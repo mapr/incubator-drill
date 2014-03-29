@@ -31,10 +31,15 @@ enum RpcType {
 	
 }
 
+message UserProperties {
+  optional string defaultSchemaName = 1;
+}
+
 message UserToBitHandshake {
   optional exec.shared.RpcChannel channel = 1 [default = USER];
   optional bool support_listening = 2;
   optional int32 rpc_version = 3;
+  optional UserProperties props = 4;
 }
 
 message RequestResults {
@@ -47,8 +52,6 @@ message RunQuery {
   optional QueryType type = 2;
   optional string plan = 3;
 }
-
-message 
 
 enum QueryType {
   SQL = 1;

@@ -27,6 +27,7 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
+import java.util.Properties;
 import java.util.Vector;
 
 import org.apache.drill.common.config.DrillConfig;
@@ -40,6 +41,7 @@ import org.apache.drill.exec.proto.UserBitShared.QueryId;
 import org.apache.drill.exec.proto.UserProtos;
 import org.apache.drill.exec.proto.UserProtos.QueryType;
 import org.apache.drill.exec.proto.UserProtos.RpcType;
+import org.apache.drill.exec.proto.UserProtos.UserProperties;
 import org.apache.drill.exec.rpc.BasicClientWithConnection.ServerConnection;
 import org.apache.drill.exec.rpc.ChannelClosedException;
 import org.apache.drill.exec.rpc.DrillRpcFuture;
@@ -62,6 +64,7 @@ public class DrillClient implements Closeable, ConnectionThrottle{
   
   DrillConfig config;
   private UserClient client;
+  private UserProperties props = null;
   private volatile ClusterCoordinator clusterCoordinator;
   private volatile boolean connected = false;
   private final TopLevelAllocator allocator = new TopLevelAllocator(Long.MAX_VALUE);
@@ -104,10 +107,14 @@ public class DrillClient implements Closeable, ConnectionThrottle{
    * @throws IOException
    */
   public void connect() throws RpcException {
-    connect((String) null);
+    connect(null, new Properties());
+  }
+
+  public void connect(Properties props) throws RpcException {
+    connect(null, props);
   }
     
-  public synchronized void connect(String connect) throws RpcException {
+  public synchronized void connect(String connect, Properties props) throws RpcException {
     if (connected) return;
 
     if (clusterCoordinator == null) {
@@ -118,6 +125,9 @@ public class DrillClient implements Closeable, ConnectionThrottle{
         throw new RpcException("Failure setting up ZK for client.", e);
       }
     }
+
+    if (props.get("schema") != null)
+      this.props = UserProperties.newBuilder().setDefaultSchemaName((String) props.get("schema")).build();
 
     Collection<DrillbitEndpoint> endpoints = clusterCoordinator.getAvailableEndpoints();
     checkState(!endpoints.isEmpty(), "No DrillbitEndpoint can be found");
@@ -155,7 +165,7 @@ public class DrillClient implements Closeable, ConnectionThrottle{
   private void connect(DrillbitEndpoint endpoint) throws RpcException {
     FutureHandler f = new FutureHandler();
     try {
-      client.connect(f, endpoint);
+      client.connect(f, endpoint, props);
       f.checkedGet();
     } catch (InterruptedException e) {
       throw new RpcException(e);

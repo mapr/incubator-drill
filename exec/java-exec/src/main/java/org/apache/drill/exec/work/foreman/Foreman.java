@@ -47,6 +47,7 @@ import org.apache.drill.exec.planner.fragment.PlanningSet;
 import org.apache.drill.exec.planner.fragment.SimpleParallelizer;
 import org.apache.drill.exec.planner.fragment.StatsCollector;
 import org.apache.drill.exec.planner.sql.DrillSqlWorker;
+import org.apache.drill.exec.planner.sql.DrillSqlWorker.OptiqSchemaFactory;
 import org.apache.drill.exec.proto.BitControl.PlanFragment;
 import org.apache.drill.exec.proto.GeneralRPCProtos.Ack;
 import org.apache.drill.exec.proto.UserBitShared.DrillPBError;
@@ -346,9 +347,9 @@ public class Foreman implements Runnable, Closeable, Comparable<Object>{
 
   private void runSQL(String sql) {
     try{
-      DrillSqlWorker sqlWorker = new DrillSqlWorker(context.getFactory());
+      DrillSqlWorker sqlWorker =
+        new DrillSqlWorker(new OptiqSchemaFactory(context.getFactory(), initiatingClient.getDefaultSchemaName()));
       LogicalPlan plan = sqlWorker.getPlan(sql);
-      
 
       if(plan.getProperties().resultMode == ResultMode.LOGICAL){
         returnLogical(plan);

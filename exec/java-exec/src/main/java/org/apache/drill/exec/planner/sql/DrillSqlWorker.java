@@ -17,6 +17,9 @@
  */
 package org.apache.drill.exec.planner.sql;
 
+import net.hydromatic.linq4j.function.Function1;
+import net.hydromatic.optiq.Schema;
+import net.hydromatic.optiq.SchemaPlus;
 import net.hydromatic.optiq.jdbc.ConnectionConfig;
 import net.hydromatic.optiq.tools.Frameworks;
 import net.hydromatic.optiq.tools.Planner;
@@ -45,8 +48,8 @@ public class DrillSqlWorker {
   static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(DrillSqlWorker.class);
 
   private final Planner planner;
-  
-  public DrillSqlWorker(DrillSchemaFactory schemaFactory) throws Exception {
+
+  public DrillSqlWorker(OptiqSchemaFactory schemaFactory) throws Exception {
     this.planner = Frameworks.getPlanner(ConnectionConfig.Lex.MYSQL, schemaFactory, SqlStdOperatorTable.instance(), new RuleSet[]{DrillRuleSets.DRILL_BASIC_RULES});
   }
   
@@ -86,5 +89,19 @@ public class DrillSqlWorker {
     
   }
 
-  
+  public static class OptiqSchemaFactory implements Function1<SchemaPlus, Schema> {
+
+    private String defaultSchema;
+    private DrillSchemaFactory drillSchemaFactory;
+
+    public OptiqSchemaFactory(DrillSchemaFactory drillSchemaFactory, String defaultSchema) {
+      this.drillSchemaFactory = drillSchemaFactory;
+      this.defaultSchema = defaultSchema;
+    }
+
+    @Override
+    public Schema apply(SchemaPlus parent) {
+      return drillSchemaFactory.apply(parent, defaultSchema);
+    }
+  }
 }

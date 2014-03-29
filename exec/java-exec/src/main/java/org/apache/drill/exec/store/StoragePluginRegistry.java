@@ -167,25 +167,28 @@ public class StoragePluginRegistry implements Iterable<Map.Entry<String, Storage
     return schemaFactory;
   }
 
-  public class DrillSchemaFactory implements Function1<SchemaPlus, Schema>{
+  public class DrillSchemaFactory {
 
-    @Override
-    public Schema apply(SchemaPlus parent) {
+    public Schema apply(SchemaPlus parent, String defaultSchemaName) {
       Schema defaultSchema = null;
       for(Map.Entry<String, StoragePlugin> e : engines.entrySet()){
         Schema s = e.getValue().createAndAddSchema(parent);
+        if(s.getName().equals(defaultSchemaName)) defaultSchema = s;
+
+        // store a schema for default in case we didn't find the given default schema
         if(defaultSchema == null) defaultSchema = s;
       }
+
       return defaultSchema;
     }
     
     /**
      * Used in situations where we want to get a schema without having to use in the context of an Optiq planner. 
-     * @return Root schema of the storage engine hiearchy.
+     * @return Root schema of the storage engine hierarchy.
      */
     public SchemaPlus getOrphanedRootSchema(){
       SchemaPlus p = new OrphanPlus();
-      apply(p);
+      apply(p, null);
       return p;
     }
     

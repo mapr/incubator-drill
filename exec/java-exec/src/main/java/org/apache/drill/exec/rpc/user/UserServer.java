@@ -30,6 +30,7 @@ import org.apache.drill.exec.proto.UserProtos.BitToUserHandshake;
 import org.apache.drill.exec.proto.UserProtos.RequestResults;
 import org.apache.drill.exec.proto.UserProtos.RpcType;
 import org.apache.drill.exec.proto.UserProtos.RunQuery;
+import org.apache.drill.exec.proto.UserProtos.UserProperties;
 import org.apache.drill.exec.proto.UserProtos.UserToBitHandshake;
 import org.apache.drill.exec.rpc.BasicServer;
 import org.apache.drill.exec.rpc.ProtobufLengthDecoder;
@@ -71,10 +72,6 @@ public class UserServer extends BasicServer<RpcType, UserServer.UserClientConnec
       throws RpcException {
     switch (rpcType) {
 
-    case RpcType.HANDSHAKE_VALUE:
-      // logger.debug("Received handshake, responding in kind.");
-      return new Response(RpcType.HANDSHAKE, BitToUserHandshake.getDefaultInstance());
-
     case RpcType.RUN_QUERY_VALUE:
       // logger.debug("Received query to run.  Returning query handle.");
       try {
@@ -101,8 +98,17 @@ public class UserServer extends BasicServer<RpcType, UserServer.UserClientConnec
 
   
   public class UserClientConnection extends RemoteConnection {
+    private String defaultSchemaName = null;
+
     public UserClientConnection(Channel channel) {
       super(channel);
+    }
+
+    public String getDefaultSchemaName() {
+      return defaultSchemaName;
+    }
+    public void setDefaultSchemaName(String schemaName) {
+      this.defaultSchemaName = schemaName;
     }
 
     public void sendResult(RpcOutcomeListener<Ack> listener, QueryWritableBatch result){
@@ -115,7 +121,6 @@ public class UserServer extends BasicServer<RpcType, UserServer.UserClientConnec
     public BufferAllocator getAllocator() {
       return alloc;
     }
-
   }
 
   @Override
@@ -124,13 +129,17 @@ public class UserServer extends BasicServer<RpcType, UserServer.UserClientConnec
   }
   
   @Override
-  protected ServerHandshakeHandler<UserToBitHandshake> getHandshakeHandler(UserClientConnection connection) {
+  protected ServerHandshakeHandler<UserToBitHandshake> getHandshakeHandler(final UserClientConnection connection) {
     return new ServerHandshakeHandler<UserToBitHandshake>(RpcType.HANDSHAKE, UserToBitHandshake.PARSER){
 
       @Override
       public MessageLite getHandshakeResponse(UserToBitHandshake inbound) throws Exception {
 //        logger.debug("Handling handshake from user to bit. {}", inbound);
         if(inbound.getRpcVersion() != UserRpcConfig.RPC_VERSION) throw new RpcException(String.format("Invalid rpc version.  Expected %d, actual %d.", inbound.getRpcVersion(), UserRpcConfig.RPC_VERSION));
+
+        if (inbound.hasProps() && inbound.getProps().hasDefaultSchemaName())
+          connection.setDefaultSchemaName(inbound.getProps().getDefaultSchemaName());
+
         return BitToUserHandshake.newBuilder().setRpcVersion(UserRpcConfig.RPC_VERSION).build();
       }
 

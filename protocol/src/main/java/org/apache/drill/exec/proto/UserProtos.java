@@ -74,6 +74,14 @@ public final class UserProtos {
      * <code>QUERY_HANDLE = 7;</code>
      */
     QUERY_HANDLE(7, 7),
+    /**
+     * <code>REQ_META_FUNCTIONS = 8;</code>
+     */
+    REQ_META_FUNCTIONS(8, 8),
+    /**
+     * <code>RESP_FUNCTION_LIST = 9;</code>
+     */
+    RESP_FUNCTION_LIST(9, 9),
     ;
 
     /**
@@ -116,6 +124,14 @@ public final class UserProtos {
      * <code>QUERY_HANDLE = 7;</code>
      */
     public static final int QUERY_HANDLE_VALUE = 7;
+    /**
+     * <code>REQ_META_FUNCTIONS = 8;</code>
+     */
+    public static final int REQ_META_FUNCTIONS_VALUE = 8;
+    /**
+     * <code>RESP_FUNCTION_LIST = 9;</code>
+     */
+    public static final int RESP_FUNCTION_LIST_VALUE = 9;
 
 
     public final int getNumber() { return value; }
@@ -130,6 +146,8 @@ public final class UserProtos {
         case 5: return REQUEST_RESULTS;
         case 6: return QUERY_RESULT;
         case 7: return QUERY_HANDLE;
+        case 8: return REQ_META_FUNCTIONS;
+        case 9: return RESP_FUNCTION_LIST;
         default: return null;
       }
     }
@@ -353,6 +371,477 @@ public final class UserProtos {
     // @@protoc_insertion_point(enum_scope:exec.user.QueryResultsMode)
   }
 
+  public interface UserPropertiesOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+
+    // optional string defaultSchemaName = 1;
+    /**
+     * <code>optional string defaultSchemaName = 1;</code>
+     */
+    boolean hasDefaultSchemaName();
+    /**
+     * <code>optional string defaultSchemaName = 1;</code>
+     */
+    java.lang.String getDefaultSchemaName();
+    /**
+     * <code>optional string defaultSchemaName = 1;</code>
+     */
+    com.google.protobuf.ByteString
+        getDefaultSchemaNameBytes();
+  }
+  /**
+   * Protobuf type {@code exec.user.UserProperties}
+   */
+  public static final class UserProperties extends
+      com.google.protobuf.GeneratedMessage
+      implements UserPropertiesOrBuilder {
+    // Use UserProperties.newBuilder() to construct.
+    private UserProperties(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+      this.unknownFields = builder.getUnknownFields();
+    }
+    private UserProperties(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final UserProperties defaultInstance;
+    public static UserProperties getDefaultInstance() {
+      return defaultInstance;
+    }
+
+    public UserProperties getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private UserProperties(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              bitField0_ |= 0x00000001;
+              defaultSchemaName_ = input.readBytes();
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return org.apache.drill.exec.proto.UserProtos.internal_static_exec_user_UserProperties_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return org.apache.drill.exec.proto.UserProtos.internal_static_exec_user_UserProperties_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              org.apache.drill.exec.proto.UserProtos.UserProperties.class, org.apache.drill.exec.proto.UserProtos.UserProperties.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<UserProperties> PARSER =
+        new com.google.protobuf.AbstractParser<UserProperties>() {
+      public UserProperties parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new UserProperties(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<UserProperties> getParserForType() {
+      return PARSER;
+    }
+
+    private int bitField0_;
+    // optional string defaultSchemaName = 1;
+    public static final int DEFAULTSCHEMANAME_FIELD_NUMBER = 1;
+    private java.lang.Object defaultSchemaName_;
+    /**
+     * <code>optional string defaultSchemaName = 1;</code>
+     */
+    public boolean hasDefaultSchemaName() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    /**
+     * <code>optional string defaultSchemaName = 1;</code>
+     */
+    public java.lang.String getDefaultSchemaName() {
+      java.lang.Object ref = defaultSchemaName_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          defaultSchemaName_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string defaultSchemaName = 1;</code>
+     */
+    public com.google.protobuf.ByteString
+        getDefaultSchemaNameBytes() {
+      java.lang.Object ref = defaultSchemaName_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        defaultSchemaName_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    private void initFields() {
+      defaultSchemaName_ = "";
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeBytes(1, getDefaultSchemaNameBytes());
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(1, getDefaultSchemaNameBytes());
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static org.apache.drill.exec.proto.UserProtos.UserProperties parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.apache.drill.exec.proto.UserProtos.UserProperties parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.apache.drill.exec.proto.UserProtos.UserProperties parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.apache.drill.exec.proto.UserProtos.UserProperties parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.apache.drill.exec.proto.UserProtos.UserProperties parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static org.apache.drill.exec.proto.UserProtos.UserProperties parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static org.apache.drill.exec.proto.UserProtos.UserProperties parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static org.apache.drill.exec.proto.UserProtos.UserProperties parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static org.apache.drill.exec.proto.UserProtos.UserProperties parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static org.apache.drill.exec.proto.UserProtos.UserProperties parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(org.apache.drill.exec.proto.UserProtos.UserProperties prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code exec.user.UserProperties}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements org.apache.drill.exec.proto.UserProtos.UserPropertiesOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return org.apache.drill.exec.proto.UserProtos.internal_static_exec_user_UserProperties_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return org.apache.drill.exec.proto.UserProtos.internal_static_exec_user_UserProperties_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                org.apache.drill.exec.proto.UserProtos.UserProperties.class, org.apache.drill.exec.proto.UserProtos.UserProperties.Builder.class);
+      }
+
+      // Construct using org.apache.drill.exec.proto.UserProtos.UserProperties.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        defaultSchemaName_ = "";
+        bitField0_ = (bitField0_ & ~0x00000001);
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return org.apache.drill.exec.proto.UserProtos.internal_static_exec_user_UserProperties_descriptor;
+      }
+
+      public org.apache.drill.exec.proto.UserProtos.UserProperties getDefaultInstanceForType() {
+        return org.apache.drill.exec.proto.UserProtos.UserProperties.getDefaultInstance();
+      }
+
+      public org.apache.drill.exec.proto.UserProtos.UserProperties build() {
+        org.apache.drill.exec.proto.UserProtos.UserProperties result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public org.apache.drill.exec.proto.UserProtos.UserProperties buildPartial() {
+        org.apache.drill.exec.proto.UserProtos.UserProperties result = new org.apache.drill.exec.proto.UserProtos.UserProperties(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.defaultSchemaName_ = defaultSchemaName_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof org.apache.drill.exec.proto.UserProtos.UserProperties) {
+          return mergeFrom((org.apache.drill.exec.proto.UserProtos.UserProperties)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(org.apache.drill.exec.proto.UserProtos.UserProperties other) {
+        if (other == org.apache.drill.exec.proto.UserProtos.UserProperties.getDefaultInstance()) return this;
+        if (other.hasDefaultSchemaName()) {
+          bitField0_ |= 0x00000001;
+          defaultSchemaName_ = other.defaultSchemaName_;
+          onChanged();
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        org.apache.drill.exec.proto.UserProtos.UserProperties parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (org.apache.drill.exec.proto.UserProtos.UserProperties) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      // optional string defaultSchemaName = 1;
+      private java.lang.Object defaultSchemaName_ = "";
+      /**
+       * <code>optional string defaultSchemaName = 1;</code>
+       */
+      public boolean hasDefaultSchemaName() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>optional string defaultSchemaName = 1;</code>
+       */
+      public java.lang.String getDefaultSchemaName() {
+        java.lang.Object ref = defaultSchemaName_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          defaultSchemaName_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string defaultSchemaName = 1;</code>
+       */
+      public com.google.protobuf.ByteString
+          getDefaultSchemaNameBytes() {
+        java.lang.Object ref = defaultSchemaName_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          defaultSchemaName_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string defaultSchemaName = 1;</code>
+       */
+      public Builder setDefaultSchemaName(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+        defaultSchemaName_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string defaultSchemaName = 1;</code>
+       */
+      public Builder clearDefaultSchemaName() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        defaultSchemaName_ = getDefaultInstance().getDefaultSchemaName();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string defaultSchemaName = 1;</code>
+       */
+      public Builder setDefaultSchemaNameBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+        defaultSchemaName_ = value;
+        onChanged();
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:exec.user.UserProperties)
+    }
+
+    static {
+      defaultInstance = new UserProperties(true);
+      defaultInstance.initFields();
+    }
+
+    // @@protoc_insertion_point(class_scope:exec.user.UserProperties)
+  }
+
   public interface UserToBitHandshakeOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
 
@@ -385,6 +874,20 @@ public final class UserProtos {
      * <code>optional int32 rpc_version = 3;</code>
      */
     int getRpcVersion();
+
+    // optional .exec.user.UserProperties props = 4;
+    /**
+     * <code>optional .exec.user.UserProperties props = 4;</code>
+     */
+    boolean hasProps();
+    /**
+     * <code>optional .exec.user.UserProperties props = 4;</code>
+     */
+    org.apache.drill.exec.proto.UserProtos.UserProperties getProps();
+    /**
+     * <code>optional .exec.user.UserProperties props = 4;</code>
+     */
+    org.apache.drill.exec.proto.UserProtos.UserPropertiesOrBuilder getPropsOrBuilder();
   }
   /**
    * Protobuf type {@code exec.user.UserToBitHandshake}
@@ -456,6 +959,19 @@ public final class UserProtos {
             case 24: {
               bitField0_ |= 0x00000004;
               rpcVersion_ = input.readInt32();
+              break;
+            }
+            case 34: {
+              org.apache.drill.exec.proto.UserProtos.UserProperties.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000008) == 0x00000008)) {
+                subBuilder = props_.toBuilder();
+              }
+              props_ = input.readMessage(org.apache.drill.exec.proto.UserProtos.UserProperties.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(props_);
+                props_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000008;
               break;
             }
           }
@@ -546,10 +1062,33 @@ public final class UserProtos {
       return rpcVersion_;
     }
 
+    // optional .exec.user.UserProperties props = 4;
+    public static final int PROPS_FIELD_NUMBER = 4;
+    private org.apache.drill.exec.proto.UserProtos.UserProperties props_;
+    /**
+     * <code>optional .exec.user.UserProperties props = 4;</code>
+     */
+    public boolean hasProps() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    /**
+     * <code>optional .exec.user.UserProperties props = 4;</code>
+     */
+    public org.apache.drill.exec.proto.UserProtos.UserProperties getProps() {
+      return props_;
+    }
+    /**
+     * <code>optional .exec.user.UserProperties props = 4;</code>
+     */
+    public org.apache.drill.exec.proto.UserProtos.UserPropertiesOrBuilder getPropsOrBuilder() {
+      return props_;
+    }
+
     private void initFields() {
       channel_ = org.apache.drill.exec.proto.UserBitShared.RpcChannel.USER;
       supportListening_ = false;
       rpcVersion_ = 0;
+      props_ = org.apache.drill.exec.proto.UserProtos.UserProperties.getDefaultInstance();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -572,6 +1111,9 @@ public final class UserProtos {
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         output.writeInt32(3, rpcVersion_);
       }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeMessage(4, props_);
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -592,6 +1134,10 @@ public final class UserProtos {
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(3, rpcVersion_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(4, props_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -701,6 +1247,7 @@ public final class UserProtos {
       }
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          getPropsFieldBuilder();
         }
       }
       private static Builder create() {
@@ -715,6 +1262,12 @@ public final class UserProtos {
         bitField0_ = (bitField0_ & ~0x00000002);
         rpcVersion_ = 0;
         bitField0_ = (bitField0_ & ~0x00000004);
+        if (propsBuilder_ == null) {
+          props_ = org.apache.drill.exec.proto.UserProtos.UserProperties.getDefaultInstance();
+        } else {
+          propsBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000008);
         return this;
       }
 
@@ -755,6 +1308,14 @@ public final class UserProtos {
           to_bitField0_ |= 0x00000004;
         }
         result.rpcVersion_ = rpcVersion_;
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        if (propsBuilder_ == null) {
+          result.props_ = props_;
+        } else {
+          result.props_ = propsBuilder_.build();
+        }
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -779,6 +1340,9 @@ public final class UserProtos {
         }
         if (other.hasRpcVersion()) {
           setRpcVersion(other.getRpcVersion());
+        }
+        if (other.hasProps()) {
+          mergeProps(other.getProps());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -907,6 +1471,123 @@ public final class UserProtos {
         rpcVersion_ = 0;
         onChanged();
         return this;
+      }
+
+      // optional .exec.user.UserProperties props = 4;
+      private org.apache.drill.exec.proto.UserProtos.UserProperties props_ = org.apache.drill.exec.proto.UserProtos.UserProperties.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          org.apache.drill.exec.proto.UserProtos.UserProperties, org.apache.drill.exec.proto.UserProtos.UserProperties.Builder, org.apache.drill.exec.proto.UserProtos.UserPropertiesOrBuilder> propsBuilder_;
+      /**
+       * <code>optional .exec.user.UserProperties props = 4;</code>
+       */
+      public boolean hasProps() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
+      }
+      /**
+       * <code>optional .exec.user.UserProperties props = 4;</code>
+       */
+      public org.apache.drill.exec.proto.UserProtos.UserProperties getProps() {
+        if (propsBuilder_ == null) {
+          return props_;
+        } else {
+          return propsBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .exec.user.UserProperties props = 4;</code>
+       */
+      public Builder setProps(org.apache.drill.exec.proto.UserProtos.UserProperties value) {
+        if (propsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          props_ = value;
+          onChanged();
+        } else {
+          propsBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000008;
+        return this;
+      }
+      /**
+       * <code>optional .exec.user.UserProperties props = 4;</code>
+       */
+      public Builder setProps(
+          org.apache.drill.exec.proto.UserProtos.UserProperties.Builder builderForValue) {
+        if (propsBuilder_ == null) {
+          props_ = builderForValue.build();
+          onChanged();
+        } else {
+          propsBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000008;
+        return this;
+      }
+      /**
+       * <code>optional .exec.user.UserProperties props = 4;</code>
+       */
+      public Builder mergeProps(org.apache.drill.exec.proto.UserProtos.UserProperties value) {
+        if (propsBuilder_ == null) {
+          if (((bitField0_ & 0x00000008) == 0x00000008) &&
+              props_ != org.apache.drill.exec.proto.UserProtos.UserProperties.getDefaultInstance()) {
+            props_ =
+              org.apache.drill.exec.proto.UserProtos.UserProperties.newBuilder(props_).mergeFrom(value).buildPartial();
+          } else {
+            props_ = value;
+          }
+          onChanged();
+        } else {
+          propsBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000008;
+        return this;
+      }
+      /**
+       * <code>optional .exec.user.UserProperties props = 4;</code>
+       */
+      public Builder clearProps() {
+        if (propsBuilder_ == null) {
+          props_ = org.apache.drill.exec.proto.UserProtos.UserProperties.getDefaultInstance();
+          onChanged();
+        } else {
+          propsBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000008);
+        return this;
+      }
+      /**
+       * <code>optional .exec.user.UserProperties props = 4;</code>
+       */
+      public org.apache.drill.exec.proto.UserProtos.UserProperties.Builder getPropsBuilder() {
+        bitField0_ |= 0x00000008;
+        onChanged();
+        return getPropsFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .exec.user.UserProperties props = 4;</code>
+       */
+      public org.apache.drill.exec.proto.UserProtos.UserPropertiesOrBuilder getPropsOrBuilder() {
+        if (propsBuilder_ != null) {
+          return propsBuilder_.getMessageOrBuilder();
+        } else {
+          return props_;
+        }
+      }
+      /**
+       * <code>optional .exec.user.UserProperties props = 4;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          org.apache.drill.exec.proto.UserProtos.UserProperties, org.apache.drill.exec.proto.UserProtos.UserProperties.Builder, org.apache.drill.exec.proto.UserProtos.UserPropertiesOrBuilder> 
+          getPropsFieldBuilder() {
+        if (propsBuilder_ == null) {
+          propsBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              org.apache.drill.exec.proto.UserProtos.UserProperties, org.apache.drill.exec.proto.UserProtos.UserProperties.Builder, org.apache.drill.exec.proto.UserProtos.UserPropertiesOrBuilder>(
+                  props_,
+                  getParentForChildren(),
+                  isClean());
+          props_ = null;
+        }
+        return propsBuilder_;
       }
 
       // @@protoc_insertion_point(builder_scope:exec.user.UserToBitHandshake)
@@ -5150,6 +5831,11 @@ public final class UserProtos {
   }
 
   private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_exec_user_UserProperties_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_exec_user_UserProperties_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
     internal_static_exec_user_UserToBitHandshake_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
@@ -5189,74 +5875,83 @@ public final class UserProtos {
   static {
     java.lang.String[] descriptorData = {
       "\n\nUser.proto\022\texec.user\032\017SchemaDef.proto" +
-      "\032\023UserBitShared.proto\"t\n\022UserToBitHandsh" +
-      "ake\022.\n\007channel\030\001 \001(\0162\027.exec.shared.RpcCh" +
-      "annel:\004USER\022\031\n\021support_listening\030\002 \001(\010\022\023" +
-      "\n\013rpc_version\030\003 \001(\005\"S\n\016RequestResults\022&\n" +
-      "\010query_id\030\001 \001(\0132\024.exec.shared.QueryId\022\031\n" +
-      "\021maximum_responses\030\002 \001(\005\"o\n\010RunQuery\0221\n\014" +
-      "results_mode\030\001 \001(\0162\033.exec.user.QueryResu" +
-      "ltsMode\022\"\n\004type\030\002 \001(\0162\024.exec.user.QueryT" +
-      "ype\022\014\n\004plan\030\003 \001(\t\")\n\022BitToUserHandshake\022",
-      "\023\n\013rpc_version\030\002 \001(\005\"7\n\nNodeStatus\022\017\n\007no" +
-      "de_id\030\001 \001(\005\022\030\n\020memory_footprint\030\002 \001(\003\"\331\003" +
-      "\n\013QueryResult\0226\n\013query_state\030\001 \001(\0162!.exe" +
-      "c.user.QueryResult.QueryState\022&\n\010query_i" +
-      "d\030\002 \001(\0132\024.exec.shared.QueryId\022\025\n\ris_last" +
-      "_chunk\030\003 \001(\010\022\021\n\trow_count\030\004 \001(\005\022\024\n\014recor" +
-      "ds_scan\030\005 \001(\003\022\025\n\rrecords_error\030\006 \001(\003\022\027\n\017" +
-      "submission_time\030\007 \001(\003\022*\n\013node_status\030\010 \003" +
-      "(\0132\025.exec.user.NodeStatus\022(\n\005error\030\t \003(\013" +
-      "2\031.exec.shared.DrillPBError\022(\n\003def\030\n \001(\013",
-      "2\033.exec.shared.RecordBatchDef\022\026\n\016schema_" +
-      "changed\030\013 \001(\010\"b\n\nQueryState\022\013\n\007PENDING\020\000" +
-      "\022\013\n\007RUNNING\020\001\022\r\n\tCOMPLETED\020\002\022\014\n\010CANCELED" +
-      "\020\003\022\n\n\006FAILED\020\004\022\021\n\rUNKNOWN_QUERY\020\005*\210\001\n\007Rp" +
-      "cType\022\r\n\tHANDSHAKE\020\000\022\007\n\003ACK\020\001\022\013\n\007GOODBYE" +
-      "\020\002\022\r\n\tRUN_QUERY\020\003\022\020\n\014CANCEL_QUERY\020\004\022\023\n\017R" +
-      "EQUEST_RESULTS\020\005\022\020\n\014QUERY_RESULT\020\006\022\020\n\014QU" +
-      "ERY_HANDLE\020\007*/\n\tQueryType\022\007\n\003SQL\020\001\022\013\n\007LO" +
-      "GICAL\020\002\022\014\n\010PHYSICAL\020\003*#\n\020QueryResultsMod" +
-      "e\022\017\n\013STREAM_FULL\020\001B+\n\033org.apache.drill.e",
-      "xec.protoB\nUserProtosH\001"
+      "\032\023UserBitShared.proto\"+\n\016UserProperties\022" +
+      "\031\n\021defaultSchemaName\030\001 \001(\t\"\236\001\n\022UserToBit" +
+      "Handshake\022.\n\007channel\030\001 \001(\0162\027.exec.shared" +
+      ".RpcChannel:\004USER\022\031\n\021support_listening\030\002" +
+      " \001(\010\022\023\n\013rpc_version\030\003 \001(\005\022(\n\005props\030\004 \001(\013" +
+      "2\031.exec.user.UserProperties\"S\n\016RequestRe" +
+      "sults\022&\n\010query_id\030\001 \001(\0132\024.exec.shared.Qu" +
+      "eryId\022\031\n\021maximum_responses\030\002 \001(\005\"o\n\010RunQ" +
+      "uery\0221\n\014results_mode\030\001 \001(\0162\033.exec.user.Q",
+      "ueryResultsMode\022\"\n\004type\030\002 \001(\0162\024.exec.use" +
+      "r.QueryType\022\014\n\004plan\030\003 \001(\t\")\n\022BitToUserHa" +
+      "ndshake\022\023\n\013rpc_version\030\002 \001(\005\"7\n\nNodeStat" +
+      "us\022\017\n\007node_id\030\001 \001(\005\022\030\n\020memory_footprint\030" +
+      "\002 \001(\003\"\331\003\n\013QueryResult\0226\n\013query_state\030\001 \001" +
+      "(\0162!.exec.user.QueryResult.QueryState\022&\n" +
+      "\010query_id\030\002 \001(\0132\024.exec.shared.QueryId\022\025\n" +
+      "\ris_last_chunk\030\003 \001(\010\022\021\n\trow_count\030\004 \001(\005\022" +
+      "\024\n\014records_scan\030\005 \001(\003\022\025\n\rrecords_error\030\006" +
+      " \001(\003\022\027\n\017submission_time\030\007 \001(\003\022*\n\013node_st",
+      "atus\030\010 \003(\0132\025.exec.user.NodeStatus\022(\n\005err" +
+      "or\030\t \003(\0132\031.exec.shared.DrillPBError\022(\n\003d" +
+      "ef\030\n \001(\0132\033.exec.shared.RecordBatchDef\022\026\n" +
+      "\016schema_changed\030\013 \001(\010\"b\n\nQueryState\022\013\n\007P" +
+      "ENDING\020\000\022\013\n\007RUNNING\020\001\022\r\n\tCOMPLETED\020\002\022\014\n\010" +
+      "CANCELED\020\003\022\n\n\006FAILED\020\004\022\021\n\rUNKNOWN_QUERY\020" +
+      "\005*\270\001\n\007RpcType\022\r\n\tHANDSHAKE\020\000\022\007\n\003ACK\020\001\022\013\n" +
+      "\007GOODBYE\020\002\022\r\n\tRUN_QUERY\020\003\022\020\n\014CANCEL_QUER" +
+      "Y\020\004\022\023\n\017REQUEST_RESULTS\020\005\022\020\n\014QUERY_RESULT" +
+      "\020\006\022\020\n\014QUERY_HANDLE\020\007\022\026\n\022REQ_META_FUNCTIO",
+      "NS\020\010\022\026\n\022RESP_FUNCTION_LIST\020\t*/\n\tQueryTyp" +
+      "e\022\007\n\003SQL\020\001\022\013\n\007LOGICAL\020\002\022\014\n\010PHYSICAL\020\003*#\n" +
+      "\020QueryResultsMode\022\017\n\013STREAM_FULL\020\001B+\n\033or" +
+      "g.apache.drill.exec.protoB\nUserProtosH\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
         public com.google.protobuf.ExtensionRegistry assignDescriptors(
             com.google.protobuf.Descriptors.FileDescriptor root) {
           descriptor = root;
-          internal_static_exec_user_UserToBitHandshake_descriptor =
+          internal_static_exec_user_UserProperties_descriptor =
             getDescriptor().getMessageTypes().get(0);
+          internal_static_exec_user_UserProperties_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_exec_user_UserProperties_descriptor,
+              new java.lang.String[] { "DefaultSchemaName", });
+          internal_static_exec_user_UserToBitHandshake_descriptor =
+            getDescriptor().getMessageTypes().get(1);
           internal_static_exec_user_UserToBitHandshake_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_exec_user_UserToBitHandshake_descriptor,
-              new java.lang.String[] { "Channel", "SupportListening", "RpcVersion", });
+              new java.lang.String[] { "Channel", "SupportListening", "RpcVersion", "Props", });
           internal_static_exec_user_RequestResults_descriptor =
-            getDescriptor().getMessageTypes().get(1);
+            getDescriptor().getMessageTypes().get(2);
           internal_static_exec_user_RequestResults_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_exec_user_RequestResults_descriptor,
               new java.lang.String[] { "QueryId", "MaximumResponses", });
           internal_static_exec_user_RunQuery_descriptor =
-            getDescriptor().getMessageTypes().get(2);
+            getDescriptor().getMessageTypes().get(3);
           internal_static_exec_user_RunQuery_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_exec_user_RunQuery_descriptor,
               new java.lang.String[] { "ResultsMode", "Type", "Plan", });
           internal_static_exec_user_BitToUserHandshake_descriptor =
-            getDescriptor().getMessageTypes().get(3);
+            getDescriptor().getMessageTypes().get(4);
           internal_static_exec_user_BitToUserHandshake_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_exec_user_BitToUserHandshake_descriptor,
               new java.lang.String[] { "RpcVersion", });
           internal_static_exec_user_NodeStatus_descriptor =
-            getDescriptor().getMessageTypes().get(4);
+            getDescriptor().getMessageTypes().get(5);
           internal_static_exec_user_NodeStatus_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_exec_user_NodeStatus_descriptor,
               new java.lang.String[] { "NodeId", "MemoryFootprint", });
           internal_static_exec_user_QueryResult_descriptor =
-            getDescriptor().getMessageTypes().get(5);
+            getDescriptor().getMessageTypes().get(6);
           internal_static_exec_user_QueryResult_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_exec_user_QueryResult_descriptor,

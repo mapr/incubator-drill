@@ -179,4 +179,45 @@ public class TestJdbcQuery {
         "TABLE_NAME=SCHEMATA\n"
       );
   }
+
+  @Test
+  public void testDefaultSchemaDfs() throws Exception{
+    JdbcAssert.withFull("dfs")
+      .sql(String.format("SELECT R_REGIONKEY FROM `%s/../sample-data/region.parquet` LIMIT 2", WORKING_PATH))
+      .returns(
+        "R_REGIONKEY=0\n" +
+        "R_REGIONKEY=1\n"
+      );
+  }
+
+  @Test
+  public void testDefaultSchemaClasspath() throws Exception{
+    JdbcAssert.withFull("cp")
+      .sql("SELECT full_name FROM `employee.json` LIMIT 2")
+      .returns(
+        "full_name=Sheri Nowmer\n" +
+        "full_name=Derrick Whelply\n"
+      );
+  }
+
+
+  @Test
+  public void testDefaultSchemaHive() throws Exception{
+    JdbcAssert.withFull("hive")
+      .sql("SELECT * FROM kv LIMIT 2")
+      .returns(
+        "key=1; value= key_1\n" +
+          "key=2; value= key_2\n"
+      );
+  }
+ 
+  @Test
+  public void testQueryFromNonDefaultSchema() throws Exception{
+    JdbcAssert.withFull("hive")
+      .sql("SELECT full_name FROM cp.`employee.json` LIMIT 2")
+      .returns(
+        "full_name=Sheri Nowmer\n" +
+        "full_name=Derrick Whelply\n"
+      );
+  }
 }
