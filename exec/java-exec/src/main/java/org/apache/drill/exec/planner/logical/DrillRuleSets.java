@@ -33,6 +33,8 @@ import org.apache.drill.exec.planner.physical.StreamAggPrule;
 import org.eigenbase.rel.rules.PushFilterPastJoinRule;
 import org.eigenbase.rel.rules.PushFilterPastProjectRule;
 import org.eigenbase.rel.rules.PushJoinThroughJoinRule;
+import org.eigenbase.rel.rules.RemoveDistinctAggregateRule;
+import org.eigenbase.rel.rules.SwapJoinRule;
 import org.eigenbase.relopt.RelOptRule;
 import org.eigenbase.relopt.volcano.AbstractConverter.ExpandConversionRule;
 
@@ -45,6 +47,7 @@ public class DrillRuleSets {
       // Add support for WHERE style joins.
       PushFilterPastProjectRule.INSTANCE,
       PushFilterPastJoinRule.FILTER_ON_JOIN,
+      PushFilterPastJoinRule.JOIN,
       PushJoinThroughJoinRule.RIGHT, 
       PushJoinThroughJoinRule.LEFT, 
       // End supprot for WHERE style joins.
@@ -58,6 +61,10 @@ public class DrillRuleSets {
       DrillSortRule.INSTANCE,
       DrillJoinRule.INSTANCE,
       DrillUnionRule.INSTANCE
+      
+      
+      ,SwapJoinRule.INSTANCE
+      ,RemoveDistinctAggregateRule.INSTANCE
       
       
 

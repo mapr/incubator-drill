@@ -122,6 +122,9 @@ public class DrillOptiq {
         case LIKE:
         case SIMILAR:
           return getDrillFunctionFromOptiqCall(call);
+          
+        
+          
         case CASE:
           List<LogicalExpression> caseArgs = Lists.newArrayList();
           for(RexNode r : call.getOperands()){
@@ -146,6 +149,14 @@ public class DrillOptiq {
           final RexLiteral literal = (RexLiteral) call.getOperands().get(1);
           return left.getChild((String) literal.getValue2());
         }
+        
+      case POSTFIX:
+        switch(call.getKind()){
+        case IS_TRUE:
+          return call.getOperands().get(0).accept(this);
+        
+        }
+
         
         // fall through
       default:

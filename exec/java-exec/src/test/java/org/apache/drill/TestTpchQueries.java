@@ -24,85 +24,76 @@ public class TestTpchQueries extends BaseTestQuery{
   static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(TestTpchQueries.class);
   
   @Test
-  @Ignore
   public void tpch01() throws Exception{
     testSqlFromFile("queries/tpch/01.sql");
   }
   
   @Test
-  @Ignore // DRILL-435
   public void tpch02() throws Exception{
     testSqlFromFile("queries/tpch/02.sql");
   }
 
   @Test
-  @Ignore
+  public void tpch02_1() throws Exception {
+    testSqlFromFile("queries/tpch/02_1.sql");
+  }
+  @Test
   public void tpch03() throws Exception{
     testSqlFromFile("queries/tpch/03.sql");
   }
 
   @Test
-  @Ignore // DRILL-437
   public void tpch04() throws Exception{
     testSqlFromFile("queries/tpch/04.sql");
   }
   
   @Test 
-  @Ignore // DRILL-436
   public void tpch05() throws Exception{
     testSqlFromFile("queries/tpch/05.sql");
   }
   
-  @Test  // DRILL-356
-  @Ignore
+  @Test
   public void tpch06() throws Exception{
     testSqlFromFile("queries/tpch/06.sql");
   }
 
   @Test 
-  @Ignore // DRILL-439
   public void tpch07() throws Exception{
     testSqlFromFile("queries/tpch/07.sql");
   }
 
   @Test  
-  @Ignore // DRILL-356
   public void tpch08() throws Exception{
     testSqlFromFile("queries/tpch/08.sql");
   }
 
   @Test  
-  @Ignore // DRILL-435
   public void tpch09() throws Exception{
     testSqlFromFile("queries/tpch/09.sql");
   }
 
   @Test  
-  @Ignore // DRILL-356  
   public void tpch10() throws Exception{
     testSqlFromFile("queries/tpch/10.sql");
   }
 
   @Test  
-  @Ignore // DRILL-436
   public void tpch11() throws Exception{
     testSqlFromFile("queries/tpch/11.sql");
   }
 
   @Test 
-  @Ignore // DRILL-403
   public void tpch12() throws Exception{
     testSqlFromFile("queries/tpch/12.sql");
   }
 
-  @Test  
-  @Ignore // DRILL-435
+  @Test 
+  @Ignore // no equi-join
   public void tpch13() throws Exception{
     testSqlFromFile("queries/tpch/13.sql");
   }
 
   @Test  
-  @Ignore // DRILL-435
   public void tpch14() throws Exception{
     testSqlFromFile("queries/tpch/14.sql");
   }
@@ -114,13 +105,11 @@ public class TestTpchQueries extends BaseTestQuery{
   }
 
   @Test  
-  @Ignore // DRILL-435
   public void tpch16() throws Exception{
     testSqlFromFile("queries/tpch/16.sql");
   }
 
   @Test
-  @Ignore // DRILL-440
   public void tpch17() throws Exception{
     testSqlFromFile("queries/tpch/17.sql");
   }
@@ -132,25 +121,25 @@ public class TestTpchQueries extends BaseTestQuery{
   }
 
   @Test  
-  @Ignore // DRILL-436
+//  @Ignore // DRILL-436
   public void tpch19() throws Exception{
     testSqlFromFile("queries/tpch/19.sql");
   }
 
   @Test  
-  @Ignore // DRILL-435
+  //@Ignore // DRILL-435
   public void tpch20() throws Exception{
     testSqlFromFile("queries/tpch/20.sql");
   }
 
   @Test  
-  @Ignore // DRILL-440
+//  @Ignore // DRILL-440
   public void tpch21() throws Exception{
     testSqlFromFile("queries/tpch/21.sql");
   }
 
   @Test  
-  @Ignore // DRILL-441
+//  @Ignore // DRILL-441
   public void tpch22() throws Exception{
     testSqlFromFile("queries/tpch/22.sql");
   }

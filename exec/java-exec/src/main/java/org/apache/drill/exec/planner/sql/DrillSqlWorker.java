@@ -55,9 +55,10 @@ import org.eigenbase.relopt.RelTraitSet;
 import org.eigenbase.sql.SqlExplain;
 import org.eigenbase.sql.SqlExplainLevel;
 import org.eigenbase.sql.SqlKind;
-import org.eigenbase.sql.SqlLiteral;
 import org.eigenbase.sql.SqlNode;
+import org.eigenbase.sql.fun.SqlStdOperatorTable;
 import org.eigenbase.sql.parser.SqlParseException;
+import org.eigenbase.sql.parser.impl.SqlParserImpl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -102,6 +103,8 @@ public class DrillSqlWorker {
     if(sqlNode.getKind() == SqlKind.EXPLAIN){
       SqlExplain explain = (SqlExplain) sqlNode;
       SqlExplain.Depth depth = (SqlExplain.Depth) explain.getDepth();
+      sqlNode = explain.operand(0);
+      
       switch(depth){
       case LOGICAL:
         resultMode = ResultMode.LOGICAL;
@@ -130,14 +133,9 @@ public class DrillSqlWorker {
   public LogicalPlan getLogicalPlan(String sql) throws SqlParseException, ValidationException, RelConversionException{
     RelResult result = getRel(sql);
 
-    RelNode convertedRelNode = planner.transform(LOGICAL_RULES, planner.getEmptyTraitSet().plus(DrillRel.DRILL_LOGICAL), result.node);
-    if(convertedRelNode instanceof DrillStoreRel){
-      throw new UnsupportedOperationException();
-    }else{
-      convertedRelNode = new DrillScreenRel(convertedRelNode.getCluster(), convertedRelNode.getTraitSet(), convertedRelNode);
-    }
+
     DrillImplementor implementor = new DrillImplementor(new DrillParseContext(), result.mode);
-    implementor.go( (DrillRel) convertedRelNode);
+    implementor.go( (DrillRel) result.node);
     planner.close();
     planner.reset();
     return implementor.getPlan();

@@ -3,7 +3,7 @@ select
   p.p_brand,
   p.p_type,
   p.p_size,
-  count(distinct ps.ps_suppkey) as supplier_cnt
+  COUNT(distinct ps.ps_suppkey) as supplier_cnt
 from
   cp.`tpch/partsupp.parquet` ps,
   cp.`tpch/part.parquet` p
