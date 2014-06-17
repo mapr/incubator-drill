@@ -18,6 +18,7 @@
 package org.apache.drill.exec.store.ischema;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -25,6 +26,7 @@ import net.hydromatic.optiq.Schema;
 import net.hydromatic.optiq.SchemaPlus;
 
 import org.apache.drill.common.JSONOptions;
+import org.apache.drill.common.expression.SchemaPath;
 import org.apache.drill.common.logical.StoragePluginConfig;
 import org.apache.drill.exec.planner.logical.DrillTable;
 import org.apache.drill.exec.server.DrillbitContext;
@@ -53,9 +55,9 @@ public class InfoSchemaStoragePlugin extends AbstractStoragePlugin{
   }
 
   @Override
-  public InfoSchemaGroupScan getPhysicalScan(JSONOptions selection) throws IOException {
+  public InfoSchemaGroupScan getPhysicalScan(JSONOptions selection, List<SchemaPath> columns) throws IOException {
     SelectedTable table = selection.getWith(context.getConfig(),  SelectedTable.class);
-    return new InfoSchemaGroupScan(table);
+    return new InfoSchemaGroupScan(table); //TODO : push project to InfoSchema ? 
   }
 
   @Override
