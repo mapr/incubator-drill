@@ -17,22 +17,16 @@
  */
 package org.apache.drill.exec.store.maprdb;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.NavigableMap;
-import java.util.PriorityQueue;
-import java.util.Queue;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.concurrent.TimeUnit;
-
+import com.fasterxml.jackson.annotation.JacksonInject;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Preconditions;
+import com.google.common.base.Stopwatch;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import org.apache.drill.common.exceptions.DrillRuntimeException;
 import org.apache.drill.common.exceptions.ExecutionSetupException;
 import org.apache.drill.common.expression.SchemaPath;
@@ -44,50 +38,49 @@ import org.apache.drill.exec.physical.base.ScanStats;
 import org.apache.drill.exec.physical.base.ScanStats.GroupScanProperty;
 import org.apache.drill.exec.proto.CoordinationProtos.DrillbitEndpoint;
 import org.apache.drill.exec.store.StoragePluginRegistry;
+import org.apache.drill.exec.store.dfs.FileSystemFormatConfig;
+import org.apache.drill.exec.store.dfs.FileSystemPlugin;
+import org.apache.drill.exec.store.hbase.DrillHBaseConstants;
+import org.apache.drill.exec.store.hbase.HBaseScanSpec;
 import org.apache.drill.exec.store.hbase.HBaseSubScan.HBaseSubScanSpec;
+import org.apache.drill.exec.store.hbase.HBaseUtils;
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.HRegionInfo;
 import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.ServerName;
 import org.apache.hadoop.hbase.client.HTable;
+import org.codehaus.jackson.annotate.JsonCreator;
 
-import parquet.org.codehaus.jackson.annotate.JsonCreator;
-
-import com.fasterxml.jackson.annotation.JacksonInject;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Preconditions;
-import com.google.common.base.Stopwatch;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
+import java.io.IOException;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.concurrent.TimeUnit;
 
 @JsonTypeName("hbase-scan")
 public class MapRDBGroupScan extends AbstractGroupScan implements DrillHBaseConstants {
   static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(MapRDBGroupScan.class);
 
-  private static final Comparator<List<MapRDBSubScanSpec>> LIST_SIZE_COMPARATOR = new Comparator<List<MapRDBSubScanSpec>>() {
+  private static final Comparator<List<HBaseSubScanSpec>> LIST_SIZE_COMPARATOR = new Comparator<List<HBaseSubScanSpec>>() {
     @Override
-    public int compare(List<MapRDBSubScanSpec> list1, List<MapRDBSubScanSpec> list2) {
+    public int compare(List<HBaseSubScanSpec> list1, List<HBaseSubScanSpec> list2) {
       return list1.size() - list2.size();
     }
   };
 
-  private static final Comparator<List<MapRDBSubScanSpec>> LIST_SIZE_COMPARATOR_REV = Collections.reverseOrder(LIST_SIZE_COMPARATOR);
-
-  private HBaseStoragePluginConfig storagePluginConfig;
+  private static final Comparator<List<HBaseSubScanSpec>> LIST_SIZE_COMPARATOR_REV = Collections.reverseOrder(LIST_SIZE_COMPARATOR);
 
   private List<SchemaPath> columns;
 
   private HBaseScanSpec hbaseScanSpec;
 
-  private HBaseStoragePlugin storagePlugin;
+  private FileSystemPlugin storagePlugin;
+
+  private MapRDBFormatPlugin formatPlugin;
 
   private Stopwatch watch = new Stopwatch();
 
-  private Map<Integer, List<MapRDBSubScanSpec>> endpointFragmentMapping;
+  private Map<Integer, List<HBaseSubScanSpec>> endpointFragmentMapping;
 
   private NavigableMap<HRegionInfo, ServerName> regionsToScan;
 
@@ -97,15 +90,19 @@ public class MapRDBGroupScan extends AbstractGroupScan implements DrillHBaseCons
 
   @JsonCreator
   public MapRDBGroupScan(@JsonProperty("hbaseScanSpec") HBaseScanSpec hbaseScanSpec,
-                        @JsonProperty("storage") HBaseStoragePluginConfig storagePluginConfig,
+                        @JsonProperty("storage") FileSystemFormatConfig storagePluginConfig,
+                        @JsonProperty("format") MapRDBFormatPluginConfig formatPluginConfig,
                         @JsonProperty("columns") List<SchemaPath> columns,
                         @JacksonInject StoragePluginRegistry pluginRegistry) throws IOException, ExecutionSetupException {
-    this ((HBaseStoragePlugin) pluginRegistry.getPlugin(storagePluginConfig), hbaseScanSpec, columns);
+    this ((FileSystemPlugin) pluginRegistry.getPlugin(storagePluginConfig),
+            (MapRDBFormatPlugin) pluginRegistry.getFormatPlugin(storagePluginConfig, formatPluginConfig),
+            hbaseScanSpec,
+            columns);
   }
 
-  public MapRDBGroupScan(HBaseStoragePlugin storagePlugin, HBaseScanSpec scanSpec, List<SchemaPath> columns) {
+  public MapRDBGroupScan(FileSystemPlugin storagePlugin, MapRDBFormatPlugin formatPlugin, HBaseScanSpec scanSpec, List<SchemaPath> columns) {
     this.storagePlugin = storagePlugin;
-    this.storagePluginConfig = storagePlugin.getConfig();
+    this.formatPlugin = formatPlugin;
     this.hbaseScanSpec = scanSpec;
     this.columns = columns;
     init();
@@ -120,8 +117,7 @@ public class MapRDBGroupScan extends AbstractGroupScan implements DrillHBaseCons
     this.hbaseScanSpec = that.hbaseScanSpec;
     this.endpointFragmentMapping = that.endpointFragmentMapping;
     this.regionsToScan = that.regionsToScan;
-    this.storagePlugin = that.storagePlugin;
-    this.storagePluginConfig = that.storagePluginConfig;
+    this.formatPlugin = that.formatPlugin;
     this.hTableDesc = that.hTableDesc;
     this.filterPushedDown = that.filterPushedDown;
   }
@@ -137,7 +133,7 @@ public class MapRDBGroupScan extends AbstractGroupScan implements DrillHBaseCons
   private void init() {
     logger.debug("Getting region locations");
     try {
-      HTable table = new HTable(storagePluginConfig.getHBaseConf(), hbaseScanSpec.getTableName());
+      HTable table = new HTable(HBaseConfiguration.create(), hbaseScanSpec.getTableName());
       this.hTableDesc = table.getTableDescriptor();
       NavigableMap<HRegionInfo, ServerName> regionsMap = table.getRegionLocations();
       table.close();
@@ -177,7 +173,7 @@ public class MapRDBGroupScan extends AbstractGroupScan implements DrillHBaseCons
     watch.reset();
     watch.start();
     Map<String, DrillbitEndpoint> endpointMap = new HashMap<String, DrillbitEndpoint>();
-    for (DrillbitEndpoint ep : storagePlugin.getContext().getBits()) {
+    for (DrillbitEndpoint ep : formatPlugin.getContext().getBits()) {
       endpointMap.put(ep.getAddress(), ep);
     }
 
@@ -230,7 +226,7 @@ public class MapRDBGroupScan extends AbstractGroupScan implements DrillHBaseCons
      * Initialize these two maps
      */
     for (int i = 0; i < numSlots; ++i) {
-      endpointFragmentMapping.put(i, new ArrayList<MapRDBSubScanSpec>(maxPerEndpointSlot));
+      endpointFragmentMapping.put(i, new ArrayList<HBaseSubScanSpec>(maxPerEndpointSlot));
       String hostname = incomingEndpoints.get(i).getAddress();
       Queue<Integer> hostIndexQueue = endpointHostIndexListMap.get(hostname);
       if (hostIndexQueue == null) {
@@ -253,7 +249,7 @@ public class MapRDBGroupScan extends AbstractGroupScan implements DrillHBaseCons
       Queue<Integer> endpointIndexlist = endpointHostIndexListMap.get(regionEntry.getValue().getHostname());
       if (endpointIndexlist != null) {
         Integer slotIndex = endpointIndexlist.poll();
-        List<MapRDBSubScanSpec> endpointSlotScanList = endpointFragmentMapping.get(slotIndex);
+        List<HBaseSubScanSpec> endpointSlotScanList = endpointFragmentMapping.get(slotIndex);
         endpointSlotScanList.add(regionInfoToSubScanSpec(regionEntry.getKey()));
         // add to the tail of the slot list, to add more later in round robin fashion
         endpointIndexlist.offer(slotIndex);
@@ -265,9 +261,9 @@ public class MapRDBGroupScan extends AbstractGroupScan implements DrillHBaseCons
     /*
      * Build priority queues of slots, with ones which has tasks lesser than 'minPerEndpointSlot' and another which have more.
      */
-    PriorityQueue<List<MapRDBSubScanSpec>> minHeap = new PriorityQueue<List<MapRDBSubScanSpec>>(numSlots, LIST_SIZE_COMPARATOR);
-    PriorityQueue<List<MapRDBSubScanSpec>> maxHeap = new PriorityQueue<List<MapRDBSubScanSpec>>(numSlots, LIST_SIZE_COMPARATOR_REV);
-    for(List<MapRDBSubScanSpec> listOfScan : endpointFragmentMapping.values()) {
+    PriorityQueue<List<HBaseSubScanSpec>> minHeap = new PriorityQueue<List<HBaseSubScanSpec>>(numSlots, LIST_SIZE_COMPARATOR);
+    PriorityQueue<List<HBaseSubScanSpec>> maxHeap = new PriorityQueue<List<HBaseSubScanSpec>>(numSlots, LIST_SIZE_COMPARATOR_REV);
+    for(List<HBaseSubScanSpec> listOfScan : endpointFragmentMapping.values()) {
       if (listOfScan.size() < minPerEndpointSlot) {
         minHeap.offer(listOfScan);
       } else if (listOfScan.size() > minPerEndpointSlot){
@@ -280,7 +276,7 @@ public class MapRDBGroupScan extends AbstractGroupScan implements DrillHBaseCons
      */
     if (regionsToAssignSet.size() > 0) {
       for (Entry<HRegionInfo, ServerName> regionEntry : regionsToAssignSet) {
-        List<MapRDBSubScanSpec> smallestList = minHeap.poll();
+        List<HBaseSubScanSpec> smallestList = minHeap.poll();
         smallestList.add(regionInfoToSubScanSpec(regionEntry.getKey()));
         if (smallestList.size() < minPerEndpointSlot) {
           minHeap.offer(smallestList);
@@ -292,8 +288,8 @@ public class MapRDBGroupScan extends AbstractGroupScan implements DrillHBaseCons
      * While there are slots with lesser than 'minPerEndpointSlot' unit work, balance from those with more.
      */
     while(minHeap.peek() != null && minHeap.peek().size() < minPerEndpointSlot) {
-      List<MapRDBSubScanSpec> smallestList = minHeap.poll();
-      List<MapRDBSubScanSpec> largestList = maxHeap.poll();
+      List<HBaseSubScanSpec> smallestList = minHeap.poll();
+      List<HBaseSubScanSpec> largestList = maxHeap.poll();
       smallestList.add(largestList.remove(largestList.size()-1));
       if (largestList.size() > minPerEndpointSlot) {
         maxHeap.offer(largestList);
@@ -312,14 +308,15 @@ public class MapRDBGroupScan extends AbstractGroupScan implements DrillHBaseCons
         watch.elapsed(TimeUnit.NANOSECONDS)/1000, incomingEndpoints, endpointFragmentMapping.toString());
   }
 
-  private MapRDBSubScanSpec regionInfoToSubScanSpec(HRegionInfo ri) {
+  private HBaseSubScanSpec regionInfoToSubScanSpec(HRegionInfo ri) {
     HBaseScanSpec spec = hbaseScanSpec;
-    return new MapRDBSubScanSpec()
-        .setTableName(spec.getTableName())
-        .setRegionServer(regionsToScan.get(ri).getHostname())
-        .setStartRow((!isNullOrEmpty(spec.getStartRow()) && ri.containsRow(spec.getStartRow())) ? spec.getStartRow() : ri.getStartKey())
-        .setStopRow((!isNullOrEmpty(spec.getStopRow()) && ri.containsRow(spec.getStopRow())) ? spec.getStopRow() : ri.getEndKey())
-        .setSerializedFilter(spec.getSerializedFilter());
+    HBaseSubScanSpec subScanSpec = new HBaseSubScanSpec(spec.getTableName(),
+            regionsToScan.get(ri).getHostname(),
+            (!isNullOrEmpty(spec.getStartRow()) && ri.containsRow(spec.getStartRow())) ? spec.getStartRow() : ri.getStartKey(),
+            (!isNullOrEmpty(spec.getStopRow()) && ri.containsRow(spec.getStopRow())) ? spec.getStopRow() : ri.getEndKey(),
+            spec.getSerializedFilter(),
+            null);
+    return subScanSpec;
   }
 
   private boolean isNullOrEmpty(byte[] key) {
@@ -331,7 +328,7 @@ public class MapRDBGroupScan extends AbstractGroupScan implements DrillHBaseCons
     assert minorFragmentId < endpointFragmentMapping.size() : String.format(
         "Mappings length [%d] should be greater than minor fragment id [%d] but it isn't.", endpointFragmentMapping.size(),
         minorFragmentId);
-    return new MapRDBSubScan(storagePlugin, storagePluginConfig, endpointFragmentMapping.get(minorFragmentId), columns);
+    return new MapRDBSubScan(storagePlugin, formatPlugin, endpointFragmentMapping.get(minorFragmentId), columns);
   }
 
   @Override
@@ -356,13 +353,13 @@ public class MapRDBGroupScan extends AbstractGroupScan implements DrillHBaseCons
   }
 
   @JsonIgnore
-  public HBaseStoragePlugin getStoragePlugin() {
-    return storagePlugin;
+  public MapRDBFormatPlugin getFormatPlugin() {
+    return formatPlugin;
   }
 
   @JsonIgnore
   public Configuration getHBaseConf() {
-    return getStorageConfig().getHBaseConf();
+    return HBaseConfiguration.create();
   }
 
   @JsonIgnore
@@ -383,8 +380,8 @@ public class MapRDBGroupScan extends AbstractGroupScan implements DrillHBaseCons
   }
 
   @JsonProperty("storage")
-  public HBaseStoragePluginConfig getStorageConfig() {
-    return this.storagePluginConfig;
+  public FileSystemFormatConfig getStorageConfig() {
+    return (FileSystemFormatConfig) storagePlugin.getConfig();
   }
 
   @JsonProperty
