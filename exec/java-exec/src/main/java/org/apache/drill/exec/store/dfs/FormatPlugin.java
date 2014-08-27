@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.drill.common.exceptions.ExecutionSetupException;
 import org.apache.drill.common.expression.SchemaPath;
 import org.apache.drill.common.logical.FormatPluginConfig;
 import org.apache.drill.common.logical.StoragePluginConfig;
@@ -44,11 +45,11 @@ public interface FormatPlugin {
 
   public AbstractWriter getWriter(PhysicalOperator child, String location) throws IOException;
 
-  public AbstractGroupScan getGroupScan(FileSelection selection) throws IOException;
+  public AbstractGroupScan getGroupScan(FileSelection selection) throws IOException, ExecutionSetupException;
 
   public Set<StoragePluginOptimizerRule> getOptimizerRules();
   
-  public AbstractGroupScan getGroupScan(FileSelection selection, List<SchemaPath> columns) throws IOException;
+  public AbstractGroupScan getGroupScan(FileSelection selection, List<SchemaPath> columns) throws IOException, ExecutionSetupException;
   
   public FormatPluginConfig getConfig();
   public StoragePluginConfig getStorageConfig();

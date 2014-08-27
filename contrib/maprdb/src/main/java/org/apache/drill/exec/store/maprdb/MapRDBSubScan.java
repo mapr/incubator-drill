@@ -29,6 +29,9 @@ import org.apache.drill.exec.physical.base.PhysicalOperator;
 import org.apache.drill.exec.physical.base.PhysicalVisitor;
 import org.apache.drill.exec.physical.base.SubScan;
 import org.apache.drill.exec.store.StoragePluginRegistry;
+import org.apache.drill.exec.store.hbase.HBaseStoragePlugin;
+import org.apache.drill.exec.store.hbase.HBaseStoragePluginConfig;
+import org.apache.drill.exec.store.hbase.HBaseUtils;
 import org.apache.hadoop.hbase.filter.Filter;
 import org.apache.hadoop.hbase.util.Bytes;
 
