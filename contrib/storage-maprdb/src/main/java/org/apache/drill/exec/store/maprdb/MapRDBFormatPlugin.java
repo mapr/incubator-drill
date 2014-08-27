@@ -40,8 +40,8 @@ import java.util.Set;
 
 public class MapRDBFormatPlugin implements FormatPlugin{
 
-    private final MapRDBFormatPluginConfig config;
     private final StoragePluginConfig storageConfig;
+    private final MapRDBFormatPluginConfig config;
     private final DrillFileSystem fs;
     private final DrillbitContext context;
     private final String name;
@@ -82,8 +82,8 @@ public class MapRDBFormatPlugin implements FormatPlugin{
 
 	@Override
 	public AbstractGroupScan getGroupScan(FileSelection selection)
-            throws IOException, ExecutionSetupException {
-        getGroupScan(selection, null);
+            throws IOException {
+        return getGroupScan(selection, null);
 	}
 
 	@Override
@@ -93,13 +93,18 @@ public class MapRDBFormatPlugin implements FormatPlugin{
 
 	@Override
 	public AbstractGroupScan getGroupScan(FileSelection selection,
-			List<SchemaPath> columns) throws IOException, ExecutionSetupException {
+			List<SchemaPath> columns) throws IOException {
         List<String> files = selection.getAsFiles();
         assert(files.size() == 1);
         String tableName = files.get(0);
         HBaseScanSpec scanSpec = new HBaseScanSpec(tableName);
-        return new MapRDBGroupScan((FileSystemPlugin)(context.getStorage().getPlugin(storageConfig)), this, scanSpec, columns);
-	}
+        try {
+            return new MapRDBGroupScan((FileSystemPlugin)(context.getStorage().getPlugin(storageConfig)), this, scanSpec, columns);
+        } catch (ExecutionSetupException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
 	@Override
 	public FormatPluginConfig getConfig() {

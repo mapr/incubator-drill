@@ -17,10 +17,10 @@
  */
 package org.apache.drill.exec.store.maprdb;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-
+import com.fasterxml.jackson.annotation.JacksonInject;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.common.base.Preconditions;
+import com.google.common.collect.Iterators;
 import org.apache.drill.common.exceptions.ExecutionSetupException;
 import org.apache.drill.common.expression.SchemaPath;
 import org.apache.drill.common.logical.StoragePluginConfig;
@@ -29,19 +29,18 @@ import org.apache.drill.exec.physical.base.PhysicalOperator;
 import org.apache.drill.exec.physical.base.PhysicalVisitor;
 import org.apache.drill.exec.physical.base.SubScan;
 import org.apache.drill.exec.store.StoragePluginRegistry;
-import org.apache.drill.exec.store.hbase.HBaseStoragePlugin;
-import org.apache.drill.exec.store.hbase.HBaseStoragePluginConfig;
+import org.apache.drill.exec.store.dfs.FileSystemPlugin;
+import org.apache.drill.exec.store.hbase.HBaseSubScan;
 import org.apache.drill.exec.store.hbase.HBaseUtils;
 import org.apache.hadoop.hbase.filter.Filter;
 import org.apache.hadoop.hbase.util.Bytes;
+import org.codehaus.jackson.annotate.JsonCreator;
+import org.codehaus.jackson.annotate.JsonTypeName;
+import parquet.org.codehaus.jackson.annotate.JsonIgnore;
 
-import com.fasterxml.jackson.annotation.JacksonInject;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.google.common.base.Preconditions;
-import com.google.common.collect.Iterators;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 // Class containing information for reading a single HBase region
 @JsonTypeName("hbase-region-scan")
@@ -49,37 +48,37 @@ public class MapRDBSubScan extends AbstractBase implements SubScan {
   static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(MapRDBSubScan.class);
 
   @JsonProperty
-  public final HBaseStoragePluginConfig storage;
+  public final StoragePluginConfig storage;
   @JsonIgnore
-  private final HBaseStoragePlugin hbaseStoragePlugin;
-  private final List<MapRDBSubScanSpec> regionScanSpecList;
+  private final FileSystemPlugin fsStoragePlugin;
+  private final List<HBaseSubScan.HBaseSubScanSpec> regionScanSpecList;
   private final List<SchemaPath> columns;
 
   @JsonCreator
   public MapRDBSubScan(@JacksonInject StoragePluginRegistry registry,
                       @JsonProperty("storage") StoragePluginConfig storage,
-                      @JsonProperty("regionScanSpecList") LinkedList<MapRDBSubScanSpec> regionScanSpecList,
+                      @JsonProperty("regionScanSpecList") LinkedList<HBaseSubScan.HBaseSubScanSpec> regionScanSpecList,
                       @JsonProperty("columns") List<SchemaPath> columns) throws ExecutionSetupException {
-    hbaseStoragePlugin = (HBaseStoragePlugin) registry.getPlugin(storage);
+    this.fsStoragePlugin = (FileSystemPlugin) registry.getPlugin(storage);
     this.regionScanSpecList = regionScanSpecList;
-    this.storage = (HBaseStoragePluginConfig) storage;
+    this.storage = storage;
     this.columns = columns;
   }
 
-  public MapRDBSubScan(HBaseStoragePlugin plugin, HBaseStoragePluginConfig config,
-      List<MapRDBSubScanSpec> regionInfoList, List<SchemaPath> columns) {
-    hbaseStoragePlugin = plugin;
-    storage = config;
-    this.regionScanSpecList = regionInfoList;
-    this.columns = columns;
-  }
+    public MapRDBSubScan(FileSystemPlugin storagePlugin, StoragePluginConfig config,
+                         List<HBaseSubScan.HBaseSubScanSpec> hBaseSubScanSpecs, List<SchemaPath> columns) {
+        fsStoragePlugin = storagePlugin;
+        storage = config;
+        this.regionScanSpecList = hBaseSubScanSpecs;
+        this.columns = columns;
+    }
 
-  public List<MapRDBSubScanSpec> getRegionScanSpecList() {
+    public List<HBaseSubScan.HBaseSubScanSpec> getRegionScanSpecList() {
     return regionScanSpecList;
   }
 
   @JsonIgnore
-  public HBaseStoragePluginConfig getStorageConfig() {
+  public StoragePluginConfig getStorageConfig() {
     return storage;
   }
 
@@ -93,8 +92,8 @@ public class MapRDBSubScan extends AbstractBase implements SubScan {
   }
 
   @JsonIgnore
-  public HBaseStoragePlugin getStorageEngine(){
-    return hbaseStoragePlugin;
+  public FileSystemPlugin getStorageEngine(){
+    return fsStoragePlugin;
   }
 
   @Override
@@ -105,7 +104,7 @@ public class MapRDBSubScan extends AbstractBase implements SubScan {
   @Override
   public PhysicalOperator getNewWithChildren(List<PhysicalOperator> children) {
     Preconditions.checkArgument(children.isEmpty());
-    return new MapRDBSubScan(hbaseStoragePlugin, storage, regionScanSpecList, columns);
+    return new MapRDBSubScan(fsStoragePlugin, storage, regionScanSpecList, columns);
   }
 
   @Override
@@ -113,7 +112,7 @@ public class MapRDBSubScan extends AbstractBase implements SubScan {
     return Iterators.emptyIterator();
   }
 
-  public static class MapRDBSubScanSpec {
+  public static class HBaseSubScanSpec {
 
     protected String tableName;
     protected String regionServer;
@@ -122,7 +121,7 @@ public class MapRDBSubScan extends AbstractBase implements SubScan {
     protected byte[] serializedFilter;
 
     @parquet.org.codehaus.jackson.annotate.JsonCreator
-    public MapRDBSubScanSpec(@JsonProperty("tableName") String tableName,
+    public HBaseSubScanSpec(@JsonProperty("tableName") String tableName,
                             @JsonProperty("regionServer") String regionServer,
                             @JsonProperty("startRow") byte[] startRow,
                             @JsonProperty("stopRow") byte[] stopRow,
@@ -142,7 +141,7 @@ public class MapRDBSubScan extends AbstractBase implements SubScan {
       }
     }
 
-    /* package */ MapRDBSubScanSpec() {
+    /* package */ HBaseSubScanSpec() {
       // empty constructor, to be used with builder pattern;
     }
 
@@ -159,7 +158,7 @@ public class MapRDBSubScan extends AbstractBase implements SubScan {
       return tableName;
     }
 
-    public MapRDBSubScanSpec setTableName(String tableName) {
+    public HBaseSubScanSpec setTableName(String tableName) {
       this.tableName = tableName;
       return this;
     }
@@ -168,7 +167,7 @@ public class MapRDBSubScan extends AbstractBase implements SubScan {
       return regionServer;
     }
 
-    public MapRDBSubScanSpec setRegionServer(String regionServer) {
+    public HBaseSubScanSpec setRegionServer(String regionServer) {
       this.regionServer = regionServer;
       return this;
     }
@@ -177,7 +176,7 @@ public class MapRDBSubScan extends AbstractBase implements SubScan {
       return startRow;
     }
 
-    public MapRDBSubScanSpec setStartRow(byte[] startRow) {
+    public HBaseSubScanSpec setStartRow(byte[] startRow) {
       this.startRow = startRow;
       return this;
     }
@@ -186,7 +185,7 @@ public class MapRDBSubScan extends AbstractBase implements SubScan {
       return stopRow;
     }
 
-    public MapRDBSubScanSpec setStopRow(byte[] stopRow) {
+    public HBaseSubScanSpec setStopRow(byte[] stopRow) {
       this.stopRow = stopRow;
       return this;
     }
@@ -195,7 +194,7 @@ public class MapRDBSubScan extends AbstractBase implements SubScan {
       return serializedFilter;
     }
 
-    public MapRDBSubScanSpec setSerializedFilter(byte[] serializedFilter) {
+    public HBaseSubScanSpec setSerializedFilter(byte[] serializedFilter) {
       this.serializedFilter = serializedFilter;
       this.scanFilter = null;
       return this;
