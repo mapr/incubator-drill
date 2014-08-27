@@ -26,13 +26,20 @@
 
   <artifactId>drill-storage-maprdb</artifactId>
 
-  <name>contrib/hbase-storage-plugin</name>
+  <name>contrib/maprdb-storage-plugin</name>
 
   <properties>
     <hbase.TestSuite>**/HBaseTestsSuite.class</hbase.TestSuite>
   </properties>
 
   <dependencies>
+   <dependency>
+      <groupId>org.apache.drill.contrib</groupId>
+      <artifactId>drill-storage-hbase</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+
     <dependency>
       <groupId>org.apache.drill.exec</groupId>
       <artifactId>drill-java-exec</artifactId>

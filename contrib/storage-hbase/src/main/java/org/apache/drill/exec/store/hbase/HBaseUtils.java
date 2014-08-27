@@ -17,14 +17,7 @@
  */
 package org.apache.drill.exec.store.hbase;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.nio.charset.CharacterCodingException;
-import java.util.List;
-
+import com.google.common.collect.Lists;
 import org.apache.drill.common.exceptions.DrillRuntimeException;
 import org.apache.hadoop.hbase.HConstants;
 import org.apache.hadoop.hbase.filter.Filter;
@@ -33,7 +26,9 @@ import org.apache.hadoop.hbase.filter.ParseFilter;
 import org.apache.hadoop.hbase.io.HbaseObjectWritable;
 import org.apache.hadoop.hbase.util.Bytes;
 
-import com.google.common.collect.Lists;
+import java.io.*;
+import java.nio.charset.CharacterCodingException;
+import java.util.List;
 
 public class HBaseUtils {
   static final ParseFilter FILTER_PARSEER = new ParseFilter();
@@ -45,7 +40,7 @@ public class HBaseUtils {
     return str == null ? HConstants.EMPTY_BYTE_ARRAY : Bytes.toBytes(str);
   }
 
-  static Filter parseFilterString(String filterString) {
+  public static Filter parseFilterString(String filterString) {
     if (filterString == null) return null;
     try {
       return FILTER_PARSEER.parseFilterString(filterString);

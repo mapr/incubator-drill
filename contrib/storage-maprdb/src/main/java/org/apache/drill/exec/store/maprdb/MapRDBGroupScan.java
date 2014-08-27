@@ -53,7 +53,19 @@ import org.apache.hadoop.hbase.client.HTable;
 import org.codehaus.jackson.annotate.JsonCreator;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.NavigableMap;
+import java.util.Comparator;
+import java.util.TreeMap;
+import java.util.HashMap;
+import java.util.Queue;
+import java.util.ArrayList;
+import java.util.Set;
+import java.util.Iterator;
+import java.util.PriorityQueue;
+
 import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 
@@ -328,7 +340,7 @@ public class MapRDBGroupScan extends AbstractGroupScan implements DrillHBaseCons
     assert minorFragmentId < endpointFragmentMapping.size() : String.format(
         "Mappings length [%d] should be greater than minor fragment id [%d] but it isn't.", endpointFragmentMapping.size(),
         minorFragmentId);
-    return new MapRDBSubScan(storagePlugin, formatPlugin, endpointFragmentMapping.get(minorFragmentId), columns);
+    return new MapRDBSubScan(storagePlugin, storagePlugin.getConfig(), endpointFragmentMapping.get(minorFragmentId), columns);
   }
 
   @Override
