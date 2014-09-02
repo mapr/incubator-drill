@@ -42,6 +42,7 @@ public class MapRDBFormatPlugin implements FormatPlugin{
 
     private final StoragePluginConfig storageConfig;
     private final MapRDBFormatPluginConfig config;
+    private final MapRDBFormatMatcher matcher;
     private final DrillFileSystem fs;
     private final DrillbitContext context;
     private final String name;
@@ -53,7 +54,7 @@ public class MapRDBFormatPlugin implements FormatPlugin{
     public MapRDBFormatPlugin(String name, DrillbitContext context, DrillFileSystem fs, StoragePluginConfig storageConfig, MapRDBFormatPluginConfig formatConfig){
         this.context = context;
         this.config = formatConfig;
-//        this.formatMatcher = new ParquetFormatMatcher(this, fs);
+        this.matcher = new MapRDBFormatMatcher(this, fs);
         this.storageConfig = storageConfig;
         this.fs = fs;
         this.name = name == null ? "maprdb" : name;
@@ -70,8 +71,7 @@ public class MapRDBFormatPlugin implements FormatPlugin{
 
 	@Override
 	public FormatMatcher getMatcher() {
-		// TODO
-        return null;
+    return matcher;
 	}
 
 	@Override
