@@ -17,14 +17,15 @@
  */
 package org.apache.drill.exec.store.maprdb;
 
+import com.mapr.fs.MapRFileStatus;
 import org.apache.drill.exec.store.dfs.FileSelection;
 import org.apache.drill.exec.store.dfs.FormatMatcher;
 import org.apache.drill.exec.store.dfs.FormatPlugin;
 import org.apache.drill.exec.store.dfs.FormatSelection;
 import org.apache.drill.exec.store.dfs.shim.DrillFileSystem;
+import org.apache.hadoop.fs.FileStatus;
 
 import java.io.IOException;
-import java.lang.reflect.Method;
 
 public class MapRDBFormatMatcher extends FormatMatcher {
 
@@ -43,17 +44,13 @@ public class MapRDBFormatMatcher extends FormatMatcher {
 
   @Override
   public FormatSelection isReadable(FileSelection selection) throws IOException {
-    Method method;
-    try {
-      if ((method = selection.getFirstPath(fs).getClass().getMethod("isTable")) != null) {
-        if ((boolean) method.invoke(selection.getFirstPath(fs))) {
-          return new FormatSelection(getFormatPlugin().getConfig(), selection);
-        }
+    FileStatus status = selection.getFirstPath(fs);
+    if (status instanceof MapRFileStatus) {
+      if (((MapRFileStatus) status).isTable()) {
+        return new FormatSelection(getFormatPlugin().getConfig(), selection);
       }
-      return null;
-    } catch (ReflectiveOperationException e) {
-      return null;
     }
+    return null;
   }
 
   @Override

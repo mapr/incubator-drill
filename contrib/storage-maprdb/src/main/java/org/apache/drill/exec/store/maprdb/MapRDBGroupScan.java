@@ -38,6 +38,7 @@ import org.apache.drill.exec.physical.base.ScanStats;
 import org.apache.drill.exec.physical.base.ScanStats.GroupScanProperty;
 import org.apache.drill.exec.proto.CoordinationProtos.DrillbitEndpoint;
 import org.apache.drill.exec.store.StoragePluginRegistry;
+import org.apache.drill.exec.store.dfs.FileSystemConfig;
 import org.apache.drill.exec.store.dfs.FileSystemFormatConfig;
 import org.apache.drill.exec.store.dfs.FileSystemPlugin;
 import org.apache.drill.exec.store.hbase.DrillHBaseConstants;
@@ -102,7 +103,7 @@ public class MapRDBGroupScan extends AbstractGroupScan implements DrillHBaseCons
 
   @JsonCreator
   public MapRDBGroupScan(@JsonProperty("hbaseScanSpec") HBaseScanSpec hbaseScanSpec,
-                        @JsonProperty("storage") FileSystemFormatConfig storagePluginConfig,
+                        @JsonProperty("storage") FileSystemConfig storagePluginConfig,
                         @JsonProperty("format") MapRDBFormatPluginConfig formatPluginConfig,
                         @JsonProperty("columns") List<SchemaPath> columns,
                         @JacksonInject StoragePluginRegistry pluginRegistry) throws IOException, ExecutionSetupException {
@@ -129,6 +130,7 @@ public class MapRDBGroupScan extends AbstractGroupScan implements DrillHBaseCons
     this.hbaseScanSpec = that.hbaseScanSpec;
     this.endpointFragmentMapping = that.endpointFragmentMapping;
     this.regionsToScan = that.regionsToScan;
+    this.storagePlugin = that.storagePlugin;
     this.formatPlugin = that.formatPlugin;
     this.hTableDesc = that.hTableDesc;
     this.filterPushedDown = that.filterPushedDown;
@@ -170,6 +172,7 @@ public class MapRDBGroupScan extends AbstractGroupScan implements DrillHBaseCons
   }
 
   private void verifyColumns() {
+    /*
     if (columns != null) {
       for (SchemaPath column : columns) {
         if (!(column.equals(ROW_KEY_PATH) || hTableDesc.hasFamily(HBaseUtils.getBytes(column.getRootSegment().getPath())))) {
@@ -178,6 +181,7 @@ public class MapRDBGroupScan extends AbstractGroupScan implements DrillHBaseCons
         }
       }
     }
+    */
   }
 
   @Override
@@ -392,8 +396,8 @@ public class MapRDBGroupScan extends AbstractGroupScan implements DrillHBaseCons
   }
 
   @JsonProperty("storage")
-  public FileSystemFormatConfig getStorageConfig() {
-    return (FileSystemFormatConfig) storagePlugin.getConfig();
+  public FileSystemConfig getStorageConfig() {
+    return (FileSystemConfig) storagePlugin.getConfig();
   }
 
   @JsonProperty

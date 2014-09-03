@@ -240,6 +240,10 @@
           </exclusions>
         </dependency>
         <dependency>
+          <groupId>com.mapr.hadoop</groupId>
+          <artifactId>maprfs</artifactId>
+        </dependency>
+        <dependency>
           <groupId>org.apache.hadoop</groupId>
           <artifactId>hadoop-test</artifactId>
           <version>1.0.3-mapr-3.0.2</version>
