@@ -371,4 +371,9 @@ public class JsonReader {
 
 
   }
+
+  public DrillBuf getWorkBuf() {
+    return workBuf;
+  }
+
 }

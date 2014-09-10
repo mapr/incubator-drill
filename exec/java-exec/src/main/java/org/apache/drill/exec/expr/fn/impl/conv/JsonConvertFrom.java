@@ -70,6 +70,7 @@ public class JsonConvertFrom {
         org.apache.drill.exec.vector.complex.fn.JsonReader jsonReader = new org.apache.drill.exec.vector.complex.fn.JsonReader(buffer, false);
 
         jsonReader.write(new java.io.StringReader(input), writer);
+        buffer = jsonReader.getWorkBuf();
 
       } catch (Exception e) {
 //        System.out.println("Error while converting from JSON. ");
@@ -99,6 +100,7 @@ public class JsonConvertFrom {
         org.apache.drill.exec.vector.complex.fn.JsonReader jsonReader = new org.apache.drill.exec.vector.complex.fn.JsonReader(buffer, false);
 
         jsonReader.write(new java.io.StringReader(input), writer);
+        buffer = jsonReader.getWorkBuf();
 
       } catch (Exception e) {
 //        System.out.println("Error while converting from JSON. ");
