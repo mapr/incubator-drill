@@ -143,6 +143,6 @@ public class TextFormatPlugin extends EasyFormatPlugin<TextFormatPlugin.TextForm
 
   @Override
   public boolean supportsPushDown() {
-    return true;
+    return false; // DRILL-1401: temporarily disable projection pushdown
   }
 }
