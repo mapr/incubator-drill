@@ -373,7 +373,7 @@ public class MapVector extends AbstractContainerVector {
 
     @Override
     public Object getObject(int index) {
-      Map<String, Object> vv = new JsonStringHashMap();
+      Map<String, Object> vv = new JsonStringHashMap<>();
       for (Map.Entry<String, ValueVector> e : vectors.entrySet()) {
         ValueVector v = e.getValue();
         String k = e.getKey();
@@ -382,7 +382,11 @@ public class MapVector extends AbstractContainerVector {
           vv.put(k, value);
         }
       }
-      return vv;
+      if(vv.isEmpty()){
+        return null;
+      } else{
+        return vv;
+      }
     }
 
     public void get(int index, ComplexHolder holder) {

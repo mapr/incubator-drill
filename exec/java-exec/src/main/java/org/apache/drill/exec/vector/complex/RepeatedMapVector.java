@@ -505,7 +505,7 @@ public class RepeatedMapVector extends AbstractContainerVector implements Repeat
 
     @Override
     public Object getObject(int index) {
-      List<Object> l = new JsonStringArrayList();
+      List<Object> l = new JsonStringArrayList<>();
       int end = offsets.getAccessor().get(index+1);
       for (int i =  offsets.getAccessor().get(index); i < end; i++) {
         Map<String, Object> vv = Maps.newLinkedHashMap();
@@ -516,6 +516,9 @@ public class RepeatedMapVector extends AbstractContainerVector implements Repeat
           if (value != null) {
             vv.put(k,value);
           }
+        }
+        if(vv.isEmpty()){
+          vv = null;
         }
         l.add(vv);
       }
