@@ -61,7 +61,7 @@ public class Mappify {
     }
 
     public void eval() {
-      this.buffer = org.apache.drill.exec.expr.fn.impl.MappifyUtility.mappify(reader, writer, buffer);
+      buffer = org.apache.drill.exec.expr.fn.impl.MappifyUtility.mappify(reader, writer, buffer);
     }
   }
 }
