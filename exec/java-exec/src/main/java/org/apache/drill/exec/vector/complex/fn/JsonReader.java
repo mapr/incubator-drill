@@ -269,9 +269,9 @@ private boolean writeToVector(ComplexWriter writer, JsonToken t) throws JsonPars
           handleString(parser, map, fieldName);
           break;
         }
-        BigIntHolder bh = new BigIntHolder();
-        bh.value = parser.getLongValue();
-        map.bigInt(fieldName).write(bh);
+        Float8Holder bh = new Float8Holder();
+        bh.value = parser.getDoubleValue();
+        map.float8(fieldName).write(bh);
         break;
       case VALUE_STRING:
         handleString(parser, map, fieldName);
@@ -377,9 +377,9 @@ private boolean writeToVector(ComplexWriter writer, JsonToken t) throws JsonPars
           handleString(parser, list);
           break;
         }
-        BigIntHolder bh = new BigIntHolder();
-        bh.value = parser.getLongValue();
-        list.bigInt().write(bh);
+        Float8Holder bh = new Float8Holder();
+        bh.value = parser.getDoubleValue();
+        list.float8().write(bh);
         break;
       case VALUE_STRING:
         handleString(parser, list);
