@@ -21,7 +21,7 @@ import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.drill.common.exceptions.ExpressionParsingException;
+import org.apache.drill.common.exceptions.UserException;
 import org.apache.drill.exec.server.options.OptionValue.Kind;
 import org.apache.drill.exec.server.options.OptionValue.OptionType;
 import org.eigenbase.sql.SqlLiteral;
@@ -40,11 +40,12 @@ public class TypeValidators {
     }
 
     @Override
-    public void validate(OptionValue v) throws ExpressionParsingException {
+    public void validate(OptionValue v) {
       super.validate(v);
       if (v.num_val > max || v.num_val < 0) {
-        throw new ExpressionParsingException(String.format("Option %s must be between %d and %d.", getOptionName(), 0,
-            max));
+        throw UserException.validationError()
+          .message("Option %s must be between %d and %d.", getOptionName(), 0, max)
+          .build();
       }
     }
   }
@@ -56,10 +57,12 @@ public class TypeValidators {
     }
 
     @Override
-    public void validate(OptionValue v) throws ExpressionParsingException {
+    public void validate(OptionValue v) {
       super.validate(v);
       if (!isPowerOfTwo(v.num_val)) {
-        throw new ExpressionParsingException(String.format("Option %s must be a power of two.", getOptionName()));
+        throw UserException.validationError()
+          .message("Option %s must be a power of two.", getOptionName())
+          .build();
       }
     }
 
@@ -79,11 +82,12 @@ public class TypeValidators {
     }
 
     @Override
-    public void validate(OptionValue v) throws ExpressionParsingException {
+    public void validate(OptionValue v) {
       super.validate(v);
       if (v.float_val > max || v.float_val < min) {
-        throw new ExpressionParsingException(String.format("Option %s must be between %f and %f.",
-            getOptionName(), min, max));
+        throw UserException.validationError()
+          .message("Option %s must be between %f and %f.", getOptionName(), min, max)
+          .build();
       }
     }
 
@@ -124,11 +128,12 @@ public class TypeValidators {
     }
 
     @Override
-    public void validate(OptionValue v) throws ExpressionParsingException {
+    public void validate(OptionValue v) {
       super.validate(v);
       if (v.num_val > max || v.num_val < min) {
-        throw new ExpressionParsingException(String.format("Option %s must be between %d and %d.",
-            getOptionName(), min, max));
+        throw UserException.validationError()
+          .message("Option %s must be between %d and %d.", getOptionName(), min, max)
+          .build();
       }
     }
   }
@@ -147,10 +152,12 @@ public class TypeValidators {
     }
 
     @Override
-    public void validate(final OptionValue v) throws ExpressionParsingException {
+    public void validate(final OptionValue v) {
       super.validate(v);
       if (!valuesSet.contains(v.string_val.toLowerCase())) {
-        throw new ExpressionParsingException(String.format("Option %s must be one of: %s", getOptionName(), valuesSet));
+        throw UserException.validationError()
+          .message("Option %s must be one of %s.", getOptionName(), valuesSet)
+          .build();
       }
     }
   }
@@ -171,19 +178,19 @@ public class TypeValidators {
     }
 
     @Override
-    public OptionValue validate(final SqlLiteral value, final OptionType optionType)
-        throws ExpressionParsingException {
+    public OptionValue validate(final SqlLiteral value, final OptionType optionType) {
       final OptionValue op = getPartialValue(getOptionName(), optionType, value);
       validate(op);
       return op;
     }
 
     @Override
-    public void validate(final OptionValue v) throws ExpressionParsingException {
+    public void validate(final OptionValue v) {
       if (v.kind != kind) {
-        throw new ExpressionParsingException(String.format(
-            "Option %s must be of type %s but you tried to set to %s.",
-            getOptionName(), kind.name(), v.kind.name()));
+        throw UserException.validationError()
+          .message("Option %s must be of type %s but you tried to set to %s.", getOptionName(), kind.name(),
+            v.kind.name())
+          .build();
       }
     }
   }
@@ -220,8 +227,9 @@ public class TypeValidators {
       return OptionValue.createBoolean(type, name, (Boolean) object);
 
     default:
-      throw new ExpressionParsingException(String.format(
-          "Drill doesn't support set option expressions with literals of type %s.", typeName));
+      throw UserException.validationError()
+        .message("Drill doesn't support set option expressions with literals of type %s.", typeName)
+        .build();
     }
   }
 }

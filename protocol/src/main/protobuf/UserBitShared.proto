@@ -33,7 +33,6 @@ message DrillPBError{
   enum ErrorType {
     /* equivalent to SQLClientInfoException
      * - handshake version error
-     * - invalid schema
      */
     CONNECTION = 0;
     /* equivalent to SQLRecoverableException
@@ -77,6 +76,12 @@ message DrillPBError{
      * - schema change
      */
     UNSUPPORTED_OPERATION = 9;
+    /* Validation exception
+     * - invalid schema path
+     * - invalid entries in SQL tree
+     * - option validation
+     */
+    VALIDATION = 10;
   }
   optional string error_id = 1; // for debug tracing purposes
   optional DrillbitEndpoint endpoint = 2;

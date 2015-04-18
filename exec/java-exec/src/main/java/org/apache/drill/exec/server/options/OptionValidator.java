@@ -17,14 +17,12 @@
  ******************************************************************************/
 package org.apache.drill.exec.server.options;
 
-import org.apache.drill.common.exceptions.ExpressionParsingException;
+import org.apache.drill.common.exceptions.UserException;
 import org.apache.drill.exec.server.options.OptionValue.OptionType;
 import org.eigenbase.sql.SqlLiteral;
 
 /**
  * Validates the values provided to Drill options.
- *
- * @param <E>
  */
 public abstract class OptionValidator {
   // Stored here as well as in the option static class to allow insertion of option optionName into
@@ -45,9 +43,9 @@ public abstract class OptionValidator {
    * @return - the value requested, in its standard format to be used for representing the value within Drill
    *            Example: all lower case values for strings, to avoid ambiguities in how values are stored
    *            while allowing some flexibility for users
-   * @throws ExpressionParsingException - message to describe error with value, including range or list of expected values
+   * @throws UserException - message to describe error with value, including range or list of expected values
    */
-  public abstract OptionValue validate(SqlLiteral value, OptionType optionType) throws ExpressionParsingException;
+  public abstract OptionValue validate(SqlLiteral value, OptionType optionType);
 
   public String getOptionName() {
     return optionName;
@@ -59,5 +57,10 @@ public abstract class OptionValidator {
 
   public abstract OptionValue getDefault();
 
-  public abstract void validate(OptionValue v) throws ExpressionParsingException;
+  /**
+   * Validates the option value
+   * @param v the value that needs to be validated
+   * @throws UserException - message to describe error with value, including range or list of expected values
+   */
+  public abstract void validate(OptionValue v);
 }

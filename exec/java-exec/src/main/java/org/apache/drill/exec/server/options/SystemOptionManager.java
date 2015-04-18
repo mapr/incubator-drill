@@ -25,15 +25,12 @@ import java.util.concurrent.ConcurrentMap;
 
 import org.apache.commons.collections.IteratorUtils;
 import org.apache.drill.common.config.DrillConfig;
+import org.apache.drill.common.exceptions.UserException;
 import org.apache.drill.exec.ExecConstants;
 import org.apache.drill.exec.compile.ClassTransformer;
 import org.apache.drill.exec.compile.QueryClassLoader;
 import org.apache.drill.exec.planner.physical.PlannerSettings;
 import org.apache.drill.exec.server.options.OptionValue.OptionType;
-import org.apache.drill.exec.server.options.TypeValidators.BooleanValidator;
-import org.apache.drill.exec.server.options.TypeValidators.DoubleValidator;
-import org.apache.drill.exec.server.options.TypeValidators.LongValidator;
-import org.apache.drill.exec.server.options.TypeValidators.StringValidator;
 import org.apache.drill.exec.store.sys.PStore;
 import org.apache.drill.exec.store.sys.PStoreConfig;
 import org.apache.drill.exec.store.sys.PStoreProvider;
@@ -167,7 +164,6 @@ public class SystemOptionManager extends BaseOptionManager {
     }
   }
 
-
   @Override
   public void setOption(final String name, final SqlLiteral literal, final OptionType type) {
     assert type == OptionValue.OptionType.SYSTEM || type == OptionValue.OptionType.SESSION;
@@ -216,20 +212,23 @@ public class SystemOptionManager extends BaseOptionManager {
     }
 
     @Override
-    public void validate(final OptionValue v) throws SetOptionException {
+    public void validate(final OptionValue v) {
       final OptionValidator validator = knownOptions.get(v.name);
       if (validator == null) {
-        throw new SetOptionException("Unknown option " + v.name);
+        throw UserException.validationError()
+          .message("Unknown option %s", v.name)
+          .build();
       }
       validator.validate(v);
     }
 
     @Override
-    public OptionValue validate(final String name, final SqlLiteral value, final OptionType optionType)
-        throws SetOptionException {
+    public OptionValue validate(final String name, final SqlLiteral value, final OptionType optionType) {
       final OptionValidator validator = knownOptions.get(name);
       if (validator == null) {
-        throw new SetOptionException("Unknown option: " + name);
+        throw UserException.validationError()
+          .message("Unknown option %s", name)
+          .build();
       }
       return validator.validate(value, optionType);
     }

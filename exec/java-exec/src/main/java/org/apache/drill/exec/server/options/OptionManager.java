@@ -17,6 +17,7 @@
  */
 package org.apache.drill.exec.server.options;
 
+import org.apache.drill.common.exceptions.UserException;
 import org.apache.drill.exec.server.options.OptionValue.OptionType;
 import org.apache.drill.exec.server.options.TypeValidators.BooleanValidator;
 import org.apache.drill.exec.server.options.TypeValidators.DoubleValidator;
@@ -26,10 +27,27 @@ import org.eigenbase.sql.SqlLiteral;
 
 public interface OptionManager extends Iterable<OptionValue> {
   public OptionValue getOption(String name);
-  public void setOption(OptionValue value) throws SetOptionException;
-  public void setOption(String name, SqlLiteral literal, OptionValue.OptionType type) throws SetOptionException;
+
+  /**
+   * Sets the option
+   * @param value the option value to set
+   * @throws UserException - message to describe error with setting the value
+   */
+  public void setOption(OptionValue value);
+
+  /**
+   * Sets the option
+   * @param name name of the option
+   * @param literal value of the option as a literal
+   * @param type type of the option
+   * @throws UserException - message to describe error with setting the value
+   */
+  public void setOption(String name, SqlLiteral literal, OptionValue.OptionType type);
+
   public OptionAdmin getAdmin();
+
   public OptionManager getSystemManager();
+
   public OptionList getOptionList();
 
   public boolean getOption(BooleanValidator validator);
@@ -39,7 +57,20 @@ public interface OptionManager extends Iterable<OptionValue> {
 
   public interface OptionAdmin {
     public void registerOptionType(OptionValidator validator);
+
+    /**
+     * See {@link org.apache.drill.exec.server.options.OptionValidator#validate}
+     */
     public void validate(OptionValue v) throws SetOptionException;
-    public OptionValue validate(String name, SqlLiteral value, OptionType optionType) throws SetOptionException;
+
+    /**
+     * Calls the registered validator for the given parameters
+     * See {@link org.apache.drill.exec.server.options.OptionValidator#validate}
+     * @param name name of the option
+     * @param value value of the option
+     * @param optionType type of the option
+     * @return the validated option
+     */
+    public OptionValue validate(String name, SqlLiteral value, OptionType optionType);
   }
 }
