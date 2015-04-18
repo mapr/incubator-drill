@@ -73,6 +73,30 @@ class ErrorHelper {
     return getWrapperBuilder(ex).build();
   }
 
+  /**
+   * returns the root error message
+   * @param cause exception we want the root message for
+   * @return root error message or empty string if none found
+   */
+  static String getRootMessage(final Throwable cause) {
+    String message = "";
+
+    Throwable ex = cause;
+    while (ex != null) {
+      if (ex.getMessage() != null) {
+        message = ex.getMessage();
+      }
+
+      if (ex.getCause() != null && ex.getCause() != ex) {
+        ex = ex.getCause();
+      } else {
+        break;
+      }
+    }
+
+    return message;
+  }
+
   private static ExceptionWrapper.Builder getWrapperBuilder(Throwable ex) {
     return getWrapperBuilder(ex, false);
   }
