@@ -47,6 +47,7 @@ import org.apache.drill.exec.planner.sql.parser.impl.DrillParserWithCompoundIdCo
 import org.apache.drill.exec.store.StoragePluginRegistry;
 import org.apache.drill.exec.util.Pointer;
 import org.apache.drill.exec.work.foreman.ForemanSetupException;
+import org.apache.drill.exec.work.foreman.SqlUnsupportedException;
 import org.eigenbase.rel.RelCollationTraitDef;
 import org.eigenbase.rel.rules.ReduceExpressionsRule;
 import org.eigenbase.rel.rules.WindowedAggSplitterRule;
@@ -121,7 +122,9 @@ public class DrillSqlWorker {
     try {
       sqlNode = planner.parse(sql);
     } catch (SqlParseException e) {
-      throw new QueryInputException("Failure parsing SQL. " + e.getMessage(), e);
+      throw UserException.parseError()
+          .message(e.getMessage())
+          .build();
     }
 
     AbstractSqlHandler handler;
@@ -155,6 +158,9 @@ public class DrillSqlWorker {
     } catch(ValidationException e) {
       String errorMessage = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
       throw UserException.parseError(e).message(errorMessage).build();
+    } catch(SqlUnsupportedException e) {
+      throw UserException.unsupportedError(e)
+          .build();
     } catch (IOException | RelConversionException e) {
       throw new QueryInputException("Failure handling SQL.", e);
     }
