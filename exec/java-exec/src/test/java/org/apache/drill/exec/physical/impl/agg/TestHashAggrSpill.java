@@ -29,8 +29,9 @@ import org.apache.drill.test.ClusterFixture;
 import org.apache.drill.test.ClusterFixtureBuilder;
 import org.apache.drill.test.DrillTest;
 import org.apache.drill.test.ProfileParser;
-import org.apache.drill.test.QueryBuilder;
 import org.apache.drill.categories.SlowTest;
+import org.apache.drill.test.QueryBuilder.QuerySummary;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -100,7 +101,7 @@ public class TestHashAggrSpill extends DrillTest {
     }
 
   private void runAndDump(ClientFixture client, String sql, long expectedRows, long spillCycle, long fromSpilledPartitions, long toSpilledPartitions) throws Exception {
-    QueryBuilder.QuerySummary summary = client.queryBuilder().sql(sql).run();
+    QuerySummary summary = client.queryBuilder().sql(sql).run();
     if (expectedRows > 0) {
       assertEquals(expectedRows, summary.recordCount());
     }

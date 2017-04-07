@@ -15,20 +15,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.drill.exec.client;
-
-import org.apache.drill.exec.rpc.NonTransientRpcException;
+package org.apache.drill.exec.rpc.user.clusterclient;
 
 /**
- * Exception for malformed connection string from client
+ * Behaves both like a cluster client and a connection.
  */
-public class InvalidConnectionInfoException extends NonTransientRpcException {
-
-  public InvalidConnectionInfoException(String message) {
-    super(message);
-  }
-
-  public InvalidConnectionInfoException(String message, Object... args) {
-    super(String.format(message, args));
-  }
+public interface DrillConnectionPool extends DrillConnection, DrillClusterClient {
 }

@@ -71,7 +71,7 @@ public class QueryBuilder {
    * using a {@link QuerySummaryFuture}.
    */
 
-  public class SummaryOnlyQueryEventListener implements UserResultsListener {
+  public static class SummaryOnlyQueryEventListener implements UserResultsListener {
 
     /**
      * The future to be notified. Created here and returned by the
@@ -121,7 +121,7 @@ public class QueryBuilder {
    * just the summary of the query.
    */
 
-  public class QuerySummaryFuture implements Future<QuerySummary> {
+  public static class QuerySummaryFuture implements Future<QuerySummary> {
 
     /**
      * Synchronizes the listener thread and the test thread that

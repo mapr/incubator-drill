@@ -15,20 +15,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.drill.exec.client;
+package org.apache.drill.exec.rpc.user.clusterclient;
 
-import org.apache.drill.exec.rpc.NonTransientRpcException;
+import org.apache.drill.exec.memory.BufferAllocator;
 
-/**
- * Exception for malformed connection string from client
- */
-public class InvalidConnectionInfoException extends NonTransientRpcException {
+public interface DrillClusterClient {
 
-  public InvalidConnectionInfoException(String message) {
-    super(message);
-  }
+  /**
+   * Gets the {@link BufferAllocator buffer allocator} used by this client.
+   *
+   * @return buffer allocator
+   */
+  BufferAllocator getAllocator();
 
-  public InvalidConnectionInfoException(String message, Object... args) {
-    super(String.format(message, args));
-  }
+  /**
+   * Release resources, and close all {@link DrillConnection connections}
+   * created using this client.
+   **/
+  void close();
+
 }

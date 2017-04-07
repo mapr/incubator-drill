@@ -250,6 +250,10 @@ public class PreparedStatementProvider {
     }
 
     @Override
+    public void close() {
+    }
+
+    @Override
     public void sendData(RpcOutcomeListener<Ack> listener, QueryWritableBatch result) {
       // Save the query results schema and release the buffers.
       if (fields == null) {

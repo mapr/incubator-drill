@@ -28,6 +28,7 @@ import org.apache.drill.exec.proto.UserBitShared.QueryId;
 import org.apache.drill.exec.proto.UserBitShared.QueryResult;
 import org.apache.drill.exec.proto.UserBitShared.SaslMessage;
 import org.apache.drill.exec.proto.UserProtos.BitToUserHandshake;
+import org.apache.drill.exec.proto.UserProtos.CancelQueryWithSessionHandle;
 import org.apache.drill.exec.proto.UserProtos.CreatePreparedStatementReq;
 import org.apache.drill.exec.proto.UserProtos.CreatePreparedStatementResp;
 import org.apache.drill.exec.proto.UserProtos.GetCatalogsReq;
@@ -41,9 +42,12 @@ import org.apache.drill.exec.proto.UserProtos.GetServerMetaReq;
 import org.apache.drill.exec.proto.UserProtos.GetServerMetaResp;
 import org.apache.drill.exec.proto.UserProtos.GetTablesReq;
 import org.apache.drill.exec.proto.UserProtos.GetTablesResp;
+import org.apache.drill.exec.proto.UserProtos.NewSessionRequest;
 import org.apache.drill.exec.proto.UserProtos.QueryPlanFragments;
 import org.apache.drill.exec.proto.UserProtos.RpcType;
 import org.apache.drill.exec.proto.UserProtos.RunQuery;
+import org.apache.drill.exec.proto.UserProtos.RunQueryWithSessionHandle;
+import org.apache.drill.exec.proto.UserProtos.SessionHandle;
 import org.apache.drill.exec.proto.UserProtos.UserToBitHandshake;
 import org.apache.drill.exec.rpc.RpcConfig;
 
@@ -74,6 +78,12 @@ public class UserRpcConfig {
             RpcType.PREPARED_STATEMENT, CreatePreparedStatementResp.class) // user to bit
         .add(RpcType.SASL_MESSAGE, SaslMessage.class, RpcType.SASL_MESSAGE, SaslMessage.class) // user <-> bit
         .add(RpcType.GET_SERVER_META, GetServerMetaReq.class, RpcType.SERVER_META, GetServerMetaResp.class) // user to bit
+        .add(RpcType.NEW_SESSION, NewSessionRequest.class, RpcType.SESSION_HANDLE, SessionHandle.class) // user to bit
+        .add(RpcType.RUN_QUERY_WITH_SESSION, RunQueryWithSessionHandle.class,
+            RpcType.QUERY_HANDLE, QueryId.class) // user to bit
+        .add(RpcType.CLOSE_SESSION, SessionHandle.class, RpcType.ACK, Ack.class) // user to bit
+        .add(RpcType.CANCEL_QUERY_WITH_SESSION, CancelQueryWithSessionHandle.class,
+            RpcType.ACK, Ack.class)
         .build();
   }
 

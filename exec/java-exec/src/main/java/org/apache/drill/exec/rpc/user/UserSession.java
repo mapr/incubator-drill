@@ -40,6 +40,7 @@ import org.apache.drill.exec.planner.sql.handlers.SqlHandlerUtil;
 import org.apache.drill.exec.proto.UserBitShared.UserCredentials;
 import org.apache.drill.exec.proto.UserProtos.UserProperties;
 import org.apache.drill.exec.server.options.OptionManager;
+import org.apache.drill.exec.server.options.OptionValue;
 import org.apache.drill.exec.server.options.SessionOptionManager;
 
 import com.google.common.collect.Maps;
@@ -115,6 +116,11 @@ public class UserSession implements AutoCloseable {
       return this;
     }
 
+    public Builder withUserProperties(DrillProperties properties) {
+      userSession.properties = properties;
+      return this;
+    }
+
     public Builder setSupportComplexTypes(boolean supportComplexTypes) {
       userSession.supportComplexTypes = supportComplexTypes;
       return this;
@@ -178,6 +184,10 @@ public class UserSession implements AutoCloseable {
     return properties.getProperty(DrillProperties.IMPERSONATION_TARGET);
   }
 
+  public String unsetTargetUserName() {
+    return (String) properties.remove(DrillProperties.IMPERSONATION_TARGET);
+  }
+
   public void incrementQueryCount(final QueryCountIncrementer incrementer) {
     assert incrementer != null;
     queryCount.incrementAndGet();
@@ -185,6 +195,10 @@ public class UserSession implements AutoCloseable {
 
   public int getQueryCount() {
     return queryCount.get();
+  }
+
+  public DrillProperties getProperties() {
+    return properties;
   }
 
   /**
@@ -246,6 +260,17 @@ public class UserSession implements AutoCloseable {
    */
   public void setSessionOption(String name, String value) {
     sessionOptions.setLocalOption(name, value);
+  }
+
+  /**
+   * Set the option of a session level.
+   *
+   * @param kind option kind
+   * @param name option name
+   * @param value option value
+   */
+  public void setSessionOption(final OptionValue.Kind kind, final String name, final String value) {
+    sessionOptions.setLocalOption(kind, name, value);
   }
 
   /**
