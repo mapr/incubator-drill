@@ -48,7 +48,7 @@ public class IteratorValidator extends AbstractSingle{
 
   @Override
   protected PhysicalOperator getNewWithChild(PhysicalOperator child) {
-    return new IteratorValidator(child, isRepeatable);
+    return new IteratorValidator(child, this.isRepeatable);
   }
 
   @Override
