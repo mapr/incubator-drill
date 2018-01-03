@@ -17,6 +17,7 @@
  */
 package org.apache.drill.exec.planner.index.generators;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import org.apache.calcite.plan.RelTraitSet;
 import org.apache.calcite.rel.InvalidRelException;
@@ -30,8 +31,6 @@ import org.apache.drill.exec.planner.index.FunctionalIndexInfo;
 import org.apache.drill.exec.planner.index.IndexPlanUtils;
 import org.apache.drill.exec.planner.logical.DrillParseContext;
 import org.apache.drill.exec.planner.physical.PlannerSettings;
-import org.apache.drill.exec.planner.physical.LimitPrel;
-import org.apache.drill.exec.planner.physical.SortPrel;
 import org.apache.drill.exec.planner.physical.ProjectPrel;
 import org.apache.drill.exec.planner.physical.PrelUtil;
 import org.apache.drill.exec.planner.physical.ScanPrel;
