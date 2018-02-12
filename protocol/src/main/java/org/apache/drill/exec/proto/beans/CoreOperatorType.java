@@ -34,7 +34,7 @@ public enum CoreOperatorType implements com.dyuproject.protostuff.EnumLite<CoreO
     ORDERED_PARTITION_SENDER(9),
     PROJECT(10),
     UNORDERED_RECEIVER(11),
-    RANGE_SENDER(12),
+    RANGE_PARTITION_SENDER(12),
     SCREEN(13),
     SELECTION_VECTOR_REMOVER(14),
     STREAMING_AGGREGATE(15),
@@ -65,7 +65,9 @@ public enum CoreOperatorType implements com.dyuproject.protostuff.EnumLite<CoreO
     FLATTEN(40),
     LATERAL_JOIN(41),
     UNNEST(42),
-    HIVE_DRILL_NATIVE_PARQUET_ROW_GROUP_SCAN(43);
+    HIVE_DRILL_NATIVE_PARQUET_ROW_GROUP_SCAN(43),
+    MAPRDB_SUB_SCAN(44),
+    ROWKEY_JOIN(45);
     
     public final int number;
     
@@ -95,7 +97,7 @@ public enum CoreOperatorType implements com.dyuproject.protostuff.EnumLite<CoreO
             case 9: return ORDERED_PARTITION_SENDER;
             case 10: return PROJECT;
             case 11: return UNORDERED_RECEIVER;
-            case 12: return RANGE_SENDER;
+            case 12: return RANGE_PARTITION_SENDER;
             case 13: return SCREEN;
             case 14: return SELECTION_VECTOR_REMOVER;
             case 15: return STREAMING_AGGREGATE;
@@ -127,6 +129,8 @@ public enum CoreOperatorType implements com.dyuproject.protostuff.EnumLite<CoreO
             case 41: return LATERAL_JOIN;
             case 42: return UNNEST;
             case 43: return HIVE_DRILL_NATIVE_PARQUET_ROW_GROUP_SCAN;
+            case 44: return MAPRDB_SUB_SCAN;
+            case 45: return ROWKEY_JOIN;
             default: return null;
         }
     }
