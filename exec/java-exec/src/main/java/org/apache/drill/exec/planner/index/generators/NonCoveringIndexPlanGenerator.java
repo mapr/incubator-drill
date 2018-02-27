@@ -89,18 +89,22 @@ public class NonCoveringIndexPlanGenerator extends AbstractIndexPlanGenerator {
   final private IndexDescriptor indexDesc;
   // Ideally This functionInfo should be cached along with indexDesc.
   final protected FunctionalIndexInfo functionInfo;
+  // The condition that should be applied on top of the primary table
+  final protected RexNode primaryTableCondition;
 
   public NonCoveringIndexPlanGenerator(IndexLogicalPlanCallContext indexContext,
                                        IndexDescriptor indexDesc,
                                        IndexGroupScan indexGroupScan,
                                        RexNode indexCondition,
                                        RexNode remainderCondition,
+                                       RexNode primaryTableCondition,
                                        RexBuilder builder,
                                        PlannerSettings settings) {
     super(indexContext, indexCondition, remainderCondition, builder, settings);
     this.indexGroupScan = indexGroupScan;
     this.indexDesc = indexDesc;
     this.functionInfo = indexDesc.getFunctionalInfo();
+    this.primaryTableCondition = primaryTableCondition;
   }
 
   @Override
@@ -213,7 +217,7 @@ public class NonCoveringIndexPlanGenerator extends AbstractIndexPlanGenerator {
     FilterPrel leftIndexFilterPrel = null;
     if (indexDesc.isAsyncIndex()) {
       leftIndexFilterPrel = new FilterPrel(dbScan.getCluster(), dbScan.getTraitSet(),
-            dbScan, indexContext.getOrigCondition());
+            dbScan, primaryTableCondition);
       lastLeft = leftIndexFilterPrel;
     }
 
