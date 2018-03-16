@@ -23,6 +23,8 @@ import org.apache.drill.common.logical.data.JoinCondition;
 import org.apache.drill.exec.ExecConstants;
 import org.apache.drill.exec.ops.QueryContext;
 import org.apache.drill.exec.physical.base.PhysicalOperator;
+import org.apache.drill.exec.physical.base.SubScan;
+import org.apache.drill.exec.planner.common.JoinControl;
 import org.apache.drill.exec.proto.UserBitShared.CoreOperatorType;
 import org.apache.calcite.rel.core.JoinRelType;
 
@@ -37,29 +39,70 @@ import org.apache.drill.exec.physical.base.AbstractJoinPop;
 public class HashJoinPOP extends AbstractJoinPop {
   static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(HashJoinPOP.class);
 
+  private final boolean isRowKeyJoin;
+  private final int joinControl;
+  @JsonProperty("subScanForRowKeyJoin")
+  private SubScan subScanForRowKeyJoin;
+
+  public HashJoinPOP(
+      @JsonProperty("left") PhysicalOperator left,
+      @JsonProperty("right") PhysicalOperator right,
+      @JsonProperty("conditions") List<JoinCondition> conditions,
+      @JsonProperty("joinType") JoinRelType joinType
+  ) {
+    this(left, right, conditions, joinType, false, JoinControl.DEFAULT);
+  }
+
   @JsonCreator
-  public HashJoinPOP(@JsonProperty("left") PhysicalOperator left, @JsonProperty("right") PhysicalOperator right,
-                       @JsonProperty("conditions") List<JoinCondition> conditions,
-                       @JsonProperty("joinType") JoinRelType joinType) {
+  public HashJoinPOP(
+      @JsonProperty("left") PhysicalOperator left,
+      @JsonProperty("right") PhysicalOperator right,
+      @JsonProperty("conditions") List<JoinCondition> conditions,
+      @JsonProperty("joinType") JoinRelType joinType,
+      @JsonProperty("isRowKeyJoin") boolean isRowKeyJoin,
+      @JsonProperty("joinControl") int joinControl
+  ) {
         super(left, right, joinType, null, conditions);
         Preconditions.checkArgument(joinType != null, "Join type is missing for HashJoin Pop");
+    this.isRowKeyJoin = isRowKeyJoin;
+    this.subScanForRowKeyJoin = null;
+    this.joinControl = joinControl;
   }
 
   @Override
   public PhysicalOperator getNewWithChildren(List<PhysicalOperator> children) {
         Preconditions.checkArgument(children.size() == 2);
-        HashJoinPOP newHashJoin = new HashJoinPOP(children.get(0), children.get(1), conditions, joinType);
-        newHashJoin.setMaxAllocation(getMaxAllocation());
+        HashJoinPOP newHashJoin = new HashJoinPOP(children.get(0), children.get(1), conditions, joinType, isRowKeyJoin, joinControl);
+        newHashJoin.setSubScanForRowKeyJoin(this.getSubScanForRowKeyJoin());
         return newHashJoin;
-  }
+    }
 
-  public HashJoinPOP flipIfRight() {
-      if (joinType == JoinRelType.RIGHT) {
+    @JsonProperty("isRowKeyJoin")
+    public boolean isRowKeyJoin() {
+        return isRowKeyJoin;
+    }
+
+    @JsonProperty("joinControl")
+    public int getJoinControl() {
+        return joinControl;
+    }
+
+    @JsonProperty("subScanForRowKeyJoin")
+    public SubScan getSubScanForRowKeyJoin() {
+        return subScanForRowKeyJoin;
+    }
+
+    public void setSubScanForRowKeyJoin(SubScan subScan) {
+        this.subScanForRowKeyJoin = subScan;
+    }
+
+    public HashJoinPOP flipIfRight() {
+        if (joinType == JoinRelType.RIGHT) {
             List<JoinCondition> flippedConditions = Lists.newArrayList();
             for (JoinCondition c : conditions) {
                 flippedConditions.add(c.flip());
             }
-            return new HashJoinPOP(right, left, flippedConditions, JoinRelType.LEFT);
+            return new HashJoinPOP(right, left, flippedConditions, JoinRelType.LEFT, isRowKeyJoin, joinControl);
       } else {
             return this;
       }

@@ -122,6 +122,22 @@ public class SystemOptionManager extends BaseOptionManager implements AutoClosea
       new OptionDefinition(ExecConstants.HASHJOIN_NUM_ROWS_IN_BATCH_VALIDATOR),
       new OptionDefinition(ExecConstants.HASHJOIN_MAX_BATCHES_IN_MEMORY_VALIDATOR, new OptionMetaData(OptionValue.AccessibleScopes.SYSTEM, true, true)),
       new OptionDefinition(ExecConstants.HASHJOIN_FALLBACK_ENABLED_VALIDATOR), // for enable/disable unbounded HashJoin
+      // ------------------------------------------- Index planning related options BEGIN --------------------------------------------------------------
+      new OptionDefinition(PlannerSettings.USE_SIMPLE_OPTIMIZER),
+      new OptionDefinition(PlannerSettings.INDEX_PLANNING),
+      new OptionDefinition(PlannerSettings.ENABLE_STATS),
+      new OptionDefinition(PlannerSettings.DISABLE_FULL_TABLE_SCAN),
+      new OptionDefinition(PlannerSettings.INDEX_MAX_CHOSEN_INDEXES_PER_TABLE),
+      new OptionDefinition(PlannerSettings.INDEX_FORCE_SORT_NONCOVERING),
+      new OptionDefinition(PlannerSettings.INDEX_USE_HASHJOIN_NONCOVERING),
+      new OptionDefinition(PlannerSettings.INDEX_COVERING_SELECTIVITY_THRESHOLD),
+      new OptionDefinition(PlannerSettings.INDEX_NONCOVERING_SELECTIVITY_THRESHOLD),
+      new OptionDefinition(PlannerSettings.INDEX_ROWKEYJOIN_COST_FACTOR),
+      new OptionDefinition(PlannerSettings.INDEX_STATS_ROWCOUNT_SCALING_FACTOR),
+      // TODO: Deprecate the following 2 (also in PlannerSettings.java)
+      new OptionDefinition(PlannerSettings.INDEX_PREFER_INTERSECT_PLANS),
+      new OptionDefinition(PlannerSettings.INDEX_MAX_INDEXES_TO_INTERSECT),
+      // ------------------------------------------- Index planning related options END   --------------------------------------------------------------
       new OptionDefinition(ExecConstants.HASHAGG_NUM_PARTITIONS_VALIDATOR),
       new OptionDefinition(ExecConstants.HASHAGG_MAX_MEMORY_VALIDATOR),
       new OptionDefinition(ExecConstants.HASHAGG_MIN_BATCHES_PER_PARTITION_VALIDATOR), // for tuning
@@ -228,6 +244,7 @@ public class SystemOptionManager extends BaseOptionManager implements AutoClosea
       new OptionDefinition(ExecConstants.ENABLE_ITERATOR_VALIDATOR),
       new OptionDefinition(ExecConstants.OUTPUT_BATCH_SIZE_VALIDATOR, new OptionMetaData(OptionValue.AccessibleScopes.SYSTEM, true, false)),
       new OptionDefinition(ExecConstants.FRAG_RUNNER_RPC_TIMEOUT_VALIDATOR, new OptionMetaData(OptionValue.AccessibleScopes.SYSTEM, true, true)),
+      new OptionDefinition(ExecConstants.QUERY_ROWKEYJOIN_BATCHSIZE)
     };
 
     final CaseInsensitiveMap<OptionDefinition> map = CaseInsensitiveMap.newHashMap();

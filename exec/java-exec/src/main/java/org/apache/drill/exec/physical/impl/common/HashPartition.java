@@ -18,6 +18,7 @@
 package org.apache.drill.exec.physical.impl.common;
 
 import com.google.common.collect.Lists;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.drill.common.exceptions.RetryAfterSpillException;
 import org.apache.drill.common.exceptions.UserException;
 import org.apache.drill.exec.cache.VectorSerializer;
@@ -399,6 +400,10 @@ public class HashPartition implements HashJoinMemoryCalculator.PartitionStat {
 
   public void updateBatches() throws SchemaChangeException {
     hashTable.updateBatches();
+  }
+
+  public Pair<VectorContainer, Integer> nextBatch() {
+    return hashTable.nextBatch();
   }
 
   @Override
