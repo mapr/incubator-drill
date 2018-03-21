@@ -346,5 +346,4 @@ public class IndexIntersectPlanGenerator extends AbstractIndexPlanGenerator {
 
     return finalRel;
   }
-
 }
