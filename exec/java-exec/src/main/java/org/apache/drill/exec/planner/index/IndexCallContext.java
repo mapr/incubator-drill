@@ -28,6 +28,8 @@ import org.apache.drill.exec.planner.physical.DrillDistributionTrait.Distributio
 import org.apache.drill.exec.planner.common.DrillScanRelBase;
 import org.apache.drill.exec.planner.common.DrillProjectRelBase;
 import org.apache.drill.exec.planner.common.OrderedRel;
+import org.apache.drill.exec.planner.logical.DrillParseContext;
+
 import java.util.List;
 import java.util.Set;
 
@@ -45,6 +47,8 @@ public interface IndexCallContext {
   boolean hasUpperProject();
 
   RelOptRuleCall getCall();
+
+  DrillParseContext getDefaultParseContext();
 
   Set<LogicalExpression> getLeftOutPathsInFunctions();
 

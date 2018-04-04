@@ -20,6 +20,7 @@ package org.apache.drill.exec.planner.index.generators;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.calcite.plan.RelOptUtil;
 import org.apache.calcite.plan.RelTraitSet;
@@ -31,6 +32,7 @@ import org.apache.drill.exec.planner.common.JoinControl;
 import org.apache.drill.exec.planner.index.IndexLogicalPlanCallContext;
 import org.apache.drill.exec.planner.index.IndexDescriptor;
 import org.apache.drill.exec.planner.index.FunctionalIndexInfo;
+import org.apache.drill.exec.planner.index.FlattenIndexPlanCallContext;
 import org.apache.drill.exec.planner.index.FunctionalIndexHelper;
 import org.apache.drill.exec.planner.index.IndexPlanUtils;
 import org.apache.drill.exec.planner.logical.DrillScanRel;
@@ -52,9 +54,13 @@ import org.apache.calcite.rel.core.JoinRelType;
 import org.apache.calcite.rel.type.RelDataType;
 import org.apache.calcite.rel.type.RelDataTypeFactory;
 import org.apache.calcite.rel.type.RelDataTypeField;
+import org.apache.calcite.rel.type.RelDataTypeFieldImpl;
 import org.apache.calcite.rex.RexBuilder;
+import org.apache.calcite.rex.RexCall;
 import org.apache.calcite.rex.RexInputRef;
 import org.apache.calcite.rex.RexNode;
+import org.apache.calcite.util.Pair;
+
 import org.apache.drill.shaded.guava.com.google.common.base.Preconditions;
 import org.apache.drill.shaded.guava.com.google.common.collect.ImmutableList;
 import org.apache.drill.shaded.guava.com.google.common.collect.Lists;
@@ -226,10 +232,32 @@ public class NonCoveringIndexPlanGenerator extends AbstractIndexPlanGenerator {
     if (origProject != null) {// then we also  don't need a project
       // new Project's rowtype is original Project's rowtype [plus rowkey if rowkey is not in original rowtype]
       List<RelDataTypeField> origProjFields = origRowType.getFieldList();
-      leftFieldTypeBuilder.addAll(origProjFields);
-      // get the exprs from the original Project
+      List<RelDataTypeField> newProjFields = Lists.newArrayList();
 
-      leftProjectExprs.addAll(IndexPlanUtils.getProjects(origProject));
+      // get the exprs from the original Project and adjust if necessary
+      if (indexContext instanceof FlattenIndexPlanCallContext) {
+        List<Pair<RexNode, String>> projExprList = origProject.getNamedProjects();
+        FlattenIndexPlanCallContext flattenContext = ((FlattenIndexPlanCallContext) indexContext);
+        int origFieldIndex = 0;
+
+        for (Pair<RexNode, String> p : projExprList) {
+          newProjFields.add(origProjFields.get(origFieldIndex));
+          // if this expr is a flatten, only keep the input of flatten.  Note that we cannot drop
+          // the expr altogether because the new Project will be added to the same RelSubset as the old Project and
+          // the RowType of both should be the same to pass validation checks in the VolcanoPlanner.
+          if (flattenContext.getFlattenMap().containsKey(p.right)) {
+            leftProjectExprs.add(((RexCall)p.left).getOperands().get(0));
+          } else {
+            leftProjectExprs.add(p.left);
+          }
+          origFieldIndex++;
+        }
+        leftFieldTypeBuilder.addAll(newProjFields);
+      } else {
+        leftProjectExprs.addAll(origProject.getProjects());
+        leftFieldTypeBuilder.addAll(origProjFields);
+      }
+
       // add the rowkey IFF rowkey is not in orig scan
       if (getRowKeyIndex(origRowType, origScan) < 0) {
         leftFieldTypeBuilder.add(leftRowKeyField);

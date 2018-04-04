@@ -118,6 +118,8 @@ public class IndexPlanUtils {
     if (functionInfo.hasFunctional()) {
       // need info from full query
       return queryCoveredByIndex(indexContext, functionInfo);
+    } else if (functionInfo.hasArrayField()) {
+      return isCoveringArrayIndex(indexContext, functionInfo);
     }
     DbGroupScan groupScan = (DbGroupScan) getGroupScan(indexContext.getScan());
     List<LogicalExpression> tableCols = Lists.newArrayList();
@@ -150,8 +152,7 @@ public class IndexPlanUtils {
       }
     }
 
-    DrillParseContext parserContext =
-        new DrillParseContext(PrelUtil.getPlannerSettings(indexContext.getCall().rel(0).getCluster()));
+    DrillParseContext parserContext = indexContext.getDefaultParseContext();
 
     Set<LogicalExpression> exprs = Sets.newHashSet();
     if (indexContext.getUpperProject() != null) {
@@ -230,6 +231,11 @@ public class IndexPlanUtils {
       }
     }
 
+    return false;
+  }
+
+  private static boolean isCoveringArrayIndex(IndexCallContext indexContext, FunctionalIndexInfo indexInfo) {
+    // TODO: add full implementation for checking covering index with array fields
     return false;
   }
 
@@ -373,8 +379,7 @@ public class IndexPlanUtils {
       return;
     }
 
-    DrillParseContext parserContext =
-        new DrillParseContext(PrelUtil.getPlannerSettings(indexContext.getCall().rel(0).getCluster()));
+    DrillParseContext parserContext = indexContext.getDefaultParseContext();
 
     indexContext.createSortExprs();
     for (RelFieldCollation collation : coll) {
@@ -414,8 +419,7 @@ public class IndexPlanUtils {
       return;
     }
 
-    DrillParseContext parserContext =
-            new DrillParseContext(PrelUtil.getPlannerSettings(indexContext.call.rel(0).getCluster()));
+    DrillParseContext parserContext = indexContext.getDefaultParseContext();
 
     indexContext.sortExprs = Lists.newArrayList();
     for (RelFieldCollation collation : coll) {
@@ -563,8 +567,7 @@ public class IndexPlanUtils {
       }
 
       RelCollation idxCollation = indexDesc.getCollation();
-      RelFieldCollation.NullDirection nullsDir = idxCollation == null ? RelFieldCollation.NullDirection.UNSPECIFIED :
-              idxCollation.getFieldCollations().get(idxFieldCount).nullDirection;
+      RelFieldCollation.NullDirection nullsDir = indexDesc.getNullsOrderingDirection();
       RelFieldCollation.Direction dir = (idxCollation == null)?
           null : idxCollation.getFieldCollations().get(idxFieldCount).direction;
       if (dir == null) {

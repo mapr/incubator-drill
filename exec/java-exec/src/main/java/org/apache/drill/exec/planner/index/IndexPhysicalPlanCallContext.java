@@ -32,8 +32,10 @@ import org.apache.drill.exec.planner.physical.ProjectPrel;
 import org.apache.drill.exec.planner.physical.FilterPrel;
 import org.apache.drill.exec.planner.physical.ScanPrel;
 import org.apache.drill.exec.planner.common.OrderedRel;
+import org.apache.drill.exec.planner.logical.DrillParseContext;
 import org.apache.drill.exec.planner.physical.ExchangePrel;
 import org.apache.drill.exec.planner.physical.HashToRandomExchangePrel;
+import org.apache.drill.exec.planner.physical.PrelUtil;
 import org.apache.drill.exec.planner.physical.DrillDistributionTrait.DistributionField;
 
 import java.util.Collections;
@@ -50,6 +52,7 @@ public class IndexPhysicalPlanCallContext implements IndexCallContext {
   final public ScanPrel scan;
   final public ExchangePrel exch;
   final public String indexHint;
+  final public DrillParseContext defaultParseContext;
 
   public Set<LogicalExpression> leftOutPathsInFunctions;
 
@@ -80,6 +83,7 @@ public class IndexPhysicalPlanCallContext implements IndexCallContext {
     this.scan = scan;
     this.exch = exch;
     this.indexHint = ((DbGroupScan)this.scan.getGroupScan()).getIndexHint();
+    this.defaultParseContext = new DrillParseContext(PrelUtil.getPlannerSettings(getCall().rel(0).getCluster()));
   }
 
   public IndexPhysicalPlanCallContext(RelOptRuleCall call,
@@ -94,17 +98,20 @@ public class IndexPhysicalPlanCallContext implements IndexCallContext {
     this.scan = scan;
     this.exch = exch;
     this.indexHint = ((DbGroupScan)this.scan.getGroupScan()).getIndexHint();
+    this.defaultParseContext = new DrillParseContext(PrelUtil.getPlannerSettings(getCall().rel(0).getCluster()));
   }
 
+  @Override
   public DbGroupScan getGroupScan() {
     return (DbGroupScan) scan.getGroupScan();
   }
 
+  @Override
   public DrillScanRelBase getScan() {
     return scan;
   }
 
-
+  @Override
   public List<RelCollation> getCollationList() {
     if (sort != null) {
       return sort.getCollationList();
@@ -112,6 +119,7 @@ public class IndexPhysicalPlanCallContext implements IndexCallContext {
     return null;
   }
 
+  @Override
   public RelCollation getCollation() {
     if (sort != null) {
       return sort.getCollation();
@@ -119,75 +127,97 @@ public class IndexPhysicalPlanCallContext implements IndexCallContext {
     return null;
   }
 
+  @Override
   public boolean hasLowerProject() {
     return lowerProject != null;
   }
 
+  @Override
   public boolean hasUpperProject() {
     return upperProject != null;
   }
 
+  @Override
   public RelOptRuleCall getCall() {
     return call;
   }
 
+  @Override
   public Set<LogicalExpression> getLeftOutPathsInFunctions() {
     return leftOutPathsInFunctions;
   }
 
+  @Override
   public RelNode getFilter() {
     return filter;
   }
 
+  @Override
   public IndexableExprMarker getOrigMarker() {
     return origMarker;
   }
 
+  @Override
   public List<LogicalExpression> getSortExprs() {
     return sortExprs;
   }
 
+  @Override
   public DrillProjectRelBase getLowerProject() {
     return lowerProject;
   }
 
+  @Override
   public DrillProjectRelBase getUpperProject() {
     return upperProject;
   }
 
+  @Override
   public void setLeftOutPathsInFunctions(Set<LogicalExpression> exprs) {
     leftOutPathsInFunctions = exprs;
   }
 
+  @Override
   public List<SchemaPath> getScanColumns() {
     return ((AbstractDbGroupScan)scan.getGroupScan()).getColumns();
   }
 
+  @Override
   public RexNode getFilterCondition() {
     return filter.getCondition();
   }
 
+  @Override
   public RexNode getOrigCondition() {
     return origPushedCondition;
   }
 
+  @Override
   public OrderedRel getSort() {
     return sort;
   }
 
+  @Override
   public RelNode getExchange() {
     return exch;
   }
 
+  @Override
   public void createSortExprs() {
     sortExprs = Lists.newArrayList();
   }
 
+  @Override
   public List<DistributionField> getDistributionFields() {
     if (exch != null) {
       return ((HashToRandomExchangePrel) exch).getFields();
     } else {
       return Collections.EMPTY_LIST;
     }
+  }
+
+  @Override
+  public DrillParseContext getDefaultParseContext() {
+    return defaultParseContext;
   }
 }

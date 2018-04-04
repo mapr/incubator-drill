@@ -64,7 +64,9 @@ public class SemiJoinIndexScanPrule extends AbstractIndexPrule {
                   RelOptHelper.any(DrillScanRel.class),
                   RelOptHelper.some(DrillAggregateRel.class,
                           RelOptHelper.some(DrillProjectRel.class,
-                                  FlattenToIndexScanPrule.FILTER_PROJECT_SCAN.getOperand()))),
+                              RelOptHelper.some(DrillFilterRel.class,
+                                  RelOptHelper.some(DrillProjectRel.class, RelOptHelper.any(DrillScanRel.class)))))),
+//                                  FlattenToIndexScanPrule.FILTER_PROJECT_SCAN.getOperand()))),
           "SemiJoinIndexScanPrule:Join_Project_Filter_Project_Scan", new MatchJSPFPS());
 
   final private MatchFunction<SemiJoinIndexPlanCallContext> match;
@@ -132,6 +134,7 @@ public class SemiJoinIndexScanPrule extends AbstractIndexPrule {
 
   private static class MatchJSPFPS extends AbstractMatchFunction<SemiJoinIndexPlanCallContext> {
     Map<String, RexCall> flattenMap = Maps.newHashMap();
+    List<RexNode> nonFlattenExprs = Lists.newArrayList();
 
     @Override
     public boolean match(RelOptRuleCall call) {
@@ -155,7 +158,7 @@ public class SemiJoinIndexScanPrule extends AbstractIndexPrule {
       if (checkScan(rightRel)) {
 
         //check if the lower project contains the flatten.
-        return projectHasFlatten(lowerProject, flattenMap);
+        return projectHasFlatten(lowerProject, flattenMap, nonFlattenExprs);
       } else {
         return false;
       }
@@ -173,7 +176,7 @@ public class SemiJoinIndexScanPrule extends AbstractIndexPrule {
       final DrillJoinRel join = call.rel(0);
       final DrillAggregateRel distinct = call.rel(2);
 
-      FlattenIndexPlanCallContext rightSideContext = new FlattenIndexPlanCallContext(call, upperProject, filter, lowerProject,null, rightScan, flattenMap);
+      FlattenIndexPlanCallContext rightSideContext = new FlattenIndexPlanCallContext(call, upperProject, filter, lowerProject,null, rightScan, flattenMap, nonFlattenExprs);
       IndexLogicalPlanCallContext leftSideContext = new IndexLogicalPlanCallContext(call, null, null, null, leftScan);
       SemiJoinIndexPlanCallContext idxContext = new SemiJoinIndexPlanCallContext(call, join, distinct, leftSideContext, rightSideContext);
       return idxContext;
@@ -213,10 +216,11 @@ public class SemiJoinIndexScanPrule extends AbstractIndexPrule {
             context.rightSide.scan, context.rightSide.upperProject.getTraitSet(),
             context.rightSide.upperProject);
     Map<String, RexCall> flattenMap = Maps.newHashMap();
-    AbstractMatchFunction.projectHasFlatten(projectRel, flattenMap);
+    List<RexNode> nonFlattenExprs = Lists.newArrayList();
+    AbstractMatchFunction.projectHasFlatten(projectRel, flattenMap, nonFlattenExprs);
 
     FlattenIndexPlanCallContext logicalPlanCallContext = new FlattenIndexPlanCallContext(context.call, upperProjectRel, filterRel,
-            projectRel, null, newScan, flattenMap);
+            projectRel, null, newScan, flattenMap, nonFlattenExprs);
     return logicalPlanCallContext;
   }
 

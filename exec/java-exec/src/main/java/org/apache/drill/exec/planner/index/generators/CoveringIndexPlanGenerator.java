@@ -43,7 +43,6 @@ import org.apache.drill.exec.planner.physical.PrelUtil;
 import org.apache.drill.exec.planner.physical.ProjectPrel;
 import org.apache.drill.exec.planner.physical.Prule;
 import org.apache.drill.exec.planner.physical.ScanPrel;
-import org.apache.calcite.rel.InvalidRelException;
 
 import org.apache.calcite.rel.RelNode;
 

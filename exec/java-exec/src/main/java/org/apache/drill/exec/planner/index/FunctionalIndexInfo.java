@@ -82,4 +82,10 @@ public interface FunctionalIndexInfo {
    */
   boolean supportEqualCharConvertToLike();
 
+  /**
+   * Whether this index has an array field in the indexed fields or included fields
+   * @return True if the index has an array field in the indexed or included fields, False otherwise
+   */
+  boolean hasArrayField();
+
 }

@@ -17,6 +17,7 @@
  */
 package org.apache.drill.exec.planner.index;
 
+import java.util.List;
 import java.util.Map;
 
 import org.apache.calcite.plan.RelOptRuleCall;
@@ -25,6 +26,7 @@ import org.apache.calcite.rex.RexNode;
 import org.apache.drill.exec.planner.logical.DrillFilterRel;
 import org.apache.drill.exec.planner.logical.DrillProjectRel;
 import org.apache.drill.exec.planner.logical.DrillScanRel;
+
 
 public class FlattenIndexPlanCallContext extends IndexLogicalPlanCallContext {
 
@@ -38,7 +40,27 @@ public class FlattenIndexPlanCallContext extends IndexLogicalPlanCallContext {
    */
   protected DrillFilterRel filterBelowFlatten = null;
 
+  /**
+   * Project that has the Flatten
+   */
+  protected DrillProjectRel projectWithFlatten = null;
+
+  /**
+   * Map of Flatten field names to the corresponding RexCall
+   */
   protected Map<String, RexCall> flattenMap = null;
+
+  /**
+   * List of the non-Flatten expressions
+   */
+  protected List<RexNode> nonFlattenExprs = null;
+
+  /**
+   * Placeholder for ITEM expressions representing the individual filter conditions above the Flatten.
+   * For instance, suppose Flatten output is 'f', and the filter references f.b < 10, then the index planning
+   * rule will create an ITEM expression representing this condition.
+   */
+  protected List<RexNode> itemExprList = null;
 
   public FlattenIndexPlanCallContext(RelOptRuleCall call,
       DrillProjectRel upperProject,
@@ -46,20 +68,27 @@ public class FlattenIndexPlanCallContext extends IndexLogicalPlanCallContext {
       DrillProjectRel projectWithFlatten,
       DrillFilterRel filterBelowFlatten,
       DrillScanRel scan,
-      Map<String, RexCall> flattenMap) {
+      Map<String, RexCall> flattenMap,
+      List<RexNode> nonFlattenExprs) {
     super(call, null /* no Sort */,
         upperProject,
         filterAboveFlatten,
-        projectWithFlatten,
+        projectWithFlatten /* same as lowerProject */,
         scan);
 
     this.filterAboveFlatten = filterAboveFlatten;
     this.filterBelowFlatten = filterBelowFlatten;
+    this.projectWithFlatten = projectWithFlatten;
     this.flattenMap = flattenMap;
+    this.nonFlattenExprs = nonFlattenExprs;
   }
 
   public Map<String, RexCall> getFlattenMap() {
     return flattenMap;
+  }
+
+  public List<RexNode> getNonFlattenExprs() {
+    return nonFlattenExprs;
   }
 
   public DrillFilterRel getFilterAboveFlatten() {
@@ -68,6 +97,18 @@ public class FlattenIndexPlanCallContext extends IndexLogicalPlanCallContext {
 
   public DrillFilterRel getFilterBelowFlatten() {
     return filterBelowFlatten;
+  }
+
+  public void setItemExprList(List<RexNode> itemExprList) {
+    this.itemExprList = itemExprList;
+  }
+
+  public DrillProjectRel getProjectWithFlatten() {
+    return projectWithFlatten;
+  }
+
+  public List<RexNode> getItemExprList() {
+    return itemExprList;
   }
 
 }

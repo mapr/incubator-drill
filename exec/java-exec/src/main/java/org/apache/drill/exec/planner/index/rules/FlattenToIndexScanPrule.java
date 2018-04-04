@@ -92,13 +92,14 @@ public class FlattenToIndexScanPrule extends AbstractIndexPrule {
   private static class MatchFPS extends AbstractMatchFunction<FlattenIndexPlanCallContext> {
 
     Map<String, RexCall> flattenMap = Maps.newHashMap();
+    List<RexNode> nonFlattenExprs = Lists.newArrayList();
 
     public boolean match(RelOptRuleCall call) {
       final DrillScanRel scan = (DrillScanRel) call.rel(2);
       final DrillProjectRel project = (DrillProjectRel) call.rel(1);
       if (checkScan(scan)) {
         // if Project does not contain a FLATTEN expression, rule does not apply
-        return projectHasFlatten(project, flattenMap);
+        return projectHasFlatten(project, flattenMap, nonFlattenExprs);
       }
       return false;
     }
@@ -114,7 +115,8 @@ public class FlattenToIndexScanPrule extends AbstractIndexPrule {
           projectWithFlatten,
           null /* no filter below flatten */,
           scan,
-          flattenMap);
+          flattenMap,
+          nonFlattenExprs);
       return idxContext;
     }
   }
@@ -122,6 +124,7 @@ public class FlattenToIndexScanPrule extends AbstractIndexPrule {
   private static class MatchFPFS extends AbstractMatchFunction<FlattenIndexPlanCallContext> {
 
     Map<String, RexCall> flattenMap = Maps.newHashMap();
+    List<RexNode> nonFlattenExprs = Lists.newArrayList();
 
     public boolean match(RelOptRuleCall call) {
       final DrillProjectRel project = (DrillProjectRel) call.rel(1);
@@ -129,7 +132,7 @@ public class FlattenToIndexScanPrule extends AbstractIndexPrule {
 
       if (checkScan(scan)) {
         // if Project does not contain a FLATTEN expression, rule does not apply
-        return projectHasFlatten(project, flattenMap);
+        return projectHasFlatten(project, flattenMap, nonFlattenExprs);
       }
       return false;
     }
@@ -146,7 +149,8 @@ public class FlattenToIndexScanPrule extends AbstractIndexPrule {
               projectWithFlatten,
               filterBelowFlatten,
               scan,
-              flattenMap);
+              flattenMap,
+              nonFlattenExprs);
 
       return idxContext;
     }
@@ -199,9 +203,13 @@ public class FlattenToIndexScanPrule extends AbstractIndexPrule {
       FilterVisitor  filterVisitor =
           new FilterVisitor(indexContext.getFlattenMap(), indexContext.lowerProject, builder);
       RexNode conditionFilterAboveFlatten = indexContext.getFilterAboveFlatten().getCondition().accept(filterVisitor);
+
+      // keep track of the ITEM exprs that were created
+      indexContext.setItemExprList(filterVisitor.getItemExprList());
+
       if (indexContext.getFilterBelowFlatten() != null) {
         RexNode conditionFilterBelowFlatten = indexContext.getFilterBelowFlatten().getCondition();
-        // compose a new condition
+        // compose a new condition using conjunction (this is valid since the above and below are 2 independent filters)
         RexNode combinedCondition = RexUtil.composeConjunction(builder,
             ImmutableList.of(conditionFilterAboveFlatten, conditionFilterBelowFlatten), false);
         return combinedCondition;
@@ -229,15 +237,6 @@ public class FlattenToIndexScanPrule extends AbstractIndexPrule {
     logger.debug("Index Rule {} starts", this.description);
 
     RexBuilder builder = indexContext.getFilterAboveFlatten().getCluster().getRexBuilder();
-
-    /*
-    RexNode condition = null;
-    if (indexContext.lowerProject == null) {
-      condition = indexContext.filter.getCondition();
-    } else {
-      // get the filter as if it were below the projection.
-      condition = RelOptUtil.pushFilterPastProject(indexContext.filter.getCondition(), indexContext.lowerProject);
-    } */
 
     // create a combined condition using the upper and lower filters
     RexNode condition = composeCondition(indexContext, builder);
@@ -309,7 +308,7 @@ public class FlattenToIndexScanPrule extends AbstractIndexPrule {
 
         RexNode indexCondition = indexProps.getLeadingColumnsFilter();
         RexNode remainderCondition = indexProps.getTotalRemainderFilter();
-        //Copy primary table statistics to index table
+        // Copy primary table statistics to index table
         idxScan.setStatistics(((DbGroupScan) scan.getGroupScan()).getStatistics());
         logger.info("index_plan_info: Generating covering index plan for index: {}, query condition {}", indexDesc.getIndexName(), indexCondition.toString());
 
@@ -325,7 +324,7 @@ public class FlattenToIndexScanPrule extends AbstractIndexPrule {
 
     // Create non-covering index plans.
 
-    //First, check if the primary table scan supports creating a restricted scan
+    // First, check if the primary table scan supports creating a restricted scan
     if (primaryTableScan instanceof DbGroupScan &&
             (((DbGroupScan) primaryTableScan).supportsRestrictedScan())) {
       try {
@@ -340,7 +339,7 @@ public class FlattenToIndexScanPrule extends AbstractIndexPrule {
           // Combine the index and remainder conditions such that the total condition can be re-applied
           RexNode totalCondition = IndexPlanUtils.getTotalFilter(indexCondition, remainderCondition, builder);
 
-          //Copy primary table statistics to index table
+          // Copy primary table statistics to index table
           idxScan.setStatistics(((DbGroupScan) primaryTableScan).getStatistics());
           logger.info("index_plan_info: Generating non-covering index plan for index: {}, query condition {}", indexDesc.getIndexName(), indexCondition.toString());
           AbstractIndexPlanGenerator planGen = generator.getNonCoveringIndexGen(indexDesc, idxScan, indexCondition, remainderCondition, totalCondition, builder, settings);
@@ -355,39 +354,34 @@ public class FlattenToIndexScanPrule extends AbstractIndexPrule {
   }
 
   /**
+   * <p>
+   * The FilterVisitor converts an ITEM expression that is referencing the output of a FLATTEN(array) to
+   * a corresponding nested ITEM expression with -1 ordinal. The reason for this conversion is that
+   * for index planning purposes, we want to keep track of fields that occur within an array.
+   * </p>
+   * <p>
    * Query:
    * select d from (select flatten(t1.`first`.`second`.`a`) as f from t1) as t
    *    where t.f.b < 10 AND t.f.c > 20;
+   * </p>
+   * <p>
    * The logical plan has the following:
-   *      DrillFilterRel: condition=[AND(<(ITEM($0, 'b'), 10), >(ITEM($0, 'c'), 20))])
-   *      DrillProjectRel: FLATTEN(ITEM(ITEM($1, 'second'), 'a')
-   *
-   *
-   *                   AND
-   *                 /       \
-   *                /         \
-   *               <           >
-   *              /  \        / \
-   *            ITEM  10   ITEM  20
-   *           /    \      /  \
-   *          $0    'b'   $0  'c'
-   *          |          /
-   *      FLATTEN-------/
-   *        |
-   *      ITEM
-   *      /  \
-   *    ITEM  'a'
-   *    /  \
-   *  $1  'second'
-   *  |
-   *  Scan's RowType: ['first']
-   *
+   *   <li>DrillFilterRel: condition=[AND(<(ITEM($0, 'b'), 10), >(ITEM($0, 'c'), 20))]) </li>
+   *   <li>DrillProjectRel: FLATTEN(ITEM(ITEM($1, 'second'), 'a') </li>
+   *   <li>DrillScanRel RowType: ['first']  </li>
+   * </p>
+   * <p>
+   * Conversion is as follows:
+   *   <li>original expr: ITEM($0, 'b') </li>
+   *   <li>new expr: ITEM(ITEM($0, -1), 'b') </li>
+   * </p>
    */
   private static class FilterVisitor extends RexVisitorImpl<RexNode> {
 
     private final Map<String, RexCall> flattenMap;
     private final DrillProjectRel project;
     private final RexBuilder builder;
+    private final List<RexNode> itemExprList = Lists.newArrayList();
 
     FilterVisitor(Map<String, RexCall> flattenMap, DrillProjectRel project,
         RexBuilder builder) {
@@ -413,21 +407,6 @@ public class FlattenToIndexScanPrule extends AbstractIndexPrule {
           RexCall c;
           RexNode left = null;
           if ((c = flattenMap.get(projectFieldName)) != null) {
-            // drill down to the left leaf level of the Flatten to find which field it is
-            // referencing from the Scan
-/*
-            RexNode n = c;
-            while (true) {
-              // here we are only expecting a RexCall or a RexInputRef
-              if (n instanceof RexCall) {
-                n = ((RexCall)n).getOperands().get(0);
-              }
-              if (n instanceof RexInputRef) {
-                left = n;
-                break;
-              }
-            }
-*/
             left = c.getOperands().get(0);
             Preconditions.checkArgument(left != null, "Found null input reference for Flatten") ;
 
@@ -439,6 +418,9 @@ public class FlattenToIndexScanPrule extends AbstractIndexPrule {
             left = result1;
             right = literal;
             RexNode result2 = builder.makeCall(call.getType(), SqlStdOperatorTable.ITEM, ImmutableList.of(left, right));
+
+            // save the individual ITEM exprs for future use
+            itemExprList.add(result2);
             return result2;
           }
         }
@@ -462,6 +444,10 @@ public class FlattenToIndexScanPrule extends AbstractIndexPrule {
         children.add(child.accept(this));
       }
       return ImmutableList.copyOf(children);
+    }
+
+    public List<RexNode> getItemExprList() {
+      return itemExprList;
     }
   }
 }

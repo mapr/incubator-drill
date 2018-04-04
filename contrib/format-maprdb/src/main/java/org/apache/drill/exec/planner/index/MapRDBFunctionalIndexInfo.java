@@ -34,6 +34,10 @@ public class MapRDBFunctionalIndexInfo implements FunctionalIndexInfo {
 
   // When we scan schemaPath in groupscan's columns, we check if this column(schemaPath) should be rewritten to '$N',
   // When there are more than two functions on the same column in index, CAST(a.b as INT), CAST(a.b as VARCHAR),
+  private boolean hasArrayField = false;
+
+  //when we scan schemaPath in groupscan's columns, we check if this column(schemaPath) should be rewritten to '$N',
+  //When there are more than two functions on the same column in index, CAST(a.b as INT), CAST(a.b as VARCHAR),
   // then we should map SchemaPath a.b to a set of SchemaPath, e.g. $1, $2
   private Map<SchemaPath, Set<SchemaPath>> columnToConvert;
 
@@ -77,6 +81,8 @@ public class MapRDBFunctionalIndexInfo implements FunctionalIndexInfo {
         }
 
         count++;
+      } else if (((SchemaPath)indexedExpr).isArray()) {
+        hasArrayField = true;
       }
     }
   }
@@ -165,4 +171,11 @@ public class MapRDBFunctionalIndexInfo implements FunctionalIndexInfo {
   public boolean supportEqualCharConvertToLike() {
     return true;
   }
+
+  @Override
+  public boolean hasArrayField() {
+    return hasArrayField;
+  }
+
+
 }

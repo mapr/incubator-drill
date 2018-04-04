@@ -19,6 +19,7 @@ package org.apache.drill.exec.planner.index.rules;
 
 import org.apache.drill.shaded.guava.com.google.common.base.Stopwatch;
 import org.apache.drill.shaded.guava.com.google.common.collect.Lists;
+import org.apache.drill.shaded.guava.com.google.common.collect.Maps;
 
 import org.apache.calcite.plan.RelOptRule;
 import org.apache.calcite.plan.RelOptRuleCall;
@@ -138,7 +139,11 @@ public class DbScanToIndexScanPrule extends AbstractIndexPrule {
 
     public boolean match(RelOptRuleCall call) {
       final DrillScanRel scan = (DrillScanRel) call.rel(2);
-      return checkScan(scan);
+      final DrillProjectRel project = (DrillProjectRel) call.rel(1);
+      if (checkScan(scan)) {
+        return !projectHasFlatten(project, Maps.newHashMap(), Lists.newArrayList());
+      }
+      return false;
     }
 
     public IndexLogicalPlanCallContext onMatch(RelOptRuleCall call) {

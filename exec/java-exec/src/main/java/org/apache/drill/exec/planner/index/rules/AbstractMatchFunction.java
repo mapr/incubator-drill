@@ -26,6 +26,7 @@ import org.apache.drill.exec.planner.logical.DrillProjectRel;
 import org.apache.drill.exec.planner.logical.DrillScanRel;
 import org.apache.calcite.util.Pair;
 
+import java.util.List;
 import java.util.Map;
 
 
@@ -66,26 +67,33 @@ public abstract class AbstractMatchFunction<T> implements MatchFunction<T> {
   /**
    * Check if a Project contains Flatten expressions and populate a supplied map with a mapping of
    * the field name to the RexCall corresponding to the Flatten expression. If there are multiple
-   * Flattens, identify all of them.
+   * Flattens, identify all of them. Also populate a supplied list of non-flatten exprs in the Project.
    * @param project
    * @param flattenMap
+   * @param nonFlattenExprs
    * @return True if Flatten was found, False otherwise
    */
-  protected static boolean projectHasFlatten(DrillProjectRel project, Map<String, RexCall> flattenMap) {
+  public static boolean projectHasFlatten(DrillProjectRel project, Map<String, RexCall> flattenMap,
+      List<RexNode> nonFlattenExprs) {
     boolean found = false;
     for (Pair<RexNode, String> p : project.getNamedProjects()) {
       if (p.left instanceof RexCall) {
         RexCall function = (RexCall) p.left;
         String functionName = function.getOperator().getName();
         if (functionName.equalsIgnoreCase("flatten")
-                && function.getOperands().size() == 1) {
+            && function.getOperands().size() == 1) {
           flattenMap.put((String) p.right, (RexCall) p.left);
           found = true;
           // continue since there may be multiple FLATTEN exprs which may be
           // referenced by the filter condition
+        } else {
+          nonFlattenExprs.add((RexCall) p.left);
         }
+      } else {
+        nonFlattenExprs.add(p.left);
       }
     }
     return found;
   }
+
 }

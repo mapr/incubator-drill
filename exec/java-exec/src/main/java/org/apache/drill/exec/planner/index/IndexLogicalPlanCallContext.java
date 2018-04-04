@@ -21,25 +21,24 @@ import org.apache.drill.shaded.guava.com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.apache.calcite.plan.RelOptRuleCall;
 import org.apache.calcite.rel.RelCollation;
-import org.apache.calcite.rel.core.Sort;
-import org.apache.calcite.rex.RexCall;
 import org.apache.calcite.rex.RexNode;
 import org.apache.drill.common.expression.LogicalExpression;
 import org.apache.drill.common.expression.SchemaPath;
 import org.apache.drill.exec.physical.base.DbGroupScan;
 import org.apache.drill.exec.planner.common.DrillProjectRelBase;
 import org.apache.drill.exec.planner.logical.DrillFilterRel;
+import org.apache.drill.exec.planner.logical.DrillParseContext;
 import org.apache.drill.exec.planner.logical.DrillProjectRel;
 import org.apache.drill.exec.planner.logical.DrillScanRel;
 import org.apache.drill.exec.planner.logical.DrillSortRel;
 import org.apache.drill.exec.planner.common.DrillScanRelBase;
 import org.apache.drill.exec.planner.common.OrderedRel;
+import org.apache.drill.exec.planner.physical.PrelUtil;
 import org.apache.drill.exec.planner.physical.DrillDistributionTrait.DistributionField;
 import org.apache.calcite.rel.RelNode;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 public class IndexLogicalPlanCallContext implements IndexCallContext {
@@ -53,6 +52,7 @@ public class IndexLogicalPlanCallContext implements IndexCallContext {
   final public DrillProjectRel lowerProject;
   final public DrillScanRel scan;
   final public String indexHint;
+  final public DrillParseContext defaultParseContext;
 
 
   /**
@@ -90,6 +90,7 @@ public class IndexLogicalPlanCallContext implements IndexCallContext {
     this.lowerProject = project;
     this.scan = scan;
     this.indexHint = scan == null ? null : ((DbGroupScan)this.scan.getGroupScan()).getIndexHint();
+    this.defaultParseContext = new DrillParseContext(PrelUtil.getPlannerSettings(getCall().rel(0).getCluster()));
   }
 
   public IndexLogicalPlanCallContext(RelOptRuleCall call,
@@ -103,16 +104,20 @@ public class IndexLogicalPlanCallContext implements IndexCallContext {
     this.lowerProject = project;
     this.scan = scan;
     this.indexHint = ((DbGroupScan)this.scan.getGroupScan()).getIndexHint();
+    this.defaultParseContext = new DrillParseContext(PrelUtil.getPlannerSettings(getCall().rel(0).getCluster()));
   }
 
+  @Override
   public DbGroupScan getGroupScan() {
     return (DbGroupScan) scan.getGroupScan();
   }
 
+  @Override
   public DrillScanRelBase getScan() {
     return scan;
   }
 
+  @Override
   public List<RelCollation> getCollationList() {
     if (sort != null) {
       return sort.getCollationList();
@@ -120,6 +125,7 @@ public class IndexLogicalPlanCallContext implements IndexCallContext {
     return null;
   }
 
+  @Override
   public RelCollation getCollation() {
     if (sort != null) {
       return sort.getCollation();
@@ -127,68 +133,90 @@ public class IndexLogicalPlanCallContext implements IndexCallContext {
     return null;
   }
 
+  @Override
   public boolean hasLowerProject() {
     return lowerProject != null;
   }
 
+  @Override
   public boolean hasUpperProject() {
     return upperProject != null;
   }
 
+  @Override
   public RelOptRuleCall getCall() {
     return call;
   }
 
+  @Override
   public Set<LogicalExpression> getLeftOutPathsInFunctions() {
     return leftOutPathsInFunctions;
   }
 
+  @Override
   public DrillFilterRel getFilter() {
     return filter;
   }
 
+  @Override
   public IndexableExprMarker getOrigMarker() {
     return origMarker;
   }
 
+  @Override
   public List<LogicalExpression> getSortExprs() {
     return sortExprs;
   }
 
+  @Override
   public DrillProjectRelBase getLowerProject() {
     return lowerProject;
   }
 
+  @Override
   public DrillProjectRelBase getUpperProject() {
     return upperProject;
   }
 
+  @Override
   public void setLeftOutPathsInFunctions(Set<LogicalExpression> exprs) {
     leftOutPathsInFunctions = exprs;
   }
 
+  @Override
   public List<SchemaPath> getScanColumns() {
     return scan.getColumns();
   }
 
+  @Override
   public RexNode getFilterCondition() {
     return filter.getCondition();
   }
 
+  @Override
   public RexNode getOrigCondition() {
     return origPushedCondition;
   }
 
+  @Override
   public OrderedRel getSort() {
     return sort;
   }
 
+  @Override
   public void createSortExprs() {
     sortExprs = Lists.newArrayList();
   }
 
+  @Override
   public RelNode getExchange() { return null; }
 
+  @Override
   public List<DistributionField> getDistributionFields() { return Collections.EMPTY_LIST; }
+
+  @Override
+  public DrillParseContext getDefaultParseContext() {
+    return defaultParseContext;
+  }
 
 }
