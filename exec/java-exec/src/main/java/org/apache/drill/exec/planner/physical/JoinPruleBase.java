@@ -19,6 +19,7 @@ package org.apache.drill.exec.planner.physical;
 
 import java.util.List;
 
+import org.apache.calcite.rel.type.RelDataType;
 import org.apache.drill.common.expression.FieldReference;
 import org.apache.drill.exec.physical.base.DbGroupScan;
 import org.apache.drill.exec.physical.impl.join.JoinUtils;
@@ -84,22 +85,31 @@ public abstract class JoinPruleBase extends Prule {
     return false;
   }
 
-  protected void createRangePartitionRightPlan(RelOptRuleCall call, RowKeyJoinRel join,
-    PhysicalJoinType physicalJoinType, boolean implementAsRowKeyJoin, RelNode left, RelNode right,
-    RelCollation collationLeft, RelCollation collationRight) throws InvalidRelException {
+  public static DrillDistributionTrait getRangePartitionTrait(DrillJoinRel join,
+                                                              DbGroupScan groupScan,
+                                                              RelDataType rightRowType) {
     assert join.getRightKeys().size() == 1 : "Cannot create range partition plan with multi-column join condition";
     int joinKeyRight = join.getRightKeys().get(0);
     List<DrillDistributionTrait.DistributionField> rangeDistFields =
-        Lists.newArrayList(new DrillDistributionTrait.DistributionField(joinKeyRight /* `rowkey equivalent` ordinal on the right side */));
+            Lists.newArrayList(new DrillDistributionTrait.DistributionField(joinKeyRight /* `rowkey equivalent` ordinal on the right side */));
     List<FieldReference> rangeDistRefList = Lists.newArrayList();
     FieldReference rangeDistRef =
-        FieldReference.getWithQuotedRef(right.getRowType().getFieldList().get(joinKeyRight).getName());
+            FieldReference.getWithQuotedRef(rightRowType.getFieldList().get(joinKeyRight).getName());
     rangeDistRefList.add(rangeDistRef);
-    RelNode leftScan = DrillPushRowKeyJoinToScanRule.getValidJoinInput(left);
     DrillDistributionTrait rangePartRight = new DrillDistributionTrait(
-        DrillDistributionTrait.DistributionType.RANGE_DISTRIBUTED,
-        ImmutableList.copyOf(rangeDistFields),
-        ((DbGroupScan)((DrillScanRelBase) leftScan).getGroupScan()).getRangePartitionFunction(rangeDistRefList));
+            DrillDistributionTrait.DistributionType.RANGE_DISTRIBUTED,
+            ImmutableList.copyOf(rangeDistFields),
+            groupScan.getRangePartitionFunction(rangeDistRefList));
+    return rangePartRight;
+  }
+
+  protected void createRangePartitionRightPlan(RelOptRuleCall call, RowKeyJoinRel join,
+    PhysicalJoinType physicalJoinType, boolean implementAsRowKeyJoin, RelNode left, RelNode right,
+    RelCollation collationLeft, RelCollation collationRight) throws InvalidRelException {
+
+    RelNode leftScan = DrillPushRowKeyJoinToScanRule.getValidJoinInput(left);
+    DrillDistributionTrait rangePartRight = getRangePartitionTrait(join,
+            ((DbGroupScan)((DrillScanRelBase) leftScan).getGroupScan()), right.getRowType());
 
     RelTraitSet traitsLeft = null;
     RelTraitSet traitsRight = null;

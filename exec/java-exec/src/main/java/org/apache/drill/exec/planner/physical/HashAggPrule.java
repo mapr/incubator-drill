@@ -92,7 +92,7 @@ public class HashAggPrule extends AggPruleBase {
           traits = call.getPlanner().emptyTraitSet().plus(Prel.DRILL_PHYSICAL);
 
           RelNode convertedInput = convert(input, traits);
-          new TwoPhaseSubset(call, distOnAllKeys).go(aggregate, convertedInput);
+          new TwoPhaseHashAggWithHashExchange(call, distOnAllKeys).go(aggregate, convertedInput);
 
         }
       }
@@ -101,47 +101,30 @@ public class HashAggPrule extends AggPruleBase {
     }
   }
 
-  private class TwoPhaseSubset extends SubsetTransformer<DrillAggregateRel, InvalidRelException> {
+  public static class TwoPhaseHashAggWithHashExchange extends TwoPhaseHashAgg {
     final RelTrait distOnAllKeys;
 
-    public TwoPhaseSubset(RelOptRuleCall call, RelTrait distOnAllKeys) {
-      super(call);
-      this.distOnAllKeys = distOnAllKeys;
+    public TwoPhaseHashAggWithHashExchange(RelOptRuleCall call, DrillDistributionTrait trait) {
+      super(call, trait);
     }
 
     @Override
-    public RelNode convertChild(DrillAggregateRel aggregate, RelNode input) throws InvalidRelException {
+    public ExchangePrel generateExchange(DrillAggregateRel aggregate, RelNode input) {
+      return new HashToRandomExchangePrel(input.getCluster(), input.getTraitSet().plus(Prel.DRILL_PHYSICAL).plus(distOnAllKeys),
+                      input, ImmutableList.copyOf(getDistributionField(aggregate, true)));
+    }
+  }
 
-      RelTraitSet traits = newTraitSet(Prel.DRILL_PHYSICAL, input.getTraitSet().getTrait(DrillDistributionTraitDef.INSTANCE));
-      RelNode newInput = convert(input, traits);
+  public static class TwoPhaseHashAggWithRangeExchange extends TwoPhaseHashAgg {
 
-      HashAggPrel phase1Agg = new HashAggPrel(
-          aggregate.getCluster(),
-          traits,
-          newInput,
-          aggregate.getGroupSet(),
-          aggregate.getGroupSets(),
-          aggregate.getAggCallList(),
-          OperatorPhase.PHASE_1of2);
+    public TwoPhaseHashAggWithRangeExchange(RelOptRuleCall call, DrillDistributionTrait trait) {
+      super(call, trait);
+    }
 
-      HashToRandomExchangePrel exch =
-          new HashToRandomExchangePrel(phase1Agg.getCluster(), phase1Agg.getTraitSet().plus(Prel.DRILL_PHYSICAL).plus(distOnAllKeys),
-              phase1Agg, ImmutableList.copyOf(getDistributionField(aggregate, true)));
-
-      ImmutableBitSet newGroupSet = remapGroupSet(aggregate.getGroupSet());
-      List<ImmutableBitSet> newGroupSets = Lists.newArrayList();
-      for (ImmutableBitSet groupSet : aggregate.getGroupSets()) {
-        newGroupSets.add(remapGroupSet(groupSet));
-      }
-
-      return new HashAggPrel(
-          aggregate.getCluster(),
-          exch.getTraitSet(),
-          exch,
-          newGroupSet,
-          newGroupSets,
-          phase1Agg.getPhase2AggCalls(),
-          OperatorPhase.PHASE_2of2);
+    @Override
+    public ExchangePrel generateExchange(DrillAggregateRel aggregate, RelNode input) {
+      return new RangePartitionExchangePrel(input.getCluster(), input.getTraitSet().plus(Prel.DRILL_PHYSICAL).plus(distOnAllKeys),
+              input, ImmutableList.copyOf(getDistributionField(aggregate, true)), distOnAllKeys.getPartitionFunction());
     }
   }
 
@@ -161,5 +144,4 @@ public class HashAggPrule extends AggPruleBase {
 
     call.transformTo(newAgg);
   }
-
 }

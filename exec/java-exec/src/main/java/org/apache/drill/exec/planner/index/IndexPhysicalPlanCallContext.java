@@ -83,7 +83,7 @@ public class IndexPhysicalPlanCallContext implements IndexCallContext {
     this.scan = scan;
     this.exch = exch;
     this.indexHint = ((DbGroupScan)this.scan.getGroupScan()).getIndexHint();
-    this.defaultParseContext = new DrillParseContext(PrelUtil.getPlannerSettings(getCall().rel(0).getCluster()));
+    this.defaultParseContext = new DrillParseContext(PrelUtil.getPlannerSettings(scan.getCluster()));
   }
 
   public IndexPhysicalPlanCallContext(RelOptRuleCall call,
@@ -98,7 +98,7 @@ public class IndexPhysicalPlanCallContext implements IndexCallContext {
     this.scan = scan;
     this.exch = exch;
     this.indexHint = ((DbGroupScan)this.scan.getGroupScan()).getIndexHint();
-    this.defaultParseContext = new DrillParseContext(PrelUtil.getPlannerSettings(getCall().rel(0).getCluster()));
+    this.defaultParseContext = new DrillParseContext(PrelUtil.getPlannerSettings(scan.getCluster()));
   }
 
   @Override
