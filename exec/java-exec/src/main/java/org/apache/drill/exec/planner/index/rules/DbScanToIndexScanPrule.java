@@ -141,7 +141,7 @@ public class DbScanToIndexScanPrule extends AbstractIndexPrule {
       final DrillScanRel scan = (DrillScanRel) call.rel(2);
       final DrillProjectRel project = (DrillProjectRel) call.rel(1);
       if (checkScan(scan)) {
-        return !projectHasFlatten(project, Maps.newHashMap(), Lists.newArrayList());
+        return !projectHasFlatten(project, true, null, null);
       }
       return false;
     }

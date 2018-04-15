@@ -148,9 +148,7 @@ public class SemiJoinIndexScanPrule extends AbstractIndexPrule {
 
 
   private static class MatchJSPFPFS extends AbstractMatchFunction<SemiJoinIndexPlanCallContext> {
-    Map<String, RexCall> flattenMap = Maps.newHashMap();
     IndexLogicalPlanCallContext context = null;
-    List<RexNode> nonFlattenExprs = Lists.newArrayList();
 
     @Override
     public boolean match(RelOptRuleCall call) {
@@ -179,7 +177,7 @@ public class SemiJoinIndexScanPrule extends AbstractIndexPrule {
 
       if (checkScan(rightRel)) {
         //check if the lower project contains the flatten.
-        return projectHasFlatten(lowerProject, flattenMap, nonFlattenExprs);
+        return projectHasFlatten(lowerProject, true, null, null);
       } else {
         return false;
       }
@@ -196,6 +194,12 @@ public class SemiJoinIndexScanPrule extends AbstractIndexPrule {
       final DrillJoinRel join = call.rel(0);
       final DrillAggregateRel distinct = call.rel(2);
 
+      Map<String, RexCall> flattenMap = Maps.newHashMap();
+      List<RexNode> nonFlattenExprs = Lists.newArrayList();
+
+      // populate the flatten and non-flatten collections
+      projectHasFlatten(lowerProject, false, flattenMap, nonFlattenExprs);
+
       FlattenIndexPlanCallContext rightSideContext = new FlattenIndexPlanCallContext(call, upperProject,
               upperFilter, lowerProject,lowerFilter, rightScan, flattenMap, nonFlattenExprs);
       SemiJoinIndexPlanCallContext idxContext = new SemiJoinIndexPlanCallContext(call, join, distinct, this.context, rightSideContext);
@@ -204,9 +208,8 @@ public class SemiJoinIndexScanPrule extends AbstractIndexPrule {
   }
 
   private static class MatchJSPFPS extends AbstractMatchFunction<SemiJoinIndexPlanCallContext> {
-    Map<String, RexCall> flattenMap = Maps.newHashMap();
+
     IndexLogicalPlanCallContext context = null;
-    List<RexNode> nonFlattenExprs = Lists.newArrayList();
 
     @Override
     public boolean match(RelOptRuleCall call) {
@@ -234,7 +237,7 @@ public class SemiJoinIndexScanPrule extends AbstractIndexPrule {
 
       if (checkScan(rightRel)) {
         //check if the lower project contains the flatten.
-        return projectHasFlatten(lowerProject, flattenMap, nonFlattenExprs);
+        return projectHasFlatten(lowerProject, true, null, null);
       } else {
         return false;
       }
@@ -249,6 +252,12 @@ public class SemiJoinIndexScanPrule extends AbstractIndexPrule {
 
       final DrillJoinRel join = call.rel(0);
       final DrillAggregateRel distinct = call.rel(2);
+
+      Map<String, RexCall> flattenMap = Maps.newHashMap();
+      List<RexNode> nonFlattenExprs = Lists.newArrayList();
+
+      // populate the flatten and non-flatten collections
+      projectHasFlatten(lowerProject, false, flattenMap, nonFlattenExprs);
 
       FlattenIndexPlanCallContext rightSideContext = new FlattenIndexPlanCallContext(call, upperProject, filter, lowerProject,
               null, rightScan, flattenMap, nonFlattenExprs);
@@ -294,7 +303,7 @@ public class SemiJoinIndexScanPrule extends AbstractIndexPrule {
             context.rightSide.upperProject);
     Map<String, RexCall> flattenMap = Maps.newHashMap();
     List<RexNode> nonFlattenExprs = Lists.newArrayList();
-    AbstractMatchFunction.projectHasFlatten(projectRel, flattenMap, nonFlattenExprs);
+    AbstractMatchFunction.projectHasFlatten(projectRel, false, flattenMap, nonFlattenExprs);
 
     FlattenIndexPlanCallContext logicalPlanCallContext = new FlattenIndexPlanCallContext(context.call, upperProjectRel, filterRel,
             projectRel, null, newScan, flattenMap, nonFlattenExprs);

@@ -73,7 +73,7 @@ public abstract class AbstractMatchFunction<T> implements MatchFunction<T> {
    * @param nonFlattenExprs
    * @return True if Flatten was found, False otherwise
    */
-  public static boolean projectHasFlatten(DrillProjectRel project, Map<String, RexCall> flattenMap,
+  public static boolean projectHasFlatten(DrillProjectRel project, boolean firstFlattenOnly, Map<String, RexCall> flattenMap,
       List<RexNode> nonFlattenExprs) {
     boolean found = false;
     for (Pair<RexNode, String> p : project.getNamedProjects()) {
@@ -82,14 +82,21 @@ public abstract class AbstractMatchFunction<T> implements MatchFunction<T> {
         String functionName = function.getOperator().getName();
         if (functionName.equalsIgnoreCase("flatten")
             && function.getOperands().size() == 1) {
-          flattenMap.put((String) p.right, (RexCall) p.left);
+          if (flattenMap != null) {
+            flattenMap.put((String) p.right, (RexCall) p.left);
+          }
+          if (firstFlattenOnly) {
+            return true;
+          }
           found = true;
           // continue since there may be multiple FLATTEN exprs which may be
           // referenced by the filter condition
         } else {
-          nonFlattenExprs.add((RexCall) p.left);
+          if (nonFlattenExprs != null) {
+            nonFlattenExprs.add((RexCall) p.left);
+          }
         }
-      } else {
+      } else if (nonFlattenExprs != null) {
         nonFlattenExprs.add(p.left);
       }
     }

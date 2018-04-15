@@ -26,7 +26,6 @@ import org.apache.calcite.plan.RelOptRule;
 import org.apache.calcite.plan.RelOptRuleCall;
 import org.apache.calcite.plan.RelOptRuleOperand;
 import org.apache.calcite.rel.type.RelDataType;
-import org.apache.calcite.util.Pair;
 import org.apache.drill.exec.physical.base.DbGroupScan;
 import org.apache.drill.exec.physical.base.GroupScan;
 import org.apache.drill.exec.physical.base.IndexGroupScan;
@@ -91,15 +90,12 @@ public class FlattenToIndexScanPrule extends AbstractIndexPrule {
 
   private static class MatchFPS extends AbstractMatchFunction<FlattenIndexPlanCallContext> {
 
-    Map<String, RexCall> flattenMap = Maps.newHashMap();
-    List<RexNode> nonFlattenExprs = Lists.newArrayList();
-
     public boolean match(RelOptRuleCall call) {
       final DrillScanRel scan = (DrillScanRel) call.rel(2);
       final DrillProjectRel project = (DrillProjectRel) call.rel(1);
       if (checkScan(scan)) {
         // if Project does not contain a FLATTEN expression, rule does not apply
-        return projectHasFlatten(project, flattenMap, nonFlattenExprs);
+        return projectHasFlatten(project, true, null, null);
       }
       return false;
     }
@@ -108,6 +104,12 @@ public class FlattenToIndexScanPrule extends AbstractIndexPrule {
       final DrillFilterRel filterAboveFlatten = call.rel(0);
       final DrillProjectRel projectWithFlatten = call.rel(1);
       final DrillScanRel scan = call.rel(2);
+
+      Map<String, RexCall> flattenMap = Maps.newHashMap();
+      List<RexNode> nonFlattenExprs = Lists.newArrayList();
+
+      // populate the flatten and non-flatten collections
+      projectHasFlatten(projectWithFlatten, false, flattenMap, nonFlattenExprs);
 
       FlattenIndexPlanCallContext idxContext = new FlattenIndexPlanCallContext(call,
           null /* upper project */,
@@ -123,16 +125,13 @@ public class FlattenToIndexScanPrule extends AbstractIndexPrule {
 
   private static class MatchFPFS extends AbstractMatchFunction<FlattenIndexPlanCallContext> {
 
-    Map<String, RexCall> flattenMap = Maps.newHashMap();
-    List<RexNode> nonFlattenExprs = Lists.newArrayList();
-
     public boolean match(RelOptRuleCall call) {
       final DrillProjectRel project = (DrillProjectRel) call.rel(1);
       final DrillScanRel scan = (DrillScanRel) call.rel(3);
 
       if (checkScan(scan)) {
         // if Project does not contain a FLATTEN expression, rule does not apply
-        return projectHasFlatten(project, flattenMap, nonFlattenExprs);
+        return projectHasFlatten(project, true, null, null);
       }
       return false;
     }
@@ -142,6 +141,12 @@ public class FlattenToIndexScanPrule extends AbstractIndexPrule {
       final DrillProjectRel projectWithFlatten = (DrillProjectRel) call.rel(1);
       final DrillFilterRel filterBelowFlatten = (DrillFilterRel) call.rel(2);
       final DrillScanRel scan = (DrillScanRel) call.rel(3);
+
+      Map<String, RexCall> flattenMap = Maps.newHashMap();
+      List<RexNode> nonFlattenExprs = Lists.newArrayList();
+
+      // populate the flatten and non-flatten collections
+      projectHasFlatten(projectWithFlatten, false, flattenMap, nonFlattenExprs);
 
       FlattenIndexPlanCallContext idxContext = new FlattenIndexPlanCallContext(call,
               null /* upper project */,
@@ -426,7 +431,9 @@ public class FlattenToIndexScanPrule extends AbstractIndexPrule {
 
     @Override
     public RexNode visitInputRef(RexInputRef inputRef) {
-      return inputRef;
+      // since the filter will ultimately be pushed into the Scan, we are interested in the
+      // the input of the project exprs
+      return project.getProjects().get(inputRef.getIndex());
     }
 
     @Override
