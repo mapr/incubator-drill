@@ -22,19 +22,21 @@ import com.google.common.collect.Lists;
 import org.apache.calcite.rel.InvalidRelException;
 import org.apache.calcite.rel.RelNode;
 import org.apache.calcite.rel.core.JoinRelType;
+import org.apache.calcite.rel.logical.LogicalProject;
 import org.apache.calcite.rel.type.RelDataType;
 import org.apache.calcite.rel.type.RelDataTypeField;
 import org.apache.calcite.rel.type.RelRecordType;
 import org.apache.calcite.rex.RexBuilder;
 import org.apache.calcite.rex.RexNode;
 import org.apache.calcite.rex.RexUtil;
+import org.apache.calcite.tools.RelBuilder;
 import org.apache.commons.collections.ListUtils;
 import org.apache.drill.exec.physical.base.DbGroupScan;
 import org.apache.drill.exec.planner.common.DrillScanRelBase;
+import org.apache.drill.exec.planner.common.DrillRelOptUtil;
 import org.apache.drill.exec.planner.index.IndexPhysicalPlanCallContext;
 import org.apache.drill.exec.planner.index.IndexPlanUtils;
 import org.apache.drill.exec.planner.index.SemiJoinIndexPlanCallContext;
-import org.apache.drill.exec.planner.index.generators.SemiJoinMergeRowKeyJoinGenerator;
 import org.apache.drill.exec.planner.logical.DrillAggregateRel;
 import org.apache.drill.exec.planner.physical.HashAggPrel;
 import org.apache.drill.exec.planner.physical.ProjectPrel;
@@ -54,12 +56,13 @@ public class SemiJoinIndexPlanUtils {
   static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(SemiJoinIndexPlanUtils.class);
 
 
-  public static RelNode applyProjects(RelNode node, List<ProjectPrel> projectRels, RelNode leftSideJoinNode) {
+  public static RelNode applyProjects(RelNode node, List<ProjectPrel> projectRels,
+                                      RelNode leftSideJoinNode, RelBuilder builder) {
     RelNode input = node;
     RelNode inputNode = leftSideJoinNode;
     for (ProjectPrel proj : Lists.reverse(projectRels)) {
       inputNode = buildProject(inputNode, inputNode);
-      input = mergeProject((ProjectPrel) inputNode, proj, input);
+      input = mergeProject((ProjectPrel) inputNode, proj, input, builder);
     }
     return input;
   }
@@ -132,17 +135,30 @@ public class SemiJoinIndexPlanUtils {
             RexUtil.composeConjunction(input.getCluster().getRexBuilder(), combineConditions, false));
   }
 
-  public static RelNode mergeProject(ProjectPrel projectL, ProjectPrel projectR, RelNode input) {
-    RexBuilder builder = input.getCluster().getRexBuilder();
+  public static RelNode mergeProject(ProjectPrel projectL, ProjectPrel projectR,
+                                     RelNode input, RelBuilder builder) {
+    RexBuilder rexBuilder = input.getCluster().getRexBuilder();
     List<RexNode> combinedProjects = Lists.newArrayList();
-    combinedProjects.addAll(IndexPlanUtils.projectsTransformer(0,builder, projectL.getProjects(),
+    combinedProjects.addAll(IndexPlanUtils.projectsTransformer(0,rexBuilder, projectL.getProjects(),
             projectL.getInput().getRowType(), input.getRowType()));
-    combinedProjects.addAll(IndexPlanUtils.projectsTransformer(projectL.getProjects().size(), builder, projectR.getProjects(),
+    combinedProjects.addAll(IndexPlanUtils.projectsTransformer(projectL.getProjects().size(), rexBuilder, projectR.getProjects(),
             projectR.getInput().getRowType(), input.getRowType()));
     List<RexNode> listOfProjects = Lists.newArrayList();
     listOfProjects.addAll(combinedProjects);
-    return new ProjectPrel(input.getCluster(), input.getTraitSet(), input, listOfProjects,
+    ProjectPrel upperProject = new ProjectPrel(input.getCluster(), input.getTraitSet(), input, listOfProjects,
             merge(projectL.getRowType(), projectR.getRowType()));
+    if (input instanceof ProjectPrel) {
+      RelNode proj = DrillRelOptUtil.mergeProjects(upperProject,(ProjectPrel) input, false, builder);
+      if (proj instanceof LogicalProject) {
+        return new ProjectPrel(input.getCluster(), input.getTraitSet(), proj.getInput(0),
+                ((LogicalProject) proj).getProjects(), proj.getRowType());
+      } else {
+        return proj;
+      }
+    } else {
+      return new ProjectPrel(input.getCluster(), input.getTraitSet(), input, listOfProjects,
+              merge(projectL.getRowType(), projectR.getRowType()));
+    }
   }
 
   public static RelDataType merge(RelDataType first, RelDataType second) {

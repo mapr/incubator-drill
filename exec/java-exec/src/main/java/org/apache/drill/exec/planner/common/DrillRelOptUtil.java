@@ -44,6 +44,7 @@ import org.apache.calcite.rel.type.RelDataTypeField;
 import org.apache.calcite.rex.RexBuilder;
 import org.apache.calcite.rex.RexCall;
 import org.apache.calcite.rex.RexInputRef;
+import org.apache.calcite.rex.RexUtil;
 import org.apache.calcite.rex.RexLiteral;
 import org.apache.calcite.rex.RexNode;
 import org.apache.calcite.rex.RexVisitor;
@@ -53,6 +54,7 @@ import org.apache.calcite.sql.SqlKind;
 import org.apache.calcite.sql.fun.SqlStdOperatorTable;
 import org.apache.calcite.sql.type.SqlTypeName;
 import org.apache.calcite.sql.validate.SqlValidatorUtil;
+import org.apache.calcite.tools.RelBuilder;
 import org.apache.calcite.util.Pair;
 import org.apache.calcite.util.Util;
 import org.apache.drill.common.expression.PathSegment;
@@ -767,6 +769,43 @@ public abstract class DrillRelOptUtil {
             };
     node.accept(visitor);
     return rexRefs;
+  }
+
+  public static List<RexNode> simplifyCast(List<RexNode> projectExprs) {
+    final List<RexNode> list = new ArrayList<>();
+    for (RexNode rex: projectExprs) {
+      if (rex.getKind() == SqlKind.CAST) {
+        RexNode operand = ((RexCall) rex).getOperands().get(0);
+        while (operand.getKind() == SqlKind.CAST
+                && operand.getType().equals(rex.getType())) {
+          rex = operand;
+          operand = ((RexCall) rex).getOperands().get(0);
+        }
+
+      }
+      list.add(rex);
+    }
+    return list;
+  }
+
+  public static RelNode mergeProjects(Project topProject, Project bottomProject,
+                                      boolean force, RelBuilder relBuilder) {
+    final List<RexNode> pushedProjects =
+            RelOptUtil.pushPastProject(topProject.getProjects(), bottomProject);
+    final List<RexNode> newProjects = simplifyCast(pushedProjects);
+    final RelNode input = bottomProject.getInput();
+    if (RexUtil.isIdentity(newProjects, input.getRowType())) {
+      if (force
+              || input.getRowType().getFieldNames()
+              .equals(topProject.getRowType().getFieldNames())) {
+        return input;
+      }
+    }
+
+    // replace the two projects with a combined projection
+    relBuilder.push(bottomProject.getInput());
+    relBuilder.project(newProjects, topProject.getRowType().getFieldNames());
+    return relBuilder.build();
   }
 
   public static class RexFieldsTransformer {

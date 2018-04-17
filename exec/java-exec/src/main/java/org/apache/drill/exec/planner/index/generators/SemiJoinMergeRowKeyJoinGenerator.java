@@ -17,9 +17,11 @@
  */
 package org.apache.drill.exec.planner.index.generators;
 
+import org.apache.calcite.rel.logical.LogicalProject;
 import org.apache.calcite.rex.RexBuilder;
 import org.apache.calcite.rex.RexNode;
 import org.apache.drill.exec.physical.base.IndexGroupScan;
+import org.apache.drill.exec.planner.common.DrillRelOptUtil;
 import org.apache.drill.exec.planner.index.IndexDescriptor;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
@@ -122,10 +124,16 @@ public class SemiJoinMergeRowKeyJoinGenerator extends NonCoveringIndexPlanGenera
     //merge the left side relations of the join and left side relations of the RKJ operator.
     RelNode root = merge(leftSideJoinContext, leftContext);
     //apply the top level projects.
-    root = SemiJoinIndexPlanUtils.applyProjects(root, projectRels, joinContext.join.getInput(0));
+    root = SemiJoinIndexPlanUtils.applyProjects(root, projectRels, joinContext.join.getInput(0), this.joinContext.call.builder());
     //build the top project to make sure that no fields are selected from the RKJ operator's relation nodes.
-    root = SemiJoinIndexPlanUtils.buildProject(root, joinContext.join.getInput(0));
+    root = DrillRelOptUtil.mergeProjects(
+            SemiJoinIndexPlanUtils.buildProject(root, joinContext.join.getInput(0)),
+            (ProjectPrel)root, false, joinContext.call.builder());
 
+    if (root instanceof LogicalProject) {
+      root = new ProjectPrel(input.getCluster(), input.getTraitSet(), root.getInput(0),
+              ((LogicalProject) root).getProjects(), root.getRowType());
+    }
     logger.info("semi_join_index_plan_info: create top level ROW KEY join");
     //build the top ROWKEY join operator on the merged root and agg.
     return SemiJoinIndexPlanUtils.buildRowKeyJoin(joinContext, root,agg);
@@ -143,7 +151,7 @@ public class SemiJoinMergeRowKeyJoinGenerator extends NonCoveringIndexPlanGenera
 
     leftInput = SemiJoinIndexPlanUtils.getProject(leftInput, leftJoinContext.lowerProject);
     rightInput = SemiJoinIndexPlanUtils.getProject(rightInput, leftRKJContext.lowerProject);
-    input = SemiJoinIndexPlanUtils.mergeProject((ProjectPrel) leftInput, (ProjectPrel) rightInput, input);
+    input = SemiJoinIndexPlanUtils.mergeProject((ProjectPrel) leftInput, (ProjectPrel) rightInput, input, this.joinContext.call.builder());
     logger.debug("semi_join_index_plan_info: merge project ( {}, {} ) => {} ", leftInput, rightInput, input);
 
     leftInput = SemiJoinIndexPlanUtils.getFilter(leftInput, leftJoinContext.filter);
@@ -153,7 +161,7 @@ public class SemiJoinMergeRowKeyJoinGenerator extends NonCoveringIndexPlanGenera
 
     leftInput = SemiJoinIndexPlanUtils.getProject(leftInput, leftJoinContext.upperProject);
     rightInput = SemiJoinIndexPlanUtils.getProject(rightInput, leftRKJContext.upperProject);
-    input = SemiJoinIndexPlanUtils.mergeProject((ProjectPrel) leftInput, (ProjectPrel) rightInput, input);
+    input = SemiJoinIndexPlanUtils.mergeProject((ProjectPrel) leftInput, (ProjectPrel) rightInput, input, this.joinContext.call.builder());
     logger.debug("semi_join_index_plan_info: merge project ( {}, {} ) => {} ", leftInput, rightInput, input);
 
     return input;

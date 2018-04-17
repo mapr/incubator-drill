@@ -32,9 +32,9 @@ import org.apache.calcite.rel.core.RelFactories.ProjectFactory;
 import org.apache.calcite.rex.RexCall;
 import org.apache.calcite.rex.RexNode;
 import org.apache.drill.exec.planner.DrillRelBuilder;
+import org.apache.drill.exec.planner.common.DrillRelOptUtil;
 import org.apache.drill.exec.planner.physical.PrelFactories;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -127,40 +127,7 @@ public class DrillMergeProjectRule extends RelOptRule {
       }
     }
 
-    final List<RexNode> pushedProjects =
-        RelOptUtil.pushPastProject(topProject.getProjects(), bottomProject);
-    final List<RexNode> newProjects = simplifyCast(pushedProjects);
-    final RelNode input = bottomProject.getInput();
-    if (RexUtil.isIdentity(newProjects, input.getRowType())) {
-      if (force
-          || input.getRowType().getFieldNames()
-          .equals(topProject.getRowType().getFieldNames())) {
-        call.transformTo(input);
-        return;
-      }
-    }
-
-    // replace the two projects with a combined projection
-    relBuilder.push(bottomProject.getInput());
-    relBuilder.project(newProjects, topProject.getRowType().getFieldNames());
-    call.transformTo(relBuilder.build());
-  }
-
-  public static List<RexNode> simplifyCast(List<RexNode> projectExprs) {
-    final List<RexNode> list = new ArrayList<>();
-    for (RexNode rex: projectExprs) {
-      if (rex.getKind() == SqlKind.CAST) {
-        RexNode operand = ((RexCall) rex).getOperands().get(0);
-        while (operand.getKind() == SqlKind.CAST
-            && operand.getType().equals(rex.getType())) {
-          rex = operand;
-          operand = ((RexCall) rex).getOperands().get(0);
-        }
-
-      }
-      list.add(rex);
-    }
-    return list;
+    call.transformTo(DrillRelOptUtil.mergeProjects(topProject, bottomProject, force, relBuilder));
   }
 
   /**
