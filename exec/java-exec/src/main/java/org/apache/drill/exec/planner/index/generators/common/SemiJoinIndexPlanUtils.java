@@ -102,13 +102,19 @@ public class SemiJoinIndexPlanUtils {
 
   public static ScanPrel mergeScan(ScanPrel leftScan, ScanPrel rightScan) {
     Preconditions.checkArgument(SemiJoinIndexPlanUtils.checkSameTableScan(leftScan, rightScan));
+    Preconditions.checkArgument(leftScan.getGroupScan() instanceof DbGroupScan &&
+                                rightScan.getGroupScan() instanceof DbGroupScan);
 
     List<String> rightSideColumns = rightScan.getRowType().getFieldNames();
     List<String> leftSideColumns = leftScan.getRowType().getFieldNames();
     List<RelDataType> rightSideTypes = relDataTypeFromRelFieldType(rightScan.getRowType().getFieldList());
     List<RelDataType> leftSideTypes = relDataTypeFromRelFieldType(leftScan.getRowType().getFieldList());
+
+    DbGroupScan leftGroupScan = (DbGroupScan) leftScan.getGroupScan();
+    DbGroupScan rightGroupScan = (DbGroupScan) rightScan.getGroupScan();
+
     DbGroupScan restrictedGroupScan  = ((DbGroupScan) IndexPlanUtils.getGroupScan(leftScan))
-            .getRestrictedScan(ListUtils.union(leftSideColumns,rightSideColumns));
+            .getRestrictedScan(ListUtils.union(leftGroupScan.getColumns(), rightGroupScan.getColumns()));
     return new ScanPrel(leftScan.getCluster(),
             rightScan.getTraitSet(),
             restrictedGroupScan,
@@ -178,14 +184,15 @@ public class SemiJoinIndexPlanUtils {
     return result;
   }
 
-  public static List<RelNode> getRelNodes(RelNode node, List<RelNode> result) {
+  public static List<RelNode> getRelNodesBottomUp(RelNode node, List<RelNode> result) {
     if (node.getInputs().size() == 0) {
       result.add(node);
       return result;
     }
 
+    getRelNodesBottomUp(node.getInputs().get(0), result);
     result.add(node);
-    return getRelNodes(node.getInputs().get(0), result);
+    return result;
   }
 
   /*
@@ -211,11 +218,13 @@ public class SemiJoinIndexPlanUtils {
    * ScanPrel, FilterPrel, ProjectPrel.
    */
   public static IndexPhysicalPlanCallContext getPhysicalContext(List<RelNode> nodes) {
+    Preconditions.checkArgument( nodes.size() >= 1 && nodes.get(0) instanceof ScanPrel);
+
     ScanPrel scan = null;
     ProjectPrel lowerProj = null;
     FilterPrel filter = null;
     ProjectPrel upperProj = null;
-    for (RelNode nd : Lists.reverse(nodes)) {
+    for (RelNode nd : nodes) {
       Preconditions.checkArgument(nd instanceof ProjectPrel || nd instanceof FilterPrel || nd instanceof ScanPrel);
       if (nd instanceof ScanPrel) {
         Preconditions.checkArgument(scan == null);

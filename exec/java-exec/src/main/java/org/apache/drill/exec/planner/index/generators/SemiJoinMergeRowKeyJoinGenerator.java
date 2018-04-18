@@ -221,7 +221,7 @@ public class SemiJoinMergeRowKeyJoinGenerator extends NonCoveringIndexPlanGenera
   private IndexPhysicalPlanCallContext gatherLeftSideRelsOfRKJ(RowKeyJoinPrel rkj) {
     RelNode node = rkj.getInput(0);
     List<RelNode> relNodes = Lists.newArrayList();
-    SemiJoinIndexPlanUtils.getRelNodes(node, relNodes);
+    SemiJoinIndexPlanUtils.getRelNodesBottomUp(node, relNodes);
     return SemiJoinIndexPlanUtils.getPhysicalContext(relNodes);
   }
 

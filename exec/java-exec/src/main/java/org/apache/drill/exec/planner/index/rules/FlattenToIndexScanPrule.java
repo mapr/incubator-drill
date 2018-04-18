@@ -236,7 +236,7 @@ public class FlattenToIndexScanPrule extends AbstractIndexPrule {
 
     if (indexCollection == null ||
         !indexCollection.supportsArrayIndexes()) {
-      result = false;
+      return false;
     }
 
     logger.debug("Index Rule {} starts", this.description);
