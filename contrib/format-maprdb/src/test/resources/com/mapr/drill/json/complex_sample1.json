@@ -1,0 +1,10 @@
+{"user_id":"user001", "county": "Santa Clara", "salary": {"min":1000.0, "max":2000.0}, "weight": [{"low":120, "high":150},{"low":110, "high":145}], "friends": [{"name": ["Sam", "Jack"]}]}
+{"user_id":"user002", "county": "San Francisco", "salary": {"min":3000.0, "max":5000.0}, "weight": [{"low":150, "high":180},{"low":130, "high":165}], "friends": [{"name": ["Tom", "Ben"]}]}
+{"user_id":"user003", "county": "Santa Clara", "salary": {"min":1500.0, "max":5000.0}, "weight": [{"low":140, "high":190},{"low":125, "high":155}], "friends": [{"name": ["Sam", "Tom"]}]}
+{"user_id":"user004", "county": "San Francisco", "salary": {"min":3500.0, "max":4000.0}, "weight": [{"low":150, "high":180},{"low":130, "high":165}], "friends": [{"name": ["Ben", "Bill"]}]}
+{"user_id":"user005", "county": "Santa Clara", "salary": {"min":1000.0, "max":2000.0}, "weight": [{"low":120, "high":150},{"low":110, "high":145}], "friends": [{"name": ["Sam", "Jack"]}]}
+{"user_id":"user006", "county": "San Francisco", "salary": {"min":3000.0, "max":5000.0}, "weight": [{"low":150, "high":180},{"low":130, "high":165}], "friends": [{"name": ["Tom", "Ben"]}]}
+{"user_id":"user007", "county": "Santa Clara", "salary": {"min":1500.0, "max":5000.0}, "weight": [{"low":140, "high":190},{"low":125, "high":155}], "friends": [{"name": ["Sam", "Tom"]}]}
+{"user_id":"user008", "county": "San Francisco", "salary": {"min":3500.0, "max":4000.0}, "weight": [{"low":150, "high":180},{"low":130, "high":165}], "friends": [{"name": ["Ben", "Bill"]}]}
+{"user_id":"user009", "county": "Santa Clara", "salary": {"min":1000.0, "max":2000.0}, "weight": [{"low":120, "high":150},{"low":110, "high":145}], "friends": [{"name": ["Harry", "Jack"]}]}
+{"user_id":"user010", "county": "San Francisco", "salary": {"min":3000.0, "max":5000.0}, "weight": [{"low":150, "high":180},{"low":130, "high":165}], "friends": [{"name": ["John", "Ben"]}]}
