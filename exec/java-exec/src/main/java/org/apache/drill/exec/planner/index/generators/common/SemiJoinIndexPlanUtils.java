@@ -19,9 +19,11 @@ package org.apache.drill.exec.planner.index.generators.common;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+import org.apache.calcite.plan.RelOptUtil;
 import org.apache.calcite.rel.InvalidRelException;
 import org.apache.calcite.rel.RelNode;
 import org.apache.calcite.rel.core.JoinRelType;
+import org.apache.calcite.rel.core.Project;
 import org.apache.calcite.rel.logical.LogicalProject;
 import org.apache.calcite.rel.type.RelDataType;
 import org.apache.calcite.rel.type.RelDataTypeField;
@@ -29,6 +31,7 @@ import org.apache.calcite.rel.type.RelRecordType;
 import org.apache.calcite.rex.RexBuilder;
 import org.apache.calcite.rex.RexNode;
 import org.apache.calcite.rex.RexUtil;
+import org.apache.calcite.sql.validate.SqlValidatorUtil;
 import org.apache.calcite.tools.RelBuilder;
 import org.apache.commons.collections.ListUtils;
 import org.apache.drill.exec.physical.base.DbGroupScan;
@@ -96,7 +99,7 @@ public class SemiJoinIndexPlanUtils {
   }
 
   public static ProjectPrel buildProject(RelNode input, RelNode projectsRelNode) {
-    return new ProjectPrel(input.getCluster(), input.getTraitSet(), input,
+    return new ProjectPrel(input.getCluster(), input.getTraitSet().plus(DRILL_PHYSICAL), input,
             IndexPlanUtils.projects(input, projectsRelNode.getRowType().getFieldNames()),projectsRelNode.getRowType());
   }
 
@@ -119,7 +122,7 @@ public class SemiJoinIndexPlanUtils {
             rightScan.getTraitSet(),
             restrictedGroupScan,
             leftScan.getCluster().getTypeFactory().createStructType(ListUtils.union(leftSideTypes, rightSideTypes),
-                    ListUtils.union(leftSideColumns, rightSideColumns)),
+                    SqlValidatorUtil.uniquify(ListUtils.union(leftSideColumns, rightSideColumns))),
             leftScan.getTable());
   }
 
@@ -151,8 +154,10 @@ public class SemiJoinIndexPlanUtils {
             projectR.getInput().getRowType(), input.getRowType()));
     List<RexNode> listOfProjects = Lists.newArrayList();
     listOfProjects.addAll(combinedProjects);
+    Project proj1 = (Project) RelOptUtil.createProject(input, listOfProjects,
+            ListUtils.union(projectL.getRowType().getFieldNames(), projectR.getRowType().getFieldNames()));
     ProjectPrel upperProject = new ProjectPrel(input.getCluster(), input.getTraitSet(), input, listOfProjects,
-            merge(projectL.getRowType(), projectR.getRowType()));
+            proj1.getRowType());
     if (input instanceof ProjectPrel) {
       RelNode proj = DrillRelOptUtil.mergeProjects(upperProject,(ProjectPrel) input, false, builder);
       if (proj instanceof LogicalProject) {
@@ -162,8 +167,7 @@ public class SemiJoinIndexPlanUtils {
         return proj;
       }
     } else {
-      return new ProjectPrel(input.getCluster(), input.getTraitSet(), input, listOfProjects,
-              merge(projectL.getRowType(), projectR.getRowType()));
+      return upperProject;
     }
   }
 

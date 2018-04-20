@@ -18,25 +18,18 @@
 package com.mapr.drill.maprdb.tests.index;
 
 import static com.mapr.drill.maprdb.tests.MaprDBTestsSuite.INDEX_FLUSH_TIMEOUT;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+
 
 import java.io.InputStream;
-import java.util.Properties;
-
 import org.apache.drill.PlanTestBase;
-import org.apache.drill.common.config.DrillConfig;
 import org.apache.hadoop.fs.Path;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.ojai.Document;
 import org.ojai.DocumentStream;
 import org.ojai.json.Json;
-
 import com.mapr.db.Admin;
 import com.mapr.db.Table;
 import com.mapr.db.TableDescriptor;
@@ -102,8 +95,8 @@ public class TestComplexTypeIndex extends BaseJsonTest {
 
       System.out.println("Finished waiting for index updates.");
     }
-    System.out.println("Sleep 2 secs....");
-    Thread.sleep(2000);
+    System.out.println("waiting for indexes to sync....");
+    Thread.sleep(INDEX_FLUSH_TIMEOUT);
   }
 
   private static Table createOrReplaceTable(String tableName) {
@@ -138,7 +131,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
   }
 
   @Test
-  public void NonCoveringPlan1() throws Exception {
+  public void SemiJoinNonCoveringWithRangeCondition() throws Exception {
 
     String query = "SELECT user_id from hbase.`index_test_complex1` where _id in "
         + " (select _id from (select _id, flatten(weight) as f from hbase.`index_test_complex1`) as t "
@@ -147,14 +140,100 @@ public class TestComplexTypeIndex extends BaseJsonTest {
     test(maxNonCoveringSelectivityThreshold);
 
     PlanTestBase.testPlanMatchingPatterns(query,
-        new String[] {"RowKeyJoin", ".*RestrictedJsonTableGroupScan.*tableName=.*index_test_complex1,",
-           ".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*indexName=weightIdx1"},
-        new String[]{}
+            new String[] {"RowKeyJoin", ".*RestrictedJsonTableGroupScan.*tableName=.*index_test_complex1,",
+                      ".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*low.*>.*120.*indexName=weightIdx1"},
+            new String[]{}
     );
-
-    System.out.println("Non-Covering Plan Verified!");
 
     return;
   }
 
+  @Test
+  public void SemiJoinWithEqualityConditionOnOuterTable() throws Exception {
+
+    String query = "select user_id from hbase.`index_test_complex1` t where user_id in " +
+                    "(select user_id from (select user_id, flatten(t1.weight) as f from hbase.`index_test_complex1` as t1 ) as t " +
+                    "where t.f.low <= 20) and t.`user_id` = 'user001'";
+
+    test(maxNonCoveringSelectivityThreshold);
+
+    PlanTestBase.testPlanMatchingPatterns(query,
+            new String[] {"RowKeyJoin", ".*RestrictedJsonTableGroupScan.*tableName=.*index_test_complex1,",
+                    ".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*low.*<=.*20.*indexName=weightIdx1"},
+            new String[]{}
+    );
+
+    return;
+  }
+
+  @Test
+  public void SemiJoinWithNoOuterCondition() throws Exception {
+
+    String query = "select user_id from hbase.`index_test_complex1` t where user_id in " +
+            "(select user_id from (select user_id, flatten(t1.weight) as f from hbase.`index_test_complex1` as t1 ) as t where t.f.low <= 20)";
+
+    test(maxNonCoveringSelectivityThreshold);
+
+    PlanTestBase.testPlanMatchingPatterns(query,
+            new String[] {"RowKeyJoin", ".*RestrictedJsonTableGroupScan.*tableName=.*index_test_complex1,",
+                    ".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*low.*<=.*20.*indexName=weightIdx1"},
+            new String[]{}
+    );
+
+    return;
+  }
+
+  @Test
+  public void SemiJoinWithOuterConditionOnITEMField() throws Exception {
+
+    String query = " select user_id from hbase.`index_test_complex1` t where user_id in " +
+            "(select user_id from (select user_id, flatten(t1.weight) as f from hbase.`index_test_complex1` as t1 ) as t " +
+            "where t.f.low <= 20) and t.`salary`.`min` <= 1200";
+
+    test(maxNonCoveringSelectivityThreshold);
+
+    PlanTestBase.testPlanMatchingPatterns(query,
+            new String[] {"RowKeyJoin", ".*RestrictedJsonTableGroupScan.*tableName=.*index_test_complex1,",
+                    ".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*low.*<=.*20.*indexName=weightIdx1"},
+            new String[]{}
+    );
+
+    return;
+  }
+
+  @Test
+  public void SemiJoinWithInnerTableConditionOnArrayAndNonArrayField() throws Exception {
+
+    String query = "select user_id from hbase.`index_test_complex1` t where user_id in " +
+            "(select user_id from (select user_id, flatten(t1.weight) as f, t1.`salary`.`min` as minimum_salary from hbase.`index_test_complex1` as t1 ) as t2 " +
+            "where t2.f.low <= 20 and t2.minimum_salary >= 0) and t.`user_id` = 'user001'";
+
+    test(maxNonCoveringSelectivityThreshold);
+
+    PlanTestBase.testPlanMatchingPatterns(query,
+            new String[] {"RowKeyJoin", ".*RestrictedJsonTableGroupScan.*tableName=.*index_test_complex1,",
+                    ".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*.low.*<=.*20.*indexName=weightIdx1"},
+            new String[]{}
+    );
+
+    return;
+  }
+
+  @Test
+  public void SemiJoinWithStarOnOuterTable() throws Exception {
+
+    String query = "select * from hbase.`index_test_complex1` t " +
+            "where user_id in (select user_id from (select user_id, flatten(t1.weight) as f, t1.`salary`.`min` as minimum_salary from hbase.`index_test_complex1` as t1 ) as t2" +
+            " where t2.f.low <= 20 and t2.minimum_salary >= 0) and t.`user_id` = 'user001'";
+
+    test(maxNonCoveringSelectivityThreshold);
+
+    PlanTestBase.testPlanMatchingPatterns(query,
+            new String[] {"RowKeyJoin", ".*RestrictedJsonTableGroupScan.*tableName=.*index_test_complex1,.*columns=.*`\\*\\*`.*",
+                    ".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*.low.*<=.*20.*indexName=weightIdx1"},
+            new String[]{}
+    );
+
+    return;
+  }
 }

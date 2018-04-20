@@ -23,11 +23,13 @@ import org.apache.calcite.plan.RelTraitSet;
 import org.apache.calcite.plan.RelOptCluster;
 import org.apache.calcite.plan.RelOptRuleCall;
 import org.apache.calcite.plan.RelOptRule;
+import org.apache.calcite.plan.RelOptUtil;
 import org.apache.calcite.plan.RelOptRuleOperand;
 import org.apache.calcite.rel.AbstractRelNode;
 import org.apache.calcite.rel.type.RelDataType;
+import org.apache.calcite.sql.validate.SqlValidatorUtil;
 import org.apache.drill.exec.physical.base.IndexGroupScan;
-import org.apache.drill.exec.planner.common.DrillRelOptUtil;
+import org.apache.calcite.rel.core.Project;
 import org.apache.calcite.rel.type.RelDataTypeField;
 import org.apache.commons.collections.ListUtils;
 import org.apache.drill.exec.planner.index.FlattenIndexPlanCallContext;
@@ -51,7 +53,6 @@ import org.apache.drill.exec.planner.logical.DrillAggregateRel;
 import org.apache.drill.exec.planner.logical.RelOptHelper;
 import org.apache.calcite.rex.RexBuilder;
 import org.apache.calcite.rex.RexCall;
-import org.apache.calcite.rex.RexInputRef;
 import org.apache.calcite.rex.RexNode;
 import org.apache.drill.exec.planner.physical.PlannerSettings;
 
@@ -329,22 +330,13 @@ public class SemiJoinIndexScanPrule extends AbstractIndexPrule {
                                                   oldProject.getProjects(), oldScan.getRowType(), newScan.getRowType());
     List<String> leftProjectsNames = otherScan.getRowType().getFieldNames();
     List<String> rightProjectsNames = oldProject.getRowType().getFieldNames();
-    List<RelDataType> projectTypes = relDataTypes(ListUtils.union(leftProjects, rightProjects));
-    RelDataType projectRowType = cluster.getTypeFactory()
-            .createStructType(projectTypes,
-                    ListUtils.union(leftProjectsNames, rightProjectsNames));
-    DrillProjectRel projectRel = DrillProjectRel.create(cluster, traits,
-            newScan, ListUtils.union(leftProjects, rightProjects),
-            projectRowType);
-    return projectRel;
-  }
 
-  private List<RelDataType> relDataTypes(List<RexNode> projects) {
-    List<RelDataType> types = Lists.newArrayList();
-    for (RexNode project : projects) {
-      types.add(project.getType());
-    }
-    return types;
+    Project proj = (Project)RelOptUtil.createProject(newScan, ListUtils.union(leftProjects, rightProjects),
+                                                      ListUtils.union(leftProjectsNames, rightProjectsNames));
+    DrillProjectRel projectRel = DrillProjectRel.create(cluster, traits,
+            proj.getInput(), proj.getProjects(),
+            proj.getRowType());
+    return projectRel;
   }
 
   private DrillScanRel merge(DrillScanRel leftScan, DrillScanRel rightScan) {
@@ -358,7 +350,7 @@ public class SemiJoinIndexScanPrule extends AbstractIndexPrule {
             rightScan.getTraitSet(),
             rightScan.getTable(),
             leftScan.getCluster().getTypeFactory().createStructType(ListUtils.union(leftSideTypes, rightSideTypes),
-                    ListUtils.union(leftSideColumns, rightSideColumns)),
+                    SqlValidatorUtil.uniquify(ListUtils.union(leftSideColumns, rightSideColumns))),
             rightScan.getColumns(), false);
   }
 
