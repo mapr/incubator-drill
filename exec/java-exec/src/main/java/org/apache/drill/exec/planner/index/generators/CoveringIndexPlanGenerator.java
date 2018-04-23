@@ -20,22 +20,33 @@ package org.apache.drill.exec.planner.index.generators;
 import org.apache.drill.shaded.guava.com.google.common.base.Preconditions;
 import org.apache.drill.shaded.guava.com.google.common.collect.Lists;
 
+import org.apache.calcite.plan.RelOptCluster;
+import org.apache.calcite.plan.RelOptUtil;
 import org.apache.calcite.plan.RelTraitSet;
 import org.apache.calcite.rel.RelCollation;
+import org.apache.calcite.rel.core.Project;
+import org.apache.calcite.rel.RelCollations;
 import org.apache.calcite.rel.type.RelDataType;
+import org.apache.calcite.rel.type.RelDataTypeFactory;
+import org.apache.calcite.rel.type.RelDataTypeField;
 import org.apache.calcite.rex.RexBuilder;
 import org.apache.calcite.rex.RexCall;
 import org.apache.calcite.rex.RexInputRef;
 import org.apache.calcite.rex.RexNode;
+import org.apache.calcite.rex.RexUtil;
+import org.apache.calcite.util.Pair;
 import org.apache.drill.exec.physical.base.IndexGroupScan;
 import org.apache.drill.exec.planner.index.IndexLogicalPlanCallContext;
 import org.apache.drill.exec.planner.index.IndexDescriptor;
 import org.apache.drill.exec.planner.index.FunctionalIndexInfo;
+import org.apache.drill.exec.planner.index.FlattenIndexPlanCallContext;
 import org.apache.drill.exec.planner.index.FunctionalIndexHelper;
 import org.apache.drill.exec.planner.index.IndexPlanUtils;
 import org.apache.drill.exec.planner.index.SimpleRexRemap;
 import org.apache.drill.exec.planner.logical.DrillMergeProjectRule;
 import org.apache.drill.exec.planner.logical.DrillParseContext;
+import org.apache.drill.exec.planner.logical.DrillProjectRel;
+import org.apache.drill.exec.planner.logical.DrillRelFactories;
 import org.apache.drill.exec.planner.physical.FilterPrel;
 import org.apache.drill.exec.planner.physical.PlannerSettings;
 import org.apache.drill.exec.planner.physical.Prel;
@@ -119,10 +130,48 @@ public class CoveringIndexPlanGenerator extends AbstractIndexPlanGenerator {
 
     ProjectPrel indexProjectPrel = null;
     if (origProject != null) {
-      RelCollation collation = IndexPlanUtils.buildCollationProject(IndexPlanUtils.getProjects(origProject), null,
-          origScan, functionInfo, indexContext);
-      indexProjectPrel = new ProjectPrel(origScan.getCluster(), indexFilterTraitSet.plus(collation),
-          indexFilterPrel, IndexPlanUtils.getProjects(origProject), origProject.getRowType());
+      if (indexContext instanceof FlattenIndexPlanCallContext) {
+        List<RelDataTypeField> origProjFields = origProject.getRowType().getFieldList();
+        List<RelDataTypeField> newProjFields = Lists.newArrayList();
+        List<Pair<RexNode, String>> projExprList = origProject.getNamedProjects();
+        // build the row type for the new Project
+        List<RexNode> newProjectExprs = Lists.newArrayList();
+
+        final RelDataTypeFactory.FieldInfoBuilder newProjectFieldTypeBuilder =
+            origScan.getCluster().getTypeFactory().builder();
+
+        FlattenIndexPlanCallContext flattenContext = ((FlattenIndexPlanCallContext) indexContext);
+        int origFieldIndex = 0;
+
+        for (Pair<RexNode, String> p : projExprList) {
+          newProjFields.add(origProjFields.get(origFieldIndex));
+          // if this expr is a flatten, only keep the input of flatten.  Note that we cannot drop
+          // the expr altogether because the new Project will be added to the same RelSubset as the old Project and
+          // the RowType of both should be the same to pass validation checks in the VolcanoPlanner.
+          if (flattenContext.getFlattenMap().containsKey(p.right)) {
+            newProjectExprs.add(((RexCall)p.left).getOperands().get(0));
+          } else {
+            newProjectExprs.add(p.left);
+          }
+          origFieldIndex++;
+        }
+        newProjectFieldTypeBuilder.addAll(newProjFields);
+        final RelDataType newProjectRowType = newProjectFieldTypeBuilder.build();
+
+        // to be safe, use empty collation since there is no guarantee that flatten pushdown
+        // to index will allow collation trait
+        // TODO: this may change in the future if we determine otherwise
+        final RelCollation collation = RelCollations.EMPTY;
+
+        indexProjectPrel = new ProjectPrel(origScan.getCluster(), indexFilterTraitSet.plus(collation),
+            indexFilterPrel, newProjectExprs, newProjectRowType);
+
+      } else {
+        RelCollation collation = IndexPlanUtils.buildCollationProject(IndexPlanUtils.getProjects(origProject), null,
+            origScan, functionInfo, indexContext);
+        indexProjectPrel = new ProjectPrel(origScan.getCluster(), indexFilterTraitSet.plus(collation),
+            indexFilterPrel, IndexPlanUtils.getProjects(origProject), origProject.getRowType());
+      }
     }
 
     RelNode finalRel;

@@ -19,6 +19,7 @@
 package org.apache.drill.exec.planner.index;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -41,6 +42,8 @@ import org.apache.calcite.rel.AbstractRelNode;
 import org.apache.calcite.rel.core.Sort;
 import org.apache.calcite.rex.RexBuilder;
 import org.apache.calcite.rex.RexUtil;
+import org.apache.calcite.rex.RexVisitor;
+import org.apache.calcite.rex.RexVisitorImpl;
 import org.apache.calcite.rex.RexLiteral;
 import org.apache.calcite.sql.SqlKind;
 import org.apache.drill.common.expression.FieldReference;
@@ -240,8 +243,71 @@ public class IndexPlanUtils {
     return false;
   }
 
+  /**
+   * Gather all RexInputRefs in input expressions.
+   *
+   * @param nodes expressions
+   * @return set of RexInputRefs
+   */
+  public static Set<RexInputRef> gatherInputRefs(final List<RexNode> nodes) {
+    final Set<RexInputRef> inputRefs = new HashSet<>();
+    RexVisitor<Void> visitor =
+        new RexVisitorImpl<Void>(true) {
+          @Override public Void visitInputRef(RexInputRef ref) {
+            inputRefs.add(ref);
+            return super.visitInputRef(ref);
+          }
+        };
+    for (RexNode e : nodes) {
+      e.accept(visitor);
+    }
+    return inputRefs;
+  }
+
   private static boolean isCoveringArrayIndex(IndexCallContext indexContext, FunctionalIndexInfo indexInfo) {
-    // TODO: add full implementation for checking covering index with array fields
+    if (indexContext instanceof FlattenIndexPlanCallContext) {
+      FlattenIndexPlanCallContext flattenContext = (FlattenIndexPlanCallContext)indexContext;
+      List<RexNode> itemRexExprList = flattenContext.getItemExprList();
+      List<LogicalExpression> referencedExprsList = Lists.newArrayList();
+
+      RelNode flattenInputRel = (flattenContext.getProjectWithFlatten().getInput() instanceof RelSubset) ?
+          ((RelSubset)flattenContext.getProjectWithFlatten().getInput()).getBest() :
+            flattenContext.getProjectWithFlatten().getInput();
+
+      Preconditions.checkNotNull(flattenInputRel);
+
+      // add the columns that are referenced by the filter condition above the Flatten, so these
+      // are the ITEM expressions
+      for (RexNode itemRexExpr : itemRexExprList) {
+        LogicalExpression itemLogicalExpr =
+            DrillOptiq.toDrill(indexContext.getDefaultParseContext(), flattenInputRel, itemRexExpr);
+        referencedExprsList.add(itemLogicalExpr);
+      }
+      // don't need to add columns from the filter below the Flatten because those referenced columns must
+      // already be part of the Scan's output columns
+
+      // process the _NON_ flatten columns
+      List<RexNode> nonFlattenExprs = flattenContext.getNonFlattenExprs();
+      if (nonFlattenExprs != null && nonFlattenExprs.size() > 0) {
+        if (flattenInputRel == flattenContext.getScan()) {
+          // these are the set of fields that we want from the Scan
+          Set<RexInputRef> nonFlattenRefs = gatherInputRefs(nonFlattenExprs);
+          for (RexInputRef nf : nonFlattenRefs) {
+            LogicalExpression nfExpr =
+                DrillOptiq.toDrill(indexContext.getDefaultParseContext(), flattenInputRel, nf);
+            referencedExprsList.add(nfExpr);
+          }
+        } else {
+          // add the columns from the table scan
+          DbGroupScan groupScan = (DbGroupScan) getGroupScan(indexContext.getScan());
+          referencedExprsList.addAll(groupScan.getColumns());
+        }
+      }
+
+      // now check for covering property
+      boolean isCovering = indexInfo.getIndexDesc().isCoveringIndex(referencedExprsList);
+      return isCovering;
+    }
     return false;
   }
 
