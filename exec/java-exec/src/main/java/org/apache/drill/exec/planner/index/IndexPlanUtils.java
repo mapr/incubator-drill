@@ -41,11 +41,13 @@ import org.apache.calcite.rel.RelNode;
 import org.apache.calcite.rel.AbstractRelNode;
 import org.apache.calcite.rel.core.Sort;
 import org.apache.calcite.rex.RexBuilder;
+import org.apache.calcite.rex.RexCall;
 import org.apache.calcite.rex.RexUtil;
 import org.apache.calcite.rex.RexVisitor;
 import org.apache.calcite.rex.RexVisitorImpl;
 import org.apache.calcite.rex.RexLiteral;
 import org.apache.calcite.sql.SqlKind;
+import org.apache.calcite.sql.fun.SqlStdOperatorTable;
 import org.apache.drill.common.expression.FieldReference;
 import org.apache.drill.common.expression.LogicalExpression;
 import org.apache.drill.common.expression.SchemaPath;
@@ -244,24 +246,31 @@ public class IndexPlanUtils {
   }
 
   /**
-   * Gather all RexInputRefs in input expressions.
+   * From the supplied expressions, gather all relevant expressions needed for doing the covering check
+   * This includes: RexInputRefs and the ITEM expressions.
    *
    * @param nodes expressions
-   * @return set of RexInputRefs
+   * @return set of RexNodes that are needed
    */
-  public static Set<RexInputRef> gatherInputRefs(final List<RexNode> nodes) {
-    final Set<RexInputRef> inputRefs = new HashSet<>();
+  public static Set<RexNode> gatherRelevantExprsForCovering(final List<RexNode> nodes) {
+    final Set<RexNode> exprList = new HashSet<>();
     RexVisitor<Void> visitor =
         new RexVisitorImpl<Void>(true) {
           @Override public Void visitInputRef(RexInputRef ref) {
-            inputRefs.add(ref);
+            exprList.add(ref);
             return super.visitInputRef(ref);
+          }
+          @Override public Void visitCall(RexCall call) {
+            if (SqlStdOperatorTable.ITEM.equals(call.getOperator())) {
+              exprList.add(call);
+            }
+            return null;
           }
         };
     for (RexNode e : nodes) {
       e.accept(visitor);
     }
-    return inputRefs;
+    return exprList;
   }
 
   private static boolean isCoveringArrayIndex(IndexCallContext indexContext, FunctionalIndexInfo indexInfo) {
@@ -283,16 +292,13 @@ public class IndexPlanUtils {
             DrillOptiq.toDrill(indexContext.getDefaultParseContext(), flattenInputRel, itemRexExpr);
         referencedExprsList.add(itemLogicalExpr);
       }
-      // don't need to add columns from the filter below the Flatten because those referenced columns must
-      // already be part of the Scan's output columns
-
       // process the _NON_ flatten columns
       List<RexNode> nonFlattenExprs = flattenContext.getNonFlattenExprs();
       if (nonFlattenExprs != null && nonFlattenExprs.size() > 0) {
         if (flattenInputRel == flattenContext.getScan()) {
           // these are the set of fields that we want from the Scan
-          Set<RexInputRef> nonFlattenRefs = gatherInputRefs(nonFlattenExprs);
-          for (RexInputRef nf : nonFlattenRefs) {
+          Set<RexNode> nonFlattenRefs = gatherRelevantExprsForCovering(nonFlattenExprs);
+          for (RexNode nf : nonFlattenRefs) {
             LogicalExpression nfExpr =
                 DrillOptiq.toDrill(indexContext.getDefaultParseContext(), flattenInputRel, nf);
             referencedExprsList.add(nfExpr);
