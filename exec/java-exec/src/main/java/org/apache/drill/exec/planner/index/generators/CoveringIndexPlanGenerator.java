@@ -29,6 +29,7 @@ import org.apache.calcite.rel.RelCollations;
 import org.apache.calcite.rel.type.RelDataType;
 import org.apache.calcite.rel.type.RelDataTypeFactory;
 import org.apache.calcite.rel.type.RelDataTypeField;
+import org.apache.calcite.rel.InvalidRelException;
 import org.apache.calcite.rex.RexBuilder;
 import org.apache.calcite.rex.RexCall;
 import org.apache.calcite.rex.RexInputRef;
@@ -105,7 +106,7 @@ public class CoveringIndexPlanGenerator extends AbstractIndexPlanGenerator {
   }
 
   @Override
-  public RelNode convertChild(final RelNode filter, final RelNode input) {
+  public RelNode convertChild(final RelNode filter, final RelNode input) throws InvalidRelException {
 
     if (indexGroupScan == null) {
       logger.error("Null indexgroupScan in CoveringIndexPlanGenerator.convertChild");

@@ -41,6 +41,10 @@ import org.apache.drill.exec.planner.index.IndexPhysicalPlanCallContext;
 import org.apache.drill.exec.planner.index.IndexPlanUtils;
 import org.apache.drill.exec.planner.index.SemiJoinIndexPlanCallContext;
 import org.apache.drill.exec.planner.logical.DrillAggregateRel;
+import org.apache.drill.exec.planner.logical.DrillProjectRel;
+import org.apache.drill.exec.planner.logical.DrillFilterRel;
+import org.apache.drill.exec.planner.logical.DrillScanRel;
+import org.apache.drill.exec.planner.logical.DrillRel;
 import org.apache.drill.exec.planner.physical.HashAggPrel;
 import org.apache.drill.exec.planner.physical.ProjectPrel;
 import org.apache.drill.exec.planner.physical.ScanPrel;
@@ -52,8 +56,10 @@ import org.apache.drill.exec.planner.physical.HashAggPrule;
 
 import java.util.List;
 
+import static org.apache.drill.exec.planner.logical.DrillRel.DRILL_LOGICAL;
 import static org.apache.drill.exec.planner.physical.AggPrelBase.OperatorPhase.PHASE_1of1;
 import static org.apache.drill.exec.planner.physical.Prel.DRILL_PHYSICAL;
+
 
 public class SemiJoinIndexPlanUtils {
   static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(SemiJoinIndexPlanUtils.class);
@@ -68,6 +74,50 @@ public class SemiJoinIndexPlanUtils {
       input = mergeProject((ProjectPrel) inputNode, proj, input, builder);
     }
     return input;
+  }
+
+  /**
+   * Given a join context it traverses the nodes and creates the corresponding physical rels.
+   */
+  public static IndexPhysicalPlanCallContext gatherLeftSideRelsOfJoin(SemiJoinIndexPlanCallContext joinContext) {
+    List<RelNode> nodes = Lists.newArrayList();
+    physicalRel(joinContext.leftSide.upperProject,
+            physicalRel(joinContext.leftSide.filter,
+                    physicalRel(joinContext.leftSide.lowerProject,
+                            physicalRel(joinContext.leftSide.scan, nodes))));
+    logger.debug("semi_join_index_plan_info: gathered nodes from left side of join: {}", nodes);
+    return SemiJoinIndexPlanUtils.getPhysicalContext(nodes);
+  }
+
+
+  private static List<RelNode> physicalRel(DrillScanRel scan, List<RelNode> collectionOfRels) {
+    Preconditions.checkNotNull(scan);
+    Preconditions.checkArgument(scan.getGroupScan() instanceof DbGroupScan);
+
+    DbGroupScan restrictedScan = ((DbGroupScan)scan.getGroupScan()).getRestrictedScan(scan.getColumns());
+    collectionOfRels.add(new ScanPrel(scan.getCluster(), scan.getTraitSet().plus(DRILL_PHYSICAL),
+            restrictedScan, scan.getRowType(), scan.getTable()));
+    return collectionOfRels;
+  }
+
+  private static List<RelNode> physicalRel(DrillProjectRel projectRel, List<RelNode> collectionOfRels) {
+    if (projectRel == null) {
+      return collectionOfRels;
+    }
+
+    collectionOfRels.add(new ProjectPrel(projectRel.getCluster(), projectRel.getTraitSet().plus(DRILL_PHYSICAL),
+            collectionOfRels.get(collectionOfRels.size()-1), projectRel.getProjects(), projectRel.getRowType()));
+    return collectionOfRels;
+  }
+
+  private static List<RelNode> physicalRel(DrillFilterRel filter, List<RelNode> collectionOfRels) {
+    if (filter == null) {
+      return collectionOfRels;
+    }
+
+    collectionOfRels.add(new FilterPrel(filter.getCluster(), filter.getTraitSet().plus(DRILL_PHYSICAL),
+            collectionOfRels.get(collectionOfRels.size()-1), filter.getCondition()));
+    return collectionOfRels;
   }
 
   public static RelNode buildRowKeyJoin(SemiJoinIndexPlanCallContext joinContext,
@@ -86,6 +136,14 @@ public class SemiJoinIndexPlanUtils {
     return buildProject(input, input);
   }
 
+  public static DrillProjectRel getProject(DrillRel input, DrillProjectRel project) {
+    if (project != null) {
+      return project;
+    }
+
+    return buildProject(input, input);
+  }
+
   public static FilterPrel getFilter(RelNode input, FilterPrel filter) {
     if (filter != null) {
       return filter;
@@ -94,13 +152,34 @@ public class SemiJoinIndexPlanUtils {
     return buildFilter(input);
   }
 
+  public static DrillFilterRel getFilter(DrillRel input, DrillFilterRel filter) {
+    if (filter != null) {
+      return filter;
+    }
+
+    return buildFilter(input);
+  }
+
   public static FilterPrel buildFilter(RelNode input) {
-    return new FilterPrel(input.getCluster(), input.getTraitSet(), input, input.getCluster().getRexBuilder().makeLiteral(true));
+    return new FilterPrel(input.getCluster(), input.getTraitSet().plus(DRILL_PHYSICAL), input,
+            input.getCluster().getRexBuilder().makeLiteral(true));
+  }
+
+  public static DrillFilterRel buildFilter(DrillRel input) {
+    return new DrillFilterRel(input.getCluster(), input.getTraitSet().plus(DRILL_LOGICAL), input,
+            input.getCluster().getRexBuilder().makeLiteral(true));
   }
 
   public static ProjectPrel buildProject(RelNode input, RelNode projectsRelNode) {
     return new ProjectPrel(input.getCluster(), input.getTraitSet().plus(DRILL_PHYSICAL), input,
-            IndexPlanUtils.projects(input, projectsRelNode.getRowType().getFieldNames()),projectsRelNode.getRowType());
+            IndexPlanUtils.projects(input, projectsRelNode.getRowType().getFieldNames()),
+            projectsRelNode.getRowType());
+  }
+
+  public static DrillProjectRel buildProject(DrillRel input, DrillRel projectsRelNode) {
+    return DrillProjectRel.create(input.getCluster(), input.getTraitSet().plus(DRILL_LOGICAL), input,
+            IndexPlanUtils.projects(input, projectsRelNode.getRowType().getFieldNames()),
+            projectsRelNode.getRowType());
   }
 
   public static ScanPrel mergeScan(ScanPrel leftScan, ScanPrel rightScan) {
@@ -131,12 +210,11 @@ public class SemiJoinIndexPlanUtils {
                                     RelNode input) {
     List<RexNode> combineConditions = Lists.newArrayList();
     RexNode leftTransformedConditions = IndexPlanUtils.transform(0,input.getCluster().getRexBuilder(),
-                                                                  filterL.getCondition(), filterL.getInput().getRowType(),
-                                                                  input.getRowType());
+                                                                  filterL.getCondition(), filterL.getInput().getRowType());
     logger.debug("semi_join_index_plan_info: left conditions after transforming: {}", leftTransformedConditions);
     RexNode rightTransformedConditions = IndexPlanUtils.transform(filterL.getInput().getRowType().getFieldList().size(),
                                                                     input.getCluster().getRexBuilder(), filterR.getCondition(),
-                                                                    filterR.getInput().getRowType(), input.getRowType());
+                                                                    filterR.getInput().getRowType());
     logger.debug("semi_join_index_plan_info: right conditions after transforming: {}", rightTransformedConditions);
     combineConditions.add(leftTransformedConditions);
     combineConditions.add(rightTransformedConditions);
@@ -149,9 +227,9 @@ public class SemiJoinIndexPlanUtils {
     RexBuilder rexBuilder = input.getCluster().getRexBuilder();
     List<RexNode> combinedProjects = Lists.newArrayList();
     combinedProjects.addAll(IndexPlanUtils.projectsTransformer(0,rexBuilder, projectL.getProjects(),
-            projectL.getInput().getRowType(), input.getRowType()));
+            projectL.getInput().getRowType()));
     combinedProjects.addAll(IndexPlanUtils.projectsTransformer(projectL.getProjects().size(), rexBuilder, projectR.getProjects(),
-            projectR.getInput().getRowType(), input.getRowType()));
+            projectR.getInput().getRowType()));
     List<RexNode> listOfProjects = Lists.newArrayList();
     listOfProjects.addAll(combinedProjects);
     Project proj1 = (Project) RelOptUtil.createProject(input, listOfProjects,
@@ -229,7 +307,10 @@ public class SemiJoinIndexPlanUtils {
     FilterPrel filter = null;
     ProjectPrel upperProj = null;
     for (RelNode nd : nodes) {
-      Preconditions.checkArgument(nd instanceof ProjectPrel || nd instanceof FilterPrel || nd instanceof ScanPrel);
+      Preconditions.checkArgument(nd instanceof ProjectPrel
+              || nd instanceof FilterPrel
+              || nd instanceof ScanPrel);
+
       if (nd instanceof ScanPrel) {
         Preconditions.checkArgument(scan == null);
         scan = (ScanPrel)nd;

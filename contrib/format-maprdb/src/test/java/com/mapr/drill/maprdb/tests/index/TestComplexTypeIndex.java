@@ -26,6 +26,7 @@ import org.apache.hadoop.fs.Path;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.Ignore;
 import org.junit.experimental.categories.Category;
 import org.ojai.Document;
 import org.ojai.DocumentStream;
@@ -225,6 +226,40 @@ public class TestComplexTypeIndex extends BaseJsonTest {
     String query = "select * from hbase.`index_test_complex1` t " +
             "where user_id in (select user_id from (select user_id, flatten(t1.weight) as f, t1.`salary`.`min` as minimum_salary from hbase.`index_test_complex1` as t1 ) as t2" +
             " where t2.f.low <= 20 and t2.minimum_salary >= 0) and t.`user_id` = 'user001'";
+
+    test(maxNonCoveringSelectivityThreshold);
+
+    PlanTestBase.testPlanMatchingPatterns(query,
+            new String[] {"RowKeyJoin", ".*RestrictedJsonTableGroupScan.*tableName=.*index_test_complex1,.*columns=.*`\\*\\*`.*",
+                    ".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*.low.*<=.*20.*indexName=weightIdx1"},
+            new String[]{}
+    );
+
+    return;
+  }
+
+  @Ignore
+  @Test
+  public void SemiJoinCoveringIndexPlan() throws Exception {
+
+    String query = "select _id from hbase.`index_test_complex1` t " +
+            "where _id in (select _id from (select _id, flatten(t1.weight) as f from hbase.`index_test_complex1` as t1 ) as t2" +
+            " where t2.f.low <= 20 )";
+
+    PlanTestBase.testPlanMatchingPatterns(query,
+            new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*.low.*<=.*20.*indexName=weightIdx1"},
+            new String[]{"RowKeyJoin", ".*RestrictedJsonTableGroupScan.*tableName=.*index_test_complex1,.*columns=.*`\\*\\*`.*"}
+    );
+
+    return;
+  }
+
+  @Test
+  public void SemiJoinWithStarAndid() throws Exception {
+
+    String query = "select * from hbase.`index_test_complex1` t " +
+            "where _id in (select _id from (select _id, flatten(t1.weight) as f from hbase.`index_test_complex1` as t1 ) as t2" +
+            " where t2.f.low <= 20 ) and t.`_id` = 'user001'";
 
     test(maxNonCoveringSelectivityThreshold);
 

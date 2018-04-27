@@ -23,6 +23,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.HashMap;
 
 import org.apache.drill.shaded.guava.com.google.common.collect.ImmutableList;
 import org.apache.drill.shaded.guava.com.google.common.collect.Lists;
@@ -1072,18 +1073,49 @@ public class IndexPlanUtils {
   }
 
   public static List<RexNode> projectsTransformer(int startIndex, RexBuilder builder, List<RexNode> projects,
-                                            RelDataType oldRowType, RelDataType newRowType) {
+                                            RelDataType oldRowType) {
     List<RexNode> result = Lists.newArrayList();
-    DrillRelOptUtil.RexFieldsTransformer transformer = new DrillRelOptUtil.RexFieldsTransformer(builder, oldRowType, newRowType, startIndex);
+    DrillRelOptUtil.RexFieldsTransformer transformer = new DrillRelOptUtil.RexFieldsTransformer(builder, inputRefMap(oldRowType, startIndex));
     for (RexNode expr : projects) {
       result.add(transformer.go(expr));
     }
     return result;
   }
 
+  public static List<RexNode> transform(List<RexNode> inputExprs, Map<Integer, Integer> inputRefMap, RexBuilder builder) {
+    List<RexNode> result = Lists.newArrayList();
+    DrillRelOptUtil.RexFieldsTransformer transformer = new DrillRelOptUtil.RexFieldsTransformer(builder, inputRefMap);
+    for (RexNode expr : inputExprs) {
+      result.add(transformer.go(expr));
+    }
+
+    return result;
+  }
+
+  public static RexNode transform(RexNode inputExprs, Map<Integer, Integer> inputRefMap, RexBuilder builder) {
+    DrillRelOptUtil.RexFieldsTransformer transformer = new DrillRelOptUtil.RexFieldsTransformer(builder, inputRefMap);
+    return transformer.go(inputExprs);
+  }
+
   public static RexNode transform(int startIndex, RexBuilder builder, RexNode rexNode,
-                            RelDataType oldRowType, RelDataType newRowType) {
-    DrillRelOptUtil.RexFieldsTransformer transformer = new DrillRelOptUtil.RexFieldsTransformer(builder, oldRowType, newRowType, startIndex);
+                                  RelDataType oldRowType) {
+    DrillRelOptUtil.RexFieldsTransformer transformer = new DrillRelOptUtil.RexFieldsTransformer(builder, inputRefMap(oldRowType, startIndex));
     return transformer.go(rexNode);
+  }
+
+  /**
+   * Creates a new field to old field reference map. The new field index start from startIndex.
+   * @param oldRowType
+   * @param startIndex
+   * @return Mapping of old row index to new row index where new row index starts from startIndex.
+   */
+  private static Map<Integer, Integer> inputRefMap(RelDataType oldRowType, int startIndex) {
+    Map<Integer, Integer> refMap = new HashMap<>();
+
+    for (int i= 0; i<oldRowType.getFieldList().size(); i++) {
+      refMap.put(i, i+startIndex);
+    }
+
+    return refMap;
   }
 }
