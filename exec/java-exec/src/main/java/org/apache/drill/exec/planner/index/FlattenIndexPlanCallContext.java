@@ -46,6 +46,11 @@ public class FlattenIndexPlanCallContext extends IndexLogicalPlanCallContext {
   protected DrillProjectRel projectWithFlatten = null;
 
   /**
+   * Project directly above the Scan
+   */
+  protected DrillProjectRel leafProjectAboveScan = null;
+
+  /**
    * Map of Flatten field names to the corresponding RexCall
    */
   protected Map<String, RexCall> flattenMap = null;
@@ -67,6 +72,7 @@ public class FlattenIndexPlanCallContext extends IndexLogicalPlanCallContext {
       DrillFilterRel filterAboveFlatten,
       DrillProjectRel projectWithFlatten,
       DrillFilterRel filterBelowFlatten,
+      DrillProjectRel leafProjectAboveScan,
       DrillScanRel scan,
       Map<String, RexCall> flattenMap,
       List<RexNode> nonFlattenExprs) {
@@ -79,8 +85,21 @@ public class FlattenIndexPlanCallContext extends IndexLogicalPlanCallContext {
     this.filterAboveFlatten = filterAboveFlatten;
     this.filterBelowFlatten = filterBelowFlatten;
     this.projectWithFlatten = projectWithFlatten;
+    this.leafProjectAboveScan = leafProjectAboveScan;
     this.flattenMap = flattenMap;
     this.nonFlattenExprs = nonFlattenExprs;
+  }
+
+  public FlattenIndexPlanCallContext(RelOptRuleCall call,
+      DrillProjectRel upperProject,
+      DrillFilterRel filterAboveFlatten,
+      DrillProjectRel projectWithFlatten,
+      DrillFilterRel filterBelowFlatten,
+      DrillScanRel scan,
+      Map<String, RexCall> flattenMap,
+      List<RexNode> nonFlattenExprs) {
+    this (call, upperProject, filterAboveFlatten, projectWithFlatten, filterBelowFlatten,
+        null /* no leaf project above scan */, scan, flattenMap, nonFlattenExprs);
   }
 
   public Map<String, RexCall> getFlattenMap() {
@@ -109,6 +128,10 @@ public class FlattenIndexPlanCallContext extends IndexLogicalPlanCallContext {
 
   public List<RexNode> getItemExprList() {
     return itemExprList;
+  }
+
+  public DrillProjectRel getLeafProjectAboveScan() {
+    return leafProjectAboveScan;
   }
 
 }

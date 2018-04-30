@@ -79,6 +79,14 @@ public class FlattenToIndexScanPrule extends AbstractIndexPrule {
               RelOptHelper.some(DrillFilterRel.class, RelOptHelper.any(DrillScanRel.class)))),
       "FlattenToIndexScanPrule:Filter_Project_Filter_Scan", new MatchFPFS());
 
+  public static final RelOptRule FILTER_PROJECT_FILTER_PROJECT_SCAN = new FlattenToIndexScanPrule(
+      RelOptHelper.some(DrillFilterRel.class,
+          RelOptHelper.some(DrillProjectRel.class,
+              RelOptHelper.some(DrillFilterRel.class,
+                  RelOptHelper.some(DrillProjectRel.class, RelOptHelper.any(DrillScanRel.class))))),
+      "FlattenToIndexScanPrule:Filter_Project_Filter_Project_Scan", new MatchFPFPS());
+
+
   final private MatchFunction<FlattenIndexPlanCallContext> match;
 
   private FlattenToIndexScanPrule(RelOptRuleOperand operand,
@@ -161,6 +169,46 @@ public class FlattenToIndexScanPrule extends AbstractIndexPrule {
     }
   }
 
+  private static class MatchFPFPS extends AbstractMatchFunction<FlattenIndexPlanCallContext> {
+
+    public boolean match(RelOptRuleCall call) {
+      final DrillProjectRel upperProject = (DrillProjectRel) call.rel(1);
+      final DrillScanRel scan = (DrillScanRel) call.rel(4);
+
+      if (checkScan(scan)) {
+        // if Project does not contain a FLATTEN expression, rule does not apply
+        return projectHasFlatten(upperProject, true, null, null);
+      }
+      return false;
+    }
+
+    public FlattenIndexPlanCallContext onMatch(RelOptRuleCall call) {
+      final DrillFilterRel filterAboveFlatten = (DrillFilterRel) call.rel(0);
+      final DrillProjectRel projectWithFlatten = (DrillProjectRel) call.rel(1);
+      final DrillFilterRel filterBelowFlatten = (DrillFilterRel) call.rel(2);
+      final DrillProjectRel leafProjectAboveScan = (DrillProjectRel) call.rel(3);
+      final DrillScanRel scan = (DrillScanRel) call.rel(4);
+
+      Map<String, RexCall> flattenMap = Maps.newHashMap();
+      List<RexNode> nonFlattenExprs = Lists.newArrayList();
+
+      // populate the flatten and non-flatten collections
+      projectHasFlatten(projectWithFlatten, false, flattenMap, nonFlattenExprs);
+
+      FlattenIndexPlanCallContext idxContext = new FlattenIndexPlanCallContext(call,
+              null /* upper project */,
+              filterAboveFlatten,
+              projectWithFlatten,
+              filterBelowFlatten,
+              leafProjectAboveScan,
+              scan,
+              flattenMap,
+              nonFlattenExprs);
+
+      return idxContext;
+    }
+  }
+
   public static class FlattenIndexPlanGenerator implements IndexPlanGenerator {
     private final IndexLogicalPlanCallContext indexContext;
 
@@ -214,6 +262,12 @@ public class FlattenToIndexScanPrule extends AbstractIndexPrule {
 
       if (indexContext.getFilterBelowFlatten() != null) {
         RexNode conditionFilterBelowFlatten = indexContext.getFilterBelowFlatten().getCondition();
+        if (indexContext.getLeafProjectAboveScan() != null) {
+          FilterVisitor  filterVisitor2 =
+              new FilterVisitor(indexContext.getFlattenMap(), indexContext.getLeafProjectAboveScan(), builder);
+          conditionFilterBelowFlatten = indexContext.getFilterBelowFlatten().getCondition().accept(filterVisitor2);
+        }
+
         // compose a new condition using conjunction (this is valid since the above and below are 2 independent filters)
         RexNode combinedCondition = RexUtil.composeConjunction(builder,
             ImmutableList.of(conditionFilterAboveFlatten, conditionFilterBelowFlatten), false);

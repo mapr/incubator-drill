@@ -274,40 +274,50 @@ public class IndexPlanUtils {
     return exprList;
   }
 
+  /**
+   * Drill down to the descendant Project (if present) or the Scan
+   * @return RelNode corresponding to the descendant Project (if present) or the Scan
+   */
+  private static RelNode getFlattenDescendantRel(RelNode flattenRel) {
+    RelNode currentRel = flattenRel;
+
+    while (!(currentRel instanceof DrillScanRel)) {
+      if (currentRel instanceof RelSubset) {
+        currentRel = ((RelSubset)currentRel).getBest();
+      } else if ((currentRel instanceof DrillProjectRel && currentRel != flattenRel)
+          || currentRel instanceof DrillScanRel) {
+        break;
+      } else if (currentRel.getInputs().size() > 0) {
+        currentRel = currentRel.getInput(0);
+      }
+    }
+    return currentRel;
+  }
+
   private static boolean isCoveringArrayIndex(IndexCallContext indexContext, FunctionalIndexInfo indexInfo) {
     if (indexContext instanceof FlattenIndexPlanCallContext) {
       FlattenIndexPlanCallContext flattenContext = (FlattenIndexPlanCallContext)indexContext;
       List<RexNode> itemRexExprList = flattenContext.getItemExprList();
       List<LogicalExpression> referencedExprsList = Lists.newArrayList();
 
-      RelNode flattenInputRel = (flattenContext.getProjectWithFlatten().getInput() instanceof RelSubset) ?
-          ((RelSubset)flattenContext.getProjectWithFlatten().getInput()).getBest() :
-            flattenContext.getProjectWithFlatten().getInput();
-
-      Preconditions.checkNotNull(flattenInputRel);
+      RelNode flattenDescendantRel = getFlattenDescendantRel(flattenContext.getProjectWithFlatten());
 
       // add the columns that are referenced by the filter condition above the Flatten, so these
       // are the ITEM expressions
       for (RexNode itemRexExpr : itemRexExprList) {
         LogicalExpression itemLogicalExpr =
-            DrillOptiq.toDrill(indexContext.getDefaultParseContext(), flattenInputRel, itemRexExpr);
+            DrillOptiq.toDrill(indexContext.getDefaultParseContext(), flattenDescendantRel, itemRexExpr);
         referencedExprsList.add(itemLogicalExpr);
       }
       // process the _NON_ flatten columns
       List<RexNode> nonFlattenExprs = flattenContext.getNonFlattenExprs();
       if (nonFlattenExprs != null && nonFlattenExprs.size() > 0) {
-        if (flattenInputRel == flattenContext.getScan()) {
-          // these are the set of fields that we want from the Scan
-          Set<RexNode> nonFlattenRefs = gatherRelevantExprsForCovering(nonFlattenExprs);
-          for (RexNode nf : nonFlattenRefs) {
-            LogicalExpression nfExpr =
-                DrillOptiq.toDrill(indexContext.getDefaultParseContext(), flattenInputRel, nf);
-            referencedExprsList.add(nfExpr);
-          }
-        } else {
-          // add the columns from the table scan
-          DbGroupScan groupScan = (DbGroupScan) getGroupScan(indexContext.getScan());
-          referencedExprsList.addAll(groupScan.getColumns());
+        // these are the set of fields that we want from the Scan
+        Set<RexNode> nonFlattenRefs = gatherRelevantExprsForCovering(nonFlattenExprs);
+        for (RexNode nf : nonFlattenRefs) {
+          LogicalExpression nfExpr =
+              DrillOptiq.toDrill(indexContext.getDefaultParseContext(), flattenDescendantRel, nf);
+          referencedExprsList.add(nfExpr);
         }
       }
 
