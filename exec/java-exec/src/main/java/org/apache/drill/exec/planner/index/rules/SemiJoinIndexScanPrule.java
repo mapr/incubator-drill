@@ -209,6 +209,8 @@ public class SemiJoinIndexScanPrule extends AbstractIndexPrule {
       FlattenIndexPlanCallContext rightSideContext = new FlattenIndexPlanCallContext(call, upperProject,
               upperFilter, lowerProject,lowerFilter, rightScan, flattenMap, nonFlattenExprs);
       SemiJoinIndexPlanCallContext idxContext = new SemiJoinIndexPlanCallContext(call, join, distinct, this.context, rightSideContext);
+      idxContext.setCoveringIndexPlanApplicable(!projectHasFlatten(context.lowerProject, true, null,null) &&
+              !projectHasFlatten(context.upperProject, true, null, null));
       return idxContext;
     }
   }
@@ -270,6 +272,8 @@ public class SemiJoinIndexScanPrule extends AbstractIndexPrule {
 
       SemiJoinIndexPlanCallContext idxContext = new SemiJoinIndexPlanCallContext(call, join, distinct,
               this.context, rightSideContext);
+      idxContext.setCoveringIndexPlanApplicable(!projectHasFlatten(context.lowerProject, true, null,null) &&
+              !projectHasFlatten(context.upperProject, true, null, null));
       return idxContext;
     }
   }
@@ -288,7 +292,7 @@ public class SemiJoinIndexScanPrule extends AbstractIndexPrule {
     if (indexContext.join != null) {
       FlattenIndexPlanCallContext context = transformJoinToSingleTableScan(indexContext);
       indexContext.set(context);
-      if (FlattenToIndexScanPrule.FILTER_PROJECT_SCAN.doOnMatch(context, new SemiJoinCoveringIndexPlanGenerator(indexContext))){
+      if (context != null && FlattenToIndexScanPrule.FILTER_PROJECT_SCAN.doOnMatch(context, new SemiJoinCoveringIndexPlanGenerator(indexContext))){
         return;
       }
     }
@@ -299,6 +303,10 @@ public class SemiJoinIndexScanPrule extends AbstractIndexPrule {
   }
 
   private FlattenIndexPlanCallContext transformJoinToSingleTableScan(SemiJoinIndexPlanCallContext context) {
+    if (!context.isCoveringIndexPlanApplicable()) {
+      return null;
+    }
+
     DrillScanRel leftScan = context.leftSide.scan;
     DrillScanRel rightScan = context.rightSide.scan;
     Pair<DrillScanRel, Map<Integer, Integer>> newScanInfo = merge(leftScan, rightScan);
@@ -377,7 +385,7 @@ public class SemiJoinIndexScanPrule extends AbstractIndexPrule {
   }
 
   /**
-   * Normalizes the datatype , columns by removing redundant columns and thier types.
+   * Normalizes the datatype , columns by removing redundant columns and their types.
    * @param types column type info for this scan.
    * @param columns column information for this scan.
    * @param grpScanCols group scan columns this scan.

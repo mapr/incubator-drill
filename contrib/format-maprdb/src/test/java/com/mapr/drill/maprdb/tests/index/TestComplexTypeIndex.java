@@ -45,6 +45,7 @@ import com.mapr.fs.utils.ssh.TestCluster;
 public class TestComplexTypeIndex extends BaseJsonTest {
 
   private static final String TABLE_NAME = "/tmp/index_test_complex1";
+  private static final String TABLE_NAME_1 = "/tmp/index_test_complex_without_index";
   private static final String JSON_FILE_URL = "/com/mapr/drill/json/complex_sample1.json";
 
   private static boolean tableCreated = false;
@@ -69,19 +70,29 @@ public class TestComplexTypeIndex extends BaseJsonTest {
 
   @BeforeClass
   public static void setupTestComplexTypeIndex() throws Exception {
-    try (Table table = createOrReplaceTable(TABLE_NAME);
-        InputStream in = MaprDBTestsSuite.getJsonStream(JSON_FILE_URL);
-        DocumentStream stream = Json.newDocumentStream(in)) {
+    tablePath = createTableAndIndex(TABLE_NAME, true, JSON_FILE_URL);
+    createTableAndIndex(TABLE_NAME_1, false, JSON_FILE_URL);
+    System.out.println("waiting for indexes to sync....");
+    Thread.sleep(INDEX_FLUSH_TIMEOUT);
+  }
+
+  private static String createTableAndIndex(String tableName, boolean createIndex, String fileName) throws Exception {
+    String tablePath;
+    try (Table table = createOrReplaceTable(tableName);
+         InputStream in = MaprDBTestsSuite.getJsonStream(fileName);
+         DocumentStream stream = Json.newDocumentStream(in)) {
       tableCreated = true;
       tablePath = table.getPath().toUri().getPath();
 
       System.out.println(String.format("Created table %s", tablePath));
 
-      // create indexes on empty table
-      createIndexes(tablePath);
+      if (createIndex) {
+        // create indexes on empty table
+        createIndexes(tablePath);
 
-      // set stats update interval
-      DBTests.setTableStatsSendInterval(1);
+        // set stats update interval
+        DBTests.setTableStatsSendInterval(1);
+      }
 
       // insert documents in table with 'user_id' as the row key
       for (Document document : stream) {
@@ -91,13 +102,14 @@ public class TestComplexTypeIndex extends BaseJsonTest {
 
       System.out.println("Inserted documents. Waiting for indexes to be updated..");
 
-      // wait for indexes to be updated
-      DBTests.waitForIndexFlush(table.getPath(), INDEX_FLUSH_TIMEOUT);
+      if (createIndex) {
+        // wait for indexes to be updated
+        DBTests.waitForIndexFlush(table.getPath(), INDEX_FLUSH_TIMEOUT);
+      }
 
       System.out.println("Finished waiting for index updates.");
     }
-    System.out.println("waiting for indexes to sync....");
-    Thread.sleep(INDEX_FLUSH_TIMEOUT);
+    return tablePath;
   }
 
   private static Table createOrReplaceTable(String tableName) {
@@ -125,8 +137,13 @@ public class TestComplexTypeIndex extends BaseJsonTest {
   public static void cleanupTestComplexTypeIndex() throws Exception {
     if (tableCreated) {
       Admin admin = MaprDBTestsSuite.getAdmin();
-      if (admin != null && admin.tableExists(TABLE_NAME)) {
-        admin.deleteTable(TABLE_NAME);
+      if (admin != null) {
+        if (admin.tableExists(TABLE_NAME)) {
+          admin.deleteTable(TABLE_NAME);
+        }
+        if (admin.tableExists(TABLE_NAME_1)) {
+          admin.deleteTable(TABLE_NAME_1);
+        }
       }
     }
   }
@@ -134,7 +151,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
   @Test
   public void SemiJoinNonCoveringWithRangeCondition() throws Exception {
 
-    String query = "SELECT user_id from hbase.`index_test_complex1` where _id in "
+    String query = "SELECT _id from hbase.`index_test_complex1` where _id in "
         + " (select _id from (select _id, flatten(weight) as f from hbase.`index_test_complex1`) as t "
         + " where t.f.low > 120 and t.f.high < 200) ";
 
@@ -152,33 +169,13 @@ public class TestComplexTypeIndex extends BaseJsonTest {
   @Test
   public void SemiJoinWithEqualityConditionOnOuterTable() throws Exception {
 
-    String query = "select user_id from hbase.`index_test_complex1` t where user_id in " +
-                    "(select user_id from (select user_id, flatten(t1.weight) as f from hbase.`index_test_complex1` as t1 ) as t " +
-                    "where t.f.low <= 20) and t.`user_id` = 'user001'";
-
-    test(maxNonCoveringSelectivityThreshold);
+    String query = "select _id from hbase.`index_test_complex1` t where _id in " +
+                    "(select _id from (select _id, flatten(t1.weight) as f from hbase.`index_test_complex1` as t1 ) as t " +
+                    "where t.f.low <= 20) and t.`_id` = 'user001'";
 
     PlanTestBase.testPlanMatchingPatterns(query,
-            new String[] {"RowKeyJoin", ".*RestrictedJsonTableGroupScan.*tableName=.*index_test_complex1,",
-                    ".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*low.*<=.*20.*indexName=weightIdx1"},
-            new String[]{}
-    );
-
-    return;
-  }
-
-  @Test
-  public void SemiJoinWithNoOuterCondition() throws Exception {
-
-    String query = "select user_id from hbase.`index_test_complex1` t where user_id in " +
-            "(select user_id from (select user_id, flatten(t1.weight) as f from hbase.`index_test_complex1` as t1 ) as t where t.f.low <= 20)";
-
-    test(maxNonCoveringSelectivityThreshold);
-
-    PlanTestBase.testPlanMatchingPatterns(query,
-            new String[] {"RowKeyJoin", ".*RestrictedJsonTableGroupScan.*tableName=.*index_test_complex1,",
-                    ".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*low.*<=.*20.*indexName=weightIdx1"},
-            new String[]{}
+            new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*low.*<=.*20.*indexName=weightIdx1"},
+            new String[]{"RowKeyJoin", ".*RestrictedJsonTableGroupScan.*tableName=.*index_test_complex1,"}
     );
 
     return;
@@ -187,8 +184,8 @@ public class TestComplexTypeIndex extends BaseJsonTest {
   @Test
   public void SemiJoinWithOuterConditionOnITEMField() throws Exception {
 
-    String query = " select user_id from hbase.`index_test_complex1` t where user_id in " +
-            "(select user_id from (select user_id, flatten(t1.weight) as f from hbase.`index_test_complex1` as t1 ) as t " +
+    String query = " select _id from hbase.`index_test_complex1` t where _id in " +
+            "(select _id from (select _id, flatten(t1.weight) as f from hbase.`index_test_complex1` as t1 ) as t " +
             "where t.f.low <= 20) and t.`salary`.`min` <= 1200";
 
     test(maxNonCoveringSelectivityThreshold);
@@ -205,9 +202,9 @@ public class TestComplexTypeIndex extends BaseJsonTest {
   @Test
   public void SemiJoinWithInnerTableConditionOnArrayAndNonArrayField() throws Exception {
 
-    String query = "select user_id from hbase.`index_test_complex1` t where user_id in " +
-            "(select user_id from (select user_id, flatten(t1.weight) as f, t1.`salary`.`min` as minimum_salary from hbase.`index_test_complex1` as t1 ) as t2 " +
-            "where t2.f.low <= 20 and t2.minimum_salary >= 0) and t.`user_id` = 'user001'";
+    String query = "select _id from hbase.`index_test_complex1` t where _id in " +
+            "(select _id from (select _id, flatten(t1.weight) as f, t1.`salary`.`min` as minimum_salary from hbase.`index_test_complex1` as t1 ) as t2 " +
+            "where t2.f.low <= 20 and t2.minimum_salary >= 0) and t.`_id` = 'user001'";
 
     test(maxNonCoveringSelectivityThreshold);
 
@@ -224,8 +221,8 @@ public class TestComplexTypeIndex extends BaseJsonTest {
   public void SemiJoinWithStarOnOuterTable() throws Exception {
 
     String query = "select * from hbase.`index_test_complex1` t " +
-            "where user_id in (select user_id from (select user_id, flatten(t1.weight) as f, t1.`salary`.`min` as minimum_salary from hbase.`index_test_complex1` as t1 ) as t2" +
-            " where t2.f.low <= 20 and t2.minimum_salary >= 0) and t.`user_id` = 'user001'";
+            "where _id in (select _id from (select _id, flatten(t1.weight) as f, t1.`salary`.`min` as minimum_salary from hbase.`index_test_complex1` as t1 ) as t2" +
+            " where t2.f.low <= 20 and t2.minimum_salary >= 0) and t.`_id` = 'user001'";
 
     test(maxNonCoveringSelectivityThreshold);
 
@@ -238,7 +235,6 @@ public class TestComplexTypeIndex extends BaseJsonTest {
     return;
   }
 
-  @Ignore
   @Test
   public void SemiJoinCoveringIndexPlan() throws Exception {
 
@@ -267,6 +263,62 @@ public class TestComplexTypeIndex extends BaseJsonTest {
             new String[] {"RowKeyJoin", ".*RestrictedJsonTableGroupScan.*tableName=.*index_test_complex1,.*columns=.*`\\*\\*`.*",
                     ".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*.low.*<=.*20.*indexName=weightIdx1"},
             new String[]{}
+    );
+
+    return;
+  }
+
+  @Test
+  public void SemiJoinWithFlattenOnLeftSide_1() throws Exception {
+
+    String query = "select _id, t1.`f`.`low` from (select _id, flatten(t.weight) f from hbase.`index_test_complex1` t) as t1 " +
+            "where _id in (select _id from (select _id, flatten(t1.weight) as f from hbase.`index_test_complex1` as t1 ) as t2 where t2.f.low <= 200)";
+
+    test(maxNonCoveringSelectivityThreshold);
+
+    PlanTestBase.testPlanMatchingPatterns(query,
+            new String[] {"RowKeyJoin", ".*RestrictedJsonTableGroupScan.*tableName=.*index_test_complex1,",
+                    ".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*.low.*<=.*200.*indexName=weightIdx1"},
+            new String[]{}
+    );
+
+    return;
+  }
+
+  @Test
+  public void SemiJoinWithFlattenOnLeftSide_2() throws Exception {
+
+    String query = "select _id, flatten(t.weight) f from hbase.`index_test_complex1` as t " +
+            "where _id in (select _id from (select _id, flatten(t1.weight) as f from hbase.`index_test_complex1` as t1 ) as t2 where t2.f.low <= 200)";
+
+    test(maxNonCoveringSelectivityThreshold);
+
+    PlanTestBase.testPlanMatchingPatterns(query,
+            new String[] {"RowKeyJoin", ".*RestrictedJsonTableGroupScan.*tableName=.*index_test_complex1,",
+                    ".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*.low.*<=.*200.*indexName=weightIdx1"},
+            new String[]{}
+    );
+
+    return;
+  }
+
+  /*
+   *Index planning should not happen when the tables are different on either side of a IN join.
+   * The following test case will not produce any RowKey  join or covering index plan.
+   */
+  @Test
+  public void SemiJoinWithTwoDifferentTables() throws Exception {
+
+    String query = "select _id, flatten(t.weight) f from hbase.`index_test_complex_without_index` as t " +
+            "where _id in (select _id from (select _id, flatten(t1.weight) as f from hbase.`index_test_complex1` as t1 ) as t2 where t2.f.low <= 200)";
+
+    test(maxNonCoveringSelectivityThreshold);
+
+    PlanTestBase.testPlanMatchingPatterns(query,
+            new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex_without_index,",
+                    ".*JsonTableGroupScan.*tableName=.*index_test_complex1,"},
+            new String[]{"RowKeyJoin", ".*RestrictedJsonTableGroupScan.*tableName=.*index_test_complex_without_index,",
+                    ".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*.low.*<=.*200.*indexName=weightIdx1"}
     );
 
     return;

@@ -24,14 +24,9 @@ import org.apache.calcite.rel.InvalidRelException;
 import org.apache.calcite.rel.core.AggregateCall;
 import org.apache.calcite.rex.RexBuilder;
 import org.apache.calcite.rex.RexNode;
-import org.apache.calcite.rex.RexVisitorImpl;
-import org.apache.calcite.rex.RexVisitor;
-import org.apache.calcite.rex.RexInputRef;
 import org.apache.calcite.sql.fun.SqlStdOperatorTable;
 import org.apache.calcite.util.ImmutableBitSet;
 import org.apache.calcite.util.Pair;
-import org.apache.drill.common.expression.FunctionCall;
-import org.apache.drill.common.logical.data.NamedExpression;
 import org.apache.drill.exec.physical.base.IndexGroupScan;
 import org.apache.drill.exec.planner.index.FunctionalIndexInfo;
 import org.apache.drill.exec.planner.index.IndexPlanUtils;
@@ -91,7 +86,7 @@ public class SemiJoinToCoveringIndexScanGenerator extends CoveringIndexPlanGener
 
     //build the Drill logical Aggregate with _id as distinct and other columns as min(colname).
     DrillAggregateRel aggregateRel = new DrillAggregateRel(input.getCluster(), input.getTraitSet().plus(DRILL_LOGICAL),
-                                          input, false, grpSets.left, grpSets.right, aggregateCalls);
+            coveringIndexScanRel, false, grpSets.left, grpSets.right, aggregateCalls);
     //build HashAgg for distinct processing
     List<HashAggPrel> agg = SemiJoinIndexPlanUtils.buildHashAgg(joinContext, aggregateRel, coveringIndexScanRel);
 

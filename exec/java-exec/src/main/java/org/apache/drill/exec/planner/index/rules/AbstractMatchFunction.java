@@ -76,6 +76,10 @@ public abstract class AbstractMatchFunction<T> implements MatchFunction<T> {
   public static boolean projectHasFlatten(DrillProjectRel project, boolean firstFlattenOnly, Map<String, RexCall> flattenMap,
       List<RexNode> nonFlattenExprs) {
     boolean found = false;
+    if (project == null) {
+      return found;
+    }
+
     for (Pair<RexNode, String> p : project.getNamedProjects()) {
       if (p.left instanceof RexCall) {
         RexCall function = (RexCall) p.left;

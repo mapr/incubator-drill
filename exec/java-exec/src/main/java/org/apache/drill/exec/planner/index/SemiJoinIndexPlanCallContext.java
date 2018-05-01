@@ -27,6 +27,9 @@ public class SemiJoinIndexPlanCallContext {
   public final FlattenIndexPlanCallContext rightSide;
   public final DrillJoinRel join;
   public final DrillAggregateRel distinct;
+  private boolean isCoveringIndexPlanApplicable = true;
+
+
   private IndexLogicalPlanCallContext converingIndexContext;
 
   public SemiJoinIndexPlanCallContext(RelOptRuleCall call,
@@ -47,5 +50,13 @@ public class SemiJoinIndexPlanCallContext {
 
   public IndexLogicalPlanCallContext getConveringIndexContext() {
     return converingIndexContext;
+  }
+
+  public void setCoveringIndexPlanApplicable(boolean isApplicable) {
+    this.isCoveringIndexPlanApplicable = isApplicable;
+  }
+
+  public boolean isCoveringIndexPlanApplicable() {
+    return this.isCoveringIndexPlanApplicable;
   }
 }
