@@ -34,7 +34,6 @@ import org.apache.drill.exec.planner.index.SemiJoinIndexPlanCallContext;
 import org.apache.drill.exec.planner.index.generators.common.SemiJoinIndexPlanUtils;
 import org.apache.drill.exec.planner.logical.DrillAggregateRel;
 import org.apache.drill.exec.planner.logical.DrillJoinRel;
-import org.apache.drill.exec.planner.physical.HashAggPrel;
 import org.apache.drill.exec.planner.physical.ProjectPrel;
 import org.apache.drill.exec.planner.physical.PlannerSettings;
 import org.apache.calcite.rel.RelNode;
@@ -88,7 +87,7 @@ public class SemiJoinToCoveringIndexScanGenerator extends CoveringIndexPlanGener
     DrillAggregateRel aggregateRel = new DrillAggregateRel(input.getCluster(), input.getTraitSet().plus(DRILL_LOGICAL),
             coveringIndexScanRel, false, grpSets.left, grpSets.right, aggregateCalls);
     //build HashAgg for distinct processing
-    List<HashAggPrel> agg = SemiJoinIndexPlanUtils.buildHashAgg(joinContext, aggregateRel, coveringIndexScanRel);
+    List<RelNode> agg = SemiJoinIndexPlanUtils.buildAgg(joinContext, aggregateRel, coveringIndexScanRel);
 
     //build project to match the output rowType.
     List<RexNode> exprs = IndexPlanUtils.projects(agg.get(0), agg.get(0).getRowType().getFieldNames());

@@ -45,14 +45,15 @@ import org.apache.drill.exec.planner.logical.DrillProjectRel;
 import org.apache.drill.exec.planner.logical.DrillFilterRel;
 import org.apache.drill.exec.planner.logical.DrillScanRel;
 import org.apache.drill.exec.planner.logical.DrillRel;
-import org.apache.drill.exec.planner.physical.HashAggPrel;
+import org.apache.drill.exec.planner.physical.StreamAggPrel;
 import org.apache.drill.exec.planner.physical.ProjectPrel;
 import org.apache.drill.exec.planner.physical.ScanPrel;
 import org.apache.drill.exec.planner.physical.RowKeyJoinPrel;
 import org.apache.drill.exec.planner.physical.FilterPrel;
+import org.apache.drill.exec.planner.physical.HashAggPrel;
+import org.apache.drill.exec.planner.physical.HashAggPrule;
 import org.apache.drill.exec.planner.physical.DrillDistributionTrait;
 import org.apache.drill.exec.planner.physical.JoinPruleBase;
-import org.apache.drill.exec.planner.physical.HashAggPrule;
 
 import java.util.List;
 
@@ -121,7 +122,7 @@ public class SemiJoinIndexPlanUtils {
   }
 
   public static RelNode buildRowKeyJoin(SemiJoinIndexPlanCallContext joinContext,
-                                        RelNode leftInput, List<HashAggPrel> distinct) throws InvalidRelException {
+                                        RelNode leftInput, List<RelNode> distinct) throws InvalidRelException {
 
     return new RowKeyJoinPrel(leftInput.getCluster(), distinct.get(0).getTraitSet(), leftInput, distinct.get(0),
             joinContext.join.getCondition(), JoinRelType.INNER);
@@ -279,10 +280,11 @@ public class SemiJoinIndexPlanUtils {
 
   /*
    * builds one phase and two phase hash agg plans.
+   * TODO Only single phase HashAgg is being generated currently. Should be enhanced to produce distributed 2 phase hashagg as well.
    */
-  public static List<HashAggPrel> buildHashAgg(SemiJoinIndexPlanCallContext joinContext,
-                                         DrillAggregateRel distinct, RelNode input) throws InvalidRelException {
-    List<HashAggPrel> result = Lists.newArrayList();
+  public static List<RelNode> buildAgg(SemiJoinIndexPlanCallContext joinContext,
+                                       DrillAggregateRel distinct, RelNode input) throws InvalidRelException {
+    List<RelNode> result = Lists.newArrayList();
     // generating one phase aggregation.
     result.add(new HashAggPrel(distinct.getCluster(), input.getTraitSet().plus(DRILL_PHYSICAL),input,
             distinct.indicator,distinct.getGroupSet(), distinct.getGroupSets(), distinct.getAggCallList(),PHASE_1of1));
@@ -290,7 +292,7 @@ public class SemiJoinIndexPlanUtils {
 
     //generate two phase aggregation.
     DrillDistributionTrait distOnAllKeys = JoinPruleBase.getRangePartitionTrait(joinContext.join, grpScan,result.get(0).getRowType());
-    result.add((HashAggPrel)new HashAggPrule.TwoPhaseHashAggWithRangeExchange(joinContext.call, distOnAllKeys).convertChild(distinct, input));
+    result.add(new HashAggPrule.TwoPhaseHashAggWithRangeExchange(joinContext.call, distOnAllKeys).convertChild(distinct, input));
     return result;
   }
 

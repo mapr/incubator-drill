@@ -27,7 +27,6 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import org.apache.drill.exec.planner.index.IndexPhysicalPlanCallContext;
 import org.apache.drill.exec.planner.index.generators.common.SemiJoinIndexPlanUtils;
-import org.apache.drill.exec.planner.physical.HashAggPrel;
 import org.apache.drill.exec.planner.physical.ProjectPrel;
 import org.apache.drill.exec.planner.physical.ScanPrel;
 import org.apache.drill.exec.planner.physical.RowKeyJoinPrel;
@@ -39,9 +38,7 @@ import org.apache.drill.exec.planner.index.SemiJoinIndexPlanCallContext;
 import org.apache.calcite.rel.RelNode;
 import org.apache.calcite.plan.RelTraitSet;
 import org.apache.drill.exec.planner.logical.DrillJoinRel;
-import org.apache.drill.exec.planner.logical.DrillScanRel;
-import org.apache.drill.exec.planner.logical.DrillProjectRel;
-import org.apache.drill.exec.planner.logical.DrillFilterRel;
+
 import static org.apache.drill.exec.planner.physical.Prel.DRILL_PHYSICAL;
 import java.util.List;
 
@@ -115,7 +112,7 @@ public class SemiJoinMergeRowKeyJoinGenerator extends NonCoveringIndexPlanGenera
     IndexPhysicalPlanCallContext leftContext = gatherLeftSideRelsOfRKJ(rkj);
     //get the aggregation nodes input.
     RelNode aggInput = SemiJoinIndexPlanUtils.getRightInputOfRowKeyJoin(rkj);
-    List<HashAggPrel> agg = SemiJoinIndexPlanUtils.buildHashAgg(joinContext, joinContext.distinct, aggInput);
+    List<RelNode> agg = SemiJoinIndexPlanUtils.buildAgg(joinContext, joinContext.distinct, aggInput);
     logger.debug("semi_join_index_plan_info: generated hash aggregation operators: {}", agg);
 
 

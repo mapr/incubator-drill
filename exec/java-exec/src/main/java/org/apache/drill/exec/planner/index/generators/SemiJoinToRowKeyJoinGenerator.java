@@ -27,7 +27,6 @@ import org.apache.drill.exec.planner.index.IndexPhysicalPlanCallContext;
 import org.apache.drill.exec.planner.index.SemiJoinIndexPlanCallContext;
 import org.apache.drill.exec.planner.index.generators.common.SemiJoinIndexPlanUtils;
 import org.apache.drill.exec.planner.logical.DrillJoinRel;
-import org.apache.drill.exec.planner.physical.HashAggPrel;
 import org.apache.drill.exec.planner.physical.PlannerSettings;
 import org.apache.calcite.rel.RelNode;
 import org.apache.drill.exec.planner.physical.Prule;
@@ -73,7 +72,7 @@ public class SemiJoinToRowKeyJoinGenerator extends CoveringIndexPlanGenerator {
 
 
     //build HashAgg for distinct processing
-    List<HashAggPrel> agg = SemiJoinIndexPlanUtils.buildHashAgg(joinContext, joinContext.distinct, nonCoveringIndexPlan);
+    List<RelNode> agg = SemiJoinIndexPlanUtils.buildAgg(joinContext, joinContext.distinct, nonCoveringIndexPlan);
     return SemiJoinIndexPlanUtils.buildRowKeyJoin(joinContext,getRoot(leftSideJoinContext) , agg);
   }
 
