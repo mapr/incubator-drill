@@ -17,6 +17,7 @@
  */
 package org.apache.drill.exec.planner.index;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -26,7 +27,6 @@ import org.apache.calcite.rex.RexNode;
 import org.apache.drill.exec.planner.logical.DrillFilterRel;
 import org.apache.drill.exec.planner.logical.DrillProjectRel;
 import org.apache.drill.exec.planner.logical.DrillScanRel;
-
 
 public class FlattenIndexPlanCallContext extends IndexLogicalPlanCallContext {
 
@@ -56,16 +56,21 @@ public class FlattenIndexPlanCallContext extends IndexLogicalPlanCallContext {
   protected Map<String, RexCall> flattenMap = null;
 
   /**
-   * List of the non-Flatten expressions
+   * List of the non-Flatten expressions in the Project containing Flatten
    */
   protected List<RexNode> nonFlattenExprs = null;
 
   /**
-   * Placeholder for ITEM expressions representing the individual filter conditions above the Flatten.
+   * List of other relevant expressions in the leaf Project above Scan
+   */
+  protected List<RexNode> relevantExprsInLeafProject = null;
+
+  /**
+   * Placeholder for individual filter expressions referencing Flatten output.
    * For instance, suppose Flatten output is 'f', and the filter references f.b < 10, then the index planning
    * rule will create an ITEM expression representing this condition.
    */
-  protected List<RexNode> itemExprList = null;
+  protected List<RexNode> filterExprsReferencingFlatten = null;
 
   public FlattenIndexPlanCallContext(RelOptRuleCall call,
       DrillProjectRel upperProject,
@@ -118,20 +123,28 @@ public class FlattenIndexPlanCallContext extends IndexLogicalPlanCallContext {
     return filterBelowFlatten;
   }
 
-  public void setItemExprList(List<RexNode> itemExprList) {
-    this.itemExprList = itemExprList;
+  public void setFilterExprsReferencingFlatten(List<RexNode> exprList) {
+    this.filterExprsReferencingFlatten = exprList;
   }
 
   public DrillProjectRel getProjectWithFlatten() {
     return projectWithFlatten;
   }
 
-  public List<RexNode> getItemExprList() {
-    return itemExprList;
+  public List<RexNode> getFilterExprsReferencingFlatten() {
+    return filterExprsReferencingFlatten;
   }
 
   public DrillProjectRel getLeafProjectAboveScan() {
     return leafProjectAboveScan;
+  }
+
+  public void setRelevantExprsInLeafProject(List<RexNode> exprList) {
+    this.relevantExprsInLeafProject = exprList;
+  }
+
+  public List<RexNode> getRelevantExprsInLeafProject() {
+    return relevantExprsInLeafProject;
   }
 
 }

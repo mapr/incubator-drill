@@ -257,8 +257,9 @@ public class FlattenToIndexScanPrule extends AbstractIndexPrule {
           new FilterVisitor(indexContext.getFlattenMap(), indexContext.lowerProject, builder);
       RexNode conditionFilterAboveFlatten = indexContext.getFilterAboveFlatten().getCondition().accept(filterVisitor);
 
-      // keep track of the ITEM exprs that were created
-      indexContext.setItemExprList(filterVisitor.getItemExprList());
+      // keep track of the exprs that were created representing filter exprs
+      // referencing flatten
+      indexContext.setFilterExprsReferencingFlatten(filterVisitor.getExprsReferencingFlatten());
 
       if (indexContext.getFilterBelowFlatten() != null) {
         RexNode conditionFilterBelowFlatten = indexContext.getFilterBelowFlatten().getCondition();
@@ -266,6 +267,10 @@ public class FlattenToIndexScanPrule extends AbstractIndexPrule {
           FilterVisitor  filterVisitor2 =
               new FilterVisitor(indexContext.getFlattenMap(), indexContext.getLeafProjectAboveScan(), builder);
           conditionFilterBelowFlatten = indexContext.getFilterBelowFlatten().getCondition().accept(filterVisitor2);
+
+          // keep track of the relevant exprs in the filter that are referencing the
+          // child Project
+          indexContext.setRelevantExprsInLeafProject(filterVisitor2.getOtherExprs());
         }
 
         // compose a new condition using conjunction (this is valid since the above and below are 2 independent filters)
@@ -436,7 +441,14 @@ public class FlattenToIndexScanPrule extends AbstractIndexPrule {
     private final Map<String, RexCall> flattenMap;
     private final DrillProjectRel project;
     private final RexBuilder builder;
-    private final List<RexNode> itemExprList = Lists.newArrayList();
+
+    // list of expressions in the filter that are referencing a
+    // FLATTEN expr from the child Project
+    private final List<RexNode> exprsReferencingFlatten = Lists.newArrayList();
+
+    // list of expressions in the filter that are _NOT_ referencing
+    // FLATTEN expr from the child Project
+    private final List<RexNode> otherExprs = Lists.newArrayList();
 
     FilterVisitor(Map<String, RexCall> flattenMap, DrillProjectRel project,
         RexBuilder builder) {
@@ -475,7 +487,7 @@ public class FlattenToIndexScanPrule extends AbstractIndexPrule {
             RexNode result2 = builder.makeCall(call.getType(), SqlStdOperatorTable.ITEM, ImmutableList.of(left, right));
 
             // save the individual ITEM exprs for future use
-            itemExprList.add(result2);
+            exprsReferencingFlatten.add(result2);
             return result2;
           }
         }
@@ -485,9 +497,30 @@ public class FlattenToIndexScanPrule extends AbstractIndexPrule {
 
     @Override
     public RexNode visitInputRef(RexInputRef inputRef) {
-      // since the filter will ultimately be pushed into the Scan, we are interested in the
-      // the input of the project exprs
-      return project.getProjects().get(inputRef.getIndex());
+      // check if input is referencing a FLATTEN
+      String projectFieldName = project.getRowType().getFieldNames().get(inputRef.getIndex());
+      RexCall c;
+      if ((c = flattenMap.get(projectFieldName)) != null) {
+        RexNode left = c.getOperands().get(0);
+        Preconditions.checkArgument(left != null, "Found null input reference for Flatten") ;
+
+        // take the Flatten's input and build a new RexExpr with ITEM($n, -1)
+        RexLiteral right = builder.makeBigintLiteral(BigDecimal.valueOf(-1));
+        RexNode result = builder.makeCall(inputRef.getType(), SqlStdOperatorTable.ITEM, ImmutableList.of(left, right));
+
+        // save the individual ITEM exprs for future use
+        exprsReferencingFlatten.add(result);
+        return result;
+      } else {
+        // since the filter will ultimately be pushed into the Scan, we are interested in
+        // the input of the project exprs
+        RexNode n = project.getProjects().get(inputRef.getIndex());
+
+        // save all such exprs (i.e those not referencing Flatten) for future use
+        otherExprs.add(n);
+        return n;
+      }
+
     }
 
     @Override
@@ -503,8 +536,13 @@ public class FlattenToIndexScanPrule extends AbstractIndexPrule {
       return ImmutableList.copyOf(children);
     }
 
-    public List<RexNode> getItemExprList() {
-      return itemExprList;
+    public List<RexNode> getExprsReferencingFlatten() {
+      return exprsReferencingFlatten;
     }
+
+    public List<RexNode> getOtherExprs() {
+      return otherExprs;
+    }
+
   }
 }

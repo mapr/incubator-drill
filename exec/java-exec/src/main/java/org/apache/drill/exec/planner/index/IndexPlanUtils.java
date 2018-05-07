@@ -297,17 +297,17 @@ public class IndexPlanUtils {
   private static boolean isCoveringArrayIndex(IndexCallContext indexContext, FunctionalIndexInfo indexInfo) {
     if (indexContext instanceof FlattenIndexPlanCallContext) {
       FlattenIndexPlanCallContext flattenContext = (FlattenIndexPlanCallContext)indexContext;
-      List<RexNode> itemRexExprList = flattenContext.getItemExprList();
-      List<LogicalExpression> referencedExprsList = Lists.newArrayList();
+      List<RexNode> filterExprsReferencingFlatten = flattenContext.getFilterExprsReferencingFlatten();
+      Set<LogicalExpression> referencedExprsSet = new HashSet<>();
 
       RelNode flattenDescendantRel = getFlattenDescendantRel(flattenContext.getProjectWithFlatten());
 
       // add the columns that are referenced by the filter condition above the Flatten, so these
       // are the ITEM expressions
-      for (RexNode itemRexExpr : itemRexExprList) {
+      for (RexNode itemRexExpr : filterExprsReferencingFlatten) {
         LogicalExpression itemLogicalExpr =
             DrillOptiq.toDrill(indexContext.getDefaultParseContext(), flattenDescendantRel, itemRexExpr);
-        referencedExprsList.add(itemLogicalExpr);
+        referencedExprsSet.add(itemLogicalExpr);
       }
       // process the _NON_ flatten columns
       List<RexNode> nonFlattenExprs = flattenContext.getNonFlattenExprs();
@@ -317,12 +317,21 @@ public class IndexPlanUtils {
         for (RexNode nf : nonFlattenRefs) {
           LogicalExpression nfExpr =
               DrillOptiq.toDrill(indexContext.getDefaultParseContext(), flattenDescendantRel, nf);
-          referencedExprsList.add(nfExpr);
+          referencedExprsSet.add(nfExpr);
+        }
+      }
+      // process the relevant expressions in leaf Project above the Scan
+      List<RexNode> relevantExprsInLeafProject = flattenContext.getRelevantExprsInLeafProject();
+      if (relevantExprsInLeafProject != null && relevantExprsInLeafProject.size() > 0) {
+        for (RexNode n : relevantExprsInLeafProject) {
+          LogicalExpression expr =
+              DrillOptiq.toDrill(indexContext.getDefaultParseContext(), flattenContext.getScan(), n);
+          referencedExprsSet.add(expr);
         }
       }
 
       // now check for covering property
-      boolean isCovering = indexInfo.getIndexDesc().isCoveringIndex(referencedExprsList);
+      boolean isCovering = indexInfo.getIndexDesc().isCoveringIndex(ImmutableList.copyOf(referencedExprsSet));
       return isCovering;
     }
     return false;
