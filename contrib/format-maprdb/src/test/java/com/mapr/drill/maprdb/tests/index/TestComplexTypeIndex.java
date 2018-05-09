@@ -133,18 +133,18 @@ public class TestComplexTypeIndex extends BaseJsonTest {
         + " -indexedfields weight[].low,weight[].high ");
     String createIndex2 = String.format("maprcli table index add -path "
         + tablePath
-        + " -index weightCountyIdx"
-        + " -indexedfields weight[].low "
+        + " -index weightCountyIdx1"
+        + " -indexedfields weight[].high "
         + " -includedfields county,salary.max");
-//    String createIndex3 = String.format("maprcli table index add -path "
-//        + tablePath
-//        + " -index SalaryWeightIdx"
-//        + " -indexedfields salary[].min,weight[].low "
-//        + " -includedfields salary[].min,salary[].max,weight[].low,weight[].max ");
-    System.out.println("Creating index..");
+    String createIndex3 = String.format("maprcli table index add -path "
+        + tablePath
+        + " -index salaryWeightIdx1"
+        + " -indexedfields salary.max,weight[].high "
+        + " -includedfields salary.min,weight[].low,weight[].high ");
+    System.out.println("Creating indexes..");
     TestCluster.runCommand(createIndex1);
     TestCluster.runCommand(createIndex2);
-//    TestCluster.runCommand(createIndex3);
+    TestCluster.runCommand(createIndex3);
   }
 
   @AfterClass
@@ -169,14 +169,11 @@ public class TestComplexTypeIndex extends BaseJsonTest {
         + " (select _id from (select _id, flatten(weight) as f from hbase.`index_test_complex1`) as t "
         + " where t.f.low > 120 and t.f.high < 200) ";
 
-    test(maxNonCoveringSelectivityThreshold);
-
     PlanTestBase.testPlanMatchingPatterns(query,
             new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*low.*>.*120.*indexName=weightIdx1"},
             new String[]{"RowKeyJoin", ".*RestrictedJsonTableGroupScan.*tableName=.*index_test_complex1,"}
     );
     testBuilder()
-            .optionSettingQueriesForTestQuery(maxNonCoveringSelectivityThreshold)
             .optionSettingQueriesForBaseline(noIndexPlan)
             .unOrdered()
             .sqlQuery(query)
@@ -184,7 +181,6 @@ public class TestComplexTypeIndex extends BaseJsonTest {
             .build()
             .run();
   } finally {
-    test(resetmaxNonCoveringSelectivityThreshold);
     test(IndexPlanning);
   }
     return;
@@ -202,7 +198,6 @@ public class TestComplexTypeIndex extends BaseJsonTest {
             new String[]{"RowKeyJoin", ".*RestrictedJsonTableGroupScan.*tableName=.*index_test_complex1,"}
     );
     testBuilder()
-            .optionSettingQueriesForTestQuery(maxNonCoveringSelectivityThreshold)
             .optionSettingQueriesForBaseline(noIndexPlan)
             .unOrdered()
             .sqlQuery(query)
@@ -210,37 +205,31 @@ public class TestComplexTypeIndex extends BaseJsonTest {
             .build()
             .run();
   } finally {
-    test(resetmaxNonCoveringSelectivityThreshold);
     test(IndexPlanning);
   }
     return;
   }
 
   @Test
-  public void SemiJoinWithOuterConditionOnITEMField() throws Exception {
+  public void SemiJoinWithSubqueryConditionOnITEMField() throws Exception {
     try {
     String query = " select _id from hbase.`index_test_complex1` t where _id in " +
             "(select _id from (select _id, flatten(t1.weight) as f from hbase.`index_test_complex1` as t1 where t1.`salary`.`max` > 10) as t " +
-            "where t.f.low <= 200)";
-
-    test(maxNonCoveringSelectivityThreshold);
+            "where t.f.high <= 200)";
 
     PlanTestBase.testPlanMatchingPatterns(query,
-            new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*low.*<=.*200.*indexName=weightCountyIdx"},
+            new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*high.*<=.*200.*indexName=salaryWeightIdx1"},
             new String[]{"RowKeyJoin", ".*RestrictedJsonTableGroupScan.*tableName=.*index_test_complex1,"}
     );
-      //TODO enable the result comparison when maprdb bug is fixed. It looks like there is a bug on a covering index plan
-      //with predicate on included field.
-//    testBuilder()
-//            .optionSettingQueriesForTestQuery(maxNonCoveringSelectivityThreshold)
-//            .optionSettingQueriesForBaseline(noIndexPlan)
-//            .unOrdered()
-//            .sqlQuery(query)
-//            .sqlBaselineQuery(query)
-//            .build()
-//            .run();
+
+    testBuilder()
+            .optionSettingQueriesForBaseline(noIndexPlan)
+            .unOrdered()
+            .sqlQuery(query)
+            .sqlBaselineQuery(query)
+            .build()
+            .run();
   } finally {
-    test(resetmaxNonCoveringSelectivityThreshold);
     test(IndexPlanning);
   }
     return;
@@ -251,26 +240,21 @@ public class TestComplexTypeIndex extends BaseJsonTest {
     try {
       String query = "select _id from hbase.`index_test_complex1`" +
               "where _id in (select _id from (select _id from (select _id, county, flatten(weight) as f from hbase.`index_test_complex1` as t1" +
-              " where t1.`county` = 'Santa Clara') as t where t.f.low > 10))";
-
-      test(maxNonCoveringSelectivityThreshold);
+              " where t1.`county` = 'Santa Clara') as t where t.f.high > 10))";
 
       PlanTestBase.testPlanMatchingPatterns(query,
-              new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*low.*>.*10.*indexName=weightCountyIdx"},
+              new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*high.*>.*10.*indexName=weightCountyIdx1"},
               new String[]{"RowKeyJoin", ".*RestrictedJsonTableGroupScan.*tableName=.*index_test_complex1,"}
       );
-      //TODO enable the result comparison when maprdb bug is fixed. It looks like there is a bug on a covering index plan
-      //with predicate on included field.
-//      testBuilder()
-//              .optionSettingQueriesForTestQuery(maxNonCoveringSelectivityThreshold)
-//              .optionSettingQueriesForBaseline(noIndexPlan)
-//              .unOrdered()
-//              .sqlQuery(query)
-//              .sqlBaselineQuery(query)
-//              .build()
-//              .run();
+
+      testBuilder()
+              .optionSettingQueriesForBaseline(noIndexPlan)
+              .unOrdered()
+              .sqlQuery(query)
+              .sqlBaselineQuery(query)
+              .build()
+              .run();
     } finally {
-      test(resetmaxNonCoveringSelectivityThreshold);
       test(IndexPlanning);
     }
     return;
@@ -281,26 +265,21 @@ public class TestComplexTypeIndex extends BaseJsonTest {
     try {
       String query = "select _id from hbase.`index_test_complex1`" +
               "where _id in (select _id from (select _id from (select _id, county, flatten(weight) as f from hbase.`index_test_complex1` as t1" +
-              " where t1.`salary`.`max` > 100) as t where t.f.low > 10))";
-
-      test(maxNonCoveringSelectivityThreshold);
+              " where t1.`salary`.`max` > 100) as t where t.f.high > 10))";
 
       PlanTestBase.testPlanMatchingPatterns(query,
-              new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*low.*>.*10.*indexName=weightCountyIdx"},
+              new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*high.*>.*10.*indexName=weightCountyIdx1"},
               new String[]{"RowKeyJoin", ".*RestrictedJsonTableGroupScan.*tableName=.*index_test_complex1,"}
       );
-      //TODO enable the result comparison when maprdb bug is fixed. It looks like there is a bug on a covering index plan
-      //with predicate on included field.
-//      testBuilder()
-//              .optionSettingQueriesForTestQuery(maxNonCoveringSelectivityThreshold)
-//              .optionSettingQueriesForBaseline(noIndexPlan)
-//              .unOrdered()
-//              .sqlQuery(query)
-//              .sqlBaselineQuery(query)
-//              .build()
-//              .run();
+
+      testBuilder()
+              .optionSettingQueriesForBaseline(noIndexPlan)
+              .unOrdered()
+              .sqlQuery(query)
+              .sqlBaselineQuery(query)
+              .build()
+              .run();
     } finally {
-      test(resetmaxNonCoveringSelectivityThreshold);
       test(IndexPlanning);
     }
     return;
