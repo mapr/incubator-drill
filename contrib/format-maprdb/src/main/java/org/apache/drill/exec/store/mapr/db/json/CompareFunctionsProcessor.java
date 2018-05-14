@@ -17,9 +17,11 @@
  */
 package org.apache.drill.exec.store.mapr.db.json;
 
+import static com.mapr.db.impl.MapRDBImpl.newDocument;
 import static com.mapr.db.rowcol.DBValueBuilderImpl.KeyValueBuilder;
 
 import org.apache.drill.common.FunctionNames;
+import org.apache.drill.common.expression.CastExpression;
 import org.apache.drill.common.expression.FunctionCall;
 import org.apache.drill.common.expression.LogicalExpression;
 import org.apache.drill.common.expression.SchemaPath;
@@ -36,8 +38,11 @@ import org.apache.drill.common.expression.ValueExpressions.TimeExpression;
 import org.apache.drill.common.expression.ValueExpressions.TimeStampExpression;
 import org.apache.drill.common.expression.ValueExpressions.VarDecimalExpression;
 import org.apache.drill.common.expression.visitors.AbstractExprVisitor;
+import org.apache.drill.common.types.TypeProtos;
 import org.joda.time.LocalTime;
+import org.ojai.Document;
 import org.ojai.Value;
+import org.ojai.exceptions.DecodingException;
 import org.ojai.types.ODate;
 import org.ojai.types.OTime;
 
@@ -57,6 +62,7 @@ class CompareFunctionsProcessor extends AbstractExprVisitor<Boolean, LogicalExpr
   private Boolean success;
   protected Value value;
   protected SchemaPath path;
+  private static final String KEY_STRING = "KEY";
 
   public CompareFunctionsProcessor(String functionName) {
     this.functionName = functionName;
@@ -229,7 +235,44 @@ class CompareFunctionsProcessor extends AbstractExprVisitor<Boolean, LogicalExpr
     if (valueArg instanceof TimeStampExpression) {
       return visitTimestampExpr(path, (TimeStampExpression) valueArg);
     }
+
+    if (valueArg instanceof CastExpression) {
+      if (valueArg.getMajorType().getMinorType().equals(TypeProtos.MinorType.VARBINARY)) {
+        buildKeyValueFromString(valueArg);
+        this.path = path;
+        return true;
+      }
+    }
     return false;
+  }
+
+  /**
+   * Constructs a document by taking valueArg string as value and "KEY" as key. This parses the given valueArg string
+   * and transforms it into Map or List respectively, which is then extracted by doing a get on KEY_STRING
+   * @param valueArg
+   */
+  private void buildKeyValueFromString(LogicalExpression valueArg) throws  UnsupportedOperationException {
+
+    Document document;
+    String input = (String.valueOf(((QuotedString) (((CastExpression) valueArg).getInput())).value));
+    StringBuilder jsonString = new StringBuilder();
+    jsonString.append("{ \"").append(KEY_STRING).append("\":").append(input).append("}");
+    try {
+      document = newDocument(String.valueOf(jsonString.toString()));
+    } catch (DecodingException ex) {
+      throw new UnsupportedOperationException("Unable to convert given string. Expecting an Array or Map");
+    }
+    Value.Type type = document.getValue(KEY_STRING).getType();
+    switch (type) {
+      case MAP:
+        this.value = KeyValueBuilder.initFrom(document.getMap(KEY_STRING));
+        break;
+      case ARRAY:
+        this.value = KeyValueBuilder.initFrom(document.getList(KEY_STRING));
+        break;
+      default:
+        throw new UnsupportedOperationException("Unsupported type" + type + ". Value type should be either Array or Map");
+      }
   }
 
   protected boolean visitTimestampExpr(SchemaPath path, TimeStampExpression valueArg) {

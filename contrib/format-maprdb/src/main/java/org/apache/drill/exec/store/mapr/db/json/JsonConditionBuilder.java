@@ -179,7 +179,12 @@ public class JsonConditionBuilder extends AbstractExprVisitor<JsonScanSpec, Void
     case BINARY:
       c.is(str, op, v.getBinary());
       break;
-      // XXX/TODO: Map, Array?
+      case ARRAY:
+        c.equals(str, v.getList());
+        break;
+      case MAP:
+        c.equals(str, v.getMap());
+        break;
     default:
       break;
     }

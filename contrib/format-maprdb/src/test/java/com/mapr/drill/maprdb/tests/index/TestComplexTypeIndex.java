@@ -83,6 +83,14 @@ public class TestComplexTypeIndex extends BaseJsonTest {
 
   private static String createTableAndIndex(String tableName, boolean createIndex, String fileName) throws Exception {
     String tablePath;
+    final String[] indexList =
+        {   "weightIdx1", "weight[].low, weight[].high", "",
+            "weightCountyIdx1", "weight[].high", "county,salary.max",
+            "salaryWeightIdx1", "salary.max,weight[].high", "salary.min,weight[].low,weight[].high",
+            "carsIdx1", "cars[]", "name",
+            "salaryIdx", "salary", "",
+            "weightListIdx", "weight", ""
+        };
     try (Table table = createOrReplaceTable(tableName);
          InputStream in = MaprDBTestsSuite.getJsonStream(fileName);
          DocumentStream stream = Json.newDocumentStream(in)) {
@@ -93,7 +101,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
 
       if (createIndex) {
         // create indexes on empty table
-        createIndexes(tablePath);
+        createIndexes(table, indexList);
 
         // set stats update interval
         DBTests.setTableStatsSendInterval(1);
@@ -128,31 +136,11 @@ public class TestComplexTypeIndex extends BaseJsonTest {
     return admin.createTable(desc);
   }
 
-  private static void createIndexes(String tablePath) throws Exception {
-    String createIndex1 = String.format("maprcli table index add -path "
-        + tablePath
-        + " -index weightIdx1"
-        + " -indexedfields weight[].low,weight[].high ");
-    String createIndex2 = String.format("maprcli table index add -path "
-        + tablePath
-        + " -index weightCountyIdx1"
-        + " -indexedfields weight[].high "
-        + " -includedfields county,salary.max");
-    String createIndex3 = String.format("maprcli table index add -path "
-        + tablePath
-        + " -index salaryWeightIdx1"
-        + " -indexedfields salary.max,weight[].high "
-        + " -includedfields salary.min,weight[].low,weight[].high ");
-    String createIndex4 = String.format("maprcli table index add -path "
-        + tablePath
-        + " -index carsIdx1"
-        + " -indexedfields cars[] "
-        + " -includedfields name ");
+  private static void createIndexes(Table table, String[] indexList) throws Exception {
+
+    LargeTableGen gen = new LargeTableGen(MaprDBTestsSuite.getAdmin());
     System.out.println("Creating indexes..");
-    TestCluster.runCommand(createIndex1);
-    TestCluster.runCommand(createIndex2);
-    TestCluster.runCommand(createIndex3);
-    TestCluster.runCommand(createIndex4);
+    gen.createIndex(table, indexList);
   }
 
   @AfterClass
@@ -202,7 +190,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
                     "where t.f.low <= 200) and t.`_id` = 'user001'";
 
     PlanTestBase.testPlanMatchingPatterns(query,
-            new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*low.*<=.*20.*indexName=weightIdx1"},
+            new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*low.*<=.*20.*indexName=(weightIdx1|weightCountyIdx1)"},
             new String[]{"RowKeyJoin", ".*RestrictedJsonTableGroupScan.*tableName=.*index_test_complex1,"}
     );
     testBuilder()
@@ -521,5 +509,88 @@ public class TestComplexTypeIndex extends BaseJsonTest {
   }
     return;
   }
+
+  @Test
+  public void TestEqualityForMap() throws Exception {
+    try {
+      String query = " select t.salary from hbase.`index_test_complex1` as t " +
+              "where t.salary = cast('{\"min\":1000.0, \"max\":2000.0}' as VARBINARY)";
+
+      test(maxNonCoveringSelectivityThreshold);
+
+      PlanTestBase.testPlanMatchingPatterns(query,
+              new String[]{".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*salary.*min.*1000.*max.*2000.*indexName=salaryIdx"},
+              new String[]{"RowKeyJoin", ".*RestrictedJsonTableGroupScan.*tableName=.*index_test_complex1,"}
+      );
+
+    } finally {
+      test(resetmaxNonCoveringSelectivityThreshold);
+      test(IndexPlanning);
+    }
+    return;
+  }
+
+  @Test
+  public void TestEqualityForList() throws Exception {
+
+    try {
+      String query = " select t.weight from hbase.`index_test_complex1` as t " +
+              "where t.weight = cast('[{\"low\":120, \"high\":150},{\"low\":110, \"high\":145}]' as VARBINARY)";
+
+      test(maxNonCoveringSelectivityThreshold);
+
+      PlanTestBase.testPlanMatchingPatterns(query,
+              new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*low.*120.*high.*150.*low.*110.*high.*145.*indexName=weightListIdx"},
+              new String[]{"RowKeyJoin", ".*RestrictedJsonTableGroupScan.*tableName=.*index_test_complex1,"}
+      );
+
+    } finally {
+        test(resetmaxNonCoveringSelectivityThreshold);
+        test(IndexPlanning);
+    }
+    return;
+  }
+
+  @Test
+  public void TestEqualityForMapWithConjunction() throws Exception {
+
+    try {
+      String query = " select t.salary from hbase.`index_test_complex1` as t " +
+              "where t.salary = cast('{\"min\":1000.0, \"max\":2000.0}' as VARBINARY) and t.county='Santa Clara'";
+
+      test(maxNonCoveringSelectivityThreshold);
+
+      PlanTestBase.testPlanMatchingPatterns(query,
+              new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*salary.*min.*1000.*max.*2000.*indexName=salaryIdx"},
+              new String[]{}
+      );
+
+    } finally {
+        test(resetmaxNonCoveringSelectivityThreshold);
+        test(IndexPlanning);
+    }
+    return;
+  }
+
+  @Test
+  public void TestEqualityForListWithConjunction() throws Exception {
+
+    try {
+      String query = "select t.weight from hbase.`index_test_complex1` as t " +
+              "where t.weight = cast('[{\"low\":120, \"high\":150},{\"low\":110, \"high\":145}]' as VARBINARY) and t.`_id`='user001' ";
+
+      test(maxNonCoveringSelectivityThreshold);
+
+      PlanTestBase.testPlanMatchingPatterns(query,
+              new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*low.*120.*high.*150.*low.*110.*high.*145.*indexName=weightListIdx"},
+              new String[]{}
+      );
+
+      } finally {
+          test(resetmaxNonCoveringSelectivityThreshold);
+          test(IndexPlanning);
+      }
+    return;
+    }
 
 }

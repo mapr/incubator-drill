@@ -86,7 +86,7 @@ public class LargeTableGen extends LargeTableGenBase {
     }
   }
 
-  private void createIndex(Table table, String[] indexDef) throws Exception {
+   public void createIndex(Table table, String[] indexDef) throws Exception {
     if (indexDef == null) {
       // don't create index here. indexes may have been created
       return;

@@ -522,6 +522,7 @@ public class DrillOptiq {
           castType = Types.required(MinorType.BIT);
           break;
         case BINARY:
+        case VARBINARY:
           castType = Types.required(MinorType.VARBINARY);
           break;
         case ANY:
