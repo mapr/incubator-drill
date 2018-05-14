@@ -63,10 +63,12 @@ public class TestComplexTypeIndex extends BaseJsonTest {
 
   /*
    * Sample document from the table:
-   * { "user_id":"user001",
+   * { "_id":"user001",
+   *   "name": "Tom",
    *   "county": "Santa Clara",
    *   "salary": {"min":1000.0, "max":2000.0},
    *   "weight": [{"low":120, "high":150},{"low":110, "high":145}],
+   *   "cars": ["Nissan Leaf", "Honda Accord"],
    *   "friends": [{"name": ["Sam", "Jack"]}]
    * }
    */
@@ -141,10 +143,16 @@ public class TestComplexTypeIndex extends BaseJsonTest {
         + " -index salaryWeightIdx1"
         + " -indexedfields salary.max,weight[].high "
         + " -includedfields salary.min,weight[].low,weight[].high ");
+    String createIndex4 = String.format("maprcli table index add -path "
+        + tablePath
+        + " -index carsIdx1"
+        + " -indexedfields cars[] "
+        + " -includedfields name ");
     System.out.println("Creating indexes..");
     TestCluster.runCommand(createIndex1);
     TestCluster.runCommand(createIndex2);
     TestCluster.runCommand(createIndex3);
+    TestCluster.runCommand(createIndex4);
   }
 
   @AfterClass
@@ -348,7 +356,6 @@ public class TestComplexTypeIndex extends BaseJsonTest {
             new String[]{"RowKeyJoin", ".*RestrictedJsonTableGroupScan.*tableName=.*index_test_complex1,.*columns=.*`\\*\\*`.*"}
     );
     testBuilder()
-            .optionSettingQueriesForTestQuery(maxNonCoveringSelectivityThreshold)
             .optionSettingQueriesForBaseline(noIndexPlan)
             .unOrdered()
             .sqlQuery(query)
@@ -356,7 +363,6 @@ public class TestComplexTypeIndex extends BaseJsonTest {
             .build()
             .run();
   } finally {
-    test(resetmaxNonCoveringSelectivityThreshold);
     test(IndexPlanning);
   }
     return;
@@ -490,4 +496,30 @@ public class TestComplexTypeIndex extends BaseJsonTest {
 
     return;
   }
+
+  // Index on scalar array, flatten of scalar array
+  @Test
+  public void SemiJoinCoveringIndexScalarArray_1() throws Exception {
+    try {
+    String query = "select _id from hbase.`index_test_complex1` t " +
+            "where _id in (select _id from (select _id, flatten(t1.cars) as f from hbase.`index_test_complex1` as t1 ) as t2" +
+            " where t2.f like 'Toyota%' )";
+
+    PlanTestBase.testPlanMatchingPatterns(query,
+            new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*cars.*MATCHES.*Toyota.*indexName=carsIdx1"},
+            new String[]{"RowKeyJoin", ".*RestrictedJsonTableGroupScan.*tableName=.*index_test_complex1,.*columns=.*`\\*\\*`.*"}
+    );
+    testBuilder()
+            .optionSettingQueriesForBaseline(noIndexPlan)
+            .unOrdered()
+            .sqlQuery(query)
+            .sqlBaselineQuery(query)
+            .build()
+            .run();
+  } finally {
+    test(IndexPlanning);
+  }
+    return;
+  }
+
 }

@@ -151,7 +151,7 @@ public class MapRDBIndexDiscover extends IndexDiscoverBase implements IndexDisco
     if (fieldName.contains(":")) {
       fieldName = fieldName.split(":")[1];
     }
-    if (fieldName.contains(".")) {
+    if (fieldName.contains(".") || fieldName.endsWith("[]")) {
       return FieldPathHelper.fieldPath2SchemaPath(FieldPath.parseFrom(fieldName));
     }
     return SchemaPath.getSimplePath(fieldName);
