@@ -56,6 +56,7 @@ import org.apache.calcite.rex.RexInputRef;
 import org.apache.calcite.rex.RexLiteral;
 import org.apache.calcite.rex.RexNode;
 import org.apache.calcite.rex.RexUtil;
+import org.apache.calcite.rex.RexVisitor;
 import org.apache.calcite.rex.RexVisitorImpl;
 import org.apache.calcite.sql.SqlOperator;
 import org.apache.calcite.sql.fun.SqlStdOperatorTable;
@@ -458,41 +459,67 @@ public class FlattenToIndexScanPrule extends AbstractIndexPrule {
       this.builder = builder;
     }
 
+    private RexNode makeArrayItem(RexCall item) {
+      RexInputRef inputRef = (RexInputRef) item.getOperands().get(0);
+      RexLiteral literal = (RexLiteral) item.getOperands().get(1);
+
+      // check if input is referencing a FLATTEN
+      String projectFieldName = project.getRowType().getFieldNames().get(inputRef.getIndex());
+      RexCall c;
+      RexNode left = null;
+      if ((c = flattenMap.get(projectFieldName)) != null) {
+        left = c.getOperands().get(0);
+        Preconditions.checkArgument(left != null, "Found null input reference for Flatten") ;
+
+        // take the Flatten's input and build a new RexExpr with ITEM($n, -1)
+        RexLiteral right = builder.makeBigintLiteral(BigDecimal.valueOf(-1));
+        RexNode result1 = builder.makeCall(item.getType(), SqlStdOperatorTable.ITEM, ImmutableList.of(left, right));
+
+        left = result1;
+        right = literal;
+        RexNode result2 = builder.makeCall(item.getType(), SqlStdOperatorTable.ITEM, ImmutableList.of(left, right));
+
+        return result2;
+      }
+      return null;
+    }
+
+    private RexNode buildArrayItemRef(RexCall item) {
+      RexVisitor<RexNode> visitor =
+        new RexVisitorImpl<RexNode>(true) {
+          @Override public RexNode visitCall(RexCall ref) {
+            if (SqlStdOperatorTable.ITEM.equals(ref.getOperator()) &&
+                ref.getOperands().get(0) instanceof RexInputRef) {
+              RexNode arrayRef = makeArrayItem(ref);
+              if (arrayRef != null) {
+                return arrayRef;
+              }
+            }
+            return builder.makeCall(ref.getType(), ref.getOperator(), visitChildren(ref, this));
+          }
+
+          @Override
+          public RexNode visitLiteral(RexLiteral literal) {
+            return literal;
+          }
+        };
+      RexNode arrayItem = item.accept(visitor);
+      exprsReferencingFlatten.add(arrayItem);
+      return arrayItem;
+    }
+
     @Override
     public RexNode visitCall(RexCall call) {
       SqlOperator op = call.getOperator();
       RelDataType type = call.getType();
 
-      if (SqlStdOperatorTable.ITEM.equals(op) &&
-          call.getOperands().size() == 2) {
-        if (call.getOperands().get(0) instanceof RexInputRef) {
-          RexInputRef inputRef = (RexInputRef) call.getOperands().get(0);
-          RexLiteral literal = (RexLiteral) call.getOperands().get(1);
-
-          // check if input is referencing a FLATTEN
-          String projectFieldName = project.getRowType().getFieldNames().get(inputRef.getIndex());
-          RexCall c;
-          RexNode left = null;
-          if ((c = flattenMap.get(projectFieldName)) != null) {
-            left = c.getOperands().get(0);
-            Preconditions.checkArgument(left != null, "Found null input reference for Flatten") ;
-
-            // take the Flatten's input and build a new RexExpr with ITEM($n, -1)
-            RexLiteral right = builder.makeBigintLiteral(BigDecimal.valueOf(-1));
-            RexNode result1 = builder.makeCall(call.getType(), SqlStdOperatorTable.ITEM, ImmutableList.of(left, right));
-
-            // final output is ITEM(ITEM($n, -1), 'literal')
-            left = result1;
-            right = literal;
-            RexNode result2 = builder.makeCall(call.getType(), SqlStdOperatorTable.ITEM, ImmutableList.of(left, right));
-
-            // save the individual ITEM exprs for future use
-            exprsReferencingFlatten.add(result2);
-            return result2;
-          }
+      if (SqlStdOperatorTable.ITEM.equals(op)) {
+        RexNode node = buildArrayItemRef(call);
+        if (node != null) {
+          return node;
         }
       }
-      return builder.makeCall(type, op, visitChildren(call));
+      return builder.makeCall(type, op, visitChildren(call, this));
     }
 
     @Override
@@ -520,7 +547,6 @@ public class FlattenToIndexScanPrule extends AbstractIndexPrule {
         otherExprs.add(n);
         return n;
       }
-
     }
 
     @Override
@@ -528,10 +554,10 @@ public class FlattenToIndexScanPrule extends AbstractIndexPrule {
       return literal;
     }
 
-    private List<RexNode> visitChildren(RexCall call) {
+    private List<RexNode> visitChildren(RexCall call, RexVisitor<RexNode> visitor) {
       List<RexNode> children = Lists.newArrayList();
       for (RexNode child : call.getOperands()) {
-        children.add(child.accept(this));
+        children.add(child.accept(visitor));
       }
       return ImmutableList.copyOf(children);
     }
