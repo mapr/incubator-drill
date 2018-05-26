@@ -45,7 +45,6 @@ import org.apache.drill.exec.planner.logical.DrillProjectRel;
 import org.apache.drill.exec.planner.logical.DrillFilterRel;
 import org.apache.drill.exec.planner.logical.DrillScanRel;
 import org.apache.drill.exec.planner.logical.DrillRel;
-import org.apache.drill.exec.planner.physical.StreamAggPrel;
 import org.apache.drill.exec.planner.physical.ProjectPrel;
 import org.apache.drill.exec.planner.physical.ScanPrel;
 import org.apache.drill.exec.planner.physical.RowKeyJoinPrel;
@@ -334,4 +333,5 @@ public class SemiJoinIndexPlanUtils {
   public static boolean checkSameTableScan(DrillScanRelBase scanA, DrillScanRelBase scanB) {
     return scanA.getTable().getQualifiedName().equals(scanB.getTable().getQualifiedName());
   }
+
 }

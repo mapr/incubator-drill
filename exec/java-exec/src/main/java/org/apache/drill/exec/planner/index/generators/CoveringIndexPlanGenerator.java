@@ -22,45 +22,29 @@ import org.apache.drill.shaded.guava.com.google.common.collect.Lists;
 
 import org.apache.calcite.plan.RelOptCluster;
 import org.apache.calcite.plan.RelOptUtil;
-import org.apache.calcite.plan.RelTraitSet;
-import org.apache.calcite.rel.RelCollation;
 import org.apache.calcite.rel.core.Project;
-import org.apache.calcite.rel.RelCollations;
 import org.apache.calcite.rel.type.RelDataType;
-import org.apache.calcite.rel.type.RelDataTypeFactory;
-import org.apache.calcite.rel.type.RelDataTypeField;
 import org.apache.calcite.rel.InvalidRelException;
 import org.apache.calcite.rex.RexBuilder;
-import org.apache.calcite.rex.RexCall;
-import org.apache.calcite.rex.RexInputRef;
 import org.apache.calcite.rex.RexNode;
 import org.apache.calcite.rex.RexUtil;
-import org.apache.calcite.util.Pair;
 import org.apache.drill.exec.physical.base.IndexGroupScan;
 import org.apache.drill.exec.planner.index.IndexLogicalPlanCallContext;
 import org.apache.drill.exec.planner.index.IndexDescriptor;
 import org.apache.drill.exec.planner.index.FunctionalIndexInfo;
-import org.apache.drill.exec.planner.index.FlattenIndexPlanCallContext;
-import org.apache.drill.exec.planner.index.FunctionalIndexHelper;
 import org.apache.drill.exec.planner.index.IndexPlanUtils;
 import org.apache.drill.exec.planner.index.SimpleRexRemap;
 import org.apache.drill.exec.planner.logical.DrillMergeProjectRule;
 import org.apache.drill.exec.planner.logical.DrillParseContext;
 import org.apache.drill.exec.planner.logical.DrillProjectRel;
 import org.apache.drill.exec.planner.logical.DrillRelFactories;
-import org.apache.drill.exec.planner.physical.FilterPrel;
 import org.apache.drill.exec.planner.physical.PlannerSettings;
 import org.apache.drill.exec.planner.physical.Prel;
-import org.apache.drill.exec.planner.physical.PrelUtil;
 import org.apache.drill.exec.planner.physical.ProjectPrel;
-import org.apache.drill.exec.planner.physical.Prule;
 import org.apache.drill.exec.planner.physical.ScanPrel;
-
 import org.apache.calcite.rel.RelNode;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Generate a covering index plan that is equivalent to the original plan.
@@ -68,7 +52,7 @@ import java.util.Map;
  * This plan will be further optimized by the filter pushdown rule of the Index plugin which should
  * push this filter into the index scan.
  */
-public class CoveringIndexPlanGenerator extends AbstractIndexPlanGenerator {
+public class CoveringIndexPlanGenerator extends AbstractCoveringPlanGenerator {
 
   static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(CoveringIndexPlanGenerator.class);
   final protected IndexGroupScan indexGroupScan;
@@ -90,168 +74,50 @@ public class CoveringIndexPlanGenerator extends AbstractIndexPlanGenerator {
     this.indexDesc = functionInfo.getIndexDesc();
   }
 
-  /**
-   *
-   * @param inputIndex
-   * @param functionInfo functional index information that may impact rewrite
-   * @return
-   */
-  private RexNode rewriteFunctionalCondition(RexNode inputIndex, RelDataType newRowType,
-                                             FunctionalIndexInfo functionInfo) {
-    if (!functionInfo.hasFunctional()) {
-      return inputIndex;
-    }
-    return FunctionalIndexHelper.convertConditionForIndexScan(inputIndex,
-        origScan, newRowType, builder, functionInfo);
-  }
-
   @Override
   public RelNode convertChild(final RelNode filter, final RelNode input) throws InvalidRelException {
 
     if (indexGroupScan == null) {
-      logger.error("Null indexgroupScan in CoveringIndexPlanGenerator.convertChild");
+      logger.error("CoveringIndexPlanGenerator: Null indexgroupScan in CoveringIndexPlanGenerator.convertChild");
       return null;
     }
 
-    RexNode coveringCondition;
     ScanPrel indexScanPrel =
-        IndexPlanUtils.buildCoveringIndexScan(origScan, indexGroupScan, indexContext, indexDesc);
+            IndexPlanUtils.buildCoveringIndexScan(origScan, indexGroupScan, indexContext, indexDesc);
 
+    RexNode newIndexCondition = null;
     // If remainder condition, then combine the index and remainder conditions. This is a covering plan so we can
     // pushed the entire condition into the index.
-    coveringCondition = IndexPlanUtils.getTotalFilter(indexCondition, remainderCondition, indexScanPrel.getCluster().getRexBuilder());
-    RexNode newIndexCondition =
-        rewriteFunctionalCondition(coveringCondition, indexScanPrel.getRowType(), functionInfo);
+    RexNode coveringCondition = IndexPlanUtils.getTotalFilter(indexCondition, remainderCondition, indexScanPrel.getCluster().getRexBuilder());
+    newIndexCondition =
+            rewriteFunctionalCondition(coveringCondition, indexScanPrel.getRowType(), functionInfo, origScan, builder);
 
-    // build collation for filter
-    RelTraitSet indexFilterTraitSet = indexScanPrel.getTraitSet();
-
-    FilterPrel indexFilterPrel = new FilterPrel(indexScanPrel.getCluster(), indexFilterTraitSet,
-        indexScanPrel, newIndexCondition);
-
-    ProjectPrel indexProjectPrel = null;
-    if (origProject != null) {
-      if (indexContext instanceof FlattenIndexPlanCallContext) {
-        List<RelDataTypeField> origProjFields = origProject.getRowType().getFieldList();
-        List<RelDataTypeField> newProjFields = Lists.newArrayList();
-        List<Pair<RexNode, String>> projExprList = origProject.getNamedProjects();
-        // build the row type for the new Project
-        List<RexNode> newProjectExprs = Lists.newArrayList();
-
-        final RelDataTypeFactory.FieldInfoBuilder newProjectFieldTypeBuilder =
-            origScan.getCluster().getTypeFactory().builder();
-
-        FlattenIndexPlanCallContext flattenContext = ((FlattenIndexPlanCallContext) indexContext);
-        int origFieldIndex = 0;
-
-        for (Pair<RexNode, String> p : projExprList) {
-          newProjFields.add(origProjFields.get(origFieldIndex));
-          // if this expr is a flatten, only keep the input of flatten.  Note that we cannot drop
-          // the expr altogether because the new Project will be added to the same RelSubset as the old Project and
-          // the RowType of both should be the same to pass validation checks in the VolcanoPlanner.
-          if (flattenContext.getFlattenMap().containsKey(p.right)) {
-            newProjectExprs.add(((RexCall)p.left).getOperands().get(0));
-          } else {
-            newProjectExprs.add(p.left);
-          }
-          origFieldIndex++;
-        }
-        newProjectFieldTypeBuilder.addAll(newProjFields);
-        final RelDataType newProjectRowType = newProjectFieldTypeBuilder.build();
-
-        // to be safe, use empty collation since there is no guarantee that flatten pushdown
-        // to index will allow collation trait
-        // TODO: this may change in the future if we determine otherwise
-        final RelCollation collation = RelCollations.EMPTY;
-
-        indexProjectPrel = new ProjectPrel(origScan.getCluster(), indexFilterTraitSet.plus(collation),
-            indexFilterPrel, newProjectExprs, newProjectRowType);
-
-      } else {
-        RelCollation collation = IndexPlanUtils.buildCollationProject(IndexPlanUtils.getProjects(origProject), null,
-            origScan, functionInfo, indexContext);
-        indexProjectPrel = new ProjectPrel(origScan.getCluster(), indexFilterTraitSet.plus(collation),
-            indexFilterPrel, IndexPlanUtils.getProjects(origProject), origProject.getRowType());
-      }
-    }
-
-    RelNode finalRel;
-    if (indexProjectPrel != null) {
-      finalRel = indexProjectPrel;
-    } else {
-      finalRel = indexFilterPrel;
-    }
-
-    if (upperProject != null) {
-      RelCollation newCollation =
-          IndexPlanUtils.buildCollationProject(IndexPlanUtils.getProjects(upperProject), origProject,
-              origScan, functionInfo, indexContext);
-
-      ProjectPrel cap = new ProjectPrel(upperProject.getCluster(),
-          newCollation==null?finalRel.getTraitSet() : finalRel.getTraitSet().plus(newCollation),
-          finalRel, IndexPlanUtils.getProjects(upperProject), upperProject.getRowType());
-
-      if (functionInfo.hasFunctional()) {
-        //if there is functional index field, then a rewrite may be needed in upperProject/indexProject
-        //merge upperProject with indexProjectPrel(from origProject) if both exist,
-        ProjectPrel newProject = cap;
-        if (indexProjectPrel != null) {
-          newProject = (ProjectPrel) DrillMergeProjectRule.replace(newProject, indexProjectPrel);
-        }
-        // then rewrite functional expressions in new project.
-        List<RexNode> newProjects = Lists.newArrayList();
-        DrillParseContext parseContxt = new DrillParseContext(PrelUtil.getPlannerSettings(newProject.getCluster()));
-        for(RexNode projectRex: newProject.getProjects()) {
-          RexNode newRex = IndexPlanUtils.rewriteFunctionalRex(indexContext, parseContxt, null, origScan, projectRex, indexScanPrel.getRowType(), functionInfo);
-          newProjects.add(newRex);
-        }
-
-        ProjectPrel rewrittenProject = new ProjectPrel(newProject.getCluster(),
-            newCollation==null? newProject.getTraitSet() : newProject.getTraitSet().plus(newCollation),
-            indexFilterPrel, newProjects, newProject.getRowType());
-
-        cap = rewrittenProject;
-      }
-
-      finalRel = cap;
-    }
-
-    if (indexContext.getSort() != null) {
-      finalRel = getSortNode(indexContext, finalRel, false,true, true);
-      Preconditions.checkArgument(finalRel != null);
-    }
-
-    finalRel = Prule.convert(finalRel, finalRel.getTraitSet().plus(Prel.DRILL_PHYSICAL));
-
+    RelNode indexPlan = getIndexPlan(indexScanPrel, newIndexCondition, builder, functionInfo,
+                          origProject, indexContext, origScan, upperProject);
     logger.debug("CoveringIndexPlanGenerator got finalRel {} from origScan {}, original digest {}, new digest {}.",
-        finalRel.toString(), origScan.toString(),
-        upperProject==null?indexContext.getFilter().getDigest(): upperProject.getDigest(), finalRel.getDigest());
-    return finalRel;
+            indexPlan.toString(), origScan.toString(),
+            upperProject==null?indexContext.getFilter().getDigest(): upperProject.getDigest(), indexPlan.getDigest());
+
+    return indexPlan;
   }
 
-  private RexNode rewriteConditionForProject(RexNode condition, List<RexNode> projects) {
-    Map<RexNode, RexNode> mapping = new HashMap<>();
-    rewriteConditionForProjectInternal(condition, projects, mapping);
-    SimpleRexRemap.RexReplace replacer = new SimpleRexRemap.RexReplace(mapping);
-    return condition.accept(replacer);
-  }
+  public static ProjectPrel replace(Project topProject, Project bottomProject) {
+    final List<RexNode> newProjects =
+        RelOptUtil.pushPastProject(topProject.getProjects(), bottomProject);
 
-  private void rewriteConditionForProjectInternal(RexNode condition, List<RexNode> projects, Map<RexNode, RexNode> mapping) {
-    if (condition instanceof RexCall) {
-      if ("ITEM".equals(((RexCall) condition).getOperator().getName().toUpperCase())) {
-        int index = 0;
-        for (RexNode project : projects) {
-          if (project.toString().equals(condition.toString())) {
-            // Map it to the corresponding RexInputRef for the project
-            mapping.put(condition, new RexInputRef(index, project.getType()));
-          }
-          ++index;
-        }
-      } else {
-        for (RexNode child : ((RexCall) condition).getOperands()) {
-          rewriteConditionForProjectInternal(child, projects, mapping);
-        }
-      }
+    // replace the two projects with a combined projection
+    if (topProject instanceof DrillProjectRel) {
+      ProjectPrel newProjectRel = (ProjectPrel)DrillRelFactories.DRILL_LOGICAL_PROJECT_FACTORY.createProject(
+          bottomProject.getInput(), newProjects,
+          topProject.getRowType().getFieldNames());
+
+      return newProjectRel;
+    } else {
+      final RelNode child = bottomProject.getInput();
+      final RelOptCluster cluster = child.getCluster();
+      final RelDataType rowType = RexUtil.createStructType(cluster.getTypeFactory(), newProjects, topProject.getRowType().getFieldNames());
+      return new ProjectPrel(cluster, child.getTraitSet().plus(Prel.DRILL_PHYSICAL),
+          child, Lists.newArrayList(newProjects), rowType);
     }
   }
 }

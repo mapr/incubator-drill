@@ -1080,10 +1080,10 @@ public class IndexPlanUtils {
     return new IndexLogicalPlanCallContext(call, null, null, null, null, null);
   }
 
-  public static List<RexNode> projects(RelNode scan, List<String> names) {
+  public static List<RexNode> projects(RelNode relNode, List<String> names) {
     List<RexNode> projects = Lists.newArrayList();
-    List<String> scanFields = scan.getRowType().getFieldNames();
-    List<RelDataTypeField> scanFieldTypes = scan.getRowType().getFieldList();
+    List<String> scanFields = relNode.getRowType().getFieldNames();
+    List<RelDataTypeField> scanFieldTypes = relNode.getRowType().getFieldList();
     for (String name : names) {
       int fieldIndex = scanFields.indexOf(name);
       projects.add(RexInputRef.of(fieldIndex, scanFieldTypes));

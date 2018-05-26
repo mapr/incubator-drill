@@ -144,6 +144,7 @@ public class SystemOptionManager extends BaseOptionManager implements AutoClosea
       // ------------------------------------------- Index planning related options BEGIN --------------------------------------------------------------
       new OptionDefinition(PlannerSettings.USE_SIMPLE_OPTIMIZER),
       new OptionDefinition(PlannerSettings.INDEX_PLANNING),
+      new OptionDefinition(PlannerSettings.COMPLEX_TYPE_FULLTABLESCAN),
       new OptionDefinition(PlannerSettings.ENABLE_STATS),
       new OptionDefinition(PlannerSettings.DISABLE_FULL_TABLE_SCAN),
       new OptionDefinition(PlannerSettings.INDEX_MAX_CHOSEN_INDEXES_PER_TABLE),

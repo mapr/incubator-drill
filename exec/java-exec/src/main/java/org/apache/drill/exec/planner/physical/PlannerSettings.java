@@ -137,6 +137,8 @@ public class PlannerSettings implements Context{
       new OptionDescription("Simple optimizer applies fewer rules to reduce planning time and is meant to be used only for simple operational queries that use limit, sort, and filter."));
   public static final BooleanValidator INDEX_PLANNING = new BooleanValidator("planner.enable_index_planning",
       new OptionDescription("Enables or disables index planning."));
+  public static final BooleanValidator COMPLEX_TYPE_FULLTABLESCAN = new BooleanValidator("planner.enable_complex_type_fts",
+      new OptionDescription("Enable or disable complex full table scan."));
   public static final BooleanValidator ENABLE_STATS = new BooleanValidator("planner.enable_statistics",
       new OptionDescription("Enable or disable statistics for the filter conditions on indexed columns."));
   public static final BooleanValidator DISABLE_FULL_TABLE_SCAN = new BooleanValidator("planner.disable_full_table_scan",
@@ -434,6 +436,10 @@ public class PlannerSettings implements Context{
 
   public boolean isIndexPlanningEnabled() {
     return options.getOption(INDEX_PLANNING);
+  }
+
+  public boolean isComplexFTSEnabled() {
+    return options.getOption(COMPLEX_TYPE_FULLTABLESCAN);
   }
 
   public boolean isStatisticsEnabled() {

@@ -23,18 +23,14 @@ import org.apache.calcite.plan.RelOptRuleCall;
 import org.apache.calcite.plan.RelOptRule;
 import org.apache.calcite.plan.RelOptRuleOperand;
 import org.apache.calcite.rel.AbstractRelNode;
-import org.apache.drill.exec.physical.base.IndexGroupScan;
+import org.apache.calcite.rex.RexBuilder;
 import org.apache.drill.exec.planner.index.FlattenIndexPlanCallContext;
 import org.apache.drill.exec.planner.index.SemiJoinIndexPlanCallContext;
-import org.apache.drill.exec.planner.index.IndexDescriptor;
 import org.apache.drill.exec.planner.index.IndexPlanUtils;
-import org.apache.drill.exec.planner.index.FunctionalIndexInfo;
 import org.apache.drill.exec.planner.index.IndexLogicalPlanCallContext;
-import org.apache.drill.exec.planner.index.generators.SemiJoinMergeRowKeyJoinGenerator;
-import org.apache.drill.exec.planner.index.generators.SemiJoinToRowKeyJoinGenerator;
-import org.apache.drill.exec.planner.index.generators.SemiJoinToCoveringIndexScanGenerator;
-import org.apache.drill.exec.planner.index.generators.IndexPlanGenerator;
 import org.apache.drill.exec.planner.index.generators.AbstractIndexPlanGenerator;
+import org.apache.drill.exec.planner.index.generators.CoveringPlanGenerator;
+import org.apache.drill.exec.planner.index.generators.common.FlattenConditionUtils;
 import org.apache.drill.exec.planner.index.generators.common.SemiJoinIndexPlanUtils;
 import org.apache.drill.exec.planner.index.generators.common.SemiJoinTransformUtils;
 import org.apache.drill.exec.planner.logical.DrillFilterRel;
@@ -43,37 +39,37 @@ import org.apache.drill.exec.planner.logical.DrillScanRel;
 import org.apache.drill.exec.planner.logical.DrillJoinRel;
 import org.apache.drill.exec.planner.logical.DrillAggregateRel;
 import org.apache.drill.exec.planner.logical.RelOptHelper;
-import org.apache.calcite.rex.RexBuilder;
 import org.apache.calcite.rex.RexCall;
 import org.apache.calcite.rex.RexNode;
-import org.apache.drill.exec.planner.physical.PlannerSettings;
+import org.apache.drill.exec.planner.physical.PrelUtil;
 
 import java.util.List;
 import java.util.Map;
 
-public class SemiJoinIndexScanPrule extends AbstractIndexPrule {
-  static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(SemiJoinIndexScanPrule.class);
 
-  public static final RelOptRule JOIN_FILTER_PROJECT_SCAN = new SemiJoinIndexScanPrule(
+public class SemiJoinFullTableScanPrule extends AbstractIndexPrule {
+  static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(SemiJoinFullTableScanPrule.class);
+
+  public static final RelOptRule JOIN_FILTER_PROJECT_SCAN = new SemiJoinFullTableScanPrule(
           RelOptHelper.some(DrillJoinRel.class,
                   RelOptHelper.any(AbstractRelNode.class),
                   RelOptHelper.some(DrillAggregateRel.class,
                           RelOptHelper.some(DrillProjectRel.class,
-                              RelOptHelper.some(DrillFilterRel.class,
-                                  RelOptHelper.some(DrillProjectRel.class, RelOptHelper.any(DrillScanRel.class)))))),
-          "SemiJoinIndexScanPrule:Join_Project_Filter_Project_Scan", new MatchJSPFPS());
+                                  RelOptHelper.some(DrillFilterRel.class,
+                                          RelOptHelper.some(DrillProjectRel.class, RelOptHelper.any(DrillScanRel.class)))))),
+          "SemiJoinFullTableScanPrule:Join_Project_Filter_Project_Scan", new MatchJSPFPS());
 
-  public static final RelOptRule JOIN_FILTER_PROJECT_FILTER_SCAN = new SemiJoinIndexScanPrule(
+  public static final RelOptRule JOIN_FILTER_PROJECT_FILTER_SCAN = new SemiJoinFullTableScanPrule(
           RelOptHelper.some(DrillJoinRel.class,
                   RelOptHelper.any(AbstractRelNode.class),
                   RelOptHelper.some(DrillAggregateRel.class,
                           RelOptHelper.some(DrillProjectRel.class,
                                   RelOptHelper.some(DrillFilterRel.class,
                                           RelOptHelper.some(DrillProjectRel.class,
-                                                  RelOptHelper.some(DrillFilterRel.class ,RelOptHelper.any(DrillScanRel.class))))))),
-          "SemiJoinIndexScanPrule:Join_Project_Filter_Project_Filter_Scan", new MatchJSPFPFS());
+                                                  RelOptHelper.some(DrillFilterRel.class, RelOptHelper.any(DrillScanRel.class))))))),
+          "SemiJoinFullTableScanPrule:Join_Project_Filter_Project_Filter_Scan", new MatchJSPFPFS());
 
-  public static final RelOptRule JOIN_FILTER_PROJECT_FILTER_PROJECT_SCAN = new SemiJoinIndexScanPrule(
+  public static final RelOptRule JOIN_FILTER_PROJECT_FILTER_PROJECT_SCAN = new SemiJoinFullTableScanPrule(
           RelOptHelper.some(DrillJoinRel.class,
                   RelOptHelper.any(AbstractRelNode.class),
                   RelOptHelper.some(DrillAggregateRel.class,
@@ -82,72 +78,15 @@ public class SemiJoinIndexScanPrule extends AbstractIndexPrule {
                                           RelOptHelper.some(DrillProjectRel.class,
                                                   RelOptHelper.some(DrillFilterRel.class,
                                                           RelOptHelper.some(DrillProjectRel.class, RelOptHelper.any(DrillScanRel.class)))))))),
-          "SemiJoinIndexScanPrule:Join_Project_Filter_Project_Filter_Project_Scan", new MatchJSPFPFPS());
+          "SemiJoinFullTableScanPrule:Join_Project_Filter_Project_Filter_Project_Scan", new MatchJSPFPFPS());
 
   final private MatchFunction<SemiJoinIndexPlanCallContext> match;
 
-  private SemiJoinIndexScanPrule(RelOptRuleOperand operand,
-                                 String description,
-                                 MatchFunction<SemiJoinIndexPlanCallContext> match) {
+  private SemiJoinFullTableScanPrule(RelOptRuleOperand operand,
+                                     String description,
+                                     MatchFunction<SemiJoinIndexPlanCallContext> match) {
     super(operand, description);
     this.match = match;
-  }
-
-  private static class SemiJoinCoveringIndexPlanGenerator implements IndexPlanGenerator {
-    private final SemiJoinIndexPlanCallContext context;
-
-    private SemiJoinCoveringIndexPlanGenerator(SemiJoinIndexPlanCallContext context) {
-      this.context = context;
-    }
-
-    @Override
-    public AbstractIndexPlanGenerator getCoveringIndexGen(FunctionalIndexInfo functionInfo,
-                                                          IndexGroupScan indexGroupScan,
-                                                          RexNode indexCondition,
-                                                          RexNode remainderCondition,
-                                                          RexBuilder builder, PlannerSettings settings) {
-      return new SemiJoinToCoveringIndexScanGenerator(context, functionInfo, indexGroupScan,
-              indexCondition, remainderCondition, builder, settings);
-    }
-
-    @Override
-    public AbstractIndexPlanGenerator getNonCoveringIndexGen(IndexDescriptor indexDesc,
-                                                             IndexGroupScan indexGroupScan,
-                                                             RexNode indexCondition,
-                                                             RexNode remainderCondition,
-                                                             RexNode totalCondition,
-                                                             RexBuilder builder, PlannerSettings settings) {
-      throw new RuntimeException();
-    }
-  }
-
-  private static class SemiJoinNonCoveringIndexPlanGenerator implements IndexPlanGenerator {
-    private final SemiJoinIndexPlanCallContext context;
-
-    private SemiJoinNonCoveringIndexPlanGenerator(SemiJoinIndexPlanCallContext context) {
-      this.context = context;
-    }
-
-    @Override
-    public AbstractIndexPlanGenerator getCoveringIndexGen(FunctionalIndexInfo functionInfo,
-                                                          IndexGroupScan indexGroupScan,
-                                                          RexNode indexCondition,
-                                                          RexNode remainderCondition,
-                                                          RexBuilder builder, PlannerSettings settings) {
-      return new SemiJoinToRowKeyJoinGenerator(context, functionInfo, indexGroupScan,
-              indexCondition, remainderCondition, builder, settings);
-    }
-
-    @Override
-    public AbstractIndexPlanGenerator getNonCoveringIndexGen(IndexDescriptor indexDesc,
-                                                             IndexGroupScan indexGroupScan,
-                                                             RexNode indexCondition,
-                                                             RexNode remainderCondition,
-                                                             RexNode totalCondition,
-                                                             RexBuilder builder, PlannerSettings settings) {
-      return new SemiJoinMergeRowKeyJoinGenerator(context, indexDesc, indexGroupScan, indexCondition,
-              remainderCondition, totalCondition, builder, settings);
-    }
   }
 
   private static class MatchJSPFPFPS extends AbstractMatchFunction<SemiJoinIndexPlanCallContext> {
@@ -160,7 +99,7 @@ public class SemiJoinIndexScanPrule extends AbstractIndexPrule {
       DrillProjectRel upperProject = call.rel(3);
       DrillFilterRel upperFilter = call.rel(4);
       DrillProjectRel lowerProject = call.rel(5);
-      DrillFilterRel lowerFilter= call.rel(6);
+      DrillFilterRel lowerFilter = call.rel(6);
       DrillProjectRel lowerProjectAboveScan = call.rel(7);
       DrillScanRel rightRel = call.rel(8);
 
@@ -206,9 +145,9 @@ public class SemiJoinIndexScanPrule extends AbstractIndexPrule {
       projectHasFlatten(lowerProject, false, flattenMap, nonFlattenExprs);
 
       FlattenIndexPlanCallContext rightSideContext = new FlattenIndexPlanCallContext(call, upperProject,
-              upperFilter, lowerProject,lowerFilter, lowerProjectAboveScan, rightScan, flattenMap, nonFlattenExprs);
+              upperFilter, lowerProject, lowerFilter, lowerProjectAboveScan, rightScan, flattenMap, nonFlattenExprs);
       SemiJoinIndexPlanCallContext idxContext = new SemiJoinIndexPlanCallContext(call, join, distinct, this.context, rightSideContext);
-      idxContext.setCoveringIndexPlanApplicable(!projectHasFlatten(context.lowerProject, true, null,null) &&
+      idxContext.setCoveringIndexPlanApplicable(!projectHasFlatten(context.lowerProject, true, null, null) &&
               !projectHasFlatten(context.upperProject, true, null, null));
       return idxContext;
     }
@@ -224,7 +163,7 @@ public class SemiJoinIndexScanPrule extends AbstractIndexPrule {
       DrillProjectRel upperProject = call.rel(3);
       DrillFilterRel upperFilter = call.rel(4);
       DrillProjectRel lowerProject = call.rel(5);
-      DrillFilterRel lowerFilter= call.rel(6);
+      DrillFilterRel lowerFilter = call.rel(6);
       DrillScanRel rightRel = call.rel(7);
 
       IndexLogicalPlanCallContext context = IndexPlanUtils.generateContext(call, call.rel(1), logger);
@@ -268,9 +207,9 @@ public class SemiJoinIndexScanPrule extends AbstractIndexPrule {
       projectHasFlatten(lowerProject, false, flattenMap, nonFlattenExprs);
 
       FlattenIndexPlanCallContext rightSideContext = new FlattenIndexPlanCallContext(call, upperProject,
-              upperFilter, lowerProject,lowerFilter, rightScan, flattenMap, nonFlattenExprs);
+              upperFilter, lowerProject, lowerFilter, rightScan, flattenMap, nonFlattenExprs);
       SemiJoinIndexPlanCallContext idxContext = new SemiJoinIndexPlanCallContext(call, join, distinct, this.context, rightSideContext);
-      idxContext.setCoveringIndexPlanApplicable(!projectHasFlatten(context.lowerProject, true, null,null) &&
+      idxContext.setCoveringIndexPlanApplicable(!projectHasFlatten(context.lowerProject, true, null, null) &&
               !projectHasFlatten(context.upperProject, true, null, null));
       return idxContext;
     }
@@ -333,7 +272,7 @@ public class SemiJoinIndexScanPrule extends AbstractIndexPrule {
 
       SemiJoinIndexPlanCallContext idxContext = new SemiJoinIndexPlanCallContext(call, join, distinct,
               this.context, rightSideContext);
-      idxContext.setCoveringIndexPlanApplicable(!projectHasFlatten(context.lowerProject, true, null,null) &&
+      idxContext.setCoveringIndexPlanApplicable(!projectHasFlatten(context.lowerProject, true, null, null) &&
               !projectHasFlatten(context.upperProject, true, null, null));
       return idxContext;
     }
@@ -356,14 +295,16 @@ public class SemiJoinIndexScanPrule extends AbstractIndexPrule {
       if (context == null) {
         logger.warn("Covering Index Scan cannot be applied as FlattenIndexPlanContext is null");
       } else {
-        if (FlattenToIndexScanPrule.FILTER_PROJECT_SCAN.doOnMatch(context, new SemiJoinCoveringIndexPlanGenerator(indexContext))) {
-          return;
-        }
+        RexBuilder builder = context.getFilterAboveFlatten().getCluster().getRexBuilder();
+        RexNode condition = FlattenConditionUtils.composeCondition(context, builder);
+        AbstractIndexPlanGenerator planGen = new CoveringPlanGenerator(indexContext, condition,
+                builder, PrelUtil.getPlannerSettings(indexContext.call.getPlanner()));
+      try {
+        indexContext.call.transformTo(planGen.convertChild(null,null));
+      } catch (Exception e) {
+        logger.warn("Exception while trying to generate covering index plan", e);
+      }
       }
     }
-
-    //As we couldn't generate a single table scan for the join,
-    //try index planning by only considering the PFPS.
-    FlattenToIndexScanPrule.FILTER_PROJECT_SCAN.doOnMatch(indexContext.rightSide, new SemiJoinNonCoveringIndexPlanGenerator(indexContext));
   }
 }
