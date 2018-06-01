@@ -24,7 +24,6 @@ import org.apache.calcite.rel.RelNode;
 import org.apache.calcite.rel.core.Project;
 import org.apache.calcite.rel.logical.LogicalProject;
 import org.apache.calcite.rex.RexUtil;
-import org.apache.calcite.sql.SqlKind;
 import org.apache.calcite.tools.RelBuilder;
 import org.apache.calcite.util.Permutation;
 import org.apache.drill.exec.expr.fn.FunctionImplementationRegistry;

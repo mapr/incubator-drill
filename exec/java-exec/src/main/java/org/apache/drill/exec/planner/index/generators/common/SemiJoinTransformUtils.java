@@ -32,6 +32,7 @@ import org.apache.calcite.rex.RexUtil;
 import org.apache.calcite.util.Pair;
 import org.apache.commons.collections.ListUtils;
 import org.apache.drill.common.expression.SchemaPath;
+import org.apache.drill.exec.expr.fn.FunctionImplementationRegistry;
 import org.apache.drill.exec.planner.common.DrillRelOptUtil;
 import org.apache.drill.exec.planner.index.FlattenIndexPlanCallContext;
 import org.apache.drill.exec.planner.index.IndexPlanUtils;
@@ -41,8 +42,12 @@ import org.apache.drill.exec.planner.logical.DrillFilterRel;
 import org.apache.drill.exec.planner.logical.DrillProjectRel;
 import org.apache.drill.exec.planner.logical.DrillRel;
 import org.apache.drill.exec.planner.logical.DrillScanRel;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.Map;
 
 import static org.apache.drill.exec.planner.logical.DrillRel.DRILL_LOGICAL;
@@ -50,6 +55,7 @@ import static org.apache.drill.exec.planner.logical.DrillRel.DRILL_LOGICAL;
 public class SemiJoinTransformUtils {
 
   public static FlattenIndexPlanCallContext transformJoinToSingleTableScan(SemiJoinIndexPlanCallContext context,
+                                                                           FunctionImplementationRegistry functionRegistry,
                                                                            org.slf4j.Logger logger) {
     DrillScanRel newScan = null;
     DrillFilterRel filterBelowFlatten = null;
@@ -68,7 +74,7 @@ public class SemiJoinTransformUtils {
       left = SemiJoinIndexPlanUtils.getProject(left, (DrillProjectRel)null);
       right = SemiJoinIndexPlanUtils.getProject(right, context.rightSide.getLeafProjectAboveScan());
       newScanInfo = constructProject(context.join.getCluster(), newScanInfo.left, newScanInfo.right,
-              (DrillProjectRel)left, (DrillProjectRel)right, true);
+              (DrillProjectRel)left, (DrillProjectRel)right, functionRegistry, true);
       projectAboveScan = (DrillProjectRel)newScanInfo.left;
     }
 
@@ -83,7 +89,7 @@ public class SemiJoinTransformUtils {
     DrillRel leftLowerProject = SemiJoinIndexPlanUtils.getProject(left, context.leftSide.lowerProject);
     DrillRel rightLowerProject = SemiJoinIndexPlanUtils.getProject(right, context.rightSide.lowerProject);
     Pair<DrillRel, Map<Integer, Integer>> lowerProjInfo = constructProject(context.join.getCluster(), newScanInfo.left, newScanInfo.right,
-            (DrillProjectRel)leftLowerProject, (DrillProjectRel)rightLowerProject, true);
+            (DrillProjectRel)leftLowerProject, (DrillProjectRel)rightLowerProject, functionRegistry, true);
 
     DrillRel leftFilter = SemiJoinIndexPlanUtils.getFilter(leftLowerProject, context.leftSide.filter);
     DrillRel rightFilter = SemiJoinIndexPlanUtils.getFilter(rightLowerProject, context.rightSide.filter);
@@ -93,7 +99,7 @@ public class SemiJoinTransformUtils {
     DrillProjectRel leftUpperProject = SemiJoinIndexPlanUtils.getProject(leftFilter, context.leftSide.upperProject);
     DrillProjectRel rightUpperProject = SemiJoinIndexPlanUtils.getProject(rightFilter, context.rightSide.upperProject);
     Pair<DrillRel, Map<Integer, Integer>> upperProjectInfo = constructProject(context.join.getCluster(), filterInfo.left, filterInfo.right,
-            leftUpperProject, rightUpperProject, false);
+            leftUpperProject, rightUpperProject, functionRegistry,false);
     Map<String, RexCall> flattenMap = Maps.newHashMap();
     List<RexNode> nonFlattenExprs = Lists.newArrayList();
     AbstractMatchFunction.projectHasFlatten((DrillProjectRel) lowerProjInfo.left, false, flattenMap, nonFlattenExprs);
@@ -120,14 +126,15 @@ public class SemiJoinTransformUtils {
   }
 
   public static Pair<DrillRel, Map<Integer,Integer>> constructProject(RelOptCluster cluster, DrillRel newScan, Map<Integer, Integer> inputColMap,
-                                                                DrillProjectRel leftProject, DrillProjectRel rightProject, boolean uniquify) {
+                                                                      DrillProjectRel leftProject, DrillProjectRel rightProject,
+                                                                      FunctionImplementationRegistry functionRegistry, boolean uniquify) {
     List<RexNode> leftProjects = leftProject.getProjects();
     List<RexNode> rightProjects = IndexPlanUtils.projectsTransformer(leftProjects.size(), cluster.getRexBuilder(),
             rightProject.getProjects(), rightProject.getInput().getRowType());
     List<String> leftProjectsNames = leftProject.getRowType().getFieldNames();
     List<String> rightProjectsNames = rightProject.getRowType().getFieldNames();
     Pair<Pair<List<RexNode>, List<String>>, Map<Integer, Integer>> normalizedInfo = normalize(cluster.getRexBuilder(),
-            ListUtils.union(leftProjects, rightProjects), uniquify,
+            ListUtils.union(leftProjects, rightProjects), functionRegistry, uniquify,
             ListUtils.union(leftProjectsNames, rightProjectsNames), inputColMap);
 
     Project proj = (Project) RelOptUtil.createProject(newScan, normalizedInfo.left.left, normalizedInfo.left.right);
@@ -171,7 +178,6 @@ public class SemiJoinTransformUtils {
     List<RelDataType> uniqueTypes = Lists.newArrayList();
     List<String> uniqueCols = Lists.newArrayList();
 
-
     int index = 0;
     for (int i=0;i<columns.size(); i++) {
       String columnName = columns.get(i);
@@ -199,6 +205,7 @@ public class SemiJoinTransformUtils {
    * @return transformed expressions with respect to fieldRefMap and column names.
    */
   public static Pair<Pair<List<RexNode>, List<String>>, Map<Integer, Integer>> normalize(RexBuilder builder, List<RexNode> exprs,
+                                                                                   FunctionImplementationRegistry functionRegistry,
                                                                                    boolean uniquify, List<String> fieldNames,
                                                                                    Map<Integer, Integer> fieldRefMap) {
     Preconditions.checkArgument(exprs.size() == fieldNames.size());
@@ -212,8 +219,10 @@ public class SemiJoinTransformUtils {
     int index = 0;
     for (int i=0;i<exprs.size();i++) {
       RexNode transFormedExpr = transformer.go(exprs.get(i));
+      //any complex condition like Flatten should not be simplified, doing so will change the semantics of the query.
+      boolean isComplexFunction = isComplexFunction(transFormedExpr, functionRegistry);
       Integer colIndex = uniqueColMap.putIfAbsent(transFormedExpr.toString(), index);
-      if (!uniquify || colIndex == null) {
+      if (!uniquify || colIndex == null || isComplexFunction) {
         uniqueExprs.add(transFormedExpr);
         uniqueFieldNames.add(fieldNames.get(i));
         colIndexMap.put(i, index);
@@ -225,6 +234,16 @@ public class SemiJoinTransformUtils {
 
     return Pair.of(Pair.of(uniqueExprs, uniqueFieldNames), colIndexMap);
   }
+
+  public static boolean isComplexFunction(RexNode expr, FunctionImplementationRegistry functionRegistry) {
+    if (expr instanceof RexCall) {
+      if (functionRegistry.isFunctionComplexOutput(((RexCall) expr).getOperator().getName())) {
+        return true;
+      }
+    }
+    return false;
+  }
+
 
   public static List<RelDataType> relDataTypeFromRelFieldType(List<RelDataTypeField> fieldTypes) {
     List<RelDataType> result = Lists.newArrayList();

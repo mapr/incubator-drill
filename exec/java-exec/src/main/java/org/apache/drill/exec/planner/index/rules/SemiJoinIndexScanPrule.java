@@ -23,6 +23,7 @@ import org.apache.calcite.plan.RelOptRuleCall;
 import org.apache.calcite.plan.RelOptRule;
 import org.apache.calcite.plan.RelOptRuleOperand;
 import org.apache.calcite.rel.AbstractRelNode;
+import org.apache.drill.exec.expr.fn.FunctionImplementationRegistry;
 import org.apache.drill.exec.physical.base.IndexGroupScan;
 import org.apache.drill.exec.planner.index.FlattenIndexPlanCallContext;
 import org.apache.drill.exec.planner.index.SemiJoinIndexPlanCallContext;
@@ -54,42 +55,62 @@ import java.util.Map;
 public class SemiJoinIndexScanPrule extends AbstractIndexPrule {
   static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(SemiJoinIndexScanPrule.class);
 
-  public static final RelOptRule JOIN_FILTER_PROJECT_SCAN = new SemiJoinIndexScanPrule(
-          RelOptHelper.some(DrillJoinRel.class,
-                  RelOptHelper.any(AbstractRelNode.class),
-                  RelOptHelper.some(DrillAggregateRel.class,
-                          RelOptHelper.some(DrillProjectRel.class,
-                              RelOptHelper.some(DrillFilterRel.class,
-                                  RelOptHelper.some(DrillProjectRel.class, RelOptHelper.any(DrillScanRel.class)))))),
-          "SemiJoinIndexScanPrule:Join_Project_Filter_Project_Scan", new MatchJSPFPS());
-
-  public static final RelOptRule JOIN_FILTER_PROJECT_FILTER_SCAN = new SemiJoinIndexScanPrule(
-          RelOptHelper.some(DrillJoinRel.class,
-                  RelOptHelper.any(AbstractRelNode.class),
-                  RelOptHelper.some(DrillAggregateRel.class,
-                          RelOptHelper.some(DrillProjectRel.class,
-                                  RelOptHelper.some(DrillFilterRel.class,
-                                          RelOptHelper.some(DrillProjectRel.class,
-                                                  RelOptHelper.some(DrillFilterRel.class ,RelOptHelper.any(DrillScanRel.class))))))),
-          "SemiJoinIndexScanPrule:Join_Project_Filter_Project_Filter_Scan", new MatchJSPFPFS());
-
-  public static final RelOptRule JOIN_FILTER_PROJECT_FILTER_PROJECT_SCAN = new SemiJoinIndexScanPrule(
-          RelOptHelper.some(DrillJoinRel.class,
-                  RelOptHelper.any(AbstractRelNode.class),
-                  RelOptHelper.some(DrillAggregateRel.class,
-                          RelOptHelper.some(DrillProjectRel.class,
-                                  RelOptHelper.some(DrillFilterRel.class,
-                                          RelOptHelper.some(DrillProjectRel.class,
-                                                  RelOptHelper.some(DrillFilterRel.class,
-                                                          RelOptHelper.some(DrillProjectRel.class, RelOptHelper.any(DrillScanRel.class)))))))),
-          "SemiJoinIndexScanPrule:Join_Project_Filter_Project_Filter_Project_Scan", new MatchJSPFPFPS());
+  private static RelOptRule JOIN_FILTER_PROJECT_SCAN = null;
+  private static RelOptRule JOIN_FILTER_PROJECT_FILTER_SCAN = null;
+  private static RelOptRule JOIN_FILTER_PROJECT_FILTER_PROJECT_SCAN = null;
 
   final private MatchFunction<SemiJoinIndexPlanCallContext> match;
+  final private FunctionImplementationRegistry functionRegistry;
+
+  public static List<RelOptRule> getRuleInstances(FunctionImplementationRegistry functionRegistry) {
+    if (JOIN_FILTER_PROJECT_SCAN == null) {
+      JOIN_FILTER_PROJECT_SCAN = new SemiJoinIndexScanPrule(
+              RelOptHelper.some(DrillJoinRel.class,
+                      RelOptHelper.any(AbstractRelNode.class),
+                      RelOptHelper.some(DrillAggregateRel.class,
+                              RelOptHelper.some(DrillProjectRel.class,
+                                      RelOptHelper.some(DrillFilterRel.class,
+                                              RelOptHelper.some(DrillProjectRel.class, RelOptHelper.any(DrillScanRel.class)))))),
+              "SemiJoinIndexScanPrule:Join_Project_Filter_Project_Scan", functionRegistry, new MatchJSPFPS());
+    }
+
+    if (JOIN_FILTER_PROJECT_FILTER_SCAN == null) {
+      JOIN_FILTER_PROJECT_FILTER_SCAN = new SemiJoinIndexScanPrule(
+              RelOptHelper.some(DrillJoinRel.class,
+                      RelOptHelper.any(AbstractRelNode.class),
+                      RelOptHelper.some(DrillAggregateRel.class,
+                              RelOptHelper.some(DrillProjectRel.class,
+                                      RelOptHelper.some(DrillFilterRel.class,
+                                              RelOptHelper.some(DrillProjectRel.class,
+                                                      RelOptHelper.some(DrillFilterRel.class ,RelOptHelper.any(DrillScanRel.class))))))),
+              "SemiJoinIndexScanPrule:Join_Project_Filter_Project_Filter_Scan", functionRegistry, new MatchJSPFPFS());
+    }
+
+    if (JOIN_FILTER_PROJECT_FILTER_PROJECT_SCAN == null) {
+      JOIN_FILTER_PROJECT_FILTER_PROJECT_SCAN = new SemiJoinIndexScanPrule(
+              RelOptHelper.some(DrillJoinRel.class,
+                      RelOptHelper.any(AbstractRelNode.class),
+                      RelOptHelper.some(DrillAggregateRel.class,
+                              RelOptHelper.some(DrillProjectRel.class,
+                                      RelOptHelper.some(DrillFilterRel.class,
+                                              RelOptHelper.some(DrillProjectRel.class,
+                                                      RelOptHelper.some(DrillFilterRel.class,
+                                                              RelOptHelper.some(DrillProjectRel.class, RelOptHelper.any(DrillScanRel.class)))))))),
+              "SemiJoinIndexScanPrule:Join_Project_Filter_Project_Filter_Project_Scan", functionRegistry, new MatchJSPFPFPS());
+    }
+
+    List<RelOptRule> rules = Lists.newArrayList();
+    rules.add(JOIN_FILTER_PROJECT_SCAN);
+    rules.add(JOIN_FILTER_PROJECT_FILTER_SCAN);
+    rules.add(JOIN_FILTER_PROJECT_FILTER_PROJECT_SCAN);
+    return rules;
+  }
 
   private SemiJoinIndexScanPrule(RelOptRuleOperand operand,
-                                 String description,
+                                 String description, FunctionImplementationRegistry functionRegistry,
                                  MatchFunction<SemiJoinIndexPlanCallContext> match) {
     super(operand, description);
+    this.functionRegistry = functionRegistry;
     this.match = match;
   }
 
@@ -351,7 +372,7 @@ public class SemiJoinIndexScanPrule extends AbstractIndexPrule {
 
   private void doOnMatch(SemiJoinIndexPlanCallContext indexContext) {
     if (indexContext.join != null) {
-      FlattenIndexPlanCallContext context = SemiJoinTransformUtils.transformJoinToSingleTableScan(indexContext, logger);
+      FlattenIndexPlanCallContext context = SemiJoinTransformUtils.transformJoinToSingleTableScan(indexContext, functionRegistry, logger);
       indexContext.set(context);
       if (context == null) {
         logger.warn("Covering Index Scan cannot be applied as FlattenIndexPlanContext is null");

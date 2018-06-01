@@ -448,10 +448,8 @@ public enum PlannerPhase {
             DbScanSortRemovalRule.INDEX_SORT_EXCHANGE_PROJ_SCAN,
             DbScanSortRemovalRule.INDEX_SORT_EXCHANGE_SCAN,
             DbScanSortRemovalRule.INDEX_SORT_SCAN,
-            DbScanSortRemovalRule.INDEX_SORT_PROJ_SCAN,
-            SemiJoinIndexScanPrule.JOIN_FILTER_PROJECT_FILTER_SCAN,
-            SemiJoinIndexScanPrule.JOIN_FILTER_PROJECT_FILTER_PROJECT_SCAN,
-            SemiJoinIndexScanPrule.JOIN_FILTER_PROJECT_SCAN)
+            DbScanSortRemovalRule.INDEX_SORT_PROJ_SCAN)
+        .addAll(SemiJoinIndexScanPrule.getRuleInstances(optimizerRulesContext.getFunctionRegistry()))
         .addAll(getComplexTypeFTSRules(ps))
         .build();
     return RuleSets.ofList(indexRules);
@@ -460,9 +458,7 @@ public enum PlannerPhase {
   static RuleSet getComplexTypeFTSRules(PlannerSettings ps) {
     if (ps.isComplexFTSEnabled()) {
       return RuleSets.ofList(ImmutableSet.<RelOptRule>builder()
-              .add(SemiJoinFullTableScanPrule.JOIN_FILTER_PROJECT_FILTER_PROJECT_SCAN,
-                      SemiJoinFullTableScanPrule.JOIN_FILTER_PROJECT_SCAN,
-                      SemiJoinFullTableScanPrule.JOIN_FILTER_PROJECT_FILTER_SCAN).build());
+              .addAll(SemiJoinFullTableScanPrule.getRuleInstances(ps.functionImplementationRegistry)).build());
     } else {
       return RuleSets.ofList(ImmutableSet.<RelOptRule>builder().build());
     }
