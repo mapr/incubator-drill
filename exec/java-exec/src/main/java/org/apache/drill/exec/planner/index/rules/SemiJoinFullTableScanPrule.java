@@ -46,6 +46,7 @@ import org.apache.drill.exec.planner.physical.PrelUtil;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 
 public class SemiJoinFullTableScanPrule extends AbstractIndexPrule {
@@ -316,7 +317,10 @@ public class SemiJoinFullTableScanPrule extends AbstractIndexPrule {
         logger.warn("Covering Index Scan cannot be applied as FlattenIndexPlanContext is null");
       } else {
         RexBuilder builder = context.getFilterAboveFlatten().getCluster().getRexBuilder();
-        RexNode condition = FlattenConditionUtils.composeCondition(context, builder);
+        FlattenConditionUtils.ComposedConditionInfo cInfo =
+            new FlattenConditionUtils.ComposedConditionInfo(builder);
+        FlattenConditionUtils.composeConditions(context, builder, cInfo);
+        RexNode condition = cInfo.getTotalCondition();
         AbstractIndexPlanGenerator planGen = new CoveringPlanGenerator(indexContext, condition,
                 builder, PrelUtil.getPlannerSettings(indexContext.call.getPlanner()));
         try {

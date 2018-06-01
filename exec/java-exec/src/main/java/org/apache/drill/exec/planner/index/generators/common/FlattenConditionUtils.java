@@ -20,6 +20,9 @@ package org.apache.drill.exec.planner.index.generators.common;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+
+import org.apache.calcite.plan.RelOptUtil;
 import org.apache.calcite.rel.type.RelDataType;
 import org.apache.calcite.rex.RexBuilder;
 import org.apache.calcite.rex.RexCall;
@@ -37,51 +40,196 @@ import org.apache.drill.exec.planner.logical.DrillProjectRel;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class FlattenConditionUtils {
 
   /**
-   * The composeCondition combines all the flatten and non-flatten conditions into one condition.
-   * It also changes the flatten column referenced in the flatten condition to ITEM($<fieldNo>, -1)
-   * @param indexContext
-   * @param builder
-   * @return
+   * A holder class to maintain artifacts related to filter conditions on flatten expressions
+   * and other conditions. It provides utility methods to combine multiple conditions as needed.
    */
-  public static RexNode composeCondition(FlattenIndexPlanCallContext indexContext, RexBuilder builder) {
-    if (indexContext.getFilterAboveFlatten() != null) {
-      FilterVisitor filterVisitor =
-              new FilterVisitor(indexContext.getFlattenMap(), indexContext.lowerProject, builder);
-      RexNode conditionFilterAboveFlatten = indexContext.getFilterAboveFlatten().getCondition().accept(filterVisitor);
+  public static class ComposedConditionInfo {
+    private RexBuilder builder;
+    private Map<String, RexNode> nameComposedCondMap = Maps.newHashMap();
+    private RexNode conditionBelowFlatten = null;
+    private List<RexNode> otherRemainderConjuncts = Lists.newArrayList();
 
-      // keep track of the exprs that were created representing filter exprs
-      // referencing flatten
-      indexContext.setFilterExprsReferencingFlatten(filterVisitor.getExprsReferencingFlatten());
+    public ComposedConditionInfo(RexBuilder builder) {
+      this.builder = builder;
+    }
 
-      if (indexContext.getFilterBelowFlatten() != null) {
-        RexNode conditionFilterBelowFlatten = indexContext.getFilterBelowFlatten().getCondition();
-        if (indexContext.getLeafProjectAboveScan() != null) {
-          FilterVisitor filterVisitor2 =
-                  new FilterVisitor(indexContext.getFlattenMap(), indexContext.getLeafProjectAboveScan(), builder);
-          conditionFilterBelowFlatten = indexContext.getFilterBelowFlatten().getCondition().accept(filterVisitor2);
+    public void addCondition(String name, RexNode c) {
+      nameComposedCondMap.put(name,  c);
+    }
 
-          // keep track of the relevant exprs in the filter that are referencing the
-          // child Project
-          indexContext.setRelevantExprsInLeafProject(filterVisitor2.getOtherExprs());
-        }
+    public void addOtherRemainderConjunct(RexNode c) {
+      otherRemainderConjuncts.add(c);
+    }
 
-        // compose a new condition using conjunction (this is valid since the above and below are 2 independent filters)
+    public void setConditionBelowFlatten(RexNode c) {
+      conditionBelowFlatten = c;
+    }
+
+    public Set<String> getFieldNamesWithFlatten() {
+      return nameComposedCondMap.keySet();
+    }
+
+    public int numEntries() {
+      return nameComposedCondMap.size();
+    }
+
+    public RexNode getMainFlattenCondition(String fieldNameWithFlatten) {
+      RexNode cond = nameComposedCondMap.get(fieldNameWithFlatten);
+      // compose a new condition by combining with the condition below flatten
+      if (conditionBelowFlatten != null) {
         RexNode combinedCondition = RexUtil.composeConjunction(builder,
-                ImmutableList.of(conditionFilterAboveFlatten, conditionFilterBelowFlatten), false);
+            ImmutableList.of(cond, conditionBelowFlatten), false);
         return combinedCondition;
-      } else {
-        return conditionFilterAboveFlatten;
       }
-    } else {
+      return cond;
+    }
+
+    public RexNode getRemainderFlattenCondition(String fieldNameWithFlatten) {
+      RexNode remainderCond = null;
+      List<RexNode> remainderList = Lists.newArrayList();
+      for (Map.Entry<String, RexNode> e : nameComposedCondMap.entrySet()) {
+        if ( !e.getKey().equals(fieldNameWithFlatten) ) {
+          remainderList.add(e.getValue());
+        }
+      }
+
+      remainderList.addAll(otherRemainderConjuncts);
+
+      if (remainderList.size() > 0) {
+        remainderCond = RexUtil.composeConjunction(builder, ImmutableList.copyOf(remainderList), false);
+      }
+
+      return remainderCond;
+
+    }
+
+    public RexNode getTotalCondition() {
+      List<RexNode> conjuncts = Lists.newArrayList();
+      for (Map.Entry<String, RexNode> e : nameComposedCondMap.entrySet()) {
+        conjuncts.add(e.getValue());
+      }
+
+      conjuncts.addAll(otherRemainderConjuncts);
+
+      if (conditionBelowFlatten != null) {
+        conjuncts.add(conditionBelowFlatten);
+      }
+      RexNode totalCondition = RexUtil.composeConjunction(builder, ImmutableList.copyOf(conjuncts), false);
+
+      return totalCondition;
+    }
+
+  }
+
+  /** Compose filter conditions by combining the filter above flatten and those below.  Suppose the query is:
+   *  ...(SELECT flatten(a) as f1, flatten(a) as f2 ..WHERE e > 5) WHERE f1.b > 20 AND f2.c < 50
+   * In this case we will create 2 RexNodes corresponding to following 2 filter conditions:
+   *    f1.b > 20 AND e > 5
+   *    f2.c < 50 AND e > 5
+   * These are kept in a map maintained by ComposedConditionInfo where the key of the map is the name of the
+   * project expression: 'f1' or 'f2' etc.
+   * Conditions that do not reference Flatten exprs are also saved in separate lists
+   *
+   * The RexNodes created for the Flatten filter conditions are of type ITEM($n, -1) where
+   * 'n' = field ordinal from the child
+   */
+  public static void composeConditions(FlattenIndexPlanCallContext indexContext, RexBuilder builder,
+      ComposedConditionInfo cInfo) {
+    if (indexContext.getFilterAboveFlatten() == null) {
       // return null because filter below flatten is supposed to be handled by a separate
       // index planning rule
-      return null;
+      return;
     }
+    RexNode origConditionAboveFlatten = indexContext.getFilterAboveFlatten().getCondition();
+
+    // break up the condition into conjuncts
+    List<RexNode> conjuncts = RelOptUtil.conjunctions(origConditionAboveFlatten);
+
+    Map<String, List<RexNode>> newConjunctsMap = Maps.newHashMap();
+    Map<String, List<RexNode>> exprsReferencingFlattenMap = Maps.newHashMap();
+
+    // process each conjunct separately
+    for (RexNode c : conjuncts) {
+      FilterVisitor  filterVisitor =
+          new FilterVisitor(indexContext.getFlattenMap(), indexContext.lowerProject, builder);
+
+      RexNode conjunctAboveFlatten = c.accept(filterVisitor);
+
+      // if the number of flatten exprs referenced by a single conjunct is > 1 then currently we
+      // are not supporting this
+      Preconditions.checkArgument(filterVisitor.getExprsReferencingFlattenMap().keySet().size() <= 1,
+          "This type of predicate is not currently supported");
+
+      if (filterVisitor.getExprsReferencingFlattenMap().size() == 0) {
+        // since this conjunct is not referencing Flatten, save this in the 'other remainder' list
+        cInfo.addOtherRemainderConjunct(conjunctAboveFlatten);
+        continue;
+      }
+
+      // save the results from each iteration of the filter visitor such that
+      // consolidated information can be used further
+      for (Map.Entry<String, List<RexNode>> e :
+        filterVisitor.getExprsReferencingFlattenMap().entrySet()) {
+
+        if (newConjunctsMap.containsKey(e.getKey())) {
+          List<RexNode> newConjuncts = newConjunctsMap.get(e.getKey());
+          newConjuncts.add(conjunctAboveFlatten);
+        } else {
+          newConjunctsMap.put(e.getKey(), Lists.newArrayList(conjunctAboveFlatten));
+        }
+
+        if (exprsReferencingFlattenMap.containsKey(e.getKey())) {
+          List<RexNode> exprs = exprsReferencingFlattenMap.get(e.getKey());
+          exprs.addAll(e.getValue());
+        } else {
+          exprsReferencingFlattenMap.put(e.getKey(), e.getValue());
+        }
+      }
+    }
+
+    // Since there could be multiple conjuncts involving the same flatten expression
+    // (e.g f1.b > 20, f1.c < 30 etc.), consolidate the conjuncts into a single RexNode
+    // for each of the flatten expression
+    for (Map.Entry<String, List<RexNode>> e : newConjunctsMap.entrySet()) {
+      List<RexNode> newConjuncts = e.getValue();
+      RexNode cond = RexUtil.composeConjunction(builder,
+          ImmutableList.copyOf(newConjuncts), false);
+      cInfo.addCondition(e.getKey(), cond);
+    }
+
+    List<RexNode> exprsReferencingFlatten = Lists.newArrayList();
+    for (Map.Entry<String, List<RexNode>> e : exprsReferencingFlattenMap.entrySet()) {
+      exprsReferencingFlatten.addAll(e.getValue());
+    }
+
+    // keep track of the exprs that were created representing filter exprs referencing flatten
+    indexContext.setFilterExprsReferencingFlatten(exprsReferencingFlatten);
+
+    // if only filters above Flatten are present, return the information gathered so far
+    if (indexContext.getFilterBelowFlatten() == null) {
+      return ;
+    }
+
+    // handle the filters below the flatten
+    RexNode conditionFilterBelowFlatten = indexContext.getFilterBelowFlatten().getCondition();
+    if (indexContext.getLeafProjectAboveScan() != null) {
+      FilterVisitor  filterVisitor2 =
+          new FilterVisitor(indexContext.getFlattenMap(), indexContext.getLeafProjectAboveScan(), builder);
+      conditionFilterBelowFlatten = indexContext.getFilterBelowFlatten().getCondition().accept(filterVisitor2);
+
+      // keep track of the relevant exprs in the filter that are referencing the
+      // child Project
+      indexContext.setRelevantExprsInLeafProject(filterVisitor2.getOtherExprs());
+    }
+
+    cInfo.setConditionBelowFlatten(conditionFilterBelowFlatten);
   }
+
 
   /**
    * <p>
@@ -106,22 +254,23 @@ public class FlattenConditionUtils {
    *   <li>new expr: ITEM(ITEM($0, -1), 'b') </li>
    * </p>
    */
-  public static class FilterVisitor extends RexVisitorImpl<RexNode> {
+  private static class FilterVisitor extends RexVisitorImpl<RexNode> {
 
     private final Map<String, RexCall> flattenMap;
     private final DrillProjectRel project;
     private final RexBuilder builder;
 
-    // list of expressions in the filter that are referencing a
-    // FLATTEN expr from the child Project
-    private final List<RexNode> exprsReferencingFlatten = Lists.newArrayList();
+    // The key of the map is the name of the Project expression for Flatten.
+    // Value is the list of expressions in the filter that are referencing that particular
+    // FLATTEN expr from the child Project.
+    private final Map<String, List<RexNode>> exprsReferencingFlattenMap = Maps.newHashMap();
 
     // list of expressions in the filter that are _NOT_ referencing
     // FLATTEN expr from the child Project
     private final List<RexNode> otherExprs = Lists.newArrayList();
 
     public FilterVisitor(Map<String, RexCall> flattenMap, DrillProjectRel project,
-                         RexBuilder builder) {
+        RexBuilder builder) {
       super(true);
       this.project = project;
       this.flattenMap = flattenMap;
@@ -155,24 +304,33 @@ public class FlattenConditionUtils {
 
     private RexNode buildArrayItemRef(RexCall item) {
       RexVisitor<RexNode> visitor =
-              new RexVisitorImpl<RexNode>(true) {
-                @Override public RexNode visitCall(RexCall ref) {
-                  if (SqlStdOperatorTable.ITEM.equals(ref.getOperator()) &&
-                          ref.getOperands().get(0) instanceof RexInputRef) {
-                    RexNode arrayRef = makeArrayItem(ref);
-                    if (arrayRef != null) {
-                      return arrayRef;
-                    }
-                  }
-                  return builder.makeCall(ref.getType(), ref.getOperator(), visitChildren(ref, this));
-                }
+          new RexVisitorImpl<RexNode>(true) {
+        @Override public RexNode visitCall(RexCall ref) {
+          if (SqlStdOperatorTable.ITEM.equals(ref.getOperator()) &&
+              ref.getOperands().get(0) instanceof RexInputRef) {
+            RexNode arrayRef = makeArrayItem(ref);
+            if (arrayRef != null) {
+              return arrayRef;
+            }
+          }
+          return builder.makeCall(ref.getType(), ref.getOperator(), visitChildren(ref, this));
+        }
 
-                @Override
-                public RexNode visitLiteral(RexLiteral literal) {
-                  return literal;
-                }
-              };
+        @Override
+        public RexNode visitLiteral(RexLiteral literal) {
+          return literal;
+        }
+      };
       RexNode arrayItem = item.accept(visitor);
+
+      // save the mapping of the project field name to the arrayItem expr created
+      RexInputRef inputRef = (RexInputRef) item.getOperands().get(0);
+      String projectFieldName = project.getRowType().getFieldNames().get(inputRef.getIndex());
+      List<RexNode> exprsReferencingFlatten = null;
+      if ((exprsReferencingFlatten = exprsReferencingFlattenMap.get(projectFieldName)) == null) {
+        exprsReferencingFlatten = Lists.newArrayList();
+        exprsReferencingFlattenMap.put(projectFieldName, exprsReferencingFlatten);
+      }
       exprsReferencingFlatten.add(arrayItem);
       return arrayItem;
     }
@@ -204,6 +362,11 @@ public class FlattenConditionUtils {
         RexLiteral right = builder.makeBigintLiteral(BigDecimal.valueOf(-1));
         RexNode result = builder.makeCall(inputRef.getType(), SqlStdOperatorTable.ITEM, ImmutableList.of(left, right));
 
+        List<RexNode> exprsReferencingFlatten = null;
+        if ((exprsReferencingFlatten = exprsReferencingFlattenMap.get(projectFieldName)) == null) {
+          exprsReferencingFlatten = Lists.newArrayList();
+          exprsReferencingFlattenMap.put(projectFieldName, exprsReferencingFlatten);
+        }
         // save the individual ITEM exprs for future use
         exprsReferencingFlatten.add(result);
         return result;
@@ -231,8 +394,8 @@ public class FlattenConditionUtils {
       return ImmutableList.copyOf(children);
     }
 
-    public List<RexNode> getExprsReferencingFlatten() {
-      return exprsReferencingFlatten;
+    public Map<String, List<RexNode>> getExprsReferencingFlattenMap() {
+      return exprsReferencingFlattenMap;
     }
 
     public List<RexNode> getOtherExprs() {

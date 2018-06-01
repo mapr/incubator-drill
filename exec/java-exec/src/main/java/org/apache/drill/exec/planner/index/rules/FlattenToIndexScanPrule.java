@@ -19,6 +19,7 @@ package org.apache.drill.exec.planner.index.rules;
 
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.Maps;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import org.apache.calcite.plan.RelOptRule;
 import org.apache.calcite.plan.RelOptRuleCall;
@@ -51,8 +52,11 @@ import org.apache.drill.exec.planner.physical.PrelUtil;
 import org.apache.calcite.rex.RexBuilder;
 import org.apache.calcite.rex.RexCall;
 import org.apache.calcite.rex.RexNode;
+import org.apache.calcite.rex.RexUtil;
+
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 public class FlattenToIndexScanPrule extends AbstractIndexPrule {
@@ -256,23 +260,49 @@ public class FlattenToIndexScanPrule extends AbstractIndexPrule {
 
     RexBuilder builder = indexContext.getFilterAboveFlatten().getCluster().getRexBuilder();
 
-    // create a combined condition using the upper and lower filters
-    RexNode condition = FlattenConditionUtils.composeCondition(indexContext, builder);
+    FlattenConditionUtils.ComposedConditionInfo cInfo =
+        new FlattenConditionUtils.ComposedConditionInfo(builder);
 
-    if (condition == null) {
+    // compose new conditions, one for each Flatten expr and combining with
+    // conditions below the Flatten
+    FlattenConditionUtils.composeConditions(indexContext, builder, cInfo);
+
+    if (cInfo.numEntries() == 0) {
       return false;
     }
 
-    // the index analysis code only understands binary operators, so the condition should be
-    // rewritten to convert N-ary ANDs and ORs into binary ANDs and ORs
-    RewriteAsBinaryOperators visitor = new RewriteAsBinaryOperators(true, builder);
-    condition = condition.accept(visitor);
-
     if (indexCollection.supportsIndexSelection()) {
-      try {
-        result = processWithIndexSelection(indexContext, settings, condition, indexCollection, builder, generator);
-      } catch(Exception e) {
-        logger.warn("Exception while doing index planning ", e);
+      Set<String> fieldNamesWithFlatten = cInfo.getFieldNamesWithFlatten();
+      boolean nonCoveringOnly = false;
+      if (fieldNamesWithFlatten.size() > 1) {
+        // For the AND-ed filter conditions, if the number of unique Flatten field names is > 1 then it means
+        // that we cannot generate a covering index plan.  Set the flag appropriately so we can skip covering.
+        nonCoveringOnly = true;
+      }
+
+      // Process each unique flatten field expression independently for index planning.  There may be multiple
+      // index plans created and let costing decide which is cheaper.
+      for (String fieldName : fieldNamesWithFlatten) {
+        RexNode mainFlattenCondition = cInfo.getMainFlattenCondition(fieldName);
+        RexNode remainderFlattenCondition = cInfo.getRemainderFlattenCondition(fieldName);
+
+        // the index analysis code only understands binary operators, so the condition should be
+        // rewritten to convert N-ary ANDs and ORs into binary ANDs and ORs
+        RewriteAsBinaryOperators visitor = new RewriteAsBinaryOperators(true, builder);
+        mainFlattenCondition = mainFlattenCondition.accept(visitor);
+
+        try {
+          result = processWithIndexSelection(indexContext,
+              settings,
+              mainFlattenCondition,
+              remainderFlattenCondition,
+              indexCollection,
+              builder,
+              generator,
+              nonCoveringOnly);
+        } catch(Exception e) {
+          logger.warn("Exception while doing index planning ", e);
+        }
       }
     } else {
       throw new UnsupportedOperationException("Index collection must support index selection");
@@ -285,21 +315,23 @@ public class FlattenToIndexScanPrule extends AbstractIndexPrule {
 
   public boolean processWithIndexSelection(IndexLogicalPlanCallContext indexContext,
                                           PlannerSettings settings,
-                                          RexNode condition,
+                                          RexNode mainFlattenCondition,
+                                          RexNode remainderFlattenCondition,
                                           IndexCollection collection,
                                           RexBuilder builder,
-                                          IndexPlanGenerator generator) {
+                                          IndexPlanGenerator generator,
+                                          boolean nonCoveringOnly) {
     boolean result = false;
     DrillScanRel scan = indexContext.scan;
-    IndexConditionInfo.Builder infoBuilder = IndexConditionInfo.newBuilder(condition,
+    IndexConditionInfo.Builder infoBuilder = IndexConditionInfo.newBuilder(mainFlattenCondition,
             collection, builder, indexContext.scan);
 
-    if (!analyzeCondition(indexContext, collection, condition, builder, infoBuilder, logger)) {
+    if (!analyzeCondition(indexContext, collection, mainFlattenCondition, builder, infoBuilder, logger)) {
       return false;
     }
 
     if (!initializeStatistics(scan, settings, indexContext,
-        condition, indexContext.isValidIndexHint, logger)) {
+        mainFlattenCondition, indexContext.isValidIndexHint, logger)) {
       return false;
     }
 
@@ -317,6 +349,7 @@ public class FlattenToIndexScanPrule extends AbstractIndexPrule {
 
     GroupScan primaryTableScan = indexContext.scan.getGroupScan();
 
+    if (!nonCoveringOnly) {
     try {
       for (IndexGroup index : coveringIndexes) {
         IndexProperties indexProps = index.getIndexProps().get(0);
@@ -326,6 +359,14 @@ public class FlattenToIndexScanPrule extends AbstractIndexPrule {
 
         RexNode indexCondition = indexProps.getLeadingColumnsFilter();
         RexNode remainderCondition = indexProps.getTotalRemainderFilter();
+
+        // combine this remainder condition with the remainder flatten condition supplied by caller
+        if (remainderFlattenCondition != null) {
+          remainderCondition = remainderCondition == null ? remainderFlattenCondition :
+              RexUtil.composeConjunction(builder, ImmutableList.of(remainderCondition,
+                  remainderFlattenCondition), false);
+        }
+
         // Copy primary table statistics to index table
         idxScan.setStatistics(((DbGroupScan) scan.getGroupScan()).getStatistics());
         logger.info("index_plan_info: Generating covering index plan for index: {}, query condition {}", indexDesc.getIndexName(), indexCondition.toString());
@@ -334,6 +375,10 @@ public class FlattenToIndexScanPrule extends AbstractIndexPrule {
       }
     } catch (Exception e) {
       logger.warn("Exception while trying to generate covering index plan", e);
+    }
+    } else {
+      // add the covering indexes (if any) to the list of non-covering indexes
+      nonCoveringIndexes.addAll(coveringIndexes);
     }
 
     // Create non-covering index plans.
@@ -349,6 +394,13 @@ public class FlattenToIndexScanPrule extends AbstractIndexPrule {
 
           RexNode indexCondition = indexProps.getLeadingColumnsFilter();
           RexNode remainderCondition = indexProps.getTotalRemainderFilter();
+
+          // combine this remainder condition with the remainder flatten condition supplied by caller
+          if (remainderFlattenCondition != null) {
+            remainderCondition = remainderCondition == null ? remainderFlattenCondition :
+                RexUtil.composeConjunction(builder, ImmutableList.of(remainderCondition,
+                    remainderFlattenCondition), false);
+          }
 
           // Combine the index and remainder conditions such that the total condition can be re-applied
           RexNode totalCondition = IndexPlanUtils.getTotalFilter(indexCondition, remainderCondition, builder);
