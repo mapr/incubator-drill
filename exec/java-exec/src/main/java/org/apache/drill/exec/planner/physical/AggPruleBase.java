@@ -19,10 +19,9 @@ package org.apache.drill.exec.planner.physical;
 
 import java.util.List;
 
-import com.google.common.collect.ImmutableList;
-import org.apache.calcite.plan.RelTrait;
 import org.apache.calcite.plan.RelTraitSet;
 import org.apache.calcite.rel.InvalidRelException;
+import org.apache.calcite.rel.RelCollation;
 import org.apache.calcite.sql.SqlKind;
 
 import org.apache.calcite.util.ImmutableBitSet;
@@ -63,7 +62,7 @@ public abstract class AggPruleBase extends Prule {
   // Create 2 phase aggr plan for aggregates such as SUM, MIN, MAX
   // If any of the aggregate functions are not one of these, then we
   // currently won't generate a 2 phase plan.
-  protected boolean create2PhasePlan(RelOptRuleCall call, DrillAggregateRel aggregate) {
+  public static boolean create2PhasePlan(RelOptRuleCall call, DrillAggregateRel aggregate) {
     PlannerSettings settings = PrelUtil.getPlannerSettings(call.getPlanner());
     RelNode child = call.rel(0).getInputs().get(0);
     boolean smallInput =
@@ -146,5 +145,55 @@ public abstract class AggPruleBase extends Prule {
     }
 
     public abstract ExchangePrel generateExchange(DrillAggregateRel aggregation, RelNode input);
+  }
+
+  public static abstract class TwoPhaseStreamAgg extends SubsetTransformer<DrillAggregateRel, InvalidRelException> {
+    protected final DrillDistributionTrait distOnAllKeys;
+    protected final RelCollation collation;
+
+    public TwoPhaseStreamAgg (RelOptRuleCall call, DrillDistributionTrait distOnAllKeys, RelCollation collation) {
+      super(call);
+      this.distOnAllKeys = distOnAllKeys;
+      this.collation = collation;
+    }
+
+    @Override
+    public RelNode convertChild(DrillAggregateRel aggregate, RelNode input) throws InvalidRelException {
+
+      DrillDistributionTrait toDist = input.getTraitSet().getTrait(DrillDistributionTraitDef.INSTANCE);
+      RelTraitSet traits = collation != null ? newTraitSet(Prel.DRILL_PHYSICAL, collation, toDist) : newTraitSet(Prel.DRILL_PHYSICAL, toDist);
+      RelNode newInput = convert(input, traits);
+
+      StreamAggPrel phase1Agg = new StreamAggPrel(
+              aggregate.getCluster(),
+              traits,
+              newInput,
+              aggregate.indicator,
+              aggregate.getGroupSet(),
+              aggregate.getGroupSets(),
+              aggregate.getAggCallList(),
+              AggPrelBase.OperatorPhase.PHASE_1of2);
+
+      ExchangePrel exch = generateExchange(aggregate, phase1Agg, collation);
+
+      ImmutableBitSet newGroupSet = remapGroupSet(aggregate.getGroupSet());
+      List<ImmutableBitSet> newGroupSets = Lists.newArrayList();
+      for (ImmutableBitSet groupSet : aggregate.getGroupSets()) {
+        newGroupSets.add(remapGroupSet(groupSet));
+      }
+
+      return new StreamAggPrel(
+              aggregate.getCluster(),
+              exch.getTraitSet(),
+              exch,
+              aggregate.indicator,
+              newGroupSet,
+              newGroupSets,
+              phase1Agg.getPhase2AggCalls(),
+              AggPrelBase.OperatorPhase.PHASE_2of2);
+    }
+
+    public abstract ExchangePrel generateExchange(DrillAggregateRel aggregation, RelNode input, RelCollation collation);
+
   }
 }

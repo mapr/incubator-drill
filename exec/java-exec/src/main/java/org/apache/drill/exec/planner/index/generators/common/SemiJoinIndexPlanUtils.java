@@ -21,6 +21,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import org.apache.calcite.plan.RelOptUtil;
 import org.apache.calcite.rel.InvalidRelException;
+import org.apache.calcite.rel.RelCollation;
 import org.apache.calcite.rel.RelNode;
 import org.apache.calcite.rel.core.JoinRelType;
 import org.apache.calcite.rel.core.Project;
@@ -45,19 +46,21 @@ import org.apache.drill.exec.planner.logical.DrillProjectRel;
 import org.apache.drill.exec.planner.logical.DrillFilterRel;
 import org.apache.drill.exec.planner.logical.DrillScanRel;
 import org.apache.drill.exec.planner.logical.DrillRel;
+import org.apache.drill.exec.planner.physical.AggPruleBase;
+import org.apache.drill.exec.planner.physical.PrelUtil;
 import org.apache.drill.exec.planner.physical.ProjectPrel;
 import org.apache.drill.exec.planner.physical.ScanPrel;
 import org.apache.drill.exec.planner.physical.RowKeyJoinPrel;
 import org.apache.drill.exec.planner.physical.FilterPrel;
-import org.apache.drill.exec.planner.physical.HashAggPrel;
 import org.apache.drill.exec.planner.physical.HashAggPrule;
 import org.apache.drill.exec.planner.physical.DrillDistributionTrait;
 import org.apache.drill.exec.planner.physical.JoinPruleBase;
+import org.apache.drill.exec.planner.physical.StreamAggPrule;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.apache.drill.exec.planner.logical.DrillRel.DRILL_LOGICAL;
-import static org.apache.drill.exec.planner.physical.AggPrelBase.OperatorPhase.PHASE_1of1;
 import static org.apache.drill.exec.planner.physical.Prel.DRILL_PHYSICAL;
 
 
@@ -120,12 +123,15 @@ public class SemiJoinIndexPlanUtils {
     return collectionOfRels;
   }
 
-  public static RelNode buildRowKeyJoin(SemiJoinIndexPlanCallContext joinContext,
+  public static List<RelNode> buildRowKeyJoin(SemiJoinIndexPlanCallContext joinContext,
                                         RelNode leftInput, List<RelNode> distinct) throws InvalidRelException {
 
-    return new RowKeyJoinPrel(leftInput.getCluster(), distinct.get(0).getTraitSet(), leftInput, distinct.get(0),
-            joinContext.join.getCondition(), JoinRelType.INNER);
-
+    List<RelNode> rkjNodes = new ArrayList<>();
+    for (RelNode agg : distinct) {
+      rkjNodes.add(new RowKeyJoinPrel(leftInput.getCluster(), distinct.get(0).getTraitSet(), leftInput, agg,
+              joinContext.join.getCondition(), JoinRelType.INNER));
+    }
+    return rkjNodes;
   }
 
   public static ProjectPrel getProject(RelNode input, ProjectPrel project) {
@@ -278,20 +284,53 @@ public class SemiJoinIndexPlanUtils {
   }
 
   /*
-   * builds one phase and two phase hash agg plans.
-   * TODO Only single phase HashAgg is being generated currently. Should be enhanced to produce distributed 2 phase hashagg as well.
+   * builds one phase and two phase hash agg plans.   *
    */
   public static List<RelNode> buildAgg(SemiJoinIndexPlanCallContext joinContext,
                                        DrillAggregateRel distinct, RelNode input) throws InvalidRelException {
     List<RelNode> result = Lists.newArrayList();
+    result.addAll(generateHashAgg(joinContext, distinct, input));
+    result.addAll(generateStreamAgg(joinContext, distinct, input));
+    return result;
+  }
+
+  private static List<RelNode> generateHashAgg(SemiJoinIndexPlanCallContext joinContext,
+                                               DrillAggregateRel distinct, RelNode input) throws InvalidRelException {
+    Preconditions.checkNotNull(joinContext.call);
+    boolean hashAggEnabled = PrelUtil.getPlannerSettings(joinContext.call.getPlanner()).isHashAggEnabled();
+    List<RelNode> result = Lists.newArrayList();
     // generating one phase aggregation.
-    result.add(new HashAggPrel(distinct.getCluster(), input.getTraitSet().plus(DRILL_PHYSICAL),input,
-            distinct.indicator,distinct.getGroupSet(), distinct.getGroupSets(), distinct.getAggCallList(),PHASE_1of1));
+    if (hashAggEnabled) {
+      result.add(HashAggPrule.singlePhaseHashAgg(joinContext.call, distinct, input.getTraitSet().plus(DRILL_PHYSICAL), input));
+    }
     DbGroupScan grpScan = (DbGroupScan) joinContext.leftSide.scan.getGroupScan();
 
     //generate two phase aggregation.
-    DrillDistributionTrait distOnAllKeys = JoinPruleBase.getRangePartitionTrait(joinContext.join, grpScan,result.get(0).getRowType());
-    result.add(new HashAggPrule.TwoPhaseHashAggWithRangeExchange(joinContext.call, distOnAllKeys).convertChild(distinct, input));
+    if (hashAggEnabled && AggPruleBase.create2PhasePlan(joinContext.call, distinct)) {
+      DrillDistributionTrait distOnAllKeys = JoinPruleBase.getRangePartitionTrait(joinContext.join, grpScan, distinct.getRowType());
+      result.add(new HashAggPrule.TwoPhaseHashAggWithRangeExchange(joinContext.call, distOnAllKeys).convertChild(distinct, input));
+    }
+    return result;
+  }
+
+  private static List<RelNode> generateStreamAgg(SemiJoinIndexPlanCallContext joinContext,
+                                               DrillAggregateRel distinct, RelNode input) throws InvalidRelException {
+    Preconditions.checkNotNull(joinContext.call);
+    boolean streamAggEnabled = PrelUtil.getPlannerSettings(joinContext.call.getPlanner()).isStreamAggEnabled();
+    List<RelNode> result = Lists.newArrayList();
+    final RelCollation collation = DrillRelOptUtil.getCollation(distinct);
+
+    // generating one phase aggregation.
+    if (streamAggEnabled) {
+      result.add(StreamAggPrule.singlePhaseStreamAgg(distinct, input.getTraitSet().plus(DRILL_PHYSICAL).plus(collation), input));
+    }
+    DbGroupScan grpScan = (DbGroupScan) joinContext.leftSide.scan.getGroupScan();
+
+    //generate two phase aggregation.
+    if (streamAggEnabled && AggPruleBase.create2PhasePlan(joinContext.call, distinct)) {
+      DrillDistributionTrait distOnAllKeys = JoinPruleBase.getRangePartitionTrait(joinContext.join, grpScan, distinct.getRowType());
+      result.add(new StreamAggPrule.TwoPhaseStreamAggWithHashMergeExchange(joinContext.call, distOnAllKeys, collation).convertChild(distinct, input));
+    }
     return result;
   }
 

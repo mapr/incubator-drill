@@ -33,6 +33,9 @@ import org.apache.drill.metastore.metadata.TableMetadata;
 import org.apache.calcite.plan.RelOptUtil;
 import org.apache.calcite.plan.hep.HepRelVertex;
 import org.apache.calcite.plan.volcano.RelSubset;
+import org.apache.calcite.rel.RelCollation;
+import org.apache.calcite.rel.RelCollationImpl;
+import org.apache.calcite.rel.RelFieldCollation;
 import org.apache.calcite.rel.RelNode;
 import org.apache.calcite.rel.core.Join;
 import org.apache.calcite.rel.core.Project;
@@ -55,12 +58,14 @@ import org.apache.calcite.sql.fun.SqlStdOperatorTable;
 import org.apache.calcite.sql.type.SqlTypeName;
 import org.apache.calcite.sql.validate.SqlValidatorUtil;
 import org.apache.calcite.tools.RelBuilder;
+import org.apache.calcite.util.BitSets;
 import org.apache.calcite.util.Pair;
 import org.apache.calcite.util.Util;
 import org.apache.drill.common.expression.PathSegment;
 import org.apache.drill.common.expression.SchemaPath;
 import org.apache.drill.common.types.TypeProtos;
 import org.apache.drill.common.types.Types;
+import org.apache.drill.exec.planner.logical.DrillAggregateRel;
 import org.apache.drill.exec.planner.logical.DrillRelFactories;
 import org.apache.drill.exec.planner.logical.DrillTable;
 import org.apache.drill.exec.planner.logical.FieldsReWriterUtil;
@@ -836,5 +841,14 @@ public abstract class DrillRelOptUtil {
         return rex;
       }
     }
+  }
+
+  public static RelCollation getCollation(DrillAggregateRel rel){
+
+    List<RelFieldCollation> fields = Lists.newArrayList();
+    for (int group : BitSets.toIter(rel.getGroupSet())) {
+      fields.add(new RelFieldCollation(group));
+    }
+    return RelCollationImpl.of(fields);
   }
 }

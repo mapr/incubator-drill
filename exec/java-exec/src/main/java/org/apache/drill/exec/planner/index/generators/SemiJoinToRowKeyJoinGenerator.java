@@ -60,7 +60,7 @@ public class SemiJoinToRowKeyJoinGenerator extends CoveringIndexPlanGenerator {
   }
 
   @Override
-  public RelNode convertChild(RelNode join, final RelNode input) throws InvalidRelException {
+  public List<RelNode> convertChildMulti(RelNode join, final RelNode input) throws InvalidRelException {
     RelNode nonCoveringIndexPlan = super.convertChild(joinContext.rightSide.upperProject, input);
 
     if (nonCoveringIndexPlan == null) {
@@ -73,6 +73,8 @@ public class SemiJoinToRowKeyJoinGenerator extends CoveringIndexPlanGenerator {
 
     //build HashAgg for distinct processing
     List<RelNode> agg = SemiJoinIndexPlanUtils.buildAgg(joinContext, joinContext.distinct, nonCoveringIndexPlan);
+    logger.debug("semi_join_index_plan_info: generated hash aggregation operators: {}", agg);
+
     return SemiJoinIndexPlanUtils.buildRowKeyJoin(joinContext,getRoot(leftSideJoinContext) , agg);
   }
 
@@ -89,14 +91,14 @@ public class SemiJoinToRowKeyJoinGenerator extends CoveringIndexPlanGenerator {
   }
 
   @Override
-  public boolean go() throws InvalidRelException {
+  public boolean goMulti() throws InvalidRelException {
     RelNode top = indexContext.getCall().rel(0);
     if (top instanceof DrillJoinRel) {
       DrillJoinRel join = (DrillJoinRel) top;
       final RelNode input0 = join.getInput(0);
       RelTraitSet traits0 = input0.getTraitSet().plus(DRILL_PHYSICAL);
       RelNode convertedInput0 = Prule.convert(input0, traits0);
-      return this.go(top, convertedInput0);
+      return this.goMulti(top, convertedInput0);
     } else {
       return false;
     }

@@ -187,19 +187,54 @@ public class StreamAggPrule extends AggPruleBase {
     }
   }
 
+  public static class TwoPhaseStreamAggWithUnionExchange extends TwoPhaseStreamAgg {
+
+    public TwoPhaseStreamAggWithUnionExchange(RelOptRuleCall call, DrillDistributionTrait trait, RelCollation collation) {
+      super(call, trait, collation);
+    }
+
+    @Override
+    public ExchangePrel generateExchange(DrillAggregateRel aggregate, RelNode input, RelCollation collation) {
+      return new UnionExchangePrel(input.getCluster(),  input.getTraitSet().plus(Prel.DRILL_PHYSICAL).plus(distOnAllKeys), input);
+    }
+  }
+
+  public static class TwoPhaseStreamAggWithHashMergeExchange extends TwoPhaseStreamAgg {
+
+    public TwoPhaseStreamAggWithHashMergeExchange(RelOptRuleCall call, DrillDistributionTrait trait, RelCollation collation) {
+      super(call, trait, collation);
+    }
+
+    @Override
+    public ExchangePrel generateExchange(DrillAggregateRel aggregate, RelNode input, RelCollation collation) {
+      int numEndPoints = PrelUtil.getSettings(input.getCluster()).numEndPoints();
+
+      return new HashToMergeExchangePrel(input.getCluster(), input.getTraitSet().plus(Prel.DRILL_PHYSICAL).plus(distOnAllKeys
+      ),
+                      input, ImmutableList.copyOf(getDistributionField(aggregate, true)),
+                      collation,
+                      numEndPoints);
+    }
+  }
+
+  public static RelNode singlePhaseStreamAgg(DrillAggregateRel aggregate, RelTraitSet traits, RelNode input) throws InvalidRelException {
+    final RelNode convertedInput = convert(input, traits);
+
+    return new StreamAggPrel(
+            aggregate.getCluster(),
+            traits,
+            convertedInput,
+            aggregate.indicator,
+            aggregate.getGroupSet(),
+            aggregate.getGroupSets(),
+            aggregate.getAggCallList(),
+            OperatorPhase.PHASE_1of1);
+  }
+
   private void createTransformRequest(RelOptRuleCall call, DrillAggregateRel aggregate,
                                       RelNode input, RelTraitSet traits) throws InvalidRelException {
 
-    final RelNode convertedInput = convert(input, traits);
-
-    StreamAggPrel newAgg = new StreamAggPrel(
-        aggregate.getCluster(),
-        traits,
-        convertedInput,
-        aggregate.getGroupSet(),
-        aggregate.getGroupSets(),
-        aggregate.getAggCallList(),
-        OperatorPhase.PHASE_1of1);
+    RelNode newAgg = singlePhaseStreamAgg(aggregate, traits, input);
 
     call.transformTo(newAgg);
   }

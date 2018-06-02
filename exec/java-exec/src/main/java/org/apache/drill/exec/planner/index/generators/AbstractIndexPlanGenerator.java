@@ -285,4 +285,8 @@ public abstract class AbstractIndexPlanGenerator extends SubsetTransformer<RelNo
     this.go(top, convertedInput);
     return true;
   }
+
+  public boolean goMulti() throws InvalidRelException {
+    return false;
+  }
 }

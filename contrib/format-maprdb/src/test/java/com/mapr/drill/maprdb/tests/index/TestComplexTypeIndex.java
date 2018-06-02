@@ -58,7 +58,10 @@ public class TestComplexTypeIndex extends BaseJsonTest {
   public static final String ComplexFTSTypePlanning = "alter session set `planner.enable_complex_type_fts` = true";
   public static final String DisableComplexFTSTypePlanning = "alter session set `planner.enable_complex_type_fts` = false";
   public static final String ResetComplexFTSTypePlanning = "alter session reset `planner.enable_complex_type_fts`";
-
+  public static final String disableHashAgg = "alter session set `planner.enable_hashagg` = false";
+  public static final String disableStreamAgg = "alter session set `planner.enable_streamagg` = false";
+  public static final String enableHashAgg = "alter session set `planner.enable_hashagg` = true";
+  public static final String enableStreamAgg = "alter session set `planner.enable_streamagg` = true";
 
   protected String getTablePath() {
     return tablePath;
@@ -628,7 +631,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
 
       PlanTestBase.testPlanMatchingPatterns(query,
           new String[] {"RowKeyJoin", ".*RestrictedJsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*.high.*=.*165",
-                  ".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*.low.*=.*150.*indexName=weightIdx1"},
+                  ".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=(.*weight.*.low.*=.*150.*|.*weight.*.high.*=.*165.*)indexName=(weightIdx1|weightCountyIdx1)"},
           new String[]{".*condition=.*weight.*.low.*=.*150.*weight.*.high.*=.*165.*indexName=weightIdx1"});
 
       testBuilder()
@@ -650,4 +653,61 @@ public class TestComplexTypeIndex extends BaseJsonTest {
   }
 
 
+  @Test
+  public void testCoveringIndexWithStreamAgg() throws Exception {
+    try {
+      test(IndexPlanning);
+      test(disableHashAgg);
+      String query = "select _id from hbase.`index_test_complex1`" +
+              "where _id in (select _id from (select _id from (select _id, county, flatten(weight) as f from hbase.`index_test_complex1` as t1" +
+              " where t1.`county` = 'Santa Clara') as t where t.f.high > 10))";
+
+      PlanTestBase.testPlanMatchingPatterns(query,
+              new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*high.*>.*10.*indexName=weightCountyIdx1"},
+              new String[]{"RowKeyJoin", ".*RestrictedJsonTableGroupScan.*tableName=.*index_test_complex1,",
+                            "HashAgg"}
+      );
+
+      testBuilder()
+              .optionSettingQueriesForBaseline(noIndexPlan)
+              .unOrdered()
+              .sqlQuery(query)
+              .sqlBaselineQuery(query)
+              .build()
+              .run();
+    } finally {
+      test(IndexPlanning);
+      test(enableHashAgg);
+    }
+    return;
+  }
+
+  @Test
+  public void testCoveringIndexWithHashAgg() throws Exception {
+    try {
+      test(IndexPlanning);
+      test(disableStreamAgg);
+      String query = "select _id from hbase.`index_test_complex1`" +
+              "where _id in (select _id from (select _id from (select _id, county, flatten(weight) as f from hbase.`index_test_complex1` as t1" +
+              " where t1.`county` = 'Santa Clara') as t where t.f.high > 10))";
+
+      PlanTestBase.testPlanMatchingPatterns(query,
+              new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*high.*>.*10.*indexName=weightCountyIdx1"},
+              new String[]{"RowKeyJoin", ".*RestrictedJsonTableGroupScan.*tableName=.*index_test_complex1,",
+                      "StreamAgg"}
+      );
+
+      testBuilder()
+              .optionSettingQueriesForBaseline(noIndexPlan)
+              .unOrdered()
+              .sqlQuery(query)
+              .sqlBaselineQuery(query)
+              .build()
+              .run();
+    } finally {
+      test(IndexPlanning);
+      test(enableStreamAgg);
+    }
+    return;
+  }
 }

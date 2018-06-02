@@ -206,7 +206,8 @@ public class DbScanSortRemovalRule extends AbstractIndexPrule {
     } else {
       Preconditions.checkNotNull(indexContext.getSort());
       //This case tries to use the already generated index to see if a sort can be removed.
-      if (indexContext.scan.getTraitSet().getTrait(RelCollationTraitDef.INSTANCE).getFieldCollations().size() == 0) {
+      if (!(indexContext.scan.getTraitSet().getTrait(RelCollationTraitDef.INSTANCE) instanceof RelCollationTraitDef) ||
+          indexContext.scan.getTraitSet().getTrait(RelCollationTraitDef.INSTANCE).getFieldCollations().size() == 0) {
         return;
       }
       try {

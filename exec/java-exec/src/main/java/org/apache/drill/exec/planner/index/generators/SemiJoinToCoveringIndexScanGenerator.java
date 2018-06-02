@@ -22,6 +22,7 @@ import com.google.common.collect.Lists;
 import org.apache.calcite.plan.RelTraitSet;
 import org.apache.calcite.rel.InvalidRelException;
 import org.apache.calcite.rel.core.AggregateCall;
+import org.apache.calcite.rel.core.JoinRelType;
 import org.apache.calcite.rex.RexBuilder;
 import org.apache.calcite.rex.RexNode;
 import org.apache.calcite.sql.fun.SqlStdOperatorTable;
@@ -38,6 +39,7 @@ import org.apache.drill.exec.planner.physical.ProjectPrel;
 import org.apache.drill.exec.planner.physical.PlannerSettings;
 import org.apache.calcite.rel.RelNode;
 import org.apache.drill.exec.planner.physical.Prule;
+import org.apache.drill.exec.planner.physical.RowKeyJoinPrel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -71,7 +73,7 @@ public class SemiJoinToCoveringIndexScanGenerator extends CoveringIndexPlanGener
   }
 
   @Override
-  public RelNode convertChild(final RelNode join, final RelNode input) throws InvalidRelException {
+  public List<RelNode> convertChildMulti(final RelNode join, final RelNode input) throws InvalidRelException {
     Preconditions.checkNotNull(joinContext.getConveringIndexContext());
     RelNode coveringIndexScanRel = super.convertChild(joinContext.getConveringIndexContext().upperProject, input);
     if (coveringIndexScanRel == null) {
@@ -88,12 +90,21 @@ public class SemiJoinToCoveringIndexScanGenerator extends CoveringIndexPlanGener
             coveringIndexScanRel, false, grpSets.left, grpSets.right, aggregateCalls);
     //build HashAgg for distinct processing
     List<RelNode> agg = SemiJoinIndexPlanUtils.buildAgg(joinContext, aggregateRel, coveringIndexScanRel);
+    logger.debug("semi_join_index_plan_info: generated hash aggregation operators: {}", agg);
 
     //build project to match the output rowType.
     List<RexNode> exprs = IndexPlanUtils.projects(agg.get(0), agg.get(0).getRowType().getFieldNames());
     List<RexNode> projectExprs = rearrange(exprs, inputOutputRefMap);
-    return new ProjectPrel(input.getCluster(), input.getTraitSet().plus(DRILL_PHYSICAL), agg.get(0),
-                          projectExprs, joinContext.join.getRowType());
+    return getRootProject(input, agg, projectExprs);
+  }
+
+  private List<RelNode> getRootProject(RelNode input, List<RelNode> aggregates, List<RexNode> projectExprs) {
+    List<RelNode> rkjNodes = new ArrayList<>();
+    for (RelNode agg : aggregates) {
+      rkjNodes.add(new ProjectPrel(input.getCluster(), input.getTraitSet().plus(DRILL_PHYSICAL), agg,
+              projectExprs, joinContext.join.getRowType()));
+    }
+    return rkjNodes;
   }
 
   private List<RexNode> rearrange(List<RexNode> exprs, Map<Integer, Integer> refMap) {
@@ -128,13 +139,13 @@ public class SemiJoinToCoveringIndexScanGenerator extends CoveringIndexPlanGener
       refMap.put(leftKey, outIndex++);
       aggCalls.add(AggregateCall.create(SqlStdOperatorTable.MIN, false, false,
               argList, -1, joinContext.join.getRowType().getFieldList().get(leftKey).getType(),
-              "MIN-SEMI-JOIN" + leftKey));
+              "ANY-VALUE-SEMI-JOIN" + leftKey));
     }
     return aggCalls;
   }
 
   @Override
-  public boolean go() throws InvalidRelException {
+  public boolean goMulti() throws InvalidRelException {
     RelNode top = indexContext.getCall().rel(0);
     if (top instanceof DrillJoinRel) {
       DrillJoinRel join = (DrillJoinRel) top;
@@ -144,7 +155,7 @@ public class SemiJoinToCoveringIndexScanGenerator extends CoveringIndexPlanGener
       RelNode convertedInput0 = Prule.convert(input0, traits0);
       RelTraitSet traits1 = input1.getTraitSet().plus(DRILL_PHYSICAL);
       RelNode convertedInput1 = Prule.convert(input1, traits1);
-      return this.go(top, convertedInput0) && this.go(top, convertedInput1);
+      return this.goMulti(top, convertedInput0) && this.goMulti(top, convertedInput1);
     } else {
       return false;
     }

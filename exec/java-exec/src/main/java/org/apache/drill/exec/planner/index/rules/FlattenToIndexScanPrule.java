@@ -371,7 +371,7 @@ public class FlattenToIndexScanPrule extends AbstractIndexPrule {
         idxScan.setStatistics(((DbGroupScan) scan.getGroupScan()).getStatistics());
         logger.info("index_plan_info: Generating covering index plan for index: {}, query condition {}", indexDesc.getIndexName(), indexCondition.toString());
         AbstractIndexPlanGenerator planGen = generator.getCoveringIndexGen(indexInfo, idxScan, indexCondition, remainderCondition, builder, settings);
-        result = planGen.go() || result;
+        result = planGen.goMulti() || result;
       }
     } catch (Exception e) {
       logger.warn("Exception while trying to generate covering index plan", e);
@@ -409,7 +409,7 @@ public class FlattenToIndexScanPrule extends AbstractIndexPrule {
           idxScan.setStatistics(((DbGroupScan) primaryTableScan).getStatistics());
           logger.info("index_plan_info: Generating non-covering index plan for index: {}, query condition {}", indexDesc.getIndexName(), indexCondition.toString());
           AbstractIndexPlanGenerator planGen = generator.getNonCoveringIndexGen(indexDesc, idxScan, indexCondition, remainderCondition, totalCondition, builder, settings);
-          result = planGen.go() || result;
+          result = planGen.goMulti() || result;
         }
       } catch (Exception e) {
         logger.warn("Exception while trying to generate non-covering index access plan", e);

@@ -91,7 +91,7 @@ public class SemiJoinMergeRowKeyJoinGenerator extends NonCoveringIndexPlanGenera
    * (i.e from super class generated plan) right input.
    */
   @Override
-  public RelNode convertChild(final RelNode join, final RelNode input) throws InvalidRelException {
+  public List<RelNode> convertChildMulti(final RelNode join, final RelNode input) throws InvalidRelException {
     List<ProjectPrel> projectRels = Lists.newArrayList();
 
     // get the non covering index plan from the super class.
@@ -183,7 +183,7 @@ public class SemiJoinMergeRowKeyJoinGenerator extends NonCoveringIndexPlanGenera
   }
 
   @Override
-  public boolean go() throws InvalidRelException {
+  public boolean goMulti() throws InvalidRelException {
     RelNode top = indexContext.getCall().rel(0);
     if (top instanceof DrillJoinRel) {
       DrillJoinRel join = (DrillJoinRel) top;
@@ -193,7 +193,7 @@ public class SemiJoinMergeRowKeyJoinGenerator extends NonCoveringIndexPlanGenera
       RelNode convertedInput0 = Prule.convert(input0, traits0);
       RelTraitSet traits1 = input1.getTraitSet().plus(DRILL_PHYSICAL);
       RelNode convertedInput1 = Prule.convert(input1, traits1);
-      return this.go(top, convertedInput0) && this.go(top, convertedInput1);
+      return this.goMulti(top, convertedInput0) && this.goMulti(top, convertedInput1);
     } else {
       return false;
     }
