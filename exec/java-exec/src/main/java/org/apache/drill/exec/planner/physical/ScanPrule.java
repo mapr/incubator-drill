@@ -34,12 +34,17 @@ public class ScanPrule extends Prule {
 
   @Override
   public void onMatch(RelOptRuleCall call) {
+    // if full table scan is disabled, don't generate the physical scan
+    if (PrelUtil.getPlannerSettings(call.getPlanner()).isDisableFullTableScan()) {
+      return;
+    }
+
     final DrillScanRel scan = (DrillScanRel) call.rel(0);
 
     GroupScan groupScan = scan.getGroupScan();
 
     DrillDistributionTrait partition =
-        (groupScan.getMaxParallelizationWidth() > 1 || groupScan.getDistributionAffinity() == DistributionAffinity.HARD)
+        (groupScan.isDistributed() || groupScan.getDistributionAffinity() == DistributionAffinity.HARD)
             ? DrillDistributionTrait.RANDOM_DISTRIBUTED : DrillDistributionTrait.SINGLETON;
 
     final RelTraitSet traits = scan.getTraitSet().plus(Prel.DRILL_PHYSICAL).plus(partition);
