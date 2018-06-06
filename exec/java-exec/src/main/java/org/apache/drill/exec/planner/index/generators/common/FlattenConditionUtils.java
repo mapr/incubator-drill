@@ -269,6 +269,65 @@ public class FlattenConditionUtils {
     // FLATTEN expr from the child Project
     private final List<RexNode> otherExprs = Lists.newArrayList();
 
+    private class LocalItemVisitor extends RexVisitorImpl<RexNode> {
+
+      private String projectFieldName = null;
+
+      public LocalItemVisitor() {
+        super(true);
+      }
+
+      private RexNode makeArrayItem(RexCall item) {
+        RexInputRef inputRef = (RexInputRef) item.getOperands().get(0);
+        RexLiteral literal = (RexLiteral) item.getOperands().get(1);
+
+        // check if input is referencing a FLATTEN
+        String projectFieldName = project.getRowType().getFieldNames().get(inputRef.getIndex());
+        RexCall c;
+        RexNode left = null;
+        if ((c = flattenMap.get(projectFieldName)) != null) {
+          left = c.getOperands().get(0);
+          Preconditions.checkArgument(left != null, "Found null input reference for Flatten") ;
+
+          // take the Flatten's input and build a new RexExpr with ITEM($n, -1)
+          RexLiteral right = builder.makeBigintLiteral(BigDecimal.valueOf(-1));
+          RexNode result1 = builder.makeCall(item.getType(), SqlStdOperatorTable.ITEM, ImmutableList.of(left, right));
+
+          left = result1;
+          right = literal;
+          RexNode result2 = builder.makeCall(item.getType(), SqlStdOperatorTable.ITEM, ImmutableList.of(left, right));
+
+          return result2;
+        }
+        return null;
+      }
+
+      public String getProjectFieldName() {
+        return projectFieldName;
+      }
+
+      @Override public RexNode visitCall(RexCall ref) {
+        if (SqlStdOperatorTable.ITEM.equals(ref.getOperator()) &&
+            ref.getOperands().get(0) instanceof RexInputRef) {
+
+          // keep track of the project field name from the child project referenced by this ITEM expr
+          RexInputRef iRef = (RexInputRef) ref.getOperands().get(0);
+          projectFieldName = project.getRowType().getFieldNames().get(iRef.getIndex());
+
+          RexNode arrayRef = makeArrayItem(ref);
+          if (arrayRef != null) {
+            return arrayRef;
+          }
+        }
+        return builder.makeCall(ref.getType(), ref.getOperator(), visitChildren(ref, this));
+      }
+
+      @Override
+      public RexNode visitLiteral(RexLiteral literal) {
+        return literal;
+      }
+    }
+
     public FilterVisitor(Map<String, RexCall> flattenMap, DrillProjectRel project,
         RexBuilder builder) {
       super(true);
@@ -277,55 +336,14 @@ public class FlattenConditionUtils {
       this.builder = builder;
     }
 
-    private RexNode makeArrayItem(RexCall item) {
-      RexInputRef inputRef = (RexInputRef) item.getOperands().get(0);
-      RexLiteral literal = (RexLiteral) item.getOperands().get(1);
-
-      // check if input is referencing a FLATTEN
-      String projectFieldName = project.getRowType().getFieldNames().get(inputRef.getIndex());
-      RexCall c;
-      RexNode left = null;
-      if ((c = flattenMap.get(projectFieldName)) != null) {
-        left = c.getOperands().get(0);
-        Preconditions.checkArgument(left != null, "Found null input reference for Flatten") ;
-
-        // take the Flatten's input and build a new RexExpr with ITEM($n, -1)
-        RexLiteral right = builder.makeBigintLiteral(BigDecimal.valueOf(-1));
-        RexNode result1 = builder.makeCall(item.getType(), SqlStdOperatorTable.ITEM, ImmutableList.of(left, right));
-
-        left = result1;
-        right = literal;
-        RexNode result2 = builder.makeCall(item.getType(), SqlStdOperatorTable.ITEM, ImmutableList.of(left, right));
-
-        return result2;
-      }
-      return null;
-    }
-
     private RexNode buildArrayItemRef(RexCall item) {
-      RexVisitor<RexNode> visitor =
-          new RexVisitorImpl<RexNode>(true) {
-        @Override public RexNode visitCall(RexCall ref) {
-          if (SqlStdOperatorTable.ITEM.equals(ref.getOperator()) &&
-              ref.getOperands().get(0) instanceof RexInputRef) {
-            RexNode arrayRef = makeArrayItem(ref);
-            if (arrayRef != null) {
-              return arrayRef;
-            }
-          }
-          return builder.makeCall(ref.getType(), ref.getOperator(), visitChildren(ref, this));
-        }
-
-        @Override
-        public RexNode visitLiteral(RexLiteral literal) {
-          return literal;
-        }
-      };
+      LocalItemVisitor visitor = new LocalItemVisitor();
       RexNode arrayItem = item.accept(visitor);
 
       // save the mapping of the project field name to the arrayItem expr created
-      RexInputRef inputRef = (RexInputRef) item.getOperands().get(0);
-      String projectFieldName = project.getRowType().getFieldNames().get(inputRef.getIndex());
+      String projectFieldName = visitor.getProjectFieldName() ;
+      Preconditions.checkArgument(projectFieldName != null);
+
       List<RexNode> exprsReferencingFlatten = null;
       if ((exprsReferencingFlatten = exprsReferencingFlattenMap.get(projectFieldName)) == null) {
         exprsReferencingFlatten = Lists.newArrayList();
