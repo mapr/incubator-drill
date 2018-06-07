@@ -48,7 +48,7 @@ public class CoveringPlanGenerator extends AbstractCoveringPlanGenerator  {
                                RexNode indexCondition,
                                RexBuilder builder,
                                PlannerSettings settings) {
-    super(indexContext.getConveringIndexContext(), indexCondition, null, builder, settings);
+    super(indexContext.getCoveringIndexContext(), indexCondition, null, builder, settings);
     semiJoinIndexPlanCallContext = indexContext;
   }
 

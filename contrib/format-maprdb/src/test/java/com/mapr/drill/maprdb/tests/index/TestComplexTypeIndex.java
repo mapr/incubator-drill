@@ -95,7 +95,8 @@ public class TestComplexTypeIndex extends BaseJsonTest {
             "salaryWeightIdx1", "salary.max,weight[].high", "salary.min,weight[].low,weight[].high",
             "carsIdx1", "cars[]", "name",
             "salaryIdx", "salary", "",
-            "weightListIdx", "weight", ""
+            "weightListIdx", "weight", "",
+            "weightComplexIdx1", "weight[].low", "salary,friends,cars,zipcodes"
         };
     try (Table table = createOrReplaceTable(tableName);
          InputStream in = MaprDBTestsSuite.getJsonStream(fileName);
@@ -683,6 +684,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
     return;
   }
 
+  @Ignore("Ignore until MD-3762 is fixed")
   @Test
   public void testCoveringIndexWithHashAgg() throws Exception {
     try {
@@ -708,6 +710,36 @@ public class TestComplexTypeIndex extends BaseJsonTest {
     } finally {
       test(IndexPlanning);
       test(enableStreamAgg);
+    }
+    return;
+  }
+
+  @Test
+  public void testCoveringIndexWithComplexIncludedField() throws Exception {
+    try {
+      test(IndexPlanning);
+      test(disableHashAgg);
+      test(enableStreamAgg);
+      String query = "select _id, salary, friends from hbase.`index_test_complex1`" +
+          " where _id in (select _id from (select _id, flatten(weight) as f from hbase.`index_test_complex1`) as t1" +
+          " where t1.f.low < 140)";
+
+      PlanTestBase.testPlanMatchingPatterns(query,
+          new String[] {".*StreamAgg.*ANY_VALUE-SEMI-JOIN0.*ANY_VALUE-SEMI-JOIN1.*ANY_VALUE-SEMI-JOIN2.*",
+              ".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*low.*<.*140.*indexName=weightComplexIdx1"},
+          new String[] {"RowKeyJoin", ".*RestrictedJsonTableGroupScan.*tableName=.*index_test_complex1,"}
+      );
+
+      testBuilder()
+          .optionSettingQueriesForBaseline(noIndexPlan)
+          .unOrdered()
+          .sqlQuery(query)
+          .sqlBaselineQuery(query)
+          .build()
+          .run();
+    } finally {
+      test(enableHashAgg);
+      test(IndexPlanning);
     }
     return;
   }

@@ -48,7 +48,7 @@ public class SemiJoinIndexPlanCallContext {
     this.converingIndexContext = coveringIndexContext;
   }
 
-  public IndexLogicalPlanCallContext getConveringIndexContext() {
+  public IndexLogicalPlanCallContext getCoveringIndexContext() {
     return converingIndexContext;
   }
 

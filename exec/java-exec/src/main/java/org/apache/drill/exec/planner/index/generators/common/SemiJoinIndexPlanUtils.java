@@ -301,6 +301,13 @@ public class SemiJoinIndexPlanUtils {
     return result;
   }
 
+  public static List<RelNode> buildStreamAgg(SemiJoinIndexPlanCallContext joinContext,
+                                       DrillAggregateRel distinct, RelNode input) throws InvalidRelException {
+    List<RelNode> result = Lists.newArrayList();
+    result.addAll(generateStreamAgg(joinContext, distinct, input));
+    return result;
+  }
+
   private static List<RelNode> generateHashAgg(SemiJoinIndexPlanCallContext joinContext,
                                                DrillAggregateRel distinct, RelNode input) throws InvalidRelException {
     Preconditions.checkNotNull(joinContext.call);
