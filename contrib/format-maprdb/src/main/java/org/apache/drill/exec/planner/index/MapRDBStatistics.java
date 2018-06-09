@@ -704,7 +704,8 @@ public class MapRDBStatistics implements Statistics {
       // LIKE operator - convert to a RANGE predicate, if possible
       if (typesToProcess.contains(SqlKind.LIKE)
           && ((RexCall) condition).getOperator().getKind() == SqlKind.LIKE) {
-        return convertLikeToRange((RexCall)condition, builder);
+        RexCall convCondition = (RexCall) convertLikeToRange((RexCall)condition, builder);
+        return (convertToStatsCondition(convCondition, index, context, scanRel, typesToProcess));
       } else if (typesToProcess.contains(SqlKind.CAST)
           && hasCastExpression(condition)) {
         return convertCastForFIdx(((RexCall) condition), index, context, scanRel);
