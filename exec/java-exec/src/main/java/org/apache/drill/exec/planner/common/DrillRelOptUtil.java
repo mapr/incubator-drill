@@ -813,36 +813,6 @@ public abstract class DrillRelOptUtil {
     return relBuilder.build();
   }
 
-  public static class RexFieldsTransformer {
-    private final RexBuilder rexBuilder;
-    private final Map<Integer, Integer> inputRefMap;
-
-    public RexFieldsTransformer(
-            RexBuilder rexBuilder,
-            Map<Integer, Integer> inputRefMap) {
-      this.rexBuilder = rexBuilder;
-      this.inputRefMap = inputRefMap;
-    }
-
-    public RexNode go(RexNode rex) {
-      if (rex instanceof RexCall) {
-        ImmutableList.Builder<RexNode> builder =
-                ImmutableList.builder();
-        final RexCall call = (RexCall) rex;
-        for (RexNode operand : call.operands) {
-          builder.add(go(operand));
-        }
-        return call.clone(call.getType(), builder.build());
-      } else if (rex instanceof RexInputRef) {
-        RexInputRef var = (RexInputRef) rex;
-        int index = var.getIndex();
-        return rexBuilder.makeInputRef(var.getType(), inputRefMap.get(index));
-      } else {
-        return rex;
-      }
-    }
-  }
-
   public static RelCollation getCollation(DrillAggregateRel rel){
 
     List<RelFieldCollation> fields = Lists.newArrayList();

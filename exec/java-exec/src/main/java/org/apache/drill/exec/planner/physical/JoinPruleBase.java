@@ -28,6 +28,7 @@ import org.apache.drill.exec.planner.common.DrillJoinRelBase;
 import org.apache.drill.exec.planner.common.DrillScanRelBase;
 import org.apache.drill.exec.planner.common.JoinControl;
 import org.apache.drill.exec.planner.logical.DrillJoin;
+import org.apache.drill.exec.planner.logical.DrillJoinRel;
 import org.apache.drill.exec.planner.logical.DrillPushRowKeyJoinToScanRule;
 import org.apache.drill.exec.planner.logical.RowKeyJoinRel;
 import org.apache.drill.exec.planner.physical.DrillDistributionTrait.DistributionField;

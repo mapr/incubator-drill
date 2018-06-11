@@ -148,6 +148,10 @@ public class SchemaPath extends LogicalExpressionBase {
     return new SchemaPath((NameSegment) getPathSegment(namePart));
   }
 
+  public static SchemaPath parseFromString(String expr) {
+    return parseFromString(expr, false);
+  }
+
   /**
    * Returns schema path with for arrays without index.
    * Is used to find column statistics in parquet metadata.
@@ -188,9 +192,10 @@ public class SchemaPath extends LogicalExpressionBase {
    * If a string contains [] then {@link ArraySegment} will be created.
    *
    * @param expr input string to be parsed
+   * @param allowNoIndexArray Allow string that has no index ([])
    * @return {@link SchemaPath} instance
    */
-  public static SchemaPath parseFromString(String expr) {
+  public static SchemaPath parseFromString(String expr, boolean allowNoIndexArray) {
     if (expr == null || expr.isEmpty()) {
       return null;
     }
@@ -199,7 +204,7 @@ public class SchemaPath extends LogicalExpressionBase {
       return SchemaPath.getSimplePath(expr);
     }
 
-    LogicalExpression logicalExpression = LogicalExpressionParser.parse(expr);
+    LogicalExpression logicalExpression = LogicalExpressionParser.parse(expr, allowNoIndexArray);
     if (logicalExpression instanceof SchemaPath) {
       return (SchemaPath) logicalExpression;
     } else {

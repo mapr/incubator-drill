@@ -39,6 +39,7 @@ import org.apache.drill.common.exceptions.ExpressionParsingException;
 @members{
   private String fullExpression;
   private int tokenPos;
+  private boolean allowArrayWithNoIndex = false;
 
   public static void p(String s){
     System.out.println(s);
@@ -47,6 +48,11 @@ import org.apache.drill.common.exceptions.ExpressionParsingException;
   public ExpressionPosition pos(Token token){
     return new ExpressionPosition(fullExpression, token.getTokenIndex());
   }
+
+  public void setAllowArrayWithNoIndex(boolean allowArrayWithNoIndex) {
+   this.allowArrayWithNoIndex = allowArrayWithNoIndex;
+  }
+
 }
 
 parse returns [LogicalExpression e]
@@ -319,6 +325,14 @@ arraySegment returns [PathSegment seg]
       $seg = new ArraySegment($Number.text);
     } else {
       $seg = new ArraySegment($Number.text, ($s1.ctx == null ? $s2.seg : $s1.seg));
+    }
+  }
+  |  OBracket CBracket ( (Period s1=pathSegment) | s2=arraySegment) ?
+  {
+    if (allowArrayWithNoIndex) {
+      $seg = new ArraySegment(($s1.ctx == null ? $s2.seg : $s1.seg));
+    } else {
+      throw new ExpressionParsingException("Expression has syntax error! Missing Number at ']'");
     }
   }
   ;

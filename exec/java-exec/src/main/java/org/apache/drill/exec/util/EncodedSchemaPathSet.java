@@ -164,7 +164,7 @@ public class EncodedSchemaPathSet {
         if ("*".equals(decodedString) || "`*`".equals(decodedString)) {
           builder.add(SchemaPath.STAR_COLUMN);
         } else {
-          builder.add(SchemaPath.parseFromString(decodedString));
+          builder.add(SchemaPath.parseFromString(decodedString, true));
         }
       }
       return builder.build();

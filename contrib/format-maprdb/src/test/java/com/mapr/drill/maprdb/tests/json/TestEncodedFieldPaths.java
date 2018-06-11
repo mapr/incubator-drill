@@ -125,4 +125,26 @@ public class TestEncodedFieldPaths extends BaseJsonTest {
     PlanTestBase.testPlanMatchingPatterns(sql, expectedPlan, excludedPlan);
   }
 
+  @Test
+  public void test_encoded_array_fields_projection() throws Exception {
+    final String sql = String.format(
+            "SELECT\n"
+                    + "  t.`%s`,t.`$$document`\n"
+                    + "FROM\n"
+                    + "  hbase.root.`%s` t",
+            EncodedSchemaPathSet.encode("_id", "codes[]")[0],
+            tablePath);
+
+    setColumnWidths(new int[] {20, 60});
+    runSQLAndVerifyCount(sql, 5);
+
+
+    // plan test
+    final String[] expectedPlan = {"JsonTableGroupScan.*" ,
+                    "columns=\\[`\\$\\$ENC00L5UWIADDN5SGK423LU`, `\\$\\$document`\\]" };
+    final String[] excludedPlan = {};
+
+    PlanTestBase.testPlanMatchingPatterns(sql, expectedPlan, excludedPlan);
+  }
+
 }
