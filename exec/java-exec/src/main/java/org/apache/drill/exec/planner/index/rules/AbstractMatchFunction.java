@@ -22,7 +22,7 @@ import org.apache.calcite.rex.RexNode;
 import org.apache.drill.common.expression.SchemaPath;
 import org.apache.drill.exec.physical.base.DbGroupScan;
 import org.apache.drill.exec.physical.base.GroupScan;
-import org.apache.drill.exec.planner.logical.DrillProjectRel;
+import org.apache.drill.exec.planner.common.DrillProjectRelBase;
 import org.apache.drill.exec.planner.logical.DrillScanRel;
 import org.apache.calcite.util.Pair;
 
@@ -73,7 +73,7 @@ public abstract class AbstractMatchFunction<T> implements MatchFunction<T> {
    * @param nonFlattenExprs
    * @return True if Flatten was found, False otherwise
    */
-  public static boolean projectHasFlatten(DrillProjectRel project, boolean firstFlattenOnly, Map<String, RexCall> flattenMap,
+  public static boolean projectHasFlatten(DrillProjectRelBase project, boolean firstFlattenOnly, Map<String, RexCall> flattenMap,
       List<RexNode> nonFlattenExprs) {
     boolean found = false;
     if (project == null) {

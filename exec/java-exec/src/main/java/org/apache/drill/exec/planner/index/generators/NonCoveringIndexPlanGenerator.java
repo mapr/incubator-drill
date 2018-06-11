@@ -54,12 +54,9 @@ import org.apache.calcite.rel.core.JoinRelType;
 import org.apache.calcite.rel.type.RelDataType;
 import org.apache.calcite.rel.type.RelDataTypeFactory;
 import org.apache.calcite.rel.type.RelDataTypeField;
-import org.apache.calcite.rel.type.RelDataTypeFieldImpl;
 import org.apache.calcite.rex.RexBuilder;
-import org.apache.calcite.rex.RexCall;
 import org.apache.calcite.rex.RexInputRef;
 import org.apache.calcite.rex.RexNode;
-import org.apache.calcite.util.Pair;
 
 import org.apache.drill.shaded.guava.com.google.common.base.Preconditions;
 import org.apache.drill.shaded.guava.com.google.common.collect.ImmutableList;
@@ -215,48 +212,30 @@ public class NonCoveringIndexPlanGenerator extends AbstractIndexPlanGenerator {
     final RelDataTypeFactory.FieldInfoBuilder leftFieldTypeBuilder =
         dbScan.getCluster().getTypeFactory().builder();
 
-    // We are applying the same index condition to primary table's restricted scan. The reason is, the index may be an async
-    // index .. i.e it is not synchronously updated along with the primary table update as part of a single transaction, so it
-    // is possible that after or during index scan, the primary table rows may have been updated and no longer satisfy the index
-    // condition. By re-applying the index condition here, we will ensure non-qualifying records are filtered out.
-    // The remainder condition will be applied on top of RowKeyJoin.
+    // We are applying the total condition (including the index condition) to primary table's restricted scan;
+    // the reason is that the scans on index table and primary table are not within a transaction. Thus,
+    // _during_ index scan the primary table might get updated for the same row ids that were retrieved from the index.
+    // By re-applying the conditions here, we will avoid correctness issues.
     FilterPrel leftIndexFilterPrel = null;
     if (indexDesc.isAsyncIndex()) {
-      leftIndexFilterPrel = new FilterPrel(dbScan.getCluster(), dbScan.getTraitSet(),
-            dbScan, primaryTableCondition);
+      if (indexContext instanceof FlattenIndexPlanCallContext) {
+        leftIndexFilterPrel = buildRelsForFlatten((FlattenIndexPlanCallContext) indexContext, dbScan);
+      } else {
+        leftIndexFilterPrel = new FilterPrel(dbScan.getCluster(), dbScan.getTraitSet(),
+                dbScan, primaryTableCondition);
+      }
       lastLeft = leftIndexFilterPrel;
     }
 
     RelDataType origRowType = origProject == null ? origScan.getRowType() : origProject.getRowType();
 
-    if (origProject != null) {// then we also  don't need a project
+    if (origProject != null) { // then we also  don't need a project
       // new Project's rowtype is original Project's rowtype [plus rowkey if rowkey is not in original rowtype]
       List<RelDataTypeField> origProjFields = origRowType.getFieldList();
       List<RelDataTypeField> newProjFields = Lists.newArrayList();
 
-      // get the exprs from the original Project and adjust if necessary
-      if (indexContext instanceof FlattenIndexPlanCallContext) {
-        List<Pair<RexNode, String>> projExprList = origProject.getNamedProjects();
-        FlattenIndexPlanCallContext flattenContext = ((FlattenIndexPlanCallContext) indexContext);
-        int origFieldIndex = 0;
-
-        for (Pair<RexNode, String> p : projExprList) {
-          newProjFields.add(origProjFields.get(origFieldIndex));
-          // if this expr is a flatten, only keep the input of flatten.  Note that we cannot drop
-          // the expr altogether because the new Project will be added to the same RelSubset as the old Project and
-          // the RowType of both should be the same to pass validation checks in the VolcanoPlanner.
-          if (flattenContext.getFlattenMap().containsKey(p.right)) {
-            leftProjectExprs.add(((RexCall)p.left).getOperands().get(0));
-          } else {
-            leftProjectExprs.add(p.left);
-          }
-          origFieldIndex++;
-        }
-        leftFieldTypeBuilder.addAll(newProjFields);
-      } else {
-        leftProjectExprs.addAll(origProject.getProjects());
-        leftFieldTypeBuilder.addAll(origProjFields);
-      }
+      leftProjectExprs.addAll(origProject.getProjects());
+      leftFieldTypeBuilder.addAll(origProjFields);
 
       // add the rowkey IFF rowkey is not in orig scan
       if (getRowKeyIndex(origRowType, origScan) < 0) {
@@ -364,5 +343,44 @@ public class NonCoveringIndexPlanGenerator extends AbstractIndexPlanGenerator {
         finalRel.toString(), origScan.toString());
     return finalRel;
   }
+
+  /**
+   * Builds the physical rels (prel) for the logical rels that are present in the
+   * FlattenIndexPlanCallContext
+   * @param flattenContext
+   * @param dbScan
+   * @return RelNode corresponding to the root physical rel
+   */
+  private FilterPrel buildRelsForFlatten(FlattenIndexPlanCallContext flattenContext, RelNode dbScan) {
+    RelNode newRel = dbScan;
+
+    if (flattenContext.getLeafProjectAboveScan() != null) {
+      final ProjectPrel tmpProject = new ProjectPrel(dbScan.getCluster(),
+          dbScan.getTraitSet(), dbScan, flattenContext.getLeafProjectAboveScan().getProjects(),
+          flattenContext.getLeafProjectAboveScan().getRowType());
+      newRel = tmpProject;
+    }
+
+    if (flattenContext.getFilterBelowFlatten() != null) {
+      final FilterPrel tmpFilter = new FilterPrel(newRel.getCluster(), newRel.getTraitSet(),
+          newRel, flattenContext.getFilterBelowFlatten().getCondition());
+      newRel = tmpFilter;
+    }
+
+    Preconditions.checkArgument(flattenContext.getProjectWithFlatten() != null &&
+        flattenContext.getFilterAboveFlatten() != null);
+
+    final ProjectPrel tmpProject = new ProjectPrel(newRel.getCluster(),
+        newRel.getTraitSet(), newRel, flattenContext.getProjectWithFlatten().getProjects(),
+        flattenContext.getProjectWithFlatten().getRowType());
+    newRel = tmpProject;
+
+    final FilterPrel tmpFilter = new FilterPrel(newRel.getCluster(), newRel.getTraitSet(),
+        newRel, flattenContext.getFilterAboveFlatten().getCondition());
+
+    return tmpFilter;
+
+  }
+
 }
 

@@ -618,6 +618,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
 
   // AND-ed condition on 2 Flattens. Only 1 flatten condition should be pushed down to index; other one
   // should be on primary table as part of non-covering index.
+  @Ignore ("Ignore until MD-4445 is fixed")
   @Test
   public void TestMultiFlattens_1() throws Exception {
 

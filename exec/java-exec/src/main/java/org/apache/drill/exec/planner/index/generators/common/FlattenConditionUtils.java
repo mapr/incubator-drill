@@ -34,8 +34,8 @@ import org.apache.calcite.rex.RexVisitor;
 import org.apache.calcite.rex.RexVisitorImpl;
 import org.apache.calcite.sql.SqlOperator;
 import org.apache.calcite.sql.fun.SqlStdOperatorTable;
-import org.apache.drill.exec.planner.index.FlattenIndexPlanCallContext;
-import org.apache.drill.exec.planner.logical.DrillProjectRel;
+import org.apache.drill.exec.planner.common.DrillProjectRelBase;
+import org.apache.drill.exec.planner.index.FlattenCallContext;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -138,14 +138,14 @@ public class FlattenConditionUtils {
    * The RexNodes created for the Flatten filter conditions are of type ITEM($n, -1) where
    * 'n' = field ordinal from the child
    */
-  public static void composeConditions(FlattenIndexPlanCallContext indexContext, RexBuilder builder,
+  public static void composeConditions(FlattenCallContext flattenContext, RexBuilder builder,
       ComposedConditionInfo cInfo) {
-    if (indexContext.getFilterAboveFlatten() == null) {
+    if (flattenContext.getFilterAboveFlatten() == null) {
       // return null because filter below flatten is supposed to be handled by a separate
       // index planning rule
       return;
     }
-    RexNode origConditionAboveFlatten = indexContext.getFilterAboveFlatten().getCondition();
+    RexNode origConditionAboveFlatten = flattenContext.getFilterAboveFlatten().getCondition();
 
     // break up the condition into conjuncts
     List<RexNode> conjuncts = RelOptUtil.conjunctions(origConditionAboveFlatten);
@@ -156,7 +156,7 @@ public class FlattenConditionUtils {
     // process each conjunct separately
     for (RexNode c : conjuncts) {
       FilterVisitor  filterVisitor =
-          new FilterVisitor(indexContext.getFlattenMap(), indexContext.lowerProject, builder);
+          new FilterVisitor(flattenContext.getFlattenMap(), flattenContext.getProjectWithFlatten(), builder);
 
       RexNode conjunctAboveFlatten = c.accept(filterVisitor);
 
@@ -208,23 +208,23 @@ public class FlattenConditionUtils {
     }
 
     // keep track of the exprs that were created representing filter exprs referencing flatten
-    indexContext.setFilterExprsReferencingFlatten(exprsReferencingFlatten);
+    flattenContext.setFilterExprsReferencingFlatten(exprsReferencingFlatten);
 
     // if only filters above Flatten are present, return the information gathered so far
-    if (indexContext.getFilterBelowFlatten() == null) {
+    if (flattenContext.getFilterBelowFlatten() == null) {
       return ;
     }
 
     // handle the filters below the flatten
-    RexNode conditionFilterBelowFlatten = indexContext.getFilterBelowFlatten().getCondition();
-    if (indexContext.getLeafProjectAboveScan() != null) {
+    RexNode conditionFilterBelowFlatten = flattenContext.getFilterBelowFlatten().getCondition();
+    if (flattenContext.getLeafProjectAboveScan() != null) {
       FilterVisitor  filterVisitor2 =
-          new FilterVisitor(indexContext.getFlattenMap(), indexContext.getLeafProjectAboveScan(), builder);
-      conditionFilterBelowFlatten = indexContext.getFilterBelowFlatten().getCondition().accept(filterVisitor2);
+          new FilterVisitor(flattenContext.getFlattenMap(), flattenContext.getLeafProjectAboveScan(), builder);
+      conditionFilterBelowFlatten = flattenContext.getFilterBelowFlatten().getCondition().accept(filterVisitor2);
 
       // keep track of the relevant exprs in the filter that are referencing the
       // child Project
-      indexContext.setRelevantExprsInLeafProject(filterVisitor2.getOtherExprs());
+      flattenContext.setRelevantExprsInLeafProject(filterVisitor2.getOtherExprs());
     }
 
     cInfo.setConditionBelowFlatten(conditionFilterBelowFlatten);
@@ -257,7 +257,7 @@ public class FlattenConditionUtils {
   private static class FilterVisitor extends RexVisitorImpl<RexNode> {
 
     private final Map<String, RexCall> flattenMap;
-    private final DrillProjectRel project;
+    private final DrillProjectRelBase project;
     private final RexBuilder builder;
 
     // The key of the map is the name of the Project expression for Flatten.
@@ -328,7 +328,7 @@ public class FlattenConditionUtils {
       }
     }
 
-    public FilterVisitor(Map<String, RexCall> flattenMap, DrillProjectRel project,
+    public FilterVisitor(Map<String, RexCall> flattenMap, DrillProjectRelBase project,
         RexBuilder builder) {
       super(true);
       this.project = project;

@@ -43,11 +43,8 @@ import org.apache.drill.exec.planner.logical.DrillProjectRel;
 import org.apache.drill.exec.planner.logical.DrillRel;
 import org.apache.drill.exec.planner.logical.DrillScanRel;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.Map;
 
 import static org.apache.drill.exec.planner.logical.DrillRel.DRILL_LOGICAL;
@@ -72,7 +69,7 @@ public class SemiJoinTransformUtils {
 
     if (context.rightSide.getLeafProjectAboveScan() != null) {
       left = SemiJoinIndexPlanUtils.getProject(left, (DrillProjectRel)null);
-      right = SemiJoinIndexPlanUtils.getProject(right, context.rightSide.getLeafProjectAboveScan());
+      right = SemiJoinIndexPlanUtils.getProject(right, (DrillProjectRel) context.rightSide.getLeafProjectAboveScan());
       newScanInfo = constructProject(context.join.getCluster(), newScanInfo.left, newScanInfo.right,
               (DrillProjectRel)left, (DrillProjectRel)right, functionRegistry, true);
       projectAboveScan = (DrillProjectRel)newScanInfo.left;
@@ -80,7 +77,7 @@ public class SemiJoinTransformUtils {
 
     if (context.rightSide.getFilterBelowFlatten() != null) {
       left = SemiJoinIndexPlanUtils.getFilter(left, (DrillFilterRel)null);
-      right = SemiJoinIndexPlanUtils.getFilter(right, context.rightSide.getFilterBelowFlatten());
+      right = SemiJoinIndexPlanUtils.getFilter(right, (DrillFilterRel) context.rightSide.getFilterBelowFlatten());
       newScanInfo = constructFilter(context, newScanInfo.right, newScanInfo.left,
               (DrillFilterRel)left, (DrillFilterRel)right);
       filterBelowFlatten = (DrillFilterRel)newScanInfo.left;

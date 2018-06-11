@@ -25,32 +25,31 @@ import org.apache.calcite.rex.RexCall;
 import org.apache.calcite.rex.RexNode;
 import org.apache.drill.exec.planner.common.DrillFilterRelBase;
 import org.apache.drill.exec.planner.common.DrillProjectRelBase;
-import org.apache.drill.exec.planner.logical.DrillFilterRel;
-import org.apache.drill.exec.planner.logical.DrillProjectRel;
-import org.apache.drill.exec.planner.logical.DrillScanRel;
+import org.apache.drill.exec.planner.physical.FilterPrel;
+import org.apache.drill.exec.planner.physical.ProjectPrel;
+import org.apache.drill.exec.planner.physical.ScanPrel;
 
-public class FlattenIndexPlanCallContext extends IndexLogicalPlanCallContext
-    implements FlattenCallContext {
+public class FlattenPhysicalPlanCallContext implements FlattenCallContext {
 
   /**
    * Filter directly above the Flatten's project (this filter cannot be pushed down)
    */
-  protected DrillFilterRel filterAboveFlatten = null;
+  protected FilterPrel filterAboveFlatten = null;
 
   /**
    * Filter below the Flatten (and above the Scan)
    */
-  protected DrillFilterRel filterBelowFlatten = null;
+  protected FilterPrel filterBelowFlatten = null;
 
   /**
    * Project that has the Flatten
    */
-  protected DrillProjectRel projectWithFlatten = null;
+  protected ProjectPrel projectWithFlatten = null;
 
   /**
    * Project directly above the Scan
    */
-  protected DrillProjectRel leafProjectAboveScan = null;
+  protected ProjectPrel leafProjectAboveScan = null;
 
   /**
    * Map of Flatten field names to the corresponding RexCall
@@ -74,39 +73,21 @@ public class FlattenIndexPlanCallContext extends IndexLogicalPlanCallContext
    */
   protected List<RexNode> filterExprsReferencingFlatten = null;
 
-  public FlattenIndexPlanCallContext(RelOptRuleCall call,
-      DrillProjectRel upperProject,
-      DrillFilterRel filterAboveFlatten,
-      DrillProjectRel projectWithFlatten,
-      DrillFilterRel filterBelowFlatten,
-      DrillProjectRel leafProjectAboveScan,
-      DrillScanRel scan,
+  public FlattenPhysicalPlanCallContext(RelOptRuleCall call,
+      ProjectPrel upperProject,
+      FilterPrel filterAboveFlatten,
+      ProjectPrel projectWithFlatten,
+      FilterPrel filterBelowFlatten,
+      ProjectPrel leafProjectAboveScan,
+      ScanPrel scan,
       Map<String, RexCall> flattenMap,
       List<RexNode> nonFlattenExprs) {
-    super(call, null /* no Sort */,
-        upperProject,
-        filterAboveFlatten,
-        projectWithFlatten /* same as lowerProject */,
-        scan);
-
     this.filterAboveFlatten = filterAboveFlatten;
     this.filterBelowFlatten = filterBelowFlatten;
     this.projectWithFlatten = projectWithFlatten;
     this.leafProjectAboveScan = leafProjectAboveScan;
     this.flattenMap = flattenMap;
     this.nonFlattenExprs = nonFlattenExprs;
-  }
-
-  public FlattenIndexPlanCallContext(RelOptRuleCall call,
-      DrillProjectRel upperProject,
-      DrillFilterRel filterAboveFlatten,
-      DrillProjectRel projectWithFlatten,
-      DrillFilterRel filterBelowFlatten,
-      DrillScanRel scan,
-      Map<String, RexCall> flattenMap,
-      List<RexNode> nonFlattenExprs) {
-    this (call, upperProject, filterAboveFlatten, projectWithFlatten, filterBelowFlatten,
-        null /* no leaf project above scan */, scan, flattenMap, nonFlattenExprs);
   }
 
   @Override
