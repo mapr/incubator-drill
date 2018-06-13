@@ -27,7 +27,10 @@ import static com.mapr.drill.maprdb.tests.MaprDBTestsSuite.INDEX_FLUSH_TIMEOUT;
 import com.mapr.drill.maprdb.tests.json.BaseJsonTest;
 import com.mapr.tests.annotations.ClusterTest;
 import java.io.InputStream;
+import java.util.Properties;
+
 import org.apache.drill.PlanTestBase;
+import org.apache.drill.common.config.DrillConfig;
 import org.apache.hadoop.fs.Path;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -48,6 +51,9 @@ public class TestComplexTypeIndex extends BaseJsonTest {
   private static boolean tableCreated = false;
   private static String tablePath;
 
+  private static final String sliceTargetSmall = "alter session set `planner.slice_target` = 1";
+  private static final String sliceTargetDefault = "alter session reset `planner.slice_target`";
+  private static final String disableRowKeyJoinConversion = "alter session set planner.`enable_rowkeyjoin_conversion` = false";
   public static final String maxNonCoveringSelectivityThreshold = "alter session set `planner.index.noncovering_selectivity_threshold` = 1.0";
   public static final String resetmaxNonCoveringSelectivityThreshold = "alter session reset `planner.index.noncovering_selectivity_threshold`";
   public static final String noIndexPlan = "alter session set `planner.enable_index_planning` = false";
@@ -78,10 +84,19 @@ public class TestComplexTypeIndex extends BaseJsonTest {
 
   @BeforeClass
   public static void setupTestComplexTypeIndex() throws Exception {
+    Properties overrideProps = new Properties();
+    overrideProps.setProperty("format-maprdb.json.useNumRegionsForDistribution", "true");
+    updateTestCluster(1, DrillConfig.create(overrideProps));
+    MaprDBTestsSuite.setupTests();
+    MaprDBTestsSuite.createPluginAndGetConf(getDrillbitContext());
     tablePath = createTableAndIndex(TABLE_NAME, true, JSON_FILE_URL);
     createTableAndIndex(TABLE_NAME_1, false, JSON_FILE_URL);
     System.out.println("waiting for indexes to sync....");
     Thread.sleep(INDEX_FLUSH_TIMEOUT);
+    test(sliceTargetSmall);
+    //This setting is disabled to not produce RowKey join in case of two tables not same.
+    //These tests are negative tests which test for not producing RowKey Join.
+    test(disableRowKeyJoinConversion);
   }
 
   private static String createTableAndIndex(String tableName, boolean createIndex, String fileName) throws Exception {
@@ -221,7 +236,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
               "where t.f.high <= 200)";
 
       PlanTestBase.testPlanMatchingPatterns(query,
-              new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*high.*<=.*200.*indexName=salaryWeightIdx1"},
+              new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*high.*<=.*200.*indexName=(salaryWeightIdx1|weightCountyIdx1)"},
               new String[]{"RowKeyJoin", ".*RestrictedJsonTableGroupScan.*tableName=.*index_test_complex1,"}
       );
 
@@ -302,7 +317,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
 
       PlanTestBase.testPlanMatchingPatterns(query,
               new String[] {"RowKeyJoin", ".*RestrictedJsonTableGroupScan.*tableName=.*index_test_complex1,",
-                      ".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*.low.*<=.*200.*indexName=weightIdx1"},
+                      ".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*.low.*<=.*200.*indexName=(weightIdx1|weightComplexIdx1)"},
               new String[]{}
       );
       testBuilder()
@@ -333,7 +348,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
 
       PlanTestBase.testPlanMatchingPatterns(query,
               new String[] {"RowKeyJoin", ".*RestrictedJsonTableGroupScan.*tableName=.*index_test_complex1,.*columns=.*`\\*\\*`.*",
-                      ".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*.low.*<=.*200.*indexName=weightIdx1"},
+                      ".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*.low.*<=.*200.*indexName=(weightIdx1|weightComplexIdx1)"},
               new String[]{}
       );
   } finally {
@@ -352,7 +367,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
               " where t2.f.low <= 200 )";
 
       PlanTestBase.testPlanMatchingPatterns(query,
-              new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*.low.*<=.*200.*indexName=weightIdx1"},
+              new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*.low.*<=.*200.*indexName=(weightIdx1|weightComplexIdx1)"},
               new String[]{"RowKeyJoin", ".*RestrictedJsonTableGroupScan.*tableName=.*index_test_complex1,.*columns=.*`\\*\\*`.*"}
       );
       testBuilder()
@@ -380,7 +395,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
 
     PlanTestBase.testPlanMatchingPatterns(query,
             new String[] {"RowKeyJoin", ".*RestrictedJsonTableGroupScan.*tableName=.*index_test_complex1,.*columns=.*`\\*\\*`.*",
-                    ".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*.low.*<=.*200.*indexName=weightIdx1"},
+                    ".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*.low.*<=.*200.*indexName=(weightIdx1|weightComplexIdx1)"},
             new String[]{}
     );
     testBuilder()
@@ -409,7 +424,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
 
       PlanTestBase.testPlanMatchingPatterns(query,
               new String[] {"RowKeyJoin", ".*RestrictedJsonTableGroupScan.*tableName=.*index_test_complex1,",
-                      ".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*.low.*<=.*200.*indexName=weightIdx1"},
+                      ".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*.low.*<=.*200.*indexName=(weightIdx1|weightComplexIdx1)"},
               new String[]{}
       );
       testBuilder()

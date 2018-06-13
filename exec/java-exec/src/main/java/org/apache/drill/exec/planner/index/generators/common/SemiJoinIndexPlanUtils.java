@@ -20,6 +20,7 @@ package org.apache.drill.exec.planner.index.generators.common;
 import org.apache.drill.shaded.guava.com.google.common.base.Preconditions;
 import org.apache.drill.shaded.guava.com.google.common.collect.Lists;
 import org.apache.drill.shaded.guava.com.google.common.collect.Maps;
+import org.apache.drill.shaded.guava.com.google.common.collect.ImmutableList;
 import org.apache.calcite.plan.RelOptUtil;
 import org.apache.calcite.rel.InvalidRelException;
 import org.apache.calcite.rel.RelCollation;
@@ -133,7 +134,7 @@ public class SemiJoinIndexPlanUtils {
 
     List<RelNode> rkjNodes = new ArrayList<>();
     for (RelNode agg : distinct) {
-      rkjNodes.add(new RowKeyJoinPrel(leftInput.getCluster(), distinct.get(0).getTraitSet(), leftInput, agg,
+      rkjNodes.add(new RowKeyJoinPrel(leftInput.getCluster(), distinct.get(0).getTraitSet().plus(DRILL_PHYSICAL), leftInput, agg,
               joinContext.join.getCondition(), JoinRelType.INNER));
     }
     return rkjNodes;
@@ -312,16 +313,17 @@ public class SemiJoinIndexPlanUtils {
     Preconditions.checkNotNull(joinContext.call);
     boolean hashAggEnabled = PrelUtil.getPlannerSettings(joinContext.call.getPlanner()).isHashAggEnabled();
     List<RelNode> result = Lists.newArrayList();
-    // generating one phase aggregation.
+    final DrillDistributionTrait distOnAllKeys =
+            new DrillDistributionTrait(DrillDistributionTrait.DistributionType.HASH_DISTRIBUTED,
+                    ImmutableList.copyOf(AggPruleBase.getDistributionField(distinct, true)));
     if (hashAggEnabled) {
-      result.add(HashAggPrule.singlePhaseHashAgg(joinContext.call, distinct, input.getTraitSet().plus(DRILL_PHYSICAL), input));
-    }
-    DbGroupScan grpScan = (DbGroupScan) joinContext.leftSide.scan.getGroupScan();
+      // generating one phase aggregation.
+      result.add(HashAggPrule.singlePhaseHashAgg(joinContext.call, distinct, input.getTraitSet().plus(distOnAllKeys).plus(DRILL_PHYSICAL), input));
 
-    //generate two phase aggregation.
-    if (hashAggEnabled && AggPruleBase.create2PhasePlan(joinContext.call, distinct)) {
-      DrillDistributionTrait distOnAllKeys = JoinPruleBase.getRangePartitionTrait(joinContext.join, grpScan, distinct.getRowType());
-      result.add(new HashAggPrule.TwoPhaseHashAggWithRangeExchange(joinContext.call, distOnAllKeys).convertChild(distinct, input));
+      //generate two phase aggregation.
+      if (AggPruleBase.create2PhasePlan(joinContext.call, distinct)) {
+        result.add(new HashAggPrule.TwoPhaseHashAggWithHashExchange(joinContext.call, distOnAllKeys).convertChild(distinct, input));
+      }
     }
     return result;
   }
@@ -332,17 +334,17 @@ public class SemiJoinIndexPlanUtils {
     boolean streamAggEnabled = PrelUtil.getPlannerSettings(joinContext.call.getPlanner()).isStreamAggEnabled();
     List<RelNode> result = Lists.newArrayList();
     final RelCollation collation = DrillRelOptUtil.getCollation(distinct);
-
-    // generating one phase aggregation.
+    final DrillDistributionTrait distOnAllKeys =
+            new DrillDistributionTrait(DrillDistributionTrait.DistributionType.HASH_DISTRIBUTED,
+                    ImmutableList.copyOf(AggPruleBase.getDistributionField(distinct, true)));
     if (streamAggEnabled) {
-      result.add(StreamAggPrule.singlePhaseStreamAgg(distinct, input.getTraitSet().plus(DRILL_PHYSICAL).plus(collation), input));
-    }
-    DbGroupScan grpScan = (DbGroupScan) joinContext.leftSide.scan.getGroupScan();
+      // generating one phase aggregation.
+      result.add(StreamAggPrule.singlePhaseStreamAgg(distinct, input.getTraitSet().plus(DRILL_PHYSICAL).plus(distOnAllKeys).plus(collation), input));
 
-    //generate two phase aggregation.
-    if (streamAggEnabled && AggPruleBase.create2PhasePlan(joinContext.call, distinct)) {
-      DrillDistributionTrait distOnAllKeys = JoinPruleBase.getRangePartitionTrait(joinContext.join, grpScan, distinct.getRowType());
-      result.add(new StreamAggPrule.TwoPhaseStreamAggWithHashMergeExchange(joinContext.call, distOnAllKeys, collation).convertChild(distinct, input));
+      //generate two phase aggregation.
+      if (AggPruleBase.create2PhasePlan(joinContext.call, distinct)) {
+        result.add(new StreamAggPrule.TwoPhaseStreamAggWithHashMergeExchange(joinContext.call, distOnAllKeys, collation).convertChild(distinct, input));
+      }
     }
     return result;
   }
@@ -403,5 +405,4 @@ public class SemiJoinIndexPlanUtils {
   public static boolean checkSameTableScan(DrillScanRelBase scanA, DrillScanRelBase scanB) {
     return scanA.getTable().getQualifiedName().equals(scanB.getTable().getQualifiedName());
   }
-
 }

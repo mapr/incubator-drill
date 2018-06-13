@@ -93,6 +93,7 @@ public class NonCoveringIndexPlanGenerator extends AbstractIndexPlanGenerator {
   final protected FunctionalIndexInfo functionInfo;
   // The condition that should be applied on top of the primary table
   final protected RexNode primaryTableCondition;
+  protected boolean generateRangeExchange = true;
 
   public NonCoveringIndexPlanGenerator(IndexLogicalPlanCallContext indexContext,
                                        IndexDescriptor indexDesc,
@@ -107,6 +108,14 @@ public class NonCoveringIndexPlanGenerator extends AbstractIndexPlanGenerator {
     this.indexDesc = indexDesc;
     this.functionInfo = indexDesc.getFunctionalInfo();
     this.primaryTableCondition = primaryTableCondition;
+  }
+
+  public DbGroupScan getDbGroupScan() {
+    return (DbGroupScan)IndexPlanUtils.getGroupScan(origScan);
+  }
+
+  public void setGenerateRangePartitionExchange(boolean needToGenerateRangeExchg) {
+    this.generateRangeExchange = needToGenerateRangeExchg;
   }
 
   @Override
@@ -156,14 +165,19 @@ public class NonCoveringIndexPlanGenerator extends AbstractIndexPlanGenerator {
     final ProjectPrel rightIndexProjectPrel = new ProjectPrel(indexScanPrel.getCluster(), indexScanPrel.getTraitSet(),
         rightIndexFilterPrel, rightProjectExprs, rightProjectRowType);
 
-    // create a RANGE PARTITION on the right side (this could be removed later during ExcessiveExchangeIdentifier phase
-    // if the estimated row count is smaller than slice_target
-    final RelNode rangeDistRight = createRangeDistRight(rightIndexProjectPrel, rightRowKeyField, origDbGroupScan);
+    final RelNode convertedRight;
+    if (this.generateRangeExchange) {
+      // create a RANGE PARTITION on the right side (this could be removed later during ExcessiveExchangeIdentifier phase
+      // if the estimated row count is smaller than slice_target
+      final RelNode rangeDistRight = createRangeDistRight(rightIndexProjectPrel, rightRowKeyField, origDbGroupScan);
 
-    // the range partitioning adds an extra column for the partition id but in the final plan we already have a
-    // renaming Project for the _id field inserted as part of the JoinPrelRenameVisitor. Thus, we are not inserting
-    // a separate Project here.
-    final RelNode convertedRight = rangeDistRight;
+      // the range partitioning adds an extra column for the partition id but in the final plan we already have a
+      // renaming Project for the _id field inserted as part of the JoinPrelRenameVisitor. Thus, we are not inserting
+      // a separate Project here.
+      convertedRight = rangeDistRight;
+    } else {
+      convertedRight = rightIndexProjectPrel;
+    }
 
     // left (probe) side of the rowkey join
 

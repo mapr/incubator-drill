@@ -39,9 +39,9 @@ import org.apache.drill.exec.planner.physical.Prule;
 import org.apache.drill.exec.planner.physical.RowKeyJoinPrel;
 import org.apache.drill.exec.planner.physical.ScanPrel;
 
-import java.util.List;
-
 import static org.apache.drill.exec.planner.physical.Prel.DRILL_PHYSICAL;
+
+import java.util.List;
 
 /**
  * Generate a Non covering index plan that is semantically equivalent to the original plan.
@@ -64,6 +64,7 @@ public class SemiJoinMergeRowKeyJoinGenerator extends NonCoveringIndexPlanGenera
     super(indexContext.rightSide, indexDesc, indexGroupScan,
             indexCondition, remainderCondition, totalCondition, builder, settings);
     this.joinContext = indexContext;
+    this.setGenerateRangePartitionExchange(false);
   }
 
   @Override
@@ -134,7 +135,7 @@ public class SemiJoinMergeRowKeyJoinGenerator extends NonCoveringIndexPlanGenera
     }
     logger.info("semi_join_index_plan_info: create top level ROW KEY join");
     //build the top ROWKEY join operator on the merged root and agg.
-    return SemiJoinIndexPlanUtils.buildRowKeyJoin(joinContext, root,agg);
+    return SemiJoinIndexPlanUtils.buildRowKeyJoin(joinContext, root, buildRangePartitioners(agg));
   }
 
   /**

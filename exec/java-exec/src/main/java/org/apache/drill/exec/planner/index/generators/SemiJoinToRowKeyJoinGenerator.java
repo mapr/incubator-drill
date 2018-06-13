@@ -75,7 +75,7 @@ public class SemiJoinToRowKeyJoinGenerator extends CoveringIndexPlanGenerator {
     List<RelNode> agg = SemiJoinIndexPlanUtils.buildAgg(joinContext, joinContext.distinct, nonCoveringIndexPlan);
     logger.debug("semi_join_index_plan_info: generated hash aggregation operators: {}", agg);
 
-    return SemiJoinIndexPlanUtils.buildRowKeyJoin(joinContext,leftSideJoinContext.getRoot(), agg);
+    return SemiJoinIndexPlanUtils.buildRowKeyJoin(joinContext,leftSideJoinContext.getRoot() , buildRangePartitioners(agg));
   }
 
   @Override

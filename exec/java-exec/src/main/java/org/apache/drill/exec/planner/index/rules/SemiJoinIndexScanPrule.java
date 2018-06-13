@@ -347,6 +347,7 @@ public class SemiJoinIndexScanPrule extends AbstractIndexPrule {
       List<RexNode> nonFlattenExprs = Lists.newArrayList();
 
       // populate the flatten and non-flatten collections
+
       projectHasFlatten(lowerProject, false, flattenMap, nonFlattenExprs);
 
       FlattenIndexPlanCallContext rightSideContext = new FlattenIndexPlanCallContext(call, upperProject, filter, lowerProject,

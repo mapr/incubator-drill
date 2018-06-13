@@ -160,6 +160,14 @@ public abstract class AbstractIndexPlanGenerator extends SubsetTransformer<RelNo
     return convertedRight;
   }
 
+  protected List<RelNode> buildRangePartitioners(List<RelNode> aggRels) {
+    List<RelNode> rangePartitioners = new ArrayList<>();
+    for (RelNode aggRel : aggRels) {
+      rangePartitioners.add(createRangeDistRight(aggRel,aggRel.getRowType().getFieldList().get(0), (DbGroupScan) IndexPlanUtils.getGroupScan(origScan)));
+    }
+    return rangePartitioners;
+  }
+
   @Override
   public RelTraitSet newTraitSet(RelTrait... traits) {
     RelTraitSet set = indexContext.getCall().getPlanner().emptyTraitSet();
