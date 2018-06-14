@@ -22,6 +22,7 @@ import java.util.Map;
 
 import org.apache.calcite.plan.RelOptRuleCall;
 import org.apache.calcite.rex.RexCall;
+import org.apache.calcite.rex.RexInputRef;
 import org.apache.calcite.rex.RexNode;
 import org.apache.drill.exec.planner.common.DrillFilterRelBase;
 import org.apache.drill.exec.planner.common.DrillProjectRelBase;
@@ -73,6 +74,11 @@ public class FlattenIndexPlanCallContext extends IndexLogicalPlanCallContext
    * rule will create an ITEM expression representing this condition.
    */
   protected List<RexNode> filterExprsReferencingFlatten = null;
+
+  /**
+   * List of input references for the leaf filter that is directly above the Scan
+   */
+  protected List<RexInputRef> leafFilterExprs = null;
 
   public FlattenIndexPlanCallContext(RelOptRuleCall call,
       DrillProjectRel upperProject,
@@ -157,6 +163,16 @@ public class FlattenIndexPlanCallContext extends IndexLogicalPlanCallContext
   @Override
   public List<RexNode> getRelevantExprsInLeafProject() {
     return relevantExprsInLeafProject;
+  }
+
+  @Override
+  public void setExprsForLeafFilter(List<RexInputRef> exprList) {
+    this.leafFilterExprs = exprList;
+  }
+
+  @Override
+  public List<RexInputRef> getExprsForLeafFilter() {
+    return leafFilterExprs;
   }
 
 }

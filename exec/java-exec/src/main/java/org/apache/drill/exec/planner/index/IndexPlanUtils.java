@@ -329,6 +329,16 @@ public class IndexPlanUtils {
           referencedExprsSet.add(expr);
         }
       }
+      if (flattenContext.getFilterBelowFlatten() != null) {
+        List<RexInputRef> exprsInLeafFilter = flattenContext.getExprsForLeafFilter();
+        if (exprsInLeafFilter != null && exprsInLeafFilter.size() > 0) {
+          for (RexInputRef n : exprsInLeafFilter) {
+            LogicalExpression expr =
+                DrillOptiq.toDrill(indexContext.getDefaultParseContext(), flattenContext.getScan(), n);
+            referencedExprsSet.add(expr);
+          }
+        }
+      }
 
       // now check for covering property
       boolean isCovering = indexInfo.getIndexDesc().isCoveringIndex(ImmutableList.copyOf(referencedExprsSet));

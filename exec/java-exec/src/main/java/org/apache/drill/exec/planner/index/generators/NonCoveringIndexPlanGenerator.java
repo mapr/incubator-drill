@@ -20,7 +20,6 @@ package org.apache.drill.exec.planner.index.generators;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.calcite.plan.RelOptUtil;
 import org.apache.calcite.plan.RelTraitSet;
@@ -217,9 +216,11 @@ public class NonCoveringIndexPlanGenerator extends AbstractIndexPlanGenerator {
     // _during_ index scan the primary table might get updated for the same row ids that were retrieved from the index.
     // By re-applying the conditions here, we will avoid correctness issues.
     FilterPrel leftIndexFilterPrel = null;
+    boolean leftFilterProjectCreated = false;
     if (indexDesc.isAsyncIndex()) {
       if (indexContext instanceof FlattenIndexPlanCallContext) {
         leftIndexFilterPrel = buildRelsForFlatten((FlattenIndexPlanCallContext) indexContext, dbScan);
+        leftFilterProjectCreated = true;
       } else {
         leftIndexFilterPrel = new FilterPrel(dbScan.getCluster(), dbScan.getTraitSet(),
                 dbScan, primaryTableCondition);
@@ -229,10 +230,9 @@ public class NonCoveringIndexPlanGenerator extends AbstractIndexPlanGenerator {
 
     RelDataType origRowType = origProject == null ? origScan.getRowType() : origProject.getRowType();
 
-    if (origProject != null) { // then we also  don't need a project
+    if (origProject != null && !leftFilterProjectCreated) { // then we also  don't need a project
       // new Project's rowtype is original Project's rowtype [plus rowkey if rowkey is not in original rowtype]
       List<RelDataTypeField> origProjFields = origRowType.getFieldList();
-      List<RelDataTypeField> newProjFields = Lists.newArrayList();
 
       leftProjectExprs.addAll(origProject.getProjects());
       leftFieldTypeBuilder.addAll(origProjFields);

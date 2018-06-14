@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.calcite.rex.RexCall;
+import org.apache.calcite.rex.RexInputRef;
 import org.apache.calcite.rex.RexNode;
 import org.apache.drill.exec.planner.common.DrillFilterRelBase;
 import org.apache.drill.exec.planner.common.DrillProjectRelBase;
@@ -45,5 +46,9 @@ public interface FlattenCallContext {
   void setRelevantExprsInLeafProject(List<RexNode> exprList);
 
   List<RexNode> getRelevantExprsInLeafProject();
+
+  void setExprsForLeafFilter(List<RexInputRef> exprList);
+
+  List<RexInputRef> getExprsForLeafFilter();
 
 }

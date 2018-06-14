@@ -38,6 +38,7 @@ import org.apache.drill.exec.planner.common.DrillProjectRelBase;
 import org.apache.drill.exec.planner.index.FlattenCallContext;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -219,12 +220,18 @@ public class FlattenConditionUtils {
     RexNode conditionFilterBelowFlatten = flattenContext.getFilterBelowFlatten().getCondition();
     if (flattenContext.getLeafProjectAboveScan() != null) {
       FilterVisitor  filterVisitor2 =
-          new FilterVisitor(flattenContext.getFlattenMap(), flattenContext.getLeafProjectAboveScan(), builder);
+          new FilterVisitor(Maps.newHashMap() /* empty flatten map */, flattenContext.getLeafProjectAboveScan(), builder);
       conditionFilterBelowFlatten = flattenContext.getFilterBelowFlatten().getCondition().accept(filterVisitor2);
 
       // keep track of the relevant exprs in the filter that are referencing the
       // child Project
       flattenContext.setRelevantExprsInLeafProject(filterVisitor2.getOtherExprs());
+    } else if (conditionFilterBelowFlatten != null) {
+      InputRefVisitor refVisitor = new InputRefVisitor();
+      conditionFilterBelowFlatten.accept(refVisitor);
+      List<RexInputRef> inputRefList = refVisitor.getInputRefs();
+
+      flattenContext.setExprsForLeafFilter(inputRefList);
     }
 
     cInfo.setConditionBelowFlatten(conditionFilterBelowFlatten);
@@ -420,4 +427,33 @@ public class FlattenConditionUtils {
       return otherExprs;
     }
   }
+
+  /**
+   * Simple visitor to gather all input refs in a filter
+   */
+  private static class InputRefVisitor extends RexVisitorImpl<Void> {
+    private final List<RexInputRef> inputRefList;
+
+    public InputRefVisitor() {
+      super(true);
+      inputRefList = new ArrayList<>();
+    }
+
+    public Void visitInputRef(RexInputRef ref) {
+      inputRefList.add(ref);
+      return null;
+    }
+
+    public Void visitCall(RexCall call) {
+      for (RexNode operand : call.operands) {
+        operand.accept(this);
+      }
+      return null;
+    }
+
+    public List<RexInputRef> getInputRefs() {
+      return inputRefList;
+    }
+  }
+
 }
