@@ -19,6 +19,7 @@ package org.apache.drill.exec.physical.base;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.drill.common.expression.FieldReference;
 import org.apache.drill.common.expression.SchemaPath;
 import org.apache.drill.common.logical.StoragePluginConfig;
@@ -89,4 +90,14 @@ public abstract class AbstractDbGroupScan extends AbstractGroupScan implements D
   public PluginCost getPluginCostModel() {
     return null;
   }
+
+  @Override
+  @JsonIgnore
+  public void setComplexFilterPushDown(boolean complexFilterPushDown) {
+    throw new UnsupportedOperationException("Db Table doesn't support complex filter push down.");
+  }
+
+  @Override
+  @JsonIgnore
+  public boolean supportsComplexFilterPushDown() { return false; }
 }

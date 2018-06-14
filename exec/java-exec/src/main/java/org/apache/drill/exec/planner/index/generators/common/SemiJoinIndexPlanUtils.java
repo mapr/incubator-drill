@@ -98,6 +98,7 @@ public class SemiJoinIndexPlanUtils {
     Preconditions.checkArgument(scan.getGroupScan() instanceof DbGroupScan);
 
     DbGroupScan restrictedScan = ((DbGroupScan)scan.getGroupScan()).getRestrictedScan(scan.getColumns());
+    restrictedScan.setComplexFilterPushDown(true);
     collectionOfRels.add(new ScanPrel(scan.getCluster(), scan.getTraitSet().plus(DRILL_PHYSICAL),
             restrictedScan, scan.getRowType(), scan.getTable()));
     return collectionOfRels;
@@ -203,6 +204,7 @@ public class SemiJoinIndexPlanUtils {
 
     DbGroupScan restrictedGroupScan  = ((DbGroupScan) IndexPlanUtils.getGroupScan(leftScan))
             .getRestrictedScan(ListUtils.union(leftGroupScan.getColumns(), rightGroupScan.getColumns()));
+    restrictedGroupScan.setComplexFilterPushDown(true);
     return new ScanPrel(leftScan.getCluster(),
             rightScan.getTraitSet(),
             restrictedGroupScan,

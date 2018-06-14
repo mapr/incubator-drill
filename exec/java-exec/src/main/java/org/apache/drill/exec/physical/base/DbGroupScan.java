@@ -134,4 +134,16 @@ public interface DbGroupScan extends GroupScan {
 
   @JsonIgnore
   boolean isFilterPushedDown();
+
+  /**
+   * Sets if the complex filter can be pushed down to the scan.
+   */
+  @JsonIgnore
+  void setComplexFilterPushDown(boolean complexFilterPushDown);
+
+  /**
+   * Whether complex filter conditions (like conditions on array fields etc) are supported.
+   */
+  @JsonIgnore
+  boolean supportsComplexFilterPushDown();
 }

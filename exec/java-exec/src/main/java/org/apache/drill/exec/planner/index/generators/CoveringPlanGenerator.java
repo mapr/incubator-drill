@@ -54,8 +54,9 @@ public class CoveringPlanGenerator extends AbstractCoveringPlanGenerator  {
 
   private static ScanPrel buildScanPrel(DrillScanRelBase scan) {
     DbGroupScan dbGroupScan = (DbGroupScan) IndexPlanUtils.getGroupScan(scan);
-
-    DrillDistributionTrait partition = IndexPlanUtils.scanIsPartition(IndexPlanUtils.getGroupScan(scan)) ?
+    dbGroupScan = ((DbGroupScan) dbGroupScan.clone(dbGroupScan.getColumns()));
+    dbGroupScan.setComplexFilterPushDown(true);
+    DrillDistributionTrait partition = IndexPlanUtils.scanIsPartition(dbGroupScan) ?
             DrillDistributionTrait.RANDOM_DISTRIBUTED : DrillDistributionTrait.SINGLETON;
 
     // add a default collation trait otherwise Calcite runs into a ClassCastException, which at first glance
