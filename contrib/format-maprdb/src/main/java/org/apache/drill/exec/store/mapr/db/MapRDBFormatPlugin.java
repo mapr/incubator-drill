@@ -114,6 +114,7 @@ public class MapRDBFormatPlugin extends TableFormatPlugin {
   @JsonIgnore
   public Set<StoragePluginOptimizerRule> getOptimizerRules() {
     return ImmutableSet.of(MapRDBPushFilterIntoScan.FILTER_ON_SCAN, MapRDBPushFilterIntoScan.FILTER_ON_PROJECT,
+        MapRDBPushFilterIntoScan.FILTER_ON_FLATTEN_ON_FILTER_SCAN, MapRDBPushFilterIntoScan.FILTER_ON_FLATTEN_ON_FILTER_ON_PROJECT_ON_SCAN,
         MapRDBPushProjectIntoScan.PROJECT_ON_SCAN, MapRDBPushLimitIntoScan.LIMIT_ON_PROJECT,
         MapRDBPushLimitIntoScan.LIMIT_ON_SCAN, MapRDBPushLimitIntoScan.LIMIT_ON_RKJOIN);
   }

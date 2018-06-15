@@ -352,8 +352,7 @@ public class SemiJoinIndexScanPrule extends AbstractIndexPrule {
       FlattenIndexPlanCallContext rightSideContext = new FlattenIndexPlanCallContext(call, upperProject, filter, lowerProject,
               null, rightScan, flattenMap, nonFlattenExprs);
 
-      SemiJoinIndexPlanCallContext idxContext = new SemiJoinIndexPlanCallContext(call, join, distinct,
-              this.context, rightSideContext);
+      SemiJoinIndexPlanCallContext idxContext = new SemiJoinIndexPlanCallContext(call, join, distinct, this.context, rightSideContext);
       idxContext.setCoveringIndexPlanApplicable(!projectHasFlatten(context.lowerProject, true, null,null) &&
               !projectHasFlatten(context.upperProject, true, null, null));
       return idxContext;

@@ -19,6 +19,7 @@ package org.apache.drill.exec.planner.index.generators.common;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import org.apache.calcite.plan.RelOptUtil;
 import org.apache.calcite.rel.InvalidRelException;
 import org.apache.calcite.rel.RelCollation;
@@ -30,6 +31,7 @@ import org.apache.calcite.rel.type.RelDataType;
 import org.apache.calcite.rel.type.RelDataTypeField;
 import org.apache.calcite.rel.type.RelRecordType;
 import org.apache.calcite.rex.RexBuilder;
+import org.apache.calcite.rex.RexCall;
 import org.apache.calcite.rex.RexNode;
 import org.apache.calcite.rex.RexUtil;
 import org.apache.calcite.sql.validate.SqlValidatorUtil;
@@ -38,9 +40,11 @@ import org.apache.commons.collections.ListUtils;
 import org.apache.drill.exec.physical.base.DbGroupScan;
 import org.apache.drill.exec.planner.common.DrillScanRelBase;
 import org.apache.drill.exec.planner.common.DrillRelOptUtil;
+import org.apache.drill.exec.planner.index.FlattenPhysicalPlanCallContext;
 import org.apache.drill.exec.planner.index.IndexPhysicalPlanCallContext;
 import org.apache.drill.exec.planner.index.IndexPlanUtils;
 import org.apache.drill.exec.planner.index.SemiJoinIndexPlanCallContext;
+import org.apache.drill.exec.planner.index.rules.AbstractMatchFunction;
 import org.apache.drill.exec.planner.logical.DrillAggregateRel;
 import org.apache.drill.exec.planner.logical.DrillProjectRel;
 import org.apache.drill.exec.planner.logical.DrillFilterRel;
@@ -59,6 +63,7 @@ import org.apache.drill.exec.planner.physical.StreamAggPrule;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static org.apache.drill.exec.planner.logical.DrillRel.DRILL_LOGICAL;
 import static org.apache.drill.exec.planner.physical.Prel.DRILL_PHYSICAL;
@@ -82,7 +87,7 @@ public class SemiJoinIndexPlanUtils {
   /**
    * Given a join context it traverses the nodes and creates the corresponding physical rels.
    */
-  public static IndexPhysicalPlanCallContext gatherLeftSideRelsOfJoin(SemiJoinIndexPlanCallContext joinContext) {
+  public static FlattenPhysicalPlanCallContext gatherLeftSideRelsOfJoin(SemiJoinIndexPlanCallContext joinContext) {
     List<RelNode> nodes = Lists.newArrayList();
     physicalRel(joinContext.leftSide.upperProject,
             physicalRel(joinContext.leftSide.filter,
@@ -341,13 +346,16 @@ public class SemiJoinIndexPlanUtils {
    * This function assumes that all the nodes are physical rels and are one of the
    * ScanPrel, FilterPrel, ProjectPrel.
    */
-  public static IndexPhysicalPlanCallContext getPhysicalContext(List<RelNode> nodes) {
+  public static FlattenPhysicalPlanCallContext getPhysicalContext(List<RelNode> nodes) {
     Preconditions.checkArgument( nodes.size() >= 1 && nodes.get(0) instanceof ScanPrel);
 
     ScanPrel scan = null;
-    ProjectPrel lowerProj = null;
-    FilterPrel filter = null;
-    ProjectPrel upperProj = null;
+    ProjectPrel projectAboveScan = null;
+    ProjectPrel projectWithFlatten = null;
+    FilterPrel filterBelowFlatten = null;
+    FilterPrel filterAboveFlatten = null;
+    ProjectPrel projectAboveFlatten = null;
+    boolean encounteredProjWithFlattens = false;
     for (RelNode nd : nodes) {
       Preconditions.checkArgument(nd instanceof ProjectPrel
               || nd instanceof FilterPrel
@@ -357,18 +365,33 @@ public class SemiJoinIndexPlanUtils {
         Preconditions.checkArgument(scan == null);
         scan = (ScanPrel)nd;
       } else if (nd instanceof ProjectPrel) {
-        Preconditions.checkArgument(lowerProj == null || upperProj == null);
-        if (filter == null) {
-          lowerProj = (ProjectPrel)nd;
+        boolean isProjectwithFlatten = AbstractMatchFunction.projectHasFlatten((ProjectPrel)nd, true, null,null);
+        Preconditions.checkArgument(!encounteredProjWithFlattens || !isProjectwithFlatten);
+
+        encounteredProjWithFlattens = encounteredProjWithFlattens || isProjectwithFlatten;
+        Preconditions.checkArgument(projectAboveScan == null || projectAboveFlatten == null || projectWithFlatten == null);
+        if (!encounteredProjWithFlattens && projectAboveScan == null) {
+          Preconditions.checkArgument(projectAboveScan == null);
+          projectAboveScan = (ProjectPrel)nd;
+        } else if(isProjectwithFlatten) {
+          projectWithFlatten = (ProjectPrel) nd;
         } else {
-          upperProj = (ProjectPrel)nd;
+          projectAboveFlatten = (ProjectPrel) nd;
         }
       } else {
-        Preconditions.checkArgument(filter == null);
-        filter = (FilterPrel)nd;
+        Preconditions.checkArgument(filterBelowFlatten == null || filterAboveFlatten == null);
+        if (!encounteredProjWithFlattens) {
+          Preconditions.checkArgument(filterBelowFlatten == null);
+          filterBelowFlatten = (FilterPrel) nd;
+        } else {
+          Preconditions.checkArgument(filterAboveFlatten == null);
+          filterAboveFlatten = (FilterPrel) nd;
+        }
       }
     }
-    return new IndexPhysicalPlanCallContext(null, upperProj, filter, lowerProj, scan);
+    Map<String, RexCall> flattenMap = Maps.newHashMap();
+    List<RexNode> nonFlattenExprs = Lists.newArrayList();
+    return new FlattenPhysicalPlanCallContext(projectAboveFlatten, filterAboveFlatten,projectWithFlatten,filterBelowFlatten,projectAboveScan,scan, flattenMap,nonFlattenExprs);
   }
 
   public static boolean checkSameTableScan(DrillScanRelBase scanA, DrillScanRelBase scanB) {

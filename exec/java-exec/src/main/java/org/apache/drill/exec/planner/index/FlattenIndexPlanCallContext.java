@@ -26,6 +26,7 @@ import org.apache.calcite.rex.RexInputRef;
 import org.apache.calcite.rex.RexNode;
 import org.apache.drill.exec.planner.common.DrillFilterRelBase;
 import org.apache.drill.exec.planner.common.DrillProjectRelBase;
+import org.apache.drill.exec.planner.common.DrillScanRelBase;
 import org.apache.drill.exec.planner.logical.DrillFilterRel;
 import org.apache.drill.exec.planner.logical.DrillProjectRel;
 import org.apache.drill.exec.planner.logical.DrillScanRel;
@@ -173,6 +174,16 @@ public class FlattenIndexPlanCallContext extends IndexLogicalPlanCallContext
   @Override
   public List<RexInputRef> getExprsForLeafFilter() {
     return leafFilterExprs;
+  }
+
+  @Override
+  public DrillScanRelBase getScan() {
+    return scan;
+  }
+
+  @Override
+  public DrillProjectRelBase getProjectAboveFlatten() {
+    return this.upperProject;
   }
 
 }

@@ -20,12 +20,13 @@ package org.apache.drill.exec.planner.index;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.calcite.plan.RelOptRuleCall;
+import org.apache.calcite.rel.RelNode;
 import org.apache.calcite.rex.RexCall;
 import org.apache.calcite.rex.RexInputRef;
 import org.apache.calcite.rex.RexNode;
 import org.apache.drill.exec.planner.common.DrillFilterRelBase;
 import org.apache.drill.exec.planner.common.DrillProjectRelBase;
+import org.apache.drill.exec.planner.common.DrillScanRelBase;
 import org.apache.drill.exec.planner.physical.FilterPrel;
 import org.apache.drill.exec.planner.physical.ProjectPrel;
 import org.apache.drill.exec.planner.physical.ScanPrel;
@@ -51,6 +52,18 @@ public class FlattenPhysicalPlanCallContext implements FlattenCallContext {
    * Project directly above the Scan
    */
   protected ProjectPrel leafProjectAboveScan = null;
+
+
+  /**
+   * project above flatten
+   */
+  protected ProjectPrel projectAboveFlatten = null;
+
+  /**
+   * Scan
+   */
+  protected ScanPrel scan = null;
+
 
   /**
    * Map of Flatten field names to the corresponding RexCall
@@ -79,7 +92,12 @@ public class FlattenPhysicalPlanCallContext implements FlattenCallContext {
    */
   protected List<RexInputRef> leafFilterExprs = null;
 
-  public FlattenPhysicalPlanCallContext(RelOptRuleCall call,
+  /**
+   * Non null root node of the physical call context.
+   */
+  private final RelNode root;
+
+  public FlattenPhysicalPlanCallContext(
       ProjectPrel upperProject,
       FilterPrel filterAboveFlatten,
       ProjectPrel projectWithFlatten,
@@ -88,12 +106,15 @@ public class FlattenPhysicalPlanCallContext implements FlattenCallContext {
       ScanPrel scan,
       Map<String, RexCall> flattenMap,
       List<RexNode> nonFlattenExprs) {
+    this.projectAboveFlatten = upperProject;
     this.filterAboveFlatten = filterAboveFlatten;
     this.filterBelowFlatten = filterBelowFlatten;
     this.projectWithFlatten = projectWithFlatten;
     this.leafProjectAboveScan = leafProjectAboveScan;
+    this.scan = scan;
     this.flattenMap = flattenMap;
     this.nonFlattenExprs = nonFlattenExprs;
+    this.root = getRootInternal();
   }
 
   @Override
@@ -156,4 +177,33 @@ public class FlattenPhysicalPlanCallContext implements FlattenCallContext {
     return leafFilterExprs;
   }
 
+  @Override
+  public DrillScanRelBase getScan() {
+    return scan;
+  }
+
+  @Override
+  public DrillProjectRelBase getProjectAboveFlatten() {
+    return projectAboveFlatten;
+  }
+
+  private RelNode getRootInternal() {
+    if (projectAboveFlatten != null) {
+      return projectAboveFlatten;
+    } else if (filterAboveFlatten != null) {
+      return filterAboveFlatten;
+    } else if (projectWithFlatten != null) {
+      return projectWithFlatten;
+    } else if (filterBelowFlatten != null){
+      return filterBelowFlatten;
+    } else if (leafProjectAboveScan != null) {
+      return leafProjectAboveScan;
+    } else {
+      return scan;
+    }
+  }
+
+  public RelNode getRoot() {
+    return root;
+  }
 }

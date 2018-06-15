@@ -22,6 +22,7 @@ import org.apache.calcite.rex.RexBuilder;
 import org.apache.calcite.rex.RexNode;
 import org.apache.drill.exec.physical.base.IndexGroupScan;
 import org.apache.drill.exec.planner.common.DrillRelOptUtil;
+import org.apache.drill.exec.planner.index.FlattenPhysicalPlanCallContext;
 import org.apache.drill.exec.planner.index.IndexDescriptor;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
@@ -109,7 +110,7 @@ public class SemiJoinMergeRowKeyJoinGenerator extends NonCoveringIndexPlanGenera
     logger.debug("semi_join_index_plan_info: Gathered top level project rels: {}", projectRels);
 
     //gather the left side rel's of the RKJ operator.
-    IndexPhysicalPlanCallContext leftContext = gatherLeftSideRelsOfRKJ(rkj);
+    FlattenPhysicalPlanCallContext leftContext = gatherLeftSideRelsOfRKJ(rkj);
     //get the aggregation nodes input.
     RelNode aggInput = SemiJoinIndexPlanUtils.getRightInputOfRowKeyJoin(rkj);
     List<RelNode> agg = SemiJoinIndexPlanUtils.buildAgg(joinContext, joinContext.distinct, aggInput);
@@ -117,7 +118,7 @@ public class SemiJoinMergeRowKeyJoinGenerator extends NonCoveringIndexPlanGenera
 
 
     //gather the left side relations of the root join.
-    IndexPhysicalPlanCallContext leftSideJoinContext = SemiJoinIndexPlanUtils.gatherLeftSideRelsOfJoin(joinContext);
+    FlattenPhysicalPlanCallContext leftSideJoinContext = SemiJoinIndexPlanUtils.gatherLeftSideRelsOfJoin(joinContext);
     //merge the left side relations of the join and left side relations of the RKJ operator.
     RelNode root = merge(leftSideJoinContext, leftContext);
     //apply the top level projects.
@@ -140,26 +141,47 @@ public class SemiJoinMergeRowKeyJoinGenerator extends NonCoveringIndexPlanGenera
    * Merge algorithm creates the nodes in the reverse order. It first merges the scan nodes and then
    * builds other top (project, filter, project) with previous nodes as the input.
    */
-  private RelNode merge(IndexPhysicalPlanCallContext leftJoinContext, IndexPhysicalPlanCallContext leftRKJContext) {
-    RelNode leftInput = leftJoinContext.scan;
-    RelNode rightInput = leftRKJContext.scan;
+  private RelNode merge(FlattenPhysicalPlanCallContext leftJoinContext, FlattenPhysicalPlanCallContext leftRKJContext) {
+    RelNode leftInput = leftJoinContext.getScan();
+    RelNode rightInput = leftRKJContext.getScan();
+    Preconditions.checkArgument(leftInput != null && rightInput != null);
     RelNode input = SemiJoinIndexPlanUtils.mergeScan((ScanPrel)leftInput, (ScanPrel)rightInput);
     logger.debug("semi_join_index_plan_info: merge scan ( {}, {} ) => {} ", leftInput, rightInput, input );
 
-    leftInput = SemiJoinIndexPlanUtils.getProject(leftInput, leftJoinContext.lowerProject);
-    rightInput = SemiJoinIndexPlanUtils.getProject(rightInput, leftRKJContext.lowerProject);
-    input = SemiJoinIndexPlanUtils.mergeProject((ProjectPrel) leftInput, (ProjectPrel) rightInput, input, this.joinContext.call.builder());
-    logger.debug("semi_join_index_plan_info: merge project ( {}, {} ) => {} ", leftInput, rightInput, input);
+    if (leftJoinContext.getLeafProjectAboveScan() != null || leftRKJContext.getLeafProjectAboveScan() != null) {
+      leftInput = SemiJoinIndexPlanUtils.getProject(leftInput, (ProjectPrel) leftJoinContext.getLeafProjectAboveScan());
+      rightInput = SemiJoinIndexPlanUtils.getProject(rightInput, (ProjectPrel) leftRKJContext.getLeafProjectAboveScan());
+      input = SemiJoinIndexPlanUtils.mergeProject((ProjectPrel) leftInput, (ProjectPrel) rightInput, input, this.joinContext.call.builder());
+      logger.debug("semi_join_index_plan_info: merge project ( {}, {} ) => {} ", leftInput, rightInput, input);
+    }
 
-    leftInput = SemiJoinIndexPlanUtils.getFilter(leftInput, leftJoinContext.filter);
-    rightInput = SemiJoinIndexPlanUtils.getFilter(rightInput, leftRKJContext.filter);
-    input = SemiJoinIndexPlanUtils.mergeFilter((FilterPrel)leftInput, (FilterPrel)rightInput, input);
-    logger.debug("semi_join_index_plan_info: merge filter ( {}, {} ) => {} ", leftInput, rightInput, input);
+    if (leftJoinContext.getFilterBelowFlatten() != null || leftRKJContext.getFilterBelowFlatten() != null) {
+      leftInput = SemiJoinIndexPlanUtils.getFilter(leftInput, (FilterPrel) leftJoinContext.getFilterBelowFlatten());
+      rightInput = SemiJoinIndexPlanUtils.getFilter(rightInput, (FilterPrel) leftRKJContext.getFilterBelowFlatten());
+      input = SemiJoinIndexPlanUtils.mergeFilter((FilterPrel) leftInput, (FilterPrel) rightInput, input);
+      logger.debug("semi_join_index_plan_info: merge filter ( {}, {} ) => {} ", leftInput, rightInput, input);
+    }
 
-    leftInput = SemiJoinIndexPlanUtils.getProject(leftInput, leftJoinContext.upperProject);
-    rightInput = SemiJoinIndexPlanUtils.getProject(rightInput, leftRKJContext.upperProject);
-    input = SemiJoinIndexPlanUtils.mergeProject((ProjectPrel) leftInput, (ProjectPrel) rightInput, input, this.joinContext.call.builder());
-    logger.debug("semi_join_index_plan_info: merge project ( {}, {} ) => {} ", leftInput, rightInput, input);
+    if (leftJoinContext.getProjectWithFlatten() != null || leftRKJContext.getProjectWithFlatten() != null) {
+      leftInput = SemiJoinIndexPlanUtils.getProject(leftInput, (ProjectPrel) leftJoinContext.getProjectWithFlatten());
+      rightInput = SemiJoinIndexPlanUtils.getProject(rightInput, (ProjectPrel) leftRKJContext.getProjectWithFlatten());
+      input = SemiJoinIndexPlanUtils.mergeProject((ProjectPrel) leftInput, (ProjectPrel) rightInput, input, this.joinContext.call.builder());
+      logger.debug("semi_join_index_plan_info: merge project ( {}, {} ) => {} ", leftInput, rightInput, input);
+    }
+
+    if (leftJoinContext.getFilterAboveFlatten() != null || leftRKJContext.getFilterAboveFlatten() != null) {
+      leftInput = SemiJoinIndexPlanUtils.getFilter(leftInput, (FilterPrel) leftJoinContext.getFilterAboveFlatten());
+      rightInput = SemiJoinIndexPlanUtils.getFilter(rightInput, (FilterPrel) leftRKJContext.getFilterAboveFlatten());
+      input = SemiJoinIndexPlanUtils.mergeFilter((FilterPrel) leftInput, (FilterPrel) rightInput, input);
+      logger.debug("semi_join_index_plan_info: merge filter ( {}, {} ) => {} ", leftInput, rightInput, input);
+    }
+
+    if (leftJoinContext.getProjectAboveFlatten() != null || leftRKJContext.getProjectAboveFlatten() != null) {
+      leftInput = SemiJoinIndexPlanUtils.getProject(leftInput, (ProjectPrel) leftJoinContext.getProjectAboveFlatten());
+      rightInput = SemiJoinIndexPlanUtils.getProject(rightInput, (ProjectPrel) leftRKJContext.getProjectAboveFlatten());
+      input = SemiJoinIndexPlanUtils.mergeProject((ProjectPrel) leftInput, (ProjectPrel) rightInput, input, this.joinContext.call.builder());
+      logger.debug("semi_join_index_plan_info: merge project ( {}, {} ) => {} ", leftInput, rightInput, input);
+    }
 
     return input;
   }
@@ -175,7 +197,7 @@ public class SemiJoinMergeRowKeyJoinGenerator extends NonCoveringIndexPlanGenera
     }
   }
 
-  private IndexPhysicalPlanCallContext gatherLeftSideRelsOfRKJ(RowKeyJoinPrel rkj) {
+  private FlattenPhysicalPlanCallContext gatherLeftSideRelsOfRKJ(RowKeyJoinPrel rkj) {
     RelNode node = rkj.getInput(0);
     List<RelNode> relNodes = Lists.newArrayList();
     SemiJoinIndexPlanUtils.getRelNodesBottomUp(node, relNodes);
