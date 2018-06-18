@@ -20,13 +20,17 @@ package org.apache.drill.exec.planner.index.generators;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 
+import org.apache.calcite.plan.RelOptCluster;
+import org.apache.calcite.plan.RelOptUtil;
 import org.apache.calcite.plan.RelTraitSet;
 import org.apache.calcite.rel.RelCollation;
+import org.apache.calcite.rel.core.Project;
 import org.apache.calcite.rel.type.RelDataType;
 import org.apache.calcite.rex.RexBuilder;
 import org.apache.calcite.rex.RexCall;
 import org.apache.calcite.rex.RexInputRef;
 import org.apache.calcite.rex.RexNode;
+import org.apache.calcite.rex.RexUtil;
 import org.apache.drill.exec.physical.base.IndexGroupScan;
 import org.apache.drill.exec.planner.index.IndexLogicalPlanCallContext;
 import org.apache.drill.exec.planner.index.IndexDescriptor;
@@ -34,8 +38,9 @@ import org.apache.drill.exec.planner.index.FunctionalIndexInfo;
 import org.apache.drill.exec.planner.index.FunctionalIndexHelper;
 import org.apache.drill.exec.planner.index.IndexPlanUtils;
 import org.apache.drill.exec.planner.index.SimpleRexRemap;
-import org.apache.drill.exec.planner.logical.DrillMergeProjectRule;
 import org.apache.drill.exec.planner.logical.DrillParseContext;
+import org.apache.drill.exec.planner.logical.DrillProjectRel;
+import org.apache.drill.exec.planner.logical.DrillRelFactories;
 import org.apache.drill.exec.planner.physical.FilterPrel;
 import org.apache.drill.exec.planner.physical.PlannerSettings;
 import org.apache.drill.exec.planner.physical.Prel;
@@ -147,7 +152,7 @@ public class CoveringIndexPlanGenerator extends AbstractIndexPlanGenerator {
         //merge upperProject with indexProjectPrel(from origProject) if both exist,
         ProjectPrel newProject = cap;
         if (indexProjectPrel != null) {
-          newProject = (ProjectPrel) DrillMergeProjectRule.replace(newProject, indexProjectPrel);
+          newProject = replace(newProject, indexProjectPrel);
         }
         // then rewrite functional expressions in new project.
         List<RexNode> newProjects = Lists.newArrayList();
@@ -203,6 +208,26 @@ public class CoveringIndexPlanGenerator extends AbstractIndexPlanGenerator {
           rewriteConditionForProjectInternal(child, projects, mapping);
         }
       }
+    }
+  }
+
+  public static ProjectPrel replace(Project topProject, Project bottomProject) {
+    final List<RexNode> newProjects =
+        RelOptUtil.pushPastProject(topProject.getProjects(), bottomProject);
+
+    // replace the two projects with a combined projection
+    if (topProject instanceof DrillProjectRel) {
+      ProjectPrel newProjectRel = (ProjectPrel)DrillRelFactories.DRILL_LOGICAL_PROJECT_FACTORY.createProject(
+          bottomProject.getInput(), newProjects,
+          topProject.getRowType().getFieldNames());
+
+      return newProjectRel;
+    } else {
+      final RelNode child = bottomProject.getInput();
+      final RelOptCluster cluster = child.getCluster();
+      final RelDataType rowType = RexUtil.createStructType(cluster.getTypeFactory(), newProjects, topProject.getRowType().getFieldNames());
+      return new ProjectPrel(cluster, child.getTraitSet().plus(Prel.DRILL_PHYSICAL),
+          child, Lists.newArrayList(newProjects), rowType);
     }
   }
 }
