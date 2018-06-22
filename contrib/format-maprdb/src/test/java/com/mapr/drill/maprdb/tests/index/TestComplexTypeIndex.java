@@ -926,4 +926,130 @@ public class TestComplexTypeIndex extends BaseJsonTest {
     return;
   }
 
+  @Test
+  public void TestInWithAnd() throws Exception {
+
+    try {
+      String query = "select _id from hbase.`index_test_complex1` where _id in (select _id from " +
+              "( select _id, flatten(t1.cars) as f1, t1.`salary`.`max` as maxsal from " +
+              "hbase.`index_test_complex1` as t1 ) as t where t.f1 IN ('Toyota Camry', 'BMW') and t.maxsal > 2000)";
+
+      test(maxNonCoveringSelectivityThreshold);
+      test(DisableComplexFTSTypePlanning);
+
+      PlanTestBase.testPlanMatchingPatterns(query,
+              new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*cars.*Toyota Camry.*cars.*BMW.*indexName.*carsIdx1"},
+              new String[]{}
+      );
+      testBuilder()
+              .optionSettingQueriesForTestQuery(maxNonCoveringSelectivityThreshold)
+              .optionSettingQueriesForBaseline(noIndexPlan)
+              .optionSettingQueriesForBaseline(DisableComplexFTSTypePlanning)
+              .unOrdered()
+              .sqlQuery(query)
+              .sqlBaselineQuery(query)
+              .build()
+              .run();
+
+    } finally {
+      test(resetmaxNonCoveringSelectivityThreshold);
+      test(IndexPlanning);
+      test(ResetComplexFTSTypePlanning);
+    }
+    return;
+  }
+
+  @Test
+  public void TestInWithElementAnd() throws Exception {
+
+    try {
+      String query = "select _id from hbase.`index_test_complex1` where _id in (select _id from ( select _id, flatten(t1.cars) as f1, " +
+              "t1.`salary`.`max` as maxsal from hbase.`index_test_complex1`as t1 ) as t where t.f1 IN ('Toyota Camry', 'BMW') " +
+              "and t.f1 IN ('Honda Accord', 'Toyota Camry'))";
+
+      test(maxNonCoveringSelectivityThreshold);
+      test(DisableComplexFTSTypePlanning);
+
+      PlanTestBase.testPlanMatchingPatterns(query,
+              new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*elementAnd.*cars.*Toyota Camry.*or.*BMW.*and.*Honda Accord.*or.*Toyota Camry.*indexName.*carsIdx1"},
+              new String[]{}
+      );
+      testBuilder()
+              .optionSettingQueriesForTestQuery(maxNonCoveringSelectivityThreshold)
+              .optionSettingQueriesForBaseline(noIndexPlan)
+              .optionSettingQueriesForBaseline(DisableComplexFTSTypePlanning)
+              .unOrdered()
+              .sqlQuery(query)
+              .sqlBaselineQuery(query)
+              .build()
+              .run();
+
+    } finally {
+      test(resetmaxNonCoveringSelectivityThreshold);
+      test(IndexPlanning);
+      test(ResetComplexFTSTypePlanning);
+    }
+    return;
+  }
+
+  @Test
+  public void TestOrWithAnd() throws Exception {
+
+    try {
+      String query = "select _id from hbase.`index_test_complex1` where _id in (select _id from ( select _id, " +
+              "flatten(t1.weight) as f1 , t1.`salary`.`max` as maxsal from hbase.`index_test_complex1` as t1 ) as t " +
+              "where (t.f1.low = 120 or maxsal >= 2000) and (t.f1.low = 140 or t.f1.high = 150))";
+
+      test(maxNonCoveringSelectivityThreshold);
+
+      PlanTestBase.testPlanMatchingPatterns(query,
+              new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*low.*or.*salary.*max.*2000.*and.*weight.*low.*140.*weight.*high"},
+              new String[]{".*elementAnd"}
+      );
+      testBuilder()
+              .optionSettingQueriesForTestQuery(maxNonCoveringSelectivityThreshold)
+              .optionSettingQueriesForBaseline(noIndexPlan)
+              .optionSettingQueriesForBaseline(DisableComplexFTSTypePlanning)
+              .unOrdered()
+              .sqlQuery(query)
+              .sqlBaselineQuery(query)
+              .build()
+              .run();
+
+    } finally {
+      test(resetmaxNonCoveringSelectivityThreshold);
+      test(IndexPlanning);
+      test(ResetComplexFTSTypePlanning);
+    }
+    return;
+  }
+
+  @Test
+  public void TestSimpleOr() throws Exception {
+
+    try {
+      String query = "select _id from hbase.`index_test_complex1` where _id in (select _id from ( select _id, flatten(t1.weight) as f1 ," +
+              " t1.`salary`.`max` as maxsal from hbase.`index_test_complex1` as t1 ) as t where t.f1.high = 150 or maxsal = 2000)";
+      test(ComplexFTSTypePlanning);
+      PlanTestBase.testPlanMatchingPatterns(query,
+              new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*high.*150.*or.*salary.*max.*2000"},
+              new String[]{}
+      );
+      testBuilder()
+              .optionSettingQueriesForBaseline(noIndexPlan)
+              .optionSettingQueriesForBaseline(DisableComplexFTSTypePlanning)
+              .unOrdered()
+              .sqlQuery(query)
+              .sqlBaselineQuery(query)
+              .build()
+              .run();
+
+    } finally {
+      test(resetmaxNonCoveringSelectivityThreshold);
+      test(IndexPlanning);
+      test(ResetComplexFTSTypePlanning);
+    }
+    return;
+  }
+
 }
