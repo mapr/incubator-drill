@@ -251,6 +251,21 @@ public abstract class PathSegment {
       }
       return s;
     }
+
+    public NameSegment getChildNameSegment() {
+      NameSegment childNameSegment;
+      NameSegment nameSegment = this;
+      if( nameSegment == null || nameSegment.isLastPath()) {
+        return null;
+      }
+      if (nameSegment.getChild() instanceof ArraySegment) {
+        childNameSegment = (NameSegment) nameSegment.getChild().getChild();
+      }
+      else {
+        childNameSegment = nameSegment.getChild().getNameSegment();
+      }
+      return childNameSegment;
+    }
   }
 
   public NameSegment getNameSegment() {

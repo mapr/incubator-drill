@@ -17,6 +17,7 @@
  */
 package org.apache.drill.exec.store.mapr.db.json;
 
+import com.google.common.collect.ImmutableList;
 import java.nio.ByteBuffer;
 import java.util.List;
 
@@ -117,27 +118,39 @@ public class JsonScanSpec {
   }
 
   public void mergeScanSpec(String functionName, JsonScanSpec scanSpec) {
-    if (this.condition != null && scanSpec.getCondition() != null) {
-      QueryCondition newCond = MapRDBImpl.newCondition();
-      switch (functionName) {
-      case FunctionNames.AND:
-        newCond.and();
-        break;
-      case FunctionNames.OR:
-        newCond.or();
-        break;
-      default:
-          assert(false);
+    this.mergeScanSpec(functionName, ImmutableList.of(scanSpec), null);
+  }
+
+  public void mergeScanSpec(String functionName, List<JsonScanSpec> scanSpecs, String arrayPrefix) {
+
+    if (scanSpecs.size() > 0) {
+      JsonScanSpec scanSpec = scanSpecs.get(0);
+      if (this.condition != null && scanSpec.getCondition() != null) {
+        QueryCondition newCond = MapRDBImpl.newCondition();
+        switch (functionName) {
+          case "elementAnd":
+            newCond.elementAnd(arrayPrefix);
+            break;
+          case FunctionNames.AND:
+            newCond.and();
+            break;
+          case FunctionNames.OR:
+            newCond.or();
+            break;
+          default:
+            assert (false);
+        }
+
+        newCond = newCond.condition(this.condition);
+        for (JsonScanSpec spec : scanSpecs) {
+          newCond = newCond.condition(spec.getCondition());
+        }
+
+        newCond.close().build();
+        this.condition = newCond;
+      } else if (scanSpec.getCondition() != null) {
+        this.condition = scanSpec.getCondition();
       }
-
-      newCond.condition(this.condition)
-             .condition(scanSpec.getCondition())
-             .close()
-             .build();
-
-      this.condition = newCond;
-    } else if (scanSpec.getCondition() != null){
-      this.condition = scanSpec.getCondition();
     }
   }
 

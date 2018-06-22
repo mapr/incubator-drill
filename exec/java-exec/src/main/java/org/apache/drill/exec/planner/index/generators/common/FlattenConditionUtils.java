@@ -22,6 +22,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+import java.util.ArrayList;
 import org.apache.calcite.plan.RelOptUtil;
 import org.apache.calcite.rel.type.RelDataType;
 import org.apache.calcite.rex.RexBuilder;
@@ -54,6 +55,19 @@ public class FlattenConditionUtils {
     private Map<String, RexNode> nameComposedCondMap = Maps.newHashMap();
     private RexNode conditionBelowFlatten = null;
     private List<RexNode> otherRemainderConjuncts = Lists.newArrayList();
+
+    public RexNode getConditionBelowFlatten() {
+      return conditionBelowFlatten;
+    }
+
+    public List<RexNode> getflattenConditions() {
+      List<RexNode> flattenConditions = new ArrayList<>(nameComposedCondMap.values());
+      return flattenConditions;
+    }
+
+    public List<RexNode> getOtherRemainderConjuncts() {
+      return otherRemainderConjuncts;
+    }
 
     public ComposedConditionInfo(RexBuilder builder) {
       this.builder = builder;

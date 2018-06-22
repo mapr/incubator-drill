@@ -17,6 +17,7 @@
  */
 package org.apache.drill.exec.store.mapr.db;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -99,7 +100,6 @@ public abstract class MapRDBPushFilterIntoScan extends StoragePluginOptimizerRul
       final FilterPrel filter = call.rel(0);
       ProjectPrel project = call.rel(1);
       final ScanPrel scan = call.rel(2);
-
       prepareContextAndPushDownFilter(call, scan, project, filter,null,null);
     }
 
@@ -172,8 +172,14 @@ public abstract class MapRDBPushFilterIntoScan extends StoragePluginOptimizerRul
 
 
   protected void doPushFilterIntoJsonGroupScan(RelOptRuleCall call,
+                                               FilterPrel filter, final ProjectPrel project, ScanPrel scan,
+                                               JsonTableGroupScan groupScan, RexNode condition) {
+    this.doPushFilterIntoJsonGroupScan(call, filter, project, scan, groupScan, ImmutableList.of(condition));
+  }
+
+  protected void doPushFilterIntoJsonGroupScan(RelOptRuleCall call,
       FilterPrel filter, final ProjectPrel project, ScanPrel scan,
-      JsonTableGroupScan groupScan, RexNode condition) {
+      JsonTableGroupScan groupScan, List<RexNode> conditions) {
 
     if (groupScan.isDisablePushdown() // Do not pushdown filter if it is disabled in plugin configuration
         || groupScan.isFilterPushedDown()) { // see below
@@ -187,15 +193,29 @@ public abstract class MapRDBPushFilterIntoScan extends StoragePluginOptimizerRul
     }
 
     LogicalExpression conditionExp;
-    try {
-      conditionExp = DrillOptiq.toDrill(new DrillParseContext(PrelUtil.getPlannerSettings(call.getPlanner())), scan, condition);
-    } catch (ClassCastException e) {
-      // MD-771 bug in DrillOptiq.toDrill() causes filter condition on ITEM operator to throw ClassCastException
-      // For such cases, we return without pushdown
-      return;
+    boolean allExpressionsConverted = true;
+    List<JsonScanSpec> scanSpecs = new ArrayList<>();
+    JsonScanSpec newScanSpec = null;
+    String functionName = "booleanAnd";
+
+    for (RexNode condition: conditions) {
+      try {
+        conditionExp = DrillOptiq.toDrill(new DrillParseContext(PrelUtil.getPlannerSettings(call.getPlanner())), scan, condition);
+      } catch (ClassCastException e) {
+        // MD-771 bug in DrillOptiq.toDrill() causes filter condition on ITEM operator to throw ClassCastException
+        // For such cases, we return without pushdown
+        return;
+      }
+      JsonConditionBuilder jsonConditionBuilder = new JsonConditionBuilder(groupScan, conditionExp);
+      allExpressionsConverted = jsonConditionBuilder.isAllExpressionsConverted() && allExpressionsConverted;
+      JsonScanSpec scanSpec = jsonConditionBuilder.parseTree();
+      if (newScanSpec == null) {
+        newScanSpec = scanSpec;
+      } else {
+        newScanSpec.mergeScanSpec(functionName, scanSpec);
+      }
     }
-    final JsonConditionBuilder jsonConditionBuilder = new JsonConditionBuilder(groupScan, conditionExp);
-    final JsonScanSpec newScanSpec = jsonConditionBuilder.parseTree();
+
     if (newScanSpec == null) {
       return; // no filter pushdown ==> No transformation.
     }
@@ -208,7 +228,7 @@ public abstract class MapRDBPushFilterIntoScan extends StoragePluginOptimizerRul
     // Depending on whether is a project in the middle, assign either scan or copy of project to childRel.
     final RelNode childRel = project == null ? newScanPrel : project.copy(project.getTraitSet(), ImmutableList.of((RelNode)newScanPrel));
 
-    if (jsonConditionBuilder.isAllExpressionsConverted()) {
+    if (allExpressionsConverted) {
         /*
          * Since we could convert the entire filter condition expression into an HBase filter,
          * we can eliminate the filter operator altogether.
@@ -270,6 +290,7 @@ public abstract class MapRDBPushFilterIntoScan extends StoragePluginOptimizerRul
                                                  ProjectPrel projectWithFlatten, FilterPrel filterAboveFlatten,
                                                  ProjectPrel projectAboveScan, FilterPrel filterBelowFlatten) {
     RexNode condition = null;
+    List<RexNode> conditions = new ArrayList<>();
 
     // check if this filter-on-project is part of a non-covering index plan
     if (scan.getGroupScan() instanceof RestrictedJsonTableGroupScan) {
@@ -292,8 +313,11 @@ public abstract class MapRDBPushFilterIntoScan extends StoragePluginOptimizerRul
                 nonFlattenExprs);
         FlattenConditionUtils.composeConditions(flattenContext, builder, cInfo);
 
-        // TODO: depending on the requirements, we will extract the relevant conditions from cInfo
-        condition = cInfo.getTotalCondition();
+        conditions.addAll(cInfo.getflattenConditions());
+        conditions.addAll(cInfo.getOtherRemainderConjuncts());
+        if (cInfo.getConditionBelowFlatten() != null) {
+          conditions.add(cInfo.getConditionBelowFlatten());
+        }
 
         // Create a new Project after dropping the Flatten
         int origFieldIndex = 0;
@@ -324,9 +348,10 @@ public abstract class MapRDBPushFilterIntoScan extends StoragePluginOptimizerRul
       }
     }
 
-    if (condition == null) {
+    if (conditions.size() == 0) {
       // convert the filter to one that references the child of the project
       condition =  RelOptUtil.pushPastProject(filterAboveFlatten.getCondition(), projectWithFlatten);
+      conditions.add(condition);
     }
 
     if (scan.getGroupScan() instanceof BinaryTableGroupScan) {
@@ -335,7 +360,7 @@ public abstract class MapRDBPushFilterIntoScan extends StoragePluginOptimizerRul
     } else {
       assert(scan.getGroupScan() instanceof JsonTableGroupScan);
       JsonTableGroupScan groupScan = (JsonTableGroupScan)scan.getGroupScan();
-      doPushFilterIntoJsonGroupScan(call, filterAboveFlatten, projectWithFlatten, scan, groupScan, condition);
+      doPushFilterIntoJsonGroupScan(call, filterAboveFlatten, projectWithFlatten, scan, groupScan, conditions);
     }
   }
 }
