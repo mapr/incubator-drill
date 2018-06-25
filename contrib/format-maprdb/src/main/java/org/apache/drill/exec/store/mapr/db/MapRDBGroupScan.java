@@ -42,8 +42,8 @@ import org.apache.drill.exec.planner.index.IndexDiscover;
 import org.apache.drill.exec.planner.index.IndexDiscoverFactory;
 import org.apache.drill.exec.planner.index.MapRDBIndexDiscover;
 import org.apache.drill.exec.proto.CoordinationProtos.DrillbitEndpoint;
+import org.apache.drill.exec.store.AbstractStoragePlugin;
 import org.apache.drill.exec.store.dfs.FileSystemConfig;
-import org.apache.drill.exec.store.dfs.FileSystemPlugin;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -56,7 +56,7 @@ import com.google.common.collect.Sets;
 public abstract class MapRDBGroupScan extends AbstractDbGroupScan {
   private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(MapRDBGroupScan.class);
 
-  protected FileSystemPlugin storagePlugin;
+  protected AbstractStoragePlugin storagePlugin;
 
   protected MapRDBFormatPlugin formatPlugin;
 
@@ -98,7 +98,7 @@ public abstract class MapRDBGroupScan extends AbstractDbGroupScan {
     this.doNotAccessRegionsToScan = that.doNotAccessRegionsToScan;
   }
 
-  public MapRDBGroupScan(FileSystemPlugin storagePlugin,
+  public MapRDBGroupScan(AbstractStoragePlugin storagePlugin,
       MapRDBFormatPlugin formatPlugin, List<SchemaPath> columns, String userName) {
     super(userName);
     this.storagePlugin = storagePlugin;
@@ -275,7 +275,7 @@ public abstract class MapRDBGroupScan extends AbstractDbGroupScan {
   }
 
   @JsonIgnore
-  public FileSystemPlugin getStoragePlugin(){
+  public AbstractStoragePlugin getStoragePlugin(){
     return storagePlugin;
   }
 

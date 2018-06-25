@@ -179,7 +179,8 @@ public class FileSystemPlugin extends AbstractStoragePlugin {
     return setBuilder.build();
   }
 
-  public Configuration getFsConf() {
+  @Override
+  public Configuration getConf() {
     return fsConf;
   }
 }

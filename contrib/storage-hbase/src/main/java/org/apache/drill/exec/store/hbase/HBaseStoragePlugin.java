@@ -80,6 +80,11 @@ public class HBaseStoragePlugin extends AbstractStoragePlugin {
   }
 
   @Override
+  public Configuration getConf() {
+    return storeConfig.getHBaseConf();
+  }
+
+  @Override
   public void close() throws Exception {
     hbaseConnectionManager.closeConnection(connectionKey);
   }

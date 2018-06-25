@@ -58,7 +58,7 @@ import org.apache.drill.exec.planner.logical.DrillWindowRule;
 import org.apache.drill.exec.planner.logical.partition.ParquetPruneScanRule;
 import org.apache.drill.exec.planner.logical.partition.PruneScanRule;
 import org.apache.drill.exec.planner.physical.ConvertCountToDirectScan;
-import org.apache.drill.exec.planner.physical.CorrelatePrule;
+import org.apache.drill.exec.planner.physical.LateralJoinPrule;
 import org.apache.drill.exec.planner.physical.DirectScanPrule;
 import org.apache.drill.exec.planner.physical.FilterPrule;
 import org.apache.drill.exec.planner.physical.HashAggPrule;
@@ -114,6 +114,16 @@ public enum PlannerPhase {
           RuleInstance.CALC_INSTANCE,
           RuleInstance.PROJECT_TO_LOGICAL_PROJECT_AND_WINDOW_RULE
           );
+    }
+  },
+
+  SUBQUERY_REWRITE("Sub-queries rewrites") {
+    public RuleSet getRules(OptimizerRulesContext context, Collection<StoragePlugin> plugins) {
+      return RuleSets.ofList(
+          RuleInstance.SUB_QUERY_FILTER_REMOVE_RULE,
+          RuleInstance.SUB_QUERY_PROJECT_REMOVE_RULE,
+          RuleInstance.SUB_QUERY_JOIN_REMOVE_RULE
+      );
     }
   },
 
@@ -497,7 +507,7 @@ public enum PlannerPhase {
     ruleList.add(RowKeyJoinPrule.INSTANCE);
 
     ruleList.add(UnnestPrule.INSTANCE);
-    ruleList.add(CorrelatePrule.INSTANCE);
+    ruleList.add(LateralJoinPrule.INSTANCE);
 
     ruleList.add(DrillPushLimitToScanRule.LIMIT_ON_PROJECT);
     ruleList.add(DrillPushLimitToScanRule.LIMIT_ON_SCAN);

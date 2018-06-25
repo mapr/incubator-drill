@@ -34,9 +34,11 @@ import org.apache.drill.common.exceptions.ExecutionSetupException;
 import org.apache.drill.common.expression.SchemaPath;
 import org.apache.drill.exec.ExecConstants;
 import org.apache.drill.exec.ops.OptimizerRulesContext;
+import org.apache.drill.exec.planner.sql.logical.ConvertHiveMapRDBJsonScanToDrillMapRDBJsonScan;
 import org.apache.drill.exec.planner.sql.logical.ConvertHiveParquetScanToDrillParquetScan;
 import org.apache.drill.exec.planner.sql.logical.HivePushPartitionFilterIntoScan;
 import org.apache.drill.exec.server.DrillbitContext;
+import org.apache.drill.exec.server.options.OptionManager;
 import org.apache.drill.exec.store.AbstractStoragePlugin;
 import org.apache.drill.exec.store.SchemaConfig;
 import org.apache.drill.exec.store.StoragePluginOptimizerRule;
@@ -44,6 +46,7 @@ import org.apache.drill.exec.store.hive.schema.HiveSchemaFactory;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hive.conf.HiveConf;
 import org.apache.hadoop.hive.conf.HiveConf.ConfVars;
 import org.apache.hadoop.hive.metastore.api.MetaException;
@@ -165,14 +168,18 @@ public class HiveStoragePlugin extends AbstractStoragePlugin {
 
   @Override
   public Set<StoragePluginOptimizerRule> getPhysicalOptimizerRules(OptimizerRulesContext optimizerRulesContext) {
+    ImmutableSet.Builder<StoragePluginOptimizerRule> ruleBuilder = ImmutableSet.builder();
+    OptionManager options = optimizerRulesContext.getPlannerSettings().getOptions();
     // TODO: Remove implicit using of convert_fromTIMESTAMP_IMPALA function
     // once "store.parquet.reader.int96_as_timestamp" will be true by default
-    if(optimizerRulesContext.getPlannerSettings().getOptions()
-        .getOption(ExecConstants.HIVE_OPTIMIZE_SCAN_WITH_NATIVE_READERS).bool_val) {
-      return ImmutableSet.<StoragePluginOptimizerRule>of(ConvertHiveParquetScanToDrillParquetScan.INSTANCE);
+    if (options.getBoolean(ExecConstants.HIVE_OPTIMIZE_SCAN_WITH_NATIVE_READERS) ||
+        options.getBoolean(ExecConstants.HIVE_OPTIMIZE_PARQUET_SCAN_WITH_NATIVE_READER)) {
+      ruleBuilder.add(ConvertHiveParquetScanToDrillParquetScan.INSTANCE);
     }
-
-    return ImmutableSet.of();
+    if (options.getBoolean(ExecConstants.HIVE_OPTIMIZE_MAPRDB_JSON_SCAN_WITH_NATIVE_READER)) {
+      ruleBuilder.add(ConvertHiveMapRDBJsonScanToDrillMapRDBJsonScan.INSTANCE);
+    }
+    return ruleBuilder.build();
   }
 
   private static HiveConf createHiveConf(final Map<String, String> hiveConfigOverride) {
@@ -183,6 +190,11 @@ public class HiveStoragePlugin extends AbstractStoragePlugin {
       hiveConf.set(key, value);
       logger.trace("HiveConfig Override {}={}", key, value);
     }
+    return hiveConf;
+  }
+
+  @Override
+  public Configuration getConf() {
     return hiveConf;
   }
 }

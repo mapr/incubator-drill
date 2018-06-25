@@ -53,8 +53,8 @@ import org.apache.drill.exec.planner.physical.PartitionFunction;
 import org.apache.drill.exec.planner.physical.PrelUtil;
 import org.apache.drill.exec.store.StoragePluginRegistry;
 import org.apache.drill.exec.store.dfs.FileSystemConfig;
-import org.apache.drill.exec.store.dfs.FileSystemPlugin;
 import org.apache.drill.exec.store.mapr.PluginConstants;
+import org.apache.drill.exec.store.AbstractStoragePlugin;
 import org.apache.drill.exec.store.mapr.db.MapRDBFormatPlugin;
 import org.apache.drill.exec.store.mapr.db.MapRDBFormatPluginConfig;
 import org.apache.drill.exec.store.mapr.db.MapRDBGroupScan;
@@ -120,12 +120,12 @@ public class JsonTableGroupScan extends MapRDBGroupScan implements IndexGroupSca
                             @JsonProperty("columns") List<SchemaPath> columns,
                             @JacksonInject StoragePluginRegistry pluginRegistry) throws IOException, ExecutionSetupException {
     this (userName,
-          (FileSystemPlugin) pluginRegistry.getPlugin(storagePluginConfig),
+          (AbstractStoragePlugin) pluginRegistry.getPlugin(storagePluginConfig),
           (MapRDBFormatPlugin) pluginRegistry.getFormatPlugin(storagePluginConfig, formatPluginConfig),
           scanSpec, columns);
   }
 
-  public JsonTableGroupScan(String userName, FileSystemPlugin storagePlugin,
+  public JsonTableGroupScan(String userName, AbstractStoragePlugin storagePlugin,
                             MapRDBFormatPlugin formatPlugin, JsonScanSpec scanSpec, List<SchemaPath> columns) {
     super(storagePlugin, formatPlugin, columns, userName);
     this.scanSpec = scanSpec;
@@ -134,7 +134,7 @@ public class JsonTableGroupScan extends MapRDBGroupScan implements IndexGroupSca
     init();
   }
 
-  public JsonTableGroupScan(String userName, FileSystemPlugin storagePlugin,
+  public JsonTableGroupScan(String userName, AbstractStoragePlugin storagePlugin,
                             MapRDBFormatPlugin formatPlugin, JsonScanSpec scanSpec, List<SchemaPath> columns,
                             MapRDBStatistics stats) {
     super(storagePlugin, formatPlugin, columns, userName);
@@ -193,7 +193,7 @@ public class JsonTableGroupScan extends MapRDBGroupScan implements IndexGroupSca
           PluginCost pluginCostModel = formatPlugin.getPluginCostModel();
           final int avgColumnSize = pluginCostModel.getAverageColumnSize(this);
           final int numColumns = (columns == null || columns.isEmpty() || Utilities.isStarQuery(columns)) ? STAR_COLS : columns.size();
-          MapRDBTableStats tableStats = new MapRDBTableStats(storagePlugin.getFsConf(), scanSpec.getTableName());
+          MapRDBTableStats tableStats = new MapRDBTableStats(storagePlugin.getConf(), scanSpec.getTableName());
           fullTableRowCount = tableStats.getNumRows();
           fullTableEstimatedSize = fullTableRowCount * numColumns * avgColumnSize;
         }

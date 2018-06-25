@@ -58,7 +58,7 @@ public class AvroDrillTable extends DrillTable {
     Path path = new Path(asFiles.get(0));
     this.schemaConfig = schemaConfig;
     try {
-      reader = new DataFileReader<>(new FsInput(path, plugin.getFsConf()), new GenericDatumReader<GenericContainer>());
+      reader = new DataFileReader<>(new FsInput(path, plugin.getConf()), new GenericDatumReader<GenericContainer>());
     } catch (IOException e) {
       throw UserException.dataReadError(e).build(logger);
     }

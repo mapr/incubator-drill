@@ -108,7 +108,7 @@ public class WorkspaceSchemaFactory {
       LogicalPlanPersistence logicalPlanPersistence,
       ScanResult scanResult) throws ExecutionSetupException, IOException {
     this.logicalPlanPersistence = logicalPlanPersistence;
-    this.fsConf = plugin.getFsConf();
+    this.fsConf = plugin.getConf();
     this.plugin = plugin;
     this.config = config;
     this.mapper = logicalPlanPersistence.getMapper();

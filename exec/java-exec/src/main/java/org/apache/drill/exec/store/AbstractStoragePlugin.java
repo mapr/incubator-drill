@@ -30,6 +30,7 @@ import org.apache.drill.exec.planner.PlannerPhase;
 
 import com.google.common.collect.ImmutableSet;
 import org.apache.drill.exec.server.DrillbitContext;
+import org.apache.hadoop.conf.Configuration;
 
 /** Abstract class for StorePlugin implementations.
  * See StoragePlugin for description of the interface intent and its methods.
@@ -124,5 +125,12 @@ public abstract class AbstractStoragePlugin implements StoragePlugin {
 
   public String getName() {
     return name;
+  }
+
+  /**
+   * @return Plugin configuration, null if it doesn't exist
+   */
+  public Configuration getConf() {
+    return null;
   }
 }
