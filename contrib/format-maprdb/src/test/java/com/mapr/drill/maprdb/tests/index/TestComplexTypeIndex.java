@@ -1052,4 +1052,135 @@ public class TestComplexTypeIndex extends BaseJsonTest {
     return;
   }
 
+  @Test
+  public void TestAndWithElementAnd() throws Exception {
+
+    try {
+      String query = "select _id from hbase.`index_test_complex1` where _id in (select _id from ( select _id, flatten(t1.weight) as f1, flatten(t1.weight) as f2 from " +
+              " hbase.`index_test_complex1` as t1) as t where  t.f1.low = 120  and t.f2.high = 145 and t.f1.high = 150)" ;
+
+      test(maxNonCoveringSelectivityThreshold);
+
+      PlanTestBase.testPlanMatchingPatterns(query,
+              new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=(.*elementAnd.*weight.*low.*120.*high.*150.*|.*weight.*high.*145).*indexName=(weightIdx|weightCountyIdx1)"},
+              new String[]{}
+      );
+
+      testBuilder()
+              .optionSettingQueriesForTestQuery(maxNonCoveringSelectivityThreshold)
+              .optionSettingQueriesForBaseline(noIndexPlan)
+              .optionSettingQueriesForBaseline(DisableComplexFTSTypePlanning)
+              .unOrdered()
+              .sqlQuery(query)
+              .sqlBaselineQuery(query)
+              .build()
+              .run();
+
+    } finally {
+      test(resetmaxNonCoveringSelectivityThreshold);
+      test(IndexPlanning);
+      test(ResetComplexFTSTypePlanning);
+    }
+    return;
+  }
+
+  @Test
+  public void TestMultipleFlattens_2() throws Exception {
+
+    try {
+      String query = "select _id from hbase.`index_test_complex1` where _id in (select _id from ( select _id, flatten(t1.weight) as f1, flatten(t1.weight) as f2, flatten(t1.weight) as f3 from " +
+              " hbase.`index_test_complex1` as t1) as t where  t.f1.low = 120  and t.f2.high = 145 and t.f3.average = 135)" ;
+
+      test(maxNonCoveringSelectivityThreshold);
+
+      PlanTestBase.testPlanMatchingPatterns(query,
+              new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=(.*weight.*low.*120.*|.*weight.*high.*145.*|.*weight.*average.*135).*indexName=(weightIdx|weightCountyIdx1)"},
+              new String[]{".*condition=.*elementAnd"}
+      );
+
+      testBuilder()
+              .optionSettingQueriesForTestQuery(maxNonCoveringSelectivityThreshold)
+              .optionSettingQueriesForBaseline(noIndexPlan)
+              .optionSettingQueriesForBaseline(DisableComplexFTSTypePlanning)
+              .unOrdered()
+              .sqlQuery(query)
+              .sqlBaselineQuery(query)
+              .build()
+              .run();
+
+    } finally {
+      test(resetmaxNonCoveringSelectivityThreshold);
+      test(IndexPlanning);
+      test(ResetComplexFTSTypePlanning);
+    }
+    return;
+  }
+
+  @Test
+  public void TestAndWithIn() throws Exception {
+
+    try {
+      String query = "select _id from hbase.`index_test_complex1` where _id in (select _id from ( select _id, flatten(t1.weight) as f1 , flatten(weight) as f2 from " +
+              " hbase.`index_test_complex1` as t1) as t where t.f1.low in \n" +
+              "          (120,150,170) and t.f2.high in (170,180,190))" ;
+
+      test(maxNonCoveringSelectivityThreshold);
+
+      PlanTestBase.testPlanMatchingPatterns(query,
+              new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=(.*weight.*low.*120.*weight.*low.*150.*weight.*low.*170.*|.*weight.*high.*170.*weight.*high.*180.*weight.*high.*190).*indexName=(weightIdx1|weightCountyIdx1)"},
+              new String[]{}
+      );
+
+      testBuilder()
+              .optionSettingQueriesForTestQuery(maxNonCoveringSelectivityThreshold)
+              .optionSettingQueriesForBaseline(noIndexPlan)
+              .optionSettingQueriesForBaseline(DisableComplexFTSTypePlanning)
+              .unOrdered()
+              .sqlQuery(query)
+              .sqlBaselineQuery(query)
+              .build()
+              .run();
+
+    } finally {
+      test(resetmaxNonCoveringSelectivityThreshold);
+      test(IndexPlanning);
+      test(ResetComplexFTSTypePlanning);
+    }
+    return;
+  }
+
+  // Ignore until MD-4571 is fixed
+  @Ignore
+  @Test
+  public void TestAndWithFullTableScan() throws Exception {
+
+    try {
+      String query = "select _id from hbase.`index_test_complex1` where _id in (select _id from ( select _id, flatten(t1.weight) as f1 , flatten(weight) as f2 from " +
+              " hbase.`index_test_complex1` as t1) as t where t.f1.low = 120  and t.f2.high = 145)";
+
+      test(ComplexFTSTypePlanning);
+      test(noIndexPlan);
+
+      PlanTestBase.testPlanMatchingPatterns(query,
+              new String[]{".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=(.*weight.*low.*120.*|.*weight.*high.*145)"},
+              new String[]{".*elementAnd"}
+      );
+
+      testBuilder()
+              .optionSettingQueriesForTestQuery(maxNonCoveringSelectivityThreshold)
+              .optionSettingQueriesForBaseline(noIndexPlan)
+              .optionSettingQueriesForBaseline(DisableComplexFTSTypePlanning)
+              .unOrdered()
+              .sqlQuery(query)
+              .sqlBaselineQuery(query)
+              .build()
+              .run();
+
+    } finally {
+      test(resetmaxNonCoveringSelectivityThreshold);
+      test(IndexPlanning);
+      test(ResetComplexFTSTypePlanning);
+    }
+    return;
+  }
 }
