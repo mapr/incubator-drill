@@ -17,7 +17,6 @@
  */
 package org.apache.drill.exec.planner.physical;
 
-import org.apache.drill.shaded.guava.com.google.common.collect.Lists;
 import org.apache.calcite.rel.core.AggregateCall;
 import org.apache.drill.exec.planner.logical.DrillAggregateRel;
 import org.apache.drill.exec.planner.logical.RelOptHelper;

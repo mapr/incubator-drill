@@ -1032,8 +1032,8 @@ public class IndexPlanUtils {
           }
         }
         matchingSequence = sb.toString();
-        logger.debug("FindRelSequence: ABORT: Unexpected Rel={}, After={}, CurSeq={}" ,
-                rel.getClass().getCanonicalName().toString() , matchingSequence , sequence);
+        logger.debug("FindRelSequence: ABORT: Unexpected Rel={}, After={}, CurSeq={}",
+                rel.getClass().getCanonicalName().toString(), matchingSequence, sequence);
       }
       matchingRels.clear();
     }

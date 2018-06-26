@@ -140,7 +140,7 @@ public class TestEncodedFieldPaths extends BaseJsonTest {
 
 
     // plan test
-    final String[] expectedPlan = {"JsonTableGroupScan.*" ,
+    final String[] expectedPlan = {"JsonTableGroupScan.*",
                     "columns=\\[`\\$\\$ENC00L5UWIADDN5SGK423LU`, `\\$\\$document`\\]" };
     final String[] excludedPlan = {};
 

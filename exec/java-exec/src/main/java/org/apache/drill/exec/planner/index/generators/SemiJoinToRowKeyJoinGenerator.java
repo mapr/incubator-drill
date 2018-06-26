@@ -1,4 +1,4 @@
-/**
+/*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -24,7 +24,6 @@ import org.apache.calcite.rex.RexNode;
 import org.apache.drill.exec.physical.base.IndexGroupScan;
 import org.apache.drill.exec.planner.index.FlattenPhysicalPlanCallContext;
 import org.apache.drill.exec.planner.index.FunctionalIndexInfo;
-import org.apache.drill.exec.planner.index.IndexPhysicalPlanCallContext;
 import org.apache.drill.exec.planner.index.SemiJoinIndexPlanCallContext;
 import org.apache.drill.exec.planner.index.generators.common.SemiJoinIndexPlanUtils;
 import org.apache.drill.exec.planner.logical.DrillJoinRel;
@@ -76,7 +75,7 @@ public class SemiJoinToRowKeyJoinGenerator extends CoveringIndexPlanGenerator {
     List<RelNode> agg = SemiJoinIndexPlanUtils.buildAgg(joinContext, joinContext.distinct, nonCoveringIndexPlan);
     logger.debug("semi_join_index_plan_info: generated hash aggregation operators: {}", agg);
 
-    return SemiJoinIndexPlanUtils.buildRowKeyJoin(joinContext,leftSideJoinContext.getRoot() , agg);
+    return SemiJoinIndexPlanUtils.buildRowKeyJoin(joinContext,leftSideJoinContext.getRoot(), agg);
   }
 
   @Override

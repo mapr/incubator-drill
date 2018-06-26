@@ -745,7 +745,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
 
     try {
       String query = "select _id from hbase.`index_test_complex1` where _id in (select _id from ( select _id, flatten(weight) as f1 from " +
-              " hbase.`index_test_complex1`) as t where t.f1.low = 150 and t.f1.high = 180)" ;
+              " hbase.`index_test_complex1`) as t where t.f1.low = 150 and t.f1.high = 180)";
 
       test(maxNonCoveringSelectivityThreshold);
 
@@ -776,7 +776,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
 
     try {
       String query = "select _id from hbase.`index_test_complex1` where _id in (select _id from ( select _id, flatten(weight) as f1 from " +
-              " hbase.`index_test_complex1`) as t where t.f1.low = 150 and t.f1.high = 180 and t.f1.`average` = 170)" ;
+              " hbase.`index_test_complex1`) as t where t.f1.low = 150 and t.f1.high = 180 and t.f1.`average` = 170)";
 
       test(maxNonCoveringSelectivityThreshold);
 
@@ -807,7 +807,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
 
     try {
       String query = "select _id from hbase.`index_test_complex1` where _id in (select _id from ( select _id, flatten(t1.weight) as f1, t1.`salary`.`max` as maxsal from " +
-              " hbase.`index_test_complex1` as t1) as t where  t.f1.low = 150  and maxsal = 5000 and t.f1.average = 170 and t.f1.high = 180 )" ;
+              " hbase.`index_test_complex1` as t1) as t where  t.f1.low = 150  and maxsal = 5000 and t.f1.average = 170 and t.f1.high = 180 )";
 
       test(maxNonCoveringSelectivityThreshold);
 
@@ -838,7 +838,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
     try {
       String query = "select _id from hbase.`index_test_complex1` where _id in (select _id from ( select _id, flatten(t1.weight) as f1 from " +
               " hbase.`index_test_complex1` as t1) as t where t.f1.low in \n" +
-              "          (120,150,170) and t.f1.high in (170,180,190))" ;
+              "          (120,150,170) and t.f1.high in (170,180,190))";
 
       test(maxNonCoveringSelectivityThreshold);
 
@@ -1057,7 +1057,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
 
     try {
       String query = "select _id from hbase.`index_test_complex1` where _id in (select _id from ( select _id, flatten(t1.weight) as f1, flatten(t1.weight) as f2 from " +
-              " hbase.`index_test_complex1` as t1) as t where  t.f1.low = 120  and t.f2.high = 145 and t.f1.high = 150)" ;
+              " hbase.`index_test_complex1` as t1) as t where  t.f1.low = 120  and t.f2.high = 145 and t.f1.high = 150)";
 
       test(maxNonCoveringSelectivityThreshold);
 
@@ -1089,7 +1089,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
 
     try {
       String query = "select _id from hbase.`index_test_complex1` where _id in (select _id from ( select _id, flatten(t1.weight) as f1, flatten(t1.weight) as f2, flatten(t1.weight) as f3 from " +
-              " hbase.`index_test_complex1` as t1) as t where  t.f1.low = 120  and t.f2.high = 145 and t.f3.average = 135)" ;
+              " hbase.`index_test_complex1` as t1) as t where  t.f1.low = 120  and t.f2.high = 145 and t.f3.average = 135)";
 
       test(maxNonCoveringSelectivityThreshold);
 
@@ -1122,7 +1122,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
     try {
       String query = "select _id from hbase.`index_test_complex1` where _id in (select _id from ( select _id, flatten(t1.weight) as f1 , flatten(weight) as f2 from " +
               " hbase.`index_test_complex1` as t1) as t where t.f1.low in \n" +
-              "          (120,150,170) and t.f2.high in (170,180,190))" ;
+              "          (120,150,170) and t.f2.high in (170,180,190))";
 
       test(maxNonCoveringSelectivityThreshold);
 

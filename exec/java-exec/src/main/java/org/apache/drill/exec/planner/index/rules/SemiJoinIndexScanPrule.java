@@ -17,8 +17,8 @@
  */
 package org.apache.drill.exec.planner.index.rules;
 
-import com.google.common.collect.Maps;
-import com.google.common.collect.Lists;
+import org.apache.drill.shaded.guava.com.google.common.collect.Maps;
+import org.apache.drill.shaded.guava.com.google.common.collect.Lists;
 import org.apache.calcite.plan.RelOptRuleCall;
 import org.apache.calcite.plan.RelOptRule;
 import org.apache.calcite.plan.RelOptRuleOperand;
@@ -82,7 +82,7 @@ public class SemiJoinIndexScanPrule extends AbstractIndexPrule {
                               RelOptHelper.some(DrillProjectRel.class,
                                       RelOptHelper.some(DrillFilterRel.class,
                                               RelOptHelper.some(DrillProjectRel.class,
-                                                      RelOptHelper.some(DrillFilterRel.class ,RelOptHelper.any(DrillScanRel.class))))))),
+                                                      RelOptHelper.some(DrillFilterRel.class, RelOptHelper.any(DrillScanRel.class))))))),
               "SemiJoinIndexScanPrule:Join_Project_Filter_Project_Filter_Scan", functionRegistry, new MatchJSPFPFS());
     }
 

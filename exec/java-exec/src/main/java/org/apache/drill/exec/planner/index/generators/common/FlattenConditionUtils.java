@@ -1,4 +1,4 @@
-/**
+/*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -17,10 +17,10 @@
  */
 package org.apache.drill.exec.planner.index.generators.common;
 
-import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import org.apache.drill.shaded.guava.com.google.common.base.Preconditions;
+import org.apache.drill.shaded.guava.com.google.common.collect.ImmutableList;
+import org.apache.drill.shaded.guava.com.google.common.collect.Lists;
+import org.apache.drill.shaded.guava.com.google.common.collect.Maps;
 
 import java.util.ArrayList;
 import org.apache.calcite.plan.RelOptUtil;
@@ -39,7 +39,6 @@ import org.apache.drill.exec.planner.common.DrillProjectRelBase;
 import org.apache.drill.exec.planner.index.FlattenCallContext;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -227,7 +226,7 @@ public class FlattenConditionUtils {
 
     // if only filters above Flatten are present, return the information gathered so far
     if (flattenContext.getFilterBelowFlatten() == null) {
-      return ;
+      return;
     }
 
     // handle the filters below the flatten
@@ -308,7 +307,7 @@ public class FlattenConditionUtils {
         RexNode left = null;
         if ((c = flattenMap.get(projectFieldName)) != null) {
           left = c.getOperands().get(0);
-          Preconditions.checkArgument(left != null, "Found null input reference for Flatten") ;
+          Preconditions.checkArgument(left != null, "Found null input reference for Flatten");
 
           // take the Flatten's input and build a new RexExpr with ITEM($n, -1)
           RexLiteral right = builder.makeBigintLiteral(BigDecimal.valueOf(-1));
@@ -362,9 +361,8 @@ public class FlattenConditionUtils {
       RexNode arrayItem = item.accept(visitor);
 
       // save the mapping of the project field name to the arrayItem expr created
-      String projectFieldName = visitor.getProjectFieldName() ;
+      String projectFieldName = visitor.getProjectFieldName();
       Preconditions.checkArgument(projectFieldName != null);
-
       List<RexNode> exprsReferencingFlatten = null;
       if ((exprsReferencingFlatten = exprsReferencingFlattenMap.get(projectFieldName)) == null) {
         exprsReferencingFlatten = Lists.newArrayList();
@@ -395,7 +393,7 @@ public class FlattenConditionUtils {
       RexCall c;
       if ((c = flattenMap.get(projectFieldName)) != null) {
         RexNode left = c.getOperands().get(0);
-        Preconditions.checkArgument(left != null, "Found null input reference for Flatten") ;
+        Preconditions.checkArgument(left != null, "Found null input reference for Flatten");
 
         // take the Flatten's input and build a new RexExpr with ITEM($n, -1)
         RexLiteral right = builder.makeBigintLiteral(BigDecimal.valueOf(-1));

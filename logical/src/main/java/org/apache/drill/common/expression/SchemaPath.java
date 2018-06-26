@@ -313,6 +313,11 @@ public class SchemaPath extends LogicalExpressionBase {
     return new SchemaPath(newRoot);
   }
 
+  public SchemaPath getUnindexedArrayChild() {
+    NameSegment newRoot = rootSegment.cloneWithNewChild(new ArraySegment((PathSegment) null));
+    return new SchemaPath(newRoot);
+  }
+
   public SchemaPath getChild(int index) {
     NameSegment newRoot = rootSegment.cloneWithNewChild(new ArraySegment(index));
     return new SchemaPath(newRoot);

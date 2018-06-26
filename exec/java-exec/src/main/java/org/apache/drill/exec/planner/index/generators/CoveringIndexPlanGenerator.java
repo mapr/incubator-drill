@@ -17,7 +17,6 @@
  */
 package org.apache.drill.exec.planner.index.generators;
 
-import org.apache.drill.shaded.guava.com.google.common.base.Preconditions;
 import org.apache.drill.shaded.guava.com.google.common.collect.Lists;
 
 import org.apache.calcite.plan.RelOptCluster;
@@ -33,9 +32,6 @@ import org.apache.drill.exec.planner.index.IndexLogicalPlanCallContext;
 import org.apache.drill.exec.planner.index.IndexDescriptor;
 import org.apache.drill.exec.planner.index.FunctionalIndexInfo;
 import org.apache.drill.exec.planner.index.IndexPlanUtils;
-import org.apache.drill.exec.planner.index.SimpleRexRemap;
-import org.apache.drill.exec.planner.logical.DrillMergeProjectRule;
-import org.apache.drill.exec.planner.logical.DrillParseContext;
 import org.apache.drill.exec.planner.logical.DrillProjectRel;
 import org.apache.drill.exec.planner.logical.DrillRelFactories;
 import org.apache.drill.exec.planner.physical.PlannerSettings;

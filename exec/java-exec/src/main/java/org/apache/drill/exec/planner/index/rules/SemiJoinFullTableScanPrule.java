@@ -17,8 +17,8 @@
  */
 package org.apache.drill.exec.planner.index.rules;
 
-import com.google.common.collect.Maps;
-import com.google.common.collect.Lists;
+import org.apache.drill.shaded.guava.com.google.common.collect.Maps;
+import org.apache.drill.shaded.guava.com.google.common.collect.Lists;
 import org.apache.calcite.plan.RelOptRuleCall;
 import org.apache.calcite.plan.RelOptRule;
 import org.apache.calcite.plan.RelOptRuleOperand;
@@ -46,7 +46,6 @@ import org.apache.drill.exec.planner.physical.PrelUtil;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 
 public class SemiJoinFullTableScanPrule extends AbstractIndexPrule {

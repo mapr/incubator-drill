@@ -1,4 +1,4 @@
-/**
+/*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -17,6 +17,11 @@
  */
 package org.apache.drill.exec.planner.index.generators;
 
+import org.apache.drill.shaded.guava.com.google.common.base.Preconditions;
+import org.apache.drill.shaded.guava.com.google.common.collect.Lists;
+import org.apache.calcite.plan.RelTraitSet;
+import org.apache.calcite.rel.InvalidRelException;
+import org.apache.calcite.rel.RelNode;
 import org.apache.calcite.rel.logical.LogicalProject;
 import org.apache.calcite.rex.RexBuilder;
 import org.apache.calcite.rex.RexNode;
@@ -24,24 +29,19 @@ import org.apache.drill.exec.physical.base.IndexGroupScan;
 import org.apache.drill.exec.planner.common.DrillRelOptUtil;
 import org.apache.drill.exec.planner.index.FlattenPhysicalPlanCallContext;
 import org.apache.drill.exec.planner.index.IndexDescriptor;
-import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
-import org.apache.drill.exec.planner.index.IndexPhysicalPlanCallContext;
-import org.apache.drill.exec.planner.index.generators.common.SemiJoinIndexPlanUtils;
-import org.apache.drill.exec.planner.physical.ProjectPrel;
-import org.apache.drill.exec.planner.physical.ScanPrel;
-import org.apache.drill.exec.planner.physical.RowKeyJoinPrel;
-import org.apache.drill.exec.planner.physical.FilterPrel;
-import org.apache.drill.exec.planner.physical.Prule;
-import org.apache.drill.exec.planner.physical.PlannerSettings;
-import org.apache.calcite.rel.InvalidRelException;
 import org.apache.drill.exec.planner.index.SemiJoinIndexPlanCallContext;
-import org.apache.calcite.rel.RelNode;
-import org.apache.calcite.plan.RelTraitSet;
+import org.apache.drill.exec.planner.index.generators.common.SemiJoinIndexPlanUtils;
 import org.apache.drill.exec.planner.logical.DrillJoinRel;
+import org.apache.drill.exec.planner.physical.FilterPrel;
+import org.apache.drill.exec.planner.physical.PlannerSettings;
+import org.apache.drill.exec.planner.physical.ProjectPrel;
+import org.apache.drill.exec.planner.physical.Prule;
+import org.apache.drill.exec.planner.physical.RowKeyJoinPrel;
+import org.apache.drill.exec.planner.physical.ScanPrel;
+
+import java.util.List;
 
 import static org.apache.drill.exec.planner.physical.Prel.DRILL_PHYSICAL;
-import java.util.List;
 
 /**
  * Generate a Non covering index plan that is semantically equivalent to the original plan.
