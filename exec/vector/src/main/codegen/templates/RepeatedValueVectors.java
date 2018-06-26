@@ -308,6 +308,7 @@ public final class Repeated${minor.class}Vector extends BaseRepeatedValueVector 
       holder.start = offsets.getAccessor().get(index);
       holder.end =  offsets.getAccessor().get(index+1);
       holder.vector = values;
+      reader.setPosition(index);
       holder.reader = reader;
     }
 

@@ -81,6 +81,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
    *   "salary": {"min":1000.0, "max":2000.0},
    *   "weight": [{"low":120, "high":150},{"low":110, "high":145}],
    *   "cars": ["Nissan Leaf", "Honda Accord"],
+   *   "zipcodes": [94065, 94070],
    *   "friends": [{"name": ["Sam", "Jack"]}],
    *   "orders": [{"products": [{"prodname": "bike", "price": 200.0}]}]
    * }
@@ -736,7 +737,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
       test(IndexPlanning);
       test(disableHashAgg);
       test(enableStreamAgg);
-      String query = "select _id, salary, friends from hbase.`index_test_complex1`" +
+      String query = "select _id, salary, friends, cars, zipcodes from hbase.`index_test_complex1`" +
           " where _id in (select _id from (select _id, flatten(weight) as f from hbase.`index_test_complex1`) as t1" +
           " where t1.f.low < 140)";
 
