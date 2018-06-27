@@ -74,6 +74,7 @@ public class HashJoinPOP extends AbstractJoinPop {
         Preconditions.checkArgument(children.size() == 2);
         HashJoinPOP newHashJoin = new HashJoinPOP(children.get(0), children.get(1), conditions, joinType, isRowKeyJoin, joinControl);
         newHashJoin.setSubScanForRowKeyJoin(this.getSubScanForRowKeyJoin());
+        newHashJoin.setMaxAllocation(getMaxAllocation());
         return newHashJoin;
     }
 
