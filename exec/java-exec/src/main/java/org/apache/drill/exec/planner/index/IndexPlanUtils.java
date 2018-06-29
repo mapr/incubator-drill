@@ -300,7 +300,9 @@ public class IndexPlanUtils {
       List<RexNode> filterExprsReferencingFlatten = flattenContext.getFilterExprsReferencingFlatten();
       Set<LogicalExpression> referencedExprsSet = new HashSet<>();
 
-      RelNode flattenDescendantRel = getFlattenDescendantRel(flattenContext.getProjectWithFlatten());
+      // RelNode flattenDescendantRel = getFlattenDescendantRel(flattenContext.getProjectWithRootFlatten());
+      RelNode flattenDescendantRel = (flattenContext.getLeafProjectAboveScan() != null) ?
+          flattenContext.getLeafProjectAboveScan() : flattenContext.getScan();
 
       // add the columns that are referenced by the filter condition above the Flatten, so these
       // are the ITEM expressions
@@ -310,7 +312,8 @@ public class IndexPlanUtils {
         referencedExprsSet.add(itemLogicalExpr);
       }
       // process the _NON_ flatten columns
-      List<RexNode> nonFlattenExprs = flattenContext.getNonFlattenExprs();
+      List<RexNode> nonFlattenExprs =
+          flattenContext.getNonFlattenExprsForProject(flattenContext.getProjectWithRootFlatten());
       if (nonFlattenExprs != null && nonFlattenExprs.size() > 0) {
         // these are the set of fields that we want from the Scan
         Set<RexNode> nonFlattenRefs = gatherRelevantExprsForCovering(nonFlattenExprs);
@@ -329,7 +332,7 @@ public class IndexPlanUtils {
           referencedExprsSet.add(expr);
         }
       }
-      if (flattenContext.getFilterBelowFlatten() != null) {
+      if (flattenContext.getFilterBelowLeafFlatten() != null) {
         List<RexInputRef> exprsInLeafFilter = flattenContext.getExprsForLeafFilter();
         if (exprsInLeafFilter != null && exprsInLeafFilter.size() > 0) {
           for (RexInputRef n : exprsInLeafFilter) {

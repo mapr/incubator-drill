@@ -23,7 +23,10 @@ import org.apache.drill.shaded.guava.com.google.common.collect.Lists;
 import org.apache.drill.shaded.guava.com.google.common.collect.Maps;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+
 import org.apache.calcite.plan.RelOptUtil;
+import org.apache.calcite.rel.RelNode;
 import org.apache.calcite.rel.type.RelDataType;
 import org.apache.calcite.rex.RexBuilder;
 import org.apache.calcite.rex.RexCall;
@@ -39,8 +42,12 @@ import org.apache.drill.exec.planner.common.DrillProjectRelBase;
 import org.apache.drill.exec.planner.index.FlattenCallContext;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 public class FlattenConditionUtils {
@@ -154,12 +161,12 @@ public class FlattenConditionUtils {
    */
   public static void composeConditions(FlattenCallContext flattenContext, RexBuilder builder,
       ComposedConditionInfo cInfo) {
-    if (flattenContext.getFilterAboveFlatten() == null) {
+    if (flattenContext.getFilterAboveRootFlatten() == null) {
       // return null because filter below flatten is supposed to be handled by a separate
       // index planning rule
       return;
     }
-    RexNode origConditionAboveFlatten = flattenContext.getFilterAboveFlatten().getCondition();
+    RexNode origConditionAboveFlatten = flattenContext.getFilterAboveRootFlatten().getCondition();
 
     // break up the condition into conjuncts
     List<RexNode> conjuncts = RelOptUtil.conjunctions(origConditionAboveFlatten);
@@ -170,7 +177,7 @@ public class FlattenConditionUtils {
     // process each conjunct separately
     for (RexNode c : conjuncts) {
       FilterVisitor  filterVisitor =
-          new FilterVisitor(flattenContext.getFlattenMap(), flattenContext.getProjectWithFlatten(), builder);
+          new FilterVisitor(flattenContext.getProjectToFlattenMapForAllProjects(), builder);
 
       RexNode conjunctAboveFlatten = c.accept(filterVisitor);
 
@@ -225,16 +232,16 @@ public class FlattenConditionUtils {
     flattenContext.setFilterExprsReferencingFlatten(exprsReferencingFlatten);
 
     // if only filters above Flatten are present, return the information gathered so far
-    if (flattenContext.getFilterBelowFlatten() == null) {
+    if (flattenContext.getFilterBelowLeafFlatten() == null) {
       return;
     }
 
     // handle the filters below the flatten
-    RexNode conditionFilterBelowFlatten = flattenContext.getFilterBelowFlatten().getCondition();
+    RexNode conditionFilterBelowFlatten = flattenContext.getFilterBelowLeafFlatten().getCondition();
     if (flattenContext.getLeafProjectAboveScan() != null) {
       FilterVisitor  filterVisitor2 =
-          new FilterVisitor(Maps.newHashMap() /* empty flatten map */, flattenContext.getLeafProjectAboveScan(), builder);
-      conditionFilterBelowFlatten = flattenContext.getFilterBelowFlatten().getCondition().accept(filterVisitor2);
+          new FilterVisitor(flattenContext.getLeafProjectAboveScan(), builder);
+      conditionFilterBelowFlatten = flattenContext.getFilterBelowLeafFlatten().getCondition().accept(filterVisitor2);
 
       // keep track of the relevant exprs in the filter that are referencing the
       // child Project
@@ -276,9 +283,10 @@ public class FlattenConditionUtils {
    */
   private static class FilterVisitor extends RexVisitorImpl<RexNode> {
 
-    private final Map<String, RexCall> flattenMap;
-    private final DrillProjectRelBase project;
+    private Iterator<Entry<RelNode, Map<String, RexCall>>> projectFlattenIterator;
+    private Entry<RelNode, Map<String, RexCall>> currentEntry  = null;
     private final RexBuilder builder;
+    private DrillProjectRelBase leafProjectAboveScan = null;
 
     // The key of the map is the name of the Project expression for Flatten.
     // Value is the list of expressions in the filter that are referencing that particular
@@ -288,6 +296,8 @@ public class FlattenConditionUtils {
     // list of expressions in the filter that are _NOT_ referencing
     // FLATTEN expr from the child Project
     private final List<RexNode> otherExprs = Lists.newArrayList();
+
+    private final Map<String, RexCall> emptyFlattenMap = new HashMap<String, RexCall>();
 
     private class LocalItemVisitor extends RexVisitorImpl<RexNode> {
 
@@ -302,15 +312,21 @@ public class FlattenConditionUtils {
         RexLiteral literal = (RexLiteral) item.getOperands().get(1);
 
         // check if input is referencing a FLATTEN
-        String projectFieldName = project.getRowType().getFieldNames().get(inputRef.getIndex());
+        String projectFieldName = getCurrentProject().getRowType().getFieldNames().get(inputRef.getIndex());
         RexCall c;
         RexNode left = null;
-        if ((c = flattenMap.get(projectFieldName)) != null) {
+        if ((c = getCurrentFlattenMap().get(projectFieldName)) != null) {
           left = c.getOperands().get(0);
           Preconditions.checkArgument(left != null, "Found null input reference for Flatten");
 
           // take the Flatten's input and build a new RexExpr with ITEM($n, -1)
           RexLiteral right = builder.makeBigintLiteral(BigDecimal.valueOf(-1));
+
+          if (projectFlattenIterator.hasNext()) {
+            currentEntry = projectFlattenIterator.next();
+            left = left.accept(this);
+          }
+
           RexNode result1 = builder.makeCall(item.getType(), SqlStdOperatorTable.ITEM, ImmutableList.of(left, right));
 
           left = result1;
@@ -332,7 +348,7 @@ public class FlattenConditionUtils {
 
           // keep track of the project field name from the child project referenced by this ITEM expr
           RexInputRef iRef = (RexInputRef) ref.getOperands().get(0);
-          projectFieldName = project.getRowType().getFieldNames().get(iRef.getIndex());
+          projectFieldName = getCurrentProject().getRowType().getFieldNames().get(iRef.getIndex());
 
           RexNode arrayRef = makeArrayItem(ref);
           if (arrayRef != null) {
@@ -348,12 +364,19 @@ public class FlattenConditionUtils {
       }
     }
 
-    public FilterVisitor(Map<String, RexCall> flattenMap, DrillProjectRelBase project,
+    public FilterVisitor(LinkedHashMap<RelNode, Map<String, RexCall>> projectToFlattenExprsMap,
         RexBuilder builder) {
       super(true);
-      this.project = project;
-      this.flattenMap = flattenMap;
       this.builder = builder;
+      this.projectFlattenIterator = projectToFlattenExprsMap.entrySet().iterator();
+      this.currentEntry = projectFlattenIterator.hasNext() ? projectFlattenIterator.next() : null;
+    }
+
+    public FilterVisitor(DrillProjectRelBase leafProjectAboveScan,
+        RexBuilder builder) {
+      super(true);
+      this.builder = builder;
+      this.leafProjectAboveScan = leafProjectAboveScan;
     }
 
     private RexNode buildArrayItemRef(RexCall item) {
@@ -363,6 +386,7 @@ public class FlattenConditionUtils {
       // save the mapping of the project field name to the arrayItem expr created
       String projectFieldName = visitor.getProjectFieldName();
       Preconditions.checkArgument(projectFieldName != null);
+
       List<RexNode> exprsReferencingFlatten = null;
       if ((exprsReferencingFlatten = exprsReferencingFlattenMap.get(projectFieldName)) == null) {
         exprsReferencingFlatten = Lists.newArrayList();
@@ -389,15 +413,20 @@ public class FlattenConditionUtils {
     @Override
     public RexNode visitInputRef(RexInputRef inputRef) {
       // check if input is referencing a FLATTEN
-      String projectFieldName = project.getRowType().getFieldNames().get(inputRef.getIndex());
+      String projectFieldName = getCurrentProject().getRowType().getFieldNames().get(inputRef.getIndex());
       RexCall c;
-      if ((c = flattenMap.get(projectFieldName)) != null) {
+      if ((c = getCurrentFlattenMap().get(projectFieldName)) != null) {
         RexNode left = c.getOperands().get(0);
         Preconditions.checkArgument(left != null, "Found null input reference for Flatten");
 
         // take the Flatten's input and build a new RexExpr with ITEM($n, -1)
         RexLiteral right = builder.makeBigintLiteral(BigDecimal.valueOf(-1));
-        RexNode result = builder.makeCall(inputRef.getType(), SqlStdOperatorTable.ITEM, ImmutableList.of(left, right));
+        if (projectFlattenIterator.hasNext()) {
+          currentEntry = projectFlattenIterator.next();
+          left = left.accept(this);
+        }
+        RexNode result = builder.makeCall(inputRef.getType(), SqlStdOperatorTable.ITEM,
+            ImmutableList.of(left, right));
 
         List<RexNode> exprsReferencingFlatten = null;
         if ((exprsReferencingFlatten = exprsReferencingFlattenMap.get(projectFieldName)) == null) {
@@ -410,7 +439,7 @@ public class FlattenConditionUtils {
       } else {
         // since the filter will ultimately be pushed into the Scan, we are interested in
         // the input of the project exprs
-        RexNode n = project.getProjects().get(inputRef.getIndex());
+        RexNode n = getCurrentProject().getProjects().get(inputRef.getIndex());
 
         // save all such exprs (i.e those not referencing Flatten) for future use
         otherExprs.add(n);
@@ -437,6 +466,22 @@ public class FlattenConditionUtils {
 
     public List<RexNode> getOtherExprs() {
       return otherExprs;
+    }
+
+    private DrillProjectRelBase getCurrentProject() {
+      if (currentEntry != null) {
+        return (DrillProjectRelBase) currentEntry.getKey();
+      } else {
+        return leafProjectAboveScan;
+      }
+    }
+
+    private Map<String, RexCall> getCurrentFlattenMap() {
+      if (currentEntry != null) {
+        return currentEntry.getValue();
+      } else {
+        return emptyFlattenMap;
+      }
     }
   }
 

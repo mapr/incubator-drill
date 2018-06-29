@@ -375,22 +375,22 @@ public class NonCoveringIndexPlanGenerator extends AbstractIndexPlanGenerator {
       newRel = tmpProject;
     }
 
-    if (flattenContext.getFilterBelowFlatten() != null) {
+    if (flattenContext.getFilterBelowLeafFlatten() != null) {
       final FilterPrel tmpFilter = new FilterPrel(newRel.getCluster(), newRel.getTraitSet(),
-          newRel, flattenContext.getFilterBelowFlatten().getCondition());
+          newRel, flattenContext.getFilterBelowLeafFlatten().getCondition());
       newRel = tmpFilter;
     }
 
-    Preconditions.checkArgument(flattenContext.getProjectWithFlatten() != null &&
-        flattenContext.getFilterAboveFlatten() != null);
+    Preconditions.checkArgument(flattenContext.getProjectWithRootFlatten() != null &&
+        flattenContext.getFilterAboveRootFlatten() != null);
 
     final ProjectPrel tmpProject = new ProjectPrel(newRel.getCluster(),
-        newRel.getTraitSet(), newRel, flattenContext.getProjectWithFlatten().getProjects(),
-        flattenContext.getProjectWithFlatten().getRowType());
+        newRel.getTraitSet(), newRel, flattenContext.getProjectWithRootFlatten().getProjects(),
+        flattenContext.getProjectWithRootFlatten().getRowType());
     newRel = tmpProject;
 
     final FilterPrel tmpFilter = new FilterPrel(newRel.getCluster(), newRel.getTraitSet(),
-        newRel, flattenContext.getFilterAboveFlatten().getCondition());
+        newRel, flattenContext.getFilterAboveRootFlatten().getCondition());
 
     return tmpFilter;
 

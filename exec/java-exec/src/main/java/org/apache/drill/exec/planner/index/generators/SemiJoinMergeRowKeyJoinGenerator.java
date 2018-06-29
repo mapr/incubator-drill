@@ -20,6 +20,7 @@ package org.apache.drill.exec.planner.index.generators;
 import org.apache.drill.shaded.guava.com.google.common.base.Preconditions;
 import org.apache.drill.shaded.guava.com.google.common.collect.Lists;
 import org.apache.calcite.plan.RelTraitSet;
+import org.apache.calcite.plan.volcano.RelSubset;
 import org.apache.calcite.rel.InvalidRelException;
 import org.apache.calcite.rel.RelNode;
 import org.apache.calcite.rel.logical.LogicalProject;
@@ -32,6 +33,7 @@ import org.apache.drill.exec.planner.index.IndexDescriptor;
 import org.apache.drill.exec.planner.index.SemiJoinIndexPlanCallContext;
 import org.apache.drill.exec.planner.index.generators.common.SemiJoinIndexPlanUtils;
 import org.apache.drill.exec.planner.logical.DrillJoinRel;
+import org.apache.drill.exec.planner.index.rules.AbstractMatchFunction;
 import org.apache.drill.exec.planner.physical.FilterPrel;
 import org.apache.drill.exec.planner.physical.PlannerSettings;
 import org.apache.drill.exec.planner.physical.ProjectPrel;
@@ -41,6 +43,8 @@ import org.apache.drill.exec.planner.physical.ScanPrel;
 
 import static org.apache.drill.exec.planner.physical.Prel.DRILL_PHYSICAL;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -119,7 +123,7 @@ public class SemiJoinMergeRowKeyJoinGenerator extends NonCoveringIndexPlanGenera
 
 
     //gather the left side relations of the root join.
-    FlattenPhysicalPlanCallContext leftSideJoinContext = SemiJoinIndexPlanUtils.gatherLeftSideRelsOfJoin(joinContext);
+    FlattenPhysicalPlanCallContext leftSideJoinContext = joinContext.getLeftFlattenPhysicalPlanCallContext();
     //merge the left side relations of the join and left side relations of the RKJ operator.
     RelNode root = merge(leftSideJoinContext, leftContext);
     //apply the top level projects.
@@ -156,30 +160,62 @@ public class SemiJoinMergeRowKeyJoinGenerator extends NonCoveringIndexPlanGenera
       logger.debug("semi_join_index_plan_info: merge project ( {}, {} ) => {} ", leftInput, rightInput, input);
     }
 
-    if (leftJoinContext.getFilterBelowFlatten() != null || leftRKJContext.getFilterBelowFlatten() != null) {
-      leftInput = SemiJoinIndexPlanUtils.getFilter(leftInput, (FilterPrel) leftJoinContext.getFilterBelowFlatten());
-      rightInput = SemiJoinIndexPlanUtils.getFilter(rightInput, (FilterPrel) leftRKJContext.getFilterBelowFlatten());
+    if (leftJoinContext.getFilterBelowLeafFlatten() != null || leftRKJContext.getFilterBelowLeafFlatten() != null) {
+      leftInput = SemiJoinIndexPlanUtils.getFilter(leftInput, (FilterPrel) leftJoinContext.getFilterBelowLeafFlatten());
+      rightInput = SemiJoinIndexPlanUtils.getFilter(rightInput, (FilterPrel) leftRKJContext.getFilterBelowLeafFlatten());
       input = SemiJoinIndexPlanUtils.mergeFilter((FilterPrel) leftInput, (FilterPrel) rightInput, input);
       logger.debug("semi_join_index_plan_info: merge filter ( {}, {} ) => {} ", leftInput, rightInput, input);
     }
 
-    if (leftJoinContext.getProjectWithFlatten() != null || leftRKJContext.getProjectWithFlatten() != null) {
-      leftInput = SemiJoinIndexPlanUtils.getProject(leftInput, (ProjectPrel) leftJoinContext.getProjectWithFlatten());
-      rightInput = SemiJoinIndexPlanUtils.getProject(rightInput, (ProjectPrel) leftRKJContext.getProjectWithFlatten());
-      input = SemiJoinIndexPlanUtils.mergeProject((ProjectPrel) leftInput, (ProjectPrel) rightInput, input, this.joinContext.call.builder());
-      logger.debug("semi_join_index_plan_info: merge project ( {}, {} ) => {} ", leftInput, rightInput, input);
+    if (leftJoinContext.getProjectWithRootFlatten() != null || leftRKJContext.getProjectWithRootFlatten() != null) {
+      List<RelNode> leftProjectList = new ArrayList<>(leftJoinContext.getProjectToFlattenMapForAllProjects().keySet());
+      Collections.reverse(leftProjectList);
+      List<RelNode> rightProjectList = new ArrayList<>(leftRKJContext.getProjectToFlattenMapForAllProjects().keySet());
+      Collections.reverse(rightProjectList);
+
+      // reverse walk the list of Project entries and merge them bottom-up
+      int leftSize = leftProjectList.size();
+      int rightSize = rightProjectList.size();
+      int minSize = Math.min(leftSize, rightSize);
+
+      // merge up to the first minSize elements
+      for (int i = 0; i < minSize; i++) {
+        leftInput = (ProjectPrel) leftProjectList.get(i);
+        rightInput = (ProjectPrel) rightProjectList.get(i);
+
+        input = SemiJoinIndexPlanUtils.mergeProject((ProjectPrel) leftInput, (ProjectPrel) rightInput, input, this.joinContext.call.builder());
+        logger.debug("semi_join_index_plan_info: merge project ( {}, {} ) => {} ", leftInput, rightInput, input);
+      }
+
+      // merge remaining elements
+      if (leftSize > rightSize) {
+        for (int i = minSize; i < leftSize; i++) {
+          leftInput = (ProjectPrel) leftProjectList.get(i);
+          rightInput = SemiJoinIndexPlanUtils.getProject(rightInput, null);
+          input = SemiJoinIndexPlanUtils.mergeProject((ProjectPrel) leftInput, (ProjectPrel) rightInput, input, this.joinContext.call.builder());
+          logger.debug("semi_join_index_plan_info: merge project ( {}, {} ) => {} ", leftInput, rightInput, input);
+        }
+      } else {
+        for (int i = minSize; i < rightSize; i++) {
+          leftInput = SemiJoinIndexPlanUtils.getProject(leftInput, null);
+          rightInput = (ProjectPrel) rightProjectList.get(i);
+          input = SemiJoinIndexPlanUtils.mergeProject((ProjectPrel) leftInput, (ProjectPrel) rightInput, input, this.joinContext.call.builder());
+          logger.debug("semi_join_index_plan_info: merge project ( {}, {} ) => {} ", leftInput, rightInput, input);
+        }
+      }
+
     }
 
-    if (leftJoinContext.getFilterAboveFlatten() != null || leftRKJContext.getFilterAboveFlatten() != null) {
-      leftInput = SemiJoinIndexPlanUtils.getFilter(leftInput, (FilterPrel) leftJoinContext.getFilterAboveFlatten());
-      rightInput = SemiJoinIndexPlanUtils.getFilter(rightInput, (FilterPrel) leftRKJContext.getFilterAboveFlatten());
+    if (leftJoinContext.getFilterAboveRootFlatten() != null || leftRKJContext.getFilterAboveRootFlatten() != null) {
+      leftInput = SemiJoinIndexPlanUtils.getFilter(leftInput, (FilterPrel) leftJoinContext.getFilterAboveRootFlatten());
+      rightInput = SemiJoinIndexPlanUtils.getFilter(rightInput, (FilterPrel) leftRKJContext.getFilterAboveRootFlatten());
       input = SemiJoinIndexPlanUtils.mergeFilter((FilterPrel) leftInput, (FilterPrel) rightInput, input);
       logger.debug("semi_join_index_plan_info: merge filter ( {}, {} ) => {} ", leftInput, rightInput, input);
     }
 
-    if (leftJoinContext.getProjectAboveFlatten() != null || leftRKJContext.getProjectAboveFlatten() != null) {
-      leftInput = SemiJoinIndexPlanUtils.getProject(leftInput, (ProjectPrel) leftJoinContext.getProjectAboveFlatten());
-      rightInput = SemiJoinIndexPlanUtils.getProject(rightInput, (ProjectPrel) leftRKJContext.getProjectAboveFlatten());
+    if (leftJoinContext.getProjectAboveRootFlatten() != null || leftRKJContext.getProjectAboveRootFlatten() != null) {
+      leftInput = SemiJoinIndexPlanUtils.getProject(leftInput, (ProjectPrel) leftJoinContext.getProjectAboveRootFlatten());
+      rightInput = SemiJoinIndexPlanUtils.getProject(rightInput, (ProjectPrel) leftRKJContext.getProjectAboveRootFlatten());
       input = SemiJoinIndexPlanUtils.mergeProject((ProjectPrel) leftInput, (ProjectPrel) rightInput, input, this.joinContext.call.builder());
       logger.debug("semi_join_index_plan_info: merge project ( {}, {} ) => {} ", leftInput, rightInput, input);
     }
@@ -199,10 +235,35 @@ public class SemiJoinMergeRowKeyJoinGenerator extends NonCoveringIndexPlanGenera
   }
 
   private FlattenPhysicalPlanCallContext gatherLeftSideRelsOfRKJ(RowKeyJoinPrel rkj) {
-    RelNode node = rkj.getInput(0);
-    List<RelNode> relNodes = Lists.newArrayList();
-    SemiJoinIndexPlanUtils.getRelNodesBottomUp(node, relNodes);
-    return SemiJoinIndexPlanUtils.getPhysicalContext(relNodes);
+    RelNode current = rkj.getInput(0);
+    ProjectPrel rootProjectWithFlatten = null;
+    ProjectPrel projectAboveFlatten = null;
+    FilterPrel filterAboveFlatten = null;
+    while (rootProjectWithFlatten == null && ! (current instanceof ScanPrel) ) {
+
+      if (current instanceof RelSubset) {
+        current = (((RelSubset) current).getBest());
+      }
+
+      if (current instanceof ProjectPrel) {
+        if (AbstractMatchFunction.projectHasFlatten((ProjectPrel) current, true, null,null)) {
+          rootProjectWithFlatten = (ProjectPrel) current;
+        } else if (rootProjectWithFlatten == null) {
+          Preconditions.checkArgument(projectAboveFlatten == null, "Encountered an extra Project");
+          projectAboveFlatten = (ProjectPrel) current;
+        }
+      } else if (current instanceof FilterPrel) {
+        // if we haven't seen the root project with flatten, then this must be the filter above flatten
+        filterAboveFlatten = (FilterPrel) current;
+      }
+
+      if (current.getInputs().size() > 0) {
+        current = current.getInput(0);
+      }
+
+    }
+
+    return new FlattenPhysicalPlanCallContext(projectAboveFlatten, filterAboveFlatten, rootProjectWithFlatten);
   }
 
   @Override

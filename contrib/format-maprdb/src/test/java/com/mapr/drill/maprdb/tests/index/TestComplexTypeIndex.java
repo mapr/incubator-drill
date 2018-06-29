@@ -481,6 +481,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
    *Index planning should not happen when the tables are different on either side of a IN join.
    * The following test case will not produce any RowKey  join or covering index plan.
    */
+  @Ignore ("Temporarily ignored")
   @Test
   public void SemiJoinWithTwoDifferentTables() throws Exception {
 

@@ -17,52 +17,61 @@
  */
 package org.apache.drill.exec.planner.index;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.calcite.plan.RelOptRuleCall;
+import org.apache.calcite.rel.RelNode;
 import org.apache.calcite.rex.RexCall;
 import org.apache.calcite.rex.RexInputRef;
 import org.apache.calcite.rex.RexNode;
 import org.apache.drill.exec.planner.common.DrillFilterRelBase;
 import org.apache.drill.exec.planner.common.DrillProjectRelBase;
 import org.apache.drill.exec.planner.common.DrillScanRelBase;
+import org.apache.drill.exec.planner.index.rules.AbstractMatchFunction;
 import org.apache.drill.exec.planner.logical.DrillFilterRel;
 import org.apache.drill.exec.planner.logical.DrillProjectRel;
 import org.apache.drill.exec.planner.logical.DrillScanRel;
+
+import org.apache.drill.shaded.guava.com.google.common.collect.Maps;
 
 public class FlattenIndexPlanCallContext extends IndexLogicalPlanCallContext
     implements FlattenCallContext {
 
   /**
-   * Filter directly above the Flatten's project (this filter cannot be pushed down)
+   * Filter directly above the root Flatten's project (this filter cannot be pushed down)
    */
-  protected DrillFilterRel filterAboveFlatten = null;
+  protected DrillFilterRelBase filterAboveRootFlatten = null;
 
   /**
-   * Filter below the Flatten (and above the Scan)
+   * Filter below the the leaf Flatten (and above the Scan)
    */
-  protected DrillFilterRel filterBelowFlatten = null;
+  protected DrillFilterRelBase filterBelowLeafFlatten = null;
 
   /**
    * Project that has the Flatten
    */
-  protected DrillProjectRel projectWithFlatten = null;
+  protected DrillProjectRelBase projectWithRootFlatten = null;
 
   /**
    * Project directly above the Scan
    */
-  protected DrillProjectRel leafProjectAboveScan = null;
+  protected DrillProjectRelBase leafProjectAboveScan = null;
 
   /**
-   * Map of Flatten field names to the corresponding RexCall
+   * 2-level map of Project to another map of Flatten field names to the corresponding RexCall.
+   * This 2-level mapping is needed since there could be chain of Project-Project-Project each
+   * containing Flatten
    */
-  protected Map<String, RexCall> flattenMap = null;
+  LinkedHashMap<RelNode, Map<String, RexCall>> projectToFlattenExprsMap;
 
   /**
-   * List of the non-Flatten expressions in the Project containing Flatten
+   * Map of Project to list of non-Flatten exprs in the Project containing Flatten.
+   * This mapping is needed since there could be chain of Project-Project-Project each
+   * containing Flatten and non-Flatten exprs
    */
-  protected List<RexNode> nonFlattenExprs = null;
+  LinkedHashMap<RelNode, List<RexNode>> projectToNonFlattenExprsMap;
 
   /**
    * List of other relevant expressions in the leaf Project above Scan
@@ -83,57 +92,51 @@ public class FlattenIndexPlanCallContext extends IndexLogicalPlanCallContext
 
   public FlattenIndexPlanCallContext(RelOptRuleCall call,
       DrillProjectRel upperProject,
-      DrillFilterRel filterAboveFlatten,
-      DrillProjectRel projectWithFlatten,
-      DrillFilterRel filterBelowFlatten,
-      DrillProjectRel leafProjectAboveScan,
-      DrillScanRel scan,
-      Map<String, RexCall> flattenMap,
-      List<RexNode> nonFlattenExprs) {
-    super(call, null /* no Sort */,
+      DrillFilterRel filterAboveRootFlatten,
+      DrillProjectRel projectWithRootFlatten,
+      DrillScanRel scan) {
+    super(call,
+        null, // no Sort
         upperProject,
-        filterAboveFlatten,
-        projectWithFlatten /* same as lowerProject */,
+        filterAboveRootFlatten,
+        projectWithRootFlatten, // same as lowerProject
         scan);
+    this.filterAboveRootFlatten = filterAboveRootFlatten;
+    this.projectWithRootFlatten = projectWithRootFlatten;
+    this.projectToFlattenExprsMap = Maps.newLinkedHashMap();
+    this.projectToNonFlattenExprsMap = Maps.newLinkedHashMap();
 
-    this.filterAboveFlatten = filterAboveFlatten;
-    this.filterBelowFlatten = filterBelowFlatten;
-    this.projectWithFlatten = projectWithFlatten;
-    this.leafProjectAboveScan = leafProjectAboveScan;
-    this.flattenMap = flattenMap;
-    this.nonFlattenExprs = nonFlattenExprs;
-  }
-
-  public FlattenIndexPlanCallContext(RelOptRuleCall call,
-      DrillProjectRel upperProject,
-      DrillFilterRel filterAboveFlatten,
-      DrillProjectRel projectWithFlatten,
-      DrillFilterRel filterBelowFlatten,
-      DrillScanRel scan,
-      Map<String, RexCall> flattenMap,
-      List<RexNode> nonFlattenExprs) {
-    this (call, upperProject, filterAboveFlatten, projectWithFlatten, filterBelowFlatten,
-        null /* no leaf project above scan */, scan, flattenMap, nonFlattenExprs);
+    initializeContext();
   }
 
   @Override
-  public Map<String, RexCall> getFlattenMap() {
-    return flattenMap;
+  public LinkedHashMap<RelNode, Map<String, RexCall>> getProjectToFlattenMapForAllProjects() {
+    return projectToFlattenExprsMap;
   }
 
   @Override
-  public List<RexNode> getNonFlattenExprs() {
-    return nonFlattenExprs;
+  public Map<String, RexCall> getFlattenMapForProject(RelNode project) {
+    return projectToFlattenExprsMap.get(project);
   }
 
   @Override
-  public DrillFilterRelBase getFilterAboveFlatten() {
-    return filterAboveFlatten;
+  public LinkedHashMap<RelNode, List<RexNode>> getNonFlattenExprsMapForAllProjects() {
+    return projectToNonFlattenExprsMap;
   }
 
   @Override
-  public DrillFilterRelBase getFilterBelowFlatten() {
-    return filterBelowFlatten;
+  public List<RexNode> getNonFlattenExprsForProject(RelNode project) {
+    return projectToNonFlattenExprsMap.get(project);
+  }
+
+  @Override
+  public DrillFilterRelBase getFilterAboveRootFlatten() {
+    return filterAboveRootFlatten;
+  }
+
+  @Override
+  public DrillFilterRelBase getFilterBelowLeafFlatten() {
+    return filterBelowLeafFlatten;
   }
 
   @Override
@@ -142,8 +145,8 @@ public class FlattenIndexPlanCallContext extends IndexLogicalPlanCallContext
   }
 
   @Override
-  public DrillProjectRelBase getProjectWithFlatten() {
-    return projectWithFlatten;
+  public DrillProjectRelBase getProjectWithRootFlatten() {
+    return projectWithRootFlatten;
   }
 
   @Override
@@ -182,8 +185,22 @@ public class FlattenIndexPlanCallContext extends IndexLogicalPlanCallContext
   }
 
   @Override
-  public DrillProjectRelBase getProjectAboveFlatten() {
+  public DrillProjectRelBase getProjectAboveRootFlatten() {
     return this.upperProject;
+  }
+
+  @Override
+  public void setFilterBelowLeafFlatten(DrillFilterRelBase filter) {
+    this.filterBelowLeafFlatten = filter;
+  }
+
+  @Override
+  public void setLeafProjectAboveScan(DrillProjectRelBase project) {
+    this.leafProjectAboveScan = project;
+  }
+
+  private void initializeContext() {
+    AbstractMatchFunction.initializeContext(this);
   }
 
 }

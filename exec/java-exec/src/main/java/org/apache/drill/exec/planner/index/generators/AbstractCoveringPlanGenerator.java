@@ -90,7 +90,7 @@ public abstract class AbstractCoveringPlanGenerator extends AbstractIndexPlanGen
           // if this expr is a flatten, only keep the input of flatten.  Note that we cannot drop
           // the expr altogether because the new Project will be added to the same RelSubset as the old Project and
           // the RowType of both should be the same to pass validation checks in the VolcanoPlanner.
-          if (flattenContext.getFlattenMap().containsKey(p.right)) {
+          if (flattenContext.getFlattenMapForProject(origProject).containsKey(p.right)) {
             newProjectExprs.add(((RexCall)p.left).getOperands().get(0));
           } else {
             newProjectExprs.add(p.left);

@@ -19,9 +19,9 @@ package org.apache.drill.exec.planner.index.generators.common;
 
 import org.apache.drill.shaded.guava.com.google.common.base.Preconditions;
 import org.apache.drill.shaded.guava.com.google.common.collect.Lists;
-import org.apache.drill.shaded.guava.com.google.common.collect.Maps;
 import org.apache.calcite.plan.RelOptCluster;
 import org.apache.calcite.plan.RelOptUtil;
+import org.apache.calcite.rel.RelNode;
 import org.apache.calcite.rel.core.Project;
 import org.apache.calcite.rel.type.RelDataType;
 import org.apache.calcite.rel.type.RelDataTypeField;
@@ -43,6 +43,8 @@ import org.apache.drill.exec.planner.logical.DrillProjectRel;
 import org.apache.drill.exec.planner.logical.DrillRel;
 import org.apache.drill.exec.planner.logical.DrillScanRel;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,9 +56,6 @@ public class SemiJoinTransformUtils {
   public static FlattenIndexPlanCallContext transformJoinToSingleTableScan(SemiJoinIndexPlanCallContext context,
                                                                            FunctionImplementationRegistry functionRegistry,
                                                                            org.slf4j.Logger logger) {
-    DrillScanRel newScan = null;
-    DrillFilterRel filterBelowFlatten = null;
-    DrillProjectRel projectAboveScan = null;
     if (!context.isCoveringIndexPlanApplicable()) {
       logger.info("Covering index scan is not applicable for this query as it has complex operations");
       return null;
@@ -65,45 +64,63 @@ public class SemiJoinTransformUtils {
     DrillRel left = context.leftSide.scan;
     DrillRel right = context.rightSide.scan;
     Pair<DrillRel, Map<Integer, Integer>> newScanInfo = merge((DrillScanRel)left, (DrillScanRel)right);
-    newScan = (DrillScanRel)newScanInfo.left;
 
     if (context.rightSide.getLeafProjectAboveScan() != null) {
       left = SemiJoinIndexPlanUtils.getProject(left, (DrillProjectRel)null);
       right = SemiJoinIndexPlanUtils.getProject(right, (DrillProjectRel) context.rightSide.getLeafProjectAboveScan());
       newScanInfo = constructProject(context.join.getCluster(), newScanInfo.left, newScanInfo.right,
               (DrillProjectRel)left, (DrillProjectRel)right, functionRegistry, true);
-      projectAboveScan = (DrillProjectRel)newScanInfo.left;
     }
 
-    if (context.rightSide.getFilterBelowFlatten() != null) {
+    if (context.rightSide.getFilterBelowLeafFlatten() != null) {
       left = SemiJoinIndexPlanUtils.getFilter(left, (DrillFilterRel)null);
-      right = SemiJoinIndexPlanUtils.getFilter(right, (DrillFilterRel) context.rightSide.getFilterBelowFlatten());
+      right = SemiJoinIndexPlanUtils.getFilter(right, (DrillFilterRel) context.rightSide.getFilterBelowLeafFlatten());
       newScanInfo = constructFilter(context, newScanInfo.right, newScanInfo.left,
               (DrillFilterRel)left, (DrillFilterRel)right);
-      filterBelowFlatten = (DrillFilterRel)newScanInfo.left;
     }
 
-    DrillRel leftLowerProject = SemiJoinIndexPlanUtils.getProject(left, context.leftSide.lowerProject);
-    DrillRel rightLowerProject = SemiJoinIndexPlanUtils.getProject(right, context.rightSide.lowerProject);
-    Pair<DrillRel, Map<Integer, Integer>> lowerProjInfo = constructProject(context.join.getCluster(), newScanInfo.left, newScanInfo.right,
-            (DrillProjectRel)leftLowerProject, (DrillProjectRel)rightLowerProject, functionRegistry, true);
+    List<RelNode> projectList = new ArrayList<>(context.rightSide.getProjectToFlattenMapForAllProjects().keySet());
+    Collections.reverse(projectList);
+
+    DrillProjectRel proj = context.leftSide.lowerProject;
+    DrillProjectRel rightLowerProject = null;
+    DrillRel leftLowerProject = null;
+
+    // reverse walk the list of Project entries and merge them bottom-up
+    for (RelNode node : projectList) {
+      rightLowerProject = (DrillProjectRel) node;
+      leftLowerProject = SemiJoinIndexPlanUtils.getProject(left, proj);
+
+      // merge the projects
+      newScanInfo = constructProject(context.join.getCluster(),
+          newScanInfo.left, newScanInfo.right, (DrillProjectRel) leftLowerProject,
+          rightLowerProject, functionRegistry, true);
+
+      proj = null;
+      left = leftLowerProject;
+    }
+
+    Preconditions.checkArgument(leftLowerProject != null && rightLowerProject != null);
+    DrillProjectRel topFlattenProject = (DrillProjectRel)newScanInfo.left;
 
     DrillRel leftFilter = SemiJoinIndexPlanUtils.getFilter(leftLowerProject, context.leftSide.filter);
     DrillRel rightFilter = SemiJoinIndexPlanUtils.getFilter(rightLowerProject, context.rightSide.filter);
-    Pair<DrillRel, Map<Integer, Integer>> filterInfo = constructFilter(context, lowerProjInfo.right, lowerProjInfo.left,
+    Pair<DrillRel, Map<Integer, Integer>> filterInfo = constructFilter(context, newScanInfo.right, newScanInfo.left,
             (DrillFilterRel)leftFilter, (DrillFilterRel)rightFilter);
 
     DrillProjectRel leftUpperProject = SemiJoinIndexPlanUtils.getProject(leftFilter, context.leftSide.upperProject);
-    DrillProjectRel rightUpperProject = SemiJoinIndexPlanUtils.getProject(rightFilter, context.rightSide.upperProject);
+    DrillProjectRel rightUpperProject = SemiJoinIndexPlanUtils.getProject(rightFilter, (DrillProjectRel) context.rightSide.getProjectAboveRootFlatten());
     Pair<DrillRel, Map<Integer, Integer>> upperProjectInfo = constructProject(context.join.getCluster(), filterInfo.left, filterInfo.right,
             leftUpperProject, rightUpperProject, functionRegistry,false);
-    Map<String, RexCall> flattenMap = Maps.newHashMap();
-    List<RexNode> nonFlattenExprs = Lists.newArrayList();
-    AbstractMatchFunction.projectHasFlatten((DrillProjectRel) lowerProjInfo.left, false, flattenMap, nonFlattenExprs);
 
-    FlattenIndexPlanCallContext logicalPlanCallContext = new FlattenIndexPlanCallContext(context.call, (DrillProjectRel)upperProjectInfo.left,
-            (DrillFilterRel) filterInfo.left, (DrillProjectRel) lowerProjInfo.left, filterBelowFlatten, projectAboveScan,  newScan,
-            flattenMap, nonFlattenExprs);
+    DrillScanRel rightScan = AbstractMatchFunction.getDescendantScan(topFlattenProject);
+
+    FlattenIndexPlanCallContext logicalPlanCallContext = new FlattenIndexPlanCallContext(context.call,
+        (DrillProjectRel) upperProjectInfo.left,
+        (DrillFilterRel) filterInfo.left,
+        topFlattenProject,
+        rightScan);
+
     return logicalPlanCallContext;
   }
 

@@ -24,6 +24,7 @@ import java.util.Map;
 import org.apache.calcite.plan.RelOptRuleCall;
 import org.apache.calcite.plan.RelOptRuleOperand;
 import org.apache.calcite.plan.RelOptUtil;
+import org.apache.calcite.plan.volcano.RelSubset;
 import org.apache.calcite.rel.RelNode;
 import org.apache.calcite.rel.type.RelDataType;
 import org.apache.calcite.rel.type.RelDataTypeFactory;
@@ -38,6 +39,7 @@ import org.apache.drill.exec.planner.index.generators.common.FlattenConditionUti
 import org.apache.drill.exec.planner.index.rules.AbstractMatchFunction;
 import org.apache.drill.exec.planner.logical.DrillOptiq;
 import org.apache.drill.exec.planner.logical.DrillParseContext;
+import org.apache.drill.exec.planner.logical.DrillScanRel;
 import org.apache.drill.exec.planner.logical.RelOptHelper;
 import org.apache.drill.exec.planner.physical.FilterPrel;
 import org.apache.drill.exec.planner.physical.PrelUtil;
@@ -52,9 +54,9 @@ import org.apache.drill.exec.store.mapr.db.json.JsonScanSpec;
 import org.apache.drill.exec.store.mapr.db.json.JsonTableGroupScan;
 import org.apache.drill.exec.store.mapr.db.json.RestrictedJsonTableGroupScan;
 
+import org.apache.drill.shaded.guava.com.google.common.base.Preconditions;
 import org.apache.drill.shaded.guava.com.google.common.collect.ImmutableList;
 import org.apache.drill.shaded.guava.com.google.common.collect.Lists;
-import org.apache.drill.shaded.guava.com.google.common.collect.Maps;
 
 
 public abstract class MapRDBPushFilterIntoScan extends StoragePluginOptimizerRule {
@@ -93,19 +95,25 @@ public abstract class MapRDBPushFilterIntoScan extends StoragePluginOptimizerRul
     }
   };
 
-  public static final StoragePluginOptimizerRule FILTER_ON_PROJECT = new MapRDBPushFilterIntoScan(RelOptHelper.some(FilterPrel.class, RelOptHelper.some(ProjectPrel.class, RelOptHelper.any(ScanPrel.class))), "MapRDBPushFilterIntoScan:Filter_On_Project") {
+  // public static final StoragePluginOptimizerRule FILTER_ON_PROJECT = new MapRDBPushFilterIntoScan(RelOptHelper.some(FilterPrel.class, RelOptHelper.some(ProjectPrel.class, RelOptHelper.any(ScanPrel.class))), "MapRDBPushFilterIntoScan:Filter_On_Project") {
+  public static final StoragePluginOptimizerRule FILTER_ON_PROJECT = new MapRDBPushFilterIntoScan(RelOptHelper.some(FilterPrel.class, RelOptHelper.any(ProjectPrel.class)), "MapRDBPushFilterIntoScan:Filter_On_Project") {
 
     @Override
     public void onMatch(RelOptRuleCall call) {
       final FilterPrel filter = call.rel(0);
       ProjectPrel project = call.rel(1);
-      final ScanPrel scan = call.rel(2);
-      prepareContextAndPushDownFilter(call, scan, project, filter,null,null);
+      final ScanPrel scan = (ScanPrel) getDescendantScan(project);
+      prepareContextAndPushDownFilter(call, scan, project, filter);
     }
 
     @Override
     public boolean matches(RelOptRuleCall call) {
-      final ScanPrel scan = call.rel(2);
+      final ProjectPrel project = call.rel(1);
+      RelNode descendantRel = getDescendantScan(project);
+      if ( descendantRel == null || ! (descendantRel instanceof ScanPrel) ) {
+        return false;
+      }
+      final ScanPrel scan = (ScanPrel) descendantRel;
       if (scan.getGroupScan() instanceof BinaryTableGroupScan ||
           scan.getGroupScan() instanceof JsonTableGroupScan) {
         return super.matches(call);
@@ -113,63 +121,6 @@ public abstract class MapRDBPushFilterIntoScan extends StoragePluginOptimizerRul
       return false;
     }
   };
-
-  public static final StoragePluginOptimizerRule FILTER_ON_FLATTEN_ON_FILTER_SCAN =
-          new MapRDBPushFilterIntoScan(
-                  RelOptHelper.some(FilterPrel.class,
-                    RelOptHelper.some(ProjectPrel.class,
-                       RelOptHelper.some(FilterPrel.class,
-                            RelOptHelper.any(ScanPrel.class)))), "MapRDBPushFilterIntoScan:Filter_On_Flatten_on_Filter_On_Scan") {
-
-    @Override
-    public void onMatch(RelOptRuleCall call) {
-      final ScanPrel scan = call.rel(3);
-      final FilterPrel filterAboveScan = call.rel(2);
-      ProjectPrel flattenProject = call.rel(1);
-      final FilterPrel filterAboveFlatten = call.rel(0);
-
-      prepareContextAndPushDownFilter(call, scan, flattenProject, filterAboveFlatten, null, filterAboveScan);
-    }
-
-    @Override
-    public boolean matches(RelOptRuleCall call) {
-      final ScanPrel scan =  call.rel(3);
-      if (scan.getGroupScan() instanceof RestrictedJsonTableGroupScan) {
-        return super.matches(call);
-      }
-      return false;
-    }
-  };
-
-  public static final StoragePluginOptimizerRule FILTER_ON_FLATTEN_ON_FILTER_ON_PROJECT_ON_SCAN =
-          new MapRDBPushFilterIntoScan(
-                  RelOptHelper.some(FilterPrel.class,
-                          RelOptHelper.some(ProjectPrel.class,
-                                  RelOptHelper.some(FilterPrel.class,
-                                          RelOptHelper.some(ProjectPrel.class,
-                                                  RelOptHelper.any(ScanPrel.class))))), "MapRDBPushFilterIntoScan:Filter_On_Flatten_on_Filter_On_Project_On_Scan") {
-
-    @Override
-    public void onMatch(RelOptRuleCall call) {
-      final ScanPrel scan = call.rel(4);
-      final ProjectPrel projectAboveScan = call.rel(3);
-      final FilterPrel filterAboveScan = call.rel(2);
-      ProjectPrel flattenProject = call.rel(1);
-      final FilterPrel filterAboveFlatten = call.rel(0);
-
-      prepareContextAndPushDownFilter(call, scan, flattenProject, filterAboveFlatten, projectAboveScan, filterAboveScan);
-    }
-
-    @Override
-    public boolean matches(RelOptRuleCall call) {
-      final ScanPrel scan =  call.rel(4);
-      if (scan.getGroupScan() instanceof RestrictedJsonTableGroupScan) {
-        return super.matches(call);
-      }
-      return false;
-    }
-  };
-
 
   protected void doPushFilterIntoJsonGroupScan(RelOptRuleCall call,
                                                FilterPrel filter, final ProjectPrel project, ScanPrel scan,
@@ -287,30 +238,25 @@ public abstract class MapRDBPushFilterIntoScan extends StoragePluginOptimizerRul
   }
 
   protected void prepareContextAndPushDownFilter(RelOptRuleCall call, ScanPrel scan,
-                                                 ProjectPrel projectWithFlatten, FilterPrel filterAboveFlatten,
-                                                 ProjectPrel projectAboveScan, FilterPrel filterBelowFlatten) {
+                                                 ProjectPrel projectWithFlatten, FilterPrel filterAboveFlatten)  {
+
     RexNode condition = null;
     List<RexNode> conditions = new ArrayList<>();
 
     // check if this filter-on-project is part of a non-covering index plan
     if (scan.getGroupScan() instanceof RestrictedJsonTableGroupScan) {
       // check if filter is referencing Flatten expressions from the child Project
-      Map<String, RexCall> flattenMap = Maps.newHashMap();
-      List<RexNode> nonFlattenExprs = Lists.newArrayList();
-
-      if (AbstractMatchFunction.projectHasFlatten(projectWithFlatten, false, flattenMap, nonFlattenExprs)) {
+      if (AbstractMatchFunction.projectHasFlatten(projectWithFlatten, false, null, null)) {
         RexBuilder builder = filterAboveFlatten.getCluster().getRexBuilder();
         FlattenConditionUtils.ComposedConditionInfo cInfo =
                 new FlattenConditionUtils.ComposedConditionInfo(builder);
+
         FlattenPhysicalPlanCallContext flattenContext = new FlattenPhysicalPlanCallContext(
-                null,
-                filterAboveFlatten,
-                projectWithFlatten,
-                filterBelowFlatten,
-                projectAboveScan,
-                scan,
-                flattenMap,
-                nonFlattenExprs);
+            null, // upper project
+            filterAboveFlatten,
+            projectWithFlatten,
+            scan);
+
         FlattenConditionUtils.composeConditions(flattenContext, builder, cInfo);
 
         conditions.addAll(cInfo.getflattenConditions());
@@ -325,6 +271,7 @@ public abstract class MapRDBPushFilterIntoScan extends StoragePluginOptimizerRul
         List<RelDataTypeField> newProjFields = Lists.newArrayList();
         List<RexNode> newProjExprs = Lists.newArrayList();
         RelDataTypeFactory.FieldInfoBuilder newProjFieldTypeBuilder = scan.getCluster().getTypeFactory().builder();
+        Map<String, RexCall> flattenMap = flattenContext.getFlattenMapForProject(projectWithFlatten);
 
         for (Pair<RexNode, String> p : projectWithFlatten.getNamedProjects()) {
           newProjFields.add(origProjFields.get(origFieldIndex));
@@ -363,4 +310,34 @@ public abstract class MapRDBPushFilterIntoScan extends StoragePluginOptimizerRul
       doPushFilterIntoJsonGroupScan(call, filterAboveFlatten, projectWithFlatten, scan, groupScan, conditions);
     }
   }
+
+  /**
+   * Get the descendant Scan node starting from this Project with the assumption that the child rels are unary.
+   * @param rootProject
+   * @return RelNode which is either a (logical) DrillScanRel or a (physical) ScanPrel if all child rels are unary,
+   *   or null otherwise
+   */
+  // TODO: consolidate this method with similar method for logical scan in AbstractMatchFunction
+  private static RelNode getDescendantScan(ProjectPrel rootProject) {
+    RelNode current = rootProject;
+    while (! (current instanceof ScanPrel) && ! (current instanceof DrillScanRel)) {
+      if (current instanceof RelSubset) {
+        if (((RelSubset) current).getBest() != null) {
+          current = ((RelSubset) current).getBest();
+        } else {
+          current = ((RelSubset) current).getOriginal();
+        }
+      }
+
+      int numinputs = current.getInputs().size();
+      if (numinputs > 1) {
+        return null;  // an n-ary operator was encountered
+      } else if (numinputs > 0) {
+        current = current.getInput(0);
+      }
+    }
+    Preconditions.checkArgument(current instanceof ScanPrel || current instanceof DrillScanRel);
+    return current;
+  }
+
 }

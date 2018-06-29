@@ -17,9 +17,11 @@
  */
 package org.apache.drill.exec.planner.index;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.calcite.rel.RelNode;
 import org.apache.calcite.rex.RexCall;
 import org.apache.calcite.rex.RexInputRef;
 import org.apache.calcite.rex.RexNode;
@@ -28,17 +30,22 @@ import org.apache.drill.exec.planner.common.DrillProjectRelBase;
 import org.apache.drill.exec.planner.common.DrillScanRelBase;
 
 public interface FlattenCallContext {
-  Map<String, RexCall> getFlattenMap();
 
-  List<RexNode> getNonFlattenExprs();
+  LinkedHashMap<RelNode, Map<String, RexCall>> getProjectToFlattenMapForAllProjects();
 
-  DrillFilterRelBase getFilterAboveFlatten();
+  Map<String, RexCall> getFlattenMapForProject(RelNode project);
 
-  DrillFilterRelBase getFilterBelowFlatten();
+  LinkedHashMap<RelNode, List<RexNode>> getNonFlattenExprsMapForAllProjects();
+
+  List<RexNode> getNonFlattenExprsForProject(RelNode project);
+
+  DrillFilterRelBase getFilterAboveRootFlatten();
+
+  DrillFilterRelBase getFilterBelowLeafFlatten();
 
   void setFilterExprsReferencingFlatten(List<RexNode> exprList);
 
-  DrillProjectRelBase getProjectWithFlatten();
+  DrillProjectRelBase getProjectWithRootFlatten();
 
   List<RexNode> getFilterExprsReferencingFlatten();
 
@@ -54,6 +61,10 @@ public interface FlattenCallContext {
 
   DrillScanRelBase getScan();
 
-  DrillProjectRelBase getProjectAboveFlatten();
+  DrillProjectRelBase getProjectAboveRootFlatten();
+
+  void setFilterBelowLeafFlatten(DrillFilterRelBase filter);
+
+  void setLeafProjectAboveScan(DrillProjectRelBase project);
 
 }

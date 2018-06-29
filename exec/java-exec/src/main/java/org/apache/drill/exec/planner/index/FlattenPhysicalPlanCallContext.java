@@ -17,6 +17,7 @@
  */
 package org.apache.drill.exec.planner.index;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,53 +28,58 @@ import org.apache.calcite.rex.RexNode;
 import org.apache.drill.exec.planner.common.DrillFilterRelBase;
 import org.apache.drill.exec.planner.common.DrillProjectRelBase;
 import org.apache.drill.exec.planner.common.DrillScanRelBase;
+import org.apache.drill.exec.planner.index.rules.AbstractMatchFunction;
 import org.apache.drill.exec.planner.physical.FilterPrel;
 import org.apache.drill.exec.planner.physical.ProjectPrel;
 import org.apache.drill.exec.planner.physical.ScanPrel;
 
+import org.apache.drill.shaded.guava.com.google.common.collect.Maps;
+
 public class FlattenPhysicalPlanCallContext implements FlattenCallContext {
 
   /**
-   * Filter directly above the Flatten's project (this filter cannot be pushed down)
+   * Filter directly above the root Flatten's project (this filter cannot be pushed down)
    */
-  protected FilterPrel filterAboveFlatten = null;
+  protected FilterPrel filterAboveRootFlatten = null;
 
   /**
-   * Filter below the Flatten (and above the Scan)
+   * Filter below the leaf Flatten (and above the Scan)
    */
-  protected FilterPrel filterBelowFlatten = null;
+  protected FilterPrel filterBelowLeafFlatten = null;
 
   /**
    * Project that has the Flatten
    */
-  protected ProjectPrel projectWithFlatten = null;
+  protected ProjectPrel projectWithRootFlatten = null;
 
   /**
    * Project directly above the Scan
    */
   protected ProjectPrel leafProjectAboveScan = null;
 
-
   /**
-   * project above flatten
+   * project above root flatten
    */
-  protected ProjectPrel projectAboveFlatten = null;
+  protected ProjectPrel projectAboveRootFlatten = null;
 
   /**
    * Scan
    */
   protected ScanPrel scan = null;
 
+  /**
+   * 2-level map of Project to another map of Flatten field names to the corresponding RexCall.
+   * This 2-level mapping is needed since there could be chain of Project-Project-Project each
+   * containing Flatten
+   */
+  protected LinkedHashMap<RelNode, Map<String, RexCall>> projectToFlattenExprsMap = null;
 
   /**
-   * Map of Flatten field names to the corresponding RexCall
+   * Map of Project to list of non-Flatten exprs in the Project containing Flatten.
+   * This mapping is needed since there could be chain of Project-Project-Project each
+   * containing Flatten and non-Flatten exprs
    */
-  protected Map<String, RexCall> flattenMap = null;
-
-  /**
-   * List of the non-Flatten expressions in the Project containing Flatten
-   */
-  protected List<RexNode> nonFlattenExprs = null;
+  protected LinkedHashMap<RelNode, List<RexNode>> projectToNonFlattenExprsMap = null;
 
   /**
    * List of other relevant expressions in the leaf Project above Scan
@@ -99,42 +105,76 @@ public class FlattenPhysicalPlanCallContext implements FlattenCallContext {
 
   public FlattenPhysicalPlanCallContext(
       ProjectPrel upperProject,
-      FilterPrel filterAboveFlatten,
-      ProjectPrel projectWithFlatten,
-      FilterPrel filterBelowFlatten,
+      FilterPrel filterAboveRootFlatten,
+      ProjectPrel projectWithRootFlatten,
+      FilterPrel filterBelowLeafFlatten,
       ProjectPrel leafProjectAboveScan,
-      ScanPrel scan,
-      Map<String, RexCall> flattenMap,
-      List<RexNode> nonFlattenExprs) {
-    this.projectAboveFlatten = upperProject;
-    this.filterAboveFlatten = filterAboveFlatten;
-    this.filterBelowFlatten = filterBelowFlatten;
-    this.projectWithFlatten = projectWithFlatten;
+      ScanPrel scan) {
+    this.projectAboveRootFlatten = upperProject;
+    this.filterAboveRootFlatten = filterAboveRootFlatten;
+    this.projectWithRootFlatten = projectWithRootFlatten;
+    this.filterBelowLeafFlatten = filterBelowLeafFlatten;
     this.leafProjectAboveScan = leafProjectAboveScan;
     this.scan = scan;
-    this.flattenMap = flattenMap;
-    this.nonFlattenExprs = nonFlattenExprs;
+    this.projectToFlattenExprsMap = Maps.newLinkedHashMap();
+    this.projectToNonFlattenExprsMap = Maps.newLinkedHashMap();
+
+    initializeContext();
+
+    // set the root after the above initialization step
     this.root = getRootInternal();
   }
 
-  @Override
-  public Map<String, RexCall> getFlattenMap() {
-    return flattenMap;
+  public FlattenPhysicalPlanCallContext(
+      ProjectPrel upperProject,
+      FilterPrel filterAboveRootFlatten,
+      ProjectPrel projectWithRootFlatten,
+      ScanPrel scan) {
+    this(upperProject, filterAboveRootFlatten, projectWithRootFlatten,
+        null, // filter below leaf flatten
+        null, // leaf project above scan
+        scan);
+  }
+
+  public FlattenPhysicalPlanCallContext(
+      ProjectPrel upperProject,
+      FilterPrel filterAboveRootFlatten,
+      ProjectPrel projectWithRootFlatten) {
+    this(upperProject, filterAboveRootFlatten, projectWithRootFlatten,
+        null, // filter below leaf flatten
+        null, // leaf project above scan
+        null  // scan will be set by initializer
+     );
   }
 
   @Override
-  public List<RexNode> getNonFlattenExprs() {
-    return nonFlattenExprs;
+  public LinkedHashMap<RelNode, Map<String, RexCall>> getProjectToFlattenMapForAllProjects() {
+    return projectToFlattenExprsMap;
   }
 
   @Override
-  public DrillFilterRelBase getFilterAboveFlatten() {
-    return filterAboveFlatten;
+  public Map<String, RexCall> getFlattenMapForProject(RelNode project) {
+    return projectToFlattenExprsMap.get(project);
   }
 
   @Override
-  public DrillFilterRelBase getFilterBelowFlatten() {
-    return filterBelowFlatten;
+  public LinkedHashMap<RelNode, List<RexNode>> getNonFlattenExprsMapForAllProjects() {
+    return projectToNonFlattenExprsMap;
+  }
+
+  @Override
+  public List<RexNode> getNonFlattenExprsForProject(RelNode project) {
+    return projectToNonFlattenExprsMap.get(project);
+  }
+
+  @Override
+  public DrillFilterRelBase getFilterAboveRootFlatten() {
+    return filterAboveRootFlatten;
+  }
+
+  @Override
+  public DrillFilterRelBase getFilterBelowLeafFlatten() {
+    return filterBelowLeafFlatten;
   }
 
   @Override
@@ -143,8 +183,8 @@ public class FlattenPhysicalPlanCallContext implements FlattenCallContext {
   }
 
   @Override
-  public DrillProjectRelBase getProjectWithFlatten() {
-    return projectWithFlatten;
+  public DrillProjectRelBase getProjectWithRootFlatten() {
+    return projectWithRootFlatten;
   }
 
   @Override
@@ -177,25 +217,35 @@ public class FlattenPhysicalPlanCallContext implements FlattenCallContext {
     return leafFilterExprs;
   }
 
-  @Override
+//  @Override
   public DrillScanRelBase getScan() {
     return scan;
   }
 
+//  @Override
+  public DrillProjectRelBase getProjectAboveRootFlatten() {
+    return projectAboveRootFlatten;
+  }
+
   @Override
-  public DrillProjectRelBase getProjectAboveFlatten() {
-    return projectAboveFlatten;
+  public void setFilterBelowLeafFlatten(DrillFilterRelBase filter) {
+    this.filterBelowLeafFlatten = (FilterPrel) filter;
+  }
+
+  @Override
+  public void setLeafProjectAboveScan(DrillProjectRelBase project) {
+    this.leafProjectAboveScan = (ProjectPrel) project;
   }
 
   private RelNode getRootInternal() {
-    if (projectAboveFlatten != null) {
-      return projectAboveFlatten;
-    } else if (filterAboveFlatten != null) {
-      return filterAboveFlatten;
-    } else if (projectWithFlatten != null) {
-      return projectWithFlatten;
-    } else if (filterBelowFlatten != null){
-      return filterBelowFlatten;
+    if (projectAboveRootFlatten != null) {
+      return projectAboveRootFlatten;
+    } else if (filterAboveRootFlatten != null) {
+      return filterAboveRootFlatten;
+    } else if (projectWithRootFlatten != null) {
+      return projectWithRootFlatten;
+    } else if (filterBelowLeafFlatten != null){
+      return filterBelowLeafFlatten;
     } else if (leafProjectAboveScan != null) {
       return leafProjectAboveScan;
     } else {
@@ -206,4 +256,12 @@ public class FlattenPhysicalPlanCallContext implements FlattenCallContext {
   public RelNode getRoot() {
     return root;
   }
+
+  private void initializeContext() {
+    DrillScanRelBase tmpScan = AbstractMatchFunction.initializeContext(this);
+    if (this.scan == null) {
+      this.scan = (ScanPrel) tmpScan;
+    }
+  }
+
 }
