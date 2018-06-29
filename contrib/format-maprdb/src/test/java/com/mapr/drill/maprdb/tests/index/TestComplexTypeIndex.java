@@ -78,7 +78,8 @@ public class TestComplexTypeIndex extends BaseJsonTest {
    *   "salary": {"min":1000.0, "max":2000.0},
    *   "weight": [{"low":120, "high":150},{"low":110, "high":145}],
    *   "cars": ["Nissan Leaf", "Honda Accord"],
-   *   "friends": [{"name": ["Sam", "Jack"]}]
+   *   "friends": [{"name": ["Sam", "Jack"]}],
+   *   "orders": [{"products": [{"prodname": "bike", "price": 200.0}]}]
    * }
    */
 
@@ -108,7 +109,8 @@ public class TestComplexTypeIndex extends BaseJsonTest {
             "carsIdx1", "cars[]", "name",
             "salaryIdx", "salary", "",
             "weightListIdx", "weight", "",
-            "weightComplexIdx1", "weight[].low", "salary,friends,cars,zipcodes"
+            "weightComplexIdx1", "weight[].low", "salary,friends,cars,zipcodes",
+            "ordersProductsIdx1", "orders[].products[].price", ""
         };
     try (Table table = createOrReplaceTable(tableName);
          InputStream in = MaprDBTestsSuite.getJsonStream(fileName);
@@ -1199,4 +1201,45 @@ public class TestComplexTypeIndex extends BaseJsonTest {
     }
     return;
   }
+
+  @Test
+  public void testNestedFlattenCovering_1() throws Exception {
+    try {
+      String query = "select _id from hbase.`index_test_complex1` where _id in (select _id from " +
+                      " (select _id, flatten(t1.`f1`.`products`) as f2 from (select _id, flatten(orders) as f1 from hbase.`index_test_complex1`) as t1) as t2 " +
+                      " where t2.`f2`.`price` > 50)";
+
+      test(IndexPlanning);
+
+      PlanTestBase.testPlanMatchingPatterns(query,
+          new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*orders.*products.*price.*50.*indexName=(ordersProductsIdx1)"},
+          new String[]{"RowKeyJoin"}
+      );
+    } finally {
+
+    }
+
+  }
+
+  @Test
+  public void testNestedFlattenNonCovering_1() throws Exception {
+    try {
+      String query = "select _id, name, county from hbase.`index_test_complex1` where _id in (select _id from " +
+                      " (select _id, flatten(t1.`f1`.`products`) as f2 from (select _id, flatten(orders) as f1 from hbase.`index_test_complex1`) as t1) as t2 " +
+                      " where t2.`f2`.`price` > 50)";
+
+      test(IndexPlanning);
+      test(maxNonCoveringSelectivityThreshold);
+
+      PlanTestBase.testPlanMatchingPatterns(query,
+          new String[] {"RowKeyJoin", ".*RestrictedJsonTableGroupScan.*tableName=.*index_test_complex1,",
+                        ".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*orders.*.products.*price.*50.*indexName=(ordersProductsIdx1)"},
+          new String[]{}
+      );
+    } finally {
+      test(resetmaxNonCoveringSelectivityThreshold);
+    }
+
+  }
+
 }
