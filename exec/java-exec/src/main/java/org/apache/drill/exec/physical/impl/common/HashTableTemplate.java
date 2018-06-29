@@ -368,6 +368,7 @@ public abstract class HashTableTemplate implements HashTable {
         ValueVector vv = vw.getValueVector();
         vv.getMutator().setValueCount(maxOccupiedIdx + 1);
       }
+      htContainer.setRecordCount(maxOccupiedIdx+1);
     }
 
     private void dump(int idx) {
@@ -441,7 +442,7 @@ public abstract class HashTableTemplate implements HashTable {
         size += ledger.getAccountedSize();
       }
 
-      size += new RecordBatchSizer(htContainer).actualSize();
+      size += new RecordBatchSizer(htContainer).getActualSize();
       return size;
     }
   }
