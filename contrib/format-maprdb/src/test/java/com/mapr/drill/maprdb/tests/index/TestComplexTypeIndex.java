@@ -110,7 +110,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
             "salaryIdx", "salary", "",
             "weightListIdx", "weight", "",
             "weightComplexIdx1", "weight[].low", "salary,friends,cars,zipcodes",
-            "ordersProductsIdx1", "orders[].products[].price", ""
+            "ordersProductsIdx1", "orders[].products[].price, orders[].products[].prodname", ""
         };
     try (Table table = createOrReplaceTable(tableName);
          InputStream in = MaprDBTestsSuite.getJsonStream(fileName);
@@ -1218,7 +1218,6 @@ public class TestComplexTypeIndex extends BaseJsonTest {
     } finally {
 
     }
-
   }
 
   @Test
@@ -1239,7 +1238,41 @@ public class TestComplexTypeIndex extends BaseJsonTest {
     } finally {
       test(resetmaxNonCoveringSelectivityThreshold);
     }
-
   }
 
+  @Test
+  public void testNestedFlattenWithElementAnd() throws Exception {
+    try {
+      String query = "select _id from hbase.`index_test_complex1` where _id in (select _id from " +
+              " (select _id, flatten(t1.`f1`.`products`) as f2 from (select _id, flatten(orders) as f1 from hbase.`index_test_complex1`) as t1) as t2 " +
+              " where t2.`f2`.`price` > 50 and t2.`f2`.`prodname` like '%bike%')";
+
+      test(IndexPlanning);
+
+      PlanTestBase.testPlanMatchingPatterns(query,
+              new String[]{".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*elementAnd.*orders.*products.*price.*50.*and.*prodname.*bike.*indexName=(ordersProductsIdx1)"},
+              new String[]{"RowKeyJoin"}
+      );
+    } finally {
+
+    }
+  }
+
+  @Test
+  public void testNestedFlattenElementAndWithNonCovering() throws Exception {
+    try {
+      String query = "select _id, county from hbase.`index_test_complex1` where _id in (select _id from " +
+              " (select _id, flatten(t1.`f1`.`products`) as f2 from (select _id, flatten(orders) as f1 from hbase.`index_test_complex1`) as t1) as t2 " +
+              " where t2.`f2`.`price` > 50 and t2.`f2`.`prodname` like '%bike%')";
+
+      test(IndexPlanning);
+
+      PlanTestBase.testPlanMatchingPatterns(query,
+              new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*elementAnd.*orders.*products.*price.*50.*and.*prodname.*bike.*indexName=(ordersProductsIdx1)"},
+              new String[]{}
+      );
+    } finally {
+
+    }
+  }
 }
