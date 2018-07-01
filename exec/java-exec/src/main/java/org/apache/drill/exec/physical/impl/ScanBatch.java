@@ -47,6 +47,8 @@ import org.apache.drill.exec.store.RecordReader;
 import org.apache.drill.exec.testing.ControlsInjector;
 import org.apache.drill.exec.testing.ControlsInjectorFactory;
 import org.apache.drill.exec.util.CallBack;
+import org.apache.drill.exec.util.record.RecordBatchStats;
+import org.apache.drill.exec.util.record.RecordBatchStats.RecordBatchStatsContext;
 import org.apache.drill.exec.vector.AllocationHelper;
 import org.apache.drill.exec.vector.NullableVarCharVector;
 import org.apache.drill.exec.vector.SchemaChangeCallBack;
@@ -80,6 +82,8 @@ public class ScanBatch implements CloseableRecordBatch {
   private final BufferAllocator allocator;
   private final List<Map<String, String>> implicitColumnList;
   private String currentReaderClassName;
+  private final RecordBatchStatsContext batchStatsLogging;
+
 
   private List<RecordReader> readerList = null; // needed for repeatable scanners
   private boolean isRepeatableScan = false;     // needed for repeatable scanners
@@ -121,6 +125,7 @@ public class ScanBatch implements CloseableRecordBatch {
       this.implicitColumnList = implicitColumnList;
       addImplicitVectors();
       currentReader = null;
+      batchStatsLogging = new RecordBatchStatsContext(context, oContext);
     } finally {
       oContext.getStats().stopProcessing();
     }
@@ -213,12 +218,12 @@ public class ScanBatch implements CloseableRecordBatch {
       injector.injectChecked(context.getExecutionControls(), "next-allocate", OutOfMemoryException.class);
       currentReader.allocate(mutator.fieldVectorMap());
 
-      recordCount = currentReader.next();
-      logger.trace("currentReader.next return recordCount={}", recordCount);
-      Preconditions.checkArgument(recordCount >= 0, "recordCount from RecordReader.next() should not be negative");
-      boolean isNewSchema = mutator.isNewSchema();
-      populateImplicitVectorsAndSetCount();
-      oContext.getStats().batchReceived(0, recordCount, isNewSchema);
+        recordCount = currentReader.next();
+        Preconditions.checkArgument(recordCount >= 0, "recordCount from RecordReader.next() should not be negative");
+        boolean isNewSchema = mutator.isNewSchema();
+        populateImplicitVectorsAndSetCount();
+        oContext.getStats().batchReceived(0, recordCount, isNewSchema);
+        logRecordBatchStats();
 
       boolean toContinueIter = true;
       if (recordCount == 0) {
@@ -349,6 +354,45 @@ public class ScanBatch implements CloseableRecordBatch {
   public VectorWrapper<?> getValueAccessorById(Class<?> clazz, int... ids) {
     return container.getValueAccessorById(clazz, ids);
   }
+
+  private void logRecordBatchStats() {
+    final int MAX_FQN_LENGTH = 50;
+
+    if (recordCount == 0) {
+      return; // NOOP
+    }
+
+    RecordBatchStats.logRecordBatchStats(
+      batchStatsLogging.getContextOperatorId(),
+      getFQNForLogging(MAX_FQN_LENGTH),
+      this,
+      batchStatsLogging,
+      logger);
+  }
+
+  /** Might truncate the FQN if too long */
+  private String getFQNForLogging(int maxLength) {
+    final String FQNKey = "FQN";
+    final ValueVector v = mutator.implicitFieldVectorMap.get(FQNKey);
+
+    final Object fqnObj;
+
+    if (v == null
+     || v.getAccessor().getValueCount() == 0
+     || (fqnObj = ((NullableVarCharVector) v).getAccessor().getObject(0)) == null) {
+
+      return "NA";
+    }
+
+    String fqn = fqnObj.toString();
+
+    if (fqn != null && fqn.length() > maxLength) {
+      fqn = fqn.substring(fqn.length() - maxLength, fqn.length());
+    }
+
+    return fqn;
+  }
+
 
   /**
    * Row set mutator implementation provided to record readers created by
