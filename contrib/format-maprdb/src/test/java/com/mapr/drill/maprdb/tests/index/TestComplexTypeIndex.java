@@ -1167,8 +1167,6 @@ public class TestComplexTypeIndex extends BaseJsonTest {
     return;
   }
 
-  // Ignore until MD-4571 is fixed
-  @Ignore
   @Test
   public void TestAndWithFullTableScan() throws Exception {
 

@@ -20,15 +20,16 @@ package org.apache.drill.exec.planner.index.rules;
 import org.apache.calcite.plan.RelOptRuleCall;
 import org.apache.calcite.plan.RelOptRule;
 import org.apache.calcite.plan.RelOptRuleOperand;
+import org.apache.calcite.plan.RelTraitSet;
 import org.apache.calcite.rel.AbstractRelNode;
-import org.apache.calcite.rex.RexBuilder;
+import org.apache.calcite.rel.RelCollationTraitDef;
+import org.apache.calcite.rel.RelNode;
+import org.apache.drill.exec.physical.base.DbGroupScan;
+import org.apache.drill.exec.planner.common.DrillScanRelBase;
 import org.apache.drill.exec.planner.index.FlattenIndexPlanCallContext;
 import org.apache.drill.exec.planner.index.SemiJoinIndexPlanCallContext;
 import org.apache.drill.exec.planner.index.IndexPlanUtils;
 import org.apache.drill.exec.planner.index.IndexLogicalPlanCallContext;
-import org.apache.drill.exec.planner.index.generators.AbstractIndexPlanGenerator;
-import org.apache.drill.exec.planner.index.generators.CoveringPlanGenerator;
-import org.apache.drill.exec.planner.index.generators.common.FlattenConditionUtils;
 import org.apache.drill.exec.planner.index.generators.common.SemiJoinIndexPlanUtils;
 import org.apache.drill.exec.planner.index.generators.common.SemiJoinTransformUtils;
 import org.apache.drill.exec.planner.logical.DrillFilterRel;
@@ -37,9 +38,11 @@ import org.apache.drill.exec.planner.logical.DrillScanRel;
 import org.apache.drill.exec.planner.logical.DrillJoinRel;
 import org.apache.drill.exec.planner.logical.DrillAggregateRel;
 import org.apache.drill.exec.planner.logical.RelOptHelper;
-import org.apache.calcite.rex.RexNode;
 import org.apache.drill.exec.planner.physical.PlannerSettings;
 import org.apache.drill.exec.planner.physical.PrelUtil;
+import org.apache.drill.exec.planner.physical.DrillDistributionTrait;
+import org.apache.drill.exec.planner.physical.Prel;
+import org.apache.drill.exec.planner.physical.ScanPrel;
 
 public class SemiJoinFullTableScanPrule extends AbstractIndexPrule {
   static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(SemiJoinFullTableScanPrule.class);
@@ -135,6 +138,48 @@ public class SemiJoinFullTableScanPrule extends AbstractIndexPrule {
     doOnMatch(match.onMatch(call));
   }
 
+  private static ScanPrel buildScanPrel(DrillScanRelBase scan) {
+    DbGroupScan dbGroupScan = (DbGroupScan) IndexPlanUtils.getGroupScan(scan);
+    dbGroupScan = ((DbGroupScan) dbGroupScan.clone(dbGroupScan.getColumns()));
+    dbGroupScan.setComplexFilterPushDown(true);
+    DrillDistributionTrait partition = IndexPlanUtils.scanIsPartition(dbGroupScan) ?
+            DrillDistributionTrait.RANDOM_DISTRIBUTED : DrillDistributionTrait.SINGLETON;
+
+    // add a default collation trait otherwise Calcite runs into a ClassCastException, which at first glance
+    // seems like a Calcite bug
+    RelTraitSet indexScanTraitSet = scan.getTraitSet().plus(Prel.DRILL_PHYSICAL).
+            plus(RelCollationTraitDef.INSTANCE.getDefault()).plus(partition);
+
+    ScanPrel scanPrel = new ScanPrel(scan.getCluster(),
+            indexScanTraitSet, dbGroupScan,
+            scan.getRowType(), scan.getTable());
+
+    return scanPrel;
+  }
+
+  private RelNode getFullPlan(FlattenIndexPlanCallContext indexContext) {
+    DrillScanRelBase origScan = indexContext.scan;
+    DrillFilterRel leafFilter = (DrillFilterRel) indexContext.getFilterBelowLeafFlatten();
+    DrillFilterRel flattenFilter = (DrillFilterRel) indexContext.getFilterAboveRootFlatten();
+    DrillProjectRel leafProject = (DrillProjectRel) indexContext.getLeafProjectAboveScan();
+    DrillProjectRel projectWithFlatten = (DrillProjectRel) indexContext.getProjectWithRootFlatten();
+    DrillProjectRel upperProject = (DrillProjectRel) indexContext.getUpperProject();
+
+    RelNode newRel = buildScanPrel(origScan);
+    if (leafProject != null) {
+      newRel = SemiJoinIndexPlanUtils.buildProject(newRel, leafProject);
+    }
+    if (leafFilter != null) {
+      newRel = SemiJoinIndexPlanUtils.buildFilter(newRel, leafFilter);
+    }
+    newRel = SemiJoinIndexPlanUtils.buildProject(newRel, projectWithFlatten);
+    newRel = SemiJoinIndexPlanUtils.buildFilter(newRel, flattenFilter);
+    if (upperProject != null) {
+      newRel = SemiJoinIndexPlanUtils.buildProject(newRel, upperProject);
+    }
+    return newRel;
+  }
+
   private void doOnMatch(SemiJoinIndexPlanCallContext indexContext) {
     if (indexContext != null && indexContext.join != null) {
       PlannerSettings ps = PrelUtil.getPlannerSettings(indexContext.call.getPlanner());
@@ -143,15 +188,9 @@ public class SemiJoinFullTableScanPrule extends AbstractIndexPrule {
       if (context == null) {
         logger.warn("Covering Index Scan cannot be applied as FlattenIndexPlanContext is null");
       } else {
-        RexBuilder builder = context.getFilterAboveRootFlatten().getCluster().getRexBuilder();
-        FlattenConditionUtils.ComposedConditionInfo cInfo =
-            new FlattenConditionUtils.ComposedConditionInfo(builder);
-        FlattenConditionUtils.composeConditions(context, builder, cInfo);
-        RexNode condition = cInfo.getTotalCondition();
-        AbstractIndexPlanGenerator planGen = new CoveringPlanGenerator(indexContext, condition,
-                builder, PrelUtil.getPlannerSettings(indexContext.call.getPlanner()));
         try {
-          indexContext.call.transformTo(planGen.convertChild(null,null));
+          RelNode fulltablePlan = getFullPlan(context);
+          indexContext.call.transformTo(fulltablePlan);
         } catch (Exception e) {
           logger.warn("Exception while trying to generate covering index plan", e);
         }

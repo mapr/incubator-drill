@@ -120,6 +120,11 @@ public class SemiJoinIndexPlanUtils {
     return buildFilter(input);
   }
 
+  public static FilterPrel buildFilter(RelNode input, DrillFilterRel filterRel) {
+    return new FilterPrel(input.getCluster(), input.getTraitSet().plus(DRILL_PHYSICAL), input,
+            filterRel.getCondition());
+  }
+
   public static FilterPrel buildFilter(RelNode input) {
     return new FilterPrel(input.getCluster(), input.getTraitSet().plus(DRILL_PHYSICAL), input,
             input.getCluster().getRexBuilder().makeLiteral(true));
@@ -128,6 +133,11 @@ public class SemiJoinIndexPlanUtils {
   public static DrillFilterRel buildFilter(DrillRel input) {
     return new DrillFilterRel(input.getCluster(), input.getTraitSet().plus(DRILL_LOGICAL), input,
             input.getCluster().getRexBuilder().makeLiteral(true));
+  }
+
+  public static ProjectPrel buildProject(RelNode input, DrillProjectRel projectRel) {
+    return new ProjectPrel(input.getCluster(), input.getTraitSet().plus(DRILL_PHYSICAL), input,
+            projectRel.getProjects(), projectRel.getRowType());
   }
 
   public static ProjectPrel buildProject(RelNode input, RelNode projectsRelNode) {

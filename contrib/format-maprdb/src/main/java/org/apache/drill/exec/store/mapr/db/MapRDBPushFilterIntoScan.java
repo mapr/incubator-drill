@@ -52,7 +52,6 @@ import org.apache.drill.exec.store.mapr.db.binary.MapRDBFilterBuilder;
 import org.apache.drill.exec.store.mapr.db.json.JsonConditionBuilder;
 import org.apache.drill.exec.store.mapr.db.json.JsonScanSpec;
 import org.apache.drill.exec.store.mapr.db.json.JsonTableGroupScan;
-import org.apache.drill.exec.store.mapr.db.json.RestrictedJsonTableGroupScan;
 
 import org.apache.drill.shaded.guava.com.google.common.base.Preconditions;
 import org.apache.drill.shaded.guava.com.google.common.collect.ImmutableList;
@@ -244,7 +243,7 @@ public abstract class MapRDBPushFilterIntoScan extends StoragePluginOptimizerRul
     List<RexNode> conditions = new ArrayList<>();
 
     // check if this filter-on-project is part of a non-covering index plan
-    if (scan.getGroupScan() instanceof RestrictedJsonTableGroupScan) {
+    if (scan.getGroupScan() instanceof  JsonTableGroupScan && ((JsonTableGroupScan)scan.getGroupScan()).supportsComplexFilterPushDown() ) {
       // check if filter is referencing Flatten expressions from the child Project
       if (AbstractMatchFunction.projectHasFlatten(projectWithFlatten, false, null, null)) {
         RexBuilder builder = filterAboveFlatten.getCluster().getRexBuilder();
