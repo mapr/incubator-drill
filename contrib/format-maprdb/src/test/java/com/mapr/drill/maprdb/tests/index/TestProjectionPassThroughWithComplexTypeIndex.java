@@ -1,4 +1,4 @@
-/**
+/*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * <p>
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * <p>
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,9 +23,7 @@ import com.mapr.db.TableDescriptor;
 import com.mapr.db.impl.TableDescriptorImpl;
 import com.mapr.db.tests.utils.DBTests;
 import com.mapr.drill.maprdb.tests.MaprDBTestsSuite;
-import static com.mapr.drill.maprdb.tests.MaprDBTestsSuite.INDEX_FLUSH_TIMEOUT;
 import com.mapr.drill.maprdb.tests.json.BaseJsonTest;
-import java.io.InputStream;
 import org.apache.drill.PlanTestBase;
 import org.apache.drill.exec.util.EncodedSchemaPathSet;
 import org.apache.hadoop.fs.Path;
@@ -36,6 +34,10 @@ import org.junit.Test;
 import org.ojai.Document;
 import org.ojai.DocumentStream;
 import org.ojai.json.Json;
+
+import java.io.InputStream;
+
+import static com.mapr.drill.maprdb.tests.MaprDBTestsSuite.INDEX_FLUSH_TIMEOUT;
 
 
 public class TestProjectionPassThroughWithComplexTypeIndex extends BaseJsonTest {
