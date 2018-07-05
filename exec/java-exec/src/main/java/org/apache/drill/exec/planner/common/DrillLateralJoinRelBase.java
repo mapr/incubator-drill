@@ -50,15 +50,15 @@ public abstract class DrillLateralJoinRelBase extends Correlate implements Drill
     this.excludeCorrelateColumn = excludeCorrelateCol;
   }
 
-  @Override public RelOptCost computeSelfCost(RelOptPlanner planner,
-                                              RelMetadataQuery mq) {
+  @Override
+  public RelOptCost computeSelfCost(RelOptPlanner planner, RelMetadataQuery mq) {
     DrillCostBase.DrillCostFactory costFactory = (DrillCostBase.DrillCostFactory) planner.getCostFactory();
 
-    double rowCount = mq.getRowCount(this.getLeft());
+    double rowCount = estimateRowCount(mq);
     long fieldWidth = PrelUtil.getPlannerSettings(planner).getOptions()
-        .getOption(ExecConstants.AVERAGE_FIELD_WIDTH_KEY).num_val;
+        .getLong(ExecConstants.AVERAGE_FIELD_WIDTH_KEY);
 
-    double rowSize = (this.getLeft().getRowType().getFieldList().size()) * fieldWidth;
+    double rowSize = left.getRowType().getFieldList().size() * fieldWidth;
 
     double cpuCost = rowCount * rowSize * DrillCostBase.BASE_CPU_COST;
     double memCost = !excludeCorrelateColumn ? CORRELATE_MEM_COPY_COST : 0.0;
@@ -73,7 +73,7 @@ public abstract class DrillLateralJoinRelBase extends Correlate implements Drill
         return constructRowType(SqlValidatorUtil.deriveJoinRowType(left.getRowType(),
           right.getRowType(), joinType.toJoinType(),
           getCluster().getTypeFactory(), null,
-          ImmutableList.<RelDataTypeField>of()));
+          ImmutableList.of()));
       case ANTI:
       case SEMI:
         return constructRowType(left.getRowType());
@@ -82,12 +82,19 @@ public abstract class DrillLateralJoinRelBase extends Correlate implements Drill
     }
   }
 
-  public int getInputSize(int offset, RelNode input) {
-    if (this.excludeCorrelateColumn &&
-      offset == 0) {
-      return input.getRowType().getFieldList().size() - 1;
+  /**
+   * Returns number of fields in {@link RelDataType} for
+   * input rel node with specified ordinal considering value of
+   * {@code excludeCorrelateColumn}.
+   *
+   * @param ordinal ordinal of input rel node
+   * @return number of fields in input's {@link RelDataType}
+   */
+  public int getInputSize(int ordinal) {
+    if (this.excludeCorrelateColumn && ordinal == 0) {
+      return getInput(ordinal).getRowType().getFieldList().size() - 1;
     }
-    return input.getRowType().getFieldList().size();
+    return getInput(ordinal).getRowType().getFieldList().size();
   }
 
   public RelDataType constructRowType(RelDataType inputRowType) {
@@ -109,5 +116,10 @@ public abstract class DrillLateralJoinRelBase extends Correlate implements Drill
       return getCluster().getTypeFactory().createStructType(fields, fieldNames);
     }
     return inputRowType;
+  }
+
+  @Override
+  public double estimateRowCount(RelMetadataQuery mq) {
+    return mq.getRowCount(left);
   }
 }
