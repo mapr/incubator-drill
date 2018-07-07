@@ -80,9 +80,8 @@ public class ScanPrel extends DrillScanRelBase implements Prel, HasDistributionA
     return creator.addMetadata(this, this.getGroupScan());
   }
 
-  public static ScanPrel create(RelNode old, RelTraitSet traitSets,
-                                GroupScan scan, RelDataType rowType, RelOptTable table) {
-    return new ScanPrel(old.getCluster(), traitSets, getCopy(scan), rowType, table);
+  public static ScanPrel create(RelNode old, RelTraitSet traitSets, GroupScan scan, RelDataType rowType) {
+    return new ScanPrel(old.getCluster(), traitSets, getCopy(scan), rowType, old.getTable());
   }
 
   @Override
