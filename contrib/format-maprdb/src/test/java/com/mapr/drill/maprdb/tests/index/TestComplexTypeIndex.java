@@ -23,12 +23,8 @@ import com.mapr.db.TableDescriptor;
 import com.mapr.db.impl.TableDescriptorImpl;
 import com.mapr.db.tests.utils.DBTests;
 import com.mapr.drill.maprdb.tests.MaprDBTestsSuite;
-import static com.mapr.drill.maprdb.tests.MaprDBTestsSuite.INDEX_FLUSH_TIMEOUT;
 import com.mapr.drill.maprdb.tests.json.BaseJsonTest;
 import com.mapr.tests.annotations.ClusterTest;
-import java.io.InputStream;
-import java.util.Properties;
-
 import org.apache.drill.PlanTestBase;
 import org.apache.drill.common.config.DrillConfig;
 import org.apache.hadoop.fs.Path;
@@ -40,6 +36,11 @@ import org.junit.experimental.categories.Category;
 import org.ojai.Document;
 import org.ojai.DocumentStream;
 import org.ojai.json.Json;
+
+import java.io.InputStream;
+import java.util.Properties;
+
+import static com.mapr.drill.maprdb.tests.MaprDBTestsSuite.INDEX_FLUSH_TIMEOUT;
 
 @Category(ClusterTest.class)
 public class TestComplexTypeIndex extends BaseJsonTest {
@@ -1265,4 +1266,25 @@ public class TestComplexTypeIndex extends BaseJsonTest {
 
     }
   }
+
+  @Test
+  public void testNestedFlattenNonCovering_2() throws Exception {
+    try {
+      String query = "select * from hbase.`index_test_complex1` where _id in (select _id from " +
+                      " (select _id, flatten(t1.`f1`.`products`) as f2 from (select _id, flatten(orders) as f1 from hbase.`index_test_complex1`) as t1) as t2 " +
+                      " where t2.`f2`.`price` > 50)";
+
+      test(IndexPlanning);
+      test(maxNonCoveringSelectivityThreshold);
+
+      PlanTestBase.testPlanMatchingPatterns(query,
+          new String[] {"RowKeyJoin", ".*RestrictedJsonTableGroupScan.*tableName=.*index_test_complex1,",
+                        ".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*orders.*.products.*price.*50.*indexName=(ordersProductsIdx1)"},
+          new String[]{}
+      );
+    } finally {
+      test(resetmaxNonCoveringSelectivityThreshold);
+    }
+  }
+
 }

@@ -17,10 +17,7 @@
  */
 package org.apache.drill.exec.planner.index;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
+import org.apache.calcite.plan.RelOptCluster;
 import org.apache.calcite.plan.RelOptRuleCall;
 import org.apache.calcite.rel.RelNode;
 import org.apache.calcite.rex.RexCall;
@@ -33,8 +30,17 @@ import org.apache.drill.exec.planner.index.rules.AbstractMatchFunction;
 import org.apache.drill.exec.planner.logical.DrillFilterRel;
 import org.apache.drill.exec.planner.logical.DrillProjectRel;
 import org.apache.drill.exec.planner.logical.DrillScanRel;
+import org.apache.drill.exec.planner.physical.ProjectPrel;
 
 import org.apache.drill.shaded.guava.com.google.common.collect.Maps;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import static org.apache.drill.exec.planner.physical.Prel.DRILL_PHYSICAL;
 
 public class FlattenIndexPlanCallContext extends IndexLogicalPlanCallContext
     implements FlattenCallContext {
@@ -201,6 +207,30 @@ public class FlattenIndexPlanCallContext extends IndexLogicalPlanCallContext
 
   private void initializeContext() {
     AbstractMatchFunction.initializeContext(this);
+  }
+
+  public RelNode buildPhysicalProjectsBottomUp(RelNode inputRel) {
+    List<RelNode> projectList = new ArrayList<RelNode>(getProjectToFlattenMapForAllProjects().keySet());
+    Collections.reverse(projectList);
+
+    RelNode currentInputRel = inputRel;
+
+    for (RelNode n : projectList) {
+      DrillProjectRelBase currentProject = (DrillProjectRelBase) n;
+
+      final ProjectPrel tmpProject = new ProjectPrel(currentInputRel.getCluster(),
+          currentInputRel.getTraitSet().plus(DRILL_PHYSICAL), currentInputRel,
+          currentProject.getProjects(), currentProject.getRowType());
+      currentInputRel = tmpProject;
+    }
+    return currentInputRel;
+  }
+
+  public RelNode buildPhysicalProjectsBottomUpWithoutFlatten(RelNode inputRel,
+      RelOptCluster cluster) {
+
+    return FlattenCallContextUtils.buildPhysicalProjectsBottomUpWithoutFlatten(this, inputRel, cluster, null);
+
   }
 
 }

@@ -305,7 +305,6 @@ public class JsonConditionBuilder extends AbstractExprVisitor<JsonScanSpec, Void
             nodeScanSpec1 = nodeScanSpec1 == null ? nextScanSpec : nodeScanSpec1;
           }
         }
-        
         if (nodeScanSpec != null && nodeScanSpec1 != null) {
           nodeScanSpec.mergeScanSpec(functionName, nodeScanSpec1);
         } else {

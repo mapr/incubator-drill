@@ -17,8 +17,8 @@
  */
 package org.apache.drill.exec.planner.index.rules;
 
-import org.apache.calcite.plan.RelOptRuleCall;
 import org.apache.calcite.plan.RelOptRule;
+import org.apache.calcite.plan.RelOptRuleCall;
 import org.apache.calcite.plan.RelOptRuleOperand;
 import org.apache.calcite.plan.RelTraitSet;
 import org.apache.calcite.rel.AbstractRelNode;
@@ -27,21 +27,21 @@ import org.apache.calcite.rel.RelNode;
 import org.apache.drill.exec.physical.base.DbGroupScan;
 import org.apache.drill.exec.planner.common.DrillScanRelBase;
 import org.apache.drill.exec.planner.index.FlattenIndexPlanCallContext;
-import org.apache.drill.exec.planner.index.SemiJoinIndexPlanCallContext;
-import org.apache.drill.exec.planner.index.IndexPlanUtils;
 import org.apache.drill.exec.planner.index.IndexLogicalPlanCallContext;
+import org.apache.drill.exec.planner.index.IndexPlanUtils;
+import org.apache.drill.exec.planner.index.SemiJoinIndexPlanCallContext;
 import org.apache.drill.exec.planner.index.generators.common.SemiJoinIndexPlanUtils;
 import org.apache.drill.exec.planner.index.generators.common.SemiJoinTransformUtils;
+import org.apache.drill.exec.planner.logical.DrillAggregateRel;
 import org.apache.drill.exec.planner.logical.DrillFilterRel;
+import org.apache.drill.exec.planner.logical.DrillJoinRel;
 import org.apache.drill.exec.planner.logical.DrillProjectRel;
 import org.apache.drill.exec.planner.logical.DrillScanRel;
-import org.apache.drill.exec.planner.logical.DrillJoinRel;
-import org.apache.drill.exec.planner.logical.DrillAggregateRel;
 import org.apache.drill.exec.planner.logical.RelOptHelper;
-import org.apache.drill.exec.planner.physical.PlannerSettings;
-import org.apache.drill.exec.planner.physical.PrelUtil;
 import org.apache.drill.exec.planner.physical.DrillDistributionTrait;
+import org.apache.drill.exec.planner.physical.PlannerSettings;
 import org.apache.drill.exec.planner.physical.Prel;
+import org.apache.drill.exec.planner.physical.PrelUtil;
 import org.apache.drill.exec.planner.physical.ScanPrel;
 
 public class SemiJoinFullTableScanPrule extends AbstractIndexPrule {
@@ -172,7 +172,9 @@ public class SemiJoinFullTableScanPrule extends AbstractIndexPrule {
     if (leafFilter != null) {
       newRel = SemiJoinIndexPlanUtils.buildFilter(newRel, leafFilter);
     }
-    newRel = SemiJoinIndexPlanUtils.buildProject(newRel, projectWithFlatten);
+
+    newRel = indexContext.buildPhysicalProjectsBottomUp(newRel);
+
     newRel = SemiJoinIndexPlanUtils.buildFilter(newRel, flattenFilter);
     if (upperProject != null) {
       newRel = SemiJoinIndexPlanUtils.buildProject(newRel, upperProject);

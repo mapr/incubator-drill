@@ -20,19 +20,29 @@ package org.apache.drill.exec.planner.index.generators;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.apache.calcite.plan.RelOptUtil;
 import org.apache.calcite.plan.RelTraitSet;
+import org.apache.calcite.rel.InvalidRelException;
+import org.apache.calcite.rel.RelCollation;
+import org.apache.calcite.rel.RelCollationTraitDef;
 import org.apache.calcite.rel.RelCollations;
+import org.apache.calcite.rel.RelNode;
+import org.apache.calcite.rel.core.JoinRelType;
+import org.apache.calcite.rel.type.RelDataType;
+import org.apache.calcite.rel.type.RelDataTypeFactory;
+import org.apache.calcite.rel.type.RelDataTypeField;
+import org.apache.calcite.rex.RexBuilder;
+import org.apache.calcite.rex.RexInputRef;
+import org.apache.calcite.rex.RexNode;
 import org.apache.drill.common.expression.SchemaPath;
 import org.apache.drill.exec.physical.base.DbGroupScan;
 import org.apache.drill.exec.physical.base.IndexGroupScan;
 import org.apache.drill.exec.planner.common.JoinControl;
-import org.apache.drill.exec.planner.index.IndexLogicalPlanCallContext;
-import org.apache.drill.exec.planner.index.IndexDescriptor;
-import org.apache.drill.exec.planner.index.FunctionalIndexInfo;
 import org.apache.drill.exec.planner.index.FlattenIndexPlanCallContext;
 import org.apache.drill.exec.planner.index.FunctionalIndexHelper;
+import org.apache.drill.exec.planner.index.FunctionalIndexInfo;
+import org.apache.drill.exec.planner.index.IndexDescriptor;
+import org.apache.drill.exec.planner.index.IndexLogicalPlanCallContext;
 import org.apache.drill.exec.planner.index.IndexPlanUtils;
 import org.apache.drill.exec.planner.logical.DrillScanRel;
 import org.apache.drill.exec.planner.physical.DrillDistributionTrait;
@@ -45,17 +55,6 @@ import org.apache.drill.exec.planner.physical.ProjectPrel;
 import org.apache.drill.exec.planner.physical.Prule;
 import org.apache.drill.exec.planner.physical.RowKeyJoinPrel;
 import org.apache.drill.exec.planner.physical.ScanPrel;
-import org.apache.calcite.rel.InvalidRelException;
-import org.apache.calcite.rel.RelCollation;
-import org.apache.calcite.rel.RelCollationTraitDef;
-import org.apache.calcite.rel.RelNode;
-import org.apache.calcite.rel.core.JoinRelType;
-import org.apache.calcite.rel.type.RelDataType;
-import org.apache.calcite.rel.type.RelDataTypeFactory;
-import org.apache.calcite.rel.type.RelDataTypeField;
-import org.apache.calcite.rex.RexBuilder;
-import org.apache.calcite.rex.RexInputRef;
-import org.apache.calcite.rex.RexNode;
 
 import org.apache.drill.shaded.guava.com.google.common.base.Preconditions;
 import org.apache.drill.shaded.guava.com.google.common.collect.ImmutableList;
@@ -384,10 +383,7 @@ public class NonCoveringIndexPlanGenerator extends AbstractIndexPlanGenerator {
     Preconditions.checkArgument(flattenContext.getProjectWithRootFlatten() != null &&
         flattenContext.getFilterAboveRootFlatten() != null);
 
-    final ProjectPrel tmpProject = new ProjectPrel(newRel.getCluster(),
-        newRel.getTraitSet(), newRel, flattenContext.getProjectWithRootFlatten().getProjects(),
-        flattenContext.getProjectWithRootFlatten().getRowType());
-    newRel = tmpProject;
+    newRel = flattenContext.buildPhysicalProjectsBottomUp(newRel);
 
     final FilterPrel tmpFilter = new FilterPrel(newRel.getCluster(), newRel.getTraitSet(),
         newRel, flattenContext.getFilterAboveRootFlatten().getCondition());

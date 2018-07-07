@@ -143,7 +143,7 @@ public class SemiJoinTransformUtils {
                                                                       DrillProjectRel leftProject, DrillProjectRel rightProject,
                                                                       FunctionImplementationRegistry functionRegistry, boolean uniquify) {
     List<RexNode> leftProjects = leftProject.getProjects();
-    List<RexNode> rightProjects = IndexPlanUtils.projectsTransformer(leftProjects.size(), cluster.getRexBuilder(),
+    List<RexNode> rightProjects = IndexPlanUtils.projectsTransformer(leftProject.getInput().getRowType().getFieldCount(), cluster.getRexBuilder(),
             rightProject.getProjects(), rightProject.getInput().getRowType());
     List<String> leftProjectsNames = leftProject.getRowType().getFieldNames();
     List<String> rightProjectsNames = rightProject.getRowType().getFieldNames();

@@ -17,10 +17,8 @@
  */
 package org.apache.drill.exec.planner.index;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
+import org.apache.drill.shaded.guava.com.google.common.collect.Maps;
+import org.apache.calcite.plan.RelOptCluster;
 import org.apache.calcite.rel.RelNode;
 import org.apache.calcite.rex.RexCall;
 import org.apache.calcite.rex.RexInputRef;
@@ -33,7 +31,9 @@ import org.apache.drill.exec.planner.physical.FilterPrel;
 import org.apache.drill.exec.planner.physical.ProjectPrel;
 import org.apache.drill.exec.planner.physical.ScanPrel;
 
-import org.apache.drill.shaded.guava.com.google.common.collect.Maps;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public class FlattenPhysicalPlanCallContext implements FlattenCallContext {
 
@@ -262,6 +262,14 @@ public class FlattenPhysicalPlanCallContext implements FlattenCallContext {
     if (this.scan == null) {
       this.scan = (ScanPrel) tmpScan;
     }
+  }
+
+  public RelNode buildPhysicalProjectsBottomUpWithoutFlatten(RelNode inputRel,
+      RelOptCluster cluster,
+      List<ProjectPrel> newProjectList) {
+
+    return FlattenCallContextUtils.buildPhysicalProjectsBottomUpWithoutFlatten(this, inputRel, cluster, newProjectList);
+
   }
 
 }
