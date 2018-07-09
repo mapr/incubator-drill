@@ -362,6 +362,7 @@ public abstract class DrillRelOptUtil {
       }
     }
   }
+
   public static boolean isProjectFlatten(RelNode project) {
 
     assert project instanceof Project : "Rel is NOT an instance of project!";

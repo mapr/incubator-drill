@@ -151,6 +151,7 @@ public interface HashTable {
   void setTargetBatchRowCount(int batchRowCount);
 
   int getTargetBatchRowCount();
+
   Pair<VectorContainer, Integer> nextBatch();
 }
 
