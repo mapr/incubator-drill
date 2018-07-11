@@ -34,19 +34,23 @@ import org.apache.calcite.plan.RelOptRuleCall;
 import org.apache.calcite.plan.RelTraitSet;
 import org.apache.calcite.plan.hep.HepRelVertex;
 import org.apache.calcite.plan.volcano.RelSubset;
+import org.apache.calcite.rel.AbstractRelNode;
 import org.apache.calcite.rel.RelCollation;
 import org.apache.calcite.rel.RelCollationTraitDef;
 import org.apache.calcite.rel.RelCollations;
 import org.apache.calcite.rel.RelFieldCollation;
 import org.apache.calcite.rel.RelNode;
-import org.apache.calcite.rel.AbstractRelNode;
 import org.apache.calcite.rel.core.Sort;
+import org.apache.calcite.rel.type.RelDataType;
+import org.apache.calcite.rel.type.RelDataTypeField;
 import org.apache.calcite.rex.RexBuilder;
 import org.apache.calcite.rex.RexCall;
+import org.apache.calcite.rex.RexInputRef;
+import org.apache.calcite.rex.RexLiteral;
+import org.apache.calcite.rex.RexNode;
 import org.apache.calcite.rex.RexUtil;
 import org.apache.calcite.rex.RexVisitor;
 import org.apache.calcite.rex.RexVisitorImpl;
-import org.apache.calcite.rex.RexLiteral;
 import org.apache.calcite.sql.SqlKind;
 import org.apache.calcite.sql.fun.SqlStdOperatorTable;
 import org.apache.drill.common.expression.FieldReference;
@@ -58,22 +62,19 @@ import org.apache.drill.exec.physical.base.IndexGroupScan;
 import org.apache.drill.exec.planner.common.DrillProjectRelBase;
 import org.apache.drill.exec.planner.common.DrillRelOptUtil;
 import org.apache.drill.exec.planner.common.DrillScanRelBase;
+import org.apache.drill.exec.planner.common.OrderedRel;
 import org.apache.drill.exec.planner.fragment.DistributionAffinity;
+import org.apache.drill.exec.planner.logical.DrillFilterRel;
 import org.apache.drill.exec.planner.logical.DrillOptiq;
 import org.apache.drill.exec.planner.logical.DrillParseContext;
 import org.apache.drill.exec.planner.logical.DrillProjectRel;
-import org.apache.drill.exec.planner.logical.DrillFilterRel;
 import org.apache.drill.exec.planner.logical.DrillScanRel;
 import org.apache.drill.exec.planner.physical.DrillDistributionTrait;
 import org.apache.drill.exec.planner.physical.Prel;
 import org.apache.drill.exec.planner.physical.PrelUtil;
-import org.apache.drill.exec.planner.physical.ScanPrel;
 import org.apache.drill.exec.planner.physical.ProjectPrel;
-import org.apache.drill.exec.planner.common.OrderedRel;
-import org.apache.calcite.rel.type.RelDataType;
-import org.apache.calcite.rel.type.RelDataTypeField;
-import org.apache.calcite.rex.RexInputRef;
-import org.apache.calcite.rex.RexNode;
+import org.apache.drill.exec.planner.physical.ScanPrel;
+
 
 public class IndexPlanUtils {
 
@@ -1058,33 +1059,34 @@ public class IndexPlanUtils {
     Class[] FS = new Class[] {DrillFilterRel.class, DrillScanRel.class};
     Class[] S = new Class[] {DrillScanRel.class};
 
+    // Index support is only available for DBGroupScans - generate index context accordingly
     matchingRels = IndexPlanUtils.findRelSequence(PFPS, startNode, logger);
-    if (matchingRels.size() > 0) {
+    if (matchingRels.size() > 0 && ((DrillScanRel) matchingRels.get(3)).getGroupScan() instanceof DbGroupScan) {
       logger.debug("Matched rel sequence : Project->Filter->Project->Scan");
       return new IndexLogicalPlanCallContext(call, (DrillProjectRel)matchingRels.get(0),
               (DrillFilterRel) matchingRels.get(1), (DrillProjectRel) matchingRels.get(2),
               (DrillScanRel) matchingRels.get(3));
     }
     matchingRels = IndexPlanUtils.findRelSequence(FPS, startNode, logger);
-    if (matchingRels.size() > 0) {
+    if (matchingRels.size() > 0 && ((DrillScanRel) matchingRels.get(2)).getGroupScan() instanceof DbGroupScan) {
       logger.debug("Matched rel sequence : Filter->Project->Scan");
       return new IndexLogicalPlanCallContext(call, null, (DrillFilterRel) matchingRels.get(0),
               (DrillProjectRel) matchingRels.get(1), (DrillScanRel) matchingRels.get(2));
     }
     matchingRels = IndexPlanUtils.findRelSequence(PS, startNode, logger);
-    if (matchingRels.size() > 0) {
+    if (matchingRels.size() > 0 && ((DrillScanRel) matchingRels.get(1)).getGroupScan() instanceof DbGroupScan) {
       logger.debug("Matched rel sequence : Project->Scan");
       return new IndexLogicalPlanCallContext(call, null,
               null, (DrillProjectRel) matchingRels.get(0), (DrillScanRel) matchingRels.get(1));
     }
     matchingRels = IndexPlanUtils.findRelSequence(FS, startNode, logger);
-    if (matchingRels.size() > 0) {
+    if (matchingRels.size() > 0 && ((DrillScanRel) matchingRels.get(1)).getGroupScan() instanceof DbGroupScan) {
       logger.debug("Matched rel sequence : Filter->Scan");
       return new IndexLogicalPlanCallContext(call, null,
               (DrillFilterRel) matchingRels.get(0), null, (DrillScanRel) matchingRels.get(1));
     }
     matchingRels = IndexPlanUtils.findRelSequence(S, startNode, logger);
-    if (matchingRels.size() > 0) {
+    if (matchingRels.size() > 0 && ((DrillScanRel) matchingRels.get(0)).getGroupScan() instanceof DbGroupScan) {
       logger.debug("Matched rel sequence : Scan");
       return new IndexLogicalPlanCallContext(call, null, null,
               null, (DrillScanRel) matchingRels.get(0));
