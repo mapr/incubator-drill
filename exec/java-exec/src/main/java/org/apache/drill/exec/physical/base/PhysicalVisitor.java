@@ -21,6 +21,7 @@ import org.apache.drill.exec.physical.config.BroadcastSender;
 import org.apache.drill.exec.physical.config.Filter;
 import org.apache.drill.exec.physical.config.FlattenPOP;
 import org.apache.drill.exec.physical.config.HashAggregate;
+import org.apache.drill.exec.physical.config.HashJoinPOP;
 import org.apache.drill.exec.physical.config.HashPartitionSender;
 import org.apache.drill.exec.physical.config.HashToRandomExchange;
 import org.apache.drill.exec.physical.config.IteratorValidator;
@@ -78,6 +79,7 @@ public interface PhysicalVisitor<RETURN, EXTRA, EXCEP extends Throwable> {
   public RETURN visitUnpivot(UnpivotMaps op, EXTRA value) throws EXCEP;
   public RETURN visitValues(Values op, EXTRA value) throws EXCEP;
   public RETURN visitOp(PhysicalOperator op, EXTRA value) throws EXCEP;
+  public RETURN visitHashJoin(HashJoinPOP join, EXTRA value) throws EXCEP;
 
   public RETURN visitHashPartitionSender(HashPartitionSender op, EXTRA value) throws EXCEP;
   public RETURN visitOrderedPartitionSender(OrderedPartitionSender op, EXTRA value) throws EXCEP;

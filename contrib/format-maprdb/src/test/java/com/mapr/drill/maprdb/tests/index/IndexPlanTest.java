@@ -22,8 +22,6 @@ import com.mapr.drill.maprdb.tests.MaprDBTestsSuite;
 import com.mapr.drill.maprdb.tests.json.BaseJsonTest;
 import com.mapr.tests.annotations.ClusterTest;
 import org.apache.drill.PlanTestBase;
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
 import org.apache.drill.common.config.DrillConfig;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -32,6 +30,9 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runners.MethodSorters;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Properties;
 
 
@@ -153,8 +154,6 @@ public class IndexPlanTest extends BaseJsonTest {
         new String[]{"RowKeyJoin"}
     );
 
-    System.out.println("Covering Plan Verified!");
-
     testBuilder()
         .sqlQuery(query)
         .ordered()
@@ -172,8 +171,6 @@ public class IndexPlanTest extends BaseJsonTest {
         new String[] {".*JsonTableGroupScan.*tableName=.*index_test_primary.*indexName=i_ssn"},
         new String[]{"RowKeyJoin"}
     );
-
-    System.out.println("Covering Plan Verified!");
 
     testBuilder()
         .optionSettingQueriesForTestQuery(defaultHavingIndexPlan)
@@ -195,8 +192,6 @@ public class IndexPlanTest extends BaseJsonTest {
         new String[]{"RowKeyJoin", "indexName="}
     );
 
-    System.out.println("No Index Plan Verified!");
-
     testBuilder()
         .sqlQuery(query)
         .unOrdered()
@@ -217,8 +212,6 @@ public class IndexPlanTest extends BaseJsonTest {
            ".*JsonTableGroupScan.*tableName=.*index_test_primary,.*indexName=i_ssn"},
         new String[]{}
     );
-
-    System.out.println("Non-Covering Plan Verified!");
 
     testBuilder()
         .sqlQuery(query)
@@ -492,8 +485,6 @@ public class IndexPlanTest extends BaseJsonTest {
         new String[]{"RowKeyJoin"}
     );
 
-    System.out.println("TestCastCoveringPlan Plan Verified!");
-
     testBuilder()
         .optionSettingQueriesForTestQuery(defaultHavingIndexPlan)
         .sqlQuery(query)
@@ -512,8 +503,6 @@ public class IndexPlanTest extends BaseJsonTest {
         new String[] {".*JsonTableGroupScan.*tableName=.*index_test_primary.*indexName=i_cast_int_ssn"},
         new String[]{"RowKeyJoin"}
     );
-
-    System.out.println("TestCastCoveringPlan Plan Verified!");
 
     testBuilder()
         .optionSettingQueriesForTestQuery(defaultHavingIndexPlan)
@@ -534,8 +523,6 @@ public class IndexPlanTest extends BaseJsonTest {
         new String[]{}
     );
 
-    System.out.println("TestCastNonCoveringPlan Plan Verified!");
-
     testBuilder()
         .sqlQuery(query)
         .ordered()
@@ -553,8 +540,6 @@ public class IndexPlanTest extends BaseJsonTest {
         new String[] {"RowKeyJoin(.*[\n\r])+.*RestrictedJsonTableGroupScan(.*[\n\r])+.*JsonTableGroupScan.*MATCHES \"\\^.*100007423.*E.*\\$\".*indexName=i_cast_vchar_lic"},
         new String[]{}
     );
-
-    System.out.println("TestCastVarchar_ConvertToRangePlan Verified!");
 
     testBuilder()
         .sqlQuery(query)
@@ -586,7 +571,6 @@ public class IndexPlanTest extends BaseJsonTest {
         new String[]{"RowKeyJoin", "indexName="}
     );
 
-    System.out.println("TestLongerCastVarCharNoIndex Plan Verified!");
   }
 
   @Test
@@ -1262,8 +1246,7 @@ public class IndexPlanTest extends BaseJsonTest {
         new String[] {"(Sort|TopN)"},
         new String[]{"indexName="}
     );
-    DateTime date = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")
-        .parseDateTime("2010-01-21 00:12:24");
+    LocalDateTime date = LocalDateTime.parse("2010-01-21T00:12:24", DateTimeFormatter.ISO_LOCAL_DATE_TIME);
 
     testBuilder()
         .ordered()
@@ -1497,11 +1480,8 @@ public class IndexPlanTest extends BaseJsonTest {
               new String[]{"(Sort|TopN)", "StreamAgg"},
               new String[]{"indexName="}
       );
-      DateTime date1 = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")
-              .parseDateTime("2010-01-21 00:12:24");
-
-      DateTime date2 = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")
-              .parseDateTime("2010-01-21 00:24:48");
+      LocalDateTime date1 = LocalDateTime.parse("2010-01-21T00:12:24", DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+      LocalDateTime date2 = LocalDateTime.parse("2010-01-21T00:24:48", DateTimeFormatter.ISO_LOCAL_DATE_TIME);
       testBuilder()
               .unOrdered()
               .sqlQuery(query)
@@ -1949,7 +1929,7 @@ public class IndexPlanTest extends BaseJsonTest {
     }
   }
 
-  @Ignore
+  @Ignore("Disable until DRILL-6453 is fixed")
   @Test
   public void testRowkeyJoinPushdown_13() throws Exception {
     // Check option planner.rowkeyjoin_conversion_using_hashjoin works as expected!

@@ -22,6 +22,7 @@ import org.apache.drill.shaded.guava.com.google.common.base.Stopwatch;
 import org.apache.calcite.plan.RelOptRule;
 import org.apache.calcite.plan.RelOptRuleCall;
 import org.apache.calcite.plan.RelOptRuleOperand;
+import org.apache.calcite.rel.RelCollation;
 import org.apache.calcite.rel.RelCollationTraitDef;
 import org.apache.drill.exec.physical.base.DbGroupScan;
 import org.apache.drill.exec.planner.index.IndexPhysicalPlanCallContext;
@@ -206,7 +207,7 @@ public class DbScanSortRemovalRule extends AbstractIndexPrule {
     } else {
       Preconditions.checkNotNull(indexContext.getSort());
       //This case tries to use the already generated index to see if a sort can be removed.
-      if (!(indexContext.scan.getTraitSet().getTrait(RelCollationTraitDef.INSTANCE) instanceof RelCollationTraitDef) ||
+      if (!(indexContext.scan.getTraitSet().getTrait(RelCollationTraitDef.INSTANCE) instanceof RelCollation) ||
           indexContext.scan.getTraitSet().getTrait(RelCollationTraitDef.INSTANCE).getFieldCollations().size() == 0) {
         return;
       }
@@ -218,7 +219,7 @@ public class DbScanSortRemovalRule extends AbstractIndexPrule {
           finalRel = indexContext.lowerProject.copy(indexContext.lowerProject.getTraitSet(), inputs);
         }
 
-        finalRel = AbstractIndexPlanGenerator.getSortNode(indexContext, finalRel, true,false,
+        finalRel = AbstractIndexPlanGenerator.getSortNode(indexContext, finalRel, true, false,
                   indexContext.exch != null);
 
         if (finalRel == null) {

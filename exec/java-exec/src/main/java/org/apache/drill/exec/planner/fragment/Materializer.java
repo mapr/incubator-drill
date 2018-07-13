@@ -33,9 +33,10 @@ import org.apache.drill.exec.physical.base.Store;
 import org.apache.drill.exec.physical.base.SubScan;
 import org.apache.drill.exec.proto.CoordinationProtos.DrillbitEndpoint;
 import org.apache.drill.shaded.guava.com.google.common.collect.Lists;
+import org.apache.drill.exec.physical.config.HashJoinPOP;
 import org.apache.drill.exec.physical.config.LateralJoinPOP;
-import org.apache.drill.exec.physical.config.UnnestPOP;
 import org.apache.drill.exec.physical.config.RowKeyJoinPOP;
+import org.apache.drill.exec.physical.config.UnnestPOP;
 
 public class Materializer extends AbstractPhysicalVisitor<PhysicalOperator, Materializer.IndexedFragmentNode, ExecutionSetupException>{
 
@@ -107,6 +108,30 @@ public class Materializer extends AbstractPhysicalVisitor<PhysicalOperator, Mate
     PhysicalOperator newOp = op.getNewWithChildren(children);
     newOp.setCost(op.getCost());
     newOp.setOperatorId(Short.MAX_VALUE & op.getOperatorId());
+    return newOp;
+  }
+
+  @Override
+  public PhysicalOperator visitHashJoin(HashJoinPOP op, IndexedFragmentNode iNode) throws ExecutionSetupException {
+    iNode.addAllocation(op);
+    List<PhysicalOperator> children = Lists.newArrayList();
+
+    children.add(op.getLeft().accept(this, iNode));
+
+    // keep track of the subscan in left input before visiting the right input such that subsequently we can
+    // use it for the rowkey join
+    SubScan subScanInLeftInput = iNode.getSubScan();
+
+    children.add(op.getRight().accept(this, iNode));
+
+    PhysicalOperator newOp = op.getNewWithChildren(children);
+    newOp.setCost(op.getCost());
+    newOp.setOperatorId(Short.MAX_VALUE & op.getOperatorId());
+
+    if (op.isRowKeyJoin()) { // for rowkey joins, set the sub-scan
+      ((HashJoinPOP)newOp).setSubScanForRowKeyJoin(subScanInLeftInput);
+    }
+
     return newOp;
   }
 

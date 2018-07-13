@@ -21,6 +21,7 @@ import org.apache.drill.exec.physical.config.BroadcastSender;
 import org.apache.drill.exec.physical.config.Filter;
 import org.apache.drill.exec.physical.config.FlattenPOP;
 import org.apache.drill.exec.physical.config.HashAggregate;
+import org.apache.drill.exec.physical.config.HashJoinPOP;
 import org.apache.drill.exec.physical.config.HashPartitionSender;
 import org.apache.drill.exec.physical.config.HashToRandomExchange;
 import org.apache.drill.exec.physical.config.IteratorValidator;
@@ -148,6 +149,11 @@ public abstract class AbstractPhysicalVisitor<T, X, E extends Throwable> impleme
       child.accept(this, value);
     }
     return null;
+  }
+
+  @Override
+  public T visitHashJoin(HashJoinPOP join, X value) throws E {
+    return visitOp(join, value);
   }
 
   @Override
