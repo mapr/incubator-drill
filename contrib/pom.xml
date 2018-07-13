@@ -48,4 +48,13 @@
     <module>gis</module>
     <module>auth-mechanism-maprsasl</module>
   </modules>
+
+  <profiles>
+    <profile>
+      <id>travis</id>
+      <properties>
+        <skipTests>true</skipTests>
+      </properties>
+    </profile>
+  </profiles>
 </project>

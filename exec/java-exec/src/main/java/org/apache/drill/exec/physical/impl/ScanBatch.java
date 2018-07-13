@@ -82,7 +82,7 @@ public class ScanBatch implements CloseableRecordBatch {
   private final BufferAllocator allocator;
   private final List<Map<String, String>> implicitColumnList;
   private String currentReaderClassName;
-  private final RecordBatchStatsContext batchStatsLogging;
+  private final RecordBatchStatsContext batchStatsContext;
 
 
   private List<RecordReader> readerList = null; // needed for repeatable scanners
@@ -125,7 +125,7 @@ public class ScanBatch implements CloseableRecordBatch {
       this.implicitColumnList = implicitColumnList;
       addImplicitVectors();
       currentReader = null;
-      batchStatsLogging = new RecordBatchStatsContext(context, oContext);
+      batchStatsContext = new RecordBatchStatsContext(context, oContext);
     } finally {
       oContext.getStats().stopProcessing();
     }
@@ -362,12 +362,7 @@ public class ScanBatch implements CloseableRecordBatch {
       return; // NOOP
     }
 
-    RecordBatchStats.logRecordBatchStats(
-      batchStatsLogging.getContextOperatorId(),
-      getFQNForLogging(MAX_FQN_LENGTH),
-      this,
-      batchStatsLogging,
-      logger);
+    RecordBatchStats.logRecordBatchStats(getFQNForLogging(MAX_FQN_LENGTH), this, batchStatsContext);
   }
 
   /** Might truncate the FQN if too long */
