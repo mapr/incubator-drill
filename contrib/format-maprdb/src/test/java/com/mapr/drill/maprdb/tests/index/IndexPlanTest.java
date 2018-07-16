@@ -63,6 +63,7 @@ public class IndexPlanTest extends BaseJsonTest {
   private static final String defaultRowKeyConvSelThreshold = "alter session reset `planner.rowkeyjoin_conversion_selectivity_threshold`";
   private static final String forceRowKeyJoinConversionUsingHashJoin = "alter session set `planner.rowkeyjoin_conversion_using_hashjoin` = true";
   private static final String defaultRowKeyJoinConversionUsingHashJoin = "alter session reset `planner.rowkeyjoin_conversion_using_hashjoin`";
+  private static final String semiColon = ";";
   /**
    *  A sample row of this 10K table:
    ------------------+-----------------------------+--------+
@@ -233,14 +234,14 @@ public class IndexPlanTest extends BaseJsonTest {
         " where t.personal.age > 52 AND t.name.fname='KfFzK'";
     try {
       test(defaultHavingIndexPlan + ";" + lowRowKeyJoinBackIOFactor + ";");
+      String optionsForTestQuery = defaultHavingIndexPlan + semiColon +lowRowKeyJoinBackIOFactor;
       PlanTestBase.testPlanMatchingPatterns(query,
               new String[]{"RowKeyJoin", ".*RestrictedJsonTableGroupScan.*tableName=.*index_test_primary,",
                       ".*JsonTableGroupScan.*tableName=.*index_test_primary,.*indexName=(i_age|i_age_with_fname)"},
               new String[]{}
       );
       testBuilder()
-              .optionSettingQueriesForTestQuery(defaultHavingIndexPlan)
-              .optionSettingQueriesForTestQuery(lowRowKeyJoinBackIOFactor)
+              .optionSettingQueriesForTestQuery(optionsForTestQuery)
               .optionSettingQueriesForBaseline(noIndexPlan)
               .unOrdered()
               .sqlQuery(query)
@@ -1558,6 +1559,7 @@ public class IndexPlanTest extends BaseJsonTest {
   public void testNoFilterGroupBySimpleFieldParallel() throws Exception {
     String query = "SELECT max(t.reverseid) as rid, t.driverlicense as lic FROM hbase.`index_test_primary` as t " +
         "group by t.driverlicense order by t.driverlicense limit 2";
+    String optionsForTestQuery = defaultHavingIndexPlan + semiColon + disableHashAgg + semiColon + sliceTargetSmall;
     try {
       test(defaultHavingIndexPlan);
       test(disableHashAgg);
@@ -1569,9 +1571,7 @@ public class IndexPlanTest extends BaseJsonTest {
       testBuilder()
               .unOrdered()
               .sqlQuery(query)
-              .optionSettingQueriesForTestQuery(defaultHavingIndexPlan)
-              .optionSettingQueriesForTestQuery(disableHashAgg)
-              .optionSettingQueriesForTestQuery(sliceTargetSmall)
+              .optionSettingQueriesForTestQuery(optionsForTestQuery)
               .baselineColumns("rid", "lic").baselineValues("4539", 100000000L)
               .baselineColumns("rid", "lic").baselineValues("943", 100000001L)
               .build()

@@ -47,6 +47,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
   private static final String TABLE_NAME = "/tmp/index_test_complex1";
   private static final String TABLE_NAME_1 = "/tmp/index_test_complex_without_index";
   private static final String JSON_FILE_URL = "/com/mapr/drill/json/complex_sample1.json";
+  private static final String semiColon = ";";
 
   private static boolean tableCreated = false;
   private static String tablePath;
@@ -65,6 +66,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
   public static final String disableStreamAgg = "alter session set `planner.enable_streamagg` = false";
   public static final String enableHashAgg = "alter session set `planner.enable_hashagg` = true";
   public static final String enableStreamAgg = "alter session set `planner.enable_streamagg` = true";
+  public static final String optionsForBaseLine = noIndexPlan + semiColon + DisableComplexFTSTypePlanning;
 
   protected String getTablePath() {
     return tablePath;
@@ -572,12 +574,12 @@ public class TestComplexTypeIndex extends BaseJsonTest {
     try {
       test(IndexPlanning);
       String query = " select t.weight from hbase.`index_test_complex1` as t " +
-              "where t.weight = cast('[{\"low\":120, \"high\":150},{\"low\":110, \"high\":145}]' as VARBINARY)";
+              "where t.weight = cast('[{\"average\":135, \"high\":150, \"low\":120},{\"average\":130, \"high\":145, \"low\":110}]' as VARBINARY)";
 
       test(maxNonCoveringSelectivityThreshold);
 
       PlanTestBase.testPlanMatchingPatterns(query,
-              new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*low.*120.*high.*150.*low.*110.*high.*145.*indexName=weightListIdx"},
+              new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*average.*135.*high.*150.*low.*120.*average.*130.*high.*145.*low.*110.*indexName=weightListIdx"},
               new String[]{"RowKeyJoin", ".*RestrictedJsonTableGroupScan.*tableName=.*index_test_complex1,"}
       );
 
@@ -616,12 +618,12 @@ public class TestComplexTypeIndex extends BaseJsonTest {
     try {
       test(IndexPlanning);
       String query = "select t.weight from hbase.`index_test_complex1` as t " +
-          "where t.weight = cast('[{\"low\":120, \"high\":150},{\"low\":110, \"high\":145}]' as VARBINARY) and t.`_id`='user001' ";
+          "where t.weight = cast('[{\"average\":135, \"high\":150, \"low\":120},{\"average\":130, \"high\":145, \"low\":110}]' as VARBINARY) and t.`_id`='user001' ";
 
       test(maxNonCoveringSelectivityThreshold);
 
       PlanTestBase.testPlanMatchingPatterns(query,
-          new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*low.*120.*high.*150.*low.*110.*high.*145.*indexName=weightListIdx"},
+          new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*average.*135.*high.*150.*low.*120.*average.*130.*high.*145.*low.*110.*indexName=weightListIdx"},
           new String[]{}
           );
 
@@ -652,8 +654,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
 
       testBuilder()
         .optionSettingQueriesForTestQuery(maxNonCoveringSelectivityThreshold)
-        .optionSettingQueriesForBaseline(noIndexPlan)
-        .optionSettingQueriesForBaseline(DisableComplexFTSTypePlanning)
+        .optionSettingQueriesForBaseline(optionsForBaseLine)
         .unOrdered()
         .sqlQuery(query)
         .sqlBaselineQuery(query)
@@ -774,8 +775,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
 
       testBuilder()
               .optionSettingQueriesForTestQuery(maxNonCoveringSelectivityThreshold)
-              .optionSettingQueriesForBaseline(noIndexPlan)
-              .optionSettingQueriesForBaseline(DisableComplexFTSTypePlanning)
+              .optionSettingQueriesForBaseline(optionsForBaseLine)
               .unOrdered()
               .sqlQuery(query)
               .sqlBaselineQuery(query)
@@ -805,8 +805,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
 
       testBuilder()
               .optionSettingQueriesForTestQuery(maxNonCoveringSelectivityThreshold)
-              .optionSettingQueriesForBaseline(noIndexPlan)
-              .optionSettingQueriesForBaseline(DisableComplexFTSTypePlanning)
+              .optionSettingQueriesForBaseline(optionsForBaseLine)
               .unOrdered()
               .sqlQuery(query)
               .sqlBaselineQuery(query)
@@ -833,10 +832,10 @@ public class TestComplexTypeIndex extends BaseJsonTest {
               new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*elementAnd.*weight.*low.*150.*high.*180.*average.*170.*indexName=weightIdx1"},
               new String[]{}
       );
+
       testBuilder()
               .optionSettingQueriesForTestQuery(maxNonCoveringSelectivityThreshold)
-              .optionSettingQueriesForBaseline(noIndexPlan)
-              .optionSettingQueriesForBaseline(DisableComplexFTSTypePlanning)
+              .optionSettingQueriesForBaseline(optionsForBaseLine)
               .unOrdered()
               .sqlQuery(query)
               .sqlBaselineQuery(query)
@@ -864,10 +863,10 @@ public class TestComplexTypeIndex extends BaseJsonTest {
               new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*elementAnd.*weight.*low.*120.*low.*150.*low.*170.*and.*high.*170.*high.*180.*high.*190.*indexName=weightIdx1"},
               new String[]{}
       );
+
       testBuilder()
               .optionSettingQueriesForTestQuery(maxNonCoveringSelectivityThreshold)
-              .optionSettingQueriesForBaseline(noIndexPlan)
-              .optionSettingQueriesForBaseline(DisableComplexFTSTypePlanning)
+              .optionSettingQueriesForBaseline(optionsForBaseLine)
               .unOrdered()
               .sqlQuery(query)
               .sqlBaselineQuery(query)
@@ -896,8 +895,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
       );
       testBuilder()
               .optionSettingQueriesForTestQuery(maxNonCoveringSelectivityThreshold)
-              .optionSettingQueriesForBaseline(noIndexPlan)
-              .optionSettingQueriesForBaseline(DisableComplexFTSTypePlanning)
+              .optionSettingQueriesForBaseline(optionsForBaseLine)
               .unOrdered()
               .sqlQuery(query)
               .sqlBaselineQuery(query)
@@ -929,8 +927,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
       );
       testBuilder()
               .optionSettingQueriesForTestQuery(maxNonCoveringSelectivityThreshold)
-              .optionSettingQueriesForBaseline(noIndexPlan)
-              .optionSettingQueriesForBaseline(DisableComplexFTSTypePlanning)
+              .optionSettingQueriesForBaseline(optionsForBaseLine)
               .unOrdered()
               .sqlQuery(query)
               .sqlBaselineQuery(query)
@@ -961,8 +958,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
       );
       testBuilder()
               .optionSettingQueriesForTestQuery(maxNonCoveringSelectivityThreshold)
-              .optionSettingQueriesForBaseline(noIndexPlan)
-              .optionSettingQueriesForBaseline(DisableComplexFTSTypePlanning)
+              .optionSettingQueriesForBaseline(optionsForBaseLine)
               .unOrdered()
               .sqlQuery(query)
               .sqlBaselineQuery(query)
@@ -994,8 +990,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
       );
       testBuilder()
               .optionSettingQueriesForTestQuery(maxNonCoveringSelectivityThreshold)
-              .optionSettingQueriesForBaseline(noIndexPlan)
-              .optionSettingQueriesForBaseline(DisableComplexFTSTypePlanning)
+              .optionSettingQueriesForBaseline(optionsForBaseLine)
               .unOrdered()
               .sqlQuery(query)
               .sqlBaselineQuery(query)
@@ -1019,6 +1014,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
               "where (t.f1.low = 120 or maxsal >= 2000) and (t.f1.low = 140 or t.f1.high = 150))";
 
       test(maxNonCoveringSelectivityThreshold);
+      test(ComplexFTSTypePlanning);
 
       PlanTestBase.testPlanMatchingPatterns(query,
               new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*low.*or.*salary.*max.*2000.*and.*weight.*low.*140.*weight.*high"},
@@ -1026,8 +1022,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
       );
       testBuilder()
               .optionSettingQueriesForTestQuery(maxNonCoveringSelectivityThreshold)
-              .optionSettingQueriesForBaseline(noIndexPlan)
-              .optionSettingQueriesForBaseline(DisableComplexFTSTypePlanning)
+              .optionSettingQueriesForBaseline(optionsForBaseLine)
               .unOrdered()
               .sqlQuery(query)
               .sqlBaselineQuery(query)
@@ -1048,14 +1043,15 @@ public class TestComplexTypeIndex extends BaseJsonTest {
     try {
       String query = "select _id from hbase.`index_test_complex1` where _id in (select _id from ( select _id, flatten(t1.weight) as f1 ," +
               " t1.`salary`.`max` as maxsal from hbase.`index_test_complex1` as t1 ) as t where t.f1.high = 150 or maxsal = 2000)";
+
       test(ComplexFTSTypePlanning);
+
       PlanTestBase.testPlanMatchingPatterns(query,
               new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*high.*150.*or.*salary.*max.*2000"},
               new String[]{}
       );
       testBuilder()
-              .optionSettingQueriesForBaseline(noIndexPlan)
-              .optionSettingQueriesForBaseline(DisableComplexFTSTypePlanning)
+              .optionSettingQueriesForBaseline(optionsForBaseLine)
               .unOrdered()
               .sqlQuery(query)
               .sqlBaselineQuery(query)
@@ -1086,8 +1082,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
 
       testBuilder()
               .optionSettingQueriesForTestQuery(maxNonCoveringSelectivityThreshold)
-              .optionSettingQueriesForBaseline(noIndexPlan)
-              .optionSettingQueriesForBaseline(DisableComplexFTSTypePlanning)
+              .optionSettingQueriesForBaseline(optionsForBaseLine)
               .unOrdered()
               .sqlQuery(query)
               .sqlBaselineQuery(query)
@@ -1118,8 +1113,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
 
       testBuilder()
               .optionSettingQueriesForTestQuery(maxNonCoveringSelectivityThreshold)
-              .optionSettingQueriesForBaseline(noIndexPlan)
-              .optionSettingQueriesForBaseline(DisableComplexFTSTypePlanning)
+              .optionSettingQueriesForBaseline(optionsForBaseLine)
               .unOrdered()
               .sqlQuery(query)
               .sqlBaselineQuery(query)
@@ -1151,8 +1145,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
 
       testBuilder()
               .optionSettingQueriesForTestQuery(maxNonCoveringSelectivityThreshold)
-              .optionSettingQueriesForBaseline(noIndexPlan)
-              .optionSettingQueriesForBaseline(DisableComplexFTSTypePlanning)
+              .optionSettingQueriesForBaseline(optionsForBaseLine)
               .unOrdered()
               .sqlQuery(query)
               .sqlBaselineQuery(query)
@@ -1184,8 +1177,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
 
       testBuilder()
               .optionSettingQueriesForTestQuery(maxNonCoveringSelectivityThreshold)
-              .optionSettingQueriesForBaseline(noIndexPlan)
-              .optionSettingQueriesForBaseline(DisableComplexFTSTypePlanning)
+              .optionSettingQueriesForBaseline(optionsForBaseLine)
               .unOrdered()
               .sqlQuery(query)
               .sqlBaselineQuery(query)
