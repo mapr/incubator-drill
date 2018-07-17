@@ -326,13 +326,10 @@ public abstract class MapRDBPushFilterIntoScan extends StoragePluginOptimizerRul
         } else {
           current = ((RelSubset) current).getOriginal();
         }
-      }
-
-      int numinputs = current.getInputs().size();
-      if (numinputs > 1) {
-        return null;  // an n-ary operator was encountered
-      } else if (numinputs > 0) {
+      } else if (current.getInputs().size() == 1) {
         current = current.getInput(0);
+      } else {
+        return null;  // an n-ary or 0 input operator was encountered
       }
     }
     Preconditions.checkArgument(current instanceof ScanPrel || current instanceof DrillScanRel);
