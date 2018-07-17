@@ -18,6 +18,8 @@
 package com.mapr.drill.maprdb.tests.index;
 
 import org.apache.drill.PlanTestBase;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -25,6 +27,16 @@ import com.mapr.tests.annotations.ClusterTest;
 
 @Category(ClusterTest.class)
 public class TestComplexTypeFullTableAndIndex extends TestComplexTypeIndex {
+
+  @BeforeClass
+  public static void setupTestComplexTypeFullTableAndIndex() throws Exception {
+    test(ComplexFTSTypePlanning);
+  }
+
+  @AfterClass
+  public static void cleanupTestComplexTypeFullTableAndIndex() throws Exception {
+    test(ResetComplexFTSTypePlanning);
+  }
 
   @Test
   public void SemiJoinNonCoveringWithRangeCondition_fts() throws Exception {
