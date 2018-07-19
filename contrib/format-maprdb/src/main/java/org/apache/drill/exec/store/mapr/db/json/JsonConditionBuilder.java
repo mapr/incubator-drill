@@ -252,6 +252,7 @@ public class JsonConditionBuilder extends AbstractExprVisitor<JsonScanSpec, Void
         HashMap<String, List<LogicalExpression>> arrayPrefixArgs = arrayExprsMap;
         List<LogicalExpression> scalarArgs = remainderArgs;
         JsonScanSpec nextScanSpec = null;
+        JsonScanSpec nodeScanSpec1 = null;
 
         for (String arrayPrefix : arrayPrefixArgs.keySet()) {
           List<LogicalExpression> elementAndArgs = arrayPrefixArgs.get(arrayPrefix);
@@ -277,20 +278,30 @@ public class JsonConditionBuilder extends AbstractExprVisitor<JsonScanSpec, Void
             splitArrayPath = false;
           }
         }
-        for (int i = 0; i < scalarArgs.size(); i++ ) {
 
-          if (nodeScanSpec == null) {
-            nodeScanSpec = scalarArgs.get(i).accept(this, null);
-          } else {
-            nextScanSpec = scalarArgs.get(i).accept(this, null);
-          }
-          if (nodeScanSpec != null && nextScanSpec != null) {
-            nodeScanSpec.mergeScanSpec(functionName, nextScanSpec);
-          } else {
+        if (scalarArgs.size() > 0) {
+          nodeScanSpec1 = scalarArgs.get(0).accept(this, null);
+          if (nodeScanSpec1 == null) {
             allExpressionsConverted = false;
-            nodeScanSpec = nodeScanSpec == null ? nextScanSpec : nodeScanSpec;
           }
         }
+
+        for (int i = 1; i < scalarArgs.size(); i++ ) {
+          nextScanSpec = scalarArgs.get(i).accept(this, null);
+          if (nodeScanSpec1 != null && nextScanSpec != null) {
+            nodeScanSpec1.mergeScanSpec(functionName, nextScanSpec);
+          } else {
+            allExpressionsConverted = false;
+            nodeScanSpec1 = nodeScanSpec1 == null ? nextScanSpec : nodeScanSpec1;
+          }
+        }
+        
+        if (nodeScanSpec != null && nodeScanSpec1 != null) {
+          nodeScanSpec.mergeScanSpec(functionName, nodeScanSpec1);
+        } else {
+          nodeScanSpec = nodeScanSpec == null ? nodeScanSpec1 : nodeScanSpec;
+        }
+
         break;
       case FunctionNames.OR:
         nodeScanSpec = args.get(0).accept(this, null);
