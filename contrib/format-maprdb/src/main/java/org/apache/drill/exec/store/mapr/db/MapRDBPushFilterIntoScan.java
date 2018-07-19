@@ -157,6 +157,10 @@ public abstract class MapRDBPushFilterIntoScan extends StoragePluginOptimizerRul
         return;
       }
       JsonConditionBuilder jsonConditionBuilder = new JsonConditionBuilder(groupScan, conditionExp);
+      // TODO if the index is part of included fields, then use elementAnd
+      if (groupScan.isIndexScan()) {
+        jsonConditionBuilder.setUseElementAnd(false);
+      }
       JsonScanSpec scanSpec = jsonConditionBuilder.parseTree();
       allExpressionsConverted = jsonConditionBuilder.isAllExpressionsConverted() && allExpressionsConverted;
       if (newScanSpec == null) {

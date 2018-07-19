@@ -769,8 +769,8 @@ public class TestComplexTypeIndex extends BaseJsonTest {
       test(maxNonCoveringSelectivityThreshold);
 
       PlanTestBase.testPlanMatchingPatterns(query,
-              new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*elementAnd.*weight.*low.*150.*high.*180.*indexName=weightIdx1"},
-              new String[]{}
+              new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*low.*150.*high.*180.*indexName=weightIdx1"},
+              new String[]{".*elementAnd"}
       );
 
       testBuilder()
@@ -799,8 +799,8 @@ public class TestComplexTypeIndex extends BaseJsonTest {
       test(maxNonCoveringSelectivityThreshold);
 
       PlanTestBase.testPlanMatchingPatterns(query,
-              new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*elementAnd.*weight.*low.*150.*high.*180.*average.*170.*indexName=weightIdx1"},
-              new String[]{}
+              new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*low.*150.*high.*180.*average.*170.*indexName=weightIdx1"},
+              new String[]{".*elementAnd"}
       );
 
       testBuilder()
@@ -829,7 +829,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
       test(maxNonCoveringSelectivityThreshold);
 
       PlanTestBase.testPlanMatchingPatterns(query,
-              new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*elementAnd.*weight.*low.*150.*high.*180.*average.*170.*indexName=weightIdx1"},
+              new String[] {".*RestrictedJsonTableGroupScan.*condition=.*elementAnd.*weight.*low.*150.*average.*170.*high.*180",".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*low.*150.*high.*180.*average.*170.*indexName=weightIdx1"},
               new String[]{}
       );
 
@@ -860,8 +860,8 @@ public class TestComplexTypeIndex extends BaseJsonTest {
       test(maxNonCoveringSelectivityThreshold);
 
       PlanTestBase.testPlanMatchingPatterns(query,
-              new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*elementAnd.*weight.*low.*120.*low.*150.*low.*170.*and.*high.*170.*high.*180.*high.*190.*indexName=weightIdx1"},
-              new String[]{}
+              new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*low.*120.*low.*150.*low.*170.*and.*high.*170.*high.*180.*high.*190.*indexName=weightIdx1"},
+              new String[]{".*elementAnd"}
       );
 
       testBuilder()
@@ -922,7 +922,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
       test(maxNonCoveringSelectivityThreshold);
 
       PlanTestBase.testPlanMatchingPatterns(query,
-              new String[] {".*RestrictedJsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*elementAnd.*weight.*high.*150.*low.*120.*elementAnd.*weight.*low.*150.*high.*180"},
+              new String[] {".*RestrictedJsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*high.*150.*low.*120.*weight.*low.*150.*high.*180"},
               new String[]{}
       );
       testBuilder()
@@ -977,16 +977,16 @@ public class TestComplexTypeIndex extends BaseJsonTest {
   public void TestInWithElementAnd() throws Exception {
 
     try {
-      String query = "select _id from hbase.`index_test_complex1` where _id in (select _id from ( select _id, flatten(t1.cars) as f1, " +
-              "t1.`salary`.`max` as maxsal from hbase.`index_test_complex1`as t1 ) as t where t.f1 IN ('Toyota Camry', 'BMW') " +
+      String query = "select _id from hbase.`index_test_complex1` where _id in (select _id from ( select _id, flatten(t1.cars) as f1 " +
+              "from hbase.`index_test_complex1`as t1 ) as t where t.f1 IN ('Toyota Camry', 'BMW') " +
               "and t.f1 IN ('Honda Accord', 'Toyota Camry'))";
 
       test(maxNonCoveringSelectivityThreshold);
       test(DisableComplexFTSTypePlanning);
 
       PlanTestBase.testPlanMatchingPatterns(query,
-              new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*elementAnd.*cars.*Toyota Camry.*or.*BMW.*and.*Honda Accord.*or.*Toyota Camry.*indexName.*carsIdx1"},
-              new String[]{}
+              new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*cars.*Toyota Camry.*or.*BMW.*and.*Honda Accord.*or.*Toyota Camry.*indexName.*carsIdx1"},
+              new String[]{".*elementAnd"}
       );
       testBuilder()
               .optionSettingQueriesForTestQuery(maxNonCoveringSelectivityThreshold)
@@ -1076,7 +1076,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
       test(maxNonCoveringSelectivityThreshold);
 
       PlanTestBase.testPlanMatchingPatterns(query,
-              new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=(.*elementAnd.*weight.*low.*120.*high.*150.*|.*weight.*high.*145).*indexName=(weightIdx|weightCountyIdx1)"},
+              new String[] {".*RestrictedJsonTableGroupScan.*condition=.*elementAnd.*weight.*low.*120.*high.*150", ".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=(.*weight.*low.*120.*high.*150.*|.*weight.*high.*145).*indexName=(weightIdx|weightCountyIdx1)"},
               new String[]{}
       );
 
@@ -1240,7 +1240,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
       test(IndexPlanning);
 
       PlanTestBase.testPlanMatchingPatterns(query,
-              new String[]{".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*elementAnd.*orders.*products.*price.*50.*and.*prodname.*bike.*indexName=(ordersProductsIdx1)"},
+              new String[]{".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*orders.*products.*price.*50.*and.*prodname.*bike.*indexName=(ordersProductsIdx1)"},
               new String[]{"RowKeyJoin"}
       );
     } finally {
@@ -1258,7 +1258,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
       test(IndexPlanning);
 
       PlanTestBase.testPlanMatchingPatterns(query,
-              new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*elementAnd.*orders.*products.*price.*50.*and.*prodname.*bike.*indexName=(ordersProductsIdx1)"},
+              new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*orders.*products.*price.*50.*and.*prodname.*bike.*indexName=(ordersProductsIdx1)"},
               new String[]{}
       );
     } finally {
