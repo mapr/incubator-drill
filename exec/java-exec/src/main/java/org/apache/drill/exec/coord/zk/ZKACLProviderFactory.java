@@ -15,7 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.apache.drill.exec.coord.zk;
 
 import org.apache.curator.framework.api.ACLProvider;
