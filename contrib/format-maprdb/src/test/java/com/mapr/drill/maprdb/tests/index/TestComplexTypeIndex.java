@@ -1287,4 +1287,61 @@ public class TestComplexTypeIndex extends BaseJsonTest {
     }
   }
 
+  @Test
+  public void TestBooleanIsTrue() throws Exception {
+
+    try {
+      String query = "select _id from hbase.`index_test_complex1` as t where t.`online` is true and t.`discount`.`eligible` is true";
+
+      test(ComplexFTSTypePlanning);
+
+      PlanTestBase.testPlanMatchingPatterns(query,
+              new String[]{".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=(.*online.*=.*true.*.*discount.*eligible.*=.*true)"},
+              new String[]{}
+      );
+
+      testBuilder()
+              .optionSettingQueriesForTestQuery(ComplexFTSTypePlanning)
+              .optionSettingQueriesForBaseline(noIndexPlan)
+              .optionSettingQueriesForBaseline(DisableComplexFTSTypePlanning)
+              .unOrdered()
+              .sqlQuery(query)
+              .sqlBaselineQuery(query)
+              .build()
+              .run();
+
+    } finally {
+      test(ResetComplexFTSTypePlanning);
+    }
+    return;
+  }
+
+  @Test
+  public void TestBooleanIsFalse() throws Exception {
+
+    try {
+      String query = "select _id from hbase.`index_test_complex1` as t where t.`online` is false and t.`discount`.`eligible` is false";
+
+      test(ComplexFTSTypePlanning);
+
+      PlanTestBase.testPlanMatchingPatterns(query,
+              new String[]{".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=(.*online.*=.*false.*discount.*eligible.*=.*false)"},
+              new String[]{}
+      );
+
+      testBuilder()
+              .optionSettingQueriesForTestQuery(ComplexFTSTypePlanning)
+              .optionSettingQueriesForBaseline(noIndexPlan)
+              .optionSettingQueriesForBaseline(DisableComplexFTSTypePlanning)
+              .unOrdered()
+              .sqlQuery(query)
+              .sqlBaselineQuery(query)
+              .build()
+              .run();
+
+    } finally {
+      test(ResetComplexFTSTypePlanning);
+    }
+    return;
+  }
 }

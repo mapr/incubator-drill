@@ -316,6 +316,10 @@ class CompareFunctionsProcessor extends AbstractExprVisitor<Boolean, LogicalExpr
         .put(FunctionNames.GT, FunctionNames.LT)
         .put(FunctionNames.LE, FunctionNames.GE)
         .put(FunctionNames.LT, FunctionNames.GT)
+        .put(FunctionNames.IS_FALSE, FunctionNames.IS_NOT_FALSE)
+        .put(FunctionNames.IS_TRUE, FunctionNames.IS_NOT_TRUE)
+        .put(FunctionNames.IS_NOT_FALSE, FunctionNames.IS_FALSE)
+        .put(FunctionNames.IS_NOT_TRUE, FunctionNames.IS_TRUE)
         .build();
   }
 

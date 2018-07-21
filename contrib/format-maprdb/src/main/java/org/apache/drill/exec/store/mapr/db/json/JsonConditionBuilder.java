@@ -224,6 +224,9 @@ public class JsonConditionBuilder extends AbstractExprVisitor<JsonScanSpec, Void
               remainderArgs.add(f);
             }
           }
+        } else {
+          // For unknown expressions which can't be converted 
+	  remainderArgs.add(f);
         }
       }
       catch (Exception e) {
