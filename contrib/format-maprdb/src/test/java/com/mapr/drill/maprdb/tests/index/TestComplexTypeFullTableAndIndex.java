@@ -452,4 +452,26 @@ public class TestComplexTypeFullTableAndIndex extends TestComplexTypeIndex {
     }
     return;
   }
+
+  @Test
+  public void TestNestedFlattenWithConjunction_fts() throws Exception {
+    try {
+      test(noIndexPlan);
+      String query = "select _id from hbase.`index_test_complex1` as t " +
+              " where _id in (select _id from (select _id, flatten(t1.`f1`.`products`) as f2 from (select _id, flatten(orders) as f1 " +
+              " from hbase.`index_test_complex1`) as t1) as t2 " +
+              " where t2.`f2`.`price` > 50 and t2.`f2`.`prodname` like '%bike%')";
+
+      PlanTestBase.testPlanMatchingPatterns(query,
+              new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*elementAnd.*orders\\[\\]\\.products\\[\\].*price.*prodname"},
+              new String[]{".*indexname.*"}
+      );
+
+    } finally {
+      test(noIndexPlan);
+      test(ComplexFTSTypePlanning);
+    }
+    return;
+
+  }
 }
