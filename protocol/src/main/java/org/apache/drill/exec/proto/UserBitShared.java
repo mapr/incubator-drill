@@ -553,6 +553,10 @@ public final class UserBitShared {
      * <code>ROWKEY_JOIN = 202;</code>
      */
     ROWKEY_JOIN(46, 202),
+    /**
+     * <code>REGEX_SUB_SCAN = 45;</code>
+     */
+    REGEX_SUB_SCAN(45,45),
     ;
 
     /**
@@ -743,6 +747,10 @@ public final class UserBitShared {
      * <code>ROWKEY_JOIN = 202;</code>
      */
     public static final int ROWKEY_JOIN_VALUE = 202;
+    /**
+     * <code>REGEX_SUB_SCAN = 45;</code>
+     */
+    public static final int REGEX_SUB_SCAN_VALUE = 45;
 
 
     public final int getNumber() { return value; }
@@ -796,6 +804,7 @@ public final class UserBitShared {
         case 44: return JDBC_SCAN;
         case 201: return MAPRDB_SUB_SCAN;
         case 202: return ROWKEY_JOIN;
+        case 45: return REGEX_SUB_SCAN;
         default: return null;
       }
     }
