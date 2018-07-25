@@ -72,6 +72,10 @@ class ConvertSupport;
 class GetServerMetaResp;
 class ServerMeta;
 class RunQuery;
+class NewSessionRequest;
+class SessionHandle;
+class RunQueryWithSessionHandle;
+class CancelQueryWithSessionHandle;
 
 enum RpcType {
   HANDSHAKE = 0,
@@ -88,6 +92,10 @@ enum RpcType {
   GET_COLUMNS = 17,
   CREATE_PREPARED_STATEMENT = 22,
   GET_SERVER_META = 8,
+  NEW_SESSION = 1025,
+  RUN_QUERY_WITH_SESSION = 1027,
+  CLOSE_SESSION = 1028,
+  CANCEL_QUERY_WITH_SESSION = 1029,
   QUERY_DATA = 6,
   QUERY_HANDLE = 7,
   QUERY_PLAN_FRAGMENTS = 13,
@@ -98,11 +106,12 @@ enum RpcType {
   PREPARED_STATEMENT = 23,
   SERVER_META = 9,
   QUERY_RESULT = 10,
+  SESSION_HANDLE = 1026,
   SASL_MESSAGE = 24
 };
 bool RpcType_IsValid(int value);
 const RpcType RpcType_MIN = HANDSHAKE;
-const RpcType RpcType_MAX = SASL_MESSAGE;
+const RpcType RpcType_MAX = CANCEL_QUERY_WITH_SESSION;
 const int RpcType_ARRAYSIZE = RpcType_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* RpcType_descriptor();
@@ -948,6 +957,20 @@ class UserToBitHandshake : public ::google::protobuf::Message {
   inline ::exec::user::SaslSupport sasl_support() const;
   inline void set_sasl_support(::exec::user::SaslSupport value);
 
+  // optional bool enable_multiplex = 10 [default = false];
+  inline bool has_enable_multiplex() const;
+  inline void clear_enable_multiplex();
+  static const int kEnableMultiplexFieldNumber = 10;
+  inline bool enable_multiplex() const;
+  inline void set_enable_multiplex(bool value);
+
+  // optional int32 capabilities_version = 11 [default = 0];
+  inline bool has_capabilities_version() const;
+  inline void clear_capabilities_version();
+  static const int kCapabilitiesVersionFieldNumber = 11;
+  inline ::google::protobuf::int32 capabilities_version() const;
+  inline void set_capabilities_version(::google::protobuf::int32 value);
+
   // @@protoc_insertion_point(class_scope:exec.user.UserToBitHandshake)
  private:
   inline void set_has_channel();
@@ -968,6 +991,10 @@ class UserToBitHandshake : public ::google::protobuf::Message {
   inline void clear_has_client_infos();
   inline void set_has_sasl_support();
   inline void clear_has_sasl_support();
+  inline void set_has_enable_multiplex();
+  inline void clear_has_enable_multiplex();
+  inline void set_has_capabilities_version();
+  inline void clear_has_capabilities_version();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
@@ -978,11 +1005,13 @@ class UserToBitHandshake : public ::google::protobuf::Message {
   bool support_listening_;
   bool support_complex_types_;
   bool support_timeout_;
+  bool enable_multiplex_;
   int sasl_support_;
   ::exec::user::RpcEndpointInfos* client_infos_;
+  ::google::protobuf::int32 capabilities_version_;
 
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(9 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(11 + 31) / 32];
 
   friend void  protobuf_AddDesc_User_2eproto();
   friend void protobuf_AssignDesc_User_2eproto();
@@ -4838,6 +4867,369 @@ class RunQuery : public ::google::protobuf::Message {
   void InitAsDefaultInstance();
   static RunQuery* default_instance_;
 };
+// -------------------------------------------------------------------
+
+class NewSessionRequest : public ::google::protobuf::Message {
+ public:
+  NewSessionRequest();
+  virtual ~NewSessionRequest();
+
+  NewSessionRequest(const NewSessionRequest& from);
+
+  inline NewSessionRequest& operator=(const NewSessionRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const NewSessionRequest& default_instance();
+
+  void Swap(NewSessionRequest* other);
+
+  // implements Message ----------------------------------------------
+
+  NewSessionRequest* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const NewSessionRequest& from);
+  void MergeFrom(const NewSessionRequest& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional .exec.user.UserProperties properties = 1;
+  inline bool has_properties() const;
+  inline void clear_properties();
+  static const int kPropertiesFieldNumber = 1;
+  inline const ::exec::user::UserProperties& properties() const;
+  inline ::exec::user::UserProperties* mutable_properties();
+  inline ::exec::user::UserProperties* release_properties();
+  inline void set_allocated_properties(::exec::user::UserProperties* properties);
+
+  // @@protoc_insertion_point(class_scope:exec.user.NewSessionRequest)
+ private:
+  inline void set_has_properties();
+  inline void clear_has_properties();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::exec::user::UserProperties* properties_;
+
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
+
+  friend void  protobuf_AddDesc_User_2eproto();
+  friend void protobuf_AssignDesc_User_2eproto();
+  friend void protobuf_ShutdownFile_User_2eproto();
+
+  void InitAsDefaultInstance();
+  static NewSessionRequest* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class SessionHandle : public ::google::protobuf::Message {
+ public:
+  SessionHandle();
+  virtual ~SessionHandle();
+
+  SessionHandle(const SessionHandle& from);
+
+  inline SessionHandle& operator=(const SessionHandle& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const SessionHandle& default_instance();
+
+  void Swap(SessionHandle* other);
+
+  // implements Message ----------------------------------------------
+
+  SessionHandle* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const SessionHandle& from);
+  void MergeFrom(const SessionHandle& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional string session_id = 1;
+  inline bool has_session_id() const;
+  inline void clear_session_id();
+  static const int kSessionIdFieldNumber = 1;
+  inline const ::std::string& session_id() const;
+  inline void set_session_id(const ::std::string& value);
+  inline void set_session_id(const char* value);
+  inline void set_session_id(const char* value, size_t size);
+  inline ::std::string* mutable_session_id();
+  inline ::std::string* release_session_id();
+  inline void set_allocated_session_id(::std::string* session_id);
+
+  // @@protoc_insertion_point(class_scope:exec.user.SessionHandle)
+ private:
+  inline void set_has_session_id();
+  inline void clear_has_session_id();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::std::string* session_id_;
+
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
+
+  friend void  protobuf_AddDesc_User_2eproto();
+  friend void protobuf_AssignDesc_User_2eproto();
+  friend void protobuf_ShutdownFile_User_2eproto();
+
+  void InitAsDefaultInstance();
+  static SessionHandle* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class RunQueryWithSessionHandle : public ::google::protobuf::Message {
+ public:
+  RunQueryWithSessionHandle();
+  virtual ~RunQueryWithSessionHandle();
+
+  RunQueryWithSessionHandle(const RunQueryWithSessionHandle& from);
+
+  inline RunQueryWithSessionHandle& operator=(const RunQueryWithSessionHandle& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const RunQueryWithSessionHandle& default_instance();
+
+  void Swap(RunQueryWithSessionHandle* other);
+
+  // implements Message ----------------------------------------------
+
+  RunQueryWithSessionHandle* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const RunQueryWithSessionHandle& from);
+  void MergeFrom(const RunQueryWithSessionHandle& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional .exec.user.RunQuery runQuery = 1;
+  inline bool has_runquery() const;
+  inline void clear_runquery();
+  static const int kRunQueryFieldNumber = 1;
+  inline const ::exec::user::RunQuery& runquery() const;
+  inline ::exec::user::RunQuery* mutable_runquery();
+  inline ::exec::user::RunQuery* release_runquery();
+  inline void set_allocated_runquery(::exec::user::RunQuery* runquery);
+
+  // optional .exec.user.SessionHandle sessionHandle = 2;
+  inline bool has_sessionhandle() const;
+  inline void clear_sessionhandle();
+  static const int kSessionHandleFieldNumber = 2;
+  inline const ::exec::user::SessionHandle& sessionhandle() const;
+  inline ::exec::user::SessionHandle* mutable_sessionhandle();
+  inline ::exec::user::SessionHandle* release_sessionhandle();
+  inline void set_allocated_sessionhandle(::exec::user::SessionHandle* sessionhandle);
+
+  // @@protoc_insertion_point(class_scope:exec.user.RunQueryWithSessionHandle)
+ private:
+  inline void set_has_runquery();
+  inline void clear_has_runquery();
+  inline void set_has_sessionhandle();
+  inline void clear_has_sessionhandle();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::exec::user::RunQuery* runquery_;
+  ::exec::user::SessionHandle* sessionhandle_;
+
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(2 + 31) / 32];
+
+  friend void  protobuf_AddDesc_User_2eproto();
+  friend void protobuf_AssignDesc_User_2eproto();
+  friend void protobuf_ShutdownFile_User_2eproto();
+
+  void InitAsDefaultInstance();
+  static RunQueryWithSessionHandle* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class CancelQueryWithSessionHandle : public ::google::protobuf::Message {
+ public:
+  CancelQueryWithSessionHandle();
+  virtual ~CancelQueryWithSessionHandle();
+
+  CancelQueryWithSessionHandle(const CancelQueryWithSessionHandle& from);
+
+  inline CancelQueryWithSessionHandle& operator=(const CancelQueryWithSessionHandle& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const CancelQueryWithSessionHandle& default_instance();
+
+  void Swap(CancelQueryWithSessionHandle* other);
+
+  // implements Message ----------------------------------------------
+
+  CancelQueryWithSessionHandle* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const CancelQueryWithSessionHandle& from);
+  void MergeFrom(const CancelQueryWithSessionHandle& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional .exec.shared.QueryId query_id = 1;
+  inline bool has_query_id() const;
+  inline void clear_query_id();
+  static const int kQueryIdFieldNumber = 1;
+  inline const ::exec::shared::QueryId& query_id() const;
+  inline ::exec::shared::QueryId* mutable_query_id();
+  inline ::exec::shared::QueryId* release_query_id();
+  inline void set_allocated_query_id(::exec::shared::QueryId* query_id);
+
+  // optional .exec.user.SessionHandle session_handle = 2;
+  inline bool has_session_handle() const;
+  inline void clear_session_handle();
+  static const int kSessionHandleFieldNumber = 2;
+  inline const ::exec::user::SessionHandle& session_handle() const;
+  inline ::exec::user::SessionHandle* mutable_session_handle();
+  inline ::exec::user::SessionHandle* release_session_handle();
+  inline void set_allocated_session_handle(::exec::user::SessionHandle* session_handle);
+
+  // @@protoc_insertion_point(class_scope:exec.user.CancelQueryWithSessionHandle)
+ private:
+  inline void set_has_query_id();
+  inline void clear_has_query_id();
+  inline void set_has_session_handle();
+  inline void clear_has_session_handle();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::exec::shared::QueryId* query_id_;
+  ::exec::user::SessionHandle* session_handle_;
+
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(2 + 31) / 32];
+
+  friend void  protobuf_AddDesc_User_2eproto();
+  friend void protobuf_AssignDesc_User_2eproto();
+  friend void protobuf_ShutdownFile_User_2eproto();
+
+  void InitAsDefaultInstance();
+  static CancelQueryWithSessionHandle* default_instance_;
+};
 // ===================================================================
 
 
@@ -5636,6 +6028,50 @@ inline void UserToBitHandshake::set_sasl_support(::exec::user::SaslSupport value
   assert(::exec::user::SaslSupport_IsValid(value));
   set_has_sasl_support();
   sasl_support_ = value;
+}
+
+// optional bool enable_multiplex = 10 [default = false];
+inline bool UserToBitHandshake::has_enable_multiplex() const {
+  return (_has_bits_[0] & 0x00000200u) != 0;
+}
+inline void UserToBitHandshake::set_has_enable_multiplex() {
+  _has_bits_[0] |= 0x00000200u;
+}
+inline void UserToBitHandshake::clear_has_enable_multiplex() {
+  _has_bits_[0] &= ~0x00000200u;
+}
+inline void UserToBitHandshake::clear_enable_multiplex() {
+  enable_multiplex_ = false;
+  clear_has_enable_multiplex();
+}
+inline bool UserToBitHandshake::enable_multiplex() const {
+  return enable_multiplex_;
+}
+inline void UserToBitHandshake::set_enable_multiplex(bool value) {
+  set_has_enable_multiplex();
+  enable_multiplex_ = value;
+}
+
+// optional int32 capabilities_version = 11 [default = 0];
+inline bool UserToBitHandshake::has_capabilities_version() const {
+  return (_has_bits_[0] & 0x00000400u) != 0;
+}
+inline void UserToBitHandshake::set_has_capabilities_version() {
+  _has_bits_[0] |= 0x00000400u;
+}
+inline void UserToBitHandshake::clear_has_capabilities_version() {
+  _has_bits_[0] &= ~0x00000400u;
+}
+inline void UserToBitHandshake::clear_capabilities_version() {
+  capabilities_version_ = 0;
+  clear_has_capabilities_version();
+}
+inline ::google::protobuf::int32 UserToBitHandshake::capabilities_version() const {
+  return capabilities_version_;
+}
+inline void UserToBitHandshake::set_capabilities_version(::google::protobuf::int32 value) {
+  set_has_capabilities_version();
+  capabilities_version_ = value;
 }
 
 // -------------------------------------------------------------------
@@ -11782,6 +12218,282 @@ inline void RunQuery::set_allocated_prepared_statement_handle(::exec::user::Prep
     set_has_prepared_statement_handle();
   } else {
     clear_has_prepared_statement_handle();
+  }
+}
+
+// -------------------------------------------------------------------
+
+// NewSessionRequest
+
+// optional .exec.user.UserProperties properties = 1;
+inline bool NewSessionRequest::has_properties() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void NewSessionRequest::set_has_properties() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void NewSessionRequest::clear_has_properties() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void NewSessionRequest::clear_properties() {
+  if (properties_ != NULL) properties_->::exec::user::UserProperties::Clear();
+  clear_has_properties();
+}
+inline const ::exec::user::UserProperties& NewSessionRequest::properties() const {
+  return properties_ != NULL ? *properties_ : *default_instance_->properties_;
+}
+inline ::exec::user::UserProperties* NewSessionRequest::mutable_properties() {
+  set_has_properties();
+  if (properties_ == NULL) properties_ = new ::exec::user::UserProperties;
+  return properties_;
+}
+inline ::exec::user::UserProperties* NewSessionRequest::release_properties() {
+  clear_has_properties();
+  ::exec::user::UserProperties* temp = properties_;
+  properties_ = NULL;
+  return temp;
+}
+inline void NewSessionRequest::set_allocated_properties(::exec::user::UserProperties* properties) {
+  delete properties_;
+  properties_ = properties;
+  if (properties) {
+    set_has_properties();
+  } else {
+    clear_has_properties();
+  }
+}
+
+// -------------------------------------------------------------------
+
+// SessionHandle
+
+// optional string session_id = 1;
+inline bool SessionHandle::has_session_id() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void SessionHandle::set_has_session_id() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void SessionHandle::clear_has_session_id() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void SessionHandle::clear_session_id() {
+  if (session_id_ != &::google::protobuf::internal::kEmptyString) {
+    session_id_->clear();
+  }
+  clear_has_session_id();
+}
+inline const ::std::string& SessionHandle::session_id() const {
+  return *session_id_;
+}
+inline void SessionHandle::set_session_id(const ::std::string& value) {
+  set_has_session_id();
+  if (session_id_ == &::google::protobuf::internal::kEmptyString) {
+    session_id_ = new ::std::string;
+  }
+  session_id_->assign(value);
+}
+inline void SessionHandle::set_session_id(const char* value) {
+  set_has_session_id();
+  if (session_id_ == &::google::protobuf::internal::kEmptyString) {
+    session_id_ = new ::std::string;
+  }
+  session_id_->assign(value);
+}
+inline void SessionHandle::set_session_id(const char* value, size_t size) {
+  set_has_session_id();
+  if (session_id_ == &::google::protobuf::internal::kEmptyString) {
+    session_id_ = new ::std::string;
+  }
+  session_id_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* SessionHandle::mutable_session_id() {
+  set_has_session_id();
+  if (session_id_ == &::google::protobuf::internal::kEmptyString) {
+    session_id_ = new ::std::string;
+  }
+  return session_id_;
+}
+inline ::std::string* SessionHandle::release_session_id() {
+  clear_has_session_id();
+  if (session_id_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = session_id_;
+    session_id_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+inline void SessionHandle::set_allocated_session_id(::std::string* session_id) {
+  if (session_id_ != &::google::protobuf::internal::kEmptyString) {
+    delete session_id_;
+  }
+  if (session_id) {
+    set_has_session_id();
+    session_id_ = session_id;
+  } else {
+    clear_has_session_id();
+    session_id_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+  }
+}
+
+// -------------------------------------------------------------------
+
+// RunQueryWithSessionHandle
+
+// optional .exec.user.RunQuery runQuery = 1;
+inline bool RunQueryWithSessionHandle::has_runquery() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void RunQueryWithSessionHandle::set_has_runquery() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void RunQueryWithSessionHandle::clear_has_runquery() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void RunQueryWithSessionHandle::clear_runquery() {
+  if (runquery_ != NULL) runquery_->::exec::user::RunQuery::Clear();
+  clear_has_runquery();
+}
+inline const ::exec::user::RunQuery& RunQueryWithSessionHandle::runquery() const {
+  return runquery_ != NULL ? *runquery_ : *default_instance_->runquery_;
+}
+inline ::exec::user::RunQuery* RunQueryWithSessionHandle::mutable_runquery() {
+  set_has_runquery();
+  if (runquery_ == NULL) runquery_ = new ::exec::user::RunQuery;
+  return runquery_;
+}
+inline ::exec::user::RunQuery* RunQueryWithSessionHandle::release_runquery() {
+  clear_has_runquery();
+  ::exec::user::RunQuery* temp = runquery_;
+  runquery_ = NULL;
+  return temp;
+}
+inline void RunQueryWithSessionHandle::set_allocated_runquery(::exec::user::RunQuery* runquery) {
+  delete runquery_;
+  runquery_ = runquery;
+  if (runquery) {
+    set_has_runquery();
+  } else {
+    clear_has_runquery();
+  }
+}
+
+// optional .exec.user.SessionHandle sessionHandle = 2;
+inline bool RunQueryWithSessionHandle::has_sessionhandle() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void RunQueryWithSessionHandle::set_has_sessionhandle() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void RunQueryWithSessionHandle::clear_has_sessionhandle() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void RunQueryWithSessionHandle::clear_sessionhandle() {
+  if (sessionhandle_ != NULL) sessionhandle_->::exec::user::SessionHandle::Clear();
+  clear_has_sessionhandle();
+}
+inline const ::exec::user::SessionHandle& RunQueryWithSessionHandle::sessionhandle() const {
+  return sessionhandle_ != NULL ? *sessionhandle_ : *default_instance_->sessionhandle_;
+}
+inline ::exec::user::SessionHandle* RunQueryWithSessionHandle::mutable_sessionhandle() {
+  set_has_sessionhandle();
+  if (sessionhandle_ == NULL) sessionhandle_ = new ::exec::user::SessionHandle;
+  return sessionhandle_;
+}
+inline ::exec::user::SessionHandle* RunQueryWithSessionHandle::release_sessionhandle() {
+  clear_has_sessionhandle();
+  ::exec::user::SessionHandle* temp = sessionhandle_;
+  sessionhandle_ = NULL;
+  return temp;
+}
+inline void RunQueryWithSessionHandle::set_allocated_sessionhandle(::exec::user::SessionHandle* sessionhandle) {
+  delete sessionhandle_;
+  sessionhandle_ = sessionhandle;
+  if (sessionhandle) {
+    set_has_sessionhandle();
+  } else {
+    clear_has_sessionhandle();
+  }
+}
+
+// -------------------------------------------------------------------
+
+// CancelQueryWithSessionHandle
+
+// optional .exec.shared.QueryId query_id = 1;
+inline bool CancelQueryWithSessionHandle::has_query_id() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void CancelQueryWithSessionHandle::set_has_query_id() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void CancelQueryWithSessionHandle::clear_has_query_id() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void CancelQueryWithSessionHandle::clear_query_id() {
+  if (query_id_ != NULL) query_id_->::exec::shared::QueryId::Clear();
+  clear_has_query_id();
+}
+inline const ::exec::shared::QueryId& CancelQueryWithSessionHandle::query_id() const {
+  return query_id_ != NULL ? *query_id_ : *default_instance_->query_id_;
+}
+inline ::exec::shared::QueryId* CancelQueryWithSessionHandle::mutable_query_id() {
+  set_has_query_id();
+  if (query_id_ == NULL) query_id_ = new ::exec::shared::QueryId;
+  return query_id_;
+}
+inline ::exec::shared::QueryId* CancelQueryWithSessionHandle::release_query_id() {
+  clear_has_query_id();
+  ::exec::shared::QueryId* temp = query_id_;
+  query_id_ = NULL;
+  return temp;
+}
+inline void CancelQueryWithSessionHandle::set_allocated_query_id(::exec::shared::QueryId* query_id) {
+  delete query_id_;
+  query_id_ = query_id;
+  if (query_id) {
+    set_has_query_id();
+  } else {
+    clear_has_query_id();
+  }
+}
+
+// optional .exec.user.SessionHandle session_handle = 2;
+inline bool CancelQueryWithSessionHandle::has_session_handle() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void CancelQueryWithSessionHandle::set_has_session_handle() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void CancelQueryWithSessionHandle::clear_has_session_handle() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void CancelQueryWithSessionHandle::clear_session_handle() {
+  if (session_handle_ != NULL) session_handle_->::exec::user::SessionHandle::Clear();
+  clear_has_session_handle();
+}
+inline const ::exec::user::SessionHandle& CancelQueryWithSessionHandle::session_handle() const {
+  return session_handle_ != NULL ? *session_handle_ : *default_instance_->session_handle_;
+}
+inline ::exec::user::SessionHandle* CancelQueryWithSessionHandle::mutable_session_handle() {
+  set_has_session_handle();
+  if (session_handle_ == NULL) session_handle_ = new ::exec::user::SessionHandle;
+  return session_handle_;
+}
+inline ::exec::user::SessionHandle* CancelQueryWithSessionHandle::release_session_handle() {
+  clear_has_session_handle();
+  ::exec::user::SessionHandle* temp = session_handle_;
+  session_handle_ = NULL;
+  return temp;
+}
+inline void CancelQueryWithSessionHandle::set_allocated_session_handle(::exec::user::SessionHandle* session_handle) {
+  delete session_handle_;
+  session_handle_ = session_handle;
+  if (session_handle) {
+    set_has_session_handle();
+  } else {
+    clear_has_session_handle();
   }
 }
 

@@ -216,7 +216,7 @@ enum CoreOperatorType {
   ORDERED_PARTITION_SENDER = 9,
   PROJECT = 10,
   UNORDERED_RECEIVER = 11,
-  RANGE_SENDER = 12,
+  RANGE_PARTITION_SENDER = 12,
   SCREEN = 13,
   SELECTION_VECTOR_REMOVER = 14,
   STREAMING_AGGREGATE = 15,
@@ -248,11 +248,14 @@ enum CoreOperatorType {
   LATERAL_JOIN = 41,
   UNNEST = 42,
   HIVE_DRILL_NATIVE_PARQUET_ROW_GROUP_SCAN = 43,
-  JDBC_SCAN = 44
+  JDBC_SCAN = 44,
+  REGEX_SUB_SCAN = 45,
+  MAPRDB_SUB_SCAN = 201,
+  ROWKEY_JOIN = 202
 };
 bool CoreOperatorType_IsValid(int value);
 const CoreOperatorType CoreOperatorType_MIN = SINGLE_SENDER;
-const CoreOperatorType CoreOperatorType_MAX = JDBC_SCAN;
+const CoreOperatorType CoreOperatorType_MAX = ROWKEY_JOIN;
 const int CoreOperatorType_ARRAYSIZE = CoreOperatorType_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* CoreOperatorType_descriptor();

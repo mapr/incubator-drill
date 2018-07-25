@@ -67,6 +67,7 @@ public enum CoreOperatorType implements com.dyuproject.protostuff.EnumLite<CoreO
     UNNEST(42),
     HIVE_DRILL_NATIVE_PARQUET_ROW_GROUP_SCAN(43),
     JDBC_SCAN(44),
+    REGEX_SUB_SCAN(45),
     MAPRDB_SUB_SCAN(201),
     ROWKEY_JOIN(202);
     
@@ -131,6 +132,7 @@ public enum CoreOperatorType implements com.dyuproject.protostuff.EnumLite<CoreO
             case 42: return UNNEST;
             case 43: return HIVE_DRILL_NATIVE_PARQUET_ROW_GROUP_SCAN;
             case 44: return JDBC_SCAN;
+            case 45: return REGEX_SUB_SCAN;
             case 201: return MAPRDB_SUB_SCAN;
             case 202: return ROWKEY_JOIN;
             default: return null;
