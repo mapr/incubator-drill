@@ -186,8 +186,6 @@ public class TestProjectionPassThroughWithComplexTypeIndex extends BaseJsonTest 
     }
   }
 
-  // Ignore until MD-4633 is fixed
-  @Ignore
   @Test
   public void test_encoded_fields_with_non_covering_index() throws Exception {
     try {
@@ -201,11 +199,11 @@ public class TestProjectionPassThroughWithComplexTypeIndex extends BaseJsonTest 
                       + " hbase.`index_test_projection` t\n"
                       + " WHERE _id in\n"
                       + " (select _id from ( select _id, flatten(t1.weight) as f1 from"
-                      + " hbase.`index_test_projection` as t1) as t where t.f1.low = 120 and t.f1.high = 190)",
+                      + " hbase.`index_test_projection` as t1) as t where t.f1.low = 140 and t.f1.high = 190)",
               EncodedSchemaPathSet.encode("_id", "county", "cars")[0]);
 
       final String[] expectedPlan = {"JsonTableGroupScan" +
-              ".*condition.*elementAnd.*low.*120.*high.*190",
+              ".*condition.*weight.*low.*140.*and.*weight.*high.*190.*indexName=.*weightIdx1",
               "RestrictedJsonTableGroupScan"+
               ".*columns=\\[`_id`, `\\$\\$ENC00L5UWIADDN52W45DZABRWC4TT`, `\\$\\$document`\\]"};
 
@@ -239,8 +237,8 @@ public class TestProjectionPassThroughWithComplexTypeIndex extends BaseJsonTest 
       runSQLAndVerifyCount(sql, 3);
 
       final String[] expectedPlan = {"JsonTableGroupScan" +
-              ".*condition.*elementAnd.*low.*120.*high.*150.*indexName=.*weightIdx1" +
-              ".*columns=\\[`_id`, `\\$\\$ENC00L5UWIADOMFWWKADDMFZHG`, `\\$\\$document`, `_id`, `weight`\\]"};
+              ".*condition.*weight.*low.*120.*and.*weight.*high.*150.*indexName=.*weightIdx1" +
+              ".*columns=\\[`_id`, `\\$\\$ENC00L5UWIADOMFWWKADDMFZHG`, `\\$\\$document`\\]"};
       final String[] excludedPlan = {"RowKeyJoin"};
 
       PlanTestBase.testPlanMatchingPatterns(sql, expectedPlan, excludedPlan);
