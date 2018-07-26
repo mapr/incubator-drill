@@ -276,5 +276,28 @@ public class TestProjectionPassThroughWithComplexTypeIndex extends BaseJsonTest 
       test(ResetComplexFTSTypePlanning);
     }
   }
+  @Test
+  public void test_encoded_fields_with_boolean() throws Exception {
+    try {
+      final String sql = String.format(
+              "SELECT\n"
+                      + " t.`$$document`\n"
+                      + " FROM\n"
+                      + " hbase.`index_test_projection` t\n"
+                      + " WHERE _id in\n"
+                      + " (select _id from  hbase.`index_test_projection` as t"
+                      + " where t.`online` is true and ojai_typeof(t.`discount`.`eligible`, 2))");
 
+      setColumnWidths(new int[]{40, 80});
+      runSQLAndVerifyCount(sql, 7);
+
+      final String[] expectedPlan = {"JsonTableGroupScan" +
+              ".*condition.*online.*=.*true.*TYPE_OF.*discount.*eligible.*BOOLEAN" +
+              ".*columns=\\[`_id`, `online`, `discount`.`eligible`\\]"};
+      final String[] excludedPlan = {};
+
+      PlanTestBase.testPlanMatchingPatterns(sql, expectedPlan, excludedPlan);
+    } finally {
+    }
+  }
 }
