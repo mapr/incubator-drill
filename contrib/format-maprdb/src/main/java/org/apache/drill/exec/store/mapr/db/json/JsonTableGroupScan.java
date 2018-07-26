@@ -44,15 +44,15 @@ import org.apache.drill.exec.physical.base.PhysicalOperator;
 import org.apache.drill.exec.physical.base.ScanStats;
 import org.apache.drill.exec.physical.base.ScanStats.GroupScanProperty;
 import org.apache.drill.exec.record.metadata.TupleMetadata;
-import org.apache.drill.exec.store.AbstractStoragePlugin;
+import org.apache.drill.exec.planner.cost.PluginCost;
 import org.apache.drill.exec.planner.index.IndexDescriptor;
 import org.apache.drill.exec.planner.index.MapRDBIndexDescriptor;
+import org.apache.drill.exec.planner.index.MapRDBStatistics;
 import org.apache.drill.exec.planner.index.MapRDBStatisticsPayload;
 import org.apache.drill.exec.planner.index.Statistics;
-import org.apache.drill.exec.planner.index.MapRDBStatistics;
-import org.apache.drill.exec.planner.cost.PluginCost;
 import org.apache.drill.exec.planner.physical.PartitionFunction;
 import org.apache.drill.exec.planner.physical.PrelUtil;
+import org.apache.drill.exec.store.AbstractStoragePlugin;
 import org.apache.drill.exec.store.StoragePluginRegistry;
 import org.apache.drill.exec.store.dfs.FileSystemConfig;
 import org.apache.drill.exec.store.mapr.PluginConstants;
@@ -495,16 +495,17 @@ public class JsonTableGroupScan extends MapRDBGroupScan implements IndexGroupSca
    * @param index, to use for generating the estimate
    * @return row count post filtering
    */
-  public MapRDBStatisticsPayload getAverageRowSizeStats(IndexDescriptor index) {
+  public MapRDBStatisticsPayload getFilterIndependentStats(IndexDescriptor index) {
     IndexDesc indexDesc = null;
+    double totalRowCount = ROWCOUNT_UNKNOWN;
     double avgRowSize = AVG_ROWSIZE_UNKNOWN;
 
     if (index != null) {
       indexDesc = (IndexDesc)((MapRDBIndexDescriptor)index).getOriginalDesc();
     }
     // If no index is specified, get it from the primary table
-    if (indexDesc == null && scanSpec.isSecondaryIndex()) {
-      throw new UnsupportedOperationException("getAverageRowSizeStats should be invoked on primary table");
+    if(indexDesc == null && scanSpec.isSecondaryIndex()) {
+      throw new UnsupportedOperationException("getFilterIndependentStats should be invoked on primary table");
     }
 
     // Get the index table or primary table and use the DB API to get the estimated number of rows. For size estimates,
@@ -513,14 +514,16 @@ public class JsonTableGroupScan extends MapRDBGroupScan implements IndexGroupSca
 
     if (table != null) {
       final MetaTable metaTable = table.getMetaTable();
+      final com.mapr.db.scan.ScanStats stats = metaTable.getScanStats();
       if (metaTable != null) {
         avgRowSize = metaTable.getAverageRowSize();
+        totalRowCount = stats.getEstimatedNumRows();
       }
     }
     logger.debug("index_plan_info: getEstimatedRowCount obtained from DB Client for {}: indexName: {}, indexInfo: {}, " +
-            "avgRowSize: {}, estimatedSize {}", this, (indexDesc == null ? "null" : indexDesc.getIndexName()),
-        (indexDesc == null ? "null" : indexDesc.getIndexInfo()), avgRowSize);
-    return new MapRDBStatisticsPayload(ROWCOUNT_UNKNOWN, ROWCOUNT_UNKNOWN, avgRowSize);
+            " avgRowSize {}, totalRowCount: {}", this, (indexDesc == null ? "null" : indexDesc.getIndexName()),
+        (indexDesc == null ? "null" : indexDesc.getIndexInfo()), avgRowSize, totalRowCount);
+    return new MapRDBStatisticsPayload(totalRowCount, ROWCOUNT_UNKNOWN, avgRowSize);
   }
 
   /**

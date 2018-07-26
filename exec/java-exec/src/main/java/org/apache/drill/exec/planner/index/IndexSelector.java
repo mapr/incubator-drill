@@ -33,6 +33,7 @@ import org.apache.calcite.rex.RexUtil;
 import org.apache.drill.common.expression.LogicalExpression;
 import org.apache.drill.exec.physical.base.DbGroupScan;
 import org.apache.drill.exec.planner.common.DrillJoinRelBase;
+import org.apache.drill.exec.planner.common.DrillScanRelBase;
 import org.apache.drill.exec.planner.cost.DrillCostBase;
 import org.apache.drill.exec.planner.cost.PluginCost;
 import org.apache.drill.exec.planner.physical.PlannerSettings;
@@ -93,8 +94,10 @@ public class IndexSelector  {
   }
 
   public void addIndex(IndexDescriptor indexDesc, boolean isCovering, int numProjectedFields) {
+    // Get total rows for the index (for complex indexes total rowcount would be different from the primary table)
+    double indexTotalRows = stats.getRowCount(null, stats.buildUniqueIndexIdentifier(indexDesc), primaryTableScan);
     IndexProperties indexProps = new DrillIndexProperties(indexDesc, isCovering, otherRemainderCondition, rexBuilder,
-        numProjectedFields, totalRows, primaryTableScan);
+        numProjectedFields, indexTotalRows, primaryTableScan);
     indexPropList.add(indexProps);
   }
 

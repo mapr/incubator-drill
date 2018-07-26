@@ -23,9 +23,9 @@ import org.apache.calcite.rel.metadata.RelMdUtil;
 import org.apache.calcite.rel.type.RelDataType;
 import org.apache.calcite.rex.RexBuilder;
 import org.apache.calcite.rex.RexCall;
+import org.apache.calcite.rex.RexInputRef;
 import org.apache.calcite.rex.RexLiteral;
 import org.apache.calcite.rex.RexNode;
-import org.apache.calcite.rex.RexInputRef;
 import org.apache.calcite.rex.RexUtil;
 import org.apache.calcite.sql.SqlKind;
 import org.apache.calcite.sql.fun.SqlStdOperatorTable;
@@ -48,12 +48,12 @@ import org.apache.hadoop.hbase.HConstants;
 import org.ojai.store.QueryCondition;
 
 import java.io.UnsupportedEncodingException;
-import java.util.Arrays;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import org.apache.drill.shaded.guava.com.google.common.base.Charsets;
 import org.apache.drill.shaded.guava.com.google.common.base.Preconditions;
@@ -134,8 +134,17 @@ public class MapRDBStatistics implements Statistics {
     Map<String, StatisticsPayload> payloadMap;
     if ((scanRel instanceof DrillScanRel && ((DrillScanRel)scanRel).getGroupScan() instanceof DbGroupScan)
         || (scanRel instanceof ScanPrel && ((ScanPrel)scanRel).getGroupScan() instanceof DbGroupScan)) {
-      if (condition == null && fullTableScanPayload != null) {
-        return fullTableScanPayload.getRowCount();
+      if (condition == null) {
+        if (tabIdxName != null) {
+          // fiStatsCache also stores the total rowcount for the index. Complex indexes usually would have different
+          // rowcount than the primary table since they are stored in a different manner.
+          StatisticsPayload fiPayloadMap = fIStatsCache.get(tabIdxName);
+          if (fiPayloadMap != null) {
+            return fiPayloadMap.getRowCount();
+          }
+        } else if (fullTableScanPayload != null) {
+          return fullTableScanPayload.getRowCount();
+        }
       } else if (condition != null) {
         conditionAsStr = convertRexToString(condition, scanRel.getRowType());
         payloadMap = statsCache.get(conditionAsStr);
@@ -192,9 +201,17 @@ public class MapRDBStatistics implements Statistics {
           return anyPayload.getRowCount();
         }
       }
-    } else if (condition == null
-        && fullTableScanPayload != null) {
-      return fullTableScanPayload.getRowCount();
+    } else if (condition == null) {
+      if (tabIdxName != null) {
+        // fiStatsCache also stores the total rowcount for the index. Complex indexes usually would have different
+        // rowcount than the primary table since they are stored in a different manner.
+        StatisticsPayload fiPayloadMap = fIStatsCache.get(tabIdxName);
+        if (fiPayloadMap != null) {
+          return fiPayloadMap.getRowCount();
+        }
+      } else if (fullTableScanPayload != null) {
+        return fullTableScanPayload.getRowCount();
+      }
     }
     if (condition != null) {
       conditionAsStr = condition.toString();
@@ -316,11 +333,11 @@ public class MapRDBStatistics implements Statistics {
     // Get the stats payload for full table (has total rows in the table)
     StatisticsPayload ftsPayload = jTabGrpScan.getFirstKeyEstimatedStats(null, null, scanRel);
     addToCache(null, null, context, ftsPayload, jTabGrpScan, scanRel, scanRel.getRowType());
-    addToCache(null, jTabGrpScan.getAverageRowSizeStats(null), ftsPayload);
+    addToCache(null, jTabGrpScan.getFilterIndependentStats(null), ftsPayload);
     // Get the stats for all indexes
     for (IndexDescriptor idx: indexes) {
       StatisticsPayload idxPayload = jTabGrpScan.getFirstKeyEstimatedStats(null, idx, scanRel);
-      StatisticsPayload idxRowSizePayload = jTabGrpScan.getAverageRowSizeStats(idx);
+      StatisticsPayload idxRowSizePayload = jTabGrpScan.getFilterIndependentStats(idx);
       RelDataType newRowType;
       FunctionalIndexInfo functionInfo = idx.getFunctionalInfo();
       if (functionInfo.hasFunctional()) {
@@ -378,12 +395,12 @@ public class MapRDBStatistics implements Statistics {
     StatisticsPayload ftsPayload = jTabGrpScan.getFirstKeyEstimatedStats(null, null, scanRel);
 
     // Get the average row size for table and all indexes
-    addToCache(null, jTabGrpScan.getAverageRowSizeStats(null), ftsPayload);
+    addToCache(null, jTabGrpScan.getFilterIndependentStats(null), ftsPayload);
     if (ftsPayload == null || ftsPayload.getRowCount() == 0) {
       return;
     }
     for (IndexDescriptor idx : indexes) {
-      StatisticsPayload idxRowSizePayload = jTabGrpScan.getAverageRowSizeStats(idx);
+      StatisticsPayload idxRowSizePayload = jTabGrpScan.getFilterIndependentStats(idx);
       addToCache(idx, idxRowSizePayload, ftsPayload);
     }
 
@@ -418,9 +435,9 @@ public class MapRDBStatistics implements Statistics {
           convertToLogicalExpression(preProcIdxCondition, newRowType, settings, builder));
       // Cap rows/size at total rows in case of issues with DB APIs
       StatisticsPayload idxPayload = jTabGrpScan.getFirstKeyEstimatedStats(queryCondition, idx, scanRel);
-      double rowCount = Math.min(idxPayload.getRowCount(), ftsPayload.getRowCount());
-      double leadingRowCount = Math.min(idxPayload.getLeadingRowCount(), rowCount);
-      double avgRowSize = Math.min(idxPayload.getAvgRowSize(), ftsPayload.getAvgRowSize());
+      double rowCount = idxPayload.getRowCount();
+      double leadingRowCount = idxPayload.getLeadingRowCount();
+      double avgRowSize = idxPayload.getAvgRowSize();
       StatisticsPayload payload = new MapRDBStatisticsPayload(rowCount, leadingRowCount, avgRowSize);
       addToCache(idxCondition, idx, context, payload, jTabGrpScan, scanRel, newRowType);
       addBaseConditions(idxCondition, payload, false, baseConditionMap, scanRel.getRowType());
