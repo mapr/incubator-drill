@@ -100,29 +100,37 @@ public class JsonConditionBuilder extends AbstractExprVisitor<JsonScanSpec, Void
     return visitFunctionCall(op, value);
   }
 
-  /*
-   * Traverse through the path and append "[]" to ArrayFields and return path till the last but one field.
-   * For example, If the data is a = [{b:5, c:10}], when referencing a[].b or a[].c the getEmptyArrayPrefix
-   * returns a[]. Incase of a[].b[].c[].d, it returns a[].b[].c[]
-   */
   private String getEmptyArrayPrefix(SchemaPath schemaPath) {
-    String arrayPrefixPath = "";
+    String arrayPrefix = getEmptyArrayPath(schemaPath);
+    int end = arrayPrefix.lastIndexOf("]") + 1;
+    return arrayPrefix.substring(0, end);
+  }
+
+  /*
+   * Traverse through the path and append "[]" to ArrayFields and return path till the end.
+   * For example, If the data is a = [{b:5, c:10}], when referencing a[].b the getEmptyArrayPath
+   * returns a[].b where the arrayPrefix is a[] and arraySuffix is b. Incase of a[].b[].c[].d, 
+   * the arrayPrefix is a[].b[].c[], arraySuffix is d. Incase of a[].b.c.d, the arrayPrefix is a[] 
+   * and arraySuffix is b.c.d
+   */
+  private String getEmptyArrayPath(SchemaPath schemaPath) {
+    String arrayPath = "";
     final String brackets = "[]";
     final String dot = ".";
     if (schemaPath.isArray()) {
       NameSegment nameSegment = schemaPath.getRootSegment();
       while (nameSegment!= null) {
-        arrayPrefixPath = arrayPrefixPath + nameSegment.getPath();
+        arrayPath = arrayPath + nameSegment.getPath();
         if (nameSegment.getChild() instanceof ArraySegment && ((ArraySegment) nameSegment.getChild()).getIndex() == -1) {
-          arrayPrefixPath = arrayPrefixPath + brackets;
+          arrayPath = arrayPath + brackets;
         }
-        if(!nameSegment.isLastPath()) {
+        if( nameSegment != null ) {
           nameSegment = nameSegment.getChildNameSegment();
         }
-        if (nameSegment == null || nameSegment.isLastPath()) {
-          return arrayPrefixPath;
+        if (nameSegment == null) {
+          return arrayPath;
         } else {
-          arrayPrefixPath = arrayPrefixPath + dot;
+          arrayPath = arrayPath + dot;
         }
       }
     }
@@ -150,11 +158,13 @@ public class JsonConditionBuilder extends AbstractExprVisitor<JsonScanSpec, Void
    * when referencing a[].b, getArraySuffix returns b as suffix.
    */
   private String getArraySuffix(SchemaPath schemaPath) {
-      NameSegment nameSegment = schemaPath.getRootSegment();
-        while (nameSegment != null && ! nameSegment.isLastPath()) {
-            nameSegment = nameSegment.getChildNameSegment();
-        }
-        return nameSegment == null ? null : nameSegment.getPath();
+    String arrayPath = getEmptyArrayPath(schemaPath);
+    // Since suffix starts after "]."
+    int suffixStart = arrayPath.lastIndexOf("]") + 2;
+    if (suffixStart < arrayPath.length()) {
+      return arrayPath.substring(suffixStart);
+    }
+    return null;
   }
 
   private String compareAndGetArrayPrefix(FunctionCall exp1, FunctionCall exp2) {
