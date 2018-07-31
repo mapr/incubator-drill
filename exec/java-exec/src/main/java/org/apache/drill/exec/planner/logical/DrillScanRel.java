@@ -17,6 +17,7 @@
  */
 package org.apache.drill.exec.planner.logical;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.calcite.rel.RelWriter;
@@ -61,7 +62,7 @@ public class DrillScanRel extends DrillScanRelBase implements DrillRel {
                       final RelOptTable table, boolean partitionFilterPushdown) {
     // By default, scan does not support project pushdown.
     // Decision whether push projects into scan will be made solely in DrillPushProjIntoScanRule.
-    this(cluster, traits, table, table.getRowType(), GroupScan.ALL_COLUMNS, partitionFilterPushdown);
+    this(cluster, traits, table, table.getRowType(), getProjectedColumns(table, true), partitionFilterPushdown);
     this.settings = PrelUtil.getPlannerSettings(cluster.getPlanner());
   }
 
@@ -172,6 +173,23 @@ public class DrillScanRel extends DrillScanRelBase implements DrillRel {
 
   public boolean partitionFilterPushdown() {
     return this.partitionFilterPushdown;
+  }
+
+  private static List<SchemaPath> getProjectedColumns(final RelOptTable table, boolean isSelectStar) {
+    List<String> columnNames = table.getRowType().getFieldNames();
+    List<SchemaPath> projectedColumns = new ArrayList<SchemaPath>(columnNames.size());
+
+    for (String columnName : columnNames) {
+       projectedColumns.add(SchemaPath.getSimplePath(columnName));
+    }
+
+    // If the row-type doesn't contain the STAR keyword, then insert it
+    // as we are dealing with a  SELECT_STAR query.
+    if (isSelectStar && !Utilities.isStarQuery(projectedColumns)) {
+      projectedColumns.add(SchemaPath.STAR_COLUMN);
+    }
+
+    return projectedColumns;
   }
 
 }
