@@ -33,9 +33,11 @@ import org.apache.calcite.rel.type.RelRecordType;
 import org.apache.calcite.rex.RexBuilder;
 import org.apache.calcite.rex.RexNode;
 import org.apache.calcite.rex.RexUtil;
-import org.apache.calcite.sql.validate.SqlValidatorUtil;
 import org.apache.calcite.tools.RelBuilder;
+import org.apache.calcite.util.Pair;
 import org.apache.commons.collections.ListUtils;
+import org.apache.drill.common.expression.SchemaPath;
+import org.apache.drill.exec.expr.fn.FunctionImplementationRegistry;
 import org.apache.drill.exec.physical.base.DbGroupScan;
 import org.apache.drill.exec.planner.common.DrillScanRelBase;
 import org.apache.drill.exec.planner.common.DrillRelOptUtil;
@@ -46,6 +48,7 @@ import org.apache.drill.exec.planner.logical.DrillProjectRel;
 import org.apache.drill.exec.planner.logical.DrillFilterRel;
 import org.apache.drill.exec.planner.logical.DrillRel;
 import org.apache.drill.exec.planner.physical.AggPruleBase;
+import org.apache.drill.exec.planner.physical.PlannerSettings;
 import org.apache.drill.exec.planner.physical.PrelUtil;
 import org.apache.drill.exec.planner.physical.ProjectPrel;
 import org.apache.drill.exec.planner.physical.ScanPrel;
@@ -57,6 +60,7 @@ import org.apache.drill.exec.planner.physical.StreamAggPrule;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static org.apache.drill.exec.planner.logical.DrillRel.DRILL_LOGICAL;
 import static org.apache.drill.exec.planner.physical.Prel.DRILL_PHYSICAL;
@@ -66,15 +70,15 @@ public class SemiJoinIndexPlanUtils {
   static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(SemiJoinIndexPlanUtils.class);
 
 
-  public static RelNode applyProjects(RelNode node, List<ProjectPrel> projectRels,
-                                      RelNode leftSideJoinNode, RelBuilder builder) {
-    RelNode input = node;
+  public static RelNode applyProjects(Pair<RelNode, Map<Integer, Integer>> input, List<ProjectPrel> projectRels,
+                                      RelNode leftSideJoinNode, RelBuilder builder, PlannerSettings plannerSettings) {
     RelNode inputNode = leftSideJoinNode;
     for (ProjectPrel proj : Lists.reverse(projectRels)) {
       inputNode = buildProject(inputNode, inputNode);
-      input = mergeProject((ProjectPrel) inputNode, proj, input, builder);
+      input = mergeProject((ProjectPrel) inputNode, proj, input.left, builder, plannerSettings.functionImplementationRegistry,
+              input.right, true);
     }
-    return input;
+    return input.left;
   }
 
   public static List<RelNode> buildRowKeyJoin(SemiJoinIndexPlanCallContext joinContext,
@@ -152,7 +156,7 @@ public class SemiJoinIndexPlanUtils {
             projectsRelNode.getRowType());
   }
 
-  public static ScanPrel mergeScan(ScanPrel leftScan, ScanPrel rightScan) {
+  public static Pair<RelNode, Map<Integer,Integer>> mergeScan(ScanPrel leftScan, ScanPrel rightScan) {
     Preconditions.checkArgument(SemiJoinIndexPlanUtils.checkSameTableScan(leftScan, rightScan));
     Preconditions.checkArgument(leftScan.getGroupScan() instanceof DbGroupScan &&
                                 rightScan.getGroupScan() instanceof DbGroupScan);
@@ -164,21 +168,24 @@ public class SemiJoinIndexPlanUtils {
 
     DbGroupScan leftGroupScan = (DbGroupScan) leftScan.getGroupScan();
     DbGroupScan rightGroupScan = (DbGroupScan) rightScan.getGroupScan();
-
+    List grpScanColumns = ListUtils.union(leftGroupScan.getColumns(), rightGroupScan.getColumns());
+    Pair<Pair<Pair<List<RelDataType>,
+            List<String>>, List<SchemaPath>>,
+            Map<Integer, Integer>> normalizedInfo = SemiJoinTransformUtils.normalize(ListUtils.union(leftSideTypes, rightSideTypes),
+            ListUtils.union(leftSideColumns, rightSideColumns), grpScanColumns);
     DbGroupScan restrictedGroupScan  = ((DbGroupScan) IndexPlanUtils.getGroupScan(leftScan))
-            .getRestrictedScan(ListUtils.union(leftGroupScan.getColumns(), rightGroupScan.getColumns()));
+            .getRestrictedScan(grpScanColumns);
     restrictedGroupScan.setComplexFilterPushDown(true);
-    return new ScanPrel(leftScan.getCluster(),
+    return Pair.of(new ScanPrel(leftScan.getCluster(),
             rightScan.getTraitSet(),
             restrictedGroupScan,
-            leftScan.getCluster().getTypeFactory().createStructType(ListUtils.union(leftSideTypes, rightSideTypes),
-                    SqlValidatorUtil.uniquify(ListUtils.union(leftSideColumns, rightSideColumns))),
-            leftScan.getTable());
+            leftScan.getCluster().getTypeFactory().createStructType(normalizedInfo.left.left.left, normalizedInfo.left.left.right),
+            leftScan.getTable()), normalizedInfo.right);
   }
 
-  public static RelNode mergeFilter(FilterPrel filterL,
+  public static Pair<RelNode, Map<Integer, Integer>> mergeFilter(FilterPrel filterL,
                                     FilterPrel filterR,
-                                    RelNode input) {
+                                    RelNode input, Map<Integer, Integer> inputColMap) {
     List<RexNode> combineConditions = Lists.newArrayList();
     RexNode leftTransformedConditions = IndexPlanUtils.transform(0,input.getCluster().getRexBuilder(),
                                                                   filterL.getCondition(), filterL.getInput().getRowType());
@@ -189,34 +196,45 @@ public class SemiJoinIndexPlanUtils {
     logger.debug("semi_join_index_plan_info: right conditions after transforming: {}", rightTransformedConditions);
     combineConditions.add(leftTransformedConditions);
     combineConditions.add(rightTransformedConditions);
-    return new FilterPrel(input.getCluster(), input.getTraitSet(), input,
-            RexUtil.composeConjunction(input.getCluster().getRexBuilder(), combineConditions, false));
+    RexNode finalCondition = IndexPlanUtils.transform(RexUtil.composeConjunction(input.getCluster().getRexBuilder(),
+            combineConditions,
+            false), inputColMap, input.getCluster().getRexBuilder());
+    return Pair.of(new FilterPrel(input.getCluster(), input.getTraitSet(), input, finalCondition), inputColMap);
   }
 
-  public static RelNode mergeProject(ProjectPrel projectL, ProjectPrel projectR,
-                                     RelNode input, RelBuilder builder) {
+  public static Pair<RelNode, Map<Integer, Integer>> mergeProject(ProjectPrel projectL, ProjectPrel projectR,
+                                     RelNode input, RelBuilder builder, FunctionImplementationRegistry functionRegistry,
+                                     Map<Integer, Integer> inputColMap, boolean uniquify) {
     RexBuilder rexBuilder = input.getCluster().getRexBuilder();
     List<RexNode> combinedProjects = Lists.newArrayList();
-    combinedProjects.addAll(IndexPlanUtils.projectsTransformer(0,rexBuilder, projectL.getProjects(),
-            projectL.getInput().getRowType()));
-    combinedProjects.addAll(IndexPlanUtils.projectsTransformer(projectL.getProjects().size(), rexBuilder, projectR.getProjects(),
-            projectR.getInput().getRowType()));
+    List<RexNode> leftProjects = IndexPlanUtils.projectsTransformer(0, rexBuilder, projectL.getProjects(),
+            projectL.getInput().getRowType());
+    combinedProjects.addAll(leftProjects);
+    List<RexNode> rightProjects = IndexPlanUtils.projectsTransformer(projectL.getProjects().size(), rexBuilder, projectR.getProjects(),
+            projectR.getInput().getRowType());
+    combinedProjects.addAll(rightProjects);
+
+    List<String> leftProjectsNames = projectL.getRowType().getFieldNames();
+    List<String> rightProjectsNames = projectR.getRowType().getFieldNames();
+
+    Pair<Pair<List<RexNode>, List<String>>, Map<Integer, Integer>> normalizedInfo = SemiJoinTransformUtils.normalize(rexBuilder,
+            ListUtils.union(leftProjects, rightProjects), functionRegistry, uniquify,
+            ListUtils.union(leftProjectsNames, rightProjectsNames), inputColMap);
     List<RexNode> listOfProjects = Lists.newArrayList();
     listOfProjects.addAll(combinedProjects);
-    Project proj1 = (Project) RelOptUtil.createProject(input, listOfProjects,
-            ListUtils.union(projectL.getRowType().getFieldNames(), projectR.getRowType().getFieldNames()));
-    ProjectPrel upperProject = new ProjectPrel(input.getCluster(), input.getTraitSet(), input, listOfProjects,
+    Project proj1 = (Project) RelOptUtil.createProject(input, normalizedInfo.left.left, normalizedInfo.left.right);
+    ProjectPrel upperProject = new ProjectPrel(input.getCluster(), input.getTraitSet(), input, proj1.getProjects(),
             proj1.getRowType());
     if (input instanceof ProjectPrel) {
-      RelNode proj = DrillRelOptUtil.mergeProjects(upperProject,(ProjectPrel) input, false, builder);
+      RelNode proj = DrillRelOptUtil.mergeProjects(upperProject, (ProjectPrel)input, false, builder);
       if (proj instanceof LogicalProject) {
-        return new ProjectPrel(input.getCluster(), input.getTraitSet(), proj.getInput(0),
-                ((LogicalProject) proj).getProjects(), proj.getRowType());
+        return Pair.of(new ProjectPrel(input.getCluster(), input.getTraitSet(), proj.getInput(0),
+                ((LogicalProject) proj).getProjects(), proj.getRowType()), normalizedInfo.right);
       } else {
-        return proj;
+        return Pair.of(proj, normalizedInfo.right);
       }
     } else {
-      return upperProject;
+      return Pair.of(upperProject, normalizedInfo.right);
     }
   }
 
@@ -234,17 +252,6 @@ public class SemiJoinIndexPlanUtils {
     for (RelDataTypeField type : fieldTypes) {
       result.add(type.getType());
     }
-    return result;
-  }
-
-  public static List<RelNode> getRelNodesBottomUp(RelNode node, List<RelNode> result) {
-    if (node.getInputs().size() == 0) {
-      result.add(node);
-      return result;
-    }
-
-    getRelNodesBottomUp(node.getInputs().get(0), result);
-    result.add(node);
     return result;
   }
 

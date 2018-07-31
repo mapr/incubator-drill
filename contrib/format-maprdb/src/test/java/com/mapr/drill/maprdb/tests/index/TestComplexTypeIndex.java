@@ -1375,4 +1375,29 @@ public class TestComplexTypeIndex extends BaseJsonTest {
     }
     return;
   }
+
+  @Test
+  public void TestExpressionSimplificationOnMergeRKJ() throws Exception {
+
+    try {
+      String query = "SELECT T2.name, T2.W_O.low FROM ( SELECT name, FLATTEN(weight) W_O FROM hbase.`index_test_complex1`" +
+              " WHERE _id IN ( SELECT _id FROM ( SELECT C._id, FLATTEN(weight) W_O, C.`salary.max` as max_salary FROM hbase.`index_test_complex1` C" +
+              " WHERE max_salary > 5 AND max_salary < 1000 ) T WHERE T.W_O.low = 200 ) ) T2 WHERE T2.W_O.low = 200";
+
+      test(DisableComplexFTSTypePlanning);
+      test(IndexPlanning);
+      test(maxNonCoveringSelectivityThreshold);
+
+      PlanTestBase.testPlanMatchingPatterns(query,
+              new String[]{"RowKeyJoin", ".*RestrictedJsonTableGroupScan.*tableName=.*index_test_complex1,",
+                      ".*RestrictedJsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*low.*=.*200.*"},
+              new String[]{".*RestrictedJsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight0.*low.*=.*200.*"}
+
+              );
+
+    } finally {
+      test(ResetComplexFTSTypePlanning);
+    }
+    return;
+  }
 }
