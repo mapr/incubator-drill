@@ -104,5 +104,5 @@
     } ]
   } ],
   "directories" : [ "t2", "t1" ],
-  "drillVersion" : "1.14.0-mapr-SNAPSHOT"
+  "drillVersion" : "1.15.0-mapr-SNAPSHOT"
 }
