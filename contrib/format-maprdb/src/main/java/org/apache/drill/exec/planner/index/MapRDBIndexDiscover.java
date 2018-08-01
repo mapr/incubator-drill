@@ -90,7 +90,7 @@ public class MapRDBIndexDiscover extends IndexDiscoverBase implements IndexDisco
       Set<DrillIndexDescriptor> idxSet = new HashSet<>();
       Collection<IndexDesc> indexes = admin().getTableIndexes(new Path(tableName));
       if (indexes.size() == 0 ) {
-        logger.error("No index returned from Admin.getTableIndexes for table {}", tableName);
+        logger.warn("No index returned from Admin.getTableIndexes for table {}", tableName);
         return null;
       }
       for (IndexDesc idx : indexes) {
