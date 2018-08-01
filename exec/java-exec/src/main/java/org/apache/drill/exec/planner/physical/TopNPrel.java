@@ -23,6 +23,9 @@ import java.util.List;
 
 import org.apache.calcite.rex.RexNode;
 import org.apache.calcite.sql.type.SqlTypeName;
+import com.google.common.collect.Lists;
+import org.apache.calcite.rel.RelCollationImpl;
+import org.apache.calcite.rel.RelFieldCollation;
 import org.apache.drill.exec.physical.base.PhysicalOperator;
 import org.apache.drill.exec.physical.config.TopN;
 import org.apache.drill.exec.planner.common.OrderedRel;
@@ -125,5 +128,23 @@ public class TopNPrel extends SinglePrel implements OrderedRel,Prel {
   @Override
   public SelectionVectorMode getEncoding() {
     return SelectionVectorMode.FOUR_BYTE;
+  }
+
+  @Override
+  public Prel addImplicitRowIDCol(List<RelNode> children) {
+    List<RelFieldCollation> relFieldCollations = Lists.newArrayList();
+    relFieldCollations.add(new RelFieldCollation(0,
+                          RelFieldCollation.Direction.ASCENDING, RelFieldCollation.NullDirection.FIRST));
+    for (RelFieldCollation fieldCollation : this.collation.getFieldCollations()) {
+      relFieldCollations.add(new RelFieldCollation(fieldCollation.getFieldIndex() + 1,
+              fieldCollation.direction, fieldCollation.nullDirection));
+    }
+
+    RelCollation collationTrait = RelCollationImpl.of(relFieldCollations);
+    RelTraitSet traits = RelTraitSet.createEmpty()
+                                    .replace(this.getTraitSet().getTrait(DrillDistributionTraitDef.INSTANCE))
+                                    .replace(collationTrait)
+                                    .replace(DRILL_PHYSICAL);
+    return (Prel) this.copy(traits, children);
   }
 }

@@ -160,4 +160,5 @@ public class ScanPrel extends DrillScanRelBase implements Prel, HasDistributionA
   public DistributionAffinity getDistributionAffinity() {
     return this.getGroupScan().getDistributionAffinity();
   }
+
 }
