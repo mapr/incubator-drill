@@ -39,7 +39,6 @@ import org.apache.drill.exec.planner.cost.PluginCost;
 import org.apache.drill.exec.planner.physical.PlannerSettings;
 import org.apache.drill.exec.planner.physical.PrelUtil;
 import org.apache.drill.exec.planner.physical.ScanPrel;
-import org.apache.drill.exec.planner.common.DrillScanRelBase;
 
 import org.apache.drill.shaded.guava.com.google.common.base.Preconditions;
 import org.apache.drill.shaded.guava.com.google.common.collect.ImmutableList;

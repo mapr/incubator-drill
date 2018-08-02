@@ -1351,7 +1351,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
 
     try {
       String query = "select _id, county from hbase.`index_test_complex1` where _id in (select _id from ( select _id, flatten(weight) as f1 from " +
-              " hbase.`index_test_complex1`) as t where t.f1.low = 175 and t.f1.high = 180)" ;
+              " hbase.`index_test_complex1`) as t where t.f1.low = 175 and t.f1.high = 180)";
 
       test(maxNonCoveringSelectivityThreshold);
 

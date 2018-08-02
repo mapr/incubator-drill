@@ -27,9 +27,13 @@ import org.apache.calcite.rex.RexNode;
 import org.apache.calcite.sql.fun.SqlStdOperatorTable;
 import org.apache.calcite.sql.type.SqlTypeName;
 import org.apache.drill.common.expression.CastExpression;
+import org.apache.drill.common.expression.FunctionCall;
+import org.apache.drill.common.expression.LogicalExpression;
 import org.apache.drill.common.expression.PathSegment;
 import org.apache.drill.common.expression.SchemaPath;
+import org.apache.drill.common.expression.ValueExpressions.QuotedString;
 import org.apache.drill.common.expression.visitors.AbstractExprVisitor;
+import org.apache.drill.exec.planner.sql.DrillSqlOperator;
 import org.apache.drill.exec.planner.sql.TypeInferenceUtils;
 
 import java.math.BigDecimal;
@@ -119,7 +123,7 @@ public class ExprToRex extends AbstractExprVisitor<RexNode, Void, RuntimeExcepti
     String typeStr = e.getMajorType().getMinorType().toString();
 
     if (SqlTypeName.get(typeStr) == null) {
-      logger.debug("SqlTypeName could not find {}", typeStr);
+      logger.debug("ExprToRex.visitCastExpression:SqlTypeName could not find {}", typeStr);
     }
 
     SqlTypeName typeName = TypeInferenceUtils.getCalciteTypeFromDrillType(e.getMajorType().getMinorType());
@@ -129,4 +133,20 @@ public class ExprToRex extends AbstractExprVisitor<RexNode, Void, RuntimeExcepti
     return builder.makeCast(targetType, convertedInput);
   }
 
+  @Override
+  public RexNode visitFunctionCall(FunctionCall call, Void value) throws RuntimeException {
+    List<RexNode> operands = Lists.newArrayList();
+    for (LogicalExpression arg : call.args) {
+      operands.add(arg.accept(this, null));
+    }
+    final DrillSqlOperator operator =
+        new DrillSqlOperator(call.getName(), operands.size(), true, false);
+    // Function call is not materialized - hence we cannot determine the return type. Create one without.
+    return builder.makeCall(operator, operands);
+  }
+
+  @Override
+  public RexNode visitQuotedStringConstant(QuotedString e, Void value) throws RuntimeException {
+    return builder.makeLiteral(e.getString());
+  }
 }

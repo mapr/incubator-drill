@@ -44,6 +44,7 @@ import java.util.List;
  * because of CALCITE-2223. Once, fixed this rule be changed accordingly. Please see DRILL-6501.
  */
 public class DrillMergeProjectRule extends RelOptRule {
+  static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(DrillMergeProjectRule.class);
 
   private FunctionImplementationRegistry functionRegistry;
   private final boolean force;
@@ -70,7 +71,7 @@ public class DrillMergeProjectRule extends RelOptRule {
     Project bottomProject = call.rel(1);
 
     // We have a complex output type do not fire the merge project rule
-    if (checkComplexOutput(topProject) || checkComplexOutput(bottomProject)) {
+    if (checkComplexOutput(bottomProject)) {
       return false;
     }
 
@@ -125,8 +126,16 @@ public class DrillMergeProjectRule extends RelOptRule {
         return;
       }
     }
-
-    call.transformTo(DrillRelOptUtil.mergeProjects(topProject, bottomProject, force, relBuilder));
+    if (checkComplexOutput(topProject)) {
+      try {
+        call.transformTo(DrillRelOptUtil.mergeComplexProjects(topProject, bottomProject, force, relBuilder, functionRegistry));
+      } catch (Exception ex) {
+        logger.debug("DrillMergeProjectRule: Cannot merge complex projects." + ex.getMessage());
+        return;
+      }
+    } else {
+      call.transformTo(DrillRelOptUtil.mergeProjects(topProject, bottomProject, force, relBuilder));
+    }
   }
 
   /**

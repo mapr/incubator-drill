@@ -64,12 +64,17 @@ import org.apache.drill.common.expression.PathSegment;
 import org.apache.drill.common.expression.SchemaPath;
 import org.apache.drill.common.types.TypeProtos;
 import org.apache.drill.common.types.Types;
+import org.apache.drill.exec.expr.fn.FunctionImplementationRegistry;
+import org.apache.drill.exec.planner.index.ExprToRex;
 import org.apache.drill.exec.planner.logical.DrillAggregateRel;
+import org.apache.drill.exec.planner.logical.DrillOptiq;
+import org.apache.drill.exec.planner.logical.DrillParseContext;
 import org.apache.drill.exec.planner.logical.DrillRelFactories;
 import org.apache.drill.exec.planner.logical.DrillTable;
 import org.apache.drill.exec.planner.logical.FieldsReWriterUtil;
 import org.apache.drill.exec.planner.logical.DrillTranslatableTable;
 import org.apache.drill.exec.planner.physical.PlannerSettings;
+import org.apache.drill.exec.planner.physical.PrelUtil;
 import org.apache.drill.exec.resolver.TypeCastRules;
 import org.apache.drill.exec.util.Utilities;
 import org.apache.drill.shaded.guava.com.google.common.collect.ImmutableList;
@@ -78,15 +83,6 @@ import org.apache.drill.shaded.guava.com.google.common.collect.Lists;
 import org.apache.drill.shaded.guava.com.google.common.collect.Sets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.AbstractList;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * Utility class that is a subset of the RelOptUtil class and is a placeholder
@@ -801,24 +797,78 @@ public abstract class DrillRelOptUtil {
     return list;
   }
 
-  public static RelNode mergeProjects(Project topProject, Project bottomProject,
-                                      boolean force, RelBuilder relBuilder) {
+  private static RelNode doMerge(List<RexNode> projects, List<String> names,
+      Project bottomProject, boolean force, RelBuilder relBuilder) {
     final List<RexNode> pushedProjects =
-            RelOptUtil.pushPastProject(topProject.getProjects(), bottomProject);
+        RelOptUtil.pushPastProject(projects, bottomProject);
     final List<RexNode> newProjects = simplifyCast(pushedProjects);
     final RelNode input = bottomProject.getInput();
     if (RexUtil.isIdentity(newProjects, input.getRowType())) {
       if (force
-              || input.getRowType().getFieldNames()
-              .equals(topProject.getRowType().getFieldNames())) {
+          || input.getRowType().getFieldNames()
+          .equals(names)) {
         return input;
       }
     }
 
     // replace the two projects with a combined projection
     relBuilder.push(bottomProject.getInput());
-    relBuilder.project(newProjects, topProject.getRowType().getFieldNames());
+    relBuilder.project(newProjects, names);
     return relBuilder.build();
+  }
+
+  /**
+   * Merges projects when both the top and bottom projects do not contain complex functions
+   */
+  public static RelNode mergeProjects(Project topProject, Project bottomProject,
+                                      boolean force, RelBuilder relBuilder) {
+    return doMerge(topProject.getProjects(), topProject.getRowType().getFieldNames(),
+        bottomProject, force, relBuilder);
+  }
+
+  /**
+   * Merges projects when the top project contains one or more complex functions (e.g. Flatten,
+   * Convert(To/From)Json) and the bottom project does not.
+   */
+  public static RelNode mergeComplexProjects(Project topProject, Project bottomProject,
+      boolean force, RelBuilder relBuilder, FunctionImplementationRegistry functionRegistry) {
+    List<RexNode> simpleProjects = new ArrayList<>();
+    List<String> names = new ArrayList<>();
+    for (RexNode expr: topProject.getProjects()) {
+      if (expr instanceof RexCall
+          && functionRegistry.isFunctionComplexOutput(((RexCall) expr).getOperator().getName())) {
+        InputRefVisitor visitor = new InputRefVisitor();
+        expr.accept(visitor);
+        for (RexInputRef ref : visitor.getInputRefs()) {
+          simpleProjects.add(ref);
+          names.add(bottomProject.getRowType().getFieldNames().get(ref.getIndex()));
+        }
+      } else if (expr instanceof RexInputRef) {
+        simpleProjects.add(expr);
+        names.add(bottomProject.getRowType().getFieldNames().get(((RexInputRef)expr).getIndex()));
+      } else {
+        // Cannot perform merge since found something other than RexCall/RexInputRef.
+        // TODO: See if this can be enhanced to support other types of RexNodes.
+        return topProject;
+      }
+    }
+    // If nothing to project skip the transformation!
+    if (simpleProjects.size() == 0) {
+      return topProject;
+    }
+    RelNode newRel = doMerge(simpleProjects, names, bottomProject, force, relBuilder);
+    if (newRel.equals(bottomProject.getInput())) {
+      return newRel;
+    }
+    Project combProject = (Project)newRel;
+    // remap topProject to reference fields in this `combined projection` project
+    final List<RexNode> remappedProjects = Lists.newArrayList();
+    DrillParseContext parserContext = new DrillParseContext(PrelUtil.getPlannerSettings(topProject.getCluster()));
+    ExprToRex toRex = new ExprToRex(topProject, combProject.getRowType(), topProject.getCluster().getRexBuilder());
+    for (RexNode proj : topProject.getProjects()) {
+      remappedProjects.add((DrillOptiq.toDrill(parserContext, bottomProject, proj)).accept(toRex, null));
+    }
+    return topProject.copy(topProject.getTraitSet(), combProject, remappedProjects, topProject.getRowType());
   }
 
   public static RelCollation getCollation(DrillAggregateRel rel){
