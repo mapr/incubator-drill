@@ -111,6 +111,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
             "weightCountyIdx1", "weight[].high", "county,salary.max",
             "salaryWeightIdx1", "salary.max,weight[].high", "salary.min,weight[].low,weight[].high",
             "carsIdx1", "cars[]", "name",
+            "carsWeightIdx1", "cars[]", "weight[].low",
             "salaryIdx", "salary", "",
             "weightListIdx", "weight", "",
             "weightComplexIdx1", "weight[].low", "salary,friends,cars,zipcodes",
@@ -987,7 +988,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
       test(DisableComplexFTSTypePlanning);
 
       PlanTestBase.testPlanMatchingPatterns(query,
-              new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*cars.*Toyota Camry.*or.*BMW.*and.*Honda Accord.*or.*Toyota Camry.*indexName.*carsIdx1"},
+              new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*cars.*Toyota Camry.*or.*BMW.*and.*Honda Accord.*or.*Toyota Camry.*indexName.*(carsIdx1|carsWeightIdx1)"},
               new String[]{".*elementAnd"}
       );
       testBuilder()
@@ -1398,6 +1399,31 @@ public class TestComplexTypeIndex extends BaseJsonTest {
     } finally {
       test(ResetComplexFTSTypePlanning);
     }
+    return;
+  }
+
+  @Test
+  public void TestCoveringMultiFlattenDifferentArrays() throws Exception {
+    try {
+      test(IndexPlanning);
+      String query = "select _id from hbase.`index_test_complex1` t where _id in " +
+          " (select _id from (select _id, flatten(t1.cars) as f1, flatten(weight) as f2 from hbase.`index_test_complex1` as t1 ) as t2 " +
+          "   where t2.f1 like 'Toyota%' and t2.f2.low = 200) ";
+
+      PlanTestBase.testPlanMatchingPatterns(query,
+              new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*cars.*MATCHES.*Toyota.*weight.*low.*=.*200.*indexName=carsWeightIdx1"},
+              new String[]{"RowKeyJoin", ".*RestrictedJsonTableGroupScan.*tableName=.*index_test_complex1,"}
+      );
+      testBuilder()
+              .optionSettingQueriesForBaseline(noIndexPlan)
+              .unOrdered()
+              .sqlQuery(query)
+              .sqlBaselineQuery(query)
+              .build()
+              .run();
+  } finally {
+    test(IndexPlanning);
+  }
     return;
   }
 }

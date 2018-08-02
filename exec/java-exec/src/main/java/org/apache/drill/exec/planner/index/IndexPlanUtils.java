@@ -298,7 +298,12 @@ public class IndexPlanUtils {
   private static boolean isCoveringArrayIndex(IndexCallContext indexContext, FunctionalIndexInfo indexInfo) {
     if (indexContext instanceof FlattenIndexPlanCallContext) {
       FlattenIndexPlanCallContext flattenContext = (FlattenIndexPlanCallContext)indexContext;
-      List<RexNode> filterExprsReferencingFlatten = flattenContext.getFilterExprsReferencingFlatten();
+
+      List<RexNode> filterExprsReferencingFlatten = new ArrayList<RexNode>();
+      for (Map.Entry<String, List<RexNode>> e : flattenContext.getFilterExprsReferencingFlatten().entrySet()) {
+        filterExprsReferencingFlatten.addAll(e.getValue());
+      }
+
       Set<LogicalExpression> referencedExprsSet = new HashSet<>();
 
       // RelNode flattenDescendantRel = getFlattenDescendantRel(flattenContext.getProjectWithRootFlatten());
@@ -347,6 +352,27 @@ public class IndexPlanUtils {
       // now check for covering property
       boolean isCovering = indexInfo.getIndexDesc().isCoveringIndex(ImmutableList.copyOf(referencedExprsSet));
       return isCovering;
+    }
+    return false;
+  }
+
+  public static boolean isCoveredByIncludedFields(List<RexNode> exprsReferencingFlatten, FlattenIndexPlanCallContext indexContext,
+      FunctionalIndexInfo indexInfo, DrillScanRelBase scan) {
+
+    Set<LogicalExpression> referencedExprsSet = new HashSet<>();
+
+    RelNode flattenDescendantRel = (indexContext.getLeafProjectAboveScan() != null) ?
+        indexContext.getLeafProjectAboveScan() : indexContext.getScan();
+
+    for (RexNode itemRexExpr : exprsReferencingFlatten) {
+      LogicalExpression itemLogicalExpr =
+          DrillOptiq.toDrill(indexContext.getDefaultParseContext(), flattenDescendantRel, itemRexExpr);
+      referencedExprsSet.add(itemLogicalExpr);
+    }
+
+    List<LogicalExpression> includedColumns = indexInfo.getIndexDesc().getNonIndexColumns();
+    if (includedColumns.containsAll(ImmutableList.copyOf(referencedExprsSet))) {
+      return true;
     }
     return false;
   }

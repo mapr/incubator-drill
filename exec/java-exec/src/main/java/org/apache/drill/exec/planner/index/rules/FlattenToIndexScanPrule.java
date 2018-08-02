@@ -51,6 +51,8 @@ import org.apache.calcite.rex.RexBuilder;
 import org.apache.calcite.rex.RexNode;
 import org.apache.calcite.rex.RexUtil;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -172,12 +174,6 @@ public class FlattenToIndexScanPrule extends AbstractIndexPrule {
 
     if (indexCollection.supportsIndexSelection()) {
       Set<String> fieldNamesWithFlatten = cInfo.getFieldNamesWithFlatten();
-      boolean nonCoveringOnly = false;
-      if (fieldNamesWithFlatten.size() > 1) {
-        // For the AND-ed filter conditions, if the number of unique Flatten field names is > 1 then it means
-        // that we cannot generate a covering index plan.  Set the flag appropriately so we can skip covering.
-        nonCoveringOnly = true;
-      }
 
       // Process each unique flatten field expression independently for index planning.  There may be multiple
       // index plans created and let costing decide which is cheaper.
@@ -190,6 +186,10 @@ public class FlattenToIndexScanPrule extends AbstractIndexPrule {
         RewriteAsBinaryOperators visitor = new RewriteAsBinaryOperators(true, builder);
         mainFlattenCondition = mainFlattenCondition.accept(visitor);
 
+        // make a copy such that we can remove the current field
+        Set<String> remainderFieldNamesWithFlatten = new HashSet<String>(fieldNamesWithFlatten);
+        remainderFieldNamesWithFlatten.remove(fieldName);
+
         try {
           result = processWithIndexSelection(indexContext,
               settings,
@@ -198,7 +198,7 @@ public class FlattenToIndexScanPrule extends AbstractIndexPrule {
               indexCollection,
               builder,
               generator,
-              nonCoveringOnly);
+              remainderFieldNamesWithFlatten);
         } catch(Exception e) {
           logger.warn("Exception while doing index planning ", e);
         }
@@ -212,14 +212,14 @@ public class FlattenToIndexScanPrule extends AbstractIndexPrule {
     return result;
   }
 
-  public boolean processWithIndexSelection(IndexLogicalPlanCallContext indexContext,
+  public boolean processWithIndexSelection(FlattenIndexPlanCallContext indexContext,
                                           PlannerSettings settings,
                                           RexNode mainFlattenCondition,
                                           RexNode remainderFlattenCondition,
                                           IndexCollection collection,
                                           RexBuilder builder,
                                           IndexPlanGenerator generator,
-                                          boolean nonCoveringOnly) {
+                                          Set<String> remainderFieldNamesWithFlatten) {
     boolean result = false;
     DrillScanRel scan = indexContext.scan;
     IndexConditionInfo.Builder infoBuilder = IndexConditionInfo.newBuilder(mainFlattenCondition,
@@ -248,7 +248,29 @@ public class FlattenToIndexScanPrule extends AbstractIndexPrule {
 
     GroupScan primaryTableScan = indexContext.scan.getGroupScan();
 
-    if (!nonCoveringOnly) {
+    if (remainderFieldNamesWithFlatten.size() > 0) {
+      List<RexNode> remainderExprsReferencingFlatten = new ArrayList<RexNode>();
+
+      // get the list of RexExprs corresponding to these field names
+      for (String name : remainderFieldNamesWithFlatten) {
+        remainderExprsReferencingFlatten.addAll(indexContext.getFilterExprsReferencingFlatten().get(name));
+      }
+
+      List<IndexGroup> qualifiedCoveringIndexes =
+            checkCoveringWithIncludedColumns(remainderExprsReferencingFlatten, indexContext, coveringIndexes, scan);
+
+      if (qualifiedCoveringIndexes.size() > 0) {
+        coveringIndexes = qualifiedCoveringIndexes;
+      } else {
+        // add the covering indexes to the list of non-covering indexes such that at least a
+        // non-covering plan can be generated
+        nonCoveringIndexes.addAll(coveringIndexes);
+
+        // we don't want covering in this case
+        coveringIndexes.clear();
+      }
+    }
+
     try {
       for (IndexGroup index : coveringIndexes) {
         IndexProperties indexProps = index.getIndexProps().get(0);
@@ -262,8 +284,8 @@ public class FlattenToIndexScanPrule extends AbstractIndexPrule {
         // combine this remainder condition with the remainder flatten condition supplied by caller
         if (remainderFlattenCondition != null) {
           remainderCondition = remainderCondition == null ? remainderFlattenCondition :
-              RexUtil.composeConjunction(builder, ImmutableList.of(remainderCondition,
-                  remainderFlattenCondition), false);
+            RexUtil.composeConjunction(builder, ImmutableList.of(remainderCondition,
+                remainderFlattenCondition), false);
         }
 
         // Copy primary table statistics to index table
@@ -275,16 +297,12 @@ public class FlattenToIndexScanPrule extends AbstractIndexPrule {
     } catch (Exception e) {
       logger.warn("Exception while trying to generate covering index plan", e);
     }
-    } else {
-      // add the covering indexes (if any) to the list of non-covering indexes
-      nonCoveringIndexes.addAll(coveringIndexes);
-    }
 
     // Create non-covering index plans.
 
     // First, check if the primary table scan supports creating a restricted scan
     if (primaryTableScan instanceof DbGroupScan &&
-            (((DbGroupScan) primaryTableScan).supportsRestrictedScan())) {
+        (((DbGroupScan) primaryTableScan).supportsRestrictedScan())) {
       try {
         for (IndexGroup index : nonCoveringIndexes) {
           IndexProperties indexProps = index.getIndexProps().get(0);
@@ -317,4 +335,23 @@ public class FlattenToIndexScanPrule extends AbstractIndexPrule {
 
     return result;
   }
+
+  // Given a condition check if it is covered by the included columns only (i.e not the indexed columns)
+  private List<IndexGroup> checkCoveringWithIncludedColumns(List<RexNode> exprsReferencingFlatten,
+      FlattenIndexPlanCallContext indexContext, List<IndexGroup> coveringIndexes, DrillScanRel scan) {
+
+    List<IndexGroup> qualifiedCoveringIndexes = new ArrayList<IndexGroup>();
+    for (IndexGroup index : coveringIndexes) {
+      IndexProperties indexProps = index.getIndexProps().get(0);
+      IndexDescriptor indexDesc = indexProps.getIndexDesc();
+      FunctionalIndexInfo indexInfo = indexDesc.getFunctionalInfo();
+
+      if (IndexPlanUtils.isCoveredByIncludedFields(exprsReferencingFlatten, indexContext, indexInfo, scan)) {
+        qualifiedCoveringIndexes.add(index);
+      }
+    }
+
+    return qualifiedCoveringIndexes;
+  }
+
 }

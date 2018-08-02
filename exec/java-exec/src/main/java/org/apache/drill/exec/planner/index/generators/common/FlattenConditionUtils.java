@@ -222,13 +222,8 @@ public class FlattenConditionUtils {
       cInfo.addCondition(e.getKey(), cond);
     }
 
-    List<RexNode> exprsReferencingFlatten = Lists.newArrayList();
-    for (Map.Entry<String, List<RexNode>> e : exprsReferencingFlattenMap.entrySet()) {
-      exprsReferencingFlatten.addAll(e.getValue());
-    }
-
     // keep track of the exprs that were created representing filter exprs referencing flatten
-    flattenContext.setFilterExprsReferencingFlatten(exprsReferencingFlatten);
+    flattenContext.setFilterExprsReferencingFlatten(exprsReferencingFlattenMap);
 
     // if only filters above Flatten are present, return the information gathered so far
     if (flattenContext.getFilterBelowLeafFlatten() == null) {
@@ -280,7 +275,7 @@ public class FlattenConditionUtils {
    *   <li>new expr: ITEM(ITEM($0, -1), 'b') </li>
    * </p>
    */
-  private static class FilterVisitor extends RexVisitorImpl<RexNode> {
+  public static class FilterVisitor extends RexVisitorImpl<RexNode> {
 
     private Iterator<Entry<RelNode, Map<String, RexCall>>> projectFlattenIterator;
     private Entry<RelNode, Map<String, RexCall>> currentEntry  = null;

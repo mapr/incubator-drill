@@ -86,10 +86,11 @@ public class FlattenIndexPlanCallContext extends IndexLogicalPlanCallContext
 
   /**
    * Placeholder for individual filter expressions referencing Flatten output.
-   * For instance, suppose Flatten output is 'f', and the filter references f.b < 10, then the index planning
-   * rule will create an ITEM expression representing this condition.
+   * For instance, suppose Flatten output is 'f', and the filter references f.b < 10, f.c > 20 then the index planning
+   * rule will create an ITEM expression representing this condition. This map holds a mapping from
+   * 'f' to the list of references f.b, f.c.
    */
-  protected List<RexNode> filterExprsReferencingFlatten = null;
+  protected Map<String, List<RexNode>> filterExprsReferencingFlattenMap = null;
 
   /**
    * List of input references for the leaf filter that is directly above the Scan
@@ -146,8 +147,8 @@ public class FlattenIndexPlanCallContext extends IndexLogicalPlanCallContext
   }
 
   @Override
-  public void setFilterExprsReferencingFlatten(List<RexNode> exprList) {
-    this.filterExprsReferencingFlatten = exprList;
+  public void setFilterExprsReferencingFlatten(Map<String, List<RexNode>> exprsReferencingFlattenMap) {
+    this.filterExprsReferencingFlattenMap = exprsReferencingFlattenMap;
   }
 
   @Override
@@ -156,8 +157,8 @@ public class FlattenIndexPlanCallContext extends IndexLogicalPlanCallContext
   }
 
   @Override
-  public List<RexNode> getFilterExprsReferencingFlatten() {
-    return filterExprsReferencingFlatten;
+  public Map<String, List<RexNode>> getFilterExprsReferencingFlatten() {
+    return filterExprsReferencingFlattenMap;
   }
 
   @Override

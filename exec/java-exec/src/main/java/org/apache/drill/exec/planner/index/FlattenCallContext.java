@@ -43,11 +43,11 @@ public interface FlattenCallContext {
 
   DrillFilterRelBase getFilterBelowLeafFlatten();
 
-  void setFilterExprsReferencingFlatten(List<RexNode> exprList);
+  void setFilterExprsReferencingFlatten(Map<String, List<RexNode>> exprsReferencingFlattenMap);
 
   DrillProjectRelBase getProjectWithRootFlatten();
 
-  List<RexNode> getFilterExprsReferencingFlatten();
+  Map<String, List<RexNode>> getFilterExprsReferencingFlatten();
 
   DrillProjectRelBase getLeafProjectAboveScan();
 
