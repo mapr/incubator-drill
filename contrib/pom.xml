@@ -45,8 +45,8 @@
     <module>storage-opentsdb</module>
     <module>sqlline</module>
     <module>data</module>
-    <module>gis</module>
     <module>auth-mechanism-maprsasl</module>
+    <module>udfs</module>
   </modules>
 
   <profiles>

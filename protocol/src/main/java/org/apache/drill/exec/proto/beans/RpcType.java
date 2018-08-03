@@ -25,33 +25,8 @@ public enum RpcType implements com.dyuproject.protostuff.EnumLite<RpcType>
     HANDSHAKE(0),
     ACK(1),
     GOODBYE(2),
-    RUN_QUERY(3),
-    CANCEL_QUERY(4),
-    REQUEST_RESULTS(5),
-    RESUME_PAUSED_QUERY(11),
-    GET_QUERY_PLAN_FRAGMENTS(12),
-    GET_CATALOGS(14),
-    GET_SCHEMAS(15),
-    GET_TABLES(16),
-    GET_COLUMNS(17),
-    CREATE_PREPARED_STATEMENT(22),
-    GET_SERVER_META(8),
-    NEW_SESSION(1025),
-    RUN_QUERY_WITH_SESSION(1027),
-    CLOSE_SESSION(1028),
-    CANCEL_QUERY_WITH_SESSION(1029),
-    QUERY_DATA(6),
-    QUERY_HANDLE(7),
-    QUERY_PLAN_FRAGMENTS(13),
-    CATALOGS(18),
-    SCHEMAS(19),
-    TABLES(20),
-    COLUMNS(21),
-    PREPARED_STATEMENT(23),
-    SERVER_META(9),
-    QUERY_RESULT(10),
-    SESSION_HANDLE(1026),
-    SASL_MESSAGE(24);
+    REQ_RECORD_BATCH(3),
+    SASL_MESSAGE(4);
     
     public final int number;
     
@@ -72,33 +47,8 @@ public enum RpcType implements com.dyuproject.protostuff.EnumLite<RpcType>
             case 0: return HANDSHAKE;
             case 1: return ACK;
             case 2: return GOODBYE;
-            case 3: return RUN_QUERY;
-            case 4: return CANCEL_QUERY;
-            case 5: return REQUEST_RESULTS;
-            case 6: return QUERY_DATA;
-            case 7: return QUERY_HANDLE;
-            case 8: return GET_SERVER_META;
-            case 9: return SERVER_META;
-            case 10: return QUERY_RESULT;
-            case 11: return RESUME_PAUSED_QUERY;
-            case 12: return GET_QUERY_PLAN_FRAGMENTS;
-            case 13: return QUERY_PLAN_FRAGMENTS;
-            case 14: return GET_CATALOGS;
-            case 15: return GET_SCHEMAS;
-            case 16: return GET_TABLES;
-            case 17: return GET_COLUMNS;
-            case 18: return CATALOGS;
-            case 19: return SCHEMAS;
-            case 20: return TABLES;
-            case 21: return COLUMNS;
-            case 22: return CREATE_PREPARED_STATEMENT;
-            case 23: return PREPARED_STATEMENT;
-            case 24: return SASL_MESSAGE;
-            case 1025: return NEW_SESSION;
-            case 1026: return SESSION_HANDLE;
-            case 1027: return RUN_QUERY_WITH_SESSION;
-            case 1028: return CLOSE_SESSION;
-            case 1029: return CANCEL_QUERY_WITH_SESSION;
+            case 3: return REQ_RECORD_BATCH;
+            case 4: return SASL_MESSAGE;
             default: return null;
         }
     }

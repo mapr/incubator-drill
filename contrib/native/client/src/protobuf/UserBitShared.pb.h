@@ -258,6 +258,7 @@ enum CoreOperatorType {
   HTPPD_LOG_SUB_SCAN = 51,
   IMAGE_SUB_SCAN = 52,
   SEQUENCE_SUB_SCAN = 53,
+  PARTITION_LIMIT = 54,
   ROWKEY_JOIN = 202
 };
 bool CoreOperatorType_IsValid(int value);
