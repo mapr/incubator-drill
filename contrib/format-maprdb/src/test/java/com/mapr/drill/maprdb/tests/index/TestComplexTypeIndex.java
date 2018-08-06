@@ -1345,4 +1345,34 @@ public class TestComplexTypeIndex extends BaseJsonTest {
     }
     return;
   }
+
+  @Test
+  public void TestElementAndwithNoResults() throws Exception {
+
+    try {
+      String query = "select _id, county from hbase.`index_test_complex1` where _id in (select _id from ( select _id, flatten(weight) as f1 from " +
+              " hbase.`index_test_complex1`) as t where t.f1.low = 175 and t.f1.high = 180)" ;
+
+      test(maxNonCoveringSelectivityThreshold);
+
+      PlanTestBase.testPlanMatchingPatterns(query,
+              new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*low.*175.*high.*180.*indexName=weightIdx1"},
+              new String[]{".*elementAnd"}
+      );
+
+      testBuilder()
+              .optionSettingQueriesForTestQuery(maxNonCoveringSelectivityThreshold)
+              .optionSettingQueriesForBaseline(optionsForBaseLine)
+              .unOrdered()
+              .sqlQuery(query)
+              .sqlBaselineQuery(query)
+              .build()
+              .run();
+
+    } finally {
+      test(resetmaxNonCoveringSelectivityThreshold);
+      test(IndexPlanning);
+    }
+    return;
+  }
 }
