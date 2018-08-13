@@ -188,6 +188,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
   public void SemiJoinNonCoveringWithRangeCondition() throws Exception {
     try {
       test(IndexPlanning);
+      test(DisableComplexFTSTypePlanning);
       String query = "SELECT _id from hbase.`index_test_complex1` where _id in "
           + " (select _id from (select _id, flatten(weight) as f from hbase.`index_test_complex1`) as t "
           + " where t.f.low > 120 and t.f.high < 200) ";
@@ -213,6 +214,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
   public void SemiJoinWithEqualityConditionOnOuterTable() throws Exception {
     try {
       test(IndexPlanning);
+      test(DisableComplexFTSTypePlanning);
       String query = "select _id from hbase.`index_test_complex1` t where _id in " +
                       "(select _id from (select _id, flatten(t1.weight) as f from hbase.`index_test_complex1` as t1 ) as t " +
                       "where t.f.low <= 200)";
@@ -238,6 +240,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
   public void SemiJoinWithSubqueryConditionOnITEMField() throws Exception {
     try {
       test(IndexPlanning);
+      test(DisableComplexFTSTypePlanning);
       String query = " select _id from hbase.`index_test_complex1` t where _id in " +
               "(select _id from (select _id, flatten(t1.weight) as f from hbase.`index_test_complex1` as t1 where t1.`salary`.`max` > 10) as t " +
               "where t.f.high <= 200)";
@@ -264,6 +267,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
   public void testCoveringIndexWithPredOnIncludedField() throws Exception {
     try {
       test(IndexPlanning);
+      test(DisableComplexFTSTypePlanning);
       String query = "select _id from hbase.`index_test_complex1`" +
               "where _id in (select _id from (select _id from (select _id, county, flatten(weight) as f from hbase.`index_test_complex1` as t1" +
               " where t1.`county` = 'Santa Clara') as t where t.f.high > 10))";
@@ -290,6 +294,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
   public void testCoveringIndexWithPredOnITEMIncludedField() throws Exception {
     try {
       test(IndexPlanning);
+      test(DisableComplexFTSTypePlanning);
       String query = "select _id from hbase.`index_test_complex1`" +
               "where _id in (select _id from (select _id from (select _id, county, flatten(weight) as f from hbase.`index_test_complex1` as t1" +
               " where t1.`salary`.`max` > 100) as t where t.f.high > 10))";
@@ -316,6 +321,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
   public void SemiJoinWithInnerTableConditionOnArrayAndNonArrayField() throws Exception {
     try {
       test(IndexPlanning);
+      test(DisableComplexFTSTypePlanning);
       String query = "select _id from hbase.`index_test_complex1` t where _id in " +
               "(select _id from (select _id, flatten(t1.weight) as f, t1.`salary`.`min` as minimum_salary from hbase.`index_test_complex1` as t1 ) as t2 " +
               "where t2.f.low <= 200 and t2.minimum_salary >= 0) and t.`county` = 'Santa Clara'";
@@ -347,6 +353,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
   public void SemiJoinWithStarOnOuterTable() throws Exception {
     try {
       test(IndexPlanning);
+      test(DisableComplexFTSTypePlanning);
       String query = "select * from hbase.`index_test_complex1` t " +
               "where _id in (select _id from (select _id, flatten(t1.weight) as f, t1.`salary`.`min` as minimum_salary from hbase.`index_test_complex1` as t1 ) as t2" +
               " where t2.f.low <= 200 and t2.minimum_salary >= 0)";
@@ -369,6 +376,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
   public void SemiJoinCoveringIndexPlan() throws Exception {
     try {
       test(IndexPlanning);
+      test(DisableComplexFTSTypePlanning);
       String query = "select _id from hbase.`index_test_complex1` t " +
               "where _id in (select _id from (select _id, flatten(t1.weight) as f from hbase.`index_test_complex1` as t1 ) as t2" +
               " where t2.f.low <= 200 )";
@@ -394,6 +402,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
   public void SemiJoinWithStarAndid() throws Exception {
   try {
     test(IndexPlanning);
+    test(DisableComplexFTSTypePlanning);
     String query = "select * from hbase.`index_test_complex1` t " +
             "where _id in (select _id from (select _id, flatten(t1.weight) as f from hbase.`index_test_complex1` as t1 ) as t2" +
             " where t2.f.low <= 200 ) and t.`county` = 'Santa Clara'";
@@ -424,6 +433,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
   public void SemiJoinWithFlattenOnLeftSide_1() throws Exception {
     try {
       test(IndexPlanning);
+      test(DisableComplexFTSTypePlanning);
       String query = "select _id, t1.`f`.`low` from (select _id, flatten(t.weight) f from hbase.`index_test_complex1` t) as t1 " +
               "where _id in (select _id from (select _id, flatten(t1.weight) as f from hbase.`index_test_complex1` as t1 ) as t2 where t2.f.low <= 200)";
 
@@ -456,6 +466,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
   public void SemiJoinWithFlattenOnLeftSide_2() throws Exception {
     try {
       test(IndexPlanning);
+      test(DisableComplexFTSTypePlanning);
       String query = "select _id, flatten(t.weight) f from hbase.`index_test_complex1` as t " +
               "where _id in (select _id from (select _id, flatten(t1.weight) as f from hbase.`index_test_complex1` as t1 ) as t2 where t2.f.low <= 200)";
 
@@ -494,6 +505,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
 
     try {
       test(IndexPlanning);
+      test(DisableComplexFTSTypePlanning);
       String query = "select _id, flatten(t.weight) f from hbase.`index_test_complex_without_index` as t " +
               "where _id in (select _id from (select _id, flatten(t1.weight) as f from hbase.`index_test_complex1` as t1 ) as t2 where t2.f.low <= 200)";
 
@@ -529,6 +541,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
   public void SemiJoinCoveringIndexScalarArray_1() throws Exception {
     try {
       test(IndexPlanning);
+      test(DisableComplexFTSTypePlanning);
       String query = "select _id from hbase.`index_test_complex1` t " +
               "where _id in (select _id from (select _id, flatten(t1.cars) as f from hbase.`index_test_complex1` as t1 ) as t2" +
               " where t2.f like 'Toyota%' )";
@@ -554,6 +567,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
   public void TestEqualityForMap() throws Exception {
     try {
       test(IndexPlanning);
+      test(DisableComplexFTSTypePlanning);
       String query = " select t.salary from hbase.`index_test_complex1` as t " +
               "where t.salary = cast('{\"min\":1000.0, \"max\":2000.0}' as VARBINARY)";
 
@@ -576,6 +590,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
 
     try {
       test(IndexPlanning);
+      test(DisableComplexFTSTypePlanning);
       String query = " select t.weight from hbase.`index_test_complex1` as t " +
               "where t.weight = cast('[{\"average\":135, \"high\":150, \"low\":120},{\"average\":130, \"high\":145, \"low\":110}]' as VARBINARY)";
 
@@ -598,6 +613,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
 
     try {
       test(IndexPlanning);
+      test(DisableComplexFTSTypePlanning);
       String query = " select t.salary from hbase.`index_test_complex1` as t " +
               "where t.salary = cast('{\"min\":1000.0, \"max\":2000.0}' as VARBINARY) and t.county='Santa Clara'";
 
@@ -620,6 +636,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
 
     try {
       test(IndexPlanning);
+      test(DisableComplexFTSTypePlanning);
       String query = "select t.weight from hbase.`index_test_complex1` as t " +
           "where t.weight = cast('[{\"average\":135, \"high\":150, \"low\":120},{\"average\":130, \"high\":145, \"low\":110}]' as VARBINARY) and t.`_id`='user001' ";
 
@@ -644,6 +661,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
 
     try {
       test(IndexPlanning);
+      test(DisableComplexFTSTypePlanning);
       String query = "select t._id from hbase.`index_test_complex1` as t " +
           " where _id in (select _id from (select _id, flatten(t1.weight) as f1, flatten(t1.weight) as f2 from hbase.`index_test_complex1` as t1) as t2 " +
           "  where t2.f1.low = 150 and t2.f2.high = 165) ";
@@ -678,6 +696,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
     try {
       test(IndexPlanning);
       test(disableHashAgg);
+      test(DisableComplexFTSTypePlanning);
       String query = "select _id from hbase.`index_test_complex1`" +
               "where _id in (select _id from (select _id from (select _id, county, flatten(weight) as f from hbase.`index_test_complex1` as t1" +
               " where t1.`county` = 'Santa Clara') as t where t.f.high > 10))";
@@ -708,6 +727,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
     try {
       test(IndexPlanning);
       test(disableStreamAgg);
+      test(DisableComplexFTSTypePlanning);
       String query = "select _id from hbase.`index_test_complex1`" +
               "where _id in (select _id from (select _id from (select _id, county, flatten(weight) as f from hbase.`index_test_complex1` as t1" +
               " where t1.`county` = 'Santa Clara') as t where t.f.high > 10))";
@@ -738,6 +758,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
       test(IndexPlanning);
       test(disableHashAgg);
       test(enableStreamAgg);
+      test(DisableComplexFTSTypePlanning);
       String query = "select _id, salary, friends, cars, zipcodes from hbase.`index_test_complex1`" +
           " where _id in (select _id from (select _id, flatten(weight) as f from hbase.`index_test_complex1`) as t1" +
           " where t1.f.low < 140)";
@@ -770,7 +791,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
               " hbase.`index_test_complex1`) as t where t.f1.low = 150 and t.f1.high = 180)";
 
       test(maxNonCoveringSelectivityThreshold);
-
+      test(DisableComplexFTSTypePlanning);
       PlanTestBase.testPlanMatchingPatterns(query,
               new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*low.*150.*high.*180.*indexName=weightIdx1"},
               new String[]{".*elementAnd"}
@@ -800,7 +821,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
               " hbase.`index_test_complex1`) as t where t.f1.low = 150 and t.f1.high = 180 and t.f1.`average` = 170)";
 
       test(maxNonCoveringSelectivityThreshold);
-
+      test(DisableComplexFTSTypePlanning);
       PlanTestBase.testPlanMatchingPatterns(query,
               new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*low.*150.*high.*180.*average.*170.*indexName=weightIdx1"},
               new String[]{".*elementAnd"}
@@ -830,7 +851,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
               " hbase.`index_test_complex1` as t1) as t where  t.f1.low = 150  and maxsal = 5000 and t.f1.average = 170 and t.f1.high = 180 )";
 
       test(maxNonCoveringSelectivityThreshold);
-
+      test(DisableComplexFTSTypePlanning);
       PlanTestBase.testPlanMatchingPatterns(query,
               new String[] {".*RestrictedJsonTableGroupScan.*condition=.*elementAnd.*weight.*low.*150.*average.*170.*high.*180",".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*low.*150.*high.*180.*average.*170.*indexName=weightIdx1"},
               new String[]{}
@@ -861,7 +882,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
               "          (120,150,170) and t.f1.high in (170,180,190))";
 
       test(maxNonCoveringSelectivityThreshold);
-
+      test(DisableComplexFTSTypePlanning);
       PlanTestBase.testPlanMatchingPatterns(query,
               new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*low.*120.*low.*150.*low.*170.*and.*high.*170.*high.*180.*high.*190.*indexName=weightIdx1"},
               new String[]{".*elementAnd"}
@@ -891,7 +912,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
               " hbase.`index_test_complex1` as t1) as t where (t.f1.low = 120 or maxsal = 2000) and t.f1.average = 135 and t.f1.high = 150)";
 
       test(maxNonCoveringSelectivityThreshold);
-
+      test(DisableComplexFTSTypePlanning);
       PlanTestBase.testPlanMatchingPatterns(query,
               new String[]{".*RestrictedJsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*elementAnd.*weight.*average.*135.*high.*150.*weight.*low.*120"},
               new String[]{}
@@ -923,7 +944,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
               " as maxsal from hbase.`index_test_complex1` as t1 ) as t where t.f1.low = 150 and ((t.f1.high = 150 and t.f1.low = 120 ) or (t.f1.low = 150 and t.f1.high = 180)))";
 
       test(maxNonCoveringSelectivityThreshold);
-
+      test(DisableComplexFTSTypePlanning);
       PlanTestBase.testPlanMatchingPatterns(query,
               new String[] {".*RestrictedJsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*high.*150.*low.*120.*weight.*low.*150.*high.*180"},
               new String[]{}
@@ -957,8 +978,9 @@ public class TestComplexTypeIndex extends BaseJsonTest {
 
       PlanTestBase.testPlanMatchingPatterns(query,
               new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*cars.*Toyota Camry.*cars.*BMW.*indexName.*carsIdx1"},
-              new String[]{}
+              new String[]{"UnionExchange"}
       );
+
       testBuilder()
               .optionSettingQueriesForTestQuery(maxNonCoveringSelectivityThreshold)
               .optionSettingQueriesForBaseline(optionsForBaseLine)
@@ -1077,7 +1099,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
               " hbase.`index_test_complex1` as t1) as t where  t.f1.low = 120  and t.f2.high = 145 and t.f1.high = 150)";
 
       test(maxNonCoveringSelectivityThreshold);
-
+      test(DisableComplexFTSTypePlanning);
       PlanTestBase.testPlanMatchingPatterns(query,
               new String[] {".*RestrictedJsonTableGroupScan.*condition=.*elementAnd.*weight.*low.*120.*high.*150", ".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=(.*weight.*low.*120.*high.*150.*|.*weight.*high.*145).*indexName=(weightIdx|weightCountyIdx1)"},
               new String[]{}
@@ -1108,7 +1130,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
               " hbase.`index_test_complex1` as t1) as t where  t.f1.low = 120  and t.f2.high = 145 and t.f3.average = 135)";
 
       test(maxNonCoveringSelectivityThreshold);
-
+      test(DisableComplexFTSTypePlanning);
       PlanTestBase.testPlanMatchingPatterns(query,
               new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=(.*weight.*low.*120.*|.*weight.*high.*145.*|.*weight.*average.*135).*indexName=(weightIdx|weightCountyIdx1)"},
               new String[]{".*condition=.*elementAnd"}
@@ -1140,7 +1162,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
               "          (120,150,170) and t.f2.high in (170,180,190))";
 
       test(maxNonCoveringSelectivityThreshold);
-
+      test(DisableComplexFTSTypePlanning);
       PlanTestBase.testPlanMatchingPatterns(query,
               new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=(.*weight.*low.*120.*weight.*low.*150.*weight.*low.*170.*|.*weight.*high.*170.*weight.*high.*180.*weight.*high.*190).*indexName=(weightIdx1|weightCountyIdx1)"},
               new String[]{}
@@ -1203,7 +1225,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
                       " where t2.`f2`.`price` > 50)";
 
       test(IndexPlanning);
-
+      test(DisableComplexFTSTypePlanning);
       PlanTestBase.testPlanMatchingPatterns(query,
           new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*orders.*products.*price.*50.*indexName=(ordersProductsIdx1)"},
           new String[]{"RowKeyJoin"}
@@ -1222,7 +1244,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
 
       test(IndexPlanning);
       test(maxNonCoveringSelectivityThreshold);
-
+      test(DisableComplexFTSTypePlanning);
       PlanTestBase.testPlanMatchingPatterns(query,
           new String[] {"RowKeyJoin", ".*RestrictedJsonTableGroupScan.*tableName=.*index_test_complex1,",
                         ".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*orders.*.products.*price.*50.*indexName=(ordersProductsIdx1)"},
@@ -1241,7 +1263,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
               " where t2.`f2`.`price` > 50 and t2.`f2`.`prodname` like '%bike%')";
 
       test(IndexPlanning);
-
+      test(DisableComplexFTSTypePlanning);
       PlanTestBase.testPlanMatchingPatterns(query,
               new String[]{".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*orders.*products.*price.*50.*and.*prodname.*bike.*indexName=(ordersProductsIdx1)"},
               new String[]{"RowKeyJoin"}
@@ -1259,7 +1281,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
               " where t2.`f2`.`price` > 50 and t2.`f2`.`prodname` like '%bike%')";
 
       test(IndexPlanning);
-
+      test(DisableComplexFTSTypePlanning);
       PlanTestBase.testPlanMatchingPatterns(query,
               new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*orders.*products.*price.*50.*and.*prodname.*bike.*indexName=(ordersProductsIdx1)"},
               new String[]{}
@@ -1278,7 +1300,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
 
       test(IndexPlanning);
       test(maxNonCoveringSelectivityThreshold);
-
+      test(DisableComplexFTSTypePlanning);
       PlanTestBase.testPlanMatchingPatterns(query,
           new String[] {"RowKeyJoin", ".*RestrictedJsonTableGroupScan.*tableName=.*index_test_complex1,",
                         ".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*orders.*.products.*price.*50.*indexName=(ordersProductsIdx1)"},
@@ -1355,7 +1377,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
               " hbase.`index_test_complex1`) as t where t.f1.low = 175 and t.f1.high = 180)";
 
       test(maxNonCoveringSelectivityThreshold);
-
+      test(DisableComplexFTSTypePlanning);
       PlanTestBase.testPlanMatchingPatterns(query,
               new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*low.*175.*high.*180.*indexName=weightIdx1"},
               new String[]{".*elementAnd"}
@@ -1406,6 +1428,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
   public void TestCoveringMultiFlattenDifferentArrays() throws Exception {
     try {
       test(IndexPlanning);
+      test(DisableComplexFTSTypePlanning);
       String query = "select _id from hbase.`index_test_complex1` t where _id in " +
           " (select _id from (select _id, flatten(t1.cars) as f1, flatten(weight) as f2 from hbase.`index_test_complex1` as t1 ) as t2 " +
           "   where t2.f1 like 'Toyota%' and t2.f2.low = 200) ";
