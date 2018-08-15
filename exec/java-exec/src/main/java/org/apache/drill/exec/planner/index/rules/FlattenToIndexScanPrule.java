@@ -198,7 +198,8 @@ public class FlattenToIndexScanPrule extends AbstractIndexPrule {
               indexCollection,
               builder,
               generator,
-              remainderFieldNamesWithFlatten);
+              remainderFieldNamesWithFlatten,
+              fieldName);
         } catch(Exception e) {
           logger.warn("Exception while doing index planning ", e);
         }
@@ -219,7 +220,8 @@ public class FlattenToIndexScanPrule extends AbstractIndexPrule {
                                           IndexCollection collection,
                                           RexBuilder builder,
                                           IndexPlanGenerator generator,
-                                          Set<String> remainderFieldNamesWithFlatten) {
+                                          Set<String> remainderFieldNamesWithFlatten,
+                                          String mainFlatten) {
     boolean result = false;
     DrillScanRel scan = indexContext.scan;
     IndexConditionInfo.Builder infoBuilder = IndexConditionInfo.newBuilder(mainFlattenCondition,
@@ -248,7 +250,18 @@ public class FlattenToIndexScanPrule extends AbstractIndexPrule {
 
     GroupScan primaryTableScan = indexContext.scan.getGroupScan();
 
-    if (remainderFieldNamesWithFlatten.size() > 0) {
+    List<RexNode> mainConditionFields = indexContext.getFilterExprsReferencingFlatten().get(mainFlatten);
+    //These are indexes which are partly covered by indexed fields and partly covered by included fields.
+    List<IndexGroup> indexesCoveredByIncludedAndIndexedFields = gatherCoveringIndexes(mainConditionFields,
+            indexContext, coveringIndexes, true);
+    if (indexesCoveredByIncludedAndIndexedFields.size() > 0) {
+      //remove the partially covered indexes from covering indexes and add them to non-covering.
+      //This is required so as to not generate an incorrect plan for the query.
+      nonCoveringIndexes.addAll(indexesCoveredByIncludedAndIndexedFields);
+      coveringIndexes.removeAll(indexesCoveredByIncludedAndIndexedFields);
+    }
+
+    if (coveringIndexes.size() > 0 && remainderFieldNamesWithFlatten.size() > 0) {
       List<RexNode> remainderExprsReferencingFlatten = new ArrayList<RexNode>();
 
       // get the list of RexExprs corresponding to these field names
@@ -257,7 +270,7 @@ public class FlattenToIndexScanPrule extends AbstractIndexPrule {
       }
 
       List<IndexGroup> qualifiedCoveringIndexes =
-            checkCoveringWithIncludedColumns(remainderExprsReferencingFlatten, indexContext, coveringIndexes, scan);
+            gatherCoveringIndexes(remainderExprsReferencingFlatten, indexContext, coveringIndexes, false);
 
       if (qualifiedCoveringIndexes.size() > 0) {
         coveringIndexes = qualifiedCoveringIndexes;
@@ -336,17 +349,16 @@ public class FlattenToIndexScanPrule extends AbstractIndexPrule {
     return result;
   }
 
-  // Given a condition check if it is covered by the included columns only (i.e not the indexed columns)
-  private List<IndexGroup> checkCoveringWithIncludedColumns(List<RexNode> exprsReferencingFlatten,
-      FlattenIndexPlanCallContext indexContext, List<IndexGroup> coveringIndexes, DrillScanRel scan) {
+  private List<IndexGroup> gatherCoveringIndexes(List<RexNode> exprsReferencingFlatten,
+      FlattenIndexPlanCallContext indexContext, List<IndexGroup> coveringIndexes, boolean removeIndexed) {
 
-    List<IndexGroup> qualifiedCoveringIndexes = new ArrayList<IndexGroup>();
+    List<IndexGroup> qualifiedCoveringIndexes = new ArrayList<>();
     for (IndexGroup index : coveringIndexes) {
       IndexProperties indexProps = index.getIndexProps().get(0);
       IndexDescriptor indexDesc = indexProps.getIndexDesc();
       FunctionalIndexInfo indexInfo = indexDesc.getFunctionalInfo();
 
-      if (IndexPlanUtils.isCoveredByIncludedFields(exprsReferencingFlatten, indexContext, indexInfo, scan)) {
+      if (IndexPlanUtils.isCoveredByIncludedFields(exprsReferencingFlatten, indexContext, indexInfo, removeIndexed)) {
         qualifiedCoveringIndexes.add(index);
       }
     }

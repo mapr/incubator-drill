@@ -356,8 +356,9 @@ public class IndexPlanUtils {
     return false;
   }
 
-  public static boolean isCoveredByIncludedFields(List<RexNode> exprsReferencingFlatten, FlattenIndexPlanCallContext indexContext,
-      FunctionalIndexInfo indexInfo, DrillScanRelBase scan) {
+  public static boolean isCoveredByIncludedFields(List<RexNode> exprsReferencingFlatten,
+                                                  FlattenIndexPlanCallContext indexContext,
+                                                  FunctionalIndexInfo indexInfo, boolean removeIndexed) {
 
     Set<LogicalExpression> referencedExprsSet = new HashSet<>();
 
@@ -370,11 +371,12 @@ public class IndexPlanUtils {
       referencedExprsSet.add(itemLogicalExpr);
     }
 
-    List<LogicalExpression> includedColumns = indexInfo.getIndexDesc().getNonIndexColumns();
-    if (includedColumns.containsAll(ImmutableList.copyOf(referencedExprsSet))) {
-      return true;
+    if (removeIndexed) {
+      List<LogicalExpression> indexedColumns = ImmutableList.copyOf(indexInfo.getIndexDesc().getIndexColumns());
+      referencedExprsSet.removeAll(indexedColumns);
     }
-    return false;
+    List<LogicalExpression> includedColumns = indexInfo.getIndexDesc().getNonIndexColumns();
+    return referencedExprsSet.size() > 0 && includedColumns.containsAll(ImmutableList.copyOf(referencedExprsSet));
   }
 
   /**
