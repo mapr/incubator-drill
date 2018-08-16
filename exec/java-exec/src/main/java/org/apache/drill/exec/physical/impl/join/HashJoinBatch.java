@@ -29,11 +29,8 @@ import com.google.common.collect.Sets;
 
 import org.apache.calcite.rel.core.JoinRelType;
 import org.apache.commons.io.FileUtils;
-<<<<<<< HEAD
 import org.apache.commons.lang3.tuple.Pair;
-=======
 import org.apache.commons.lang3.mutable.MutableBoolean;
->>>>>>> origin/master
 import org.apache.drill.common.exceptions.UserException;
 import org.apache.drill.common.expression.FieldReference;
 import org.apache.drill.common.expression.PathSegment;

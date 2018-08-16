@@ -60,7 +60,7 @@ public interface IndexProperties  {
 
   void setSatisfiesCollation(boolean satisfiesCollation);
 
-  RelOptCost getSelfCost(RelOptPlanner planner) ;
+  RelOptCost getSelfCost(RelOptPlanner planner);
 
   int numLeadingFilters();
 

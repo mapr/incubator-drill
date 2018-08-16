@@ -206,7 +206,7 @@ public class DrillIndexDefinition implements IndexDefinition {
     return tableName.equals(index1.tableName)
         && indexName.equals(index1.indexName)
         && indexType.equals(index1.indexType)
-        && indexColumns.equals(index1.indexColumns) ;
+        && indexColumns.equals(index1.indexColumns);
   }
 
   @Override

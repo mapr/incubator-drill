@@ -25,7 +25,7 @@ import java.util.Map;
 
 public class CollationContext {
 
-  public final Map<LogicalExpression, RelFieldCollation> collationMap ;
+  public final Map<LogicalExpression, RelFieldCollation> collationMap;
   public final List<RelFieldCollation> relFieldCollations;
 
   public CollationContext(Map<LogicalExpression, RelFieldCollation> collationMap,
