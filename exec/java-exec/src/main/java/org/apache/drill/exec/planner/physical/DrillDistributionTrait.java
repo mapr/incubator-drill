@@ -124,7 +124,7 @@ public class DrillDistributionTrait implements RelTrait {
 
   @Override
   public int hashCode() {
-    return  fields == null ? type.hashCode() : type.hashCode() | fields.hashCode() << 4 ;
+    return  fields == null? type.hashCode(): type.hashCode() | fields.hashCode() << 4;
   }
 
   @Override

@@ -50,7 +50,7 @@ public final class ExecConstants {
   public static final String ZK_SECURE_ACL = "drill.exec.zk.apply_secure_acl";
   public static final String BIT_RETRY_TIMES = "drill.exec.rpc.bit.server.retry.count";
   public static final String BIT_RETRY_DELAY = "drill.exec.rpc.bit.server.retry.delay";
-  public static final String BIT_TIMEOUT = "drill.exec.bit.timeout" ;
+  public static final String BIT_TIMEOUT = "drill.exec.bit.timeout";
   public static final String SERVICE_NAME = "drill.exec.cluster-id";
   public static final String INITIAL_BIT_PORT = "drill.exec.rpc.bit.server.port";
   public static final String INITIAL_DATA_PORT = "drill.exec.rpc.bit.server.dataport";
@@ -722,4 +722,6 @@ public final class ExecConstants {
   public static final String STATS_LOGGING_BATCH_OPERATOR_OPTION = "drill.exec.stats.logging.enabled_operators";
   public static final StringValidator STATS_LOGGING_BATCH_OPERATOR_VALIDATOR = new StringValidator(STATS_LOGGING_BATCH_OPERATOR_OPTION);
 
+  public static final String LIST_FILES_RECURSIVELY = "storage.list_files_recursively";
+  public static final BooleanValidator LIST_FILES_RECURSIVELY_VALIDATOR = new BooleanValidator(LIST_FILES_RECURSIVELY);
 }

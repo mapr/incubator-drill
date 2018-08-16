@@ -17,13 +17,12 @@
  */
 package org.apache.drill.exec.physical.impl.svremover;
 
-import org.apache.drill.exec.exception.SchemaChangeException;
 import org.apache.drill.exec.record.RecordBatch;
 import org.apache.drill.exec.record.VectorContainer;
 
 public interface Copier {
-  void setup(RecordBatch incoming, VectorContainer outgoing) throws SchemaChangeException;
-  int copyRecords(int index, int recordCount) throws SchemaChangeException;
-  int appendRecord(int index) throws SchemaChangeException;
-  int appendRecords(int index, int recordCount) throws SchemaChangeException;
+  void setup(RecordBatch incoming, VectorContainer outgoing);
+  int copyRecords(int index, int recordCount);
+  int appendRecord(int index);
+  int appendRecords(int index, int recordCount);
 }
