@@ -20,8 +20,28 @@ package org.apache.drill.exec.planner.index.rules;
 import org.apache.drill.shaded.guava.com.google.common.base.Stopwatch;
 import org.apache.drill.shaded.guava.com.google.common.collect.ImmutableList;
 import org.apache.drill.shaded.guava.com.google.common.collect.Lists;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import org.apache.calcite.plan.RelOptRuleCall;
 import org.apache.calcite.plan.RelOptRuleOperand;
+import org.apache.calcite.rex.RexBuilder;
+import org.apache.calcite.rex.RexCall;
+import org.apache.calcite.rex.RexCorrelVariable;
+import org.apache.calcite.rex.RexDynamicParam;
+import org.apache.calcite.rex.RexFieldAccess;
+import org.apache.calcite.rex.RexInputRef;
+import org.apache.calcite.rex.RexLiteral;
+import org.apache.calcite.rex.RexLocalRef;
+import org.apache.calcite.rex.RexNode;
+import org.apache.calcite.rex.RexOver;
+import org.apache.calcite.rex.RexRangeRef;
+import org.apache.calcite.rex.RexUtil;
+import org.apache.calcite.rex.RexVisitorImpl;
 import org.apache.drill.exec.physical.base.DbGroupScan;
 import org.apache.drill.exec.physical.base.GroupScan;
 import org.apache.drill.exec.physical.base.IndexGroupScan;
@@ -36,8 +56,8 @@ import org.apache.drill.exec.planner.index.IndexPlanUtils;
 import org.apache.drill.exec.planner.index.IndexProperties;
 import org.apache.drill.exec.planner.index.IndexSelector;
 import org.apache.drill.exec.planner.index.generators.AbstractIndexPlanGenerator;
-import org.apache.drill.exec.planner.index.generators.IndexPlanGenerator;
 import org.apache.drill.exec.planner.index.generators.CoveringIndexPlanGenerator;
+import org.apache.drill.exec.planner.index.generators.IndexPlanGenerator;
 import org.apache.drill.exec.planner.index.generators.NonCoveringIndexPlanGenerator;
 import org.apache.drill.exec.planner.index.generators.common.FlattenConditionUtils;
 import org.apache.drill.exec.planner.logical.DrillFilterRel;
@@ -47,15 +67,6 @@ import org.apache.drill.exec.planner.logical.RelOptHelper;
 import org.apache.drill.exec.planner.logical.partition.RewriteAsBinaryOperators;
 import org.apache.drill.exec.planner.physical.PlannerSettings;
 import org.apache.drill.exec.planner.physical.PrelUtil;
-import org.apache.calcite.rex.RexBuilder;
-import org.apache.calcite.rex.RexNode;
-import org.apache.calcite.rex.RexUtil;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 public class FlattenToIndexScanPrule extends AbstractIndexPrule {
   static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(FlattenToIndexScanPrule.class);
@@ -262,19 +273,32 @@ public class FlattenToIndexScanPrule extends AbstractIndexPrule {
     }
 
     if (coveringIndexes.size() > 0 && remainderFieldNamesWithFlatten.size() > 0) {
-      List<RexNode> remainderExprsReferencingFlatten = new ArrayList<RexNode>();
+      List<RexNode> remainderExprsReferencingFlatten = new ArrayList<>();
+      boolean onlyNonCovering = false;
 
       // get the list of RexExprs corresponding to these field names
       for (String name : remainderFieldNamesWithFlatten) {
         remainderExprsReferencingFlatten.addAll(indexContext.getFilterExprsReferencingFlatten().get(name));
       }
 
-      List<IndexGroup> qualifiedCoveringIndexes =
-            gatherCoveringIndexes(remainderExprsReferencingFlatten, indexContext, coveringIndexes, false);
+      FlattenExprVisitor findFlattenConjunctVisitor = new FlattenExprVisitor(indexContext.getFilterExprsReferencingFlatten());
+      for (RexNode expr : remainderExprsReferencingFlatten) {
+        if (expr.accept(findFlattenConjunctVisitor) == false) {
+          onlyNonCovering = true;
+          break;
+        }
+      }
+      if (!onlyNonCovering) {
+        List<IndexGroup> qualifiedCoveringIndexes =
+                gatherCoveringIndexes(remainderExprsReferencingFlatten, indexContext, coveringIndexes, false);
 
-      if (qualifiedCoveringIndexes.size() > 0) {
-        coveringIndexes = qualifiedCoveringIndexes;
-      } else {
+        if (qualifiedCoveringIndexes.size() > 0) {
+          coveringIndexes = qualifiedCoveringIndexes;
+        } else {
+          onlyNonCovering = true;
+        }
+      }
+      if (onlyNonCovering) {
         // add the covering indexes to the list of non-covering indexes such that at least a
         // non-covering plan can be generated
         nonCoveringIndexes.addAll(coveringIndexes);
@@ -366,4 +390,77 @@ public class FlattenToIndexScanPrule extends AbstractIndexPrule {
     return qualifiedCoveringIndexes;
   }
 
+  private class FlattenExprVisitor extends RexVisitorImpl<Boolean> {
+
+    Map<RexNode, String> filterExprsReferencingFlattenMap;
+    Map<Integer, String> rexInputAndFlattenRefMap;
+    String curFlattenName = null;
+    protected FlattenExprVisitor(Map<String, List<RexNode>> flattenAndRefFilterExprsMap) {
+      super(true);
+      filterExprsReferencingFlattenMap = new HashMap<>();
+      rexInputAndFlattenRefMap = new HashMap<>();
+      for (Map.Entry<String, List<RexNode>> entry : flattenAndRefFilterExprsMap.entrySet()) {
+        String flattenName = entry.getKey();
+        for (RexNode node : entry.getValue()) {
+          filterExprsReferencingFlattenMap.put(node, flattenName);
+        }
+      }
+
+    }
+
+    @Override
+    public Boolean visitInputRef(RexInputRef inputRef) {
+      rexInputAndFlattenRefMap.putIfAbsent(inputRef.getIndex(), curFlattenName);
+      // Return true if this expr references the same flatten ref
+      return rexInputAndFlattenRefMap.get(inputRef.getIndex()).equals(curFlattenName);
+    }
+
+    @Override
+    public Boolean visitCall(RexCall call) {
+      if (filterExprsReferencingFlattenMap.get(call) != null) {
+        curFlattenName = filterExprsReferencingFlattenMap.get(call);
+      }
+      for (RexNode operand : call.operands) {
+        if (!operand.accept(this)) {
+          return false;
+        }
+      }
+      return true;
+    }
+
+    @Override
+    public Boolean visitLocalRef(RexLocalRef localRef) {
+      return true;
+    }
+
+    @Override
+    public Boolean visitLiteral(RexLiteral literal) {
+      return true;
+    }
+
+    @Override
+    public Boolean visitOver(RexOver over) {
+      return true;
+    }
+
+    @Override
+    public Boolean visitCorrelVariable(RexCorrelVariable correlVariable) {
+      return true;
+    }
+
+    @Override
+    public Boolean visitDynamicParam(RexDynamicParam dynamicParam) {
+      return true;
+    }
+
+    @Override
+    public Boolean visitRangeRef(RexRangeRef rangeRef) {
+      return true;
+    }
+
+    @Override
+    public Boolean visitFieldAccess(RexFieldAccess fieldAccess) {
+      return true;
+    }
+  }
 }

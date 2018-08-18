@@ -1450,7 +1450,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
     }
     return;
   }
-  
+
   @Test
   public void TestElementAndwithIncludedFields() throws Exception {
 
@@ -1474,6 +1474,35 @@ public class TestComplexTypeIndex extends BaseJsonTest {
               .build()
               .run();
     } finally {
+      test(IndexPlanning);
+    }
+    return;
+  }
+
+  @Test
+  public void TestNonCoveringMultiFlattenSameArray() throws Exception {
+    try {
+      test(IndexPlanning);
+      test(DisableComplexFTSTypePlanning);
+      test(maxNonCoveringSelectivityThreshold);
+      String query = "select _id from hbase.`index_test_complex1` t where _id in " +
+          "(select _id from (select _id, flatten(t1.cars) as f1, flatten(weight) as f2 ,flatten(weight) as f3 from hbase.`index_test_complex1` as t1 ) as t2 " +
+          "where t2.f1 like 'Toyota%' and t2.f2.average = 120 and t2.f3.high = 150)";
+      PlanTestBase.testPlanMatchingPatterns(query,
+          new String[] {"RowKeyJoin",
+              ".*RestrictedJsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*cars.*MATCHES.*Toyota.*weight.*average.*120.*weight.*high.*150",
+              ".*JsonTableGroupScan.*tableName=.*index_test_complex1," +
+              "(.*condition=.*weight.*high.*150.*indexName=weightCountyIdx1|.*condition=.*cars.*MATCHES.*Toyota.*indexName=carsIdx1)"},
+          new String[]{});
+      testBuilder()
+          .optionSettingQueriesForBaseline(noIndexPlan)
+          .unOrdered()
+          .sqlQuery(query)
+          .sqlBaselineQuery(query)
+          .build()
+          .run();
+    } finally {
+      test(resetmaxNonCoveringSelectivityThreshold);
       test(IndexPlanning);
     }
     return;
