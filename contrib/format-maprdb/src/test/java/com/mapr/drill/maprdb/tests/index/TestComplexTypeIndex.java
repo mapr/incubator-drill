@@ -115,7 +115,8 @@ public class TestComplexTypeIndex extends BaseJsonTest {
             "salaryIdx", "salary", "",
             "weightListIdx", "weight", "",
             "weightComplexIdx1", "weight[].low", "salary,friends,cars,zipcodes",
-            "ordersProductsIdx1", "orders[].products[].price, orders[].products[].prodname", ""
+            "ordersProductsIdx1", "orders[].products[].price, orders[].products[].prodname", "",
+            "carsWeightIdx2", "cars[]",  "weight[].high,weight[].average"
         };
     try (Table table = createOrReplaceTable(tableName);
          InputStream in = MaprDBTestsSuite.getJsonStream(fileName);
@@ -1010,7 +1011,7 @@ public class TestComplexTypeIndex extends BaseJsonTest {
       test(DisableComplexFTSTypePlanning);
 
       PlanTestBase.testPlanMatchingPatterns(query,
-              new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*cars.*Toyota Camry.*or.*BMW.*and.*Honda Accord.*or.*Toyota Camry.*indexName.*(carsIdx1|carsWeightIdx1)"},
+              new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*cars.*Toyota Camry.*or.*BMW.*and.*Honda Accord.*or.*Toyota Camry.*indexName.*(carsIdx1|carsWeightIdx1|carsWeightIdx2)"},
               new String[]{".*elementAnd"}
       );
       testBuilder()
@@ -1430,11 +1431,11 @@ public class TestComplexTypeIndex extends BaseJsonTest {
       test(IndexPlanning);
       test(DisableComplexFTSTypePlanning);
       String query = "select _id from hbase.`index_test_complex1` t where _id in " +
-          " (select _id from (select _id, flatten(t1.cars) as f1, flatten(weight) as f2 from hbase.`index_test_complex1` as t1 ) as t2 " +
-          "   where t2.f1 like 'Toyota%' and t2.f2.low = 200) ";
+              " (select _id from (select _id, flatten(t1.cars) as f1, flatten(weight) as f2 from hbase.`index_test_complex1` as t1 ) as t2 " +
+              "   where t2.f1 like 'Toyota%' and t2.f2.low = 200) ";
 
       PlanTestBase.testPlanMatchingPatterns(query,
-              new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*cars.*MATCHES.*Toyota.*weight.*low.*=.*200.*indexName=carsWeightIdx1"},
+              new String[]{".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*cars.*MATCHES.*Toyota.*weight.*low.*=.*200.*indexName=carsWeightIdx1"},
               new String[]{"RowKeyJoin", ".*RestrictedJsonTableGroupScan.*tableName=.*index_test_complex1,"}
       );
       testBuilder()
@@ -1444,9 +1445,37 @@ public class TestComplexTypeIndex extends BaseJsonTest {
               .sqlBaselineQuery(query)
               .build()
               .run();
-  } finally {
-    test(IndexPlanning);
+    } finally {
+      test(IndexPlanning);
+    }
+    return;
   }
+  
+  @Test
+  public void TestElementAndwithIncludedFields() throws Exception {
+
+    try {
+      String query = "select _id from hbase.`index_test_complex1` where _id in (select _id from (select _id, flatten(t1.cars) as f1, flatten(weight) as f2" +
+              " from hbase.`index_test_complex1` as t1 ) as t2 where t2.f1 like 'Toyota%' and t2.f2.high = 150 and t2.f2.average = 135)";
+
+      test(IndexPlanning);
+
+      PlanTestBase.testPlanMatchingPatterns(query,
+              new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*elementAnd.*weight.*high.*150.*average.*135.*cars.*MATCHES.*Toyota.*indexName=carsWeightIdx2"},
+              new String[]{"RowKeyJoin"}
+      );
+
+      testBuilder()
+              .optionSettingQueriesForTestQuery(IndexPlanning)
+              .optionSettingQueriesForBaseline(optionsForBaseLine)
+              .unOrdered()
+              .sqlQuery(query)
+              .sqlBaselineQuery(query)
+              .build()
+              .run();
+    } finally {
+      test(IndexPlanning);
+    }
     return;
   }
 }

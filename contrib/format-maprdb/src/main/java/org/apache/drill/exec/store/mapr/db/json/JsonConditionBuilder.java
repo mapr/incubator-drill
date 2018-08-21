@@ -17,8 +17,9 @@
  */
 package org.apache.drill.exec.store.mapr.db.json;
 
-import java.util.List;
-
+import com.mapr.db.index.IndexFieldDesc;
+import java.util.HashSet;
+import java.util.Set;
 import org.apache.drill.common.FunctionNames;
 import org.apache.drill.common.expression.BooleanOperator;
 import org.apache.drill.common.expression.FunctionCall;
@@ -54,12 +55,7 @@ public class JsonConditionBuilder extends AbstractExprVisitor<JsonScanSpec, Void
   // ElementAnd takes array prefix as arg
   private boolean splitArrayPath = false;
 
-  // If the index is part of indexed fields don't use elementAnd. In all other cases elementAnd is used.
-  private boolean useElementAnd = true;
-
-  public void setUseElementAnd(boolean useElementAnd) {
-    this.useElementAnd = useElementAnd;
-  }
+  public Set<String> includedFields = new HashSet<>();
 
   public JsonConditionBuilder(JsonTableGroupScan groupScan,
       LogicalExpression conditionExp) {
@@ -68,6 +64,7 @@ public class JsonConditionBuilder extends AbstractExprVisitor<JsonScanSpec, Void
   }
 
   public JsonScanSpec parseTree() {
+    getIncludedFields(includedFields);
     JsonScanSpec parsedSpec = le.accept(this, null);
     if (parsedSpec != null) {
       parsedSpec.mergeScanSpec(FunctionNames.AND, this.groupScan.getScanSpec());
@@ -100,7 +97,15 @@ public class JsonConditionBuilder extends AbstractExprVisitor<JsonScanSpec, Void
     return visitFunctionCall(op, value);
   }
 
+  /*
+   * ElementAnd needs the arrayPath to be split into arrayPrefix and arraySuffix. Check if the scan is index scan and
+   * only if the schemaPath belongs to the included fields return array prefix since the condition should be pushed as
+   * elementAnd. Else return null.
+   */
   private String getEmptyArrayPrefix(SchemaPath schemaPath) {
+    if (groupScan.isIndexScan() && !belongstoIncludedFields(includedFields, schemaPath)) {
+      return null;
+    }
     String arrayPrefix = getEmptyArrayPath(schemaPath);
     int end = arrayPrefix.lastIndexOf("]") + 1;
     return arrayPrefix.substring(0, end);
@@ -191,7 +196,7 @@ public class JsonConditionBuilder extends AbstractExprVisitor<JsonScanSpec, Void
     if (nestedargs.size() > 1) {
       for (int i = 1; i < nestedargs.size(); i++) {
         arrayPrefix = compareAndGetArrayPrefix((FunctionCall) nestedargs.get(0),(FunctionCall) nestedargs.get(i));
-        if ( arrayPrefix == null) {
+        if (arrayPrefix == null) {
           return null;
         }
       }
@@ -206,6 +211,23 @@ public class JsonConditionBuilder extends AbstractExprVisitor<JsonScanSpec, Void
     arrayExprsMap.get(path).add(f);
   }
 
+  private void getIncludedFields(Set<String> includedFields) {
+    if (groupScan.isIndexScan()) {
+      List<IndexFieldDesc> includedFieldslist = new ArrayList<>(groupScan.getIndexDesc().getIncludedFields());
+      for (IndexFieldDesc includedField : includedFieldslist) {
+        includedFields.add(includedField.getFieldPath().asPathString());
+      }
+    }
+  }
+
+  /*
+   * Check if the schemaPath belongs to included fields.
+   */
+  private boolean belongstoIncludedFields(Set<String> includedFields, SchemaPath schemaPath) {
+    String fieldPathString = FieldPathHelper.schemaPath2FieldPath(schemaPath).asPathString();
+    return includedFields.contains(fieldPathString);
+  }
+
   /*
    * Pre-process all the conditions nested under AND. Groups the args that belong to the same array element together.
    * The arrayExprsMap maps array element to the list of all the fields that belong to the array element. If the arg
@@ -217,7 +239,7 @@ public class JsonConditionBuilder extends AbstractExprVisitor<JsonScanSpec, Void
     for (LogicalExpression f : args ) {
       try {
         if (f instanceof FunctionCall) {
-          if (FunctionNames.OR.equals(((FunctionCall) f).getName()) && useElementAnd) {
+          if (FunctionNames.OR.equals(((FunctionCall) f).getName())) {
             arrayPrefix = compareAndGetNestedArgsArrayPrefix((FunctionCall) f);
             if (arrayPrefix != null) {
               addToarrayExprsMap(arrayPrefix, f, arrayExprsMap);
@@ -227,7 +249,7 @@ public class JsonConditionBuilder extends AbstractExprVisitor<JsonScanSpec, Void
           } else {
             FunctionCall f1 = (FunctionCall) f;
             SchemaPath schemaPath = (SchemaPath) f1.args().get(0);
-            if (schemaPath.isArray() && useElementAnd) {
+            if (schemaPath.isArray() && getEmptyArrayPrefix(schemaPath) != null) {
               arrayPrefix = getEmptyArrayPrefix(schemaPath);
               addToarrayExprsMap(arrayPrefix, f, arrayExprsMap);
             } else {
@@ -422,7 +444,6 @@ public class JsonConditionBuilder extends AbstractExprVisitor<JsonScanSpec, Void
     SchemaPath schemaPath = processor.getPath();
 
     if (schemaPath.isArray()) {
-      String arrayPrefix = getEmptyArrayPrefix(schemaPath);
       if (splitArrayPath) {
         fieldPath = getArraySuffix(schemaPath);
         fieldPath = fieldPath == null ? defaultField : fieldPath;
