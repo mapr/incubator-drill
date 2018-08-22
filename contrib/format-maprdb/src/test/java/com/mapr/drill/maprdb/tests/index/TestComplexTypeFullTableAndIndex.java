@@ -426,6 +426,15 @@ public class TestComplexTypeFullTableAndIndex extends TestComplexTypeIndex {
               new String[]{".*indexname.*"}
       );
 
+      testBuilder()
+              .optionSettingQueriesForBaseline(DisableComplexFTSTypePlanning)
+              .optionSettingQueriesForTestQuery(ComplexFTSTypePlanning)
+              .unOrdered()
+              .sqlQuery(query)
+              .sqlBaselineQuery(query)
+              .build()
+              .run();
+
     } finally {
       test(noIndexPlan);
       test(ComplexFTSTypePlanning);
@@ -446,6 +455,14 @@ public class TestComplexTypeFullTableAndIndex extends TestComplexTypeIndex {
               new String[]{".*indexname.*"}
       );
 
+      testBuilder()
+              .optionSettingQueriesForBaseline(DisableComplexFTSTypePlanning)
+              .optionSettingQueriesForTestQuery(ComplexFTSTypePlanning)
+              .unOrdered()
+              .sqlQuery(query)
+              .sqlBaselineQuery(query)
+              .build()
+              .run();
     } finally {
       test(noIndexPlan);
       test(ComplexFTSTypePlanning);
@@ -467,11 +484,228 @@ public class TestComplexTypeFullTableAndIndex extends TestComplexTypeIndex {
               new String[]{".*indexname.*"}
       );
 
+      testBuilder()
+              .optionSettingQueriesForBaseline(DisableComplexFTSTypePlanning)
+              .optionSettingQueriesForTestQuery(ComplexFTSTypePlanning)
+              .unOrdered()
+              .sqlQuery(query)
+              .sqlBaselineQuery(query)
+              .build()
+              .run();
     } finally {
       test(noIndexPlan);
       test(ComplexFTSTypePlanning);
     }
     return;
 
+  }
+
+  @Test
+  public void testNestedFlattenWithElementAnd_fts() throws Exception {
+    try {
+      String query = "select _id from hbase.`index_test_complex1` where _id in (select _id from " +
+              " (select _id, flatten(t1.`f1`.`products`) as f2 from (select _id, flatten(orders) as f1 from hbase.`index_test_complex1`) as t1) as t2 " +
+              " where t2.`f2`.`price` > 50 and t2.`f2`.`prodname` like '%bike%')";
+
+      test(noIndexPlan);
+
+      PlanTestBase.testPlanMatchingPatterns(query,
+              new String[]{".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*elementAnd.*orders.*products.*price.*50.*and.*prodname.*bike"},
+              new String[]{"RowKeyJoin"}
+      );
+
+      testBuilder()
+              .optionSettingQueriesForBaseline(DisableComplexFTSTypePlanning)
+              .optionSettingQueriesForTestQuery(ComplexFTSTypePlanning)
+              .unOrdered()
+              .sqlQuery(query)
+              .sqlBaselineQuery(query)
+              .build()
+              .run();
+    } finally {
+      test(noIndexPlan);
+      test(ComplexFTSTypePlanning);
+    }
+  }
+
+  @Test
+  public void testNestedFlattenElementAnd_fts1() throws Exception {
+    try {
+      String query = "select _id, county from hbase.`index_test_complex1` where _id in (select _id from " +
+              " (select _id, flatten(t1.`f1`.`products`) as f2 from (select _id, flatten(orders) as f1 from hbase.`index_test_complex1`) as t1) as t2 " +
+              " where t2.`f2`.`price` > 50 and t2.`f2`.`prodname` like '%bike%')";
+
+      test(noIndexPlan);
+
+      PlanTestBase.testPlanMatchingPatterns(query,
+              new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*elementAnd.*orders.*products.*price.*50.*and.*prodname.*bike"},
+              new String[]{}
+      );
+
+      testBuilder()
+              .optionSettingQueriesForBaseline(DisableComplexFTSTypePlanning)
+              .optionSettingQueriesForTestQuery(ComplexFTSTypePlanning)
+              .unOrdered()
+              .sqlQuery(query)
+              .sqlBaselineQuery(query)
+              .build()
+              .run();
+    } finally {
+      test(noIndexPlan);
+      test(ComplexFTSTypePlanning);
+    }
+  }
+
+  @Test
+  public void TestAndWithFullTableScan() throws Exception {
+
+    try {
+      String query = "select _id from hbase.`index_test_complex1` where _id in (select _id from ( select _id, flatten(t1.weight) as f1 , flatten(weight) as f2 from " +
+              " hbase.`index_test_complex1` as t1) as t where t.f1.low = 120  and t.f2.high = 145)";
+
+      test(ComplexFTSTypePlanning);
+      test(noIndexPlan);
+
+      PlanTestBase.testPlanMatchingPatterns(query,
+              new String[]{".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=(.*weight.*low.*120.*|.*weight.*high.*145)"},
+              new String[]{".*elementAnd"}
+      );
+
+      testBuilder()
+              .optionSettingQueriesForTestQuery(ComplexFTSTypePlanning)
+              .optionSettingQueriesForBaseline(DisableComplexFTSTypePlanning)
+              .unOrdered()
+              .sqlQuery(query)
+              .sqlBaselineQuery(query)
+              .build()
+              .run();
+
+    } finally {
+      test(noIndexPlan);
+      test(ComplexFTSTypePlanning);
+    }
+    return;
+  }
+
+  @Test
+  public void TestSimpleOr() throws Exception {
+
+    try {
+      String query = "select _id from hbase.`index_test_complex1` where _id in (select _id from ( select _id, flatten(t1.weight) as f1 ," +
+              " t1.`salary`.`max` as maxsal from hbase.`index_test_complex1` as t1 ) as t where t.f1.high = 150 or maxsal = 2000)";
+
+      test(ComplexFTSTypePlanning);
+      test(noIndexPlan);
+
+      PlanTestBase.testPlanMatchingPatterns(query,
+              new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*high.*150.*or.*salary.*max.*2000"},
+              new String[]{}
+      );
+      testBuilder()
+              .optionSettingQueriesForTestQuery(ComplexFTSTypePlanning)
+              .optionSettingQueriesForBaseline(DisableComplexFTSTypePlanning)
+              .unOrdered()
+              .sqlQuery(query)
+              .sqlBaselineQuery(query)
+              .build()
+              .run();
+
+    } finally {
+      test(noIndexPlan);
+      test(ComplexFTSTypePlanning);
+    }
+    return;
+  }
+
+  @Test
+  public void TestBooleanIsTrue() throws Exception {
+
+    try {
+      String query = "select _id from hbase.`index_test_complex1` as t where t.`online` is true and t.`discount`.`eligible` is true";
+
+      test(ComplexFTSTypePlanning);
+      test(noIndexPlan);
+
+      PlanTestBase.testPlanMatchingPatterns(query,
+              new String[]{".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=(.*online.*=.*true.*.*discount.*eligible.*=.*true)"},
+              new String[]{}
+      );
+
+      testBuilder()
+              .optionSettingQueriesForTestQuery(ComplexFTSTypePlanning)
+              .optionSettingQueriesForBaseline(DisableComplexFTSTypePlanning)
+              .unOrdered()
+              .sqlQuery(query)
+              .sqlBaselineQuery(query)
+              .build()
+              .run();
+
+    } finally {
+      test(ComplexFTSTypePlanning);
+      test(noIndexPlan);
+    }
+    return;
+  }
+
+  @Test
+  public void TestBooleanIsFalse() throws Exception {
+
+    try {
+      String query = "select _id from hbase.`index_test_complex1` as t where t.`online` is false and t.`discount`.`eligible` is false";
+
+      test(ComplexFTSTypePlanning);
+      test(noIndexPlan);
+
+      PlanTestBase.testPlanMatchingPatterns(query,
+              new String[]{".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=(.*online.*=.*false.*discount.*eligible.*=.*false)"},
+              new String[]{}
+      );
+
+      testBuilder()
+              .optionSettingQueriesForTestQuery(ComplexFTSTypePlanning)
+              .optionSettingQueriesForBaseline(DisableComplexFTSTypePlanning)
+              .unOrdered()
+              .sqlQuery(query)
+              .sqlBaselineQuery(query)
+              .build()
+              .run();
+
+    } finally {
+      test(ComplexFTSTypePlanning);
+      test(noIndexPlan);
+    }
+    return;
+  }
+
+  @Test
+  public void TestOrWithAnd() throws Exception {
+
+    try {
+      test(noIndexPlan);
+      String query = "select _id from hbase.`index_test_complex1` where _id in (select _id from ( select _id, " +
+              "flatten(t1.weight) as f1 , t1.`salary`.`max` as maxsal from hbase.`index_test_complex1` as t1 ) as t " +
+              "where (t.f1.low = 120 or maxsal >= 2000) and (t.f1.low = 140 or t.f1.high = 150))";
+
+      test(maxNonCoveringSelectivityThreshold);
+      test(ComplexFTSTypePlanning);
+
+      PlanTestBase.testPlanMatchingPatterns(query,
+              new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=.*weight.*low.*or.*salary.*max.*2000.*and.*weight.*low.*140.*weight.*high"},
+              new String[]{".*elementAnd"}
+      );
+      testBuilder()
+              .optionSettingQueriesForTestQuery(ComplexFTSTypePlanning)
+              .optionSettingQueriesForBaseline(DisableComplexFTSTypePlanning)
+              .unOrdered()
+              .sqlQuery(query)
+              .sqlBaselineQuery(query)
+              .build()
+              .run();
+
+    } finally {
+      test(noIndexPlan);
+      test(ComplexFTSTypePlanning);
+    }
+    return;
   }
 }
