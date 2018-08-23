@@ -39,7 +39,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class JsonConditionBuilder extends AbstractExprVisitor<JsonScanSpec, Void, RuntimeException> implements DrillHBaseConstants {
+public class JsonConditionBuilder extends AbstractExprVisitor<JsonScanSpec, Boolean, RuntimeException> implements DrillHBaseConstants {
 
   final private JsonTableGroupScan groupScan;
 
@@ -51,10 +51,6 @@ public class JsonConditionBuilder extends AbstractExprVisitor<JsonScanSpec, Void
   // condition is on a[]. The prefix will be a[] and suffix will be $.
   private static final String defaultField = "$";
 
-  // If the path should be split into prefix and suffix to group same array prefix elements while applying elementAnd.
-  // ElementAnd takes array prefix as arg
-  private boolean splitArrayPath = false;
-
   public Set<String> includedFields = new HashSet<>();
 
   public JsonConditionBuilder(JsonTableGroupScan groupScan,
@@ -65,7 +61,7 @@ public class JsonConditionBuilder extends AbstractExprVisitor<JsonScanSpec, Void
 
   public JsonScanSpec parseTree() {
     getIncludedFields(includedFields);
-    JsonScanSpec parsedSpec = le.accept(this, null);
+    JsonScanSpec parsedSpec = le.accept(this, true);
     if (parsedSpec != null) {
       parsedSpec.mergeScanSpec(FunctionNames.AND, this.groupScan.getScanSpec());
     }
@@ -78,7 +74,7 @@ public class JsonConditionBuilder extends AbstractExprVisitor<JsonScanSpec, Void
   }
 
   @Override
-  public JsonScanSpec visitSchemaPath(SchemaPath path, Void value) throws RuntimeException {
+  public JsonScanSpec visitSchemaPath(SchemaPath path, Boolean value) throws RuntimeException {
     String fieldPath = FieldPathHelper.schemaPath2FieldPath(path).asPathString();
     QueryCondition cond = MapRDBImpl.newCondition().is(fieldPath, Op.EQUAL, true);
     return new JsonScanSpec(groupScan.getTableName(),
@@ -87,13 +83,13 @@ public class JsonConditionBuilder extends AbstractExprVisitor<JsonScanSpec, Void
   }
 
   @Override
-  public JsonScanSpec visitUnknown(LogicalExpression e, Void value) throws RuntimeException {
+  public JsonScanSpec visitUnknown(LogicalExpression e, Boolean value) throws RuntimeException {
     allExpressionsConverted = false;
     return null;
   }
 
   @Override
-  public JsonScanSpec visitBooleanOperator(BooleanOperator op, Void value) throws RuntimeException {
+  public JsonScanSpec visitBooleanOperator(BooleanOperator op, Boolean value) throws RuntimeException {
     return visitFunctionCall(op, value);
   }
 
@@ -148,7 +144,7 @@ public class JsonConditionBuilder extends AbstractExprVisitor<JsonScanSpec, Void
    */
   private String getEmptyArrayPrefix(FunctionCall f) {
     String arrayPrefix = null;
-    if (FunctionNames.OR.equals(f.getName())){
+    if (FunctionNames.OR.equals(f.getName()) || "booleanAnd".equals(f.getName())){
       arrayPrefix = compareAndGetNestedArgsArrayPrefix(f);
     } else if ( f.args().get(0) instanceof  SchemaPath){
       SchemaPath schemaPath = (SchemaPath) f.args().get(0);
@@ -172,15 +168,12 @@ public class JsonConditionBuilder extends AbstractExprVisitor<JsonScanSpec, Void
     return null;
   }
 
-  private String compareAndGetArrayPrefix(FunctionCall exp1, FunctionCall exp2) {
-    String s1, s2;
-    s1 = getEmptyArrayPrefix(exp1);
-    s2 = getEmptyArrayPrefix(exp2);
-    if (s1 == null || s2 == null) {
+  private String compareAndGetArrayPrefix(String arrayPrefix1, String arrayPrefix2) {
+    if (arrayPrefix1 == null || arrayPrefix2 == null) {
       return null;
     }
-    if (s1.equalsIgnoreCase(s2)) {
-      return s1;
+    if (arrayPrefix1.equalsIgnoreCase(arrayPrefix2)) {
+      return arrayPrefix1;
     }
     return null;
   }
@@ -193,10 +186,12 @@ public class JsonConditionBuilder extends AbstractExprVisitor<JsonScanSpec, Void
   private String compareAndGetNestedArgsArrayPrefix(FunctionCall f) {
     List<LogicalExpression> nestedargs = f.args();
     String arrayPrefix = null;
+    String arrayPrefix0;
     if (nestedargs.size() > 1) {
+      arrayPrefix0 = getEmptyArrayPrefix((FunctionCall) nestedargs.get(0));
       for (int i = 1; i < nestedargs.size(); i++) {
-        arrayPrefix = compareAndGetArrayPrefix((FunctionCall) nestedargs.get(0),(FunctionCall) nestedargs.get(i));
-        if (arrayPrefix == null) {
+        arrayPrefix = getEmptyArrayPrefix((FunctionCall) nestedargs.get(i));
+        if (compareAndGetArrayPrefix(arrayPrefix0, arrayPrefix) == null) {
           return null;
         }
       }
@@ -268,7 +263,7 @@ public class JsonConditionBuilder extends AbstractExprVisitor<JsonScanSpec, Void
   }
 
   @Override
-  public JsonScanSpec visitFunctionCall(FunctionCall call, Void value) throws RuntimeException {
+  public JsonScanSpec visitFunctionCall(FunctionCall call, Boolean createElementAnd) throws RuntimeException {
     JsonScanSpec nodeScanSpec = null;
     String functionName = call.getName();
     List<LogicalExpression> args = call.args();
@@ -282,7 +277,7 @@ public class JsonConditionBuilder extends AbstractExprVisitor<JsonScanSpec, Void
         processor = CompareFunctionsProcessor.process(call);
       }
       if (processor.isSuccess()) {
-        nodeScanSpec = createJsonScanSpec(call, processor);
+        nodeScanSpec = createJsonScanSpec(call, processor, !createElementAnd);
       }
     } else {
       switch(functionName) {
@@ -294,7 +289,11 @@ public class JsonConditionBuilder extends AbstractExprVisitor<JsonScanSpec, Void
          */
         HashMap<String, List<LogicalExpression>> arrayExprsMap = new HashMap<>();
         List<LogicalExpression> remainderArgs = new ArrayList<>();
-        preprocessArgs(args, arrayExprsMap, remainderArgs);
+        if (!createElementAnd) {
+          remainderArgs.addAll(args);
+        } else {
+          preprocessArgs(args, arrayExprsMap, remainderArgs);
+        }
         HashMap<String, List<LogicalExpression>> arrayPrefixArgs = arrayExprsMap;
         List<LogicalExpression> scalarArgs = remainderArgs;
         JsonScanSpec nextScanSpec = null;
@@ -306,12 +305,11 @@ public class JsonConditionBuilder extends AbstractExprVisitor<JsonScanSpec, Void
           if (elementAndArgs.size() == 1) {
             scalarArgs.addAll(elementAndArgs);
           } else {
-            splitArrayPath = true;
             conditions.clear();
-            nodeScanSpec = elementAndArgs.get(0).accept(this, null);
+            nodeScanSpec = elementAndArgs.get(0).accept(this, false);
 
             for (int i = 1; i < elementAndArgs.size(); i++) {
-              nextScanSpec = elementAndArgs.get(i).accept(this, null);
+              nextScanSpec = elementAndArgs.get(i).accept(this, false);
               if (nodeScanSpec != null && nextScanSpec != null) {
                 conditions.add(nextScanSpec);
               } else {
@@ -320,19 +318,18 @@ public class JsonConditionBuilder extends AbstractExprVisitor<JsonScanSpec, Void
               }
             }
             nodeScanSpec.mergeScanSpec("elementAnd", conditions, arrayPrefix);
-            splitArrayPath = false;
           }
         }
 
         if (scalarArgs.size() > 0) {
-          nodeScanSpec1 = scalarArgs.get(0).accept(this, null);
+          nodeScanSpec1 = scalarArgs.get(0).accept(this, createElementAnd);
           if (nodeScanSpec1 == null) {
             allExpressionsConverted = false;
           }
         }
 
         for (int i = 1; i < scalarArgs.size(); i++ ) {
-          nextScanSpec = scalarArgs.get(i).accept(this, null);
+          nextScanSpec = scalarArgs.get(i).accept(this, createElementAnd);
           if (nodeScanSpec1 != null && nextScanSpec != null) {
             nodeScanSpec1.mergeScanSpec(functionName, nextScanSpec);
           } else {
@@ -348,9 +345,9 @@ public class JsonConditionBuilder extends AbstractExprVisitor<JsonScanSpec, Void
 
         break;
       case FunctionNames.OR:
-        nodeScanSpec = args.get(0).accept(this, null);
+        nodeScanSpec = args.get(0).accept(this, createElementAnd);
         for (int i = 1; i < args.size(); ++i) {
-          nextScanSpec = args.get(i).accept(this, null);
+          nextScanSpec = args.get(i).accept(this, createElementAnd);
           if (nodeScanSpec != null && nextScanSpec != null) {
               nodeScanSpec.mergeScanSpec(functionName, nextScanSpec);
           } else {
@@ -437,12 +434,13 @@ public class JsonConditionBuilder extends AbstractExprVisitor<JsonScanSpec, Void
   }
 
   private JsonScanSpec createJsonScanSpec(FunctionCall call,
-      CompareFunctionsProcessor processor) {
+      CompareFunctionsProcessor processor, Boolean splitArrayPath) {
     String functionName = processor.getFunctionName();
     String fieldPath = FieldPathHelper.schemaPath2FieldPath(processor.getPath()).asPathString();
     Value fieldValue = processor.getValue();
     SchemaPath schemaPath = processor.getPath();
 
+    // Split ArrayPath if the path should be split into prefix and suffix to group same array prefix elements while applying elementAnd.
     if (schemaPath.isArray()) {
       if (splitArrayPath) {
         fieldPath = getArraySuffix(schemaPath);
