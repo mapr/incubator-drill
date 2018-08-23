@@ -40,32 +40,35 @@ import org.apache.calcite.plan.RelTraitSet;
 import org.apache.calcite.rex.RexNode;
 
 import com.google.common.collect.Lists;
+import org.apache.drill.exec.work.filter.RuntimeFilterDef;
 
 public class HashJoinPrel  extends JoinPrel {
 
   private boolean swapped = false;
+  private RuntimeFilterDef runtimeFilterDef;
   protected boolean isRowKeyJoin = false;
   private int joinControl;
 
   public HashJoinPrel(RelOptCluster cluster, RelTraitSet traits, RelNode left, RelNode right, RexNode condition,
                       JoinRelType joinType) throws InvalidRelException {
-    this(cluster, traits, left, right, condition, joinType, false, false, JoinControl.DEFAULT);
+    this(cluster, traits, left, right, condition, joinType, false, false, JoinControl.DEFAULT, null);
   }
 
   public HashJoinPrel(RelOptCluster cluster, RelTraitSet traits, RelNode left, RelNode right, RexNode condition,
-                      JoinRelType joinType, boolean swapped, boolean isRowKeyJoin, int joinControl) throws InvalidRelException {
+                      JoinRelType joinType, boolean swapped, boolean isRowKeyJoin, int joinControl, RuntimeFilterDef runtimeFilterDef) throws InvalidRelException {
     super(cluster, traits, left, right, condition, joinType);
     this.swapped = swapped;
     this.isRowKeyJoin = isRowKeyJoin;
     joincategory = JoinUtils.getJoinCategory(left, right, condition, leftKeys, rightKeys, filterNulls);
     this.joinControl = joinControl;
+    this.runtimeFilterDef = runtimeFilterDef;
   }
 
   @Override
   public Join copy(RelTraitSet traitSet, RexNode conditionExpr, RelNode left, RelNode right, JoinRelType joinType, boolean semiJoinDone) {
     try {
       return new HashJoinPrel(this.getCluster(), traitSet, left, right, conditionExpr, joinType, this.swapped,
-          this.isRowKeyJoin, this.joinControl);
+          this.isRowKeyJoin, this.joinControl, this.runtimeFilterDef);
     }catch (InvalidRelException e) {
       throw new AssertionError(e);
     }
@@ -83,7 +86,7 @@ public class HashJoinPrel  extends JoinPrel {
   }
 
   @Override
-  public PhysicalOperator getPhysicalOperator(PhysicalPlanCreator creator) throws IOException {
+  public org.apache.drill.exec.physical.base.PhysicalOperator getPhysicalOperator(PhysicalPlanCreator creator) throws IOException {
     // Depending on whether the left/right is swapped for hash inner join, pass in different
     // combinations of parameters.
     if (! swapped) {
@@ -121,7 +124,8 @@ public class HashJoinPrel  extends JoinPrel {
 
     buildJoinConditions(conditions, leftFields, rightFields, leftKeys, rightKeys);
 
-    HashJoinPOP hjoin = new HashJoinPOP(leftPop, rightPop, conditions, jtype, isRowKeyJoin, htControl);
+    RuntimeFilterDef runtimeFilterDef = this.getRuntimeFilterDef();
+    HashJoinPOP hjoin = new HashJoinPOP(leftPop, rightPop, conditions, jtype, isRowKeyJoin, htControl, runtimeFilterDef);
     return creator.addMetadata(this, hjoin);
   }
 
@@ -136,5 +140,14 @@ public class HashJoinPrel  extends JoinPrel {
   public boolean isRowKeyJoin() {
     return this.isRowKeyJoin;
   }
+
+  public RuntimeFilterDef getRuntimeFilterDef() {
+    return runtimeFilterDef;
+  }
+
+  public void setRuntimeFilterDef(RuntimeFilterDef runtimeFilterDef) {
+    this.runtimeFilterDef = runtimeFilterDef;
+  }
+
 
 }

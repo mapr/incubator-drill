@@ -265,7 +265,7 @@ public class NonCoveringIndexPlanGenerator extends AbstractIndexPlanGenerator {
       //for hash join, collation will be cleared
       HashJoinPrel hjPrel = new HashJoinPrel(topRel.getCluster(), leftTraits, convertedLeft,
           convertedRight, joinCondition, JoinRelType.INNER, false,
-          true /* useful for join-restricted scans */, JoinControl.DEFAULT);
+          true /* useful for join-restricted scans */, JoinControl.DEFAULT, null);
       newRel = hjPrel;
     } else {
       //if there is collation, add to rowkey join

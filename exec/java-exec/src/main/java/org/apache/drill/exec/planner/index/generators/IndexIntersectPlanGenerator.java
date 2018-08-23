@@ -98,7 +98,7 @@ public class IndexIntersectPlanGenerator extends AbstractIndexPlanGenerator {
       RelNode newRel;
       if (settings.isIndexUseHashJoinNonCovering()) {
         HashJoinPrel hjPrel = new HashJoinPrel(left.getCluster(), left.getTraitSet(), left,
-            right, joinCondition, JoinRelType.INNER, false, isRowKeyJoin, htControl);
+            right, joinCondition, JoinRelType.INNER, false, isRowKeyJoin, htControl, null);
         newRel = hjPrel;
       } else {
         RowKeyJoinPrel rjPrel = new RowKeyJoinPrel(left.getCluster(), left.getTraitSet(),
@@ -110,7 +110,7 @@ public class IndexIntersectPlanGenerator extends AbstractIndexPlanGenerator {
     } else {
       //there is no restricted scan on left, do a regular rowkey join
       HashJoinPrel hjPrel = new HashJoinPrel(left.getCluster(), left.getTraitSet(), left,
-          right, joinCondition, JoinRelType.INNER, false, isRowKeyJoin, htControl);
+          right, joinCondition, JoinRelType.INNER, false, isRowKeyJoin, htControl, null);
       return buildRowKeyProject(hjPrel, leftRowKeyIdx);
     }
   }

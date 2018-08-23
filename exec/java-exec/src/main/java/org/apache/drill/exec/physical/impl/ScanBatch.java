@@ -53,7 +53,6 @@ import org.apache.drill.exec.vector.AllocationHelper;
 import org.apache.drill.exec.vector.NullableVarCharVector;
 import org.apache.drill.exec.vector.SchemaChangeCallBack;
 import org.apache.drill.exec.vector.ValueVector;
-
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -337,7 +336,7 @@ public class ScanBatch implements CloseableRecordBatch {
 
   @Override
   public SelectionVector2 getSelectionVector2() {
-    throw new UnsupportedOperationException();
+    return null;
   }
 
   @Override

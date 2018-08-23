@@ -123,7 +123,7 @@ public abstract class JoinPruleBase extends Prule {
         newJoin = new HashJoinPrel(join.getCluster(), traitsLeft,
             convertedLeft, convertedRight, join.getCondition(),
             join.getJoinType(), false,
-            true /* useful for join-restricted scans */, JoinControl.DEFAULT);
+            true /* useful for join-restricted scans */, JoinControl.DEFAULT, null);
       }
     }
     if (newJoin != null) {
