@@ -1473,4 +1473,35 @@ public class TestComplexTypeIndex extends BaseJsonTest {
     }
     return;
   }
+
+  @Test
+  public void testNestedFlattenAndWithNonCovering_1() throws Exception {
+    try {
+      test(IndexPlanning);
+      test(maxNonCoveringSelectivityThreshold);
+      test(DisableComplexFTSTypePlanning);
+      String query = "select _id from hbase.`index_test_complex1` where _id in (select _id from (select _id, flatten(t1.`f1`.`products`) as f2," +
+              " t1.`f3` as f4 from (select _id, flatten(orders) as f1, flatten(weight) as f3 from hbase.`index_test_complex1`) as t1) as t2" +
+              " where t2.`f2`.`price` = 50 and t2.`f2`.`prodname`= 'chair' and t2.`f4`.`low` = 120 and t2.`f4`.high = 150)";
+
+      PlanTestBase.testPlanMatchingPatterns(query,
+              new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*indexName=(ordersProductsIdx1|weightIdx1)", "RowKeyJoin"},
+              new String[]{}
+      );
+
+      testBuilder()
+              .optionSettingQueriesForTestQuery(maxNonCoveringIndexPlan)
+              .optionSettingQueriesForBaseline(optionsForBaseLine)
+              .unOrdered()
+              .sqlQuery(query)
+              .sqlBaselineQuery(query)
+              .build()
+              .run();
+    } finally {
+      test(ResetComplexFTSTypePlanning);
+      test(IndexPlanning);
+      test(resetmaxNonCoveringSelectivityThreshold);
+    }
+    return;
+  }
 }

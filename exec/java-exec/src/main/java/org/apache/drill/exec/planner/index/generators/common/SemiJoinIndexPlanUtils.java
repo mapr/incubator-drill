@@ -225,7 +225,9 @@ public class SemiJoinIndexPlanUtils {
     Project proj1 = (Project) RelOptUtil.createProject(input, normalizedInfo.left.left, normalizedInfo.left.right);
     ProjectPrel upperProject = new ProjectPrel(input.getCluster(), input.getTraitSet(), input, proj1.getProjects(),
             proj1.getRowType());
-    if (input instanceof ProjectPrel) {
+    if (input instanceof ProjectPrel &&
+            !DrillRelOptUtil.containsComplexFunction(upperProject, functionRegistry) &&
+            !DrillRelOptUtil.containsComplexFunction((ProjectPrel)input, functionRegistry)) {
       RelNode proj = DrillRelOptUtil.mergeProjects(upperProject, (ProjectPrel)input, false, builder);
       if (proj instanceof LogicalProject) {
         return Pair.of(new ProjectPrel(input.getCluster(), input.getTraitSet(), proj.getInput(0),

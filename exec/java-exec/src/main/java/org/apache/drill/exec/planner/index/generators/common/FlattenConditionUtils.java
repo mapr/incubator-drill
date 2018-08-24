@@ -329,7 +329,13 @@ public class FlattenConditionUtils {
 
           return result2;
         }
-        return null;
+        RexNode result1 = null;
+        if (projectFlattenIterator.hasNext()) {
+          RexNode inputFlattenNode = builder.makeCall(item.getType(), SqlStdOperatorTable.ITEM, ImmutableList.of(inputRef, literal));
+          currentEntry = projectFlattenIterator.next();
+          result1 = inputFlattenNode.accept(this);
+        }
+        return result1;
       }
 
       public String getProjectFieldName() {
@@ -356,6 +362,9 @@ public class FlattenConditionUtils {
       public RexNode visitLiteral(RexLiteral literal) {
         return literal;
       }
+
+      @Override
+      public RexNode visitInputRef(RexInputRef inputRef) { return inputRef; }
     }
 
     public FilterVisitor(LinkedHashMap<RelNode, Map<String, RexCall>> projectToFlattenExprsMap,

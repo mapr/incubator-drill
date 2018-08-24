@@ -826,6 +826,12 @@ public abstract class DrillRelOptUtil {
         bottomProject, force, relBuilder);
   }
 
+  public static boolean containsComplexFunction(Project project, FunctionImplementationRegistry functionRegistry) {
+    return project.getProjects().stream()
+              .filter(rex -> rex instanceof RexCall).map(rex -> (RexCall) rex).map(rexCall -> rexCall.getOperator().getName())
+              .filter(name -> functionRegistry.isFunctionComplexOutput(name)).count() > 0;
+  }
+
   /**
    * Merges projects when the top project contains one or more complex functions (e.g. Flatten,
    * Convert(To/From)Json) and the bottom project does not.
