@@ -303,7 +303,7 @@ public class HashJoinBatch extends AbstractBinaryRecordBatch<HashJoinPOP> implem
       prefetchedBuild,
       buildSideIsEmpty,
       RIGHT_INDEX,
-      right,
+      buildBatch,
       () -> {
         batchMemoryManager.update(RIGHT_INDEX, 0, true);
         logger.debug("BATCH_STATS, incoming right: {}", batchMemoryManager.getRecordBatchSizer(RIGHT_INDEX));
@@ -318,7 +318,7 @@ public class HashJoinBatch extends AbstractBinaryRecordBatch<HashJoinPOP> implem
       prefetchedProbe,
       probeSideIsEmpty,
       LEFT_INDEX,
-      left,
+      probeBatch,
       () -> {
         batchMemoryManager.update(LEFT_INDEX, 0);
         logger.debug("BATCH_STATS, incoming left: {}", batchMemoryManager.getRecordBatchSizer(LEFT_INDEX));
@@ -364,7 +364,10 @@ public class HashJoinBatch extends AbstractBinaryRecordBatch<HashJoinPOP> implem
       state = BatchState.STOP;
     } else {
       // Got our first batch(es)
-      memoryManagerUpdate.run();
+      if (cycleNum == 0) {
+        // Only collect stats for the first cylce
+        memoryManagerUpdate.run();
+      }
       state = BatchState.FIRST;
     }
 
@@ -592,6 +595,9 @@ public class HashJoinBatch extends AbstractBinaryRecordBatch<HashJoinPOP> implem
 
           state = BatchState.FIRST;  // TODO need to determine if this is still necessary since prefetchFirstBatchFromBothSides sets this
 
+          prefetchedBuild.setValue(false);
+          prefetchedProbe.setValue(false);
+
           return innerNext(); // start processing the next spilled partition "recursively"
         }
 
@@ -784,7 +790,6 @@ public class HashJoinBatch extends AbstractBinaryRecordBatch<HashJoinPOP> implem
         buildJoinColumns,
         leftUpstream == IterOutcome.NONE, // probeEmpty
         allocator.getLimit(),
-        maxIncomingBatchSize,
         numPartitions,
         RECORDS_PER_BATCH,
         RECORDS_PER_BATCH,
@@ -843,22 +848,19 @@ public class HashJoinBatch extends AbstractBinaryRecordBatch<HashJoinPOP> implem
     {
       // Initializing build calculator
       // Limit scope of these variables to this block
-      int maxBatchSize = firstCycle? RecordBatch.MAX_BATCH_ROW_COUNT : RECORDS_PER_BATCH;
-      boolean hasProbeData = leftUpstream != IterOutcome.NONE;
-      boolean doMemoryCalculation = canSpill && hasProbeData;
+      int maxBatchSize = firstCycle? RecordBatch.MAX_BATCH_ROW_COUNT: RECORDS_PER_BATCH;
+      boolean doMemoryCalculation = canSpill && !probeSideIsEmpty.booleanValue();
       HashJoinMemoryCalculator calc = getCalculatorImpl();
 
       calc.initialize(doMemoryCalculation);
       buildCalc = calc.next();
 
-      // We've sniffed first non empty build and probe batches so we have enough information to create a calculator
       buildCalc.initialize(firstCycle, true, // TODO Fix after growing hash values bug fixed
         buildBatch,
         probeBatch,
         buildJoinColumns,
-        leftUpstream == IterOutcome.NONE, // probeEmpty
+        probeSideIsEmpty.booleanValue(),
         allocator.getLimit(),
-        maxIncomingBatchSize,
         numPartitions,
         RECORDS_PER_BATCH,
         RECORDS_PER_BATCH,
@@ -1118,7 +1120,6 @@ public class HashJoinBatch extends AbstractBinaryRecordBatch<HashJoinPOP> implem
 
     this.allocator = oContext.getAllocator();
 
-    maxIncomingBatchSize = context.getOptions().getLong(ExecConstants.OUTPUT_BATCH_SIZE);
     numPartitions = (int)context.getOptions().getOption(ExecConstants.HASHJOIN_NUM_PARTITIONS_VALIDATOR);
     if ( numPartitions == 1 ) { //
       disableSpilling("Spilling is disabled due to configuration setting of num_partitions to 1");
