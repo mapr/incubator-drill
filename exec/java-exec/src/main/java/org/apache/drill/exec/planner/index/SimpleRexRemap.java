@@ -17,9 +17,8 @@
  */
 package org.apache.drill.exec.planner.index;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
+import org.apache.drill.shaded.guava.com.google.common.collect.ImmutableMap;
+import org.apache.drill.shaded.guava.com.google.common.collect.Maps;
 import org.apache.calcite.rel.RelNode;
 import org.apache.calcite.rel.type.RelDataType;
 import org.apache.calcite.rel.type.RelDataTypeField;
@@ -91,7 +90,7 @@ public class SimpleRexRemap {
       RexNode equalOp = entry.getKey();
       LogicalExpression opInput = entry.getValue();
 
-      final ImmutableList<RexNode> operands = ((RexCall)equalOp).operands;
+      List<RexNode> operands = ((RexCall)equalOp).operands;
       RexLiteral newLiteral = null;
       RexNode input = null;
       if(operands.size() == 2 ) {

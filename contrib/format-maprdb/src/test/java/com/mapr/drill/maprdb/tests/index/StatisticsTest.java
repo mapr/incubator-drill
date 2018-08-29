@@ -17,7 +17,7 @@
  */
 package com.mapr.drill.maprdb.tests.index;
 
-import com.google.common.collect.Lists;
+import org.apache.drill.shaded.guava.com.google.common.collect.Lists;
 import com.mapr.db.Admin;
 import com.mapr.drill.maprdb.tests.MaprDBTestsSuite;
 import com.mapr.drill.maprdb.tests.json.BaseJsonTest;

@@ -21,7 +21,7 @@ package org.apache.drill.exec.planner.index.generators;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.common.base.Preconditions;
+import org.apache.drill.shaded.guava.com.google.common.base.Preconditions;
 import org.apache.calcite.plan.RelOptUtil;
 import org.apache.calcite.plan.RelTraitSet;
 import org.apache.calcite.rel.RelCollations;
@@ -56,8 +56,8 @@ import org.apache.calcite.rel.type.RelDataTypeField;
 import org.apache.calcite.rex.RexBuilder;
 import org.apache.calcite.rex.RexInputRef;
 import org.apache.calcite.rex.RexNode;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
+import org.apache.drill.shaded.guava.com.google.common.collect.ImmutableList;
+import org.apache.drill.shaded.guava.com.google.common.collect.Lists;
 
 /**
  * Generate a non-covering index plan that is equivalent to the original plan. The non-covering plan consists

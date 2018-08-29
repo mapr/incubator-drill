@@ -63,7 +63,7 @@ import org.apache.drill.jdbc.InvalidParameterSqlException;
 import org.apache.drill.jdbc.JdbcApiSqlException;
 import org.slf4j.Logger;
 
-import com.google.common.base.Throwables;
+import org.apache.drill.shaded.guava.com.google.common.base.Throwables;
 
 import static org.apache.drill.exec.util.StoragePluginTestUtils.DEFAULT_SCHEMA;
 import static org.apache.drill.exec.util.StoragePluginTestUtils.DFS_PLUGIN_NAME;
@@ -195,7 +195,7 @@ class DrillConnectionImpl extends AvaticaConnection
     try {
       return super.prepareAndExecuteInternal(statement, sql, maxRowCount);
     } catch (RuntimeException e) {
-      Throwables.propagateIfInstanceOf(e.getCause(), SQLException.class);
+      Throwables.throwIfInstanceOf(e.getCause(), SQLException.class);
       throw e;
     }
   }

@@ -49,9 +49,9 @@ import org.apache.drill.exec.proto.UserProtos.UnionSupport;
 import org.apache.drill.jdbc.AlreadyClosedSqlException;
 import org.apache.drill.jdbc.DrillDatabaseMetaData;
 
-import com.google.common.base.Joiner;
-import com.google.common.base.Throwables;
-import com.google.common.collect.ImmutableSet;
+import org.apache.drill.shaded.guava.com.google.common.base.Joiner;
+import org.apache.drill.shaded.guava.com.google.common.base.Throwables;
+import org.apache.drill.shaded.guava.com.google.common.collect.ImmutableSet;
 
 /**
  * Drill's implementation of {@link java.sql.DatabaseMetaData}.
@@ -172,7 +172,7 @@ class DrillDatabaseMetaDataImpl extends AvaticaDatabaseMetaData
             if (cause == null) {
               throw new AssertionError("Something unknown happened", e);
             }
-            Throwables.propagateIfPossible(cause);
+            Throwables.throwIfUnchecked(cause);
             throw new SQLException("Error when getting server meta", cause);
           }
         }
@@ -1141,7 +1141,7 @@ class DrillDatabaseMetaDataImpl extends AvaticaDatabaseMetaData
     try {
       return super.getTables(catalog, schemaPattern,tableNamePattern, types);
     } catch(DrillRuntimeException e) {
-      Throwables.propagateIfInstanceOf(e.getCause(), SQLException.class);
+      Throwables.throwIfInstanceOf(e.getCause(), SQLException.class);
       throw e;
     }
   }
@@ -1153,7 +1153,7 @@ class DrillDatabaseMetaDataImpl extends AvaticaDatabaseMetaData
     try {
       return super.getSchemas();
     } catch(DrillRuntimeException e) {
-      Throwables.propagateIfInstanceOf(e.getCause(), SQLException.class);
+      Throwables.throwIfInstanceOf(e.getCause(), SQLException.class);
       throw e;
     }
   }
@@ -1164,7 +1164,7 @@ class DrillDatabaseMetaDataImpl extends AvaticaDatabaseMetaData
     try {
       return super.getCatalogs();
     } catch(DrillRuntimeException e) {
-      Throwables.propagateIfInstanceOf(e.getCause(), SQLException.class);
+      Throwables.throwIfInstanceOf(e.getCause(), SQLException.class);
       throw e;
     }
   }
@@ -1182,7 +1182,7 @@ class DrillDatabaseMetaDataImpl extends AvaticaDatabaseMetaData
     try {
       return super.getColumns(catalog, schema, table, columnNamePattern);
     } catch(DrillRuntimeException e) {
-      Throwables.propagateIfInstanceOf(e.getCause(), SQLException.class);
+      Throwables.throwIfInstanceOf(e.getCause(), SQLException.class);
       throw e;
     }
   }

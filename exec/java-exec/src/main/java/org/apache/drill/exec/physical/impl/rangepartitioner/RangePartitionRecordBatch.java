@@ -37,7 +37,7 @@ import org.apache.drill.exec.record.VectorWrapper;
 import org.apache.drill.exec.vector.IntVector;
 import org.apache.drill.exec.vector.ValueVector;
 
-import com.google.common.collect.Lists;
+import org.apache.drill.shaded.guava.com.google.common.collect.Lists;
 
 /**
  * A RangePartitionRecordBatch is a run-time operator that provides the ability to divide up the input rows

@@ -22,7 +22,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.base.Preconditions;
+import org.apache.drill.shaded.guava.com.google.common.base.Preconditions;
 import org.apache.calcite.plan.RelOptCost;
 import org.apache.calcite.plan.RelOptPlanner;
 import org.apache.calcite.rel.RelCollation;
@@ -40,9 +40,9 @@ import org.apache.drill.exec.planner.physical.PlannerSettings;
 import org.apache.drill.exec.planner.physical.PrelUtil;
 import org.apache.drill.exec.planner.physical.ScanPrel;
 import org.apache.drill.exec.planner.common.DrillScanRelBase;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import org.apache.drill.shaded.guava.com.google.common.collect.ImmutableList;
+import org.apache.drill.shaded.guava.com.google.common.collect.Lists;
+import org.apache.drill.shaded.guava.com.google.common.collect.Maps;
 
 public class IndexSelector  {
   static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(IndexSelector.class);
