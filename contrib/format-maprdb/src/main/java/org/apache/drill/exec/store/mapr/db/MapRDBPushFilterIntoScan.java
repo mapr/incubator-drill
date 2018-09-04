@@ -134,9 +134,9 @@ public abstract class MapRDBPushFilterIntoScan extends StoragePluginOptimizerRul
       return;
     }
 
+    boolean isComplexFTSEnabled = PrelUtil.getPlannerSettings(call.getPlanner()).isComplexFTSEnabled();
     LogicalExpression conditionExp;
     boolean allExpressionsConverted = true;
-    List<JsonScanSpec> scanSpecs = new ArrayList<>();
     JsonScanSpec newScanSpec = null;
     String functionName = "booleanAnd";
 
@@ -149,11 +149,19 @@ public abstract class MapRDBPushFilterIntoScan extends StoragePluginOptimizerRul
         return;
       }
       JsonConditionBuilder jsonConditionBuilder = new JsonConditionBuilder(groupScan, conditionExp);
-      JsonScanSpec scanSpec = jsonConditionBuilder.parseTree();
-      allExpressionsConverted = jsonConditionBuilder.isAllExpressionsConverted() && allExpressionsConverted;
+      JsonScanSpec scanSpec = null;
+      try {
+        scanSpec = jsonConditionBuilder.parseTree();
+        allExpressionsConverted = jsonConditionBuilder.isAllExpressionsConverted() && allExpressionsConverted;
+      } catch (UnsupportedOperationException exp) {
+        allExpressionsConverted = false;
+        if (!isComplexFTSEnabled) {
+          throw exp;
+        }
+      }
       if (newScanSpec == null) {
         newScanSpec = scanSpec;
-      } else {
+      } else if (scanSpec != null) {
         newScanSpec.mergeScanSpec(functionName, scanSpec);
       }
     }

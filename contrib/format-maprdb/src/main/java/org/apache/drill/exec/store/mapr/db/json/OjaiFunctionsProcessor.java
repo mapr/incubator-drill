@@ -190,6 +190,10 @@ class OjaiFunctionsProcessor extends AbstractExprVisitor<Void, Void, RuntimeExce
       break;
     }
 
+    case "flatten": {
+      throw new UnsupportedOperationException("un-supported function " + functionName + " is used in the OJAI function");
+    }
+
     default:
       throw new IllegalArgumentException("unrecognized functionName " + functionName);
     } // switch(functionName)
