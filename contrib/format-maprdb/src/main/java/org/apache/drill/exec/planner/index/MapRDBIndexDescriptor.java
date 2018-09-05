@@ -18,6 +18,8 @@
 package org.apache.drill.exec.planner.index;
 
 
+import com.google.common.collect.ImmutableList;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -25,6 +27,7 @@ import java.util.Set;
 import org.apache.calcite.plan.RelOptCost;
 import org.apache.calcite.plan.RelOptPlanner;
 import org.apache.calcite.rel.RelFieldCollation.NullDirection;
+import org.apache.drill.common.expression.FieldReference;
 import org.apache.drill.common.expression.SchemaPath;
 import org.apache.drill.exec.expr.CloneVisitor;
 import org.apache.drill.exec.physical.base.DbGroupScan;
@@ -48,6 +51,8 @@ public class MapRDBIndexDescriptor extends DrillIndexDescriptor {
   protected final Set<LogicalExpression> indexedFields;
   protected MapRDBFunctionalIndexInfo functionalInfo;
   protected PluginCost pluginCost;
+  private static final String ENC_PREFIX = "$$ENC";
+
 
   public MapRDBIndexDescriptor(List<LogicalExpression> indexCols,
                                CollationContext indexCollationContext,
@@ -74,9 +79,30 @@ public class MapRDBIndexDescriptor extends DrillIndexDescriptor {
     return desc;
   }
 
+  /*
+   * Check if the projected fields contain "[]" and create a non-covering plan.
+   */
+  public boolean isProjectionCovering(List<LogicalExpression> expressions) {
+    for (int i = 0; i < expressions.size(); i++) {
+      LogicalExpression ex = expressions.get(i);
+      if (ex instanceof FieldReference) {
+        List<LogicalExpression> decodedCols = new DecodePathinExpr().parseExpressions(ImmutableList.of(ex));
+        for (LogicalExpression decodedCol : decodedCols) {
+          if (((FieldReference) ex).getRootSegmentPath().startsWith(ENC_PREFIX) && decodedCol.toString().endsWith("[-1]")) {
+            return false;
+          }
+        }
+      }
+    }
+    return true;
+  }
+
   @Override
   public boolean isCoveringIndex(List<LogicalExpression> expressions) {
     List<LogicalExpression> decodedCols = new DecodePathinExpr().parseExpressions(expressions);
+    if (!isProjectionCovering(expressions)) {
+      return false;
+    }
     return columnsInIndexFields(decodedCols, allFields);
   }
 
