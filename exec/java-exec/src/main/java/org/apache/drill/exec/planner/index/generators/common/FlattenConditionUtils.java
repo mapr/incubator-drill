@@ -285,7 +285,7 @@ public class FlattenConditionUtils {
     // The key of the map is the name of the Project expression for Flatten.
     // Value is the list of expressions in the filter that are referencing that particular
     // FLATTEN expr from the child Project.
-    private final Map<String, List<RexNode>> exprsReferencingFlattenMap = Maps.newHashMap();
+    private Map<String, List<RexNode>> exprsReferencingFlattenMap = Maps.newHashMap();
 
     // list of expressions in the filter that are _NOT_ referencing
     // FLATTEN expr from the child Project
@@ -375,6 +375,14 @@ public class FlattenConditionUtils {
       this.currentEntry = projectFlattenIterator.hasNext() ? projectFlattenIterator.next() : null;
     }
 
+    public FilterVisitor(RexBuilder builder, Entry<RelNode, Map<String, RexCall>> currentEntry, Iterator<Entry<RelNode, Map<String, RexCall>>> projectFlattenIterator) {
+      super(true);
+      this.builder = builder;
+      this.projectFlattenIterator = projectFlattenIterator;
+      this.currentEntry = currentEntry;
+      this.exprsReferencingFlattenMap = null;
+    }
+
     public FilterVisitor(DrillProjectRelBase leafProjectAboveScan,
         RexBuilder builder) {
       super(true);
@@ -391,11 +399,14 @@ public class FlattenConditionUtils {
       Preconditions.checkArgument(projectFieldName != null);
 
       List<RexNode> exprsReferencingFlatten = null;
-      if ((exprsReferencingFlatten = exprsReferencingFlattenMap.get(projectFieldName)) == null) {
-        exprsReferencingFlatten = Lists.newArrayList();
-        exprsReferencingFlattenMap.put(projectFieldName, exprsReferencingFlatten);
+
+      if (exprsReferencingFlattenMap != null) {
+        if ((exprsReferencingFlatten = exprsReferencingFlattenMap.get(projectFieldName)) == null) {
+          exprsReferencingFlatten = Lists.newArrayList();
+          exprsReferencingFlattenMap.put(projectFieldName, exprsReferencingFlatten);
+        }
+        exprsReferencingFlatten.add(arrayItem);
       }
-      exprsReferencingFlatten.add(arrayItem);
       return arrayItem;
     }
 
@@ -426,7 +437,7 @@ public class FlattenConditionUtils {
         RexLiteral right = builder.makeBigintLiteral(BigDecimal.valueOf(-1));
         if (projectFlattenIterator.hasNext()) {
           currentEntry = projectFlattenIterator.next();
-          left = left.accept(this);
+          left = left.accept(new FilterVisitor(this.builder, this.currentEntry, this.projectFlattenIterator));
         }
         RexNode result = builder.makeCall(inputRef.getType(), SqlStdOperatorTable.ITEM,
             ImmutableList.of(left, right));
