@@ -97,6 +97,11 @@ public class FlattenIndexPlanCallContext extends IndexLogicalPlanCallContext
    */
   protected List<RexInputRef> leafFilterExprs = null;
 
+  /**
+   * Is valid Flatten context.
+   */
+  public final boolean isValid;
+
   public FlattenIndexPlanCallContext(RelOptRuleCall call,
       DrillProjectRel upperProject,
       DrillFilterRel filterAboveRootFlatten,
@@ -113,7 +118,7 @@ public class FlattenIndexPlanCallContext extends IndexLogicalPlanCallContext
     this.projectToFlattenExprsMap = Maps.newLinkedHashMap();
     this.projectToNonFlattenExprsMap = Maps.newLinkedHashMap();
 
-    initializeContext();
+    isValid = initializeContext();
   }
 
   @Override
@@ -206,8 +211,9 @@ public class FlattenIndexPlanCallContext extends IndexLogicalPlanCallContext
     this.leafProjectAboveScan = project;
   }
 
-  private void initializeContext() {
-    AbstractMatchFunction.initializeContext(this);
+  private boolean initializeContext() {
+    DrillScanRelBase scan = AbstractMatchFunction.initializeContext(this);
+    return scan != null ? true : false;
   }
 
   public RelNode buildPhysicalProjectsBottomUp(RelNode inputRel) {

@@ -120,6 +120,10 @@ public class SemiJoinFullTableScanPrule extends AbstractIndexPrule {
           rootProjectWithFlatten,
           rightScan);
 
+      if (!rightContext.isValid) {
+        return null;
+      }
+
       SemiJoinIndexPlanCallContext idxContext = new SemiJoinIndexPlanCallContext(call, join, distinct,
               leftContext, rightContext);
       idxContext.setCoveringIndexPlanApplicable(!projectHasFlatten(leftContext.lowerProject, true, null, null) &&

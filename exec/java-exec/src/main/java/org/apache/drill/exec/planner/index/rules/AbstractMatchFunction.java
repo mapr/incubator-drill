@@ -154,6 +154,7 @@ public abstract class AbstractMatchFunction<T> implements MatchFunction<T> {
    * @return The leaf level DrillScanRelBase (either logical or physical scan) or NULL
    */
   public static DrillScanRelBase initializeContext(FlattenCallContext flattenContext) {
+    boolean encounteredFilter = false;
     // Since there could be a chain of Projects with Flattens (e.g Project-Project-Project-Scan)
     // recurse to the leaf to find the Scan
     RelNode current = flattenContext.getProjectWithRootFlatten();
@@ -180,6 +181,12 @@ public abstract class AbstractMatchFunction<T> implements MatchFunction<T> {
         Map<String, RexCall> flattenMap = projectToFlattenExprsMap.get(currentProject);
         List<RexNode> nonFlattenExprs = Lists.newArrayList();
 
+        //This pattern is not handled by the FlattenIndexPlanCallContext.
+        //For now, index planning is disabled because intermediate filter is being dropped.
+        if (projectHasFlatten && encounteredFilter) {
+          return null;
+        }
+
         if (projectHasFlatten) {
           AbstractMatchFunction.projectHasFlatten(currentProject, false, flattenMap, nonFlattenExprs);
           projectToFlattenExprsMap.put(currentProject, flattenMap);
@@ -189,6 +196,7 @@ public abstract class AbstractMatchFunction<T> implements MatchFunction<T> {
           flattenContext.setLeafProjectAboveScan(currentProject);
         }
       } else if (current instanceof DrillFilterRelBase) {
+        encounteredFilter = true;
         // this must be the filter below the leaf flatten
         flattenContext.setFilterBelowLeafFlatten((DrillFilterRelBase) current);
       }

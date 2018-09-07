@@ -177,6 +177,10 @@ public class SemiJoinIndexScanPrule extends AbstractIndexPrule {
           lowerProject,
           rightScan);
 
+      if (!rightContext.isValid) {
+        return null;
+      }
+
       SemiJoinIndexPlanCallContext idxContext = new SemiJoinIndexPlanCallContext(call, join, distinct,
               leftContext, rightContext);
       idxContext.setCoveringIndexPlanApplicable(!projectHasFlatten(leftContext.lowerProject, true, null,null) &&
@@ -196,6 +200,10 @@ public class SemiJoinIndexScanPrule extends AbstractIndexPrule {
   }
 
   private void doOnMatch(SemiJoinIndexPlanCallContext indexContext) {
+    if (indexContext == null) {
+      return;
+    }
+
     if (indexContext != null && indexContext.join != null) {
       PlannerSettings ps = PrelUtil.getPlannerSettings(indexContext.call.getPlanner());
       FlattenIndexPlanCallContext context = SemiJoinTransformUtils.transformJoinToSingleTableScan(indexContext, ps.functionImplementationRegistry, logger);
