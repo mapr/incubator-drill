@@ -270,6 +270,12 @@ public class RowKeyJoinBatch extends AbstractRecordBatch<RowKeyJoinPOP> implemen
   }
 
   @Override
+  public void dump() {
+    logger.error("RowKeyJoinBatch[container={}, popConfig={}]",
+      container, popConfig);
+  }
+
+  @Override
   public void killIncoming(boolean sendUpstream) {
     left.kill(sendUpstream);
     right.kill(sendUpstream);

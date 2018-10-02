@@ -83,7 +83,9 @@ public class ScanBatch implements CloseableRecordBatch {
   private final List<Map<String, String>> implicitColumnList;
   private String currentReaderClassName;
   private final RecordBatchStatsContext batchStatsContext;
-
+  // Represents last outcome of next(). If an Exception is thrown
+  // during the method's execution a value IterOutcome.STOP will be assigned.
+  private IterOutcome lastOutcome;
 
   private List<RecordReader> readerList = null; // needed for repeatable scanners
   private boolean isRepeatableScan = false;     // needed for repeatable scanners
@@ -258,26 +260,32 @@ public class ScanBatch implements CloseableRecordBatch {
   @Override
   public IterOutcome next() {
     if (done) {
-      return IterOutcome.NONE;
+      lastOutcome = IterOutcome.NONE;
+      return lastOutcome;
     }
     oContext.getStats().startProcessing();
     try {
-      return internalNext();
+      lastOutcome = internalNext();
+      return lastOutcome;
     } catch (OutOfMemoryException ex) {
       clearFieldVectorMap();
+      lastOutcome = IterOutcome.STOP;
       throw UserException.memoryError(ex).build(logger);
     } catch (ExecutionSetupException e) {
       if (currentReader != null) {
         try {
           currentReader.close();
         } catch (final Exception e2) {
+          lastOutcome = IterOutcome.STOP;
           logger.error("Close failed for reader " + currentReaderClassName, e2);
         }
       }
+      lastOutcome = IterOutcome.STOP;
       throw UserException.systemError(e)
           .addContext("Setup failed for", currentReaderClassName)
           .build(logger);
     } catch (Exception ex) {
+      lastOutcome = IterOutcome.STOP;
       throw UserException.systemError(ex).build(logger);
     } finally {
       oContext.getStats().stopProcessing();
@@ -617,5 +625,15 @@ public class ScanBatch implements CloseableRecordBatch {
     }
 
     return true;
+  }
+
+  @Override
+  public boolean hasFailed() {
+    return lastOutcome == IterOutcome.STOP;
+  }
+
+  @Override
+  public void dump() {
+    logger.error("ScanBatch[container={}, currentReader={}, schema={}]", container, currentReader, schema);
   }
 }

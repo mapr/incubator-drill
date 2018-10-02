@@ -109,5 +109,4 @@ public abstract class AbstractRecordReader implements RecordReader {
   protected List<SchemaPath> getDefaultColumnsToRead() {
     return GroupScan.ALL_COLUMNS;
   }
-
 }
