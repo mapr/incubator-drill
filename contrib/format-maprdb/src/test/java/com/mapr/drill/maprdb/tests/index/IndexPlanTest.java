@@ -1959,6 +1959,7 @@ public class IndexPlanTest extends BaseJsonTest {
     }
   }
 
+  @Test
   public void TestIndexScanWithDescOrderByNullsFirst() throws Exception {
 
     String query = "select t.personal.age from hbase.`index_test_primary` t order by t.personal.age desc nulls first limit 1";
