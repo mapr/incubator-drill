@@ -50,7 +50,6 @@ public final class ExecConstants {
   public static final String ZK_TIMEOUT = "drill.exec.zk.timeout";
   public static final String ZK_ROOT = "drill.exec.zk.root";
   public static final String ZK_REFRESH = "drill.exec.zk.refresh";
-  public static final String ZK_SECURE_ACL = "drill.exec.zk.apply_secure_acl";
   public static final String BIT_RETRY_TIMES = "drill.exec.rpc.bit.server.retry.count";
   public static final String BIT_RETRY_DELAY = "drill.exec.rpc.bit.server.retry.delay";
   public static final String BIT_TIMEOUT = "drill.exec.bit.timeout";
@@ -809,8 +808,7 @@ public final class ExecConstants {
   public static final String ENABLE_ITERATOR_VALIDATION = "drill.exec.debug.validate_iterators";
 
   public static final String QUERY_ROWKEYJOIN_BATCHSIZE_KEY = "exec.query.rowkeyjoin_batchsize";
-  public static final PositiveLongValidator QUERY_ROWKEYJOIN_BATCHSIZE =
-    new PositiveLongValidator(QUERY_ROWKEYJOIN_BATCHSIZE_KEY, Long.MAX_VALUE, null);
+  public static final PositiveLongValidator QUERY_ROWKEYJOIN_BATCHSIZE = new PositiveLongValidator(QUERY_ROWKEYJOIN_BATCHSIZE_KEY, Long.MAX_VALUE, null);
   /**
    * When iterator validation is enabled, additionally validates the vectors in
    * each batch passed to each iterator.

@@ -51,24 +51,25 @@ public class HashJoinPrel  extends JoinPrel {
 
   public HashJoinPrel(RelOptCluster cluster, RelTraitSet traits, RelNode left, RelNode right, RexNode condition,
                       JoinRelType joinType) throws InvalidRelException {
-    this(cluster, traits, left, right, condition, joinType, false, false, JoinControl.DEFAULT, null);
+    this(cluster, traits, left, right, condition, joinType, false, null, false, JoinControl.DEFAULT);
   }
 
   public HashJoinPrel(RelOptCluster cluster, RelTraitSet traits, RelNode left, RelNode right, RexNode condition,
-                      JoinRelType joinType, boolean swapped, boolean isRowKeyJoin, int joinControl, RuntimeFilterDef runtimeFilterDef) throws InvalidRelException {
+      JoinRelType joinType, boolean swapped, RuntimeFilterDef runtimeFilterDef,
+      boolean isRowKeyJoin, int joinControl) throws InvalidRelException {
     super(cluster, traits, left, right, condition, joinType);
     this.swapped = swapped;
     this.isRowKeyJoin = isRowKeyJoin;
     joincategory = JoinUtils.getJoinCategory(left, right, condition, leftKeys, rightKeys, filterNulls);
-    this.joinControl = joinControl;
     this.runtimeFilterDef = runtimeFilterDef;
+    this.joinControl = joinControl;
   }
 
   @Override
   public Join copy(RelTraitSet traitSet, RexNode conditionExpr, RelNode left, RelNode right, JoinRelType joinType, boolean semiJoinDone) {
     try {
-      return new HashJoinPrel(this.getCluster(), traitSet, left, right, conditionExpr, joinType, this.swapped,
-          this.isRowKeyJoin, this.joinControl, this.runtimeFilterDef);
+      return new HashJoinPrel(this.getCluster(), traitSet, left, right, conditionExpr, joinType, this.swapped, this.runtimeFilterDef,
+          this.isRowKeyJoin, this.joinControl);
     }catch (InvalidRelException e) {
       throw new AssertionError(e);
     }
@@ -125,7 +126,7 @@ public class HashJoinPrel  extends JoinPrel {
     buildJoinConditions(conditions, leftFields, rightFields, leftKeys, rightKeys);
 
     RuntimeFilterDef runtimeFilterDef = this.getRuntimeFilterDef();
-    HashJoinPOP hjoin = new HashJoinPOP(leftPop, rightPop, conditions, jtype, isRowKeyJoin, htControl, runtimeFilterDef);
+    HashJoinPOP hjoin = new HashJoinPOP(leftPop, rightPop, conditions, jtype, runtimeFilterDef, isRowKeyJoin, htControl);
     return creator.addMetadata(this, hjoin);
   }
 
@@ -137,10 +138,6 @@ public class HashJoinPrel  extends JoinPrel {
     return this.swapped;
   }
 
-  public boolean isRowKeyJoin() {
-    return this.isRowKeyJoin;
-  }
-
   public RuntimeFilterDef getRuntimeFilterDef() {
     return runtimeFilterDef;
   }
@@ -149,5 +146,8 @@ public class HashJoinPrel  extends JoinPrel {
     this.runtimeFilterDef = runtimeFilterDef;
   }
 
+  public boolean isRowKeyJoin() {
+    return this.isRowKeyJoin;
+  }
 
 }

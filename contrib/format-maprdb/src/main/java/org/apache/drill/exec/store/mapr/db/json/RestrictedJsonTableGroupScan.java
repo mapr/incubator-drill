@@ -35,7 +35,7 @@ import org.apache.drill.exec.physical.base.ScanStats.GroupScanProperty;
 import org.apache.drill.exec.planner.index.MapRDBStatistics;
 import org.apache.drill.exec.planner.cost.PluginCost;
 import org.apache.drill.exec.planner.index.Statistics;
-import org.apache.drill.exec.store.AbstractStoragePlugin;
+import org.apache.drill.exec.store.dfs.FileSystemPlugin;
 import org.apache.drill.exec.store.mapr.db.MapRDBFormatPlugin;
 import org.apache.drill.exec.store.mapr.db.MapRDBSubScan;
 import org.apache.drill.exec.store.mapr.db.MapRDBSubScanSpec;
@@ -53,11 +53,11 @@ public class RestrictedJsonTableGroupScan extends JsonTableGroupScan {
 
   @JsonCreator
   public RestrictedJsonTableGroupScan(@JsonProperty("userName") String userName,
-                            @JsonProperty("storage") AbstractStoragePlugin storagePlugin,
+                            @JsonProperty("storage") FileSystemPlugin storagePlugin,
                             @JsonProperty("format") MapRDBFormatPlugin formatPlugin,
                             @JsonProperty("scanSpec") JsonScanSpec scanSpec, /* scan spec of the original table */
                             @JsonProperty("columns") List<SchemaPath> columns,
-                            @JsonProperty("")MapRDBStatistics statistics) {
+                            @JsonProperty("") MapRDBStatistics statistics) {
     super(userName, storagePlugin, formatPlugin, scanSpec, columns, statistics);
   }
 
@@ -90,7 +90,7 @@ public class RestrictedJsonTableGroupScan extends JsonTableGroupScan {
   private List<RestrictedMapRDBSubScanSpec> getEndPointFragmentMapping(int minorFragmentId) {
     List<RestrictedMapRDBSubScanSpec> restrictedSubScanSpecList = Lists.newArrayList();
     List<MapRDBSubScanSpec> subScanSpecList = endpointFragmentMapping.get(minorFragmentId);
-    for(MapRDBSubScanSpec s : subScanSpecList) {
+    for (MapRDBSubScanSpec s : subScanSpecList) {
       restrictedSubScanSpecList.add((RestrictedMapRDBSubScanSpec) s);
     }
     return restrictedSubScanSpecList;
@@ -128,7 +128,7 @@ public class RestrictedJsonTableGroupScan extends JsonTableGroupScan {
 
   @Override
   public ScanStats getScanStats() {
-    //TODO: ideally here we should use the rowcount from index scan, and multiply a factor of restricted scan
+    // TODO: ideally here we should use the rowcount from index scan, and multiply a factor of restricted scan
     double rowCount;
     PluginCost pluginCostModel = formatPlugin.getPluginCostModel();
     final int avgColumnSize = pluginCostModel.getAverageColumnSize(this);
@@ -178,7 +178,7 @@ public class RestrictedJsonTableGroupScan extends JsonTableGroupScan {
   public String toString() {
     return "RestrictedJsonTableGroupScan [ScanSpec=" + scanSpec + ", columns=" + columns
         + ", rowcount=" + computeRestrictedScanRowcount()
-        + (maxRecordsToRead>0? ", limit=" + maxRecordsToRead : "")
-        + (getMaxParallelizationWidth()>0? ", maxwidth=" + getMaxParallelizationWidth() : "") + "]";
+        + (maxRecordsToRead > 0 ? ", limit=" + maxRecordsToRead : "")
+        + (getMaxParallelizationWidth() > 0 ? ", maxwidth=" + getMaxParallelizationWidth() : "") + "]";
   }
 }

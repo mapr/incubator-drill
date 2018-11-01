@@ -19,14 +19,13 @@ package org.apache.drill.exec.store.mapr.db;
 
 import java.io.IOException;
 
-import com.mapr.db.index.IndexDesc;
 import com.mapr.fs.MapRFileStatus;
+import com.mapr.db.index.IndexDesc;
 import com.mapr.fs.tables.TableProperties;
 import org.apache.drill.exec.planner.index.IndexDescriptor;
 import org.apache.drill.exec.planner.index.MapRDBIndexDescriptor;
 import org.apache.drill.exec.planner.logical.DrillTable;
 import org.apache.drill.exec.planner.logical.DynamicDrillTable;
-import org.apache.drill.exec.store.AbstractStoragePlugin;
 import org.apache.drill.exec.store.SchemaConfig;
 import org.apache.drill.exec.store.dfs.DrillFileSystem;
 import org.apache.drill.exec.store.dfs.FileSelection;
@@ -67,7 +66,7 @@ public class MapRDBFormatMatcher extends TableFormatMatcher {
    * @throws IOException
    */
   public DrillTable isReadableIndex(DrillFileSystem fs,
-                                    FileSelection selection, AbstractStoragePlugin fsPlugin,
+                                    FileSelection selection, FileSystemPlugin fsPlugin,
                                     String storageEngineName, String userName,
                                     IndexDescriptor secondaryIndexDesc) throws IOException {
     FileStatus status = selection.getFirstPath(fs);

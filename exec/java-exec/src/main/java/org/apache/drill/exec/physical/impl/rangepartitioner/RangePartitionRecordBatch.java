@@ -161,12 +161,6 @@ public class RangePartitionRecordBatch extends AbstractSingleRecordBatch<RangePa
     return popConfig.getPartitionFunction().eval(index, numPartitions);
   }
 
-  @Override
-  public void dump() {
-    logger.error("RangePartitionRecordBatch[container={}, popConfig={}]",
-      container, popConfig);
-  }
-
   /**
    * For each incoming record, get the partition id it belongs to by invoking the
    * partitioning function. Set this id in the output partitionIdVector.  For all other
@@ -187,6 +181,13 @@ public class RangePartitionRecordBatch extends AbstractSingleRecordBatch<RangePa
         t.transfer();
     }
     return counter;
+  }
+
+
+  @Override
+  public void dump() {
+    logger.error("RangePartitionRecordBatch[container={}, numPartitions={}, recordCount={}, partitionIdVector={}]",
+        container, numPartitions, recordCount, partitionIdVector);
   }
 
 }

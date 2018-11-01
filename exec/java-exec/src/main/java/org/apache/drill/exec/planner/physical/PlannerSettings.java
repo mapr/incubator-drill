@@ -106,18 +106,9 @@ public class PlannerSettings implements Context{
       new OptionDescription("The number of join order sequences to consider during the planning phase."));
   public static final String ENABLE_DECIMAL_DATA_TYPE_KEY = "planner.enable_decimal_data_type";
   public static final BooleanValidator ENABLE_DECIMAL_DATA_TYPE = new BooleanValidator(ENABLE_DECIMAL_DATA_TYPE_KEY,
-    new OptionDescription("False disables the DECIMAL data type, including casting to DECIMAL and reading DECIMAL types from Parquet and Hive."));
+      new OptionDescription("False disables the DECIMAL data type, including casting to DECIMAL and reading DECIMAL types from Parquet and Hive."));
   public static final OptionValidator HEP_OPT = new BooleanValidator("planner.enable_hep_opt", null);
   public static final OptionValidator HEP_PARTITION_PRUNING = new BooleanValidator("planner.enable_hep_partition_pruning", null);
-  public static final OptionValidator ROWKEYJOIN_CONVERSION =
-    new BooleanValidator("planner.enable_rowkeyjoin_conversion", new OptionDescription(""));
-  public static final RangeDoubleValidator ROWKEYJOIN_CONVERSION_SELECTIVITY_THRESHOLD =
-      new RangeDoubleValidator("planner.rowkeyjoin_conversion_selectivity_threshold", 0.0, 1.0,
-        new OptionDescription("Threshold that enables planner to choose RowKeyJoin over regular join"));
-  public static final OptionValidator ROWKEYJOIN_CONVERSION_USING_HASHJOIN =
-    new BooleanValidator("planner.rowkeyjoin_conversion_using_hashjoin",
-      new OptionDescription("Planner setting to enable HashJoin as an option for RowKeyJoin processing"));
-
   public static final OptionValidator PLANNER_MEMORY_LIMIT = new RangeLongValidator("planner.memory_limit",
       INITIAL_OFF_HEAP_ALLOCATION_IN_BYTES, MAX_OFF_HEAP_ALLOCATION_IN_BYTES,
       new OptionDescription("Defines the maximum amount of direct memory allocated to a query for planning. When multiple queries run concurrently, each query is allocated the amount of memory set by this parameter.Increase the value of this parameter and rerun the query if partition pruning failed due to insufficient memory."));
@@ -126,41 +117,24 @@ public class PlannerSettings implements Context{
 
   // ------------------------------------------- Index planning related options BEGIN --------------------------------------------------------------
   public static final String USE_SIMPLE_OPTIMIZER_KEY = "planner.use_simple_optimizer";
-  public static final BooleanValidator USE_SIMPLE_OPTIMIZER = new BooleanValidator(USE_SIMPLE_OPTIMIZER_KEY,
-    new OptionDescription("Planner option to enable using simple optimizer over volcano optimizer"));
-  public static final BooleanValidator INDEX_PLANNING =
-    new BooleanValidator("planner.enable_index_planning",
-      new OptionDescription("Planner option to enable index planning. False means index will not be considered"));
-  public static final BooleanValidator ENABLE_STATS =
-    new BooleanValidator("planner.enable_statistics", new OptionDescription("Enables index planning stats"));
-  public static final BooleanValidator DISABLE_FULL_TABLE_SCAN =
-    new BooleanValidator("planner.disable_full_table_scan",
-      new OptionDescription("Option to force disabling full table scan. Mainly used in testing to verify if index " +
-        "planning works correctly"));
-  public static final RangeLongValidator INDEX_MAX_CHOSEN_INDEXES_PER_TABLE =
-    new RangeLongValidator("planner.index.max_chosen_indexes_per_table", 0,
-      100, new OptionDescription("Maximum number of indices considered for index planning for each table"));
-  public static final BooleanValidator INDEX_FORCE_SORT_NONCOVERING =
-    new BooleanValidator("planner.index.force_sort_noncovering", null);
-  public static final BooleanValidator INDEX_USE_HASHJOIN_NONCOVERING =
-    new BooleanValidator("planner.index.use_hashjoin_noncovering", null);
+  public static final BooleanValidator USE_SIMPLE_OPTIMIZER = new BooleanValidator(USE_SIMPLE_OPTIMIZER_KEY, null);
+  public static final BooleanValidator INDEX_PLANNING = new BooleanValidator("planner.enable_index_planning", null);
+  public static final BooleanValidator ENABLE_STATS = new BooleanValidator("planner.enable_statistics", null);
+  public static final BooleanValidator DISABLE_FULL_TABLE_SCAN = new BooleanValidator("planner.disable_full_table_scan", null);
+  public static final RangeLongValidator INDEX_MAX_CHOSEN_INDEXES_PER_TABLE = new RangeLongValidator("planner.index.max_chosen_indexes_per_table", 0, 100, null);
+  public static final BooleanValidator INDEX_FORCE_SORT_NONCOVERING = new BooleanValidator("planner.index.force_sort_noncovering", null);
+  public static final BooleanValidator INDEX_USE_HASHJOIN_NONCOVERING = new BooleanValidator("planner.index.use_hashjoin_noncovering", null);
   public static final RangeDoubleValidator INDEX_COVERING_SELECTIVITY_THRESHOLD =
-      new RangeDoubleValidator("planner.index.covering_selectivity_threshold", 0.0,
-        1.0, new OptionDescription("Threshold that enables planner to choose covering index"));
+      new RangeDoubleValidator("planner.index.covering_selectivity_threshold", 0.0, 1.0, null);
   public static final RangeDoubleValidator INDEX_NONCOVERING_SELECTIVITY_THRESHOLD =
-      new RangeDoubleValidator("planner.index.noncovering_selectivity_threshold", 0.0,
-        1.0, new OptionDescription("Threshold that enables planner to choose non-covering index"));
+      new RangeDoubleValidator("planner.index.noncovering_selectivity_threshold", 0.0, 1.0, null);
   public static final RangeDoubleValidator INDEX_ROWKEYJOIN_COST_FACTOR =
-      new RangeDoubleValidator("planner.index.rowkeyjoin_cost_factor", 0,
-        Double.MAX_VALUE, null);
+      new RangeDoubleValidator("planner.index.rowkeyjoin_cost_factor", 0, Double.MAX_VALUE, null);
   // TODO: Deprecate the following 2 (also in SystemOptionManager.java)
-  public static final BooleanValidator INDEX_PREFER_INTERSECT_PLANS =
-    new BooleanValidator("planner.index.prefer_intersect_plans", null);
-  public static final RangeLongValidator INDEX_MAX_INDEXES_TO_INTERSECT =
-    new RangeLongValidator("planner.index.max_indexes_to_intersect", 2, 100, null);
+  public static final BooleanValidator INDEX_PREFER_INTERSECT_PLANS = new BooleanValidator("planner.index.prefer_intersect_plans", null);
+  public static final RangeLongValidator INDEX_MAX_INDEXES_TO_INTERSECT = new RangeLongValidator("planner.index.max_indexes_to_intersect", 2, 100, null);
   public static final RangeDoubleValidator INDEX_STATS_ROWCOUNT_SCALING_FACTOR =
-      new RangeDoubleValidator("planner.index.statistics_rowcount_scaling_factor", 0.0,
-        1.0, null);
+      new RangeDoubleValidator("planner.index.statistics_rowcount_scaling_factor", 0.0, 1.0, null);
   // ------------------------------------------- Index planning related options END ----------------------------------------------------------------
 
   public static final OptionValidator IDENTIFIER_MAX_LENGTH =
@@ -324,12 +298,6 @@ public class PlannerSettings implements Context{
   }
 
   public boolean isHepPartitionPruningEnabled() { return options.getOption(HEP_PARTITION_PRUNING.getOptionName()).bool_val;}
-
-  public boolean isRowKeyJoinConversionEnabled() { return options.getOption(ROWKEYJOIN_CONVERSION.getOptionName()).bool_val;}
-
-  public boolean isRowKeyJoinConversionUsingHashJoin() { return options.getOption(ROWKEYJOIN_CONVERSION_USING_HASHJOIN.getOptionName()).bool_val;}
-
-  public double getRowKeyJoinConversionSelThreshold() { return options.getOption(ROWKEYJOIN_CONVERSION_SELECTIVITY_THRESHOLD);}
 
   public boolean isHepOptEnabled() { return options.getOption(HEP_OPT.getOptionName()).bool_val;}
 

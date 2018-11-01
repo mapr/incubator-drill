@@ -79,7 +79,7 @@ public enum CoreOperatorType implements com.dyuproject.protostuff.EnumLite<CoreO
     PARTITION_LIMIT(54),
     PCAPNG_SUB_SCAN(55),
     RUNTIME_FILTER(56),
-    ROWKEY_JOIN(202);
+    ROWKEY_JOIN(57);
     
     public final int number;
     
@@ -154,7 +154,7 @@ public enum CoreOperatorType implements com.dyuproject.protostuff.EnumLite<CoreO
             case 54: return PARTITION_LIMIT;
             case 55: return PCAPNG_SUB_SCAN;
             case 56: return RUNTIME_FILTER;
-            case 202: return ROWKEY_JOIN;
+            case 57: return ROWKEY_JOIN;
             default: return null;
         }
     }

@@ -17,10 +17,11 @@
  */
 package org.apache.drill.exec.util;
 
+
+import org.apache.drill.shaded.guava.com.google.common.io.BaseEncoding;
 import org.apache.drill.shaded.guava.com.google.common.base.Preconditions;
 import org.apache.drill.shaded.guava.com.google.common.collect.ImmutableList;
 import org.apache.drill.shaded.guava.com.google.common.collect.Lists;
-import org.apache.drill.shaded.guava.com.google.common.io.BaseEncoding;
 import org.apache.drill.common.exceptions.DrillRuntimeException;
 import org.apache.drill.common.expression.SchemaPath;
 import org.apache.drill.exec.planner.physical.PlannerSettings;

@@ -17,12 +17,7 @@
  */
 package org.apache.drill.exec.store.mapr.db.json;
 
-import org.apache.drill.shaded.guava.com.google.common.base.Preconditions;
-import org.apache.drill.shaded.guava.com.google.common.base.Predicate;
-import org.apache.drill.shaded.guava.com.google.common.base.Stopwatch;
-import org.apache.drill.shaded.guava.com.google.common.collect.ImmutableSet;
-import org.apache.drill.shaded.guava.com.google.common.collect.Iterables;
-import org.apache.drill.shaded.guava.com.google.common.collect.Sets;
+
 import com.mapr.db.Table;
 import com.mapr.db.Table.TableOption;
 import com.mapr.db.exceptions.DBException;
@@ -59,6 +54,15 @@ import org.ojai.util.FieldProjector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.drill.shaded.guava.com.google.common.base.Preconditions;
+import org.apache.drill.shaded.guava.com.google.common.base.Stopwatch;
+import org.apache.drill.shaded.guava.com.google.common.collect.ImmutableSet;
+import org.apache.drill.shaded.guava.com.google.common.collect.Iterables;
+import org.apache.drill.shaded.guava.com.google.common.collect.Sets;
+import org.apache.drill.shaded.guava.com.google.common.base.Predicate;
+
+import com.mapr.db.MapRDB;
+import com.mapr.org.apache.hadoop.hbase.util.Bytes;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
@@ -232,7 +236,7 @@ public class MaprDBJsonRecordReader extends AbstractRecordReader {
           idOnly = (scannedFields == null);
         }
 
-        if(projectWholeDocument) {
+        if (projectWholeDocument) {
           projector = new FieldProjector(projectedFieldsSet);
         }
 
@@ -372,7 +376,7 @@ public class MaprDBJsonRecordReader extends AbstractRecordReader {
    * first encountered ARRAY field and let Drill handle the projection.
    */
   private static FieldPath getFieldPathForProjection(SchemaPath column) {
-    Stack<PathSegment.NameSegment> pathSegments = new Stack<PathSegment.NameSegment>();
+    Stack<PathSegment.NameSegment> pathSegments = new Stack<>();
     PathSegment seg = column.getRootSegment();
     while (seg != null && seg.isNamed()) {
       pathSegments.push((PathSegment.NameSegment) seg);

@@ -42,6 +42,7 @@ import org.ojai.types.OTime;
 
 import org.apache.drill.shaded.guava.com.google.common.collect.ImmutableMap;
 import org.apache.drill.shaded.guava.com.google.common.collect.ImmutableSet;
+import com.mapr.db.rowcol.KeyValueBuilder;
 import com.mapr.db.util.SqlHelper;
 
 import org.ojai.types.OTimestamp;
