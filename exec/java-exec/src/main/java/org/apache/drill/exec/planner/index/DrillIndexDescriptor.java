@@ -78,6 +78,11 @@ public class DrillIndexDescriptor extends AbstractIndexDescriptor {
     return null;
   }
 
+  public void attach(String storageName, DrillTable inTable) {
+    storage = storageName;
+    setDrillTable(inTable);
+  }
+
   /**
    * Set the storage plugin name
    * @param storageName

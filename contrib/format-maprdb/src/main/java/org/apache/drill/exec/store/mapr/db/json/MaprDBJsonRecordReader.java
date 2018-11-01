@@ -376,7 +376,7 @@ public class MaprDBJsonRecordReader extends AbstractRecordReader {
    * first encountered ARRAY field and let Drill handle the projection.
    */
   private static FieldPath getFieldPathForProjection(SchemaPath column) {
-    Stack<PathSegment.NameSegment> pathSegments = new Stack<>();
+    Stack<PathSegment.NameSegment> pathSegments = new Stack<PathSegment.NameSegment>();
     PathSegment seg = column.getRootSegment();
     while (seg != null && seg.isNamed()) {
       pathSegments.push((PathSegment.NameSegment) seg);
