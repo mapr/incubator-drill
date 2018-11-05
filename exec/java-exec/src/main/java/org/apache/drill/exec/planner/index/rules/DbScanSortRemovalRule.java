@@ -17,6 +17,7 @@
  */
 package org.apache.drill.exec.planner.index.rules;
 
+import org.apache.drill.shaded.guava.com.google.common.base.Stopwatch;
 import org.apache.drill.shaded.guava.com.google.common.base.Preconditions;
 import org.apache.drill.shaded.guava.com.google.common.base.Stopwatch;
 import org.apache.calcite.plan.RelOptRule;

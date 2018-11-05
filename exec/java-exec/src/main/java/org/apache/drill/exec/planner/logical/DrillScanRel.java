@@ -39,6 +39,7 @@ import org.apache.calcite.plan.RelOptPlanner;
 import org.apache.calcite.plan.RelOptTable;
 import org.apache.calcite.plan.RelTraitSet;
 import org.apache.calcite.rel.type.RelDataType;
+
 import org.apache.drill.shaded.guava.com.google.common.base.Preconditions;
 import org.apache.drill.exec.util.Utilities;
 
@@ -57,9 +58,9 @@ public class DrillScanRel extends DrillScanRelBase implements DrillRel {
                       final RelOptTable table) {
     this(cluster, traits, table, false);
   }
-    /** Creates a DrillScan. */
+  /** Creates a DrillScan. */
   public DrillScanRel(final RelOptCluster cluster, final RelTraitSet traits,
-      final RelOptTable table, boolean partitionFilterPushdown) {
+                      final RelOptTable table, boolean partitionFilterPushdown) {
     // By default, scan does not support project pushdown.
     // Decision whether push projects into scan will be made solely in DrillPushProjIntoScanRule.
     this(cluster, traits, table, table.getRowType(), getProjectedColumns(table, true), partitionFilterPushdown);
@@ -74,7 +75,7 @@ public class DrillScanRel extends DrillScanRelBase implements DrillRel {
 
   /** Creates a DrillScan. */
   public DrillScanRel(final RelOptCluster cluster, final RelTraitSet traits,
-      final RelOptTable table, final RelDataType rowType, final List<SchemaPath> columns, boolean partitionFilterPushdown) {
+                      final RelOptTable table, final RelDataType rowType, final List<SchemaPath> columns, boolean partitionFilterPushdown) {
     super(cluster, traits, table, columns);
     this.settings = PrelUtil.getPlannerSettings(cluster.getPlanner());
     this.rowType = rowType;
@@ -91,7 +92,7 @@ public class DrillScanRel extends DrillScanRelBase implements DrillRel {
 
   /** Creates a DrillScanRel for a particular GroupScan */
   public DrillScanRel(final RelOptCluster cluster, final RelTraitSet traits,
-      final RelOptTable table, final GroupScan groupScan, final RelDataType rowType, final List<SchemaPath> columns, boolean partitionFilterPushdown) {
+                      final RelOptTable table, final GroupScan groupScan, final RelDataType rowType, final List<SchemaPath> columns, boolean partitionFilterPushdown) {
     super(cluster, traits, groupScan, table);
     this.rowType = rowType;
     this.columns = columns;

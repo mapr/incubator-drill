@@ -21,7 +21,6 @@ package org.apache.drill.exec.planner.index.generators;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.drill.shaded.guava.com.google.common.base.Preconditions;
 import org.apache.calcite.plan.RelOptUtil;
 import org.apache.calcite.plan.RelTraitSet;
 import org.apache.calcite.rel.RelCollations;
@@ -56,6 +55,7 @@ import org.apache.calcite.rel.type.RelDataTypeField;
 import org.apache.calcite.rex.RexBuilder;
 import org.apache.calcite.rex.RexInputRef;
 import org.apache.calcite.rex.RexNode;
+import org.apache.drill.shaded.guava.com.google.common.base.Preconditions;
 import org.apache.drill.shaded.guava.com.google.common.collect.ImmutableList;
 import org.apache.drill.shaded.guava.com.google.common.collect.Lists;
 
@@ -205,16 +205,17 @@ public class NonCoveringIndexPlanGenerator extends AbstractIndexPlanGenerator {
     final RelDataTypeFactory.FieldInfoBuilder leftFieldTypeBuilder =
         dbScan.getCluster().getTypeFactory().builder();
 
-    //we are applying the same index condition to primary table's restricted scan, the reason
-    // for this is, the scans on index table and primary table are not a transaction, meaning that _after_ index scan,
-    // primary table might already have data get updated, thus some rows picked by index were modified and no more satisfy the
-    // index condition. By applying the same index condition again here, we will avoid the possibility to have some
-    //not-wanted records get into downstream operators in such scenarios.
-    //the remainder condition will be applied on top of RowKeyJoin.
-    FilterPrel leftIndexFilterPrel = new FilterPrel(dbScan.getCluster(), dbScan.getTraitSet(),
-          dbScan, indexContext.getOrigCondition());
-
-    lastLeft = leftIndexFilterPrel;
+    // We are applying the same index condition to primary table's restricted scan. The reason is, the index may be an async
+    // index .. i.e it is not synchronously updated along with the primary table update as part of a single transaction, so it
+    // is possible that after or during index scan, the primary table rows may have been updated and no longer satisfy the index
+    // condition. By re-applying the index condition here, we will ensure non-qualifying records are filtered out.
+    // The remainder condition will be applied on top of RowKeyJoin.
+    FilterPrel leftIndexFilterPrel = null;
+    if (indexDesc.isAsyncIndex()) {
+      leftIndexFilterPrel = new FilterPrel(dbScan.getCluster(), dbScan.getTraitSet(),
+            dbScan, indexContext.getOrigCondition());
+      lastLeft = leftIndexFilterPrel;
+    }
 
     RelDataType origRowType = origProject == null ? origScan.getRowType() : origProject.getRowType();
 
@@ -264,8 +265,9 @@ public class NonCoveringIndexPlanGenerator extends AbstractIndexPlanGenerator {
     if (settings.isIndexUseHashJoinNonCovering()) {
       //for hash join, collation will be cleared
       HashJoinPrel hjPrel = new HashJoinPrel(topRel.getCluster(), leftTraits, convertedLeft,
-          convertedRight, joinCondition, JoinRelType.INNER, false,
-          true /* useful for join-restricted scans */, JoinControl.DEFAULT, null);
+          convertedRight, joinCondition, JoinRelType.INNER, false /* no swap */,
+          null /* no runtime filter */,
+          true /* useful for join-restricted scans */, JoinControl.DEFAULT);
       newRel = hjPrel;
     } else {
       //if there is collation, add to rowkey join

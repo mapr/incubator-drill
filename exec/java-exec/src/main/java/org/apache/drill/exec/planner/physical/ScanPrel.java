@@ -48,10 +48,6 @@ public class ScanPrel extends DrillScanRelBase implements Prel, HasDistributionA
 
   private final RelDataType rowType;
 
-  public ScanPrel(RelNode old, RelTraitSet traitSets, GroupScan scan, RelDataType rowType) {
-    this(old.getCluster(), traitSets, scan, rowType, old.getTable());
-  }
-
   public ScanPrel(RelOptCluster cluster, RelTraitSet traits,
                   GroupScan groupScan, RelDataType rowType, RelOptTable table) {
     super(cluster, traits, getCopy(groupScan), table);

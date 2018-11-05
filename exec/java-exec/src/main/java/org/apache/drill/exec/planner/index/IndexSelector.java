@@ -22,7 +22,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.drill.shaded.guava.com.google.common.base.Preconditions;
 import org.apache.calcite.plan.RelOptCost;
 import org.apache.calcite.plan.RelOptPlanner;
 import org.apache.calcite.rel.RelCollation;
@@ -40,6 +39,8 @@ import org.apache.drill.exec.planner.physical.PlannerSettings;
 import org.apache.drill.exec.planner.physical.PrelUtil;
 import org.apache.drill.exec.planner.physical.ScanPrel;
 import org.apache.drill.exec.planner.common.DrillScanRelBase;
+
+import org.apache.drill.shaded.guava.com.google.common.base.Preconditions;
 import org.apache.drill.shaded.guava.com.google.common.collect.ImmutableList;
 import org.apache.drill.shaded.guava.com.google.common.collect.Lists;
 import org.apache.drill.shaded.guava.com.google.common.collect.Maps;
@@ -156,7 +157,7 @@ public class IndexSelector  {
               indexContext.getScan(), functionInfo, indexContext);
     }
 
-    if ( (inputCollation != null) &&
+    if ((inputCollation != null) &&
          (inputCollation.satisfies(indexContext.getCollation()))) {
       return true;
     }

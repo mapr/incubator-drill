@@ -106,7 +106,7 @@ public class PlannerSettings implements Context{
       new OptionDescription("The number of join order sequences to consider during the planning phase."));
   public static final String ENABLE_DECIMAL_DATA_TYPE_KEY = "planner.enable_decimal_data_type";
   public static final BooleanValidator ENABLE_DECIMAL_DATA_TYPE = new BooleanValidator(ENABLE_DECIMAL_DATA_TYPE_KEY,
-    new OptionDescription("False disables the DECIMAL data type, including casting to DECIMAL and reading DECIMAL types from Parquet and Hive."));
+      new OptionDescription("False disables the DECIMAL data type, including casting to DECIMAL and reading DECIMAL types from Parquet and Hive."));
   public static final OptionValidator HEP_OPT = new BooleanValidator("planner.enable_hep_opt", null);
   public static final OptionValidator HEP_PARTITION_PRUNING = new BooleanValidator("planner.enable_hep_partition_pruning", null);
   public static final OptionValidator ROWKEYJOIN_CONVERSION =
@@ -151,16 +151,12 @@ public class PlannerSettings implements Context{
       new RangeDoubleValidator("planner.index.noncovering_selectivity_threshold", 0.0,
         1.0, new OptionDescription("Threshold that enables planner to choose non-covering index"));
   public static final RangeDoubleValidator INDEX_ROWKEYJOIN_COST_FACTOR =
-      new RangeDoubleValidator("planner.index.rowkeyjoin_cost_factor", 0,
-        Double.MAX_VALUE, null);
+      new RangeDoubleValidator("planner.index.rowkeyjoin_cost_factor", 0, Double.MAX_VALUE, null);
   // TODO: Deprecate the following 2 (also in SystemOptionManager.java)
-  public static final BooleanValidator INDEX_PREFER_INTERSECT_PLANS =
-    new BooleanValidator("planner.index.prefer_intersect_plans", null);
-  public static final RangeLongValidator INDEX_MAX_INDEXES_TO_INTERSECT =
-    new RangeLongValidator("planner.index.max_indexes_to_intersect", 2, 100, null);
+  public static final BooleanValidator INDEX_PREFER_INTERSECT_PLANS = new BooleanValidator("planner.index.prefer_intersect_plans", null);
+  public static final RangeLongValidator INDEX_MAX_INDEXES_TO_INTERSECT = new RangeLongValidator("planner.index.max_indexes_to_intersect", 2, 100, null);
   public static final RangeDoubleValidator INDEX_STATS_ROWCOUNT_SCALING_FACTOR =
-      new RangeDoubleValidator("planner.index.statistics_rowcount_scaling_factor", 0.0,
-        1.0, null);
+      new RangeDoubleValidator("planner.index.statistics_rowcount_scaling_factor", 0.0, 1.0, null);
   // ------------------------------------------- Index planning related options END ----------------------------------------------------------------
 
   public static final OptionValidator IDENTIFIER_MAX_LENGTH =

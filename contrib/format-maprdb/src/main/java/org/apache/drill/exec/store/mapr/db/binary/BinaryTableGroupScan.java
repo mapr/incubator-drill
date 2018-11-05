@@ -34,6 +34,7 @@ import org.apache.drill.exec.physical.base.ScanStats;
 import org.apache.drill.exec.physical.base.ScanStats.GroupScanProperty;
 import org.apache.drill.exec.planner.index.Statistics;
 import org.apache.drill.exec.store.AbstractStoragePlugin;
+import org.apache.drill.exec.planner.index.Statistics;
 import org.apache.drill.exec.store.StoragePluginRegistry;
 import org.apache.drill.exec.store.dfs.FileSystemConfig;
 import org.apache.drill.exec.store.hbase.DrillHBaseConstants;

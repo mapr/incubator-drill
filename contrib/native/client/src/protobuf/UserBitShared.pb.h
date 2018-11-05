@@ -261,7 +261,7 @@ enum CoreOperatorType {
   PARTITION_LIMIT = 54,
   PCAPNG_SUB_SCAN = 55,
   RUNTIME_FILTER = 56,
-  ROWKEY_JOIN = 202
+  ROWKEY_JOIN = 57
 };
 bool CoreOperatorType_IsValid(int value);
 const CoreOperatorType CoreOperatorType_MIN = SINGLE_SENDER;

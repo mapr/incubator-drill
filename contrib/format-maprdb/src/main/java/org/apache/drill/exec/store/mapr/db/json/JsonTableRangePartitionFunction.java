@@ -117,7 +117,7 @@ public class JsonTableRangePartitionFunction extends AbstractRangePartitionFunct
       if (thisPartRefList.size() != otherPartRefList.size()) {
         return false;
       }
-      for (int refIdx=0; refIdx<thisPartRefList.size(); refIdx++) {
+      for (int refIdx = 0; refIdx < thisPartRefList.size(); refIdx++) {
         if (!thisPartRefList.get(refIdx).equals(otherPartRefList.get(refIdx))) {
           return false;
         }
@@ -148,7 +148,7 @@ public class JsonTableRangePartitionFunction extends AbstractRangePartitionFunct
 
       // Check if key is present in the mid interval of [start, stop].
       // Account for empty byte array start/stop
-      if ( (Bytes.compareTo(encodedKey, start) >= 0 ||
+      if ((Bytes.compareTo(encodedKey, start) >= 0 ||
              Bytes.equals(start, MapRConstants.EMPTY_BYTE_ARRAY)
            ) &&
            (Bytes.compareTo(encodedKey, stop) < 0 ||
@@ -186,7 +186,7 @@ public class JsonTableRangePartitionFunction extends AbstractRangePartitionFunct
     // get the table handle from the table cache
     Table table = plugin.getJsonTableCache().getTable(tableName, userName);
 
-    // Set the condition to null such that all scan ranges are retrieved for the primary table.
+    // Get all scan ranges for the primary table.
     // The reason is the row keys could typically belong to any one of the tablets of the table, so
     // there is no use trying to get only limited set of scan ranges.
     // NOTE: here we use the restrictedScanRangeSizeMB because the range partitioning should be parallelized

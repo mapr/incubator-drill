@@ -166,4 +166,5 @@ public class SortPrel extends org.apache.calcite.rel.core.Sort implements Ordere
 
     return this.copy(traits, children.get(0), collationTrait, this.offset, this.fetch);
   }
+
 }

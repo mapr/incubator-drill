@@ -30,7 +30,7 @@ import org.apache.drill.common.expression.visitors.AbstractExprVisitor;
 import org.ojai.Value;
 import org.ojai.store.QueryCondition;
 
-import org.apache.drill.shaded.guava.com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableMap;
 import com.mapr.db.impl.ConditionImpl;
 import com.mapr.db.impl.MapRDBImpl;
 
@@ -47,7 +47,7 @@ class OjaiFunctionsProcessor extends AbstractExprVisitor<Void, Void, RuntimeExce
     final Throwable throwable = new Throwable();
     final StackTraceElement[] ste = throwable.getStackTrace();
     final StringBuilder sb = new StringBuilder();
-    for(int i = 1; i < ste.length; ++i) {
+    for (int i = 1; i < ste.length; ++i) {
       sb.append(ste[i].toString());
       sb.append('\n');
     }

@@ -58,11 +58,33 @@ public interface IndexDescriptor extends IndexDefinition {
    */
   boolean supportsFullTextSearch();
 
+  /**
+   * Get the functional index information associated with this index (Functional indexes are
+   * indexes involving expressions e.g CAST(a as INT).
+   */
   FunctionalIndexInfo getFunctionalInfo();
 
-  public RelOptCost getCost(IndexProperties indexProps, RelOptPlanner planner,
+  /**
+   * Get the total cost of index access (I/O, CPU) in the context of the current query
+   * @param indexProps properties (metrics) of a single index in the context of current query
+   * @param planner Planner instance
+   * @param numProjectedFields Number of projected fields
+   * @param primaryGroupScan Primary table's GroupScan instance
+   * @return a RelOptCost instance representing the total cost
+   */
+  RelOptCost getCost(IndexProperties indexProps, RelOptPlanner planner,
       int numProjectedFields, GroupScan primaryGroupScan);
 
-  public PluginCost getPluginCostModel();
+  /**
+   * Get the costing factors associated with the storage/format plugin
+   */
+  PluginCost getPluginCostModel();
+
+  /**
+   * Whether this index is maintained synchronously (i.e primary table updates are propagated to the index
+   * synchronously) or asynchronously with some delay.  The latter is more common for distributed NoSQL databases.
+   * @return True if the index is maintained asynchronously, False otherwise
+   */
+  boolean isAsyncIndex();
 
 }
