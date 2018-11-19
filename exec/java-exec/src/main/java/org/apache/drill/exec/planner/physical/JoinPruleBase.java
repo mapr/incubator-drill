@@ -26,9 +26,9 @@ import org.apache.drill.exec.physical.impl.join.JoinUtils.JoinCategory;
 import org.apache.drill.exec.planner.common.DrillJoinRelBase;
 import org.apache.drill.exec.planner.common.DrillScanRelBase;
 import org.apache.drill.exec.planner.common.JoinControl;
+import org.apache.drill.exec.planner.logical.DrillJoin;
 import org.apache.drill.exec.planner.logical.DrillPushRowKeyJoinToScanRule;
 import org.apache.drill.exec.planner.logical.RowKeyJoinRel;
-import org.apache.drill.exec.planner.logical.DrillJoin;
 import org.apache.drill.exec.planner.physical.DrillDistributionTrait.DistributionField;
 import org.apache.calcite.rel.InvalidRelException;
 import org.apache.calcite.rel.core.JoinRelType;
@@ -122,8 +122,9 @@ public abstract class JoinPruleBase extends Prule {
       } else {
         newJoin = new HashJoinPrel(join.getCluster(), traitsLeft,
             convertedLeft, convertedRight, join.getCondition(),
-            join.getJoinType(), false,
-                null,true /* useful for join-restricted scans */, JoinControl.DEFAULT);
+            join.getJoinType(), false /* no swap */,
+            null /* no runtime filter */,
+            true /* useful for join-restricted scans */, JoinControl.DEFAULT);
       }
     }
     if (newJoin != null) {

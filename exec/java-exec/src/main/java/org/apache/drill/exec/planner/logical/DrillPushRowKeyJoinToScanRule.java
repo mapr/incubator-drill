@@ -17,7 +17,7 @@
  */
 package org.apache.drill.exec.planner.logical;
 
-import org.apache.drill.shaded.guava.com.google.common.collect.ImmutableList;
+
 import org.apache.calcite.plan.RelOptPlanner;
 import org.apache.calcite.plan.RelOptRule;
 import org.apache.calcite.plan.RelOptRuleCall;
@@ -38,9 +38,35 @@ import org.apache.drill.exec.physical.base.DbGroupScan;
 import org.apache.drill.exec.planner.index.rules.MatchFunction;
 import org.apache.drill.exec.planner.physical.PrelUtil;
 
+import org.apache.drill.shaded.guava.com.google.common.collect.ImmutableList;
+
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This rule implements the run-time filter pushdown via the rowkey join for queries with row-key filters. Row-key
+ * filters are filters on primary-keys which appears in database groupscans {@link DbGroupScan}.
+ *
+ * Consider the following query:
+ * SELECT L.LINEITEM_ID FROM LINEITEM L WHERE L._ID IN (SELECT O.LID FROM ORDERS O WHERE O.ORDER_DATE > '2019-01-01');
+ * With this rule the logical plan on the left would transform to the logical plan on the right:
+ * Project                                                Project
+ *   Join (L._ID = O.LID)                                   RowKeyJoin (L._ID = O.LID)
+ *     LineItem L                                ====>>       Lineitem L
+ *     Filter (ORDER_DATE > '2019-01-01')                     Filter (ORDER_DATE > '2019-01-01')
+ *       Orders O                                               Orders O
+ *
+ * During physical planning, the plan on the left would end up with e.g. HashJoin whereas the transformed plan would
+ * have a RowKeyJoin along with a Restricted GroupScan instead.
+ * Project                                                Project
+ *   HashJoin (L._ID = O.LID)                               RowKeyJoin (L._ID = O.LID)
+ *     Scan (LineItem L)                                      RestrictedScan (Lineitem L)
+ *     Filter (ORDER_DATE > '2019-01-01')                     Filter (ORDER_DATE > '2019-01-01')
+ *       Scan (Orders O)                                        Scan (Orders O)
+ *
+ * The row-key join pushes the `row-keys` for rows satisfying the filter into the Lineitem restricted groupscan. So
+ * we only fetch these rowkeys instead of fetching all rows into the Hash Join.
+ */
 public class DrillPushRowKeyJoinToScanRule extends RelOptRule {
   static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(DrillPushRowKeyJoinToScanRule.class);
   final public MatchFunction match;
