@@ -823,7 +823,8 @@ public final class ExecConstants {
   public static final String ENABLE_ITERATOR_VALIDATION = "drill.exec.debug.validate_iterators";
 
   public static final String QUERY_ROWKEYJOIN_BATCHSIZE_KEY = "exec.query.rowkeyjoin_batchsize";
-  public static final PositiveLongValidator QUERY_ROWKEYJOIN_BATCHSIZE = new PositiveLongValidator(QUERY_ROWKEYJOIN_BATCHSIZE_KEY, Long.MAX_VALUE, null);
+  public static final PositiveLongValidator QUERY_ROWKEYJOIN_BATCHSIZE = new PositiveLongValidator(QUERY_ROWKEYJOIN_BATCHSIZE_KEY, Long.MAX_VALUE,
+      new OptionDescription("Batch size (in terms of number of rows) for a 'bulk get' operation from the underlying data source during a RowKeyJoin."));
   /**
    * When iterator validation is enabled, additionally validates the vectors in
    * each batch passed to each iterator.
@@ -875,5 +876,10 @@ public final class ExecConstants {
 
   public static final String LIST_FILES_RECURSIVELY = "storage.list_files_recursively";
   public static final BooleanValidator LIST_FILES_RECURSIVELY_VALIDATOR = new BooleanValidator(LIST_FILES_RECURSIVELY,
-      new OptionDescription("Enables recursive files listing when querying the `INFORMATION_SCHEMA.FILES` table or executing the SHOW FILES command. Default is false. (Drill 1.15+"));
+      new OptionDescription("Enables recursive files listing when querying the `INFORMATION_SCHEMA.FILES` table or executing the SHOW FILES command. Default is false. (Drill 1.15+)"));
+
+  public static final String RETURN_RESULT_SET_FOR_DDL = "exec.return_result_set_for_ddl";
+  public static final BooleanValidator RETURN_RESULT_SET_FOR_DDL_VALIDATOR = new BooleanValidator(RETURN_RESULT_SET_FOR_DDL,
+      new OptionDescription("Controls whether to return result set for CREATE TABLE/VIEW, DROP TABLE/VIEW, SET, USE etc. queries. " +
+          "If set to false affected rows count will be returned instead and result set will be null. Default is true. (Drill 1.15+)"));
 }
