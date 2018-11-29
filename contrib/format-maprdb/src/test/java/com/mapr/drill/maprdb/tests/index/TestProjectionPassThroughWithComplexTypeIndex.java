@@ -29,7 +29,6 @@ import org.apache.drill.exec.util.EncodedSchemaPathSet;
 import org.apache.hadoop.fs.Path;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.ojai.Document;
 import org.ojai.DocumentStream;

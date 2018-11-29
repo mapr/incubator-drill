@@ -109,8 +109,8 @@ public class JsonConditionBuilder extends AbstractExprVisitor<JsonScanSpec, Void
   /*
    * Traverse through the path and append "[]" to ArrayFields and return path till the end.
    * For example, If the data is a = [{b:5, c:10}], when referencing a[].b the getEmptyArrayPath
-   * returns a[].b where the arrayPrefix is a[] and arraySuffix is b. Incase of a[].b[].c[].d, 
-   * the arrayPrefix is a[].b[].c[], arraySuffix is d. Incase of a[].b.c.d, the arrayPrefix is a[] 
+   * returns a[].b where the arrayPrefix is a[] and arraySuffix is b. Incase of a[].b[].c[].d,
+   * the arrayPrefix is a[].b[].c[], arraySuffix is d. Incase of a[].b.c.d, the arrayPrefix is a[]
    * and arraySuffix is b.c.d
    */
   private String getEmptyArrayPath(SchemaPath schemaPath) {
@@ -235,8 +235,8 @@ public class JsonConditionBuilder extends AbstractExprVisitor<JsonScanSpec, Void
             }
           }
         } else {
-          // For unknown expressions which can't be converted 
-	  remainderArgs.add(f);
+          // For unknown expressions which can't be converted
+          remainderArgs.add(f);
         }
       }
       catch (Exception e) {
