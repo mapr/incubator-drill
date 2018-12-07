@@ -17,6 +17,7 @@
  */
 package org.apache.drill.exec.planner.index.generators;
 
+import org.apache.drill.exec.planner.logical.DrillSemiJoinRel;
 import org.apache.drill.shaded.guava.com.google.common.base.Preconditions;
 import org.apache.drill.shaded.guava.com.google.common.collect.Lists;
 import org.apache.calcite.plan.RelTraitSet;
@@ -94,7 +95,8 @@ public class SemiJoinToCoveringIndexScanGenerator extends CoveringIndexPlanGener
 
       //build project to match the output rowType.
       List<RexNode> exprs = IndexPlanUtils.projects(agg.get(0), agg.get(0).getRowType().getFieldNames());
-      List<RexNode> projectExprs = rearrange(exprs, inputOutputRefMap);
+      List<RexNode> join_exprs = IndexPlanUtils.projects(joinContext.join, joinContext.join.getRowType().getFieldNames());
+      List<RexNode> projectExprs = rearrange(join_exprs, exprs, inputOutputRefMap);
       return getRootProject(input, agg, projectExprs);
     } else {
       // If stream agg is not enabled do not generate the covering plan!
@@ -112,10 +114,10 @@ public class SemiJoinToCoveringIndexScanGenerator extends CoveringIndexPlanGener
     return rkjNodes;
   }
 
-  private List<RexNode> rearrange(List<RexNode> exprs, Map<Integer, Integer> refMap) {
+  private List<RexNode> rearrange(List<RexNode> out_exprs, List<RexNode> exprs, Map<Integer, Integer> refMap) {
     List<RexNode> result = new ArrayList<>();
 
-    for (int i=0; i< exprs.size(); i++) {
+    for (int i=0; i< out_exprs.size(); i++) {
       result.add(exprs.get(refMap.get(i)));
     }
     return result;
@@ -154,6 +156,15 @@ public class SemiJoinToCoveringIndexScanGenerator extends CoveringIndexPlanGener
     RelNode top = indexContext.getCall().rel(0);
     if (top instanceof DrillJoinRel) {
       DrillJoinRel join = (DrillJoinRel) top;
+      final RelNode input0 = join.getInput(0);
+      final RelNode input1 = join.getInput(1);
+      RelTraitSet traits0 = input0.getTraitSet().plus(DRILL_PHYSICAL);
+      RelNode convertedInput0 = Prule.convert(input0, traits0);
+      RelTraitSet traits1 = input1.getTraitSet().plus(DRILL_PHYSICAL);
+      RelNode convertedInput1 = Prule.convert(input1, traits1);
+      return this.goMulti(top, convertedInput0) && this.goMulti(top, convertedInput1);
+    } else if (top instanceof DrillSemiJoinRel) {
+      DrillSemiJoinRel join = (DrillSemiJoinRel) top;
       final RelNode input0 = join.getInput(0);
       final RelNode input1 = join.getInput(1);
       RelTraitSet traits0 = input0.getTraitSet().plus(DRILL_PHYSICAL);

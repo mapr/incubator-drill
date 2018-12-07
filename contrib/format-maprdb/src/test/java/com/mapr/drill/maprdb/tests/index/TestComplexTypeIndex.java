@@ -57,7 +57,6 @@ public class TestComplexTypeIndex extends BaseJsonTest {
   private static String tablePath;
 
   private static final String sliceTargetSmall = "alter session set `planner.slice_target` = 1";
-  private static final String sliceTargetDefault = "alter session reset `planner.slice_target`";
   private static final String disableRowKeyJoinConversion = "alter session set planner.`enable_rowkeyjoin_conversion` = false";
   public static final String maxNonCoveringSelectivityThreshold = "alter session set `planner.index.noncovering_selectivity_threshold` = 1.0";
   public static final String resetmaxNonCoveringSelectivityThreshold = "alter session reset `planner.index.noncovering_selectivity_threshold`";
@@ -272,7 +271,6 @@ public class TestComplexTypeIndex extends BaseJsonTest {
   public void testCoveringIndexWithPredOnIncludedField() throws Exception {
     try {
       test(IndexPlanning);
-      test(DisableComplexFTSTypePlanning);
       String query = "select _id from hbase.`index_test_complex1`" +
               "where _id in (select _id from (select _id from (select _id, county, flatten(weight) as f from hbase.`index_test_complex1` as t1" +
               " where t1.`county` = 'Santa Clara') as t where t.f.high > 10))";

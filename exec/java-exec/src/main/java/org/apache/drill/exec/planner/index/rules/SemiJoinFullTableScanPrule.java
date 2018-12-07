@@ -24,6 +24,7 @@ import org.apache.calcite.plan.RelTraitSet;
 import org.apache.calcite.rel.AbstractRelNode;
 import org.apache.calcite.rel.RelCollationTraitDef;
 import org.apache.calcite.rel.RelNode;
+import org.apache.calcite.rel.logical.LogicalProject;
 import org.apache.drill.exec.physical.base.DbGroupScan;
 import org.apache.drill.exec.planner.common.DrillScanRelBase;
 import org.apache.drill.exec.planner.index.FlattenIndexPlanCallContext;
@@ -37,11 +38,13 @@ import org.apache.drill.exec.planner.logical.DrillFilterRel;
 import org.apache.drill.exec.planner.logical.DrillJoinRel;
 import org.apache.drill.exec.planner.logical.DrillProjectRel;
 import org.apache.drill.exec.planner.logical.DrillScanRel;
+import org.apache.drill.exec.planner.logical.DrillSemiJoinRel;
 import org.apache.drill.exec.planner.logical.RelOptHelper;
 import org.apache.drill.exec.planner.physical.DrillDistributionTrait;
 import org.apache.drill.exec.planner.physical.PlannerSettings;
 import org.apache.drill.exec.planner.physical.Prel;
 import org.apache.drill.exec.planner.physical.PrelUtil;
+import org.apache.drill.exec.planner.physical.ProjectPrel;
 import org.apache.drill.exec.planner.physical.ScanPrel;
 
 public class SemiJoinFullTableScanPrule extends AbstractIndexPrule {
@@ -56,6 +59,14 @@ public class SemiJoinFullTableScanPrule extends AbstractIndexPrule {
                                   RelOptHelper.any(DrillProjectRel.class))))),
   "SemiJoinFullTableScanPrule:Join_Project_Filter_Project", new MatchJSPFP());
 
+  public static RelOptRule SEMI_JOIN_FILTER_PROJECT = new SemiJoinFullTableScanPrule(
+          RelOptHelper.some(DrillSemiJoinRel.class,
+                  RelOptHelper.any(AbstractRelNode.class),
+                          RelOptHelper.some(DrillProjectRel.class,
+                                  RelOptHelper.some(DrillFilterRel.class,
+                                          RelOptHelper.any(DrillProjectRel.class)))),
+          "SemiJoinFullTableScanPrule:Semi_Join_Project_Filter_Project", new MatchSJSPFP());
+
   private final MatchFunction<SemiJoinIndexPlanCallContext> match;
 
   private SemiJoinFullTableScanPrule(RelOptRuleOperand operand,
@@ -63,6 +74,67 @@ public class SemiJoinFullTableScanPrule extends AbstractIndexPrule {
                                      MatchFunction<SemiJoinIndexPlanCallContext> match) {
     super(operand, description);
     this.match = match;
+  }
+
+  private static class MatchSJSPFP extends AbstractMatchFunction<SemiJoinIndexPlanCallContext> {
+
+    @Override
+    public boolean match(RelOptRuleCall call) {
+      DrillProjectRel lowerProject = call.rel(4);
+
+      // if Project does not contain a FLATTEN expression, rule does not apply
+      if (!projectHasFlatten(lowerProject, true, null, null)) {
+        return false;
+      }
+
+      // get the context for the left side of the join
+      IndexLogicalPlanCallContext leftContext = IndexPlanUtils.generateContext(call, call.rel(1), logger);
+
+      if (leftContext.scan == null || !checkScan(leftContext.scan)) {
+        return false;
+      }
+
+      return true;
+    }
+
+    @Override
+    public SemiJoinIndexPlanCallContext onMatch(RelOptRuleCall call) {
+      final DrillProjectRel upperProject = call.rel(2);
+      final DrillFilterRel filter = call.rel(3);
+      final DrillProjectRel rootProjectWithFlatten = call.rel(4);
+
+      final DrillSemiJoinRel join = call.rel(0);
+
+      DrillScanRel rightScan = getDescendantScan(rootProjectWithFlatten);
+
+      if (rightScan == null || !checkScan(rightScan)) {
+        return null;
+      }
+
+      // get the context for the left side of the join
+      IndexLogicalPlanCallContext leftContext = IndexPlanUtils.generateContext(call, call.rel(1), logger);
+
+      // Scans on the left and right side of the join should be for the same table
+      if (!SemiJoinIndexPlanUtils.checkSameTableScan(leftContext.scan, rightScan)) {
+        return null;
+      }
+
+      FlattenIndexPlanCallContext rightContext = new FlattenIndexPlanCallContext(call,
+              upperProject,
+              filter,
+              rootProjectWithFlatten,
+              rightScan);
+
+      if (!rightContext.isValid) {
+        return null;
+      }
+
+      SemiJoinIndexPlanCallContext idxContext = new SemiJoinIndexPlanCallContext(call, join, null,
+              leftContext, rightContext);
+      idxContext.setCoveringIndexPlanApplicable(!projectHasFlatten(leftContext.lowerProject, true, null, null) &&
+              !projectHasFlatten(leftContext.upperProject, true, null, null));
+      return idxContext;
+    }
   }
 
   private static class MatchJSPFP extends AbstractMatchFunction<SemiJoinIndexPlanCallContext> {
@@ -161,13 +233,12 @@ public class SemiJoinFullTableScanPrule extends AbstractIndexPrule {
     return scanPrel;
   }
 
-  private RelNode getFullPlan(FlattenIndexPlanCallContext indexContext) {
-    DrillScanRelBase origScan = indexContext.scan;
-    DrillFilterRel leafFilter = (DrillFilterRel) indexContext.getFilterBelowLeafFlatten();
-    DrillFilterRel flattenFilter = (DrillFilterRel) indexContext.getFilterAboveRootFlatten();
-    DrillProjectRel leafProject = (DrillProjectRel) indexContext.getLeafProjectAboveScan();
-    DrillProjectRel projectWithFlatten = (DrillProjectRel) indexContext.getProjectWithRootFlatten();
-    DrillProjectRel upperProject = (DrillProjectRel) indexContext.getUpperProject();
+  private RelNode getFullPlan(SemiJoinIndexPlanCallContext indexContext) {
+    DrillScanRelBase origScan = indexContext.getCoveringIndexContext().scan;
+    DrillFilterRel leafFilter = (DrillFilterRel) indexContext.getCoveringIndexContext().getFilterBelowLeafFlatten();
+    DrillFilterRel flattenFilter = (DrillFilterRel) indexContext.getCoveringIndexContext().getFilterAboveRootFlatten();
+    DrillProjectRel leafProject = (DrillProjectRel) indexContext.getCoveringIndexContext().getLeafProjectAboveScan();
+    DrillProjectRel upperProject = (DrillProjectRel) indexContext.getCoveringIndexContext().getUpperProject();
 
     RelNode newRel = buildScanPrel(origScan);
     if (leafProject != null) {
@@ -177,11 +248,17 @@ public class SemiJoinFullTableScanPrule extends AbstractIndexPrule {
       newRel = SemiJoinIndexPlanUtils.buildFilter(newRel, leafFilter);
     }
 
-    newRel = indexContext.buildPhysicalProjectsBottomUp(newRel);
+    newRel = indexContext.getCoveringIndexContext().buildPhysicalProjectsBottomUp(newRel);
 
     newRel = SemiJoinIndexPlanUtils.buildFilter(newRel, flattenFilter);
     if (upperProject != null) {
       newRel = SemiJoinIndexPlanUtils.buildProject(newRel, upperProject);
+    }
+
+    newRel = SemiJoinIndexPlanUtils.mergeIfPossible(SemiJoinIndexPlanUtils.buildProject(newRel, indexContext.join), newRel, indexContext);
+    if (newRel instanceof LogicalProject) {
+      newRel = new ProjectPrel(newRel.getCluster(), ((LogicalProject) newRel).getInput().getTraitSet(), newRel.getInput(0),
+              ((LogicalProject) newRel).getProjects(), newRel.getRowType());
     }
     return newRel;
   }
@@ -195,7 +272,7 @@ public class SemiJoinFullTableScanPrule extends AbstractIndexPrule {
         logger.warn("Covering Index Scan cannot be applied as FlattenIndexPlanContext is null");
       } else {
         try {
-          RelNode fulltablePlan = getFullPlan(context);
+          RelNode fulltablePlan = getFullPlan(indexContext);
           indexContext.call.transformTo(fulltablePlan);
         } catch (Exception e) {
           logger.warn("Exception while trying to generate covering index plan", e);

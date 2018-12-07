@@ -17,6 +17,7 @@
  */
 package org.apache.drill.exec.planner.index.generators;
 
+import org.apache.drill.exec.planner.logical.DrillSemiJoinRel;
 import org.apache.drill.shaded.guava.com.google.common.base.Preconditions;
 import org.apache.drill.shaded.guava.com.google.common.collect.Lists;
 import org.apache.calcite.plan.RelTraitSet;
@@ -135,7 +136,7 @@ public class SemiJoinMergeRowKeyJoinGenerator extends NonCoveringIndexPlanGenera
     RelNode root = SemiJoinIndexPlanUtils.applyProjects(rootAndColMap, projectRels, joinContext.join.getInput(0),
             this.joinContext.call.builder(), plannerSettings);
     //build the top project to make sure that no fields are selected from the RKJ operator's relation nodes.
-    root = mergeIfPossible(SemiJoinIndexPlanUtils.buildProject(root, joinContext.join.getInput(0)), root);
+    root = SemiJoinIndexPlanUtils.mergeIfPossible(SemiJoinIndexPlanUtils.buildProject(root, joinContext.join.getInput(0)), root, joinContext);
 
     if (root instanceof LogicalProject) {
       root = new ProjectPrel(input.getCluster(), input.getTraitSet(), root.getInput(0),
@@ -292,6 +293,15 @@ public class SemiJoinMergeRowKeyJoinGenerator extends NonCoveringIndexPlanGenera
     RelNode top = indexContext.getCall().rel(0);
     if (top instanceof DrillJoinRel) {
       DrillJoinRel join = (DrillJoinRel) top;
+      final RelNode input0 = join.getInput(0);
+      final RelNode input1 = join.getInput(1);
+      RelTraitSet traits0 = input0.getTraitSet().plus(DRILL_PHYSICAL);
+      RelNode convertedInput0 = Prule.convert(input0, traits0);
+      RelTraitSet traits1 = input1.getTraitSet().plus(DRILL_PHYSICAL);
+      RelNode convertedInput1 = Prule.convert(input1, traits1);
+      return this.goMulti(top, convertedInput0) && this.goMulti(top, convertedInput1);
+    } else if (top instanceof DrillSemiJoinRel) {
+      DrillSemiJoinRel join = (DrillSemiJoinRel) top;
       final RelNode input0 = join.getInput(0);
       final RelNode input1 = join.getInput(1);
       RelTraitSet traits0 = input0.getTraitSet().plus(DRILL_PHYSICAL);

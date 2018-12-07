@@ -17,6 +17,7 @@
  */
 package org.apache.drill.exec.planner.index.generators.common;
 
+import org.apache.drill.exec.planner.logical.DrillSemiJoinRel;
 import org.apache.drill.shaded.guava.com.google.common.base.Preconditions;
 import org.apache.drill.shaded.guava.com.google.common.collect.Lists;
 import org.apache.drill.shaded.guava.com.google.common.collect.ImmutableList;
@@ -81,13 +82,37 @@ public class SemiJoinIndexPlanUtils {
     return input.left;
   }
 
+  /**
+   * Merge the rel nodes if both are project and generate a single merged project.
+   * When one of the rel node is not project, then this function is a no-op.
+   * @param topProj top project in the pipeline.
+   * @param bottomProj bottom project in the pipeline.
+   * @param context SemiJoin index plan context.
+   * @return Merged project if both rel nodes are projects otherwise no change.
+   */
+  public static RelNode mergeIfPossible(RelNode topProj, RelNode bottomProj, SemiJoinIndexPlanCallContext context) {
+    if (topProj instanceof Project && bottomProj instanceof Project) {
+      return DrillRelOptUtil.mergeProjects(
+              (ProjectPrel)topProj, (ProjectPrel) bottomProj, false, context.call.builder());
+    } else {
+      return topProj;
+    }
+  }
+
   public static List<RelNode> buildRowKeyJoin(SemiJoinIndexPlanCallContext joinContext,
                                         RelNode leftInput, List<RelNode> distinct) throws InvalidRelException {
 
     List<RelNode> rkjNodes = new ArrayList<>();
     for (RelNode agg : distinct) {
-      rkjNodes.add(new RowKeyJoinPrel(leftInput.getCluster(), distinct.get(0).getTraitSet().plus(DRILL_PHYSICAL), leftInput, agg,
-              joinContext.join.getCondition(), JoinRelType.INNER));
+      RowKeyJoinPrel rowKeyJoinPrel = new RowKeyJoinPrel(leftInput.getCluster(), distinct.get(0).getTraitSet().plus(DRILL_PHYSICAL), leftInput, agg,
+                                                        joinContext.join.getCondition(), JoinRelType.INNER);
+      if (joinContext.join instanceof DrillSemiJoinRel) {
+        List<RexNode> projects = IndexPlanUtils.projects(rowKeyJoinPrel.getInput(0), rowKeyJoinPrel.getInput(0).getRowType().getFieldNames());
+        rkjNodes.add(new ProjectPrel(rowKeyJoinPrel.getCluster(), rowKeyJoinPrel.getTraitSet().plus(DRILL_PHYSICAL), rowKeyJoinPrel,
+                projects, joinContext.join.getRowType()));
+      } else {
+        rkjNodes.add(rowKeyJoinPrel);
+      }
     }
     return rkjNodes;
   }

@@ -449,7 +449,8 @@ public enum PlannerPhase {
             DbScanSortRemovalRule.INDEX_SORT_EXCHANGE_SCAN,
             DbScanSortRemovalRule.INDEX_SORT_SCAN,
             DbScanSortRemovalRule.INDEX_SORT_PROJ_SCAN,
-            SemiJoinIndexScanPrule.JOIN_FILTER_PROJECT)
+            SemiJoinIndexScanPrule.JOIN_FILTER_PROJECT,
+            SemiJoinIndexScanPrule.SEMI_JOIN_FILTER_PROJECT)
         .addAll(getComplexTypeFTSRules(ps))
         .build();
     return RuleSets.ofList(indexRules);
@@ -458,7 +459,8 @@ public enum PlannerPhase {
   static RuleSet getComplexTypeFTSRules(PlannerSettings ps) {
     if (ps.isComplexFTSEnabled()) {
       final ImmutableSet<RelOptRule> indexRules = ImmutableSet.<RelOptRule>builder()
-          .add(SemiJoinFullTableScanPrule.JOIN_FILTER_PROJECT).build();
+          .add(SemiJoinFullTableScanPrule.JOIN_FILTER_PROJECT)
+          .add(SemiJoinFullTableScanPrule.SEMI_JOIN_FILTER_PROJECT).build();
       return RuleSets.ofList(indexRules);
     } else {
       return RuleSets.ofList(ImmutableSet.<RelOptRule>builder().build());

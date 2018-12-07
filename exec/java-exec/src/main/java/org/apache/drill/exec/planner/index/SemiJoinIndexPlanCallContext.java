@@ -21,7 +21,7 @@ import static org.apache.drill.exec.planner.physical.Prel.DRILL_PHYSICAL;
 
 
 import org.apache.calcite.plan.RelOptRuleCall;
-import org.apache.drill.exec.planner.logical.DrillJoinRel;
+import org.apache.drill.exec.planner.logical.DrillJoin;
 import org.apache.drill.exec.planner.logical.DrillProjectRel;
 import org.apache.drill.exec.planner.logical.DrillScanRel;
 import org.apache.drill.exec.planner.physical.FilterPrel;
@@ -39,7 +39,7 @@ public class SemiJoinIndexPlanCallContext {
   public final RelOptRuleCall call;
   public final IndexLogicalPlanCallContext leftSide;
   public final FlattenIndexPlanCallContext rightSide;
-  public final DrillJoinRel join;
+  public final DrillJoin join;
   public final DrillAggregateRel distinct;
   private boolean isCoveringIndexPlanApplicable = true;
 
@@ -47,7 +47,7 @@ public class SemiJoinIndexPlanCallContext {
   private FlattenIndexPlanCallContext converingIndexContext;
 
   public SemiJoinIndexPlanCallContext(RelOptRuleCall call,
-                                      DrillJoinRel join,
+                                      DrillJoin join,
                                       DrillAggregateRel distinct,
                                       IndexLogicalPlanCallContext leftSide,
                                       FlattenIndexPlanCallContext rightSide) {

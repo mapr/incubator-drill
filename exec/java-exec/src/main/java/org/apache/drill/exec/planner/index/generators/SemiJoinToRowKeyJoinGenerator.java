@@ -27,6 +27,7 @@ import org.apache.drill.exec.planner.index.FunctionalIndexInfo;
 import org.apache.drill.exec.planner.index.SemiJoinIndexPlanCallContext;
 import org.apache.drill.exec.planner.index.generators.common.SemiJoinIndexPlanUtils;
 import org.apache.drill.exec.planner.logical.DrillJoinRel;
+import org.apache.drill.exec.planner.logical.DrillSemiJoinRel;
 import org.apache.drill.exec.planner.physical.PlannerSettings;
 import org.apache.calcite.rel.RelNode;
 import org.apache.drill.exec.planner.physical.Prule;
@@ -86,8 +87,14 @@ public class SemiJoinToRowKeyJoinGenerator extends CoveringIndexPlanGenerator {
       RelTraitSet traits0 = input0.getTraitSet().plus(DRILL_PHYSICAL);
       RelNode convertedInput0 = Prule.convert(input0, traits0);
       return this.goMulti(top, convertedInput0);
+    } else if (top instanceof DrillSemiJoinRel) {
+      DrillSemiJoinRel join = (DrillSemiJoinRel) top;
+      final RelNode input0 = join.getInput(0);
+      RelTraitSet traits0 = input0.getTraitSet().plus(DRILL_PHYSICAL);
+      RelNode convertedInput0 = Prule.convert(input0, traits0);
+      return this.goMulti(top, convertedInput0);
     } else {
-      return false;
+        return false;
     }
   }
 }

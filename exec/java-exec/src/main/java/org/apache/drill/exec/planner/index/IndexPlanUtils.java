@@ -1083,6 +1083,7 @@ public class IndexPlanUtils {
     // Sequence of rels (PFPS, FPS, PS, FS, S) matched for this rule
     Class[] PFPS = new Class[] {DrillProjectRel.class, DrillFilterRel.class, DrillProjectRel.class, DrillScanRel.class};
     Class[] FPS = new Class[] {DrillFilterRel.class, DrillProjectRel.class, DrillScanRel.class};
+    Class[] PFS = new Class[] {DrillProjectRel.class, DrillFilterRel.class, DrillScanRel.class};
     Class[] PS = new Class[] {DrillProjectRel.class, DrillScanRel.class};
     Class[] FS = new Class[] {DrillFilterRel.class, DrillScanRel.class};
     Class[] S = new Class[] {DrillScanRel.class};
@@ -1100,6 +1101,12 @@ public class IndexPlanUtils {
       logger.debug("Matched rel sequence : Filter->Project->Scan");
       return new IndexLogicalPlanCallContext(call, null, (DrillFilterRel) matchingRels.get(0),
               (DrillProjectRel) matchingRels.get(1), (DrillScanRel) matchingRels.get(2));
+    }
+    matchingRels = IndexPlanUtils.findRelSequence(PFS, startNode, logger);
+    if (matchingRels.size() > 0 && ((DrillScanRel) matchingRels.get(2)).getGroupScan() instanceof DbGroupScan) {
+      logger.debug("Matched rel sequence : Project->Filter->Scan");
+      return new IndexLogicalPlanCallContext(call, (DrillProjectRel) matchingRels.get(0), (DrillFilterRel) matchingRels.get(1),
+              null, (DrillScanRel) matchingRels.get(2));
     }
     matchingRels = IndexPlanUtils.findRelSequence(PS, startNode, logger);
     if (matchingRels.size() > 0 && ((DrillScanRel) matchingRels.get(1)).getGroupScan() instanceof DbGroupScan) {
