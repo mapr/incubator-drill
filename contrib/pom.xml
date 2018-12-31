@@ -23,7 +23,7 @@
   <parent>
     <artifactId>drill-root</artifactId>
     <groupId>org.apache.drill</groupId>
-    <version>1.15.0-mapr-SNAPSHOT</version>
+    <version>1.16.0-mapr-SNAPSHOT</version>
   </parent>
 
   <groupId>org.apache.drill.contrib</groupId>
@@ -48,7 +48,6 @@
     <module>storage-kudu</module>
     <module>storage-opentsdb</module>
     <module>data</module>
-    <module>auth-mechanism-maprsasl</module>
     <module>udfs</module>
   </modules>
 

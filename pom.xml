@@ -30,7 +30,7 @@
 
   <groupId>org.apache.drill</groupId>
   <artifactId>drill-root</artifactId>
-  <version>1.15.0-mapr-SNAPSHOT</version>
+  <version>1.16.0-mapr-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>Apache Drill Root POM</name>
@@ -3458,7 +3458,6 @@
     <module>common</module>
     <module>logical</module>
     <module>exec</module>
-    <module>client</module>
     <module>drill-yarn</module>
     <module>distribution</module>
   </modules>

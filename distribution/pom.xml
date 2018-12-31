@@ -23,7 +23,7 @@
   <parent>
     <artifactId>drill-root</artifactId>
     <groupId>org.apache.drill</groupId>
-    <version>1.15.0-mapr-SNAPSHOT</version>
+    <version>1.16.0-mapr-SNAPSHOT</version>
   </parent>
 
   <artifactId>distribution</artifactId>
@@ -319,11 +319,6 @@
               <artifactId>mapr-test-annotations</artifactId>
             </exclusion>
           </exclusions>
-        </dependency>
-        <dependency>
-          <groupId>org.apache.drill.contrib</groupId>
-          <artifactId>drill-auth-mechanism-maprsasl</artifactId>
-          <version>${project.version}</version>
         </dependency>
         <dependency>
           <groupId>org.apache.hadoop</groupId>
