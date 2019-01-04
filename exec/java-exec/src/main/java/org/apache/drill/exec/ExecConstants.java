@@ -224,6 +224,8 @@ public final class ExecConstants {
   public static final String HTTP_AUTHENTICATION_MECHANISMS = "drill.exec.http.auth.mechanisms";
   public static final String HTTP_SPNEGO_PRINCIPAL = "drill.exec.http.auth.spnego.principal";
   public static final String HTTP_SPNEGO_KEYTAB = "drill.exec.http.auth.spnego.keytab";
+  //Customize filters in options
+  public static final String HTTP_WEB_OPTIONS_FILTERS = "drill.exec.http.web.options.filters";
   public static final String SYS_STORE_PROVIDER_CLASS = "drill.exec.sys.store.provider.class";
   public static final String SYS_STORE_PROVIDER_LOCAL_PATH = "drill.exec.sys.store.provider.local.path";
   public static final String SYS_STORE_PROVIDER_LOCAL_ENABLE_WRITE = "drill.exec.sys.store.provider.local.write";
@@ -782,6 +784,17 @@ public final class ExecConstants {
   public static final String DYNAMIC_UDF_SUPPORT_ENABLED = "exec.udf.enable_dynamic_support";
   public static final BooleanValidator DYNAMIC_UDF_SUPPORT_ENABLED_VALIDATOR = new BooleanValidator(DYNAMIC_UDF_SUPPORT_ENABLED,
       new OptionDescription("Enables users to dynamically upload UDFs. Users must upload their UDF (source and binary) JAR files to a staging directory in the distributed file system before issuing the CREATE FUNCTION USING JAR command to register a UDF. Default is true. (Drill 1.9+)"));
+
+  //Trigger warning in UX if fragments appear to be doing no work (units are in seconds).
+  public static final String PROFILE_WARNING_PROGRESS_THRESHOLD = "drill.exec.http.profile.warning.progress.threshold";
+  //Trigger warning in UX if slowest fragment operator crosses min threshold and exceeds ratio with average (units are in seconds).
+  public static final String PROFILE_WARNING_TIME_SKEW_MIN = "drill.exec.http.profile.warning.time.skew.min";
+  //Threshold Ratio for Processing (i.e. "maxProcessing : avgProcessing" ratio must exceed this defined threshold to show a skew warning)
+  public static final String PROFILE_WARNING_TIME_SKEW_RATIO_PROCESS = "drill.exec.http.profile.warning.time.skew.ratio.process";
+  //Trigger warning in UX if slowest fragment SCAN crosses min threshold and exceeds ratio with average (units are in seconds).
+  public static final String PROFILE_WARNING_SCAN_WAIT_MIN = "drill.exec.http.profile.warning.scan.wait.min";
+  //Threshold Ratio for Waiting (i.e. "maxWait : avgWait" ratio must exceed this defined threshold to show a skew warning)
+  public static final String PROFILE_WARNING_TIME_SKEW_RATIO_WAIT = "drill.exec.http.profile.warning.time.skew.ratio.wait";
 
   /**
    * Option to save query profiles. If false, no query profile will be saved
