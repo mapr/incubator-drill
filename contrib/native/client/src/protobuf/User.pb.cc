@@ -685,7 +685,7 @@ void protobuf_AssignDesc_User_2eproto() {
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(GetServerMetaResp));
   ServerMeta_descriptor_ = file->message_type(29);
-  static const int ServerMeta_offsets_[49] = {
+  static const int ServerMeta_offsets_[50] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ServerMeta, all_tables_selectable_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ServerMeta, blob_included_in_max_row_size_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ServerMeta, catalog_at_start_),
@@ -735,6 +735,7 @@ void protobuf_AssignDesc_User_2eproto() {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ServerMeta, table_term_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ServerMeta, transaction_supported_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ServerMeta, union_support_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ServerMeta, current_schema_),
   };
   ServerMeta_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -1133,7 +1134,7 @@ void protobuf_AddDesc_User_2eproto() {
     "\006status\030\001 \001(\0162\030.exec.user.RequestStatus\022"
     "*\n\013server_meta\030\002 \001(\0132\025.exec.user.ServerM"
     "eta\022(\n\005error\030\003 \001(\0132\031.exec.shared.DrillPB"
-    "Error\"\377\r\n\nServerMeta\022\035\n\025all_tables_selec"
+    "Error\"\227\016\n\nServerMeta\022\035\n\025all_tables_selec"
     "table\030\001 \001(\010\022%\n\035blob_included_in_max_row_"
     "size\030\002 \001(\010\022\030\n\020catalog_at_start\030\003 \001(\010\022\031\n\021"
     "catalog_separator\030\004 \001(\t\022\024\n\014catalog_term\030"
@@ -1177,82 +1178,82 @@ void protobuf_AddDesc_User_2eproto() {
     "\030- \003(\0162\032.exec.user.SubQuerySupport\022\030\n\020sy"
     "stem_functions\030. \003(\t\022\022\n\ntable_term\030/ \001(\t"
     "\022\035\n\025transaction_supported\0300 \001(\010\022.\n\runion"
-    "_support\0301 \003(\0162\027.exec.user.UnionSupport\""
-    "\353\001\n\010RunQuery\0221\n\014results_mode\030\001 \001(\0162\033.exe"
-    "c.user.QueryResultsMode\022$\n\004type\030\002 \001(\0162\026."
-    "exec.shared.QueryType\022\014\n\004plan\030\003 \001(\t\0221\n\tf"
-    "ragments\030\004 \003(\0132\036.exec.bit.control.PlanFr"
-    "agment\022E\n\031prepared_statement_handle\030\005 \001("
-    "\0132\".exec.user.PreparedStatementHandle\"B\n"
-    "\021NewSessionRequest\022-\n\nproperties\030\001 \001(\0132\031"
-    ".exec.user.UserProperties\"#\n\rSessionHand"
-    "le\022\022\n\nsession_id\030\001 \001(\t\"s\n\031RunQueryWithSe"
-    "ssionHandle\022%\n\010runQuery\030\001 \001(\0132\023.exec.use"
-    "r.RunQuery\022/\n\rsessionHandle\030\002 \001(\0132\030.exec"
-    ".user.SessionHandle\"x\n\034CancelQueryWithSe"
-    "ssionHandle\022&\n\010query_id\030\001 \001(\0132\024.exec.sha"
-    "red.QueryId\0220\n\016session_handle\030\002 \001(\0132\030.ex"
-    "ec.user.SessionHandle*\310\004\n\007RpcType\022\r\n\tHAN"
-    "DSHAKE\020\000\022\007\n\003ACK\020\001\022\013\n\007GOODBYE\020\002\022\r\n\tRUN_QU"
-    "ERY\020\003\022\020\n\014CANCEL_QUERY\020\004\022\023\n\017REQUEST_RESUL"
-    "TS\020\005\022\027\n\023RESUME_PAUSED_QUERY\020\013\022\034\n\030GET_QUE"
-    "RY_PLAN_FRAGMENTS\020\014\022\020\n\014GET_CATALOGS\020\016\022\017\n"
-    "\013GET_SCHEMAS\020\017\022\016\n\nGET_TABLES\020\020\022\017\n\013GET_CO"
-    "LUMNS\020\021\022\035\n\031CREATE_PREPARED_STATEMENT\020\026\022\023"
-    "\n\017GET_SERVER_META\020\010\022\020\n\013NEW_SESSION\020\201\010\022\033\n"
-    "\026RUN_QUERY_WITH_SESSION\020\203\010\022\022\n\rCLOSE_SESS"
-    "ION\020\204\010\022\036\n\031CANCEL_QUERY_WITH_SESSION\020\205\010\022\016"
-    "\n\nQUERY_DATA\020\006\022\020\n\014QUERY_HANDLE\020\007\022\030\n\024QUER"
-    "Y_PLAN_FRAGMENTS\020\r\022\014\n\010CATALOGS\020\022\022\013\n\007SCHE"
-    "MAS\020\023\022\n\n\006TABLES\020\024\022\013\n\007COLUMNS\020\025\022\026\n\022PREPAR"
-    "ED_STATEMENT\020\027\022\017\n\013SERVER_META\020\t\022\020\n\014QUERY"
-    "_RESULT\020\n\022\023\n\016SESSION_HANDLE\020\202\010\022\020\n\014SASL_M"
-    "ESSAGE\020\030*H\n\013SaslSupport\022\030\n\024UNKNOWN_SASL_"
-    "SUPPORT\020\000\022\r\n\tSASL_AUTH\020\001\022\020\n\014SASL_PRIVACY"
-    "\020\002*#\n\020QueryResultsMode\022\017\n\013STREAM_FULL\020\001*"
-    "q\n\017HandshakeStatus\022\013\n\007SUCCESS\020\001\022\030\n\024RPC_V"
-    "ERSION_MISMATCH\020\002\022\017\n\013AUTH_FAILED\020\003\022\023\n\017UN"
-    "KNOWN_FAILURE\020\004\022\021\n\rAUTH_REQUIRED\020\005*D\n\rRe"
-    "questStatus\022\022\n\016UNKNOWN_STATUS\020\000\022\006\n\002OK\020\001\022"
-    "\n\n\006FAILED\020\002\022\013\n\007TIMEOUT\020\003*Y\n\023ColumnSearch"
-    "ability\022\031\n\025UNKNOWN_SEARCHABILITY\020\000\022\010\n\004NO"
-    "NE\020\001\022\010\n\004CHAR\020\002\022\n\n\006NUMBER\020\003\022\007\n\003ALL\020\004*K\n\022C"
-    "olumnUpdatability\022\030\n\024UNKNOWN_UPDATABILIT"
-    "Y\020\000\022\r\n\tREAD_ONLY\020\001\022\014\n\010WRITABLE\020\002*1\n\016Coll"
-    "ateSupport\022\016\n\nCS_UNKNOWN\020\000\022\017\n\013CS_GROUP_B"
-    "Y\020\001*J\n\027CorrelationNamesSupport\022\013\n\007CN_NON"
-    "E\020\001\022\026\n\022CN_DIFFERENT_NAMES\020\002\022\n\n\006CN_ANY\020\003*"
-    "\271\003\n\027DateTimeLiteralsSupport\022\016\n\nDL_UNKNOW"
-    "N\020\000\022\013\n\007DL_DATE\020\001\022\013\n\007DL_TIME\020\002\022\020\n\014DL_TIME"
-    "STAMP\020\003\022\024\n\020DL_INTERVAL_YEAR\020\004\022\025\n\021DL_INTE"
-    "RVAL_MONTH\020\005\022\023\n\017DL_INTERVAL_DAY\020\006\022\024\n\020DL_"
-    "INTERVAL_HOUR\020\007\022\026\n\022DL_INTERVAL_MINUTE\020\010\022"
-    "\026\n\022DL_INTERVAL_SECOND\020\t\022\035\n\031DL_INTERVAL_Y"
-    "EAR_TO_MONTH\020\n\022\033\n\027DL_INTERVAL_DAY_TO_HOU"
-    "R\020\013\022\035\n\031DL_INTERVAL_DAY_TO_MINUTE\020\014\022\035\n\031DL"
-    "_INTERVAL_DAY_TO_SECOND\020\r\022\036\n\032DL_INTERVAL"
-    "_HOUR_TO_MINUTE\020\016\022\036\n\032DL_INTERVAL_HOUR_TO"
-    "_SECOND\020\017\022 \n\034DL_INTERVAL_MINUTE_TO_SECON"
-    "D\020\020*Y\n\016GroupBySupport\022\013\n\007GB_NONE\020\001\022\022\n\016GB"
-    "_SELECT_ONLY\020\002\022\024\n\020GB_BEYOND_SELECT\020\003\022\020\n\014"
-    "GB_UNRELATED\020\004*x\n\020IdentifierCasing\022\016\n\nIC"
-    "_UNKNOWN\020\000\022\023\n\017IC_STORES_LOWER\020\001\022\023\n\017IC_ST"
-    "ORES_MIXED\020\002\022\023\n\017IC_STORES_UPPER\020\003\022\025\n\021IC_"
-    "SUPPORTS_MIXED\020\004*X\n\rNullCollation\022\016\n\nNC_"
-    "UNKNOWN\020\000\022\017\n\013NC_AT_START\020\001\022\r\n\tNC_AT_END\020"
-    "\002\022\013\n\007NC_HIGH\020\003\022\n\n\006NC_LOW\020\004*E\n\016OrderBySup"
-    "port\022\016\n\nOB_UNKNOWN\020\000\022\020\n\014OB_UNRELATED\020\001\022\021"
-    "\n\rOB_EXPRESSION\020\002*\226\001\n\020OuterJoinSupport\022\016"
-    "\n\nOJ_UNKNOWN\020\000\022\013\n\007OJ_LEFT\020\001\022\014\n\010OJ_RIGHT\020"
-    "\002\022\013\n\007OJ_FULL\020\003\022\r\n\tOJ_NESTED\020\004\022\022\n\016OJ_NOT_"
-    "ORDERED\020\005\022\014\n\010OJ_INNER\020\006\022\031\n\025OJ_ALL_COMPAR"
-    "ISON_OPS\020\007*\204\001\n\017SubQuerySupport\022\016\n\nSQ_UNK"
-    "NOWN\020\000\022\021\n\rSQ_CORRELATED\020\001\022\024\n\020SQ_IN_COMPA"
-    "RISON\020\002\022\020\n\014SQ_IN_EXISTS\020\003\022\020\n\014SQ_IN_INSER"
-    "T\020\004\022\024\n\020SQ_IN_QUANTIFIED\020\005*;\n\014UnionSuppor"
-    "t\022\r\n\tU_UNKNOWN\020\000\022\013\n\007U_UNION\020\001\022\017\n\013U_UNION"
-    "_ALL\020\002B+\n\033org.apache.drill.exec.protoB\nU"
-    "serProtosH\001", 9411);
+    "_support\0301 \003(\0162\027.exec.user.UnionSupport\022"
+    "\026\n\016current_schema\0302 \001(\t\"\353\001\n\010RunQuery\0221\n\014"
+    "results_mode\030\001 \001(\0162\033.exec.user.QueryResu"
+    "ltsMode\022$\n\004type\030\002 \001(\0162\026.exec.shared.Quer"
+    "yType\022\014\n\004plan\030\003 \001(\t\0221\n\tfragments\030\004 \003(\0132\036"
+    ".exec.bit.control.PlanFragment\022E\n\031prepar"
+    "ed_statement_handle\030\005 \001(\0132\".exec.user.Pr"
+    "eparedStatementHandle\"B\n\021NewSessionReque"
+    "st\022-\n\nproperties\030\001 \001(\0132\031.exec.user.UserP"
+    "roperties\"#\n\rSessionHandle\022\022\n\nsession_id"
+    "\030\001 \001(\t\"s\n\031RunQueryWithSessionHandle\022%\n\010r"
+    "unQuery\030\001 \001(\0132\023.exec.user.RunQuery\022/\n\rse"
+    "ssionHandle\030\002 \001(\0132\030.exec.user.SessionHan"
+    "dle\"x\n\034CancelQueryWithSessionHandle\022&\n\010q"
+    "uery_id\030\001 \001(\0132\024.exec.shared.QueryId\0220\n\016s"
+    "ession_handle\030\002 \001(\0132\030.exec.user.SessionH"
+    "andle*\310\004\n\007RpcType\022\r\n\tHANDSHAKE\020\000\022\007\n\003ACK\020"
+    "\001\022\013\n\007GOODBYE\020\002\022\r\n\tRUN_QUERY\020\003\022\020\n\014CANCEL_"
+    "QUERY\020\004\022\023\n\017REQUEST_RESULTS\020\005\022\027\n\023RESUME_P"
+    "AUSED_QUERY\020\013\022\034\n\030GET_QUERY_PLAN_FRAGMENT"
+    "S\020\014\022\020\n\014GET_CATALOGS\020\016\022\017\n\013GET_SCHEMAS\020\017\022\016"
+    "\n\nGET_TABLES\020\020\022\017\n\013GET_COLUMNS\020\021\022\035\n\031CREAT"
+    "E_PREPARED_STATEMENT\020\026\022\023\n\017GET_SERVER_MET"
+    "A\020\010\022\020\n\013NEW_SESSION\020\201\010\022\033\n\026RUN_QUERY_WITH_"
+    "SESSION\020\203\010\022\022\n\rCLOSE_SESSION\020\204\010\022\036\n\031CANCEL"
+    "_QUERY_WITH_SESSION\020\205\010\022\016\n\nQUERY_DATA\020\006\022\020"
+    "\n\014QUERY_HANDLE\020\007\022\030\n\024QUERY_PLAN_FRAGMENTS"
+    "\020\r\022\014\n\010CATALOGS\020\022\022\013\n\007SCHEMAS\020\023\022\n\n\006TABLES\020"
+    "\024\022\013\n\007COLUMNS\020\025\022\026\n\022PREPARED_STATEMENT\020\027\022\017"
+    "\n\013SERVER_META\020\t\022\020\n\014QUERY_RESULT\020\n\022\023\n\016SES"
+    "SION_HANDLE\020\202\010\022\020\n\014SASL_MESSAGE\020\030*H\n\013Sasl"
+    "Support\022\030\n\024UNKNOWN_SASL_SUPPORT\020\000\022\r\n\tSAS"
+    "L_AUTH\020\001\022\020\n\014SASL_PRIVACY\020\002*#\n\020QueryResul"
+    "tsMode\022\017\n\013STREAM_FULL\020\001*q\n\017HandshakeStat"
+    "us\022\013\n\007SUCCESS\020\001\022\030\n\024RPC_VERSION_MISMATCH\020"
+    "\002\022\017\n\013AUTH_FAILED\020\003\022\023\n\017UNKNOWN_FAILURE\020\004\022"
+    "\021\n\rAUTH_REQUIRED\020\005*D\n\rRequestStatus\022\022\n\016U"
+    "NKNOWN_STATUS\020\000\022\006\n\002OK\020\001\022\n\n\006FAILED\020\002\022\013\n\007T"
+    "IMEOUT\020\003*Y\n\023ColumnSearchability\022\031\n\025UNKNO"
+    "WN_SEARCHABILITY\020\000\022\010\n\004NONE\020\001\022\010\n\004CHAR\020\002\022\n"
+    "\n\006NUMBER\020\003\022\007\n\003ALL\020\004*K\n\022ColumnUpdatabilit"
+    "y\022\030\n\024UNKNOWN_UPDATABILITY\020\000\022\r\n\tREAD_ONLY"
+    "\020\001\022\014\n\010WRITABLE\020\002*1\n\016CollateSupport\022\016\n\nCS"
+    "_UNKNOWN\020\000\022\017\n\013CS_GROUP_BY\020\001*J\n\027Correlati"
+    "onNamesSupport\022\013\n\007CN_NONE\020\001\022\026\n\022CN_DIFFER"
+    "ENT_NAMES\020\002\022\n\n\006CN_ANY\020\003*\271\003\n\027DateTimeLite"
+    "ralsSupport\022\016\n\nDL_UNKNOWN\020\000\022\013\n\007DL_DATE\020\001"
+    "\022\013\n\007DL_TIME\020\002\022\020\n\014DL_TIMESTAMP\020\003\022\024\n\020DL_IN"
+    "TERVAL_YEAR\020\004\022\025\n\021DL_INTERVAL_MONTH\020\005\022\023\n\017"
+    "DL_INTERVAL_DAY\020\006\022\024\n\020DL_INTERVAL_HOUR\020\007\022"
+    "\026\n\022DL_INTERVAL_MINUTE\020\010\022\026\n\022DL_INTERVAL_S"
+    "ECOND\020\t\022\035\n\031DL_INTERVAL_YEAR_TO_MONTH\020\n\022\033"
+    "\n\027DL_INTERVAL_DAY_TO_HOUR\020\013\022\035\n\031DL_INTERV"
+    "AL_DAY_TO_MINUTE\020\014\022\035\n\031DL_INTERVAL_DAY_TO"
+    "_SECOND\020\r\022\036\n\032DL_INTERVAL_HOUR_TO_MINUTE\020"
+    "\016\022\036\n\032DL_INTERVAL_HOUR_TO_SECOND\020\017\022 \n\034DL_"
+    "INTERVAL_MINUTE_TO_SECOND\020\020*Y\n\016GroupBySu"
+    "pport\022\013\n\007GB_NONE\020\001\022\022\n\016GB_SELECT_ONLY\020\002\022\024"
+    "\n\020GB_BEYOND_SELECT\020\003\022\020\n\014GB_UNRELATED\020\004*x"
+    "\n\020IdentifierCasing\022\016\n\nIC_UNKNOWN\020\000\022\023\n\017IC"
+    "_STORES_LOWER\020\001\022\023\n\017IC_STORES_MIXED\020\002\022\023\n\017"
+    "IC_STORES_UPPER\020\003\022\025\n\021IC_SUPPORTS_MIXED\020\004"
+    "*X\n\rNullCollation\022\016\n\nNC_UNKNOWN\020\000\022\017\n\013NC_"
+    "AT_START\020\001\022\r\n\tNC_AT_END\020\002\022\013\n\007NC_HIGH\020\003\022\n"
+    "\n\006NC_LOW\020\004*E\n\016OrderBySupport\022\016\n\nOB_UNKNO"
+    "WN\020\000\022\020\n\014OB_UNRELATED\020\001\022\021\n\rOB_EXPRESSION\020"
+    "\002*\226\001\n\020OuterJoinSupport\022\016\n\nOJ_UNKNOWN\020\000\022\013"
+    "\n\007OJ_LEFT\020\001\022\014\n\010OJ_RIGHT\020\002\022\013\n\007OJ_FULL\020\003\022\r"
+    "\n\tOJ_NESTED\020\004\022\022\n\016OJ_NOT_ORDERED\020\005\022\014\n\010OJ_"
+    "INNER\020\006\022\031\n\025OJ_ALL_COMPARISON_OPS\020\007*\204\001\n\017S"
+    "ubQuerySupport\022\016\n\nSQ_UNKNOWN\020\000\022\021\n\rSQ_COR"
+    "RELATED\020\001\022\024\n\020SQ_IN_COMPARISON\020\002\022\020\n\014SQ_IN"
+    "_EXISTS\020\003\022\020\n\014SQ_IN_INSERT\020\004\022\024\n\020SQ_IN_QUA"
+    "NTIFIED\020\005*;\n\014UnionSupport\022\r\n\tU_UNKNOWN\020\000"
+    "\022\013\n\007U_UNION\020\001\022\017\n\013U_UNION_ALL\020\002B+\n\033org.ap"
+    "ache.drill.exec.protoB\nUserProtosH\001", 9435);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "User.proto", &protobuf_RegisterTypes);
   Property::default_instance_ = new Property();
@@ -12480,6 +12481,7 @@ const int ServerMeta::kSystemFunctionsFieldNumber;
 const int ServerMeta::kTableTermFieldNumber;
 const int ServerMeta::kTransactionSupportedFieldNumber;
 const int ServerMeta::kUnionSupportFieldNumber;
+const int ServerMeta::kCurrentSchemaFieldNumber;
 #endif  // !_MSC_VER
 
 ServerMeta::ServerMeta()
@@ -12535,6 +12537,7 @@ void ServerMeta::SharedCtor() {
   special_characters_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   table_term_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   transaction_supported_ = false;
+  current_schema_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -12563,6 +12566,9 @@ void ServerMeta::SharedDtor() {
   }
   if (table_term_ != &::google::protobuf::internal::kEmptyString) {
     delete table_term_;
+  }
+  if (current_schema_ != &::google::protobuf::internal::kEmptyString) {
+    delete current_schema_;
   }
   if (this != default_instance_) {
   }
@@ -12666,6 +12672,13 @@ void ServerMeta::Clear() {
       }
     }
     transaction_supported_ = false;
+  }
+  if (_has_bits_[49 / 32] & (0xffu << (49 % 32))) {
+    if (has_current_schema()) {
+      if (current_schema_ != &::google::protobuf::internal::kEmptyString) {
+        current_schema_->clear();
+      }
+    }
   }
   collate_support_.Clear();
   convert_support_.Clear();
@@ -13592,6 +13605,23 @@ bool ServerMeta::MergePartialFromCodedStream(
           goto handle_uninterpreted;
         }
         if (input->ExpectTag(392)) goto parse_union_support;
+        if (input->ExpectTag(402)) goto parse_current_schema;
+        break;
+      }
+
+      // optional string current_schema = 50;
+      case 50: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_current_schema:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_current_schema()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+            this->current_schema().data(), this->current_schema().length(),
+            ::google::protobuf::internal::WireFormat::PARSE);
+        } else {
+          goto handle_uninterpreted;
+        }
         if (input->ExpectAtEnd()) return true;
         break;
       }
@@ -13919,6 +13949,15 @@ void ServerMeta::SerializeWithCachedSizes(
       49, this->union_support(i), output);
   }
 
+  // optional string current_schema = 50;
+  if (has_current_schema()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->current_schema().data(), this->current_schema().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    ::google::protobuf::internal::WireFormatLite::WriteString(
+      50, this->current_schema(), output);
+  }
+
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -14240,6 +14279,16 @@ void ServerMeta::SerializeWithCachedSizes(
       49, this->union_support(i), target);
   }
 
+  // optional string current_schema = 50;
+  if (has_current_schema()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->current_schema().data(), this->current_schema().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        50, this->current_schema(), target);
+  }
+
   if (!unknown_fields().empty()) {
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         unknown_fields(), target);
@@ -14495,6 +14544,15 @@ int ServerMeta::ByteSize() const {
     // optional bool transaction_supported = 48;
     if (has_transaction_supported()) {
       total_size += 2 + 1;
+    }
+
+  }
+  if (_has_bits_[49 / 32] & (0xffu << (49 % 32))) {
+    // optional string current_schema = 50;
+    if (has_current_schema()) {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::StringSize(
+          this->current_schema());
     }
 
   }
@@ -14761,6 +14819,11 @@ void ServerMeta::MergeFrom(const ServerMeta& from) {
       set_transaction_supported(from.transaction_supported());
     }
   }
+  if (from._has_bits_[49 / 32] & (0xffu << (49 % 32))) {
+    if (from.has_current_schema()) {
+      set_current_schema(from.current_schema());
+    }
+  }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
 
@@ -14835,6 +14898,7 @@ void ServerMeta::Swap(ServerMeta* other) {
     std::swap(table_term_, other->table_term_);
     std::swap(transaction_supported_, other->transaction_supported_);
     union_support_.Swap(&other->union_support_);
+    std::swap(current_schema_, other->current_schema_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     std::swap(_has_bits_[1], other->_has_bits_[1]);
     _unknown_fields_.Swap(&other->_unknown_fields_);

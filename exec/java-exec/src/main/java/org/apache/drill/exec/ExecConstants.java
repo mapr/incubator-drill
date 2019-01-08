@@ -224,6 +224,10 @@ public final class ExecConstants {
   public static final String HTTP_AUTHENTICATION_MECHANISMS = "drill.exec.http.auth.mechanisms";
   public static final String HTTP_SPNEGO_PRINCIPAL = "drill.exec.http.auth.spnego.principal";
   public static final String HTTP_SPNEGO_KEYTAB = "drill.exec.http.auth.spnego.keytab";
+  //Control Web UI Resultset
+  public static final String HTTP_WEB_CLIENT_RESULTSET_AUTOLIMIT_CHECKED = "drill.exec.http.web.client.resultset.autolimit.checked";
+  public static final String HTTP_WEB_CLIENT_RESULTSET_AUTOLIMIT_ROWS = "drill.exec.http.web.client.resultset.autolimit.rows";
+  public static final String HTTP_WEB_CLIENT_RESULTSET_ROWS_PER_PAGE_VALUES = "drill.exec.http.web.client.resultset.rowsPerPageValues";
   //Customize filters in options
   public static final String HTTP_WEB_OPTIONS_FILTERS = "drill.exec.http.web.options.filters";
   public static final String SYS_STORE_PROVIDER_CLASS = "drill.exec.sys.store.provider.class";
@@ -563,7 +567,7 @@ public final class ExecConstants {
 
   public static final String EARLY_LIMIT0_OPT_KEY = "planner.enable_limit0_optimization";
   public static final BooleanValidator EARLY_LIMIT0_OPT = new BooleanValidator(EARLY_LIMIT0_OPT_KEY,
-      new OptionDescription("Sets the type of identifier quotes for the SQL parser. Default is backticks ('`'). The SQL parser accepts double quotes ('\"') and square brackets ('['). (Drill 1.11+)"));
+      new OptionDescription("Enables the query planner to determine data types returned by a query during the planning phase before scanning data. Default is true. (Drill 1.9+)"));
 
   public static final String LATE_LIMIT0_OPT_KEY = "planner.enable_limit0_on_scan";
   public static final BooleanValidator LATE_LIMIT0_OPT = new BooleanValidator(LATE_LIMIT0_OPT_KEY,
