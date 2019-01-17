@@ -189,6 +189,23 @@ public abstract class PathSegment {
       this(n, null);
     }
 
+    public static String escapeBackTick(String input) {
+      return input.replaceAll("([`\\\\])", "\\\\$1");
+    }
+
+    /**
+     *  If the field name is reserved word and the back ticks are removed, the exprParser tries to read that as
+     *  reserved word instead of a field and throws an exception. This method constructs the expression with back ticks
+     *  given a path.
+     */
+    public String getExpr() {
+      StringBuilder sb = new StringBuilder();
+      sb.append('`');
+      sb.append(escapeBackTick(path));
+      sb.append('`');
+      return sb.toString();
+    }
+
     public String getPath() { return path; }
 
     @Override

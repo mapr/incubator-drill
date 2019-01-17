@@ -152,7 +152,7 @@ public class FunctionalIndexHelper {
     }
     for (SchemaPath newPath : rowPaths) {
       fields.add(new RelDataTypeFieldImpl(
-          newPath.getRootSegmentPath(), fields.size(),
+          newPath.getRootSegment().getExpr(), fields.size(),
           typeFactory.createSqlType(SqlTypeName.ANY)));
     }
 

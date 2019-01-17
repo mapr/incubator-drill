@@ -90,7 +90,7 @@ public class ExprToRex extends AbstractExprVisitor<RexNode, Void, RuntimeExcepti
     PathSegment rootSegment = path.getRootSegment();
     if (rootSegment.isLastPath()) {
       if (rootSegment.isNamed()) {  // named segment
-        String segmentPath = ((PathSegment.NameSegment)rootSegment).getPath();
+        String segmentPath = ((PathSegment.NameSegment)rootSegment).getExpr();
         final RelDataTypeField field = findField(segmentPath, newRowType);
         return field == null ? null : builder.makeInputRef(field.getType(), field.getIndex());
       } else {  // array segment
