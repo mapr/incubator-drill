@@ -48,6 +48,7 @@
     <module>storage-kudu</module>
     <module>storage-opentsdb</module>
     <module>data</module>
+    <module>auth-mechanism-maprsasl</module>
     <module>udfs</module>
   </modules>
 
