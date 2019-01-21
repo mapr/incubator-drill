@@ -45,6 +45,8 @@ public abstract class AbstractDisposableUserClientConnection implements UserClie
 
   protected volatile UserException exception;
 
+  protected String queryState;
+
   /**
    * Wait until the query has completed or timeout is passed.
    *
@@ -73,6 +75,7 @@ public abstract class AbstractDisposableUserClientConnection implements UserClie
 
     // Release the wait latch if the query is terminated.
     final QueryState state = result.getQueryState();
+    queryState = state.toString();
     final QueryId queryId = result.getQueryId();
 
     if (logger.isDebugEnabled()) {
@@ -105,6 +108,11 @@ public abstract class AbstractDisposableUserClientConnection implements UserClie
     return error;
   }
 
+  public String getQueryState() {
+    return queryState;
+  }
+
   @Override
   public void close() {}
+
 }
