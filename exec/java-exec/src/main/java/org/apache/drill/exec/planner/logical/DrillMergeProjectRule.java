@@ -34,11 +34,8 @@ import org.apache.calcite.rex.RexNode;
 import org.apache.drill.exec.planner.DrillRelBuilder;
 import org.apache.drill.exec.planner.physical.PrelFactories;
 
-import java.util.List;
-
-import java.util.List;
-
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Rule for merging two projects provided the projects aren't projecting identical sets of
