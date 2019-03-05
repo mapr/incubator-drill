@@ -312,6 +312,7 @@ public abstract class MapRDBPushFilterIntoScan extends StoragePluginOptimizerRul
   // TODO: consolidate this method with similar method for logical scan in AbstractMatchFunction
   private static RelNode getDescendantScan(ProjectPrel rootProject) {
     RelNode current = rootProject;
+    int level = 0;
     while (! (current instanceof ScanPrel) && ! (current instanceof DrillScanRel)) {
       if (current instanceof RelSubset) {
         if (((RelSubset) current).getBest() != null) {
@@ -321,12 +322,23 @@ public abstract class MapRDBPushFilterIntoScan extends StoragePluginOptimizerRul
         }
       } else if (current.getInputs().size() == 1) {
         current = current.getInput(0);
+        level++;
       } else {
         return null;  // an n-ary or 0 input operator was encountered
       }
     }
     Preconditions.checkArgument(current instanceof ScanPrel || current instanceof DrillScanRel);
-    return current;
+    boolean supportsComplexPushDown = false;
+    // Check the level where scanPrel was found. If it is deeper then to pushdown the filter
+    // it should support complex filter pushdown. If it is just below the project then it
+    // it could have been a normal filter pushdown.
+    if (current instanceof ScanPrel) {
+      if (((ScanPrel)current).getGroupScan() instanceof JsonTableGroupScan) {
+        JsonTableGroupScan groupScan = (JsonTableGroupScan) ((ScanPrel)current).getGroupScan();
+        supportsComplexPushDown = groupScan.supportsComplexFilterPushDown();
+      }
+    }
+    return supportsComplexPushDown || level == 1 ? current : null;
   }
 
 }

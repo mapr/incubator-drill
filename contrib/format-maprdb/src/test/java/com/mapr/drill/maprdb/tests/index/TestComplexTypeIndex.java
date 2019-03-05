@@ -1502,4 +1502,31 @@ public class TestComplexTypeIndex extends BaseJsonTest {
     }
     return;
   }
+
+  @Test
+  public void TestNoFilterPushDownWithNonSemiJoin() throws Exception {
+
+    try {
+      String query = "select _id from (select _id, flatten(t1.cars) as f1 from hbase.`index_test_complex1` as t1 ) as t2 where t2.f1 like 'Toyota%'";
+
+      test(IndexPlanning);
+
+      PlanTestBase.testPlanMatchingPatterns(query,
+              new String[] {".*JsonTableGroupScan.*tableName=.*index_test_complex1,.*condition=null.*"},
+              new String[]{".*indexName=.*"}
+      );
+
+      testBuilder()
+              .optionSettingQueriesForTestQuery(IndexPlanning)
+              .optionSettingQueriesForBaseline(optionsForBaseLine)
+              .unOrdered()
+              .sqlQuery(query)
+              .sqlBaselineQuery(query)
+              .build()
+              .run();
+    } finally {
+      test(IndexPlanning);
+    }
+    return;
+  }
 }
