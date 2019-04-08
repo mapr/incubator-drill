@@ -143,6 +143,11 @@ public class Foreman implements Runnable {
     this.closeFuture = initiatingClient.getChannelClosureFuture();
     closeFuture.addListener(closeListener);
 
+    // Apply AutoLimit on resultSet (Usually received via REST APIs)
+    final int autoLimit = queryRequest.getAutolimitRowcount();
+    if (autoLimit > 0) {
+      connection.getSession().getOptions().setLocalOption(ExecConstants.QUERY_MAX_ROWS, autoLimit);
+    }
     this.queryContext = new QueryContext(connection.getSession(), drillbitContext, queryId);
     this.queryManager = new QueryManager(queryId, queryRequest, drillbitContext.getStoreProvider(),
         drillbitContext.getClusterCoordinator(), this);
@@ -239,7 +244,7 @@ public class Foreman implements Runnable {
     try {
       /*
        Check if the foreman is ONLINE. If not don't accept any new queries.
-      */
+       */
       if (!drillbitContext.isForemanOnline()) {
         throw new ForemanException("Query submission failed since Foreman is shutting down.");
       }
@@ -293,7 +298,8 @@ public class Foreman implements Runnable {
          */
         FailureUtils.unrecoverableFailure(e, "Unable to handle out of memory condition in Foreman.", EXIT_CODE_HEAP_OOM);
       }
-
+    } catch (UserException e) {
+      queryStateProcessor.moveToState(QueryState.FAILED, e);
     } catch (AssertionError | Exception ex) {
       queryStateProcessor.moveToState(QueryState.FAILED,
           new ForemanException("Unexpected exception during fragment initialization: " + ex.getMessage(), ex));
@@ -504,7 +510,7 @@ public class Foreman implements Runnable {
     } catch (Exception e) {
       queryStateProcessor.moveToState(QueryState.FAILED, e);
     } finally {
-       /*
+      /*
        * Begin accepting external events.
        *
        * Doing this here in the finally clause will guarantee that it occurs. Otherwise, if there
@@ -777,7 +783,11 @@ public class Foreman implements Runnable {
       final UserException uex;
       if (resultException != null) {
         final boolean verbose = queryContext.getOptions().getOption(ExecConstants.ENABLE_VERBOSE_ERRORS_KEY).bool_val;
-        uex = UserException.systemError(resultException).addIdentity(queryContext.getCurrentEndpoint()).build(logger);
+        if (resultException instanceof UserException) {
+          uex = (UserException) resultException;
+        } else {
+          uex = UserException.systemError(resultException).addIdentity(queryContext.getCurrentEndpoint()).build(logger);
+        }
         resultBuilder.addError(uex.getOrCreatePBError(verbose));
       } else {
         uex = null;

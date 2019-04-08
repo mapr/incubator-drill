@@ -45084,6 +45084,23 @@ public final class UserProtos {
      * <code>optional .exec.user.PreparedStatementHandle prepared_statement_handle = 5;</code>
      */
     org.apache.drill.exec.proto.UserProtos.PreparedStatementHandleOrBuilder getPreparedStatementHandleOrBuilder();
+
+    /**
+     * <pre>
+     * Input for indicating the limit on a query's result set.
+     * </pre>
+     *
+     * <code>optional int32 autolimit_rowcount = 6;</code>
+     */
+    boolean hasAutolimitRowcount();
+    /**
+     * <pre>
+     * Input for indicating the limit on a query's result set.
+     * </pre>
+     *
+     * <code>optional int32 autolimit_rowcount = 6;</code>
+     */
+    int getAutolimitRowcount();
   }
   /**
    * <pre>
@@ -45106,6 +45123,7 @@ public final class UserProtos {
       type_ = 1;
       plan_ = "";
       fragments_ = java.util.Collections.emptyList();
+      autolimitRowcount_ = 0;
     }
 
     @java.lang.Override
@@ -45182,6 +45200,11 @@ public final class UserProtos {
                 preparedStatementHandle_ = subBuilder.buildPartial();
               }
               bitField0_ |= 0x00000008;
+              break;
+            }
+            case 48: {
+              bitField0_ |= 0x00000010;
+              autolimitRowcount_ = input.readInt32();
               break;
             }
             default: {
@@ -45399,6 +45422,29 @@ public final class UserProtos {
       return preparedStatementHandle_ == null ? org.apache.drill.exec.proto.UserProtos.PreparedStatementHandle.getDefaultInstance() : preparedStatementHandle_;
     }
 
+    public static final int AUTOLIMIT_ROWCOUNT_FIELD_NUMBER = 6;
+    private int autolimitRowcount_;
+    /**
+     * <pre>
+     * Input for indicating the limit on a query's result set.
+     * </pre>
+     *
+     * <code>optional int32 autolimit_rowcount = 6;</code>
+     */
+    public boolean hasAutolimitRowcount() {
+      return ((bitField0_ & 0x00000010) == 0x00000010);
+    }
+    /**
+     * <pre>
+     * Input for indicating the limit on a query's result set.
+     * </pre>
+     *
+     * <code>optional int32 autolimit_rowcount = 6;</code>
+     */
+    public int getAutolimitRowcount() {
+      return autolimitRowcount_;
+    }
+
     private byte memoizedIsInitialized = -1;
     @java.lang.Override
     public final boolean isInitialized() {
@@ -45428,6 +45474,9 @@ public final class UserProtos {
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         output.writeMessage(5, getPreparedStatementHandle());
       }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        output.writeInt32(6, autolimitRowcount_);
+      }
       unknownFields.writeTo(output);
     }
 
@@ -45455,6 +45504,10 @@ public final class UserProtos {
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(5, getPreparedStatementHandle());
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(6, autolimitRowcount_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -45492,6 +45545,11 @@ public final class UserProtos {
         result = result && getPreparedStatementHandle()
             .equals(other.getPreparedStatementHandle());
       }
+      result = result && (hasAutolimitRowcount() == other.hasAutolimitRowcount());
+      if (hasAutolimitRowcount()) {
+        result = result && (getAutolimitRowcount()
+            == other.getAutolimitRowcount());
+      }
       result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
@@ -45522,6 +45580,10 @@ public final class UserProtos {
       if (hasPreparedStatementHandle()) {
         hash = (37 * hash) + PREPARED_STATEMENT_HANDLE_FIELD_NUMBER;
         hash = (53 * hash) + getPreparedStatementHandle().hashCode();
+      }
+      if (hasAutolimitRowcount()) {
+        hash = (37 * hash) + AUTOLIMIT_ROWCOUNT_FIELD_NUMBER;
+        hash = (53 * hash) + getAutolimitRowcount();
       }
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
@@ -45680,6 +45742,8 @@ public final class UserProtos {
           preparedStatementHandleBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000010);
+        autolimitRowcount_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000020);
         return this;
       }
 
@@ -45737,6 +45801,10 @@ public final class UserProtos {
         } else {
           result.preparedStatementHandle_ = preparedStatementHandleBuilder_.build();
         }
+        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
+          to_bitField0_ |= 0x00000010;
+        }
+        result.autolimitRowcount_ = autolimitRowcount_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -45825,6 +45893,9 @@ public final class UserProtos {
         }
         if (other.hasPreparedStatementHandle()) {
           mergePreparedStatementHandle(other.getPreparedStatementHandle());
+        }
+        if (other.hasAutolimitRowcount()) {
+          setAutolimitRowcount(other.getAutolimitRowcount());
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
@@ -46503,6 +46574,54 @@ public final class UserProtos {
           preparedStatementHandle_ = null;
         }
         return preparedStatementHandleBuilder_;
+      }
+
+      private int autolimitRowcount_ ;
+      /**
+       * <pre>
+       * Input for indicating the limit on a query's result set.
+       * </pre>
+       *
+       * <code>optional int32 autolimit_rowcount = 6;</code>
+       */
+      public boolean hasAutolimitRowcount() {
+        return ((bitField0_ & 0x00000020) == 0x00000020);
+      }
+      /**
+       * <pre>
+       * Input for indicating the limit on a query's result set.
+       * </pre>
+       *
+       * <code>optional int32 autolimit_rowcount = 6;</code>
+       */
+      public int getAutolimitRowcount() {
+        return autolimitRowcount_;
+      }
+      /**
+       * <pre>
+       * Input for indicating the limit on a query's result set.
+       * </pre>
+       *
+       * <code>optional int32 autolimit_rowcount = 6;</code>
+       */
+      public Builder setAutolimitRowcount(int value) {
+        bitField0_ |= 0x00000020;
+        autolimitRowcount_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * Input for indicating the limit on a query's result set.
+       * </pre>
+       *
+       * <code>optional int32 autolimit_rowcount = 6;</code>
+       */
+      public Builder clearAutolimitRowcount() {
+        bitField0_ = (bitField0_ & ~0x00000020);
+        autolimitRowcount_ = 0;
+        onChanged();
+        return this;
       }
       @java.lang.Override
       public final Builder setUnknownFields(
@@ -49745,81 +49864,82 @@ public final class UserProtos {
       "stem_functions\030. \003(\t\022\022\n\ntable_term\030/ \001(\t" +
       "\022\035\n\025transaction_supported\0300 \001(\010\022.\n\runion" +
       "_support\0301 \003(\0162\027.exec.user.UnionSupport\022" +
-      "\026\n\016current_schema\0302 \001(\t\"\353\001\n\010RunQuery\0221\n\014" +
+      "\026\n\016current_schema\0302 \001(\t\"\207\002\n\010RunQuery\0221\n\014" +
       "results_mode\030\001 \001(\0162\033.exec.user.QueryResu" +
       "ltsMode\022$\n\004type\030\002 \001(\0162\026.exec.shared.Quer" +
       "yType\022\014\n\004plan\030\003 \001(\t\0221\n\tfragments\030\004 \003(\0132\036" +
       ".exec.bit.control.PlanFragment\022E\n\031prepar" +
       "ed_statement_handle\030\005 \001(\0132\".exec.user.Pr" +
-      "eparedStatementHandle\"B\n\021NewSessionReque" +
-      "st\022-\n\nproperties\030\001 \001(\0132\031.exec.user.UserP" +
-      "roperties\"#\n\rSessionHandle\022\022\n\nsession_id" +
-      "\030\001 \001(\t\"s\n\031RunQueryWithSessionHandle\022%\n\010r" +
-      "unQuery\030\001 \001(\0132\023.exec.user.RunQuery\022/\n\rse" +
-      "ssionHandle\030\002 \001(\0132\030.exec.user.SessionHan" +
-      "dle\"x\n\034CancelQueryWithSessionHandle\022&\n\010q" +
-      "uery_id\030\001 \001(\0132\024.exec.shared.QueryId\0220\n\016s" +
-      "ession_handle\030\002 \001(\0132\030.exec.user.SessionH" +
-      "andle*\310\004\n\007RpcType\022\r\n\tHANDSHAKE\020\000\022\007\n\003ACK\020" +
-      "\001\022\013\n\007GOODBYE\020\002\022\r\n\tRUN_QUERY\020\003\022\020\n\014CANCEL_" +
-      "QUERY\020\004\022\023\n\017REQUEST_RESULTS\020\005\022\027\n\023RESUME_P" +
-      "AUSED_QUERY\020\013\022\034\n\030GET_QUERY_PLAN_FRAGMENT" +
-      "S\020\014\022\020\n\014GET_CATALOGS\020\016\022\017\n\013GET_SCHEMAS\020\017\022\016" +
-      "\n\nGET_TABLES\020\020\022\017\n\013GET_COLUMNS\020\021\022\035\n\031CREAT" +
-      "E_PREPARED_STATEMENT\020\026\022\023\n\017GET_SERVER_MET" +
-      "A\020\010\022\020\n\013NEW_SESSION\020\201\010\022\033\n\026RUN_QUERY_WITH_" +
-      "SESSION\020\203\010\022\022\n\rCLOSE_SESSION\020\204\010\022\036\n\031CANCEL" +
-      "_QUERY_WITH_SESSION\020\205\010\022\016\n\nQUERY_DATA\020\006\022\020" +
-      "\n\014QUERY_HANDLE\020\007\022\030\n\024QUERY_PLAN_FRAGMENTS" +
-      "\020\r\022\014\n\010CATALOGS\020\022\022\013\n\007SCHEMAS\020\023\022\n\n\006TABLES\020" +
-      "\024\022\013\n\007COLUMNS\020\025\022\026\n\022PREPARED_STATEMENT\020\027\022\017" +
-      "\n\013SERVER_META\020\t\022\020\n\014QUERY_RESULT\020\n\022\023\n\016SES" +
-      "SION_HANDLE\020\202\010\022\020\n\014SASL_MESSAGE\020\030*H\n\013Sasl" +
-      "Support\022\030\n\024UNKNOWN_SASL_SUPPORT\020\000\022\r\n\tSAS" +
-      "L_AUTH\020\001\022\020\n\014SASL_PRIVACY\020\002*#\n\020QueryResul" +
-      "tsMode\022\017\n\013STREAM_FULL\020\001*q\n\017HandshakeStat" +
-      "us\022\013\n\007SUCCESS\020\001\022\030\n\024RPC_VERSION_MISMATCH\020" +
-      "\002\022\017\n\013AUTH_FAILED\020\003\022\023\n\017UNKNOWN_FAILURE\020\004\022" +
-      "\021\n\rAUTH_REQUIRED\020\005*D\n\rRequestStatus\022\022\n\016U" +
-      "NKNOWN_STATUS\020\000\022\006\n\002OK\020\001\022\n\n\006FAILED\020\002\022\013\n\007T" +
-      "IMEOUT\020\003*Y\n\023ColumnSearchability\022\031\n\025UNKNO" +
-      "WN_SEARCHABILITY\020\000\022\010\n\004NONE\020\001\022\010\n\004CHAR\020\002\022\n" +
-      "\n\006NUMBER\020\003\022\007\n\003ALL\020\004*K\n\022ColumnUpdatabilit" +
-      "y\022\030\n\024UNKNOWN_UPDATABILITY\020\000\022\r\n\tREAD_ONLY" +
-      "\020\001\022\014\n\010WRITABLE\020\002*1\n\016CollateSupport\022\016\n\nCS" +
-      "_UNKNOWN\020\000\022\017\n\013CS_GROUP_BY\020\001*J\n\027Correlati" +
-      "onNamesSupport\022\013\n\007CN_NONE\020\001\022\026\n\022CN_DIFFER" +
-      "ENT_NAMES\020\002\022\n\n\006CN_ANY\020\003*\271\003\n\027DateTimeLite" +
-      "ralsSupport\022\016\n\nDL_UNKNOWN\020\000\022\013\n\007DL_DATE\020\001" +
-      "\022\013\n\007DL_TIME\020\002\022\020\n\014DL_TIMESTAMP\020\003\022\024\n\020DL_IN" +
-      "TERVAL_YEAR\020\004\022\025\n\021DL_INTERVAL_MONTH\020\005\022\023\n\017" +
-      "DL_INTERVAL_DAY\020\006\022\024\n\020DL_INTERVAL_HOUR\020\007\022" +
-      "\026\n\022DL_INTERVAL_MINUTE\020\010\022\026\n\022DL_INTERVAL_S" +
-      "ECOND\020\t\022\035\n\031DL_INTERVAL_YEAR_TO_MONTH\020\n\022\033" +
-      "\n\027DL_INTERVAL_DAY_TO_HOUR\020\013\022\035\n\031DL_INTERV" +
-      "AL_DAY_TO_MINUTE\020\014\022\035\n\031DL_INTERVAL_DAY_TO" +
-      "_SECOND\020\r\022\036\n\032DL_INTERVAL_HOUR_TO_MINUTE\020" +
-      "\016\022\036\n\032DL_INTERVAL_HOUR_TO_SECOND\020\017\022 \n\034DL_" +
-      "INTERVAL_MINUTE_TO_SECOND\020\020*Y\n\016GroupBySu" +
-      "pport\022\013\n\007GB_NONE\020\001\022\022\n\016GB_SELECT_ONLY\020\002\022\024" +
-      "\n\020GB_BEYOND_SELECT\020\003\022\020\n\014GB_UNRELATED\020\004*x" +
-      "\n\020IdentifierCasing\022\016\n\nIC_UNKNOWN\020\000\022\023\n\017IC" +
-      "_STORES_LOWER\020\001\022\023\n\017IC_STORES_MIXED\020\002\022\023\n\017" +
-      "IC_STORES_UPPER\020\003\022\025\n\021IC_SUPPORTS_MIXED\020\004" +
-      "*X\n\rNullCollation\022\016\n\nNC_UNKNOWN\020\000\022\017\n\013NC_" +
-      "AT_START\020\001\022\r\n\tNC_AT_END\020\002\022\013\n\007NC_HIGH\020\003\022\n" +
-      "\n\006NC_LOW\020\004*E\n\016OrderBySupport\022\016\n\nOB_UNKNO" +
-      "WN\020\000\022\020\n\014OB_UNRELATED\020\001\022\021\n\rOB_EXPRESSION\020" +
-      "\002*\226\001\n\020OuterJoinSupport\022\016\n\nOJ_UNKNOWN\020\000\022\013" +
-      "\n\007OJ_LEFT\020\001\022\014\n\010OJ_RIGHT\020\002\022\013\n\007OJ_FULL\020\003\022\r" +
-      "\n\tOJ_NESTED\020\004\022\022\n\016OJ_NOT_ORDERED\020\005\022\014\n\010OJ_" +
-      "INNER\020\006\022\031\n\025OJ_ALL_COMPARISON_OPS\020\007*\204\001\n\017S" +
-      "ubQuerySupport\022\016\n\nSQ_UNKNOWN\020\000\022\021\n\rSQ_COR" +
-      "RELATED\020\001\022\024\n\020SQ_IN_COMPARISON\020\002\022\020\n\014SQ_IN" +
-      "_EXISTS\020\003\022\020\n\014SQ_IN_INSERT\020\004\022\024\n\020SQ_IN_QUA" +
-      "NTIFIED\020\005*;\n\014UnionSupport\022\r\n\tU_UNKNOWN\020\000" +
-      "\022\013\n\007U_UNION\020\001\022\017\n\013U_UNION_ALL\020\002B+\n\033org.ap" +
-      "ache.drill.exec.protoB\nUserProtosH\001"
+      "eparedStatementHandle\022\032\n\022autolimit_rowco" +
+      "unt\030\006 \001(\005\"B\n\021NewSessionRequest\022-\n\nproper" +
+      "ties\030\001 \001(\0132\031.exec.user.UserProperties\"#\n" +
+      "\rSessionHandle\022\022\n\nsession_id\030\001 \001(\t\"s\n\031Ru" +
+      "nQueryWithSessionHandle\022%\n\010runQuery\030\001 \001(" +
+      "\0132\023.exec.user.RunQuery\022/\n\rsessionHandle\030" +
+      "\002 \001(\0132\030.exec.user.SessionHandle\"x\n\034Cance" +
+      "lQueryWithSessionHandle\022&\n\010query_id\030\001 \001(" +
+      "\0132\024.exec.shared.QueryId\0220\n\016session_handl" +
+      "e\030\002 \001(\0132\030.exec.user.SessionHandle*\310\004\n\007Rp" +
+      "cType\022\r\n\tHANDSHAKE\020\000\022\007\n\003ACK\020\001\022\013\n\007GOODBYE" +
+      "\020\002\022\r\n\tRUN_QUERY\020\003\022\020\n\014CANCEL_QUERY\020\004\022\023\n\017R" +
+      "EQUEST_RESULTS\020\005\022\027\n\023RESUME_PAUSED_QUERY\020" +
+      "\013\022\034\n\030GET_QUERY_PLAN_FRAGMENTS\020\014\022\020\n\014GET_C" +
+      "ATALOGS\020\016\022\017\n\013GET_SCHEMAS\020\017\022\016\n\nGET_TABLES" +
+      "\020\020\022\017\n\013GET_COLUMNS\020\021\022\035\n\031CREATE_PREPARED_S" +
+      "TATEMENT\020\026\022\023\n\017GET_SERVER_META\020\010\022\020\n\013NEW_S" +
+      "ESSION\020\201\010\022\033\n\026RUN_QUERY_WITH_SESSION\020\203\010\022\022" +
+      "\n\rCLOSE_SESSION\020\204\010\022\036\n\031CANCEL_QUERY_WITH_" +
+      "SESSION\020\205\010\022\016\n\nQUERY_DATA\020\006\022\020\n\014QUERY_HAND" +
+      "LE\020\007\022\030\n\024QUERY_PLAN_FRAGMENTS\020\r\022\014\n\010CATALO" +
+      "GS\020\022\022\013\n\007SCHEMAS\020\023\022\n\n\006TABLES\020\024\022\013\n\007COLUMNS" +
+      "\020\025\022\026\n\022PREPARED_STATEMENT\020\027\022\017\n\013SERVER_MET" +
+      "A\020\t\022\020\n\014QUERY_RESULT\020\n\022\023\n\016SESSION_HANDLE\020" +
+      "\202\010\022\020\n\014SASL_MESSAGE\020\030*H\n\013SaslSupport\022\030\n\024U" +
+      "NKNOWN_SASL_SUPPORT\020\000\022\r\n\tSASL_AUTH\020\001\022\020\n\014" +
+      "SASL_PRIVACY\020\002*#\n\020QueryResultsMode\022\017\n\013ST" +
+      "REAM_FULL\020\001*q\n\017HandshakeStatus\022\013\n\007SUCCES" +
+      "S\020\001\022\030\n\024RPC_VERSION_MISMATCH\020\002\022\017\n\013AUTH_FA" +
+      "ILED\020\003\022\023\n\017UNKNOWN_FAILURE\020\004\022\021\n\rAUTH_REQU" +
+      "IRED\020\005*D\n\rRequestStatus\022\022\n\016UNKNOWN_STATU" +
+      "S\020\000\022\006\n\002OK\020\001\022\n\n\006FAILED\020\002\022\013\n\007TIMEOUT\020\003*Y\n\023" +
+      "ColumnSearchability\022\031\n\025UNKNOWN_SEARCHABI" +
+      "LITY\020\000\022\010\n\004NONE\020\001\022\010\n\004CHAR\020\002\022\n\n\006NUMBER\020\003\022\007" +
+      "\n\003ALL\020\004*K\n\022ColumnUpdatability\022\030\n\024UNKNOWN" +
+      "_UPDATABILITY\020\000\022\r\n\tREAD_ONLY\020\001\022\014\n\010WRITAB" +
+      "LE\020\002*1\n\016CollateSupport\022\016\n\nCS_UNKNOWN\020\000\022\017" +
+      "\n\013CS_GROUP_BY\020\001*J\n\027CorrelationNamesSuppo" +
+      "rt\022\013\n\007CN_NONE\020\001\022\026\n\022CN_DIFFERENT_NAMES\020\002\022" +
+      "\n\n\006CN_ANY\020\003*\271\003\n\027DateTimeLiteralsSupport\022" +
+      "\016\n\nDL_UNKNOWN\020\000\022\013\n\007DL_DATE\020\001\022\013\n\007DL_TIME\020" +
+      "\002\022\020\n\014DL_TIMESTAMP\020\003\022\024\n\020DL_INTERVAL_YEAR\020" +
+      "\004\022\025\n\021DL_INTERVAL_MONTH\020\005\022\023\n\017DL_INTERVAL_" +
+      "DAY\020\006\022\024\n\020DL_INTERVAL_HOUR\020\007\022\026\n\022DL_INTERV" +
+      "AL_MINUTE\020\010\022\026\n\022DL_INTERVAL_SECOND\020\t\022\035\n\031D" +
+      "L_INTERVAL_YEAR_TO_MONTH\020\n\022\033\n\027DL_INTERVA" +
+      "L_DAY_TO_HOUR\020\013\022\035\n\031DL_INTERVAL_DAY_TO_MI" +
+      "NUTE\020\014\022\035\n\031DL_INTERVAL_DAY_TO_SECOND\020\r\022\036\n" +
+      "\032DL_INTERVAL_HOUR_TO_MINUTE\020\016\022\036\n\032DL_INTE" +
+      "RVAL_HOUR_TO_SECOND\020\017\022 \n\034DL_INTERVAL_MIN" +
+      "UTE_TO_SECOND\020\020*Y\n\016GroupBySupport\022\013\n\007GB_" +
+      "NONE\020\001\022\022\n\016GB_SELECT_ONLY\020\002\022\024\n\020GB_BEYOND_" +
+      "SELECT\020\003\022\020\n\014GB_UNRELATED\020\004*x\n\020Identifier" +
+      "Casing\022\016\n\nIC_UNKNOWN\020\000\022\023\n\017IC_STORES_LOWE" +
+      "R\020\001\022\023\n\017IC_STORES_MIXED\020\002\022\023\n\017IC_STORES_UP" +
+      "PER\020\003\022\025\n\021IC_SUPPORTS_MIXED\020\004*X\n\rNullColl" +
+      "ation\022\016\n\nNC_UNKNOWN\020\000\022\017\n\013NC_AT_START\020\001\022\r" +
+      "\n\tNC_AT_END\020\002\022\013\n\007NC_HIGH\020\003\022\n\n\006NC_LOW\020\004*E" +
+      "\n\016OrderBySupport\022\016\n\nOB_UNKNOWN\020\000\022\020\n\014OB_U" +
+      "NRELATED\020\001\022\021\n\rOB_EXPRESSION\020\002*\226\001\n\020OuterJ" +
+      "oinSupport\022\016\n\nOJ_UNKNOWN\020\000\022\013\n\007OJ_LEFT\020\001\022" +
+      "\014\n\010OJ_RIGHT\020\002\022\013\n\007OJ_FULL\020\003\022\r\n\tOJ_NESTED\020" +
+      "\004\022\022\n\016OJ_NOT_ORDERED\020\005\022\014\n\010OJ_INNER\020\006\022\031\n\025O" +
+      "J_ALL_COMPARISON_OPS\020\007*\204\001\n\017SubQuerySuppo" +
+      "rt\022\016\n\nSQ_UNKNOWN\020\000\022\021\n\rSQ_CORRELATED\020\001\022\024\n" +
+      "\020SQ_IN_COMPARISON\020\002\022\020\n\014SQ_IN_EXISTS\020\003\022\020\n" +
+      "\014SQ_IN_INSERT\020\004\022\024\n\020SQ_IN_QUANTIFIED\020\005*;\n" +
+      "\014UnionSupport\022\r\n\tU_UNKNOWN\020\000\022\013\n\007U_UNION\020" +
+      "\001\022\017\n\013U_UNION_ALL\020\002B+\n\033org.apache.drill.e" +
+      "xec.protoB\nUserProtosH\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -50024,7 +50144,7 @@ public final class UserProtos {
     internal_static_exec_user_RunQuery_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_exec_user_RunQuery_descriptor,
-        new java.lang.String[] { "ResultsMode", "Type", "Plan", "Fragments", "PreparedStatementHandle", });
+        new java.lang.String[] { "ResultsMode", "Type", "Plan", "Fragments", "PreparedStatementHandle", "AutolimitRowcount", });
     internal_static_exec_user_NewSessionRequest_descriptor =
       getDescriptor().getMessageTypes().get(31);
     internal_static_exec_user_NewSessionRequest_fieldAccessorTable = new
