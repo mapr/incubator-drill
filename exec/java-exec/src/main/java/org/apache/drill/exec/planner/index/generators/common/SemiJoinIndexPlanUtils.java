@@ -17,11 +17,11 @@
  */
 package org.apache.drill.exec.planner.index.generators.common;
 
+import org.apache.drill.exec.planner.logical.DrillRelFactories;
 import org.apache.drill.exec.planner.logical.DrillSemiJoinRel;
 import org.apache.drill.shaded.guava.com.google.common.base.Preconditions;
 import org.apache.drill.shaded.guava.com.google.common.collect.Lists;
 import org.apache.drill.shaded.guava.com.google.common.collect.ImmutableList;
-import org.apache.calcite.plan.RelOptUtil;
 import org.apache.calcite.rel.InvalidRelException;
 import org.apache.calcite.rel.RelCollation;
 import org.apache.calcite.rel.RelNode;
@@ -247,7 +247,7 @@ public class SemiJoinIndexPlanUtils {
             ListUtils.union(leftProjectsNames, rightProjectsNames), inputColMap);
     List<RexNode> listOfProjects = Lists.newArrayList();
     listOfProjects.addAll(combinedProjects);
-    Project proj1 = (Project) RelOptUtil.createProject(input, normalizedInfo.left.left, normalizedInfo.left.right);
+    Project proj1 = (Project) DrillRelFactories.DRILL_LOGICAL_PROJECT_FACTORY.createProject(input, normalizedInfo.left.left, normalizedInfo.left.right);
     ProjectPrel upperProject = new ProjectPrel(input.getCluster(), input.getTraitSet(), input, proj1.getProjects(),
             proj1.getRowType());
     if (input instanceof ProjectPrel &&

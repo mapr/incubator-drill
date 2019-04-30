@@ -28,6 +28,7 @@ import org.apache.calcite.rel.core.RelFactories;
 import org.apache.calcite.rel.type.RelDataType;
 import org.apache.calcite.rex.RexNode;
 import org.apache.calcite.rex.RexUtil;
+import org.apache.calcite.sql.validate.SqlValidatorUtil;
 import org.apache.calcite.tools.RelBuilderFactory;
 import org.apache.calcite.util.ImmutableBitSet;
 import org.apache.drill.exec.planner.DrillRelBuilder;
@@ -99,7 +100,7 @@ public class DrillRelFactories {
                                  List<? extends RexNode> childExprs, List<String> fieldNames) {
       final RelOptCluster cluster = child.getCluster();
       final RelDataType rowType =
-          RexUtil.createStructType(cluster.getTypeFactory(), childExprs, fieldNames, null);
+          RexUtil.createStructType(cluster.getTypeFactory(), childExprs, fieldNames, SqlValidatorUtil.F_SUGGESTER);
 
       return DrillProjectRel.create(cluster, child.getTraitSet().plus(DRILL_LOGICAL), child, childExprs, rowType);
     }

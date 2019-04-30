@@ -17,10 +17,10 @@
  */
 package org.apache.drill.exec.planner.index.generators.common;
 
+import org.apache.drill.exec.planner.logical.DrillRelFactories;
 import org.apache.drill.shaded.guava.com.google.common.base.Preconditions;
 import org.apache.drill.shaded.guava.com.google.common.collect.Lists;
 import org.apache.calcite.plan.RelOptCluster;
-import org.apache.calcite.plan.RelOptUtil;
 import org.apache.calcite.rel.RelNode;
 import org.apache.calcite.rel.core.Project;
 import org.apache.calcite.rel.type.RelDataType;
@@ -151,7 +151,7 @@ public class SemiJoinTransformUtils {
             ListUtils.union(leftProjects, rightProjects), functionRegistry, uniquify,
             ListUtils.union(leftProjectsNames, rightProjectsNames), inputColMap);
 
-    Project proj = (Project) RelOptUtil.createProject(newScan, normalizedInfo.left.left, normalizedInfo.left.right);
+    Project proj = (Project) DrillRelFactories.DRILL_LOGICAL_PROJECT_FACTORY.createProject(newScan, normalizedInfo.left.left, normalizedInfo.left.right);
     return Pair.of(DrillProjectRel.create(cluster, rightProject.getTraitSet().plus(DRILL_LOGICAL),
             proj.getInput(), proj.getProjects(),
             proj.getRowType()), normalizedInfo.right);
