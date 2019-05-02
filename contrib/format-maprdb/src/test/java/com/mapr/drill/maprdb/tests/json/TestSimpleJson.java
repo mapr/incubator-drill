@@ -128,8 +128,8 @@ public class TestSimpleJson extends BaseJsonTest {
         + " name <> 'Sprint'");
     runSQLAndVerifyCount(sql, 9);
 
-    final String[] expectedPlan = {"condition=null", "columns=\\[`\\*`\\]"};
-    final String[] excludedPlan = {"condition=\\(name != \"Sprint\"\\)", "columns=\\[`name`, `_id`, `categories`, `full_address`\\]"};
+    final String[] expectedPlan = {"condition=null", "columns=\\[`name`, `_id`, `categories`, `full_address`, `\\**`\\]"};
+    final String[] excludedPlan = {"condition=\\(name != \"Sprint\"\\)"};
 
     PlanTestBase.testPlanMatchingPatterns(sql, expectedPlan, excludedPlan);
   }
@@ -163,7 +163,7 @@ public class TestSimpleJson extends BaseJsonTest {
     assertNotNull(queryResult.getString("result"));
 
     String[] fields = queryResult.getString("result").split("\\|");
-    assertEquals("1970-01-01T11:00:00.000", fields[2]);
+    assertEquals("11:00", fields[2]);
     assertEquals("Mobile Phones", fields[3]);
     assertEquals("2016.0", fields[4]);
 
@@ -201,7 +201,7 @@ public class TestSimpleJson extends BaseJsonTest {
         + " name <> 'Sprint'");
     runSQLAndVerifyCount(sql, 9);
 
-    final String[] expectedPlan = {"condition=\\(name != \"Sprint\"\\)", "columns=\\[`name`, `_id`, `categories`, `full_address`\\]"};
+    final String[] expectedPlan = {"condition=\\(name != \"Sprint\"\\)", "columns=\\[`_id`, `name`, `categories`, `full_address`\\]"};
     final String[] excludedPlan = {};
 
     PlanTestBase.testPlanMatchingPatterns(sql, expectedPlan, excludedPlan);
@@ -218,7 +218,7 @@ public class TestSimpleJson extends BaseJsonTest {
         + " zip = 85260");
     runSQLAndVerifyCount(sql, 1);
 
-    final String[] expectedPlan = {"condition=\\(zip = \\{\"\\$numberLong\":85260\\}\\)"};
+    final String[] expectedPlan = {"condition=\\(zip = \\{\"\\$numberInt\":85260\\}\\)"};
     final String[] excludedPlan = {};
 
     PlanTestBase.testPlanMatchingPatterns(sql, expectedPlan, excludedPlan);
@@ -237,7 +237,7 @@ public class TestSimpleJson extends BaseJsonTest {
         + " city = 'Las Vegas'");
     runSQLAndVerifyCount(sql, 4);
 
-    final String[] expectedPlan = {"condition=\\(\\(zip = \\{\"\\$numberLong\":85260\\}\\) or \\(city = \"Las Vegas\"\\)\\)"};
+    final String[] expectedPlan = {"condition=\\(\\(zip = \\{\"\\$numberInt\":85260\\}\\) or \\(city = \"Las Vegas\"\\)\\)"};
     final String[] excludedPlan = {};
 
     PlanTestBase.testPlanMatchingPatterns(sql, expectedPlan, excludedPlan);
@@ -389,7 +389,7 @@ public class TestSimpleJson extends BaseJsonTest {
         + "FROM\n"
         + "  %s.`%s` business\n"
         + "WHERE\n"
-        + " business.attributes.`Good For`.lunch = true AND"
+        + " business.attributes.`Good For`.lunch is true AND"
         + " stars > 4.1");
     runSQLAndVerifyCount(sql, 1);
 
