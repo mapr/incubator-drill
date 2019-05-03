@@ -42,6 +42,8 @@ import org.apache.drill.exec.planner.physical.PrelUtil;
 
 import java.util.Map;
 import java.util.Set;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * The filter expressions that could be indexed
@@ -63,7 +65,10 @@ public class IndexableExprMarker extends RexVisitorImpl<Boolean> {
   final Map<RexNode, LogicalExpression> desiredExpressions = Maps.newHashMap();
 
   //the expressions in equality comparison
-  final Map<RexNode, LogicalExpression> equalityExpressions = Maps.newHashMap();
+  //for IN predicates this map contains one RexNode with a list of IN values.
+  //eg a IN (1, 2, 3) AND b IN (5, 6), this map contains two rexNodes (a and b)
+  //each with list of constant expressions of size 3 and 2 respectively.
+  final Map<RexNode, List<LogicalExpression>> equalityExpressions = Maps.newHashMap();
 
   //the expression found in non-equality comparison
   final Map<RexNode, LogicalExpression> notInEquality = Maps.newHashMap();
@@ -110,10 +115,10 @@ public class IndexableExprMarker extends RexVisitorImpl<Boolean> {
 
     notInEqSet.addAll(notInEquality.values());
 
-    for (LogicalExpression expr : equalityExpressions.values()) {
+    for (List<LogicalExpression> exprs : equalityExpressions.values()) {
       //only process expr that is not in any non-equality condition(!notInEqSet.contains)
-      if (!notInEqSet.contains(expr)) {
-
+      if (exprs.size() == 1 && !notInEqSet.contains(exprs.get(0))) {
+        LogicalExpression expr = exprs.get(0);
         //expr appear in two and more equality conditions should be ignored too
         if (inEqMoreThanOnce.contains(expr)) {
           continue;
@@ -188,7 +193,8 @@ public class IndexableExprMarker extends RexVisitorImpl<Boolean> {
           LogicalExpression expr = DrillOptiq.toDrill(parserContext, inputRel, operand);
           desiredExpressions.put(operand, expr);
           if (call.getKind() == SqlKind.EQUALS) {
-            equalityExpressions.put(operand, expr);
+            equalityExpressions.putIfAbsent(operand, new ArrayList<>());
+            equalityExpressions.get(operand).add(expr);
           }
           else {
             notInEquality.put(operand, expr);
