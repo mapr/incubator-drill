@@ -31,9 +31,9 @@ public final class SchemaUserProtos
         public static final org.apache.drill.exec.proto.SchemaUserProtos.Property.BuilderSchema MERGE =
             new org.apache.drill.exec.proto.SchemaUserProtos.Property.BuilderSchema();
         
-        public static class MessageSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.Property>
+        public static class MessageSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.Property>
         {
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.Property message) throws java.io.IOException
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.Property message) throws java.io.IOException
             {
                 if(message.hasKey())
                     output.writeString(1, message.getKey(), false);
@@ -65,12 +65,12 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.Property.class.getName();
             }
             //unused
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.Property message) throws java.io.IOException {}
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.Property message) throws java.io.IOException {}
             public org.apache.drill.exec.proto.UserProtos.Property newMessage() { return null; }
         }
-        public static class BuilderSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.Property.Builder>
+        public static class BuilderSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.Property.Builder>
         {
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.Property.Builder builder) throws java.io.IOException
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.Property.Builder builder) throws java.io.IOException
             {
                 for(int number = input.readFieldNumber(this);; number = input.readFieldNumber(this))
                 {
@@ -118,7 +118,7 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.Property.class.getName();
             }
             //unused
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.Property.Builder builder) throws java.io.IOException {}
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.Property.Builder builder) throws java.io.IOException {}
         }
         public static java.lang.String getFieldName(int number)
         {
@@ -149,9 +149,9 @@ public final class SchemaUserProtos
         public static final org.apache.drill.exec.proto.SchemaUserProtos.UserProperties.BuilderSchema MERGE =
             new org.apache.drill.exec.proto.SchemaUserProtos.UserProperties.BuilderSchema();
         
-        public static class MessageSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.UserProperties>
+        public static class MessageSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.UserProperties>
         {
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.UserProperties message) throws java.io.IOException
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.UserProperties message) throws java.io.IOException
             {
                 for(org.apache.drill.exec.proto.UserProtos.Property properties : message.getPropertiesList())
                     output.writeObject(1, properties, org.apache.drill.exec.proto.SchemaUserProtos.Property.WRITE, true);
@@ -182,12 +182,12 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.UserProperties.class.getName();
             }
             //unused
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.UserProperties message) throws java.io.IOException {}
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.UserProperties message) throws java.io.IOException {}
             public org.apache.drill.exec.proto.UserProtos.UserProperties newMessage() { return null; }
         }
-        public static class BuilderSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.UserProperties.Builder>
+        public static class BuilderSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.UserProperties.Builder>
         {
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.UserProperties.Builder builder) throws java.io.IOException
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.UserProperties.Builder builder) throws java.io.IOException
             {
                 for(int number = input.readFieldNumber(this);; number = input.readFieldNumber(this))
                 {
@@ -233,7 +233,7 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.UserProperties.class.getName();
             }
             //unused
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.UserProperties.Builder builder) throws java.io.IOException {}
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.UserProperties.Builder builder) throws java.io.IOException {}
         }
         public static java.lang.String getFieldName(int number)
         {
@@ -262,9 +262,9 @@ public final class SchemaUserProtos
         public static final org.apache.drill.exec.proto.SchemaUserProtos.RpcEndpointInfos.BuilderSchema MERGE =
             new org.apache.drill.exec.proto.SchemaUserProtos.RpcEndpointInfos.BuilderSchema();
         
-        public static class MessageSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.RpcEndpointInfos>
+        public static class MessageSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.RpcEndpointInfos>
         {
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.RpcEndpointInfos message) throws java.io.IOException
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.RpcEndpointInfos message) throws java.io.IOException
             {
                 if(message.hasName())
                     output.writeString(1, message.getName(), false);
@@ -308,12 +308,12 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.RpcEndpointInfos.class.getName();
             }
             //unused
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.RpcEndpointInfos message) throws java.io.IOException {}
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.RpcEndpointInfos message) throws java.io.IOException {}
             public org.apache.drill.exec.proto.UserProtos.RpcEndpointInfos newMessage() { return null; }
         }
-        public static class BuilderSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.RpcEndpointInfos.Builder>
+        public static class BuilderSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.RpcEndpointInfos.Builder>
         {
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.RpcEndpointInfos.Builder builder) throws java.io.IOException
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.RpcEndpointInfos.Builder builder) throws java.io.IOException
             {
                 for(int number = input.readFieldNumber(this);; number = input.readFieldNumber(this))
                 {
@@ -379,7 +379,7 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.RpcEndpointInfos.class.getName();
             }
             //unused
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.RpcEndpointInfos.Builder builder) throws java.io.IOException {}
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.RpcEndpointInfos.Builder builder) throws java.io.IOException {}
         }
         public static java.lang.String getFieldName(int number)
         {
@@ -422,9 +422,9 @@ public final class SchemaUserProtos
         public static final org.apache.drill.exec.proto.SchemaUserProtos.UserToBitHandshake.BuilderSchema MERGE =
             new org.apache.drill.exec.proto.SchemaUserProtos.UserToBitHandshake.BuilderSchema();
         
-        public static class MessageSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.UserToBitHandshake>
+        public static class MessageSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.UserToBitHandshake>
         {
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.UserToBitHandshake message) throws java.io.IOException
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.UserToBitHandshake message) throws java.io.IOException
             {
                 if(message.hasChannel())
                     output.writeEnum(1, message.getChannel().getNumber(), false);
@@ -477,12 +477,12 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.UserToBitHandshake.class.getName();
             }
             //unused
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.UserToBitHandshake message) throws java.io.IOException {}
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.UserToBitHandshake message) throws java.io.IOException {}
             public org.apache.drill.exec.proto.UserProtos.UserToBitHandshake newMessage() { return null; }
         }
-        public static class BuilderSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.UserToBitHandshake.Builder>
+        public static class BuilderSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.UserToBitHandshake.Builder>
         {
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.UserToBitHandshake.Builder builder) throws java.io.IOException
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.UserToBitHandshake.Builder builder) throws java.io.IOException
             {
                 for(int number = input.readFieldNumber(this);; number = input.readFieldNumber(this))
                 {
@@ -560,7 +560,7 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.UserToBitHandshake.class.getName();
             }
             //unused
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.UserToBitHandshake.Builder builder) throws java.io.IOException {}
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.UserToBitHandshake.Builder builder) throws java.io.IOException {}
         }
         public static java.lang.String getFieldName(int number)
         {
@@ -609,9 +609,9 @@ public final class SchemaUserProtos
         public static final org.apache.drill.exec.proto.SchemaUserProtos.RequestResults.BuilderSchema MERGE =
             new org.apache.drill.exec.proto.SchemaUserProtos.RequestResults.BuilderSchema();
         
-        public static class MessageSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.RequestResults>
+        public static class MessageSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.RequestResults>
         {
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.RequestResults message) throws java.io.IOException
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.RequestResults message) throws java.io.IOException
             {
                 if(message.hasQueryId())
                     output.writeObject(1, message.getQueryId(), org.apache.drill.exec.proto.SchemaUserBitShared.QueryId.WRITE, false);
@@ -644,12 +644,12 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.RequestResults.class.getName();
             }
             //unused
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.RequestResults message) throws java.io.IOException {}
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.RequestResults message) throws java.io.IOException {}
             public org.apache.drill.exec.proto.UserProtos.RequestResults newMessage() { return null; }
         }
-        public static class BuilderSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.RequestResults.Builder>
+        public static class BuilderSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.RequestResults.Builder>
         {
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.RequestResults.Builder builder) throws java.io.IOException
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.RequestResults.Builder builder) throws java.io.IOException
             {
                 for(int number = input.readFieldNumber(this);; number = input.readFieldNumber(this))
                 {
@@ -698,7 +698,7 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.RequestResults.class.getName();
             }
             //unused
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.RequestResults.Builder builder) throws java.io.IOException {}
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.RequestResults.Builder builder) throws java.io.IOException {}
         }
         public static java.lang.String getFieldName(int number)
         {
@@ -729,9 +729,9 @@ public final class SchemaUserProtos
         public static final org.apache.drill.exec.proto.SchemaUserProtos.GetQueryPlanFragments.BuilderSchema MERGE =
             new org.apache.drill.exec.proto.SchemaUserProtos.GetQueryPlanFragments.BuilderSchema();
         
-        public static class MessageSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.GetQueryPlanFragments>
+        public static class MessageSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.GetQueryPlanFragments>
         {
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.GetQueryPlanFragments message) throws java.io.IOException
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.GetQueryPlanFragments message) throws java.io.IOException
             {
                 if(message.hasQuery())
                     output.writeString(1, message.getQuery(), false);
@@ -765,12 +765,12 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.GetQueryPlanFragments.class.getName();
             }
             //unused
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.GetQueryPlanFragments message) throws java.io.IOException {}
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.GetQueryPlanFragments message) throws java.io.IOException {}
             public org.apache.drill.exec.proto.UserProtos.GetQueryPlanFragments newMessage() { return null; }
         }
-        public static class BuilderSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.GetQueryPlanFragments.Builder>
+        public static class BuilderSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.GetQueryPlanFragments.Builder>
         {
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.GetQueryPlanFragments.Builder builder) throws java.io.IOException
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.GetQueryPlanFragments.Builder builder) throws java.io.IOException
             {
                 for(int number = input.readFieldNumber(this);; number = input.readFieldNumber(this))
                 {
@@ -821,7 +821,7 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.GetQueryPlanFragments.class.getName();
             }
             //unused
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.GetQueryPlanFragments.Builder builder) throws java.io.IOException {}
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.GetQueryPlanFragments.Builder builder) throws java.io.IOException {}
         }
         public static java.lang.String getFieldName(int number)
         {
@@ -854,9 +854,9 @@ public final class SchemaUserProtos
         public static final org.apache.drill.exec.proto.SchemaUserProtos.QueryPlanFragments.BuilderSchema MERGE =
             new org.apache.drill.exec.proto.SchemaUserProtos.QueryPlanFragments.BuilderSchema();
         
-        public static class MessageSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.QueryPlanFragments>
+        public static class MessageSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.QueryPlanFragments>
         {
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.QueryPlanFragments message) throws java.io.IOException
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.QueryPlanFragments message) throws java.io.IOException
             {
                 if(message.hasStatus())
                     output.writeEnum(1, message.getStatus().getNumber(), false);
@@ -895,12 +895,12 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.QueryPlanFragments.class.getName();
             }
             //unused
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.QueryPlanFragments message) throws java.io.IOException {}
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.QueryPlanFragments message) throws java.io.IOException {}
             public org.apache.drill.exec.proto.UserProtos.QueryPlanFragments newMessage() { return null; }
         }
-        public static class BuilderSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.QueryPlanFragments.Builder>
+        public static class BuilderSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.QueryPlanFragments.Builder>
         {
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.QueryPlanFragments.Builder builder) throws java.io.IOException
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.QueryPlanFragments.Builder builder) throws java.io.IOException
             {
                 for(int number = input.readFieldNumber(this);; number = input.readFieldNumber(this))
                 {
@@ -957,7 +957,7 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.QueryPlanFragments.class.getName();
             }
             //unused
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.QueryPlanFragments.Builder builder) throws java.io.IOException {}
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.QueryPlanFragments.Builder builder) throws java.io.IOException {}
         }
         public static java.lang.String getFieldName(int number)
         {
@@ -992,9 +992,9 @@ public final class SchemaUserProtos
         public static final org.apache.drill.exec.proto.SchemaUserProtos.BitToUserHandshake.BuilderSchema MERGE =
             new org.apache.drill.exec.proto.SchemaUserProtos.BitToUserHandshake.BuilderSchema();
         
-        public static class MessageSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.BitToUserHandshake>
+        public static class MessageSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.BitToUserHandshake>
         {
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.BitToUserHandshake message) throws java.io.IOException
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.BitToUserHandshake message) throws java.io.IOException
             {
                 if(message.hasRpcVersion())
                     output.writeInt32(2, message.getRpcVersion(), false);
@@ -1041,12 +1041,12 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.BitToUserHandshake.class.getName();
             }
             //unused
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.BitToUserHandshake message) throws java.io.IOException {}
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.BitToUserHandshake message) throws java.io.IOException {}
             public org.apache.drill.exec.proto.UserProtos.BitToUserHandshake newMessage() { return null; }
         }
-        public static class BuilderSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.BitToUserHandshake.Builder>
+        public static class BuilderSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.BitToUserHandshake.Builder>
         {
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.BitToUserHandshake.Builder builder) throws java.io.IOException
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.BitToUserHandshake.Builder builder) throws java.io.IOException
             {
                 for(int number = input.readFieldNumber(this);; number = input.readFieldNumber(this))
                 {
@@ -1116,7 +1116,7 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.BitToUserHandshake.class.getName();
             }
             //unused
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.BitToUserHandshake.Builder builder) throws java.io.IOException {}
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.BitToUserHandshake.Builder builder) throws java.io.IOException {}
         }
         public static java.lang.String getFieldName(int number)
         {
@@ -1161,9 +1161,9 @@ public final class SchemaUserProtos
         public static final org.apache.drill.exec.proto.SchemaUserProtos.LikeFilter.BuilderSchema MERGE =
             new org.apache.drill.exec.proto.SchemaUserProtos.LikeFilter.BuilderSchema();
         
-        public static class MessageSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.LikeFilter>
+        public static class MessageSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.LikeFilter>
         {
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.LikeFilter message) throws java.io.IOException
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.LikeFilter message) throws java.io.IOException
             {
                 if(message.hasPattern())
                     output.writeString(1, message.getPattern(), false);
@@ -1195,12 +1195,12 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.LikeFilter.class.getName();
             }
             //unused
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.LikeFilter message) throws java.io.IOException {}
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.LikeFilter message) throws java.io.IOException {}
             public org.apache.drill.exec.proto.UserProtos.LikeFilter newMessage() { return null; }
         }
-        public static class BuilderSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.LikeFilter.Builder>
+        public static class BuilderSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.LikeFilter.Builder>
         {
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.LikeFilter.Builder builder) throws java.io.IOException
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.LikeFilter.Builder builder) throws java.io.IOException
             {
                 for(int number = input.readFieldNumber(this);; number = input.readFieldNumber(this))
                 {
@@ -1248,7 +1248,7 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.LikeFilter.class.getName();
             }
             //unused
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.LikeFilter.Builder builder) throws java.io.IOException {}
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.LikeFilter.Builder builder) throws java.io.IOException {}
         }
         public static java.lang.String getFieldName(int number)
         {
@@ -1279,9 +1279,9 @@ public final class SchemaUserProtos
         public static final org.apache.drill.exec.proto.SchemaUserProtos.GetCatalogsReq.BuilderSchema MERGE =
             new org.apache.drill.exec.proto.SchemaUserProtos.GetCatalogsReq.BuilderSchema();
         
-        public static class MessageSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.GetCatalogsReq>
+        public static class MessageSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.GetCatalogsReq>
         {
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.GetCatalogsReq message) throws java.io.IOException
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.GetCatalogsReq message) throws java.io.IOException
             {
                 if(message.hasCatalogNameFilter())
                     output.writeObject(1, message.getCatalogNameFilter(), org.apache.drill.exec.proto.SchemaUserProtos.LikeFilter.WRITE, false);
@@ -1312,12 +1312,12 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.GetCatalogsReq.class.getName();
             }
             //unused
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.GetCatalogsReq message) throws java.io.IOException {}
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.GetCatalogsReq message) throws java.io.IOException {}
             public org.apache.drill.exec.proto.UserProtos.GetCatalogsReq newMessage() { return null; }
         }
-        public static class BuilderSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.GetCatalogsReq.Builder>
+        public static class BuilderSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.GetCatalogsReq.Builder>
         {
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.GetCatalogsReq.Builder builder) throws java.io.IOException
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.GetCatalogsReq.Builder builder) throws java.io.IOException
             {
                 for(int number = input.readFieldNumber(this);; number = input.readFieldNumber(this))
                 {
@@ -1363,7 +1363,7 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.GetCatalogsReq.class.getName();
             }
             //unused
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.GetCatalogsReq.Builder builder) throws java.io.IOException {}
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.GetCatalogsReq.Builder builder) throws java.io.IOException {}
         }
         public static java.lang.String getFieldName(int number)
         {
@@ -1392,9 +1392,9 @@ public final class SchemaUserProtos
         public static final org.apache.drill.exec.proto.SchemaUserProtos.CatalogMetadata.BuilderSchema MERGE =
             new org.apache.drill.exec.proto.SchemaUserProtos.CatalogMetadata.BuilderSchema();
         
-        public static class MessageSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.CatalogMetadata>
+        public static class MessageSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.CatalogMetadata>
         {
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.CatalogMetadata message) throws java.io.IOException
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.CatalogMetadata message) throws java.io.IOException
             {
                 if(message.hasCatalogName())
                     output.writeString(1, message.getCatalogName(), false);
@@ -1428,12 +1428,12 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.CatalogMetadata.class.getName();
             }
             //unused
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.CatalogMetadata message) throws java.io.IOException {}
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.CatalogMetadata message) throws java.io.IOException {}
             public org.apache.drill.exec.proto.UserProtos.CatalogMetadata newMessage() { return null; }
         }
-        public static class BuilderSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.CatalogMetadata.Builder>
+        public static class BuilderSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.CatalogMetadata.Builder>
         {
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.CatalogMetadata.Builder builder) throws java.io.IOException
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.CatalogMetadata.Builder builder) throws java.io.IOException
             {
                 for(int number = input.readFieldNumber(this);; number = input.readFieldNumber(this))
                 {
@@ -1484,7 +1484,7 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.CatalogMetadata.class.getName();
             }
             //unused
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.CatalogMetadata.Builder builder) throws java.io.IOException {}
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.CatalogMetadata.Builder builder) throws java.io.IOException {}
         }
         public static java.lang.String getFieldName(int number)
         {
@@ -1517,9 +1517,9 @@ public final class SchemaUserProtos
         public static final org.apache.drill.exec.proto.SchemaUserProtos.GetCatalogsResp.BuilderSchema MERGE =
             new org.apache.drill.exec.proto.SchemaUserProtos.GetCatalogsResp.BuilderSchema();
         
-        public static class MessageSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.GetCatalogsResp>
+        public static class MessageSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.GetCatalogsResp>
         {
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.GetCatalogsResp message) throws java.io.IOException
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.GetCatalogsResp message) throws java.io.IOException
             {
                 if(message.hasStatus())
                     output.writeEnum(1, message.getStatus().getNumber(), false);
@@ -1555,12 +1555,12 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.GetCatalogsResp.class.getName();
             }
             //unused
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.GetCatalogsResp message) throws java.io.IOException {}
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.GetCatalogsResp message) throws java.io.IOException {}
             public org.apache.drill.exec.proto.UserProtos.GetCatalogsResp newMessage() { return null; }
         }
-        public static class BuilderSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.GetCatalogsResp.Builder>
+        public static class BuilderSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.GetCatalogsResp.Builder>
         {
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.GetCatalogsResp.Builder builder) throws java.io.IOException
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.GetCatalogsResp.Builder builder) throws java.io.IOException
             {
                 for(int number = input.readFieldNumber(this);; number = input.readFieldNumber(this))
                 {
@@ -1613,7 +1613,7 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.GetCatalogsResp.class.getName();
             }
             //unused
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.GetCatalogsResp.Builder builder) throws java.io.IOException {}
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.GetCatalogsResp.Builder builder) throws java.io.IOException {}
         }
         public static java.lang.String getFieldName(int number)
         {
@@ -1646,9 +1646,9 @@ public final class SchemaUserProtos
         public static final org.apache.drill.exec.proto.SchemaUserProtos.GetSchemasReq.BuilderSchema MERGE =
             new org.apache.drill.exec.proto.SchemaUserProtos.GetSchemasReq.BuilderSchema();
         
-        public static class MessageSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.GetSchemasReq>
+        public static class MessageSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.GetSchemasReq>
         {
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.GetSchemasReq message) throws java.io.IOException
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.GetSchemasReq message) throws java.io.IOException
             {
                 if(message.hasCatalogNameFilter())
                     output.writeObject(1, message.getCatalogNameFilter(), org.apache.drill.exec.proto.SchemaUserProtos.LikeFilter.WRITE, false);
@@ -1682,12 +1682,12 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.GetSchemasReq.class.getName();
             }
             //unused
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.GetSchemasReq message) throws java.io.IOException {}
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.GetSchemasReq message) throws java.io.IOException {}
             public org.apache.drill.exec.proto.UserProtos.GetSchemasReq newMessage() { return null; }
         }
-        public static class BuilderSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.GetSchemasReq.Builder>
+        public static class BuilderSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.GetSchemasReq.Builder>
         {
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.GetSchemasReq.Builder builder) throws java.io.IOException
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.GetSchemasReq.Builder builder) throws java.io.IOException
             {
                 for(int number = input.readFieldNumber(this);; number = input.readFieldNumber(this))
                 {
@@ -1737,7 +1737,7 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.GetSchemasReq.class.getName();
             }
             //unused
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.GetSchemasReq.Builder builder) throws java.io.IOException {}
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.GetSchemasReq.Builder builder) throws java.io.IOException {}
         }
         public static java.lang.String getFieldName(int number)
         {
@@ -1768,9 +1768,9 @@ public final class SchemaUserProtos
         public static final org.apache.drill.exec.proto.SchemaUserProtos.SchemaMetadata.BuilderSchema MERGE =
             new org.apache.drill.exec.proto.SchemaUserProtos.SchemaMetadata.BuilderSchema();
         
-        public static class MessageSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.SchemaMetadata>
+        public static class MessageSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.SchemaMetadata>
         {
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.SchemaMetadata message) throws java.io.IOException
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.SchemaMetadata message) throws java.io.IOException
             {
                 if(message.hasCatalogName())
                     output.writeString(1, message.getCatalogName(), false);
@@ -1808,12 +1808,12 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.SchemaMetadata.class.getName();
             }
             //unused
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.SchemaMetadata message) throws java.io.IOException {}
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.SchemaMetadata message) throws java.io.IOException {}
             public org.apache.drill.exec.proto.UserProtos.SchemaMetadata newMessage() { return null; }
         }
-        public static class BuilderSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.SchemaMetadata.Builder>
+        public static class BuilderSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.SchemaMetadata.Builder>
         {
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.SchemaMetadata.Builder builder) throws java.io.IOException
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.SchemaMetadata.Builder builder) throws java.io.IOException
             {
                 for(int number = input.readFieldNumber(this);; number = input.readFieldNumber(this))
                 {
@@ -1870,7 +1870,7 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.SchemaMetadata.class.getName();
             }
             //unused
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.SchemaMetadata.Builder builder) throws java.io.IOException {}
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.SchemaMetadata.Builder builder) throws java.io.IOException {}
         }
         public static java.lang.String getFieldName(int number)
         {
@@ -1907,9 +1907,9 @@ public final class SchemaUserProtos
         public static final org.apache.drill.exec.proto.SchemaUserProtos.GetSchemasResp.BuilderSchema MERGE =
             new org.apache.drill.exec.proto.SchemaUserProtos.GetSchemasResp.BuilderSchema();
         
-        public static class MessageSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.GetSchemasResp>
+        public static class MessageSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.GetSchemasResp>
         {
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.GetSchemasResp message) throws java.io.IOException
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.GetSchemasResp message) throws java.io.IOException
             {
                 if(message.hasStatus())
                     output.writeEnum(1, message.getStatus().getNumber(), false);
@@ -1945,12 +1945,12 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.GetSchemasResp.class.getName();
             }
             //unused
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.GetSchemasResp message) throws java.io.IOException {}
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.GetSchemasResp message) throws java.io.IOException {}
             public org.apache.drill.exec.proto.UserProtos.GetSchemasResp newMessage() { return null; }
         }
-        public static class BuilderSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.GetSchemasResp.Builder>
+        public static class BuilderSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.GetSchemasResp.Builder>
         {
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.GetSchemasResp.Builder builder) throws java.io.IOException
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.GetSchemasResp.Builder builder) throws java.io.IOException
             {
                 for(int number = input.readFieldNumber(this);; number = input.readFieldNumber(this))
                 {
@@ -2003,7 +2003,7 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.GetSchemasResp.class.getName();
             }
             //unused
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.GetSchemasResp.Builder builder) throws java.io.IOException {}
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.GetSchemasResp.Builder builder) throws java.io.IOException {}
         }
         public static java.lang.String getFieldName(int number)
         {
@@ -2036,9 +2036,9 @@ public final class SchemaUserProtos
         public static final org.apache.drill.exec.proto.SchemaUserProtos.GetTablesReq.BuilderSchema MERGE =
             new org.apache.drill.exec.proto.SchemaUserProtos.GetTablesReq.BuilderSchema();
         
-        public static class MessageSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.GetTablesReq>
+        public static class MessageSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.GetTablesReq>
         {
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.GetTablesReq message) throws java.io.IOException
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.GetTablesReq message) throws java.io.IOException
             {
                 if(message.hasCatalogNameFilter())
                     output.writeObject(1, message.getCatalogNameFilter(), org.apache.drill.exec.proto.SchemaUserProtos.LikeFilter.WRITE, false);
@@ -2077,12 +2077,12 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.GetTablesReq.class.getName();
             }
             //unused
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.GetTablesReq message) throws java.io.IOException {}
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.GetTablesReq message) throws java.io.IOException {}
             public org.apache.drill.exec.proto.UserProtos.GetTablesReq newMessage() { return null; }
         }
-        public static class BuilderSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.GetTablesReq.Builder>
+        public static class BuilderSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.GetTablesReq.Builder>
         {
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.GetTablesReq.Builder builder) throws java.io.IOException
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.GetTablesReq.Builder builder) throws java.io.IOException
             {
                 for(int number = input.readFieldNumber(this);; number = input.readFieldNumber(this))
                 {
@@ -2139,7 +2139,7 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.GetTablesReq.class.getName();
             }
             //unused
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.GetTablesReq.Builder builder) throws java.io.IOException {}
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.GetTablesReq.Builder builder) throws java.io.IOException {}
         }
         public static java.lang.String getFieldName(int number)
         {
@@ -2174,9 +2174,9 @@ public final class SchemaUserProtos
         public static final org.apache.drill.exec.proto.SchemaUserProtos.TableMetadata.BuilderSchema MERGE =
             new org.apache.drill.exec.proto.SchemaUserProtos.TableMetadata.BuilderSchema();
         
-        public static class MessageSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.TableMetadata>
+        public static class MessageSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.TableMetadata>
         {
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.TableMetadata message) throws java.io.IOException
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.TableMetadata message) throws java.io.IOException
             {
                 if(message.hasCatalogName())
                     output.writeString(1, message.getCatalogName(), false);
@@ -2212,12 +2212,12 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.TableMetadata.class.getName();
             }
             //unused
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.TableMetadata message) throws java.io.IOException {}
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.TableMetadata message) throws java.io.IOException {}
             public org.apache.drill.exec.proto.UserProtos.TableMetadata newMessage() { return null; }
         }
-        public static class BuilderSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.TableMetadata.Builder>
+        public static class BuilderSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.TableMetadata.Builder>
         {
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.TableMetadata.Builder builder) throws java.io.IOException
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.TableMetadata.Builder builder) throws java.io.IOException
             {
                 for(int number = input.readFieldNumber(this);; number = input.readFieldNumber(this))
                 {
@@ -2271,7 +2271,7 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.TableMetadata.class.getName();
             }
             //unused
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.TableMetadata.Builder builder) throws java.io.IOException {}
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.TableMetadata.Builder builder) throws java.io.IOException {}
         }
         public static java.lang.String getFieldName(int number)
         {
@@ -2306,9 +2306,9 @@ public final class SchemaUserProtos
         public static final org.apache.drill.exec.proto.SchemaUserProtos.GetTablesResp.BuilderSchema MERGE =
             new org.apache.drill.exec.proto.SchemaUserProtos.GetTablesResp.BuilderSchema();
         
-        public static class MessageSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.GetTablesResp>
+        public static class MessageSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.GetTablesResp>
         {
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.GetTablesResp message) throws java.io.IOException
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.GetTablesResp message) throws java.io.IOException
             {
                 if(message.hasStatus())
                     output.writeEnum(1, message.getStatus().getNumber(), false);
@@ -2344,12 +2344,12 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.GetTablesResp.class.getName();
             }
             //unused
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.GetTablesResp message) throws java.io.IOException {}
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.GetTablesResp message) throws java.io.IOException {}
             public org.apache.drill.exec.proto.UserProtos.GetTablesResp newMessage() { return null; }
         }
-        public static class BuilderSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.GetTablesResp.Builder>
+        public static class BuilderSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.GetTablesResp.Builder>
         {
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.GetTablesResp.Builder builder) throws java.io.IOException
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.GetTablesResp.Builder builder) throws java.io.IOException
             {
                 for(int number = input.readFieldNumber(this);; number = input.readFieldNumber(this))
                 {
@@ -2402,7 +2402,7 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.GetTablesResp.class.getName();
             }
             //unused
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.GetTablesResp.Builder builder) throws java.io.IOException {}
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.GetTablesResp.Builder builder) throws java.io.IOException {}
         }
         public static java.lang.String getFieldName(int number)
         {
@@ -2435,9 +2435,9 @@ public final class SchemaUserProtos
         public static final org.apache.drill.exec.proto.SchemaUserProtos.GetColumnsReq.BuilderSchema MERGE =
             new org.apache.drill.exec.proto.SchemaUserProtos.GetColumnsReq.BuilderSchema();
         
-        public static class MessageSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.GetColumnsReq>
+        public static class MessageSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.GetColumnsReq>
         {
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.GetColumnsReq message) throws java.io.IOException
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.GetColumnsReq message) throws java.io.IOException
             {
                 if(message.hasCatalogNameFilter())
                     output.writeObject(1, message.getCatalogNameFilter(), org.apache.drill.exec.proto.SchemaUserProtos.LikeFilter.WRITE, false);
@@ -2477,12 +2477,12 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.GetColumnsReq.class.getName();
             }
             //unused
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.GetColumnsReq message) throws java.io.IOException {}
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.GetColumnsReq message) throws java.io.IOException {}
             public org.apache.drill.exec.proto.UserProtos.GetColumnsReq newMessage() { return null; }
         }
-        public static class BuilderSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.GetColumnsReq.Builder>
+        public static class BuilderSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.GetColumnsReq.Builder>
         {
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.GetColumnsReq.Builder builder) throws java.io.IOException
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.GetColumnsReq.Builder builder) throws java.io.IOException
             {
                 for(int number = input.readFieldNumber(this);; number = input.readFieldNumber(this))
                 {
@@ -2540,7 +2540,7 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.GetColumnsReq.class.getName();
             }
             //unused
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.GetColumnsReq.Builder builder) throws java.io.IOException {}
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.GetColumnsReq.Builder builder) throws java.io.IOException {}
         }
         public static java.lang.String getFieldName(int number)
         {
@@ -2575,9 +2575,9 @@ public final class SchemaUserProtos
         public static final org.apache.drill.exec.proto.SchemaUserProtos.ColumnMetadata.BuilderSchema MERGE =
             new org.apache.drill.exec.proto.SchemaUserProtos.ColumnMetadata.BuilderSchema();
         
-        public static class MessageSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.ColumnMetadata>
+        public static class MessageSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.ColumnMetadata>
         {
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.ColumnMetadata message) throws java.io.IOException
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.ColumnMetadata message) throws java.io.IOException
             {
                 if(message.hasCatalogName())
                     output.writeString(1, message.getCatalogName(), false);
@@ -2639,12 +2639,12 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.ColumnMetadata.class.getName();
             }
             //unused
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.ColumnMetadata message) throws java.io.IOException {}
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.ColumnMetadata message) throws java.io.IOException {}
             public org.apache.drill.exec.proto.UserProtos.ColumnMetadata newMessage() { return null; }
         }
-        public static class BuilderSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.ColumnMetadata.Builder>
+        public static class BuilderSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.ColumnMetadata.Builder>
         {
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.ColumnMetadata.Builder builder) throws java.io.IOException
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.ColumnMetadata.Builder builder) throws java.io.IOException
             {
                 for(int number = input.readFieldNumber(this);; number = input.readFieldNumber(this))
                 {
@@ -2737,7 +2737,7 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.ColumnMetadata.class.getName();
             }
             //unused
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.ColumnMetadata.Builder builder) throws java.io.IOException {}
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.ColumnMetadata.Builder builder) throws java.io.IOException {}
         }
         public static java.lang.String getFieldName(int number)
         {
@@ -2798,9 +2798,9 @@ public final class SchemaUserProtos
         public static final org.apache.drill.exec.proto.SchemaUserProtos.GetColumnsResp.BuilderSchema MERGE =
             new org.apache.drill.exec.proto.SchemaUserProtos.GetColumnsResp.BuilderSchema();
         
-        public static class MessageSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.GetColumnsResp>
+        public static class MessageSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.GetColumnsResp>
         {
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.GetColumnsResp message) throws java.io.IOException
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.GetColumnsResp message) throws java.io.IOException
             {
                 if(message.hasStatus())
                     output.writeEnum(1, message.getStatus().getNumber(), false);
@@ -2836,12 +2836,12 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.GetColumnsResp.class.getName();
             }
             //unused
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.GetColumnsResp message) throws java.io.IOException {}
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.GetColumnsResp message) throws java.io.IOException {}
             public org.apache.drill.exec.proto.UserProtos.GetColumnsResp newMessage() { return null; }
         }
-        public static class BuilderSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.GetColumnsResp.Builder>
+        public static class BuilderSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.GetColumnsResp.Builder>
         {
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.GetColumnsResp.Builder builder) throws java.io.IOException
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.GetColumnsResp.Builder builder) throws java.io.IOException
             {
                 for(int number = input.readFieldNumber(this);; number = input.readFieldNumber(this))
                 {
@@ -2894,7 +2894,7 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.GetColumnsResp.class.getName();
             }
             //unused
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.GetColumnsResp.Builder builder) throws java.io.IOException {}
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.GetColumnsResp.Builder builder) throws java.io.IOException {}
         }
         public static java.lang.String getFieldName(int number)
         {
@@ -2927,9 +2927,9 @@ public final class SchemaUserProtos
         public static final org.apache.drill.exec.proto.SchemaUserProtos.CreatePreparedStatementReq.BuilderSchema MERGE =
             new org.apache.drill.exec.proto.SchemaUserProtos.CreatePreparedStatementReq.BuilderSchema();
         
-        public static class MessageSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.CreatePreparedStatementReq>
+        public static class MessageSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.CreatePreparedStatementReq>
         {
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.CreatePreparedStatementReq message) throws java.io.IOException
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.CreatePreparedStatementReq message) throws java.io.IOException
             {
                 if(message.hasSqlQuery())
                     output.writeString(1, message.getSqlQuery(), false);
@@ -2959,12 +2959,12 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.CreatePreparedStatementReq.class.getName();
             }
             //unused
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.CreatePreparedStatementReq message) throws java.io.IOException {}
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.CreatePreparedStatementReq message) throws java.io.IOException {}
             public org.apache.drill.exec.proto.UserProtos.CreatePreparedStatementReq newMessage() { return null; }
         }
-        public static class BuilderSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.CreatePreparedStatementReq.Builder>
+        public static class BuilderSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.CreatePreparedStatementReq.Builder>
         {
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.CreatePreparedStatementReq.Builder builder) throws java.io.IOException
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.CreatePreparedStatementReq.Builder builder) throws java.io.IOException
             {
                 for(int number = input.readFieldNumber(this);; number = input.readFieldNumber(this))
                 {
@@ -3009,7 +3009,7 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.CreatePreparedStatementReq.class.getName();
             }
             //unused
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.CreatePreparedStatementReq.Builder builder) throws java.io.IOException {}
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.CreatePreparedStatementReq.Builder builder) throws java.io.IOException {}
         }
         public static java.lang.String getFieldName(int number)
         {
@@ -3038,9 +3038,9 @@ public final class SchemaUserProtos
         public static final org.apache.drill.exec.proto.SchemaUserProtos.ResultColumnMetadata.BuilderSchema MERGE =
             new org.apache.drill.exec.proto.SchemaUserProtos.ResultColumnMetadata.BuilderSchema();
         
-        public static class MessageSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.ResultColumnMetadata>
+        public static class MessageSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.ResultColumnMetadata>
         {
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.ResultColumnMetadata message) throws java.io.IOException
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.ResultColumnMetadata message) throws java.io.IOException
             {
                 if(message.hasCatalogName())
                     output.writeString(1, message.getCatalogName(), false);
@@ -3106,12 +3106,12 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.ResultColumnMetadata.class.getName();
             }
             //unused
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.ResultColumnMetadata message) throws java.io.IOException {}
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.ResultColumnMetadata message) throws java.io.IOException {}
             public org.apache.drill.exec.proto.UserProtos.ResultColumnMetadata newMessage() { return null; }
         }
-        public static class BuilderSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.ResultColumnMetadata.Builder>
+        public static class BuilderSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.ResultColumnMetadata.Builder>
         {
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.ResultColumnMetadata.Builder builder) throws java.io.IOException
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.ResultColumnMetadata.Builder builder) throws java.io.IOException
             {
                 for(int number = input.readFieldNumber(this);; number = input.readFieldNumber(this))
                 {
@@ -3210,7 +3210,7 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.ResultColumnMetadata.class.getName();
             }
             //unused
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.ResultColumnMetadata.Builder builder) throws java.io.IOException {}
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.ResultColumnMetadata.Builder builder) throws java.io.IOException {}
         }
         public static java.lang.String getFieldName(int number)
         {
@@ -3275,9 +3275,9 @@ public final class SchemaUserProtos
         public static final org.apache.drill.exec.proto.SchemaUserProtos.PreparedStatementHandle.BuilderSchema MERGE =
             new org.apache.drill.exec.proto.SchemaUserProtos.PreparedStatementHandle.BuilderSchema();
         
-        public static class MessageSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.PreparedStatementHandle>
+        public static class MessageSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.PreparedStatementHandle>
         {
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.PreparedStatementHandle message) throws java.io.IOException
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.PreparedStatementHandle message) throws java.io.IOException
             {
                 if(message.hasServerInfo())
                     output.writeByteArray(1, message.getServerInfo().toByteArray(), false);
@@ -3308,12 +3308,12 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.PreparedStatementHandle.class.getName();
             }
             //unused
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.PreparedStatementHandle message) throws java.io.IOException {}
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.PreparedStatementHandle message) throws java.io.IOException {}
             public org.apache.drill.exec.proto.UserProtos.PreparedStatementHandle newMessage() { return null; }
         }
-        public static class BuilderSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.PreparedStatementHandle.Builder>
+        public static class BuilderSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.PreparedStatementHandle.Builder>
         {
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.PreparedStatementHandle.Builder builder) throws java.io.IOException
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.PreparedStatementHandle.Builder builder) throws java.io.IOException
             {
                 for(int number = input.readFieldNumber(this);; number = input.readFieldNumber(this))
                 {
@@ -3358,7 +3358,7 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.PreparedStatementHandle.class.getName();
             }
             //unused
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.PreparedStatementHandle.Builder builder) throws java.io.IOException {}
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.PreparedStatementHandle.Builder builder) throws java.io.IOException {}
         }
         public static java.lang.String getFieldName(int number)
         {
@@ -3387,9 +3387,9 @@ public final class SchemaUserProtos
         public static final org.apache.drill.exec.proto.SchemaUserProtos.PreparedStatement.BuilderSchema MERGE =
             new org.apache.drill.exec.proto.SchemaUserProtos.PreparedStatement.BuilderSchema();
         
-        public static class MessageSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.PreparedStatement>
+        public static class MessageSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.PreparedStatement>
         {
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.PreparedStatement message) throws java.io.IOException
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.PreparedStatement message) throws java.io.IOException
             {
                 for(org.apache.drill.exec.proto.UserProtos.ResultColumnMetadata columns : message.getColumnsList())
                     output.writeObject(1, columns, org.apache.drill.exec.proto.SchemaUserProtos.ResultColumnMetadata.WRITE, true);
@@ -3423,12 +3423,12 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.PreparedStatement.class.getName();
             }
             //unused
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.PreparedStatement message) throws java.io.IOException {}
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.PreparedStatement message) throws java.io.IOException {}
             public org.apache.drill.exec.proto.UserProtos.PreparedStatement newMessage() { return null; }
         }
-        public static class BuilderSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.PreparedStatement.Builder>
+        public static class BuilderSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.PreparedStatement.Builder>
         {
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.PreparedStatement.Builder builder) throws java.io.IOException
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.PreparedStatement.Builder builder) throws java.io.IOException
             {
                 for(int number = input.readFieldNumber(this);; number = input.readFieldNumber(this))
                 {
@@ -3478,7 +3478,7 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.PreparedStatement.class.getName();
             }
             //unused
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.PreparedStatement.Builder builder) throws java.io.IOException {}
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.PreparedStatement.Builder builder) throws java.io.IOException {}
         }
         public static java.lang.String getFieldName(int number)
         {
@@ -3509,9 +3509,9 @@ public final class SchemaUserProtos
         public static final org.apache.drill.exec.proto.SchemaUserProtos.CreatePreparedStatementResp.BuilderSchema MERGE =
             new org.apache.drill.exec.proto.SchemaUserProtos.CreatePreparedStatementResp.BuilderSchema();
         
-        public static class MessageSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.CreatePreparedStatementResp>
+        public static class MessageSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.CreatePreparedStatementResp>
         {
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.CreatePreparedStatementResp message) throws java.io.IOException
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.CreatePreparedStatementResp message) throws java.io.IOException
             {
                 if(message.hasStatus())
                     output.writeEnum(1, message.getStatus().getNumber(), false);
@@ -3547,12 +3547,12 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.CreatePreparedStatementResp.class.getName();
             }
             //unused
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.CreatePreparedStatementResp message) throws java.io.IOException {}
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.CreatePreparedStatementResp message) throws java.io.IOException {}
             public org.apache.drill.exec.proto.UserProtos.CreatePreparedStatementResp newMessage() { return null; }
         }
-        public static class BuilderSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.CreatePreparedStatementResp.Builder>
+        public static class BuilderSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.CreatePreparedStatementResp.Builder>
         {
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.CreatePreparedStatementResp.Builder builder) throws java.io.IOException
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.CreatePreparedStatementResp.Builder builder) throws java.io.IOException
             {
                 for(int number = input.readFieldNumber(this);; number = input.readFieldNumber(this))
                 {
@@ -3605,7 +3605,7 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.CreatePreparedStatementResp.class.getName();
             }
             //unused
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.CreatePreparedStatementResp.Builder builder) throws java.io.IOException {}
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.CreatePreparedStatementResp.Builder builder) throws java.io.IOException {}
         }
         public static java.lang.String getFieldName(int number)
         {
@@ -3638,9 +3638,9 @@ public final class SchemaUserProtos
         public static final org.apache.drill.exec.proto.SchemaUserProtos.GetServerMetaReq.BuilderSchema MERGE =
             new org.apache.drill.exec.proto.SchemaUserProtos.GetServerMetaReq.BuilderSchema();
         
-        public static class MessageSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.GetServerMetaReq>
+        public static class MessageSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.GetServerMetaReq>
         {
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.GetServerMetaReq message) throws java.io.IOException
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.GetServerMetaReq message) throws java.io.IOException
             {
             }
             public boolean isInitialized(org.apache.drill.exec.proto.UserProtos.GetServerMetaReq message)
@@ -3668,12 +3668,12 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.GetServerMetaReq.class.getName();
             }
             //unused
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.GetServerMetaReq message) throws java.io.IOException {}
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.GetServerMetaReq message) throws java.io.IOException {}
             public org.apache.drill.exec.proto.UserProtos.GetServerMetaReq newMessage() { return null; }
         }
-        public static class BuilderSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.GetServerMetaReq.Builder>
+        public static class BuilderSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.GetServerMetaReq.Builder>
         {
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.GetServerMetaReq.Builder builder) throws java.io.IOException
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.GetServerMetaReq.Builder builder) throws java.io.IOException
             {
                 for(int number = input.readFieldNumber(this);; number = input.readFieldNumber(this))
                 {
@@ -3715,7 +3715,7 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.GetServerMetaReq.class.getName();
             }
             //unused
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.GetServerMetaReq.Builder builder) throws java.io.IOException {}
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.GetServerMetaReq.Builder builder) throws java.io.IOException {}
         }
         public static java.lang.String getFieldName(int number)
         {
@@ -3742,9 +3742,9 @@ public final class SchemaUserProtos
         public static final org.apache.drill.exec.proto.SchemaUserProtos.ConvertSupport.BuilderSchema MERGE =
             new org.apache.drill.exec.proto.SchemaUserProtos.ConvertSupport.BuilderSchema();
         
-        public static class MessageSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.ConvertSupport>
+        public static class MessageSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.ConvertSupport>
         {
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.ConvertSupport message) throws java.io.IOException
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.ConvertSupport message) throws java.io.IOException
             {
                 if(message.hasFrom())
                     output.writeEnum(1, message.getFrom().getNumber(), false);
@@ -3776,12 +3776,12 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.ConvertSupport.class.getName();
             }
             //unused
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.ConvertSupport message) throws java.io.IOException {}
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.ConvertSupport message) throws java.io.IOException {}
             public org.apache.drill.exec.proto.UserProtos.ConvertSupport newMessage() { return null; }
         }
-        public static class BuilderSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.ConvertSupport.Builder>
+        public static class BuilderSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.ConvertSupport.Builder>
         {
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.ConvertSupport.Builder builder) throws java.io.IOException
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.ConvertSupport.Builder builder) throws java.io.IOException
             {
                 for(int number = input.readFieldNumber(this);; number = input.readFieldNumber(this))
                 {
@@ -3829,7 +3829,7 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.ConvertSupport.class.getName();
             }
             //unused
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.ConvertSupport.Builder builder) throws java.io.IOException {}
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.ConvertSupport.Builder builder) throws java.io.IOException {}
         }
         public static java.lang.String getFieldName(int number)
         {
@@ -3860,9 +3860,9 @@ public final class SchemaUserProtos
         public static final org.apache.drill.exec.proto.SchemaUserProtos.GetServerMetaResp.BuilderSchema MERGE =
             new org.apache.drill.exec.proto.SchemaUserProtos.GetServerMetaResp.BuilderSchema();
         
-        public static class MessageSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.GetServerMetaResp>
+        public static class MessageSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.GetServerMetaResp>
         {
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.GetServerMetaResp message) throws java.io.IOException
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.GetServerMetaResp message) throws java.io.IOException
             {
                 if(message.hasStatus())
                     output.writeEnum(1, message.getStatus().getNumber(), false);
@@ -3898,12 +3898,12 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.GetServerMetaResp.class.getName();
             }
             //unused
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.GetServerMetaResp message) throws java.io.IOException {}
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.GetServerMetaResp message) throws java.io.IOException {}
             public org.apache.drill.exec.proto.UserProtos.GetServerMetaResp newMessage() { return null; }
         }
-        public static class BuilderSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.GetServerMetaResp.Builder>
+        public static class BuilderSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.GetServerMetaResp.Builder>
         {
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.GetServerMetaResp.Builder builder) throws java.io.IOException
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.GetServerMetaResp.Builder builder) throws java.io.IOException
             {
                 for(int number = input.readFieldNumber(this);; number = input.readFieldNumber(this))
                 {
@@ -3956,7 +3956,7 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.GetServerMetaResp.class.getName();
             }
             //unused
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.GetServerMetaResp.Builder builder) throws java.io.IOException {}
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.GetServerMetaResp.Builder builder) throws java.io.IOException {}
         }
         public static java.lang.String getFieldName(int number)
         {
@@ -3989,9 +3989,9 @@ public final class SchemaUserProtos
         public static final org.apache.drill.exec.proto.SchemaUserProtos.ServerMeta.BuilderSchema MERGE =
             new org.apache.drill.exec.proto.SchemaUserProtos.ServerMeta.BuilderSchema();
         
-        public static class MessageSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.ServerMeta>
+        public static class MessageSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.ServerMeta>
         {
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.ServerMeta message) throws java.io.IOException
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.ServerMeta message) throws java.io.IOException
             {
                 if(message.hasAllTablesSelectable())
                     output.writeBool(1, message.getAllTablesSelectable(), false);
@@ -4120,12 +4120,12 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.ServerMeta.class.getName();
             }
             //unused
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.ServerMeta message) throws java.io.IOException {}
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.ServerMeta message) throws java.io.IOException {}
             public org.apache.drill.exec.proto.UserProtos.ServerMeta newMessage() { return null; }
         }
-        public static class BuilderSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.ServerMeta.Builder>
+        public static class BuilderSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.ServerMeta.Builder>
         {
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.ServerMeta.Builder builder) throws java.io.IOException
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.ServerMeta.Builder builder) throws java.io.IOException
             {
                 for(int number = input.readFieldNumber(this);; number = input.readFieldNumber(this))
                 {
@@ -4318,7 +4318,7 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.ServerMeta.class.getName();
             }
             //unused
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.ServerMeta.Builder builder) throws java.io.IOException {}
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.ServerMeta.Builder builder) throws java.io.IOException {}
         }
         public static java.lang.String getFieldName(int number)
         {
@@ -4445,9 +4445,9 @@ public final class SchemaUserProtos
         public static final org.apache.drill.exec.proto.SchemaUserProtos.RunQuery.BuilderSchema MERGE =
             new org.apache.drill.exec.proto.SchemaUserProtos.RunQuery.BuilderSchema();
         
-        public static class MessageSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.RunQuery>
+        public static class MessageSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.RunQuery>
         {
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.RunQuery message) throws java.io.IOException
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.RunQuery message) throws java.io.IOException
             {
                 if(message.hasResultsMode())
                     output.writeEnum(1, message.getResultsMode().getNumber(), false);
@@ -4489,12 +4489,12 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.RunQuery.class.getName();
             }
             //unused
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.RunQuery message) throws java.io.IOException {}
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.RunQuery message) throws java.io.IOException {}
             public org.apache.drill.exec.proto.UserProtos.RunQuery newMessage() { return null; }
         }
-        public static class BuilderSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.RunQuery.Builder>
+        public static class BuilderSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.RunQuery.Builder>
         {
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.RunQuery.Builder builder) throws java.io.IOException
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.RunQuery.Builder builder) throws java.io.IOException
             {
                 for(int number = input.readFieldNumber(this);; number = input.readFieldNumber(this))
                 {
@@ -4556,7 +4556,7 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.RunQuery.class.getName();
             }
             //unused
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.RunQuery.Builder builder) throws java.io.IOException {}
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.RunQuery.Builder builder) throws java.io.IOException {}
         }
         public static java.lang.String getFieldName(int number)
         {
@@ -4595,9 +4595,9 @@ public final class SchemaUserProtos
         public static final org.apache.drill.exec.proto.SchemaUserProtos.NewSessionRequest.BuilderSchema MERGE =
             new org.apache.drill.exec.proto.SchemaUserProtos.NewSessionRequest.BuilderSchema();
         
-        public static class MessageSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.NewSessionRequest>
+        public static class MessageSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.NewSessionRequest>
         {
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.NewSessionRequest message) throws java.io.IOException
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.NewSessionRequest message) throws java.io.IOException
             {
                 if(message.hasProperties())
                     output.writeObject(1, message.getProperties(), org.apache.drill.exec.proto.SchemaUserProtos.UserProperties.WRITE, false);
@@ -4628,12 +4628,12 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.NewSessionRequest.class.getName();
             }
             //unused
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.NewSessionRequest message) throws java.io.IOException {}
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.NewSessionRequest message) throws java.io.IOException {}
             public org.apache.drill.exec.proto.UserProtos.NewSessionRequest newMessage() { return null; }
         }
-        public static class BuilderSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.NewSessionRequest.Builder>
+        public static class BuilderSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.NewSessionRequest.Builder>
         {
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.NewSessionRequest.Builder builder) throws java.io.IOException
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.NewSessionRequest.Builder builder) throws java.io.IOException
             {
                 for(int number = input.readFieldNumber(this);; number = input.readFieldNumber(this))
                 {
@@ -4679,7 +4679,7 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.NewSessionRequest.class.getName();
             }
             //unused
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.NewSessionRequest.Builder builder) throws java.io.IOException {}
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.NewSessionRequest.Builder builder) throws java.io.IOException {}
         }
         public static java.lang.String getFieldName(int number)
         {
@@ -4708,9 +4708,9 @@ public final class SchemaUserProtos
         public static final org.apache.drill.exec.proto.SchemaUserProtos.SessionHandle.BuilderSchema MERGE =
             new org.apache.drill.exec.proto.SchemaUserProtos.SessionHandle.BuilderSchema();
         
-        public static class MessageSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.SessionHandle>
+        public static class MessageSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.SessionHandle>
         {
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.SessionHandle message) throws java.io.IOException
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.SessionHandle message) throws java.io.IOException
             {
                 if(message.hasSessionId())
                     output.writeString(1, message.getSessionId(), false);
@@ -4740,12 +4740,12 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.SessionHandle.class.getName();
             }
             //unused
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.SessionHandle message) throws java.io.IOException {}
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.SessionHandle message) throws java.io.IOException {}
             public org.apache.drill.exec.proto.UserProtos.SessionHandle newMessage() { return null; }
         }
-        public static class BuilderSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.SessionHandle.Builder>
+        public static class BuilderSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.SessionHandle.Builder>
         {
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.SessionHandle.Builder builder) throws java.io.IOException
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.SessionHandle.Builder builder) throws java.io.IOException
             {
                 for(int number = input.readFieldNumber(this);; number = input.readFieldNumber(this))
                 {
@@ -4790,7 +4790,7 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.SessionHandle.class.getName();
             }
             //unused
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.SessionHandle.Builder builder) throws java.io.IOException {}
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.SessionHandle.Builder builder) throws java.io.IOException {}
         }
         public static java.lang.String getFieldName(int number)
         {
@@ -4819,9 +4819,9 @@ public final class SchemaUserProtos
         public static final org.apache.drill.exec.proto.SchemaUserProtos.RunQueryWithSessionHandle.BuilderSchema MERGE =
             new org.apache.drill.exec.proto.SchemaUserProtos.RunQueryWithSessionHandle.BuilderSchema();
         
-        public static class MessageSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.RunQueryWithSessionHandle>
+        public static class MessageSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.RunQueryWithSessionHandle>
         {
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.RunQueryWithSessionHandle message) throws java.io.IOException
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.RunQueryWithSessionHandle message) throws java.io.IOException
             {
                 if(message.hasRunQuery())
                     output.writeObject(1, message.getRunQuery(), org.apache.drill.exec.proto.SchemaUserProtos.RunQuery.WRITE, false);
@@ -4855,12 +4855,12 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.RunQueryWithSessionHandle.class.getName();
             }
             //unused
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.RunQueryWithSessionHandle message) throws java.io.IOException {}
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.RunQueryWithSessionHandle message) throws java.io.IOException {}
             public org.apache.drill.exec.proto.UserProtos.RunQueryWithSessionHandle newMessage() { return null; }
         }
-        public static class BuilderSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.RunQueryWithSessionHandle.Builder>
+        public static class BuilderSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.RunQueryWithSessionHandle.Builder>
         {
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.RunQueryWithSessionHandle.Builder builder) throws java.io.IOException
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.RunQueryWithSessionHandle.Builder builder) throws java.io.IOException
             {
                 for(int number = input.readFieldNumber(this);; number = input.readFieldNumber(this))
                 {
@@ -4910,7 +4910,7 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.RunQueryWithSessionHandle.class.getName();
             }
             //unused
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.RunQueryWithSessionHandle.Builder builder) throws java.io.IOException {}
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.RunQueryWithSessionHandle.Builder builder) throws java.io.IOException {}
         }
         public static java.lang.String getFieldName(int number)
         {
@@ -4941,9 +4941,9 @@ public final class SchemaUserProtos
         public static final org.apache.drill.exec.proto.SchemaUserProtos.CancelQueryWithSessionHandle.BuilderSchema MERGE =
             new org.apache.drill.exec.proto.SchemaUserProtos.CancelQueryWithSessionHandle.BuilderSchema();
         
-        public static class MessageSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.CancelQueryWithSessionHandle>
+        public static class MessageSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.CancelQueryWithSessionHandle>
         {
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.CancelQueryWithSessionHandle message) throws java.io.IOException
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.CancelQueryWithSessionHandle message) throws java.io.IOException
             {
                 if(message.hasQueryId())
                     output.writeObject(1, message.getQueryId(), org.apache.drill.exec.proto.SchemaUserBitShared.QueryId.WRITE, false);
@@ -4977,12 +4977,12 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.CancelQueryWithSessionHandle.class.getName();
             }
             //unused
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.CancelQueryWithSessionHandle message) throws java.io.IOException {}
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.CancelQueryWithSessionHandle message) throws java.io.IOException {}
             public org.apache.drill.exec.proto.UserProtos.CancelQueryWithSessionHandle newMessage() { return null; }
         }
-        public static class BuilderSchema implements com.dyuproject.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.CancelQueryWithSessionHandle.Builder>
+        public static class BuilderSchema implements io.protostuff.Schema<org.apache.drill.exec.proto.UserProtos.CancelQueryWithSessionHandle.Builder>
         {
-            public void mergeFrom(com.dyuproject.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.CancelQueryWithSessionHandle.Builder builder) throws java.io.IOException
+            public void mergeFrom(io.protostuff.Input input, org.apache.drill.exec.proto.UserProtos.CancelQueryWithSessionHandle.Builder builder) throws java.io.IOException
             {
                 for(int number = input.readFieldNumber(this);; number = input.readFieldNumber(this))
                 {
@@ -5032,7 +5032,7 @@ public final class SchemaUserProtos
                 return org.apache.drill.exec.proto.UserProtos.CancelQueryWithSessionHandle.class.getName();
             }
             //unused
-            public void writeTo(com.dyuproject.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.CancelQueryWithSessionHandle.Builder builder) throws java.io.IOException {}
+            public void writeTo(io.protostuff.Output output, org.apache.drill.exec.proto.UserProtos.CancelQueryWithSessionHandle.Builder builder) throws java.io.IOException {}
         }
         public static java.lang.String getFieldName(int number)
         {
