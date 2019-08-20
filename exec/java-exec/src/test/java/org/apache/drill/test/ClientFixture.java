@@ -41,7 +41,8 @@ import org.apache.drill.exec.rpc.RpcException;
 import org.apache.drill.exec.rpc.user.QueryDataBatch;
 import org.apache.drill.exec.testing.ControlsInjectionUtil;
 import org.apache.drill.test.ClusterFixture.FixtureTestServices;
-import org.apache.drill.test.rowSet.RowSetBuilder;
+import org.apache.drill.test.QueryBuilder.QuerySummary;
+import org.apache.drill.exec.physical.rowSet.RowSetBuilder;
 
 /**
  * Represents a Drill client. Provides many useful test-specific operations such
@@ -255,7 +256,7 @@ public class ClientFixture implements AutoCloseable {
    * @throws IOException
    */
 
-  public ProfileParser parseProfile(QueryBuilder.QuerySummary summary) throws IOException {
+  public ProfileParser parseProfile(QuerySummary summary) throws IOException {
     return parseProfile(summary.queryIdString());
   }
 
