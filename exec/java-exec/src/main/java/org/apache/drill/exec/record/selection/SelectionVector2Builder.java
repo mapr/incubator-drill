@@ -15,26 +15,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.drill.exec.store.kafka.schema;
+package org.apache.drill.exec.record.selection;
 
-import org.apache.calcite.schema.SchemaPlus;
-import org.apache.drill.exec.store.AbstractSchemaFactory;
-import org.apache.drill.exec.store.SchemaConfig;
-import org.apache.drill.exec.store.kafka.KafkaStoragePlugin;
+import org.apache.drill.exec.memory.BufferAllocator;
+import org.apache.drill.exec.record.VectorContainer;
 
-public class KafkaSchemaFactory extends AbstractSchemaFactory {
+public class SelectionVector2Builder {
 
-  private final KafkaStoragePlugin plugin;
+  private final SelectionVector2 sv2;
+  private int index;
 
-  public KafkaSchemaFactory(KafkaStoragePlugin plugin, String schemaName) {
-    super(schemaName);
-    this.plugin = plugin;
+  public SelectionVector2Builder(BufferAllocator allocator, int maxSize) {
+    sv2 = new SelectionVector2(allocator);
+    sv2.allocateNew(maxSize);
   }
 
-  @Override
-  public void registerSchemas(SchemaConfig schemaConfig, SchemaPlus parent) {
-    KafkaMessageSchema schema = new KafkaMessageSchema(plugin, getName());
-    SchemaPlus hPlus = parent.add(getName(), schema);
-    schema.setHolder(hPlus);
+  public void setNext(int value) {
+    sv2.setIndex(index++, value);
+  }
+
+  public void set(int posn, int value) {
+    sv2.setIndex(posn, value);
+    index = Math.max(index, posn + 1);
+  }
+
+  public SelectionVector2 harvest(VectorContainer batch) {
+    sv2.setRecordCount(index);
+    sv2.setBatchActualRecordCount(batch.getRecordCount());
+    return sv2;
   }
 }
