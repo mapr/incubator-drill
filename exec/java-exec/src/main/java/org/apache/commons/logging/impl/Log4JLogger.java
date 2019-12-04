@@ -15,24 +15,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.drill.exec.expr;
+package org.apache.commons.logging.impl;
 
-import org.apache.drill.BaseTestQuery;
-import org.apache.drill.common.util.TestTools;
-import org.junit.Test;
-
-public class TestPrune extends BaseTestQuery {
-
-  String MULTILEVEL = TestTools.getWorkingPath() + "/../java-exec/src/test/resources/multilevel";
-
-  @Test
-  public void pruneCompound() throws Exception {
-    test(String.format("select * from dfs.`%s/csv` where x is null and dir1 in ('Q1', 'Q2')", MULTILEVEL));
-  }
-
-  @Test
-  public void pruneSimple() throws Exception {
-    test(String.format("select * from dfs.`%s/csv` where dir1 in ('Q1', 'Q2')", MULTILEVEL));
-  }
-
+/**
+ * A mock class to avoid NoClassDefFoundError after excluding Apache commons-logging from Hadoop dependency.
+ * See <a href="https://issues.apache.org/jira/browse/HADOOP-10288">HADOOP-10288</a> for the problem description.
+ */
+public class Log4JLogger {
 }

@@ -36,7 +36,6 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.ExecutionException;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -170,8 +169,6 @@ public class TestDrillClusterClient extends DrillSystemTestBase {
       assertTrue(runSampleQuery(session)
           .get()
           .succeeded());
-    } catch (ExecutionException e) {
-      fail(e.getMessage());
     } finally {
       if (session != null) {
         session.close();
