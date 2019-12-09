@@ -307,7 +307,11 @@ public class DrillOptiq {
           if (isMap) {
             return handleMapNumericKey(literal, operand, dataType, left);
           }
-          return left.getChild(((BigDecimal) literal.getValue()).intValue());
+          int index = ((BigDecimal) literal.getValue()).intValue();
+          if (index < 0) {
+            return left.getUnindexedArrayChild();
+          }
+          return left.getChild(index);
         case CHAR:
           if (isMap) {
             return handleMapCharKey(literal, operand, dataType, left);
