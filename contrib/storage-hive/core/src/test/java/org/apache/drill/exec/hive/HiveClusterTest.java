@@ -15,22 +15,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.drill.metastore.statistics;
+package org.apache.drill.exec.hive;
 
-import java.util.List;
+import org.apache.drill.test.ClusterTest;
+import org.junit.BeforeClass;
 
 /**
- * This class represents kinds of column statistics which may be received as a union
- * of other statistics, for example column nulls count may be received as a sum of nulls counts
- * of underlying metadata parts.
+ * Base class for Hive cluster tests.
  */
-public interface CollectableColumnStatisticsKind<V> extends StatisticsKind<V> {
+public class HiveClusterTest extends ClusterTest {
 
-  /**
-   * Returns column statistics value received by collecting specified {@link ColumnStatistics}.
-   *
-   * @param statistics list of {@link ColumnStatistics} instances to be collected
-   * @return column statistics value received by collecting specified {@link ColumnStatistics}
-   */
-  Object mergeStatistics(List<? extends ColumnStatistics<?>> statistics);
+  @BeforeClass
+  public static void checkJavaVersion() {
+    HiveTestUtilities.assumeJavaVersion();
+  }
 }

@@ -25,6 +25,10 @@ import org.apache.drill.exec.record.VectorContainer;
 import org.apache.drill.exec.record.VectorWrapper;
 import org.apache.drill.exec.vector.BitVector;
 import org.apache.drill.exec.vector.FixedWidthVector;
+import org.apache.drill.exec.vector.NullableVar16CharVector;
+import org.apache.drill.exec.vector.NullableVarBinaryVector;
+import org.apache.drill.exec.vector.NullableVarCharVector;
+import org.apache.drill.exec.vector.NullableVarDecimalVector;
 import org.apache.drill.exec.vector.NullableVector;
 import org.apache.drill.exec.vector.RepeatedBitVector;
 import org.apache.drill.exec.vector.UInt1Vector;
@@ -35,11 +39,10 @@ import org.apache.drill.exec.vector.VarCharVector;
 import org.apache.drill.exec.vector.VarDecimalVector;
 import org.apache.drill.exec.vector.VariableWidthVector;
 import org.apache.drill.exec.vector.ZeroVector;
+import org.apache.drill.exec.vector.complex.AbstractRepeatedMapVector;
 import org.apache.drill.exec.vector.complex.BaseRepeatedValueVector;
-import org.apache.drill.exec.vector.complex.DictVector;
 import org.apache.drill.exec.vector.complex.MapVector;
 import org.apache.drill.exec.vector.complex.RepeatedListVector;
-import org.apache.drill.exec.vector.complex.RepeatedMapVector;
 import org.apache.drill.exec.vector.complex.UnionVector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -173,6 +176,10 @@ public class BatchValidator {
   }
 
   public static boolean validate(RecordBatch batch) {
+    // This is a handy place to trace batches as they flow up
+    // the DAG. Works best for single-threaded runs with a few records.
+    // System.out.println(batch.getClass().getSimpleName());
+    // RowSetFormatter.print(batch);
     ErrorReporter reporter = errorReporter(batch);
     int rowCount = batch.getRecordCount();
     int valueCount = rowCount;
@@ -293,14 +300,16 @@ public class BatchValidator {
       // structure to check.
     } else if (vector instanceof BaseRepeatedValueVector) {
       validateRepeatedVector(name, (BaseRepeatedValueVector) vector);
-    } else if (vector instanceof RepeatedMapVector) {
-      validateRepeatedMapVector(name, (RepeatedMapVector) vector);
+    } else if (vector instanceof AbstractRepeatedMapVector) { // RepeatedMapVector or DictVector
+      // In case of DictVector, keys and values vectors are not validated explicitly to avoid NPE
+      // when keys and values vectors are not set. This happens when output dict vector's keys and
+      // values are not constructed while copying values from input reader to dict writer and the
+      // input reader is an instance of NullReader for all rows which does not have schema.
+      validateRepeatedMapVector(name, (AbstractRepeatedMapVector) vector);
     } else if (vector instanceof MapVector) {
       validateMapVector(name, (MapVector) vector);
     } else if (vector instanceof RepeatedListVector) {
       validateRepeatedListVector(name, (RepeatedListVector) vector);
-    } else if (vector instanceof DictVector) {
-      validateDictVector(name, (DictVector) vector);
     } else if (vector instanceof UnionVector) {
       validateUnionVector(name, (UnionVector) vector);
     } else if (vector instanceof VarDecimalVector) {
@@ -320,8 +329,36 @@ public class BatchValidator {
           "Outer value count = %d, but inner value count = %d",
           outerCount, valueCount));
     }
+    int lastSet = getLastSet(vector);
+    if (lastSet != -2) {
+      if (lastSet != valueCount - 1) {
+        error(name, vector, String.format(
+            "Value count = %d, but last set = %d",
+            valueCount, lastSet));
+      }
+    }
     verifyIsSetVector(vector, (UInt1Vector) vector.getBitsVector());
     validateVector(name + "-values", valuesVector);
+  }
+
+  // getLastSet() is visible per vector type, not on a super class.
+  // There is no common nullable, variable width super class.
+
+  private int getLastSet(NullableVector vector) {
+    if (vector instanceof NullableVarCharVector) {
+      return ((NullableVarCharVector) vector).getMutator().getLastSet();
+    }
+    if (vector instanceof NullableVarBinaryVector) {
+      return ((NullableVarBinaryVector) vector).getMutator().getLastSet();
+    }
+    if (vector instanceof NullableVarDecimalVector) {
+      return ((NullableVarDecimalVector) vector).getMutator().getLastSet();
+    }
+    if (vector instanceof NullableVar16CharVector) {
+      return ((NullableVar16CharVector) vector).getMutator().getLastSet();
+    }
+    // Otherwise, return a value that is never legal for lastSet
+    return -2;
   }
 
   private void validateVarCharVector(String name, VarCharVector vector) {
@@ -331,7 +368,12 @@ public class BatchValidator {
 
   private void validateVarBinaryVector(String name, VarBinaryVector vector) {
     int dataLength = vector.getBuffer().writerIndex();
-    validateVarWidthVector(name, vector, dataLength);
+    int lastOffset = validateVarWidthVector(name, vector, dataLength);
+    if (lastOffset != dataLength) {
+      error(name, vector, String.format(
+          "Data vector has length %d, but offset vector has largest offset %d",
+          dataLength, lastOffset));
+    }
   }
 
   private void validateVarDecimalVector(String name, VarDecimalVector vector) {
@@ -339,9 +381,9 @@ public class BatchValidator {
     validateVarWidthVector(name, vector, dataLength);
   }
 
-  private void validateVarWidthVector(String name, VariableWidthVector vector, int dataLength) {
+  private int validateVarWidthVector(String name, VariableWidthVector vector, int dataLength) {
     int valueCount = vector.getAccessor().getValueCount();
-    validateOffsetVector(name + "-offsets", vector.getOffsetVector(),
+    return validateOffsetVector(name + "-offsets", vector.getOffsetVector(),
         valueCount, dataLength);
   }
 
@@ -397,22 +439,13 @@ public class BatchValidator {
     }
   }
 
-  private void validateRepeatedMapVector(String name,
-      RepeatedMapVector vector) {
+  private void validateRepeatedMapVector(String name, AbstractRepeatedMapVector vector) {
     int valueCount = vector.getAccessor().getValueCount();
     int elementCount = validateOffsetVector(name + "-offsets",
         vector.getOffsetVector(), valueCount, Integer.MAX_VALUE);
     for (ValueVector child: vector) {
       validateVector(elementCount, child);
     }
-  }
-
-  private void validateDictVector(String name, DictVector vector) {
-    int valueCount = vector.getAccessor().getValueCount();
-    int elementCount = validateOffsetVector(name + "-offsets",
-        vector.getOffsetVector(), valueCount, Integer.MAX_VALUE);
-    validateVector(elementCount, vector.getKeys());
-    validateVector(elementCount, vector.getValues());
   }
 
   private void validateRepeatedListVector(String name,

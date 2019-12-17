@@ -15,22 +15,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.drill.metastore.statistics;
+package org.apache.drill.exec.physical.rowSet;
 
-import java.util.List;
+import org.apache.drill.exec.physical.resultSet.model.ReaderIndex;
+import org.apache.drill.exec.record.selection.SelectionVector4;
+import org.apache.drill.exec.vector.accessor.impl.AccessorUtilities;
 
 /**
- * This class represents kinds of column statistics which may be received as a union
- * of other statistics, for example column nulls count may be received as a sum of nulls counts
- * of underlying metadata parts.
+ * Read-only row index into the hyper row set with batch and index
+ * values mapping via an SV4.
  */
-public interface CollectableColumnStatisticsKind<V> extends StatisticsKind<V> {
 
-  /**
-   * Returns column statistics value received by collecting specified {@link ColumnStatistics}.
-   *
-   * @param statistics list of {@link ColumnStatistics} instances to be collected
-   * @return column statistics value received by collecting specified {@link ColumnStatistics}
-   */
-  Object mergeStatistics(List<? extends ColumnStatistics<?>> statistics);
+public class HyperRowIndex extends ReaderIndex {
+
+  private final SelectionVector4 sv4;
+
+  public HyperRowIndex(SelectionVector4 sv4) {
+    super(sv4.getCount());
+    this.sv4 = sv4;
+  }
+
+  @Override
+  public int offset() {
+    return AccessorUtilities.sv4Index(sv4.get(position));
+  }
+
+  @Override
+  public int hyperVectorIndex( ) {
+    return AccessorUtilities.sv4Batch(sv4.get(position));
+  }
 }
