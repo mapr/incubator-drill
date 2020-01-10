@@ -15,19 +15,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.drill.exec.expr.annotations;
-
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+package org.apache.drill.exec.ops;
 
 /**
- * Marker annotation to determine which fields should be included as parameters
- * for the function.
+ * Indicates that an external source has cancelled the query.
+ * Thrown by the operator that detects the cancellation. Bubbles
+ * up the operator tree like other exceptions. However, this one
+ * tells the fragment executor that the exception is one that
+ * the fragment executor itself initiated and so should not
+ * be reported as an error.
  */
-@Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.FIELD})
-public @interface Param {
-  boolean constant() default false;
+@SuppressWarnings("serial")
+public class QueryCancelledException extends RuntimeException {
+
+  // No need for messages; this exception is silently ignored.
 }
