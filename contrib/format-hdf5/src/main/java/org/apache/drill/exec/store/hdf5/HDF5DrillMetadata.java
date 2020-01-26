@@ -15,29 +15,44 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.drill.exec.planner.logical;
 
-import org.apache.calcite.rel.type.RelDataTypeFactory;
-import org.apache.drill.exec.planner.types.ExtendableRelDataTypeHolder;
-import org.apache.drill.exec.planner.types.RelDataTypeDrillImpl;
+package org.apache.drill.exec.store.hdf5;
 
-/**
- * RelDataType for non-dynamic table structure which
- * may be extended by adding partitions or implicit columns.
- */
-public class ExtendableRelDataType extends RelDataTypeDrillImpl {
+import java.util.HashMap;
+import java.util.Map;
 
-  public ExtendableRelDataType(ExtendableRelDataTypeHolder holder, RelDataTypeFactory typeFactory) {
-    super(holder, typeFactory);
+public class HDF5DrillMetadata {
+  private String path;
+
+  private String dataType;
+
+  private Map<String, HDF5Attribute> attributes;
+
+  public HDF5DrillMetadata() {
+    attributes = new HashMap<>();
   }
 
-  @Override
-  protected void generateTypeString(StringBuilder sb, boolean withDetail) {
-    sb.append("(ExtendableRelDataType").append(getFieldNames()).append(")");
+  public String getPath() {
+    return path;
   }
 
-  @Override
-  public boolean isDynamicStruct() {
-    return false;
+  public void setPath(String path) {
+    this.path = path;
+  }
+
+  public String getDataType() {
+    return dataType;
+  }
+
+  public void setDataType(String dataType) {
+    this.dataType = dataType;
+  }
+
+  public Map<String, HDF5Attribute> getAttributes() {
+    return attributes;
+  }
+
+  public void setAttributes(Map<String, HDF5Attribute> attribs) {
+    this.attributes = attribs;
   }
 }
