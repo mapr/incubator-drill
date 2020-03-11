@@ -77,6 +77,7 @@ public final class ExecConstants {
   public static final String INCOMING_BUFFER_SIZE = "drill.exec.buffer.size";
   public static final String SPOOLING_BUFFER_DELETE = "drill.exec.buffer.spooling.delete";
   public static final String SPOOLING_BUFFER_MEMORY = "drill.exec.buffer.spooling.size";
+  public static final String UNLIMITED_BUFFER_MAX_MEMORY_SIZE = "drill.exec.buffer.unlimited_receiver.max_size";
   public static final String BATCH_PURGE_THRESHOLD = "drill.exec.sort.purge.threshold";
 
   // Spill boot-time Options common to all spilling operators
@@ -211,6 +212,38 @@ public final class ExecConstants {
   public static final String HTTP_JETTY_SERVER_ACCEPTORS = "drill.exec.http.jetty.server.acceptors";
   public static final String HTTP_JETTY_SERVER_SELECTORS = "drill.exec.http.jetty.server.selectors";
   public static final String HTTP_JETTY_SERVER_HANDLERS = "drill.exec.http.jetty.server.handlers";
+
+  public static final String HTTP_JETTY_SSL_CONTEXT_FACTORY_OPTIONS_PREFIX = "drill.exec.http.jetty.server.sslContextFactory";
+  public static final String HTTP_JETTY_SERVER_SSL_CONTEXT_FACTORY_CERT_ALIAS = "drill.exec.http.jetty.server.sslContextFactory.certAlias";
+  public static final String HTTP_JETTY_SERVER_SSL_CONTEXT_FACTORY_CRL_PATH = "drill.exec.http.jetty.server.sslContextFactory.crlPath";
+  public static final String HTTP_JETTY_SERVER_SSL_CONTEXT_FACTORY_ENABLE_CRLDP = "drill.exec.http.jetty.server.sslContextFactory.enableCRLDP";
+  public static final String HTTP_JETTY_SERVER_SSL_CONTEXT_FACTORY_ENABLE_OCSP = "drill.exec.http.jetty.server.sslContextFactory.enableOCSP";
+  public static final String HTTP_JETTY_SERVER_SSL_CONTEXT_FACTORY_ENDPOINT_IDENTIFICATION_ALGORITHM = "drill.exec.http.jetty.server.sslContextFactory.endpointIdentificationAlgorithm";
+  public static final String HTTP_JETTY_SERVER_SSL_CONTEXT_FACTORY_EXCLUDE_CIPHER_SUITES = "drill.exec.http.jetty.server.sslContextFactory.excludeCipherSuites";
+  public static final String HTTP_JETTY_SERVER_SSL_CONTEXT_FACTORY_EXCLUDE_PROTOCOLS = "drill.exec.http.jetty.server.sslContextFactory.excludeProtocols";
+  public static final String HTTP_JETTY_SERVER_SSL_CONTEXT_FACTORY_INCLUDE_CIPHER_SUITES = "drill.exec.http.jetty.server.sslContextFactory.includeCipherSuites";
+  public static final String HTTP_JETTY_SERVER_SSL_CONTEXT_FACTORY_INCLUDE_PROTOCOLS = "drill.exec.http.jetty.server.sslContextFactory.includeProtocols";
+  public static final String HTTP_JETTY_SERVER_SSL_CONTEXT_FACTORY_KEY_MANAGER_FACTORY_ALGORITHM = "drill.exec.http.jetty.server.sslContextFactory.keyManagerFactoryAlgorithm";
+  public static final String HTTP_JETTY_SERVER_SSL_CONTEXT_FACTORY_KEYSTORE_PROVIDER = "drill.exec.http.jetty.server.sslContextFactory.keyStoreProvider";
+  public static final String HTTP_JETTY_SERVER_SSL_CONTEXT_FACTORY_KEYSTORE_TYPE = "drill.exec.http.jetty.server.sslContextFactory.keyStoreType";
+  public static final String HTTP_JETTY_SERVER_SSL_CONTEXT_FACTORY_MAX_CERT_PATH_LENGTH = "drill.exec.http.jetty.server.sslContextFactory.maxCertPathLength";
+  public static final String HTTP_JETTY_SERVER_SSL_CONTEXT_FACTORY_NEED_CLIENT_AUTH = "drill.exec.http.jetty.server.sslContextFactory.needClientAuth";
+  public static final String HTTP_JETTY_SERVER_SSL_CONTEXT_FACTORY_OCSP_RESPONDER_URL = "drill.exec.http.jetty.server.sslContextFactory.ocspResponderURL";
+  public static final String HTTP_JETTY_SERVER_SSL_CONTEXT_FACTORY_PROVIDER = "drill.exec.http.jetty.server.sslContextFactory.provider";
+  public static final String HTTP_JETTY_SERVER_SSL_CONTEXT_FACTORY_RENEGOTIATION_ALLOWED = "drill.exec.http.jetty.server.sslContextFactory.renegotiationAllowed";
+  public static final String HTTP_JETTY_SERVER_SSL_CONTEXT_FACTORY_RENEGOTIATION_LIMIT = "drill.exec.http.jetty.server.sslContextFactory.renegotiationLimit";
+  public static final String HTTP_JETTY_SERVER_SSL_CONTEXT_FACTORY_SECURE_RANDOM_ALGORITHM = "drill.exec.http.jetty.server.sslContextFactory.secureRandomAlgorithm";
+  public static final String HTTP_JETTY_SERVER_SSL_CONTEXT_FACTORY_SESSION_CACHING_ENABLED = "drill.exec.http.jetty.server.sslContextFactory.sessionCachingEnabled";
+  public static final String HTTP_JETTY_SERVER_SSL_CONTEXT_FACTORY_SSL_SESSION_CACHE_SIZE = "drill.exec.http.jetty.server.sslContextFactory.sslSessionCacheSize";
+  public static final String HTTP_JETTY_SERVER_SSL_CONTEXT_FACTORY_SSL_SESSION_TIMEOUT = "drill.exec.http.jetty.server.sslContextFactory.sslSessionTimeout";
+  public static final String HTTP_JETTY_SERVER_SSL_CONTEXT_FACTORY_TRUSTMANAGERFACTORY_ALGORITHM = "drill.exec.http.jetty.server.sslContextFactory.trustManagerFactoryAlgorithm";
+  public static final String HTTP_JETTY_SERVER_SSL_CONTEXT_FACTORY_TRUSTSTORE_PROVIDER = "drill.exec.http.jetty.server.sslContextFactory.trustStoreProvider";
+  public static final String HTTP_JETTY_SERVER_SSL_CONTEXT_FACTORY_TRUSTSTORE_TYPE = "drill.exec.http.jetty.server.sslContextFactory.trustStoreType";
+  public static final String HTTP_JETTY_SERVER_SSL_CONTEXT_FACTORY_USE_CIPHER_SUITE_ORDER = "drill.exec.http.jetty.server.sslContextFactory.useCipherSuiteOrder";
+  public static final String HTTP_JETTY_SERVER_SSL_CONTEXT_FACTORY_VALIDATE_CERTS = "drill.exec.http.jetty.server.sslContextFactory.validateCerts";
+  public static final String HTTP_JETTY_SERVER_SSL_CONTEXT_FACTORY_VALIDATE_PEER_CERTS = "drill.exec.http.jetty.server.sslContextFactory.validatePeerCerts";
+  public static final String HTTP_JETTY_SERVER_SSL_CONTEXT_FACTORY_WANT_CLIENT_AUTH = "drill.exec.http.jetty.server.sslContextFactory.wantClientAuth";
+
   public static final String HTTP_ENABLE_SSL = "drill.exec.http.ssl_enabled";
   public static final String HTTP_CLIENT_TIMEOUT = "drill.exec.http.client.timeout";
   public static final String HTTP_CORS_ENABLED = "drill.exec.http.cors.enabled";
@@ -1152,7 +1185,6 @@ public final class ExecConstants {
   public static final BooleanValidator PARQUET_READER_ENABLE_MAP_SUPPORT_VALIDATOR = new BooleanValidator(
       PARQUET_READER_ENABLE_MAP_SUPPORT, new OptionDescription("Enables Drill Parquet reader to read Parquet MAP type correctly. (Drill 1.17+)"));
 
-  // ---------------------------------------
   // Storage-plugin related config constants
 
   // Bootstrap plugin files configuration keys
@@ -1166,4 +1198,10 @@ public final class ExecConstants {
 
   // Extra private plugin classes, used for testing
   public static final String PRIVATE_CONNECTORS = "drill.exec.storage.private_connectors";
+
+  public static final String ENABLE_DYNAMIC_CREDIT_BASED_FC = "exec.enable_dynamic_fc";
+  public static final BooleanValidator ENABLE_DYNAMIC_CREDIT_BASED_FC_VALIDATOR = new BooleanValidator(
+          ENABLE_DYNAMIC_CREDIT_BASED_FC, new OptionDescription("Enable dynamic credit based flow control.This feature allows " +
+          "the sender to send out its data more rapidly, but you should know that it has a risk to OOM when the system is solving parallel " +
+          "large queries until we have a more accurate resource manager."));
 }

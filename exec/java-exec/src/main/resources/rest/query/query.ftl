@@ -43,15 +43,14 @@
 
 <#include "*/runningQuery.ftl">
 
-  <#if model.isOnlyImpersonationEnabled()>
-     <div class="form-group">
-       <label for="userName">User Name</label>
-       <input type="text" size="30" name="userName" id="userName" placeholder="User Name">
-     </div>
-  </#if>
-
   <form role="form" id="queryForm" action="/query" method="POST">
+    <#if model.isOnlyImpersonationEnabled()>
       <div class="form-group">
+        <label for="userName">User Name</label>
+        <input type="text" size="30" name="userName" id="userName" placeholder="User Name">
+      </div>
+    </#if>
+    <div class="form-group">
       <label for="queryType">Query Type</label>
       <div class="radio">
         <label>
@@ -83,6 +82,8 @@
       Submit
     </button>
     <input type="checkbox" name="forceLimit" value="limit" <#if model.isAutoLimitEnabled()>checked</#if>> Limit results to <input type="text" id="autoLimit" name="autoLimit" min="0" value="${model.getDefaultRowsAutoLimited()?c}" size="6" pattern="[0-9]*"> rows <span class="glyphicon glyphicon-info-sign" title="Limits the number of records retrieved in the query. Ignored if query has a limit already" style="cursor:pointer"></span>
+    <label> Default Schema <input type="text" size="10" name="defaultSchema" id="defaultSchema"> </label>
+    <span class="glyphicon glyphicon-info-sign" title="Set the default schema used to find table names, and for SHOW FILES and SHOW TABLES" style="cursor:pointer"></span>
     <input type="hidden" name="csrfToken" value="${model.getCsrfToken()}">
   </form>
 
