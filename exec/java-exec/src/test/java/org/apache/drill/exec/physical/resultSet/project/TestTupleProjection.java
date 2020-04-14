@@ -27,7 +27,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.drill.categories.RowSetTests;
+import org.apache.drill.categories.RowSetTest;
 import org.apache.drill.common.expression.SchemaPath;
 import org.apache.drill.common.types.TypeProtos.DataMode;
 import org.apache.drill.common.types.TypeProtos.MinorType;
@@ -50,7 +50,7 @@ import org.junit.experimental.categories.Category;
  * parsing; the only bits not tested here is that which is
  * inherently specific to some use case.
  */
-@Category(RowSetTests.class)
+@Category(RowSetTest.class)
 public class TestTupleProjection extends BaseTest {
 
   private static final ColumnMetadata NORMAL_COLUMN =
