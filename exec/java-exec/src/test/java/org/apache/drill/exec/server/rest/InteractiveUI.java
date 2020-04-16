@@ -15,15 +15,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.drill.exec.rpc;
+package org.apache.drill.exec.server.rest;
 
-import io.netty.buffer.ByteBuf;
-import org.apache.drill.common.concurrent.CheckedFuture;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.drill.exec.ExecConstants;
+import org.apache.drill.test.ClusterFixtureBuilder;
+import org.apache.drill.test.ClusterTest;
 
-public interface DrillRpcFuture<T> extends CheckedFuture<T, RpcException> {
-  Logger logger = LoggerFactory.getLogger(DrillRpcFuture.class);
+/**
+ * Quick-and-dirty tool to run the Web UI for debugging without having
+ * to wait or a full build to run using {@code drillbit.sh}.
+ */
+public class InteractiveUI extends ClusterTest {
 
-  ByteBuf getBuffer();
+  public static void main(String[] args) {
+    ClusterFixtureBuilder builder = new ClusterFixtureBuilder();
+    builder.configBuilder().put(ExecConstants.HTTP_ENABLE, true);
+    try {
+      startCluster(builder);
+      for (;;) {
+        Thread.sleep(1000);
+      }
+    } catch (Exception e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+  }
 }
