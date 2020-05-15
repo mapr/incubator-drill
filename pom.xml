@@ -64,7 +64,7 @@
     <sqlline.version>1.9.0</sqlline.version>
     <jackson.version>2.12.1</jackson.version>
     <zookeeper.version>3.5.7</zookeeper.version>
-    <mapr.release.version>6.1.0-mapr</mapr.release.version>
+    <mapr.release.version>6.2.0-mapr-SNAPSHOT</mapr.release.version>
     <ojai.version>3.0-mapr-1808</ojai.version>
     <kerby.version>1.0.0</kerby.version>
     <findbugs.version>3.0.0</findbugs.version>
@@ -2906,13 +2906,11 @@
       <id>mapr</id>
       <properties>
         <alt-hadoop>mapr</alt-hadoop>
-        <hive.version>2.3.3-mapr-1808</hive.version>
-        <hbase.version>1.1.1-mapr-1602-m7-5.2.0</hbase.version>
-        <hadoop.version>2.7.0-mapr-1808</hadoop.version>
-        <zookeeper.version>3.4.11-mapr-1808</zookeeper.version>
-        <!-- TODO: Remove this property and use a common dependency of curator-test after ZooKeeper 3.5+
-        for MapR profile is released. See problem description in https://issues.apache.org/jira/browse/CURATOR-428 -->
-        <curator.test.version>2.13.0</curator.test.version>
+        <hive.version>2.3.7-mapr-SNAPSHOT</hive.version>
+        <hbase.version>1.4.12.0-mapr-SNAPSHOT</hbase.version>
+        <hadoop.version>2.7.4.0-mapr-1908-SNAPSHOT</hadoop.version>
+        <zookeeper.version>3.5.6-mapr-SNAPSHOT</zookeeper.version>
+        <guava.version>28.2-jre</guava.version>
       </properties>
       <dependencyManagement>
         <dependencies>
@@ -3180,6 +3178,86 @@
                 <groupId>org.apache.hive</groupId>
                 <artifactId>hive-exec</artifactId>
               </exclusion>
+              <exclusion>
+                <groupId>commons-logging</groupId>
+                <artifactId>commons-logging</artifactId>
+              </exclusion>
+              <exclusion>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-core</artifactId>
+              </exclusion>
+              <exclusion>
+                <groupId>log4j</groupId>
+                <artifactId>log4j</artifactId>
+              </exclusion>
+              <exclusion>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-1.2-api</artifactId>
+              </exclusion>
+              <exclusion>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-slf4j-impl</artifactId>
+              </exclusion>
+              <exclusion>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
+              </exclusion>
+              <exclusion>
+                <groupId>tomcat</groupId>
+                <artifactId>jasper-runtime</artifactId>
+              </exclusion>
+              <exclusion>
+                <groupId>tomcat</groupId>
+                <artifactId>jasper-compiler</artifactId>
+              </exclusion>
+              <exclusion>
+                <groupId>commons-httpclient</groupId>
+                <artifactId>commons-httpclient</artifactId>
+              </exclusion>
+              <exclusion>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-all</artifactId>
+              </exclusion>
+              <exclusion>
+                <groupId>com.sun.jersey</groupId>
+                <artifactId>jersey-core</artifactId>
+              </exclusion>
+              <exclusion>
+                <groupId>com.sun.jersey</groupId>
+                <artifactId>jersey-json</artifactId>
+              </exclusion>
+              <exclusion>
+                <groupId>com.sun.jersey</groupId>
+                <artifactId>jersey-client</artifactId>
+              </exclusion>
+              <exclusion>
+                <groupId>com.sun.jersey</groupId>
+                <artifactId>jersey-server</artifactId>
+              </exclusion>
+              <exclusion>
+                <groupId>com.sun.jersey</groupId>
+                <artifactId>jersey-servlet</artifactId>
+              </exclusion>
+              <exclusion>
+                <groupId>org.apache.tomcat</groupId>
+                <artifactId>tomcat-catalina</artifactId>
+              </exclusion>
+              <exclusion>
+                <groupId>org.apache.tomcat</groupId>
+                <artifactId>tomcat-jasper</artifactId>
+              </exclusion>
+              <exclusion>
+                <groupId>org.apache.tomcat.embed</groupId>
+                <artifactId>tomcat-embed-core</artifactId>
+              </exclusion>
+              <exclusion>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-rewrite</artifactId>
+              </exclusion>
+              <exclusion>
+                <groupId>org.apache.parquet</groupId>
+                <artifactId>parquet-hadoop-bundle</artifactId>
+              </exclusion>
             </exclusions>
           </dependency>
           <dependency>
@@ -3202,6 +3280,10 @@
               <exclusion>
                 <groupId>javax.servlet</groupId>
                 <artifactId>servlet-api</artifactId>
+              </exclusion>
+              <exclusion>
+                <groupId>com.sun.jersey</groupId>
+                <artifactId>jersey-core</artifactId>
               </exclusion>
             </exclusions>
           </dependency>
@@ -3409,6 +3491,10 @@
               </exclusion>
               <exclusion>
                 <groupId>com.sun.jersey</groupId>
+                <artifactId>jersey-servlet</artifactId>
+              </exclusion>
+              <exclusion>
+                <groupId>com.sun.jersey</groupId>
                 <artifactId>jersey-json</artifactId>
               </exclusion>
               <exclusion>
@@ -3463,18 +3549,6 @@
               <exclusion>
                 <groupId>tomcat</groupId>
                 <artifactId>jasper-runtime</artifactId>
-              </exclusion>
-            </exclusions>
-          </dependency>
-          <dependency>
-            <groupId>org.apache.curator</groupId>
-            <artifactId>curator-test</artifactId>
-            <version>${curator.test.version}</version>
-            <scope>test</scope>
-            <exclusions>
-              <exclusion>
-                <groupId>log4j</groupId>
-                <artifactId>log4j</artifactId>
               </exclusion>
             </exclusions>
           </dependency>
