@@ -24,7 +24,7 @@ import io.netty.channel.ChannelFuture;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import org.apache.drill.common.config.DrillProperties;
-import org.apache.drill.exec.physical.impl.materialize.QueryWritableBatch;
+import org.apache.drill.exec.physical.impl.materialize.QueryDataPackage;
 import org.apache.drill.exec.proto.GeneralRPCProtos.Ack;
 import org.apache.drill.exec.proto.UserBitShared.QueryId;
 import org.apache.drill.exec.proto.UserBitShared.QueryResult;
@@ -201,7 +201,7 @@ public class MultiUserServerRequestHandler implements RequestHandler<UserServer.
       }
 
       @Override
-      public void sendData(RpcOutcomeListener<Ack> listener, QueryWritableBatch result) {
+      public void sendData(RpcOutcomeListener<Ack> listener, QueryDataPackage result) {
         underlyingConnection.sendData(listener, result);
       }
 
