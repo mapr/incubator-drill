@@ -109,7 +109,7 @@
         </exclusion>
         <exclusion>
           <artifactId>calcite-core</artifactId>
-          <groupId>org.apache.calcite</groupId>
+          <groupId>${calcite.groupId}</groupId>
         </exclusion>
         <exclusion>
           <artifactId>codemodel</artifactId>
