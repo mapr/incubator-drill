@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.drill.common.map.CaseInsensitiveMap;
 import org.apache.drill.exec.ExecConstants;
 import org.apache.drill.exec.physical.impl.scan.project.ColumnProjection;
@@ -37,7 +38,6 @@ import org.apache.drill.exec.server.options.OptionSet;
 import org.apache.drill.exec.store.ColumnExplorer;
 import org.apache.drill.exec.store.ColumnExplorer.ImplicitFileColumn;
 import org.apache.drill.exec.vector.ValueVector;
-import org.apache.drill.shaded.guava.com.google.common.base.Strings;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 
@@ -154,7 +154,7 @@ public class ImplicitColumnManager implements MetadataManager, ReaderProjectionR
     partitionDesignator = optionManager.getString(ExecConstants.FILESYSTEM_PARTITION_COLUMN_LABEL);
     for (ImplicitFileColumn e : ColumnExplorer.getImplicitFileColumns()) {
       String colName = optionManager.getString(e.optionName());
-      if (!Strings.isNullOrEmpty(colName)) {
+      if (StringUtils.isNotEmpty(colName)) {
         FileMetadataColumnDefn defn = new FileMetadataColumnDefn(colName, e);
         implicitColDefns.add(defn);
         fileMetadataColIndex.put(defn.colName, defn);
