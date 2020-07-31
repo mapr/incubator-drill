@@ -349,7 +349,7 @@
       <outputDirectory>bin</outputDirectory>
     </file>
     <file>
-      <source>src/main/resources/get-jars-list.sh</source>
+      <source>src/main/resources/mapr-eco-config.sh</source>
       <fileMode>0755</fileMode>
       <outputDirectory>bin</outputDirectory>
     </file>
