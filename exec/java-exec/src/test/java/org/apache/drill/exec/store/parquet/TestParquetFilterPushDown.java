@@ -447,6 +447,28 @@ public class TestParquetFilterPushDown extends PlanTestBase {
   }
 
   @Test
+  public void testParquetFilterPDWithLargeCondition() throws Exception {
+    test("SELECT * FROM (SELECT n.n_name AS name, n.n_nationkey AS nationkey, " +
+        "cast(n.n_regionkey AS FLOAT) AS regionkey FROM cp.`/tpch/nation.parquet` n) " +
+        "WHERE ((name = 'A' AND ((regionkey >= 0.0 AND regionkey <= 120.0 AND nationkey = 0.005))) " +
+        "OR (name = 'B' AND ((regionkey >= 0.0  AND regionkey <= 120.0  AND nationkey = 0.005))) " +
+        "OR (name = 'C' AND ((regionkey >= 0.0  AND regionkey <= 120.0  AND nationkey = 0.005))) " +
+        "OR (name = 'D' AND ((regionkey >= 0.0  AND regionkey <= 120.0  AND nationkey = 0.005))) " +
+        "OR (name = 'E' AND ((regionkey >= 0.0  AND regionkey <= 120.0  AND nationkey = 0.005))) " +
+        "OR (name = 'F' AND ((regionkey >= 0.0  AND regionkey <= 120.0  AND nationkey = 0.005))) " +
+        "OR (name = 'G' AND ((regionkey >= 0.0  AND regionkey <= 120.0  AND nationkey = 0.005))) " +
+        "OR (name = 'I' AND ((regionkey >= 0.0  AND regionkey <= 120.0  AND nationkey = 0.005))) " +
+        "OR (name = 'J' AND ((regionkey >= 0.0  AND regionkey <= 120.0  AND nationkey = 0.005))) " +
+        "OR (name = 'K' AND ((regionkey >= 0.0  AND regionkey <= 120.0  AND nationkey = 0.005))) " +
+        "OR (name = 'L' AND ((regionkey >= 0.0  AND regionkey <= 120.0  AND nationkey = 0.005))) " +
+        "OR (name = 'M' AND ((regionkey >= 0.0  AND regionkey <= 120.0  AND nationkey = 0.005))) " +
+        "OR (name = 'N' AND ((regionkey >= 0.0  AND regionkey <= 120.0  AND nationkey = 0.005))) " +
+        "OR (name = 'O' AND ((regionkey >= 0.0  AND regionkey <= 120.0  AND nationkey = 0.005))) " +
+        "OR (name = 'P' AND ((regionkey >= 0.0  AND regionkey <= 120.0  AND nationkey = 0.005))) " +
+        "OR (name = 'Q' AND ((regionkey >= 0.0  AND regionkey <= 120.0  AND nationkey = 0.005))))");
+  }
+
+  @Test
   public void testDatePredicateAgainstCorruptedDateCol() throws Exception {
     // Table dateTblCorrupted is created by CTAS in drill 1.8.0. Per DRILL-4203, the date column is shifted by some value.
     // The CTAS are the following, then copy to drill test resource directory.
@@ -659,6 +681,19 @@ public class TestParquetFilterPushDown extends PlanTestBase {
     assertEquals(RowsMatch.NONE, isNotTrue.matches(re));
     IsPredicate<Boolean> isNotFalse = (IsPredicate<Boolean>) IsPredicate.createIsPredicate(FunctionGenerationHelper.IS_NOT_FALSE, le);
     assertEquals(RowsMatch.ALL, isNotFalse.matches(re));
+  }
+
+  @Test
+  public void tesNonDeterministicIsNotNullWithNonExistingColumn() throws Exception {
+    String query = "select count(*) as cnt from cp.`tpch/nation.parquet`\n" +
+        "where (case when random() = 1 then true else null end * t) is not null";
+
+    testBuilder()
+        .sqlQuery(query)
+        .unOrdered()
+        .baselineColumns("cnt")
+        .baselineValues(0L)
+        .go();
   }
 
   @Test
