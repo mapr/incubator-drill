@@ -149,6 +149,9 @@ endif()
 #Find Zookeeper
 find_package(Zookeeper REQUIRED )
 
+# Enables sync Zookeeper API
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DTHREADED")
+
 # Find Cyrus SASL
 find_package(SASL REQUIRED)
 
