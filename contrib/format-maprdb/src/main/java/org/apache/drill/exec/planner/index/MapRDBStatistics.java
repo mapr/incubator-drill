@@ -477,8 +477,15 @@ public class MapRDBStatistics implements Statistics {
       /* For covering plans we would need the full condition */
       rowCount = ftsPayload.getRowCount() * computeSelectivity(idxTotColCondition, idx,
           ftsPayload.getRowCount(), scanRel, baseConditionMap).left;
-      addToCache(idxTotColCondition, idx, context, new MapRDBStatisticsPayload(rowCount, leadingRowCount, avgRowSize),
-          jTabGrpScan, scanRel, newRowType);
+
+      /* MD-6070 without these checks index in some cases wont be picked.
+         distinctFKeyIndexes needs some improvement for better index picking */
+      try {
+        addToCache(idxTotColCondition, idx, context, new MapRDBStatisticsPayload(rowCount, leadingRowCount, avgRowSize),
+            jTabGrpScan, scanRel, newRowType);
+      } catch (NullPointerException e) {
+        logger.warn("Exception while adding rowCount for covering plans on the full condition");
+      }
       /* For intersect plans we would need the index condition */
       rowCount = ftsPayload.getRowCount() * computeSelectivity(idxCondition, idx,
           ftsPayload.getRowCount(), scanRel, baseConditionMap).left;
@@ -488,8 +495,12 @@ public class MapRDBStatistics implements Statistics {
       if (idxIncColCondition != null) {
         rowCount = ftsPayload.getRowCount() * computeSelectivity(idxIncColCondition, null,
             ftsPayload.getRowCount(), scanRel, baseConditionMap).left;
-        addToCache(idxIncColCondition, idx, context, new MapRDBStatisticsPayload(rowCount, rowCount, avgRowSize),
-            jTabGrpScan, scanRel, newRowType);
+        try {
+          addToCache(idxIncColCondition, idx, context, new MapRDBStatisticsPayload(rowCount, rowCount, avgRowSize),
+              jTabGrpScan, scanRel, newRowType);
+        } catch (NullPointerException e) {
+          logger.warn("Exception while adding rowCount for condition on only included columns");
+        }
       }
     }
 
