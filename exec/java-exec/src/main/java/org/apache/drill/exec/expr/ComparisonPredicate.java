@@ -246,12 +246,8 @@ public class ComparisonPredicate<C extends Comparable<C>> extends LogicalExpress
       LogicalExpression left, LogicalExpression right) {
     return new ComparisonPredicate<C>(left, right, (leftStat, rightStat) -> {
       Comparator<C> valueComparator = leftStat.getValueComparator();
-      if (valueComparator.compare(getMaxValue(leftStat), getMinValue(rightStat)) < 0
-          || valueComparator.compare(getMaxValue(rightStat), getMinValue(leftStat)) < 0) {
-        return checkNull(leftStat, rightStat);
-      }
-      return valueComparator.compare(getMaxValue(leftStat), getMaxValue(rightStat)) == 0
-          && valueComparator.compare(getMinValue(leftStat), getMinValue(rightStat)) == 0 ? RowsMatch.NONE : RowsMatch.SOME;
+      return (valueComparator.compare(getMaxValue(leftStat), getMinValue(rightStat)) < 0
+              || valueComparator.compare(getMaxValue(rightStat), getMinValue(leftStat)) < 0) ? checkNull(leftStat, rightStat) : RowsMatch.SOME;
     });
   }
 
