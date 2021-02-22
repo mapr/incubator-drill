@@ -206,6 +206,8 @@
                  you can use TestHiveStorage.readFromAlteredPartitionedTableWithEmptyGroupType() test case. -->
                 <exclude>org/apache/parquet/**</exclude>
                 <exclude>shaded/parquet/org/**</exclude>
+                <!-- removed according to MD-6077 -->
+                <exclude>**/Log4j2Plugins.dat</exclude>
               </excludes>
             </filter>
             <filter>
