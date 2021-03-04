@@ -371,7 +371,7 @@ public class WebServer implements AutoCloseable {
   private ServerConnector createHttpsConnector(Config config) throws Exception {
     LOG.info("Setting up HTTPS connector for web server");
 
-    final SslContextFactory sslContextFactory = new SslContextFactory();
+    final SslContextFactory sslContextFactory = new SslContextFactory.Server();
 
     // if (config.hasPath(ExecConstants.HTTP_KEYSTORE_PATH) &&
     // !Strings.isNullOrEmpty(config.getString(ExecConstants.HTTP_KEYSTORE_PATH)))

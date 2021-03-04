@@ -75,7 +75,7 @@ public class SslContextFactoryConfigurator {
         .initializeSSLContext(false)
         .validateKeyStore(true)
         .build();
-    final SslContextFactory sslContextFactory = new SslContextFactory();
+    final SslContextFactory sslContextFactory = new SslContextFactory.Server();
     if (sslConf.isSslValid()) {
       useOptionsConfiguredByUser(sslContextFactory, sslConf);
     } else {
