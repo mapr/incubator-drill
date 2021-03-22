@@ -1,0 +1,54 @@
+#!/bin/bash
+
+MAPR_HOME=${MAPR_HOME:-/opt/mapr}
+DRILL_VERSION="$(cat ${MAPR_HOME}/drill/drillversion)"
+DRILL_HOME="${MAPR_HOME}/drill/drill-${DRILL_VERSION}"
+PID_FILE="$MAPR_HOME/pid/drillbit.pid"
+LOG_FILE="${DRILL_HOME}/logs/verify_service.log"
+
+EXIT_SUCCESS=0
+EXIT_NOT_RUNNING=1
+EXIT_RUNNING_NOT_RESPONDING=2
+
+
+logInfo() {
+    message="$1"
+    echo "$(timestamp) [INFO] $message" | tee -a "$LOG_FILE"
+}
+
+logError() {
+    message="$1"
+    echo "$(timestamp) [ERROR] $message" | tee -a "$LOG_FILE"
+}
+
+timestamp() {
+    date +"[%Y-%m-%d %H:%M:%S]" # current time
+}
+
+is_running() {
+    logInfo "Starting verifier at $(timestamp)"
+    if [ -e "$PID_FILE" ] || [ -h "$PID_FILE" ]; then
+        process_pid=$(cat "$PID_FILE" 2>/dev/null)
+        if [ $? -ne 0 ]; then
+            PID_FILE=$(ls -l "$PID_FILE" | awk '{print $11}')
+            process_pid=$(cat "$PID_FILE" 2>/dev/null)
+        fi
+        if [ -z "$process_pid" ]; then
+            logError "ERROR - could not get pid"
+            return $EXIT_NOT_RUNNING
+        fi
+        logInfo "checking to see if pid $process_pid is alive"
+        if kill -s 0 "$process_pid" 2>/dev/null; then
+            logInfo "pid $process_pid is alive"
+            return $EXIT_SUCCESS
+        else
+            logInfo "pid $process_pid is NOT running"
+            return $EXIT_NOT_RUNNING
+        fi
+    else
+        logInfo "no pid file, service $SERVICE is NOT running"
+        return $EXIT_NOT_RUNNING
+    fi
+}
+
+is_running

@@ -314,6 +314,11 @@
       <outputDirectory>bin</outputDirectory>
     </file>
     <file>
+      <source>src/main/resources/verify_service</source>
+      <fileMode>0755</fileMode>
+      <outputDirectory>bin</outputDirectory>
+    </file>
+    <file>
       <source>src/main/resources/drill-override.conf</source>
       <outputDirectory>conf</outputDirectory>
       <fileMode>0640</fileMode>
