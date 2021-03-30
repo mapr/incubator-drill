@@ -31,8 +31,8 @@
   <name>Drill : Contrib : Format : MaprDB</name>
 
   <properties>
-    <mapr-format-plugin.hadoop.version>2.7.4.0-mapr-1908-SNAPSHOT</mapr-format-plugin.hadoop.version>
-    <mapr-format-plugin.hbase.version>1.4.12.0-mapr-SNAPSHOT</mapr-format-plugin.hbase.version>
+    <mapr-format-plugin.hadoop.version>2.7.5.0-mapr-710-SNAPSHOT</mapr-format-plugin.hadoop.version>
+    <mapr-format-plugin.hbase.version>1.4.13.0-mapr-SNAPSHOT</mapr-format-plugin.hbase.version>
     <mapr.TestSuite>**/MaprDBTestsSuite.class</mapr.TestSuite>
     <mapr.skip.tests>true</mapr.skip.tests>
   </properties>
