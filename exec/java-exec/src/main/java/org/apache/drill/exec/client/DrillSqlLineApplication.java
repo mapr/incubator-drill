@@ -19,6 +19,7 @@ package org.apache.drill.exec.client;
 
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
+import com.typesafe.config.ConfigValueFactory;
 import org.apache.drill.common.scanner.ClassPathScanner;
 import org.apache.drill.common.util.DrillVersionInfo;
 import org.apache.drill.shaded.guava.com.google.common.annotations.VisibleForTesting;
@@ -58,6 +59,8 @@ public class DrillSqlLineApplication extends Application {
 
   private static final String DRILL_SQLLINE_CONF = "drill-sqlline.conf";
   private static final String DRILL_SQLLINE_OVERRIDE_CONF = "drill-sqlline-override.conf";
+  private static final String DRILL_CONF = "drill-distrib.conf";
+  private static final String DRILL_OVERRIDE_CONF = "drill-override.conf";
 
   private static final String INFO_MESSAGE_TEMPLATE_CONF = "drill.sqlline.info_message_template";
   private static final String QUOTES_CONF = "drill.sqlline.quotes";
@@ -75,7 +78,7 @@ public class DrillSqlLineApplication extends Application {
 
   @VisibleForTesting
   public DrillSqlLineApplication(String configName, String overrideConfigName) {
-    this.config = overrideConfig(overrideConfigName, loadConfig(configName));
+    this.config = overrideConfig(overrideConfigName, overrideConnectionMode(loadConfig(configName)));
     if (config.isEmpty()) {
       logger.warn("Was unable to find / load [{}]. Will use default SqlLine configuration.", configName);
     }
@@ -218,9 +221,36 @@ public class DrillSqlLineApplication extends Application {
     }
   }
 
+  private Config overrideConfigValue(String path, String value, Config config){
+    return config.withValue(path, ConfigValueFactory.fromAnyRef(value));
+  }
+
+  private Config overrideConnectionMode(Config config){
+    String pathToConnectMode = "drill.sqlline.opts.connectInteractionMode";
+    return isStatusSecure()
+            ? overrideConfigValue(pathToConnectMode,"useNPTogetherOrEmpty", config)
+            : overrideConfigValue(pathToConnectMode,"notAskCredentials", config);
+  }
+
   private Config overrideConfig(String configName, Config config) {
     Config overrideConfig = loadConfig(configName);
     return overrideConfig.withFallback(config).resolve();
+  }
+
+  public boolean isStatusSecure(){
+    Config drillConfig = overrideConfig(DRILL_OVERRIDE_CONF, loadConfig(DRILL_CONF));
+    String pathToAuthValue = "drill.exec.security.user.auth.enabled";
+    return drillConfig.hasPath(pathToAuthValue) && drillConfig.getBoolean(pathToAuthValue)
+            && hasSecurityMechanism(drillConfig);
+  }
+
+  private boolean hasSecurityMechanism(Config drillConfig){
+    String pathToSecurityMechanism = "drill.exec.security.auth.mechanisms";
+
+    List<String> mechanisms = drillConfig.hasPath(pathToSecurityMechanism) ?
+            drillConfig.getStringList(pathToSecurityMechanism) : null;
+
+    return mechanisms != null && mechanisms.size() != 0;
   }
 
 }
