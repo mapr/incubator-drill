@@ -226,10 +226,10 @@ public class DrillSqlLineApplication extends Application {
   }
 
   private Config overrideConnectionMode(Config config){
-    String pathToConnectMode = "drill.sqlline.opts.connectInteractionMode";
+    String connectModePath = "drill.sqlline.opts.connectInteractionMode";
     return isStatusSecure()
-            ? overrideConfigValue(pathToConnectMode,"useNPTogetherOrEmpty", config)
-            : overrideConfigValue(pathToConnectMode,"notAskCredentials", config);
+            ? overrideConfigValue(connectModePath,"useNPTogetherOrEmpty", config)
+            : overrideConfigValue(connectModePath,"notAskCredentials", config);
   }
 
   private Config overrideConfig(String configName, Config config) {
@@ -239,18 +239,8 @@ public class DrillSqlLineApplication extends Application {
 
   public boolean isStatusSecure(){
     Config drillConfig = overrideConfig(DRILL_OVERRIDE_CONF, loadConfig(DRILL_CONF));
-    String pathToAuthValue = "drill.exec.security.user.auth.enabled";
-    return drillConfig.hasPath(pathToAuthValue) && drillConfig.getBoolean(pathToAuthValue)
-            && hasSecurityMechanism(drillConfig);
-  }
-
-  private boolean hasSecurityMechanism(Config drillConfig){
-    String pathToSecurityMechanism = "drill.exec.security.auth.mechanisms";
-
-    List<String> mechanisms = drillConfig.hasPath(pathToSecurityMechanism) ?
-            drillConfig.getStringList(pathToSecurityMechanism) : null;
-
-    return mechanisms != null && mechanisms.size() != 0;
+    String authValuePath = "drill.exec.security.user.auth.enabled";
+    return drillConfig.hasPath(authValuePath) && drillConfig.getBoolean(authValuePath);
   }
 
 }
