@@ -31,20 +31,6 @@
   <packaging>jar</packaging>
   <name>Drill : Contrib : Storage : Hive : Exec Shaded</name>
 
-  <properties>
-    <hive.parquet.version>1.8.3</hive.parquet.version>
-  </properties>
-
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.apache.parquet</groupId>
-        <artifactId>parquet-hadoop-bundle</artifactId>
-        <version>${hive.parquet.version}</version>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
-
   <dependencies>
     <dependency>
       <groupId>org.apache.hive</groupId>
@@ -132,9 +118,6 @@
           <artifactSet>
             <includes>
               <include>org.apache.hive:hive-exec</include>
-              <!-- Provides custom version of parquet-hadoop-bundle instead of the shaded one
-                to be able to use version with some critical fixes like PARQUET-363 -->
-              <include>org.apache.parquet:parquet-hadoop-bundle</include>
               <include>commons-codec:commons-codec</include>
               <include>com.fasterxml.jackson.core:jackson-databind</include>
               <include>com.fasterxml.jackson.core:jackson-annotations</include>
