@@ -523,7 +523,7 @@ public class ParquetTableMetadataUtils {
     }
 
     TypeProtos.DataMode mode = getDataMode(parquetTableMetadata, metadataVersion, name);
-    return TypeProtos.MajorType.newBuilder(ParquetReaderUtility.getType(primitiveType, originalType, precision, scale))
+    return TypeProtos.MajorType.newBuilder(ParquetReaderUtility.getType(primitiveType, originalType, scale, precision))
         .setMode(mode)
         .build();
   }
