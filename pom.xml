@@ -90,7 +90,7 @@
     <javassist.version>3.27.0-GA</javassist.version>
     <msgpack.version>0.6.6</msgpack.version>
     <reflections.version>0.9.10</reflections.version>
-    <avro.version>1.9.1</avro.version>
+    <avro.version>1.9.2</avro.version>
     <metrics.version>4.0.2</metrics.version>
     <jetty.version>9.4.41.v20210516</jetty.version>
     <jersey.version>2.25.1</jersey.version>
@@ -1372,6 +1372,12 @@
             <artifactId>netty-all</artifactId>
           </exclusion>
         </exclusions>
+      </dependency>
+      <!--TODO: remove after avro-mapred upgrade -->
+      <dependency>
+        <groupId>org.apache.velocity</groupId>
+        <artifactId>velocity-engine-core</artifactId>
+        <version>2.3</version>
       </dependency>
       <dependency>
         <groupId>org.apache.hive</groupId>
