@@ -226,6 +226,9 @@ public class DrillSqlLineApplication extends Application {
   }
 
   private Config overrideConnectionMode(Config config){
+    if (config.isEmpty()) {
+      return config;
+    }
     String connectModePath = "drill.sqlline.opts.connectInteractionMode";
     return isStatusSecure()
             ? overrideConfigValue(connectModePath,"useNPTogetherOrEmpty", config)
