@@ -137,6 +137,8 @@
     <bcfips.version>1.0.2.1</bcfips.version>
     <bctlsfips.version>1.0.11.4</bctlsfips.version>
     <lombok.version>1.18.20</lombok.version>
+    <brotli-codec.version>0.1.1</brotli-codec.version>
+    <aircompressor.version>0.20</aircompressor.version>
   </properties>
 
   <scm>
