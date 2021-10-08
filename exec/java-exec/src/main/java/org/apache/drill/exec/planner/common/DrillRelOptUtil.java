@@ -144,7 +144,7 @@ public abstract class DrillRelOptUtil {
    * underlying expression, but the fields have different names.
    *
    *
-   * @param rel        Relational expression
+   * @param rel Relational expression
    * @param fieldNames Field names
    * @return Renamed relational expression
    */
@@ -183,8 +183,8 @@ public abstract class DrillRelOptUtil {
 
   /** Returns a rowType having all unique field name.
    *
-   * @param rowType : input rowType
-   * @param typeFactory : type factory used to create a new row type.
+   * @param rowType input rowType
+   * @param typeFactory type factory used to create a new row type.
    * @return a rowType having all unique field name.
    */
   public static RelDataType uniqifyFieldName(final RelDataType rowType, final RelDataTypeFactory typeFactory) {
@@ -227,10 +227,10 @@ public abstract class DrillRelOptUtil {
    * Travesal RexNode to find at least one operator in the given collection. Continue search if RexNode has a
    * RexInputRef which refers to a RexNode in project expressions.
    *
-   * @param node : RexNode to search
-   * @param projExprs : the list of project expressions. Empty list means there is No project operator underneath.
+   * @param node RexNode to search
+   * @param projExprs the list of project expressions. Empty list means there is No project operator underneath.
    * @param operators collection of operators to find
-   * @return : Return null if there is NONE; return the first appearance of item/flatten RexCall.
+   * @return Return null if there is NONE; return the first appearance of item/flatten RexCall.
    */
   public static RexCall findOperators(final RexNode node, final List<RexNode> projExprs, final Collection<String> operators) {
     try {
@@ -290,8 +290,8 @@ public abstract class DrillRelOptUtil {
   /**
    * Find whether the given project rel can produce non-scalar output (hence unknown rowcount). This
    * would happen if the project has a flatten
-   * @param project : The project rel
-   * @return : Return true if the rowcount is unknown. Otherwise, false.
+   * @param project The project rel
+   * @return Return true if the rowcount is unknown. Otherwise, false.
    */
   public static boolean isProjectOutputRowcountUnknown(Project project) {
     for (RexNode rex : project.getProjects()) {
@@ -307,8 +307,8 @@ public abstract class DrillRelOptUtil {
   /**
    * Find whether the given project rel has unknown output schema. This would happen if the
    * project has CONVERT_FROMJSON which can only derive the schema after evaluation is performed
-   * @param project : The project rel
-   * @return : Return true if the project output schema is unknown. Otherwise, false.
+   * @param project The project rel
+   * @return Return true if the project output schema is unknown. Otherwise, false.
    */
   public static boolean isProjectOutputSchemaUnknown(Project project) {
     try {
@@ -378,8 +378,8 @@ public abstract class DrillRelOptUtil {
 
   /**
    * For a given row type return a map between old field indices and one index right shifted fields.
-   * @param rowType : row type to be right shifted.
-   * @return map: hash map between old and new indices
+   * @param rowType row type to be right shifted.
+   * @return map hash map between old and new indices
    */
   public static Map<Integer, Integer> rightShiftColsInRowType(RelDataType rowType) {
     Map<Integer, Integer> map = new HashMap<>();
@@ -392,10 +392,10 @@ public abstract class DrillRelOptUtil {
 
   /**
    * Given a list of rexnodes it transforms the rexnodes by changing the expr to use new index mapped to the old index.
-   * @param builder : RexBuilder from the planner.
-   * @param exprs: RexNodes to be transformed.
-   * @param corrMap: Mapping between old index to new index.
-   * @return
+   * @param builder RexBuilder from the planner.
+   * @param exprs RexNodes to be transformed.
+   * @param corrMap Mapping between old index to new index.
+   * @return list of transformed expressions
    */
   public static List<RexNode> transformExprs(RexBuilder builder, List<RexNode> exprs, Map<Integer, Integer> corrMap) {
     List<RexNode> outputExprs = new ArrayList<>();
@@ -408,10 +408,10 @@ public abstract class DrillRelOptUtil {
 
   /**
    * Given a of rexnode it transforms the rexnode by changing the expr to use new index mapped to the old index.
-   * @param builder : RexBuilder from the planner.
-   * @param expr: RexNode to be transformed.
-   * @param corrMap: Mapping between old index to new index.
-   * @return
+   * @param builder RexBuilder from the planner.
+   * @param expr RexNode to be transformed.
+   * @param corrMap Mapping between old index to new index.
+   * @return transformed expression
    */
   public static RexNode transformExpr(RexBuilder builder, RexNode expr, Map<Integer, Integer> corrMap) {
     DrillRelOptUtil.RexFieldsTransformer transformer = new DrillRelOptUtil.RexFieldsTransformer(builder, corrMap);
@@ -608,7 +608,7 @@ public abstract class DrillRelOptUtil {
   /**
    * Returns whether statistics-based estimates or guesses are used by the optimizer
    * for the {@link RelNode} rel.
-   * @param rel : input
+   * @param rel input
    * @return TRUE if the estimate is a guess, FALSE otherwise
    * */
   public static boolean guessRows(RelNode rel) {
