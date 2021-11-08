@@ -45,12 +45,8 @@ import java.util.Set;
  * access to the {@code UserSession} executing the query. There is no actual physical
  * channel corresponding to this connection wrapper.
  *
- * It returns a close future with no actual underlying
- * {@link io.netty.channel.Channel} associated with it but do have an
- * {@code EventExecutor} out of BitServer EventLoopGroup. Since there is no actual
- * connection established using this class, hence the close event will never be
- * fired by underlying layer and close future is set only when the
- * {@link WebSessionResources} are closed.
+ * It returns a close future which do have an EventExecutor out of BitServer EventLoopGroup.
+ * Close future is set only when the {@link WebSessionResources} are closed.
  */
 public class WebUserConnection extends BaseWebUserConnection {
 
@@ -91,26 +87,7 @@ public class WebUserConnection extends BaseWebUserConnection {
       // DRILL-6847:  This section adds query metadata to the REST results
       MaterializedField col = schema.getColumn(i);
       columns.add(col.getName());
-      StringBuilder dataType = new StringBuilder(col.getType().getMinorType().name());
-
-      // For DECIMAL type
-      if (col.getType().hasPrecision()) {
-        dataType.append("(");
-        dataType.append(col.getType().getPrecision());
-
-        if (col.getType().hasScale()) {
-          dataType.append(", ");
-          dataType.append(col.getType().getScale());
-        }
-
-        dataType.append(")");
-      } else if (col.getType().hasWidth()) {
-        // Case for VARCHAR columns with specified width
-        dataType.append("(");
-        dataType.append(col.getType().getWidth());
-        dataType.append(")");
-      }
-      metadata.add(dataType.toString());
+      metadata.add(webDataType(col.getType()));
     }
   }
 

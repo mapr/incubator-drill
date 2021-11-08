@@ -22,7 +22,6 @@ import org.apache.drill.common.config.DrillConfig;
 import org.apache.drill.common.scanner.RunTimeScan;
 import org.apache.drill.common.scanner.persistence.ScanResult;
 import org.apache.drill.exec.store.easy.text.TextFormatPlugin.TextFormatConfig;
-import org.apache.drill.exec.store.image.ImageFormatConfig;
 import org.apache.drill.test.BaseTest;
 import org.junit.Test;
 
@@ -58,8 +57,11 @@ public class TestFormatPluginOptionExtractor extends BaseTest {
           assertEquals(d.typeName, "(type: String, autoCorrectCorruptDates: boolean, enableStringsSignedMinMax: boolean)", d.presentParams());
           break;
         case "json":
+          assertEquals(d.typeName, "(type: String)", d.presentParams());
+          break;
         case "sequencefile":
-        case "pcapng":
+          assertEquals(d.typeName, "(type: String)", d.presentParams());
+          break;
         case "avro":
           assertEquals(d.typeName, "(type: String)", d.presentParams());
           break;
@@ -68,12 +70,6 @@ public class TestFormatPluginOptionExtractor extends BaseTest {
           break;
         case "httpd":
           assertEquals("(type: String, logFormat: String, timestampFormat: String)", d.presentParams());
-          break;
-        case "image":
-          assertEquals(ImageFormatConfig.class, d.pluginConfigClass);
-          assertEquals(
-              "(type: String, fileSystemMetadata: boolean, descriptive: boolean, timeZone: String)", d.presentParams()
-          );
           break;
         case "logRegex":
           assertEquals(d.typeName, "(type: String, regex: String, extension: String, maxErrors: int, schema: List)", d.presentParams());

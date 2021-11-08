@@ -23,12 +23,12 @@
   <parent>
     <artifactId>drill-contrib-parent</artifactId>
     <groupId>org.apache.drill.contrib</groupId>
-    <version>1.18.0-mapr-SNAPSHOT</version>
+    <version>1.19.0-mapr-SNAPSHOT</version>
   </parent>
 
   <artifactId>drill-mongo-storage</artifactId>
 
-  <name>contrib/mongo-storage-plugin</name>
+  <name>Drill : Contrib : Storage : MongoDB</name>
 
   <properties>
      <mongo.TestSuite>**/MongoTestSuite.class</mongo.TestSuite>
@@ -44,11 +44,11 @@
 
   <dependency>
     <groupId>org.mongodb</groupId>
-    <artifactId>mongo-java-driver</artifactId>
-    <version>3.8.0</version>
+    <artifactId>mongodb-driver-sync</artifactId>
+    <version>4.2.3</version>
   </dependency>
 
-    <!-- Test dependencie -->
+    <!-- Test dependency -->
     <dependency>
       <groupId>org.apache.drill.exec</groupId>
       <artifactId>drill-java-exec</artifactId>
@@ -64,9 +64,9 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>de.flapdoodle.embed</groupId>
-      <artifactId>de.flapdoodle.embed.mongo</artifactId>
-      <version>2.2.0</version>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>mongodb</artifactId>
+      <version>${testcontainers.version}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

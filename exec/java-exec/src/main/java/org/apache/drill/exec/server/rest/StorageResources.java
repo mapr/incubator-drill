@@ -154,8 +154,9 @@ public class StorageResources {
         model);
   }
 
-  @GET
+  @POST
   @Path("/storage/{name}/enable/{val}")
+  @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public JsonResult enablePlugin(@PathParam("name") String name, @PathParam("val") Boolean enable) {
     try {
@@ -167,6 +168,17 @@ public class StorageResources {
       logger.debug("Error in enabling storage name: {} flag: {}",  name, enable);
       return message("Unable to enable/disable plugin:" + e.getMessage());
     }
+  }
+
+  /**
+   * @deprecated use the method with POST request {@link #enablePlugin} instead
+   */
+  @GET
+  @Path("/storage/{name}/enable/{val}")
+  @Produces(MediaType.APPLICATION_JSON)
+  @Deprecated
+  public JsonResult enablePluginViaGet(@PathParam("name") String name, @PathParam("val") Boolean enable) {
+    return enablePlugin(name, enable);
   }
 
   /**
@@ -233,9 +245,10 @@ public class StorageResources {
       storage.putJson(name, storagePluginConfig);
       return message("Success");
     } catch (PluginEncodingException e) {
-      logger.debug("Error in JSON mapping: {}", storagePluginConfig, e);
-      return message("Invalid JSON");
+      logger.warn("Error in JSON mapping: {}", storagePluginConfig, e);
+      return message("Invalid JSON: " + e.getMessage());
     } catch (PluginException e) {
+      logger.error("Error while saving plugin", e);
       return message(e.getMessage());
     }
   }

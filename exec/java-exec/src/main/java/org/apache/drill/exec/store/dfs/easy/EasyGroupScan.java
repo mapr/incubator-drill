@@ -20,7 +20,10 @@ package org.apache.drill.exec.store.dfs.easy;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.commons.collections.MapUtils;
+import org.apache.drill.common.PlanStringBuilder;
 import org.apache.drill.common.exceptions.DrillRuntimeException;
 import org.apache.drill.common.expression.SchemaPath;
 import org.apache.drill.common.expression.ValueExpressions;
@@ -40,6 +43,7 @@ import org.apache.drill.exec.metastore.MetadataProviderManager;
 import org.apache.drill.exec.physical.base.PhysicalOperator;
 import org.apache.drill.exec.physical.base.ScanStats;
 import org.apache.drill.exec.metastore.store.FileTableMetadataProviderBuilder;
+import org.apache.drill.metastore.metadata.FileMetadata;
 import org.apache.drill.metastore.metadata.LocationProvider;
 import org.apache.drill.metastore.metadata.TableMetadataProvider;
 import org.apache.drill.exec.planner.physical.PlannerSettings;
@@ -69,6 +73,7 @@ import org.apache.drill.shaded.guava.com.google.common.collect.Lists;
 import org.apache.hadoop.fs.Path;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 @JsonTypeName("fs-scan")
 public class EasyGroupScan extends AbstractGroupScanWithMetadata<TableMetadataProvider> {
@@ -101,7 +106,7 @@ public class EasyGroupScan extends AbstractGroupScanWithMetadata<TableMetadataPr
     this.formatPlugin = engineRegistry.resolveFormat(storageConfig, formatConfig, EasyFormatPlugin.class);
     this.columns = columns == null ? ALL_COLUMNS : columns;
     this.selectionRoot = selectionRoot;
-
+    this.maxRecords = getMaxRecords();
     this.metadataProvider = defaultTableMetadataProviderBuilder(new FileSystemMetadataProviderManager())
         .withSelection(selection)
         .withSchema(schema)
@@ -137,6 +142,7 @@ public class EasyGroupScan extends AbstractGroupScanWithMetadata<TableMetadataPr
     this.usedMetastore = metadataProviderManager.usesMetastore();
     initFromSelection(selection, formatPlugin);
     checkMetadataConsistency(selection, formatPlugin.getFsConf());
+    this.maxRecords = getMaxRecords();
   }
 
   public EasyGroupScan(
@@ -288,7 +294,7 @@ public class EasyGroupScan extends AbstractGroupScanWithMetadata<TableMetadataPr
         String.format("MinorFragmentId %d has no read entries assigned", minorFragmentId));
 
     EasySubScan subScan = new EasySubScan(getUserName(), convert(filesForMinor), formatPlugin,
-        columns, selectionRoot, partitionDepth, getSchema());
+        columns, selectionRoot, partitionDepth, getSchema(), maxRecords);
     subScan.setOperatorId(getOperatorId());
     return subScan;
   }
@@ -313,8 +319,15 @@ public class EasyGroupScan extends AbstractGroupScanWithMetadata<TableMetadataPr
 
   @Override
   public String toString() {
-    String pattern = "EasyGroupScan [selectionRoot=%s, numFiles=%s, columns=%s, files=%s, schema=%s, usedMetastore=%s]";
-    return String.format(pattern, selectionRoot, getFiles().size(), columns, getFiles(), getSchema(), usedMetastore());
+    return new PlanStringBuilder(this)
+      .field("selectionRoot", selectionRoot)
+      .field("numFiles", getFiles().size())
+      .field("columns", columns)
+      .field("files", getFiles())
+      .field("schema", getSchema())
+      .field("usedMetastore", usedMetastore())
+      .field("maxRecords", maxRecords)
+      .toString();
   }
 
   @Override
@@ -386,7 +399,7 @@ public class EasyGroupScan extends AbstractGroupScanWithMetadata<TableMetadataPr
       EasyGroupScan newScan = new EasyGroupScan((EasyGroupScan) source);
       newScan.tableMetadata = tableMetadata;
       // updates common row count and nulls counts for every column
-      if (newScan.getTableMetadata() != null && files != null && newScan.getFilesMetadata().size() != files.size()) {
+      if (newScan.getTableMetadata() != null && MapUtils.isNotEmpty(files) && newScan.getFilesMetadata().size() != files.size()) {
         newScan.tableMetadata = TableMetadataUtils.updateRowCount(newScan.getTableMetadata(), files.values());
       }
       newScan.partitions = partitions;
@@ -394,9 +407,13 @@ public class EasyGroupScan extends AbstractGroupScanWithMetadata<TableMetadataPr
       newScan.files = files;
       newScan.matchAllMetadata = matchAllMetadata;
       newScan.nonInterestingColumnsMetadata = nonInterestingColumnsMetadata;
+      newScan.maxRecords = maxRecords;
 
-      newScan.fileSet = newScan.getFilesMetadata().keySet();
-      newScan.selection = FileSelection.create(null, new ArrayList<>(newScan.fileSet), newScan.selectionRoot);
+      Map<Path, FileMetadata> filesMetadata = newScan.getFilesMetadata();
+      if (MapUtils.isNotEmpty(filesMetadata)) {
+        newScan.fileSet = filesMetadata.keySet();
+        newScan.selection = FileSelection.create(null, new ArrayList<>(newScan.fileSet), newScan.selectionRoot);
+      }
       try {
         newScan.initFromSelection(newScan.selection, newScan.formatPlugin);
       } catch (IOException e) {

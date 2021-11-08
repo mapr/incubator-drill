@@ -23,10 +23,10 @@
   <parent>
     <artifactId>exec-parent</artifactId>
     <groupId>org.apache.drill.exec</groupId>
-    <version>1.18.0-mapr-SNAPSHOT</version>
+    <version>1.19.0-mapr-SNAPSHOT</version>
   </parent>
   <artifactId>drill-rpc</artifactId>
-  <name>exec/rpc</name>
+  <name>Drill : Exec : RPC</name>
 
   <dependencies>
 

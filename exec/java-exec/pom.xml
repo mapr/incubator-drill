@@ -23,15 +23,16 @@
   <parent>
     <artifactId>exec-parent</artifactId>
     <groupId>org.apache.drill.exec</groupId>
-    <version>1.18.0-mapr-SNAPSHOT</version>
+    <version>1.19.0-mapr-SNAPSHOT</version>
   </parent>
   <artifactId>drill-java-exec</artifactId>
-  <name>exec/Java Execution Engine</name>
+  <name>Drill : Exec : Java Execution Engine</name>
 
   <properties>
     <libpam4j.version>1.8-rev2</libpam4j.version>
     <aether.version>1.1.0</aether.version>
     <wagon.version>3.3.4</wagon.version>
+    <okhttp.version>4.5.0</okhttp.version>
   </properties>
 
   <dependencies>
@@ -197,11 +198,6 @@
       <version>${jackson.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.mongodb</groupId>
-      <artifactId>mongo-java-driver</artifactId>
-      <version>3.8.0</version>
-    </dependency>
-    <dependency>
       <groupId>com.fasterxml.jackson.module</groupId>
       <artifactId>jackson-module-afterburner</artifactId>
       <version>${jackson.version}</version>
@@ -258,10 +254,6 @@
     </dependency>
     <dependency>
       <groupId>org.apache.parquet</groupId>
-      <artifactId>parquet-format</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.parquet</groupId>
       <artifactId>parquet-common</artifactId>
       <version>${parquet.version}</version>
     </dependency>
@@ -309,6 +301,11 @@
       <groupId>com.beust</groupId>
       <artifactId>jcommander</artifactId>
       <version>1.30</version>
+    </dependency>
+    <dependency>
+      <groupId>com.bettercloud</groupId>
+      <artifactId>vault-java-driver</artifactId>
+      <version>5.1.0</version>
     </dependency>
     <dependency>
       <groupId>org.apache.curator</groupId>
@@ -506,6 +503,11 @@
       </exclusions>
     </dependency>
     <dependency>
+      <groupId>org.apache.hadoop</groupId>
+      <artifactId>hadoop-yarn-api</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>org.apache.avro</groupId>
       <artifactId>avro</artifactId>
       <version>${avro.version}</version>
@@ -529,7 +531,7 @@
     <dependency>
       <groupId>nl.basjes.parse.httpdlog</groupId>
       <artifactId>httpdlog-parser</artifactId>
-      <version>5.3</version>
+      <version>${httpdlog-parser.version}</version>
       <exclusions>
         <exclusion>
           <groupId>commons-codec</groupId>
@@ -606,15 +608,6 @@
       </exclusions>
     </dependency>
     <dependency>
-      <groupId>com.drewnoakes</groupId>
-      <artifactId>metadata-extractor</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>fr.bmartel</groupId>
-      <artifactId>pcapngdecoder</artifactId>
-      <version>1.2</version>
-    </dependency>
-    <dependency>
       <groupId>sqlline</groupId>
       <artifactId>sqlline</artifactId>
     </dependency>
@@ -622,6 +615,18 @@
       <groupId>org.apache.drill.metastore</groupId>
       <artifactId>drill-iceberg-metastore</artifactId>
       <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.squareup.okhttp3</groupId>
+      <artifactId>okhttp</artifactId>
+      <version>${okhttp.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>vault</artifactId>
+      <version>${testcontainers.version}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

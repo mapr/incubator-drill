@@ -24,16 +24,31 @@
   <parent>
     <artifactId>drill-contrib-parent</artifactId>
     <groupId>org.apache.drill.contrib</groupId>
-    <version>1.18.0-mapr-SNAPSHOT</version>
+    <version>1.19.0-mapr-SNAPSHOT</version>
   </parent>
 
   <artifactId>drill-storage-kafka</artifactId>
-  <name>contrib/kafka-storage-plugin</name>
+  <name>Drill : Contrib : Storage : Kafka</name>
 
   <properties>
-    <kafka.version>2.3.1</kafka.version>
+    <kafka.version>2.8.0</kafka.version>
     <kafka.TestSuite>**/TestKafkaSuit.class</kafka.TestSuite>
   </properties>
+
+  <repositories>
+    <repository>
+      <id>confluent</id>
+      <name>Confluent</name>
+      <url>https://packages.confluent.io/maven/</url>
+      <releases>
+        <enabled>true</enabled>
+        <checksumPolicy>fail</checksumPolicy>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
 
   <dependencies>
     <dependency>
@@ -64,7 +79,7 @@
     </dependency>
     <dependency>
       <groupId>org.apache.kafka</groupId>
-      <artifactId>kafka_2.12</artifactId>
+      <artifactId>kafka_2.13</artifactId>
       <version>${kafka.version}</version>
       <exclusions>
         <exclusion>
@@ -76,6 +91,12 @@
           <artifactId>log4j</artifactId>
         </exclusion>
       </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>io.confluent</groupId>
+      <artifactId>kafka-avro-serializer</artifactId>
+      <version>6.1.1</version>
     </dependency>
 
     <!-- Test dependencies -->

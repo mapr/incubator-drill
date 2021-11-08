@@ -181,6 +181,10 @@ public class StandardConversions {
       final Constructor<? extends DirectConverter> ctor = conversionClass.getDeclaredConstructor(ScalarWriter.class, Map.class);
       return ctor.newInstance(baseWriter, mergeProperties(properties));
     } catch (final ReflectiveOperationException e) {
+      // Not a real reflection error: pass along underlying cause.
+      if (e.getCause() instanceof IllegalArgumentException) {
+        throw new IllegalArgumentException(e.getCause());
+      }
       // Ignore
     }
 
@@ -203,9 +207,9 @@ public class StandardConversions {
    * <p>
    * Does not support any of the "legacy" decimal types.
    *
-   * @param inputDefn the column schema for the input column which the
+   * @param inputSchema the column schema for the input column which the
    * client code (e.g. reader) wants to produce
-   * @param outputDefn the column schema for the output vector to be produced
+   * @param outputSchema the column schema for the output vector to be produced
    * by this operator
    * @return a description of the conversion needed (if any), along with the
    * standard conversion class, if available
@@ -241,8 +245,9 @@ public class StandardConversions {
         case BIGINT:
         case FLOAT4:
         case FLOAT8:
-        case VARDECIMAL:
           return IMPLICIT;
+        case VARDECIMAL:
+          return new ConversionDefn(ConvertIntToDecimal.class);
         case VARCHAR:
           return new ConversionDefn(ConvertIntToString.class);
         default:
@@ -257,8 +262,9 @@ public class StandardConversions {
         case BIGINT:
         case FLOAT4:
         case FLOAT8:
-        case VARDECIMAL:
           return IMPLICIT;
+        case VARDECIMAL:
+          return new ConversionDefn(ConvertIntToDecimal.class);
         case VARCHAR:
           return new ConversionDefn(ConvertIntToString.class);
        default:
@@ -273,9 +279,10 @@ public class StandardConversions {
         case BIGINT:
         case FLOAT4:
         case FLOAT8:
-        case VARDECIMAL:
         case TIME:
           return IMPLICIT;
+        case VARDECIMAL:
+          return new ConversionDefn(ConvertIntToDecimal.class);
         case VARCHAR:
           return new ConversionDefn(ConvertIntToString.class);
         default:
@@ -290,10 +297,11 @@ public class StandardConversions {
           return IMPLICIT_UNSAFE;
         case FLOAT4:
         case FLOAT8:
-        case VARDECIMAL:
         case DATE:
         case TIMESTAMP:
           return IMPLICIT;
+        case VARDECIMAL:
+          return new ConversionDefn(ConvertLongToDecimal.class);
         case VARCHAR:
           return new ConversionDefn(ConvertLongToString.class);
         default:
@@ -308,8 +316,9 @@ public class StandardConversions {
         case BIGINT:
           return IMPLICIT_UNSAFE;
         case FLOAT8:
-        case VARDECIMAL:
           return IMPLICIT;
+        case VARDECIMAL:
+          return new ConversionDefn(ConvertFloatToDecimal.class);
         case VARCHAR:
           return new ConversionDefn(ConvertDoubleToString.class);
         default:
@@ -325,7 +334,7 @@ public class StandardConversions {
         case FLOAT4:
           return IMPLICIT_UNSAFE;
         case VARDECIMAL:
-          return IMPLICIT;
+          return new ConversionDefn(ConvertDoubleToDecimal.class);
         case VARCHAR:
           return new ConversionDefn(ConvertDoubleToString.class);
         default:

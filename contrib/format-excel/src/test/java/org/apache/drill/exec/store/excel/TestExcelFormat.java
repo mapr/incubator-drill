@@ -21,6 +21,7 @@ package org.apache.drill.exec.store.excel;
 import org.apache.drill.categories.RowSetTests;
 import org.apache.drill.common.exceptions.DrillRuntimeException;
 import org.apache.drill.common.types.TypeProtos;
+import org.apache.drill.common.types.TypeProtos.MinorType;
 import org.apache.drill.exec.physical.rowSet.RowSet;
 import org.apache.drill.exec.physical.rowSet.RowSetBuilder;
 import org.apache.drill.exec.record.metadata.SchemaBuilder;
@@ -37,6 +38,7 @@ import org.junit.experimental.categories.Category;
 import java.nio.file.Paths;
 
 import static org.apache.drill.test.QueryTestUtil.generateCompressedFile;
+import static org.apache.drill.test.rowSet.RowSetUtilities.strArray;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -416,6 +418,114 @@ public class TestExcelFormat extends ClusterTest {
     RowSet expected = new RowSetBuilder(client.allocator(), expectedSchema)
       .addRow(1412294400000L, "Hi Rise")
       .addRow(1417737600000L, "Hi Rise")
+      .build();
+
+    new RowSetComparison(expected).verifyAndClearAll(results);
+  }
+
+  @Test
+  public void testTextFormula() throws Exception {
+    String sql = "SELECT * FROM cp.`excel/text-formula.xlsx`";
+
+    RowSet results = client.queryBuilder().sql(sql).rowSet();
+
+    TupleMetadata expectedSchema = new SchemaBuilder()
+      .addNullable("Grade", MinorType.VARCHAR)
+      .addNullable("Gender", MinorType.VARCHAR)
+      .addNullable("Combined", MinorType.VARCHAR)
+      .buildSchema();
+
+    RowSet expected = new RowSetBuilder(client.allocator(), expectedSchema)
+      .addRow("Seventh Grade", "Girls", "Seventh Grade Girls")
+      .addRow("Sixth Grade", "Girls", "Sixth Grade Girls")
+      .addRow("Fourth Grade", "Girls", "Fourth Grade Girls")
+      .build();
+
+    new RowSetComparison(expected).verifyAndClearAll(results);
+  }
+
+  @Test
+  public void testNumericFormula() throws Exception {
+    String sql = "SELECT * FROM cp.`excel/numeric-formula.xlsx`";
+
+    RowSet results = client.queryBuilder().sql(sql).rowSet();
+    TupleMetadata expectedSchema = new SchemaBuilder()
+      .addNullable("col1", MinorType.FLOAT8)
+      .addNullable("col2", MinorType.FLOAT8)
+      .addNullable("calc", MinorType.FLOAT8)
+      .buildSchema();
+
+    RowSet expected = new RowSetBuilder(client.allocator(), expectedSchema)
+      .addRow(2.0, 8.0, 256.0)
+      .addRow(4.0, 6.0, 4096.0)
+      .addRow(6.0, 4.0, 1296.0)
+      .build();
+
+    new RowSetComparison(expected).verifyAndClearAll(results);
+  }
+
+  @Test
+  public void testLimitPushdown() throws Exception {
+    String sql = "SELECT id, first_name, order_count FROM cp.`excel/test_data.xlsx` LIMIT 5";
+
+    queryBuilder()
+      .sql(sql)
+      .planMatcher()
+      .include("Limit", "maxRecords=5")
+      .match();
+  }
+
+  @Test
+  public void testBlankColumnFix() throws Exception {
+    String sql = "SELECT * FROM dfs.`excel/zips-small.xlsx`";
+
+    RowSet results = client.queryBuilder().sql(sql).rowSet();
+    TupleMetadata expectedSchema = new SchemaBuilder()
+      .addNullable("zip", MinorType.FLOAT8)
+      .addNullable("lat", MinorType.FLOAT8)
+      .addNullable("lng", MinorType.FLOAT8)
+      .addNullable("city", MinorType.VARCHAR)
+      .addNullable("state_id", MinorType.VARCHAR)
+      .addNullable("state_name", MinorType.VARCHAR)
+      .addNullable("zcta", MinorType.VARCHAR)
+      .addNullable("parent_zcta", MinorType.FLOAT8)
+      .addNullable("population", MinorType.FLOAT8)
+      .addNullable("density", MinorType.FLOAT8)
+      .addNullable("county_fips", MinorType.FLOAT8)
+      .addNullable("county_name", MinorType.VARCHAR)
+      .addNullable("county_weights", MinorType.VARCHAR)
+      .addNullable("county_names_all", MinorType.VARCHAR)
+      .addNullable("county_fips_all", MinorType.VARCHAR)
+      .addNullable("imprecise", MinorType.VARCHAR)
+      .addNullable("military", MinorType.VARCHAR)
+      .addNullable("timezone", MinorType.VARCHAR)
+      .buildSchema();
+
+    RowSet expected = new RowSetBuilder(client.allocator(), expectedSchema)
+      .addRow(601.0, 18.18004, -66.75218, "Adjuntas", "PR", "Puerto Rico", "TRUE", 0.0, 17242.0, 111.4, 72001.0, "Adjuntas", "{'72001':99.43,'72141':0.57}", "Adjuntas|Utuado",
+      "72001|72141", "FALSE", "FALSE", "America/Puerto_Rico")
+      .addRow(602.0, 18.36073, -67.17517, "Aguada", "PR", "Puerto Rico", "TRUE", 0.0, 38442.0, 523.5, 72003.0, "Aguada", "{'72003':100}", "Aguada", "72003", "FALSE", "FALSE", "America" +
+    "/Puerto_Rico")
+      .addRow(603.0, 18.45439, -67.12202, "Aguadilla", "PR", "Puerto Rico", "TRUE", 0.0, 48814.0, 667.9, 72005.0, "Aguadilla", "{'72005':100}", "Aguadilla", "72005", "FALSE", "FALSE",
+    "America/Puerto_Rico")
+      .addRow(606.0, 18.16724, -66.93828, "Maricao", "PR", "Puerto Rico", "TRUE", 0.0, 6437.0, 60.4, 72093.0, "Maricao", "{'72093':94.88,'72121':1.35,'72153':3.78}", "Maricao|Yauco" +
+    "|Sabana Grande", "72093|72153|72121", "FALSE", "FALSE", "America/Puerto_Rico")
+      .build();
+
+    new RowSetComparison(expected).verifyAndClearAll(results);
+  }
+
+  @Test
+  public void testGetSheetNames() throws RpcException {
+    String sql = "SELECT _sheets FROM dfs.`excel/test_data.xlsx` LIMIT 1";
+
+    RowSet results = client.queryBuilder().sql(sql).rowSet();
+    TupleMetadata expectedSchema = new SchemaBuilder()
+      .addArray("_sheets", MinorType.VARCHAR)
+      .buildSchema();
+
+    RowSet expected = new RowSetBuilder(client.allocator(), expectedSchema)
+      .addRow((Object)strArray("data", "secondSheet", "thirdSheet", "fourthSheet", "emptySheet", "missingDataSheet", "inconsistentData", "comps"))
       .build();
 
     new RowSetComparison(expected).verifyAndClearAll(results);

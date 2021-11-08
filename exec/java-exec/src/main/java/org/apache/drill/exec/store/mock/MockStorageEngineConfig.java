@@ -17,14 +17,14 @@
  */
 package org.apache.drill.exec.store.mock;
 
-import org.apache.drill.common.logical.StoragePluginConfigBase;
+import org.apache.drill.common.logical.StoragePluginConfig;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 @JsonTypeName(MockStorageEngineConfig.NAME)
-public class MockStorageEngineConfig extends StoragePluginConfigBase {
+public class MockStorageEngineConfig extends StoragePluginConfig {
   public static final String NAME = "mock";
   public static final MockStorageEngineConfig INSTANCE = new MockStorageEngineConfig("mock:///");
 

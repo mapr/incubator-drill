@@ -26,7 +26,6 @@ import org.apache.drill.exec.expr.stat.RowsMatch;
 import org.apache.drill.exec.ops.FragmentContextImpl;
 import org.apache.drill.exec.planner.physical.PlannerSettings;
 import org.apache.drill.exec.proto.BitControl;
-import org.apache.drill.exec.proto.UserBitShared;
 import org.apache.drill.exec.store.parquet.columnreaders.ParquetRecordReader;
 import org.apache.drill.exec.store.parquet.metadata.Metadata;
 import org.apache.drill.exec.store.parquet.metadata.MetadataBase;
@@ -59,7 +58,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 public class TestParquetFilterPushDown extends PlanTestBase {
   private static final String CTAS_TABLE = "order_ctas";
@@ -705,6 +704,19 @@ public class TestParquetFilterPushDown extends PlanTestBase {
     testParquetFilterPruning(query, 25, 1, new String[]{"Filter\\("});
   }
 
+  @Test
+  public void testPreservingColumnAliasAfterRemovingFilter() throws Exception {
+    test("create table dfs.tmp.`testAliasTable` as select * from cp.`tpch/nation.parquet` limit 1");
+    String query = "select n_regionkey as x from dfs.tmp.`testAliasTable` where n_nationkey > -100500";
+
+    testBuilder()
+        .sqlQuery(query)
+        .unOrdered()
+        .baselineColumns("x")
+        .baselineValues(0)
+        .go();
+  }
+
   //////////////////////////////////////////////////////////////////////////////////////////////////
   // Some test helper functions.
   //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -781,9 +793,9 @@ public class TestParquetFilterPushDown extends PlanTestBase {
     }
 
     ProfileParser profile = client.parseProfile(summary.queryIdString());
-    List<ProfileParser.OperatorProfile> ops = profile.getOpsOfType(UserBitShared.CoreOperatorType.PARQUET_ROW_GROUP_SCAN_VALUE);
+    List<ProfileParser.OperatorProfile> ops = profile.getOpsOfType(ParquetRowGroupScan.OPERATOR_TYPE);
 
-    assertTrue(!ops.isEmpty());
+    assertFalse(ops.isEmpty());
     // check for the first op only
     ProfileParser.OperatorProfile parquestScan0 = ops.get(0);
     long resultNumRowgroups = parquestScan0.getMetric(ParquetRecordReader.Metric.NUM_ROWGROUPS.ordinal());

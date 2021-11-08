@@ -23,12 +23,12 @@
   <parent>
     <artifactId>drill-root</artifactId>
     <groupId>org.apache.drill</groupId>
-    <version>1.18.0-mapr-SNAPSHOT</version>
+    <version>1.19.0-mapr-SNAPSHOT</version>
   </parent>
 
   <artifactId>drill-yarn</artifactId>
   <packaging>jar</packaging>
-  <name>Drill-on-YARN</name>
+  <name>Drill : On-YARN</name>
 
   <build>
     <plugins>

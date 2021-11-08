@@ -17,6 +17,7 @@
  */
 package org.apache.drill.exec.store.http;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -32,25 +33,29 @@ import org.apache.drill.exec.physical.base.AbstractBase;
 import org.apache.drill.exec.physical.base.PhysicalOperator;
 import org.apache.drill.exec.physical.base.PhysicalVisitor;
 import org.apache.drill.exec.physical.base.SubScan;
-import org.apache.drill.exec.proto.UserBitShared.CoreOperatorType;
-import org.apache.drill.shaded.guava.com.google.common.collect.ImmutableSet;
 
 @JsonTypeName("http-sub-scan")
 public class HttpSubScan extends AbstractBase implements SubScan {
 
+  public static final String OPERATOR_TYPE = "HTTP_SUB_SCAN";
+
   private final HttpScanSpec tableSpec;
   private final List<SchemaPath> columns;
   private final Map<String, String> filters;
+  private final int maxRecords;
 
   @JsonCreator
   public HttpSubScan(
     @JsonProperty("tableSpec") HttpScanSpec tableSpec,
     @JsonProperty("columns") List<SchemaPath> columns,
-    @JsonProperty("filters") Map<String, String> filters) {
+    @JsonProperty("filters") Map<String, String> filters,
+    @JsonProperty("maxRecords") int maxRecords
+    ) {
     super("user-if-needed");
     this.tableSpec = tableSpec;
     this.columns = columns;
     this.filters = filters;
+    this.maxRecords = maxRecords;
   }
 
   @JsonProperty("tableSpec")
@@ -68,6 +73,11 @@ public class HttpSubScan extends AbstractBase implements SubScan {
     return filters;
   }
 
+  @JsonProperty("maxRecords")
+  public int maxRecords() {
+    return maxRecords;
+  }
+
  @Override
   public <T, X, E extends Throwable> T accept(
    PhysicalVisitor<T, X, E> physicalVisitor, X value) throws E {
@@ -76,18 +86,18 @@ public class HttpSubScan extends AbstractBase implements SubScan {
 
   @Override
   public PhysicalOperator getNewWithChildren(List<PhysicalOperator> children) {
-    return new HttpSubScan(tableSpec, columns, filters);
+    return new HttpSubScan(tableSpec, columns, filters, maxRecords);
   }
 
   @Override
   @JsonIgnore
-  public int getOperatorType() {
-    return CoreOperatorType.HTTP_SUB_SCAN_VALUE;
+  public String getOperatorType() {
+    return OPERATOR_TYPE;
   }
 
   @Override
   public Iterator<PhysicalOperator> iterator() {
-    return ImmutableSet.<PhysicalOperator>of().iterator();
+    return Collections.emptyIterator();
   }
 
   @Override
@@ -96,6 +106,7 @@ public class HttpSubScan extends AbstractBase implements SubScan {
       .field("tableSpec", tableSpec)
       .field("columns", columns)
       .field("filters", filters)
+      .field("maxRecords", maxRecords)
       .toString();
   }
 
@@ -115,6 +126,7 @@ public class HttpSubScan extends AbstractBase implements SubScan {
     HttpSubScan other = (HttpSubScan) obj;
     return Objects.equals(tableSpec, other.tableSpec)
       && Objects.equals(columns, other.columns)
-      && Objects.equals(filters, other.filters);
+      && Objects.equals(filters, other.filters)
+      && Objects.equals(maxRecords, other.maxRecords);
   }
 }

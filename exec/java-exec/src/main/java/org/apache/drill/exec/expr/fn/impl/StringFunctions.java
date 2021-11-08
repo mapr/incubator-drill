@@ -17,7 +17,6 @@
  */
 package org.apache.drill.exec.expr.fn.impl;
 
-import io.netty.buffer.ByteBuf;
 import io.netty.buffer.DrillBuf;
 
 import org.apache.drill.common.FunctionNames;
@@ -37,6 +36,7 @@ import org.apache.drill.exec.expr.holders.NullableVarCharHolder;
 import org.apache.drill.exec.expr.holders.VarBinaryHolder;
 import org.apache.drill.exec.expr.holders.VarCharHolder;
 import org.apache.drill.exec.physical.impl.project.OutputSizeEstimateConstants;
+import org.apache.drill.exec.vector.complex.writer.BaseWriter.ComplexWriter;
 
 import javax.inject.Inject;
 import java.nio.charset.Charset;
@@ -272,7 +272,6 @@ public class StringFunctions{
 
     @Param VarCharHolder input;
     @Param(constant=true) VarCharHolder pattern;
-    @Inject DrillBuf buffer;
     @Workspace java.util.regex.Matcher matcher;
     @Workspace org.apache.drill.exec.expr.fn.impl.CharSequenceWrapper charSequenceWrapper;
     @Output BitHolder out;
@@ -383,67 +382,124 @@ public class StringFunctions{
 
   }
 
-
+  /**
+   * Return the string part at index after splitting the input string using the
+   * specified delimiter. The index must be a positive integer.
+   */
   @FunctionTemplate(name = "split_part", scope = FunctionScope.SIMPLE, nulls = NullHandling.NULL_IF_NULL,
                     outputWidthCalculatorType = OutputWidthCalculatorType.CUSTOM_FIXED_WIDTH_DEFAULT)
   public static class SplitPart implements DrillSimpleFunc {
-    @Param  VarCharHolder str;
-    @Param  VarCharHolder splitter;
-    @Param  IntHolder index;
+    @Param
+    VarCharHolder in;
+    @Param
+    VarCharHolder delimiter;
 
-    @Output VarCharHolder out;
+    @Param
+    IntHolder index;
+
+    @Workspace
+    com.google.common.base.Splitter splitter;
+
+    @Inject
+    DrillBuf buffer;
+
+    @Output
+    VarCharHolder out;
 
     @Override
-    public void setup() {}
+    public void setup() {
+      String split = org.apache.drill.exec.expr.fn.impl.StringFunctionHelpers.
+              toStringFromUTF8(delimiter.start, delimiter.end, delimiter.buffer);
+      splitter = com.google.common.base.Splitter.on(split);
+
+    }
 
     @Override
     public void eval() {
       if (index.value < 1) {
         throw org.apache.drill.common.exceptions.UserException.functionError()
-            .message("Index in split_part must be positive, value provided was " + index.value).build();
+          .message("Index in split_part must be positive, value provided was "
+            + index.value).build();
       }
-      int bufPos = str.start;
-      out.start = bufPos;
-      boolean beyondLastIndex = false;
-      int splitterLen = (splitter.end - splitter.start);
-      for (int i = 1; i < index.value + 1; i++) {
-        //Do string match.
-        final int pos = org.apache.drill.exec.expr.fn.impl.StringFunctionUtil.stringLeftMatchUTF8(str.buffer,
-            bufPos, str.end,
-            splitter.buffer, splitter.start, splitter.end);
-        if (pos < 0) {
-          // this is the last iteration, it is okay to hit the end of the string
-          if (i == index.value) {
-            bufPos = str.end;
-            // when the output is terminated by the end of the string we do not want
-            // to subtract the length of the splitter from the output at the end of
-            // the function below
-            splitterLen = 0;
-            break;
-          } else {
-            beyondLastIndex = true;
-            break;
-          }
-        } else {
-          // Count the # of characters. (one char could have 1-4 bytes)
-          // unlike the position function don't add 1, we are not translating the positions into SQL user level 1 based indices
-          bufPos = org.apache.drill.exec.expr.fn.impl.StringFunctionUtil.getUTF8CharLength(str.buffer, str.start, pos)
-              + splitterLen;
-          // if this is the second to last iteration, store the position again, as the start and end of the
-          // string to be returned need to be available
-          if (i == index.value - 1) {
-            out.start = bufPos;
-          }
-        }
+      String inputString = org.apache.drill.exec.expr.fn.impl.
+        StringFunctionHelpers.getStringFromVarCharHolder(in);
+      int arrayIndex = index.value - 1;
+      String result =
+              (String) com.google.common.collect.Iterables.get(splitter.split(inputString), arrayIndex, "");
+      byte[] strBytes = result.getBytes(com.google.common.base.Charsets.UTF_8);
+
+      out.buffer = buffer = buffer.reallocIfNeeded(strBytes.length);
+      out.start = 0;
+      out.end = strBytes.length;
+      out.buffer.setBytes(0, strBytes);
+    }
+
+  }
+
+  /**
+   * Return the string part from start to end after splitting the input string
+   * using the specified delimiter. The start must be a positive integer. The
+   * end is included and must be greater than or equal to the start index.
+   */
+  @FunctionTemplate(name = "split_part", scope = FunctionScope.SIMPLE, nulls =
+    NullHandling.NULL_IF_NULL, outputWidthCalculatorType =
+    OutputWidthCalculatorType.CUSTOM_FIXED_WIDTH_DEFAULT)
+  public static class SplitPartStartEnd implements DrillSimpleFunc {
+    @Param
+    VarCharHolder in;
+    @Param
+    VarCharHolder delimiter;
+    @Param
+    IntHolder start;
+    @Param
+    IntHolder end;
+
+    @Workspace
+    com.google.common.base.Splitter splitter;
+
+    @Workspace
+    com.google.common.base.Joiner joiner;
+
+    @Inject
+    DrillBuf buffer;
+
+    @Output
+    VarCharHolder out;
+
+    @Override
+    public void setup() {
+      String split = org.apache.drill.exec.expr.fn.impl.StringFunctionHelpers.
+        toStringFromUTF8(delimiter.start, delimiter.end, delimiter.buffer);
+      splitter = com.google.common.base.Splitter.on(split);
+      joiner = com.google.common.base.Joiner.on(split);
+    }
+
+    @Override
+    public void eval() {
+      if (start.value < 1) {
+        throw org.apache.drill.common.exceptions.UserException.functionError()
+          .message("Start in split_part must be positive, value provided was "
+            + start.value).build();
       }
-      if (beyondLastIndex) {
-        out.start = 0;
-        out.end = 0;
-        out.buffer = str.buffer;
-      } else {
-        out.buffer = str.buffer;
-        out.end = bufPos - splitterLen;
+      if (end.value < start.value) {
+        throw org.apache.drill.common.exceptions.UserException.functionError()
+          .message("End in split_part must be greater than or equal to start, " +
+            "value provided was start:" + start.value + ",end:" + end.value).build();
       }
+      String inputString = org.apache.drill.exec.expr.fn.impl.
+        StringFunctionHelpers.getStringFromVarCharHolder(in);
+      int arrayIndex = start.value - 1;
+      java.util.Iterator<String> iterator = com.google.common.collect.Iterables
+        .limit(com.google.common.collect.Iterables.skip(splitter
+            .split(inputString), arrayIndex),end.value - start.value + 1)
+        .iterator();
+      byte[] strBytes = joiner.join(iterator).getBytes(
+        com.google.common.base.Charsets.UTF_8);
+
+      out.buffer = buffer = buffer.reallocIfNeeded(strBytes.length);
+      out.start = 0;
+      out.end = strBytes.length;
+      out.buffer.setBytes(0, strBytes);
     }
 
   }
@@ -544,7 +600,6 @@ public class StringFunctions{
     @Param BigIntHolder length;
 
     @Output VarCharHolder out;
-    @Workspace ByteBuf buffer;
 
     @Override
     public void setup() {
@@ -582,7 +637,6 @@ public class StringFunctions{
     @Param BigIntHolder offset;
 
     @Output VarCharHolder out;
-    @Workspace ByteBuf buffer;
 
     @Override
     public void setup() {
@@ -692,7 +746,6 @@ public class StringFunctions{
     @Param BigIntHolder length;
 
     @Output VarCharHolder out;
-    @Workspace ByteBuf buffer;
 
     @Override
     public void setup() {
@@ -730,7 +783,6 @@ public class StringFunctions{
     @Param BigIntHolder length;
 
     @Output VarCharHolder out;
-    @Workspace ByteBuf buffer;
 
     @Override
     public void setup() {
@@ -1375,46 +1427,6 @@ public class StringFunctions{
 
   @FunctionTemplate(name = "split", scope = FunctionScope.SIMPLE,
       outputWidthCalculatorType = OutputWidthCalculatorType.CUSTOM_FIXED_WIDTH_DEFAULT)
-  public static class Split implements DrillSimpleFunc {
-    @Param VarCharHolder in;
-    @Param VarCharHolder delimiter;
-
-    @Workspace com.google.common.base.Splitter splitter;
-    @Inject DrillBuf buffer;
-
-    @Output org.apache.drill.exec.vector.complex.writer.BaseWriter.ComplexWriter writer;
-
-    @Override
-    public void setup() {
-      int len = delimiter.end - delimiter.start;
-      if (len != 1) {
-        throw new IllegalArgumentException("Only single character delimiters are supported for split()");
-      }
-      char splitChar = org.apache.drill.exec.expr.fn.impl.StringFunctionHelpers.
-          toStringFromUTF8(delimiter.start, delimiter.end, delimiter.buffer).charAt(0);
-      splitter = com.google.common.base.Splitter.on(splitChar);
-    }
-
-    @Override
-    public void eval() {
-      String inputString =
-          org.apache.drill.exec.expr.fn.impl.StringFunctionHelpers.toStringFromUTF8(in.start, in.end, in.buffer);
-      // Convert the iterable to an array as Janino will not handle generics.
-      Object[] tokens = com.google.common.collect.Iterables.toArray(splitter.split(inputString), String.class);
-      org.apache.drill.exec.vector.complex.writer.BaseWriter.ListWriter list = writer.rootAsList();
-      list.startList();
-      for (Object token : tokens) {
-        final byte[] strBytes = ((String) token).getBytes(com.google.common.base.Charsets.UTF_8);
-        buffer = buffer.reallocIfNeeded(strBytes.length);
-        buffer.setBytes(0, strBytes);
-        list.varChar().writeVarChar(0, strBytes.length, buffer);
-      }
-      list.endList();
-    }
-  }
-
-  @FunctionTemplate(name = "split", scope = FunctionScope.SIMPLE,
-      outputWidthCalculatorType = OutputWidthCalculatorType.CUSTOM_FIXED_WIDTH_DEFAULT)
   public static class SplitNullableInput implements DrillSimpleFunc {
     @Param NullableVarCharHolder in;
     @Param VarCharHolder delimiter;
@@ -1422,7 +1434,7 @@ public class StringFunctions{
     @Workspace com.google.common.base.Splitter splitter;
     @Inject DrillBuf buffer;
 
-    @Output org.apache.drill.exec.vector.complex.writer.BaseWriter.ComplexWriter writer;
+    @Output ComplexWriter writer;
 
     @Override
     public void setup() {
@@ -1479,12 +1491,11 @@ public class StringFunctions{
       out.buffer = buffer = buffer.reallocIfNeeded((left.end - left.start) + (right.end - right.start));
       out.start = out.end = 0;
 
-      int id = 0;
-      for (id = left.start; id < left.end; id++) {
+      for (int id = left.start; id < left.end; id++) {
         out.buffer.setByte(out.end++, left.buffer.getByte(id));
       }
 
-      for (id = right.start; id < right.end; id++) {
+      for (int id = right.start; id < right.end; id++) {
         out.buffer.setByte(out.end++, right.buffer.getByte(id));
       }
     }
@@ -1540,18 +1551,21 @@ public class StringFunctions{
 
     @Override
     public void eval() {
-      out.buffer = buffer = buffer.reallocIfNeeded((left.end - left.start) + (right.end - right.start));
-      out.start = out.end = 0;
-
-      int id = 0;
-      for (id = left.start; id < left.end; id++) {
-        out.buffer.setByte(out.end++, left.buffer.getByte(id));
-      }
-
       if (right.isSet == 1) {
-        for (id = right.start; id < right.end; id++) {
+        out.buffer = buffer = buffer.reallocIfNeeded((left.end - left.start) + (right.end - right.start));
+        out.start = out.end = 0;
+
+        for (int id = left.start; id < left.end; id++) {
+          out.buffer.setByte(out.end++, left.buffer.getByte(id));
+        }
+
+        for (int id = right.start; id < right.end; id++) {
           out.buffer.setByte(out.end++, right.buffer.getByte(id));
         }
+      } else {
+        out.buffer = left.buffer;
+        out.start = left.start;
+        out.end = left.end;
       }
     }
   }
@@ -1573,18 +1587,21 @@ public class StringFunctions{
 
     @Override
     public void eval() {
-      out.buffer = buffer.reallocIfNeeded( (left.end - left.start) + (right.end - right.start));
-      out.start = out.end = 0;
-
-      int id = 0;
       if (left.isSet == 1) {
-        for (id = left.start; id < left.end; id++) {
+        out.buffer = buffer = buffer.reallocIfNeeded((left.end - left.start) + (right.end - right.start));
+        out.start = out.end = 0;
+
+        for (int id = left.start; id < left.end; id++) {
           out.buffer.setByte(out.end++, left.buffer.getByte(id));
         }
-      }
 
-      for (id = right.start; id < right.end; id++) {
-        out.buffer.setByte(out.end++, right.buffer.getByte(id));
+        for (int id = right.start; id < right.end; id++) {
+          out.buffer.setByte(out.end++, right.buffer.getByte(id));
+        }
+      } else {
+        out.buffer = right.buffer;
+        out.start = right.start;
+        out.end = right.end;
       }
     }
   }
@@ -1606,20 +1623,31 @@ public class StringFunctions{
 
     @Override
     public void eval() {
-      out.buffer = buffer.reallocIfNeeded( (left.end - left.start) + (right.end - right.start));
-      out.start = out.end = 0;
+      if (left.isSet == 1 && right.isSet == 1) {
+        out.buffer = buffer = buffer.reallocIfNeeded((left.end - left.start) + (right.end - right.start));
+        out.start = out.end = 0;
 
-      int id = 0;
-      if (left.isSet == 1) {
-        for (id = left.start; id < left.end; id++) {
+        for (int id = left.start; id < left.end; id++) {
           out.buffer.setByte(out.end++, left.buffer.getByte(id));
         }
-      }
 
-      if (right.isSet == 1) {
-        for (id = right.start; id < right.end; id++) {
+        for (int id = right.start; id < right.end; id++) {
           out.buffer.setByte(out.end++, right.buffer.getByte(id));
         }
+      } else if (left.isSet == 1) {
+        // right is null
+        out.buffer = left.buffer;
+        out.start = left.start;
+        out.end = left.end;
+      } else if (right.isSet == 1) {
+        // left is null
+        out.buffer = right.buffer;
+        out.start = right.start;
+        out.end = right.end;
+      } else {
+        // both null
+        out.buffer = buffer;
+        out.start = out.end = 0;
       }
     }
   }
@@ -1638,7 +1666,7 @@ public class StringFunctions{
 
     @Override
     public void eval() {
-      out.buffer = buffer.reallocIfNeeded(in.end - in.start);
+      out.buffer = buffer = buffer.reallocIfNeeded(in.end - in.start);
       out.start = out.end = 0;
       out.end = org.apache.drill.common.util.DrillStringUtils.parseBinaryString(in.buffer, in.start, in.end, out.buffer);
       out.buffer.setIndex(out.start, out.end);
@@ -1663,7 +1691,7 @@ public class StringFunctions{
     @Override
     public void eval() {
       byte[] buf = org.apache.drill.common.util.DrillStringUtils.toBinaryString(in.buffer, in.start, in.end).getBytes(charset);
-      out.buffer = buffer.reallocIfNeeded(buf.length);
+      out.buffer = buffer = buffer.reallocIfNeeded(buf.length);
       out.buffer.setBytes(0, buf);
       out.buffer.setIndex(0, buf.length);
 

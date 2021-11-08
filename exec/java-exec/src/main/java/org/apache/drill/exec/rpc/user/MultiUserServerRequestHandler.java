@@ -20,9 +20,7 @@ package org.apache.drill.exec.rpc.user;
 import com.google.protobuf.InvalidProtocolBufferException;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
-import io.netty.channel.ChannelFuture;
 import io.netty.util.concurrent.Future;
-import io.netty.util.concurrent.GenericFutureListener;
 import org.apache.drill.common.config.DrillProperties;
 import org.apache.drill.exec.physical.impl.materialize.QueryDataPackage;
 import org.apache.drill.exec.proto.GeneralRPCProtos.Ack;
@@ -206,14 +204,11 @@ public class MultiUserServerRequestHandler implements RequestHandler<UserServer.
       }
 
       @Override
-      public ChannelFuture getChannelClosureFuture() {
-        return underlyingConnection.getChannelClosureFuture()
-            .addListener(new GenericFutureListener<Future<? super Void>>() {
-              @Override
-              public void operationComplete(Future<? super Void> future) throws Exception {
-                userSession.close(); // when the underlying connection is closed
-              }
-            });
+      public Future<Void> getClosureFuture() {
+        return underlyingConnection.getClosureFuture()
+                .addListener(future -> {
+                  userSession.close(); // when the underlying connection is closed
+                });
       }
 
       @Override

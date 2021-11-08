@@ -19,6 +19,7 @@ package org.apache.drill.exec.store.parquet;
 
 import static org.apache.drill.test.TestBuilder.mapOf;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -666,4 +667,45 @@ public class TestParquetLogicalTypes extends BaseTestQuery {
         .build().run();
   }
 
+  @Test
+  public void testUUID() throws Exception {
+    String query = "select `_UUID` from cp.`parquet/parquet_test_file_simple.parquet`";
+    byte[] bytes = new byte[16];
+    Arrays.fill(bytes, (byte) 1);
+    testBuilder()
+            .sqlQuery(query)
+            .unOrdered()
+            .baselineColumns("_UUID")
+            .baselineValues(bytes)
+            .baselineValues(bytes)
+            .baselineValues(bytes)
+            .go();
+  }
+
+  @Test
+  public void testNullableVarBinaryUUID() throws Exception {
+    String query = "select `opt1_p1` from cp.`parquet/uuid-simple-fixed-length-array.parquet` order by `opt1_p1` limit 4";
+    byte[] firstValue = {60, -19, 30, -38, -49, 8, 79, 38, -103, -105, -6, -36, 65, -27, -60, -91};
+    byte[] secondValue = {-13, 5, 4, -97, 62, -78, 73, 69, -115, -25, -62, 88, 116, 37, 86, -41};
+
+    testBuilder()
+            .sqlQuery(query)
+            .ordered()
+            .baselineColumns("opt1_p1")
+            .baselineValues(firstValue)
+            .baselineValues(secondValue)
+            .baselineValues(new Object[]{null})
+            .baselineValues(new Object[]{null})
+            .go();
+  }
+
+  @Test
+  public void testDecimalDictionaryEncoding() throws Exception {
+    testBuilder()
+        .sqlQuery("select RegHrs from cp.`parquet/dict_dec.parquet`")
+        .ordered()
+        .baselineColumns("RegHrs")
+        .baselineValues(new BigDecimal("8.000000"))
+        .go();
+  }
 }

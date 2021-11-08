@@ -24,18 +24,18 @@
   <parent>
     <artifactId>tools-parent</artifactId>
     <groupId>org.apache.drill.tools</groupId>
-    <version>1.18.0-mapr-SNAPSHOT</version>
+    <version>1.19.0-mapr-SNAPSHOT</version>
   </parent>
 
   <artifactId>drill-fmpp-maven-plugin</artifactId>
   <packaging>maven-plugin</packaging>
-  <name>tools/freemarker codegen tooling</name>
+  <name>Drill : Tools : Freemarker codegen</name>
 
   <dependencies>
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
-      <version>2.4</version>
+      <version>2.7</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>

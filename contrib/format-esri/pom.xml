@@ -24,11 +24,11 @@
   <parent>
     <artifactId>drill-contrib-parent</artifactId>
     <groupId>org.apache.drill.contrib</groupId>
-    <version>1.18.0-mapr-SNAPSHOT</version>
+    <version>1.19.0-mapr-SNAPSHOT</version>
   </parent>
 
   <artifactId>drill-format-esri</artifactId>
-  <name>contrib/format-esri</name>
+  <name>Drill : Contrib : Format : Esri</name>
 
   <dependencies>
     <dependency>

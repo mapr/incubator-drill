@@ -18,12 +18,6 @@
 
 package org.apache.drill.exec.store.log;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
-
 import org.apache.drill.common.exceptions.ExecutionSetupException;
 import org.apache.drill.common.exceptions.UserException;
 import org.apache.drill.common.logical.StoragePluginConfig;
@@ -34,7 +28,6 @@ import org.apache.drill.exec.physical.impl.scan.file.FileScanFramework.FileReade
 import org.apache.drill.exec.physical.impl.scan.file.FileScanFramework.FileScanBuilder;
 import org.apache.drill.exec.physical.impl.scan.file.FileScanFramework.FileSchemaNegotiator;
 import org.apache.drill.exec.physical.impl.scan.framework.ManagedReader;
-import org.apache.drill.exec.proto.UserBitShared.CoreOperatorType;
 import org.apache.drill.exec.record.metadata.ColumnMetadata;
 import org.apache.drill.exec.record.metadata.MetadataUtils;
 import org.apache.drill.exec.record.metadata.Propertied;
@@ -50,7 +43,13 @@ import org.apache.hadoop.conf.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
+
 public class LogFormatPlugin extends EasyFormatPlugin<LogFormatConfig> {
+
   private static final Logger logger = LoggerFactory.getLogger(LogFormatPlugin.class);
 
   public static final String PLUGIN_NAME = "logRegex";
@@ -58,16 +57,20 @@ public class LogFormatPlugin extends EasyFormatPlugin<LogFormatConfig> {
   public static final String REGEX_PROP = PROP_PREFIX + "regex";
   public static final String MAX_ERRORS_PROP = PROP_PREFIX + "maxErrors";
 
+  public static final String OPERATOR_TYPE = "REGEX_SUB_SCAN";
+
   private static class LogReaderFactory extends FileReaderFactory {
     private final LogReaderConfig readerConfig;
+    private final int maxRecords;
 
-    public LogReaderFactory(LogReaderConfig config) {
+    public LogReaderFactory(LogReaderConfig config, int maxRecords) {
       readerConfig = config;
+      this.maxRecords = maxRecords;
     }
 
     @Override
     public ManagedReader<? extends FileSchemaNegotiator> newReader() {
-       return new LogBatchReader(readerConfig);
+       return new LogBatchReader(readerConfig, maxRecords);
     }
   }
 
@@ -78,19 +81,19 @@ public class LogFormatPlugin extends EasyFormatPlugin<LogFormatConfig> {
   }
 
   private static EasyFormatConfig easyConfig(Configuration fsConf, LogFormatConfig pluginConfig) {
-    EasyFormatConfig config = new EasyFormatConfig();
-    config.readable = true;
-    config.writable = false;
-    // Should be block splitable, but logic not yet implemented.
-    config.blockSplittable = false;
-    config.compressible = true;
-    config.supportsProjectPushdown = true;
-    config.extensions = Collections.singletonList(pluginConfig.getExtension());
-    config.fsConf = fsConf;
-    config.defaultName = PLUGIN_NAME;
-    config.readerOperatorType = CoreOperatorType.REGEX_SUB_SCAN_VALUE;
-    config.useEnhancedScan = true;
-    return config;
+    return EasyFormatConfig.builder()
+        .readable(true)
+        .writable(false)
+        .blockSplittable(false) // Should be block splitable, but logic not yet implemented.
+        .compressible(true)
+        .supportsProjectPushdown(true)
+        .extensions(pluginConfig.getExtension())
+        .fsConf(fsConf)
+        .defaultName(PLUGIN_NAME)
+        .readerOperatorType(OPERATOR_TYPE)
+        .useEnhancedScan(true)
+        .supportsLimitPushdown(true)
+        .build();
   }
 
   /**
@@ -207,7 +210,7 @@ public class LogFormatPlugin extends EasyFormatPlugin<LogFormatConfig> {
     // each input file.
     builder.setReaderFactory(new LogReaderFactory(
         new LogReaderConfig(this, pattern, providedSchema, tableSchema,
-            readerSchema, !hasSchema, groupCount, maxErrors(providedSchema))));
+            readerSchema, !hasSchema, groupCount, maxErrors(providedSchema)), scan.getMaxRecords()));
 
     // The default type of regex columns is nullable VarChar,
     // so let's use that as the missing column type.

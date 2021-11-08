@@ -26,34 +26,27 @@ import org.apache.drill.exec.physical.impl.scan.file.FileScanFramework.FileSchem
 
 import org.apache.drill.exec.physical.impl.scan.file.FileScanFramework.FileReaderFactory;
 import org.apache.drill.exec.physical.impl.scan.framework.ManagedReader;
-import org.apache.drill.exec.proto.UserBitShared.CoreOperatorType;
 import org.apache.drill.exec.server.DrillbitContext;
 import org.apache.drill.exec.server.options.OptionManager;
 import org.apache.drill.exec.store.dfs.easy.EasyFormatPlugin;
 import org.apache.drill.exec.store.dfs.easy.EasySubScan;
-import org.apache.drill.exec.store.esri.ShpBatchReader.ShpReaderConfig;
 import org.apache.hadoop.conf.Configuration;
 
-import org.apache.drill.shaded.guava.com.google.common.collect.Lists;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 public class ShpFormatPlugin extends EasyFormatPlugin<ShpFormatConfig> {
-
-  private static final Logger logger = LoggerFactory.getLogger(ShpFormatPlugin.class);
 
   public static final String PLUGIN_NAME = "shp";
 
   public static class ShpReaderFactory extends FileReaderFactory {
-    private final ShpReaderConfig readerConfig;
 
-    public ShpReaderFactory(ShpReaderConfig config) {
-      readerConfig = config;
+    private final int maxRecords;
+
+    public ShpReaderFactory(int maxRecords) {
+      this.maxRecords = maxRecords;
     }
 
     @Override
     public ManagedReader<? extends FileScanFramework.FileSchemaNegotiator> newReader() {
-      return new ShpBatchReader(readerConfig);
+      return new ShpBatchReader(maxRecords);
     }
   }
 
@@ -63,30 +56,30 @@ public class ShpFormatPlugin extends EasyFormatPlugin<ShpFormatConfig> {
 
   @Override
   public ManagedReader<? extends FileSchemaNegotiator> newBatchReader(EasySubScan scan, OptionManager options) throws ExecutionSetupException {
-    return new ShpBatchReader(formatConfig.getReaderConfig(this));
+    return new ShpBatchReader(scan.getMaxRecords());
   }
 
   @Override
   protected FileScanFramework.FileScanBuilder frameworkBuilder(OptionManager options, EasySubScan scan) {
     FileScanFramework.FileScanBuilder builder = new FileScanFramework.FileScanBuilder();
-    builder.setReaderFactory(new ShpReaderFactory(new ShpReaderConfig(this)));
+    builder.setReaderFactory(new ShpReaderFactory(scan.getMaxRecords()));
     initScanBuilder(builder, scan);
     builder.nullType(Types.optional(TypeProtos.MinorType.VARCHAR));
     return builder;
   }
 
   private static EasyFormatConfig easyConfig(Configuration fsConf, ShpFormatConfig pluginConfig) {
-    EasyFormatConfig config = new EasyFormatConfig();
-    config.readable = true;
-    config.writable = false;
-    config.blockSplittable = false;
-    config.compressible = false;
-    config.supportsProjectPushdown = true;
-    config.extensions = Lists.newArrayList(pluginConfig.getExtensions());
-    config.fsConf = fsConf;
-    config.defaultName = PLUGIN_NAME;
-    config.readerOperatorType = CoreOperatorType.SHP_SUB_SCAN_VALUE;
-    config.useEnhancedScan = true;
-    return config;
+    return EasyFormatConfig.builder()
+        .readable(true)
+        .writable(false)
+        .blockSplittable(false)
+        .compressible(false)
+        .supportsProjectPushdown(true)
+        .extensions(pluginConfig.getExtensions())
+        .fsConf(fsConf)
+        .defaultName(PLUGIN_NAME)
+        .useEnhancedScan(true)
+        .supportsLimitPushdown(true)
+        .build();
   }
 }

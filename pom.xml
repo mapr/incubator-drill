@@ -30,12 +30,12 @@
 
   <groupId>org.apache.drill</groupId>
   <artifactId>drill-root</artifactId>
-  <version>1.18.0-mapr-SNAPSHOT</version>
+  <version>1.19.0-mapr-SNAPSHOT</version>
   <packaging>pom</packaging>
 
-  <name>Apache Drill Root POM</name>
+  <name>Drill : </name>
   <description>Apache Drill is an open source, low latency SQL query engine for Hadoop and NoSQL.</description>
-  <url>http://drill.apache.org/</url>
+  <url>https://drill.apache.org/</url>
 
   <properties>
     <maven.compiler.source>1.8</maven.compiler.source>
@@ -44,12 +44,12 @@
 
     <target.gen.source.path>${project.basedir}/target/generated-sources</target.gen.source.path>
     <proto.cas.path>${project.basedir}/src/main/protobuf/</proto.cas.path>
-    <junit.version>4.12</junit.version>
+    <junit.version>4.13.2</junit.version>
     <slf4j.version>1.7.26</slf4j.version>
     <shaded.guava.version>28.2-jre</shaded.guava.version>
-    <guava.version>19.0</guava.version>
+    <guava.version>30.1.1-jre</guava.version>
     <forkCount>2</forkCount>
-    <parquet.version>1.11.0</parquet.version>
+    <parquet.version>1.12.0</parquet.version>
     <parquet.format.version>2.8.0</parquet.format.version>
     <!--
       For development purposes to be able to use custom Calcite versions (e.g. not present in jitpack
@@ -58,20 +58,21 @@
       avoid_bad_dependencies plugin found in the file.
     -->
     <calcite.groupId>com.github.vvysotskyi.drill-calcite</calcite.groupId>
-    <calcite.version>1.21.0-drill-r0</calcite.version>
-    <avatica.version>1.15.0</avatica.version>
+    <calcite.version>1.21.0-drill-r2</calcite.version>
+    <avatica.version>1.17.0</avatica.version>
     <janino.version>3.0.11</janino.version>
     <sqlline.version>1.9.0</sqlline.version>
-    <jackson.version>2.10.3</jackson.version>
+    <jackson.version>2.12.1</jackson.version>
     <zookeeper.version>3.5.7</zookeeper.version>
     <mapr.release.version>6.1.0-mapr</mapr.release.version>
     <ojai.version>3.0-mapr-1808</ojai.version>
     <kerby.version>1.0.0</kerby.version>
     <findbugs.version>3.0.0</findbugs.version>
     <netty.tcnative.classifier />
-    <commons.io.version>2.4</commons.io.version>
+    <commons.io.version>2.7</commons.io.version>
+    <commons.collections.version>4.4</commons.collections.version>
     <hamcrest.core.version>1.3</hamcrest.core.version>
-    <curator.version>4.3.0</curator.version>
+    <curator.version>5.1.0</curator.version>
     <wiremock.standalone.version>2.23.2</wiremock.standalone.version>
     <jmockit.version>1.47</jmockit.version>
     <logback.version>1.2.3</logback.version>
@@ -82,8 +83,8 @@
       for example parquet-hadoop-bundle and derby dependencies.
     -->
     <hive.version>3.1.2</hive.version>
-    <hadoop.version>3.2.1</hadoop.version>
-    <hbase.version>2.2.2</hbase.version>
+    <hadoop.version>3.2.2</hadoop.version>
+    <hbase.version>2.4.2</hbase.version>
     <fmpp.version>1.0</fmpp.version>
     <freemarker.version>2.3.28</freemarker.version>
     <javassist.version>3.27.0-GA</javassist.version>
@@ -91,12 +92,12 @@
     <reflections.version>0.9.10</reflections.version>
     <avro.version>1.9.1</avro.version>
     <metrics.version>4.0.2</metrics.version>
-    <jetty.version>9.3.28.v20191105</jetty.version>
+    <jetty.version>9.4.41.v20210516</jetty.version>
     <jersey.version>2.25.1</jersey.version>
     <asm.version>7.3.1</asm.version>
     <excludedGroups />
-    <memoryMb>4096</memoryMb>
-    <directMemoryMb>4096</directMemoryMb>
+    <memoryMb>4000</memoryMb>
+    <directMemoryMb>3000</directMemoryMb>
     <rat.skip>true</rat.skip>
     <license.skip>true</license.skip>
     <docker.repository>apache/drill</docker.repository>
@@ -110,16 +111,18 @@
     <codemodel.version>2.6</codemodel.version>
     <joda.version>2.10.5</joda.version>
     <javax.el.version>3.0.0</javax.el.version>
-    <surefire.version>3.0.0-M4</surefire.version>
+    <surefire.version>3.0.0-M5</surefire.version>
+    <jna.version>5.8.0</jna.version>
     <commons.compress.version>1.20</commons.compress.version>
     <hikari.version>3.4.2</hikari.version>
-    <netty.version>4.0.48.Final</netty.version>
-    <httpclient.version>4.5.12</httpclient.version>
-    <libthrift.version>0.13.0</libthrift.version>
+    <netty.version>4.1.59.Final</netty.version>
+    <httpclient.version>4.5.13</httpclient.version>
+    <libthrift.version>0.14.0</libthrift.version>
     <derby.version>10.14.2.0</derby.version>
     <commons.cli.version>1.4</commons.cli.version>
     <snakeyaml.version>1.26</snakeyaml.version>
     <commons.lang3.version>3.10</commons.lang3.version>
+    <testcontainers.version>1.15.3</testcontainers.version>
     <typesafe.config.version>1.0.0</typesafe.config.version>
     <commons.codec.version>1.14</commons.codec.version>
     <metadata.extractor.version>2.13.0</metadata.extractor.version>
@@ -127,6 +130,8 @@
     <xerces.version>2.12.0</xerces.version>
     <commons.configuration.version>1.10</commons.configuration.version>
     <commons.beanutils.version>1.9.4</commons.beanutils.version>
+    <httpdlog-parser.version>5.7</httpdlog-parser.version>
+    <yauaa.version>5.20</yauaa.version>
   </properties>
 
   <scm>
@@ -175,7 +180,7 @@
       <releases>
         <enabled>true</enabled>
         <updatePolicy>never</updatePolicy>
-        <checksumPolicy>warn</checksumPolicy>
+        <checksumPolicy>fail</checksumPolicy>
       </releases>
       <snapshots>
         <enabled>false</enabled>
@@ -184,9 +189,10 @@
 
     <repository>
       <id>mapr-releases</id>
-      <url>http://repository.mapr.com/maven/</url>
+      <url>https://repository.mapr.com/maven/</url>
       <releases>
         <enabled>true</enabled>
+        <checksumPolicy>fail</checksumPolicy>
       </releases>
       <snapshots>
         <enabled>false</enabled>
@@ -201,18 +207,18 @@
       </releases>
       <snapshots>
         <enabled>true</enabled>
+        <checksumPolicy>fail</checksumPolicy>
       </snapshots>
-    </repository>
-
-    <repository>
-      <id>jhdf5-repo</id>
-      <name>ImageJ Repository</name>
-      <url>https://maven.scijava.org/content/repositories/public/</url>
     </repository>
 
     <repository>
       <id>jitpack.io</id>
       <url>https://jitpack.io</url>
+    </repository>
+    <repository>
+      <id>splunk-artifactory</id>
+      <name>Splunk Releases</name>
+      <url>https://splunk.jfrog.io/artifactory/ext-releases-local</url>
     </repository>
   </repositories>
 
@@ -220,6 +226,16 @@
     <system>Jira</system>
     <url>https://issues.apache.org/jira/browse/DRILL</url>
   </issueManagement>
+
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.owasp</groupId>
+        <artifactId>dependency-check-maven</artifactId>
+        <version>6.0.4</version>
+      </plugin>
+    </plugins>
+  </reporting>
 
   <build>
     <plugins>
@@ -354,6 +370,7 @@
             <exclude>**/clientlib/y2038/*.c</exclude> <!-- All the files here should have MIT License -->
             <exclude>**/clientlib/y2038/*.h</exclude> <!-- All the files here should have MIT License -->
             <exclude>**/resources/parquet/**/*</exclude>
+            <exclude>**/.asf.yaml</exclude>
             <exclude>**/*.woff2</exclude>
             <exclude>**/*.ks</exclude>
             <exclude>**/*.pcap</exclude>
@@ -386,7 +403,6 @@
             <exclude>**/*.csvh-test</exclude>
             <exclude>**/*.tsv</exclude>
             <exclude>**/*.txt</exclude>
-            <exclude>**/*.yaml</exclude>
             <exclude>**/*.ssv</exclude>
             <exclude>**/.buildpath</exclude>
             <exclude>**/target/**</exclude>
@@ -408,6 +424,7 @@
             <exclude>**/ssl/*.p12</exclude>
             <exclude>**/*.tbl</exclude>
             <exclude>**/*.httpd</exclude>
+            <exclude>**/*.access_log</exclude>
             <exclude>**/*.autotools</exclude>
             <exclude>**/*.cproject</exclude>
             <exclude>**/*.drill</exclude>
@@ -436,6 +453,7 @@
             <exclude>**/*.prj</exclude>
             <exclude>**/*.shp</exclude>
             <exclude>**/*.dbf</exclude>
+            <exclude>**/*.cnf</exclude>
           </excludes>
         </configuration>
       </plugin>
@@ -455,7 +473,7 @@
           <dependency>
             <groupId>com.puppycrawl.tools</groupId>
             <artifactId>checkstyle</artifactId>
-            <version>8.16</version>
+            <version>8.29</version>
           </dependency>
         </dependencies>
         <configuration>
@@ -502,7 +520,7 @@
             <manifestEntries>
               <Extension-Name>org.apache.drill</Extension-Name>
               <Built-By>${user.name}</Built-By>
-              <url>http://drill.apache.org/</url>
+              <url>https://drill.apache.org/</url>
             </manifestEntries>
           </archive>
         </configuration>
@@ -664,6 +682,7 @@
               <exclude>**/clientlib/y2038/*.c</exclude> <!-- All the files here should have MIT License -->
               <exclude>**/clientlib/y2038/*.h</exclude> <!-- All the files here should have MIT License -->
               <exclude>**/resources/parquet/**/*</exclude>
+              <exclude>**/.asf.yaml</exclude>
               <exclude>**/*.woff2</exclude>
               <exclude>**/*.ks</exclude>
               <exclude>**/*.pcap</exclude>
@@ -686,7 +705,6 @@
               <exclude>**/*.md</exclude>
               <exclude>**/*.eps</exclude>
               <exclude>**/*.json</exclude>
-              <exclude>**/*.yaml</exclude>
               <exclude>**/*.seq</exclude>
               <exclude>**/*.parquet</exclude>
               <exclude>**/*.avro</exclude>
@@ -999,7 +1017,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-checkstyle-plugin</artifactId>
-          <version>3.0.0</version>
+          <version>3.1.1</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -1067,6 +1085,10 @@
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
       <version>${commons.io.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-collections4</artifactId>
     </dependency>
 
     <!-- Test Dependencies -->
@@ -1149,6 +1171,16 @@
   <!-- Managed Dependencies -->
   <dependencyManagement>
     <dependencies>
+      <dependency>
+        <groupId>net.java.dev.jna</groupId>
+        <artifactId>jna</artifactId>
+        <version>${jna.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>net.java.dev.jna</groupId>
+        <artifactId>jna-platform</artifactId>
+        <version>${jna.version}</version>
+      </dependency>
       <dependency>
           <groupId>org.slf4j</groupId>
           <artifactId>slf4j-api</artifactId>
@@ -1583,6 +1615,11 @@
         <version>${jackson.version}</version>
       </dependency>
       <dependency>
+        <groupId>com.fasterxml.jackson.datatype</groupId>
+        <artifactId>jackson-datatype-joda</artifactId>
+        <version>${jackson.version}</version>
+      </dependency>
+      <dependency>
         <groupId>org.honton.chas.hocon</groupId>
         <artifactId>jackson-dataformat-hocon</artifactId>
         <version>1.1.1</version>
@@ -1709,7 +1746,7 @@
       <dependency>
         <groupId>io.netty</groupId>
         <artifactId>netty-tcnative</artifactId>
-        <version>2.0.1.Final</version>
+        <version>2.0.39.Final</version>
         <classifier>${netty.tcnative.classifier}</classifier>
         <scope>runtime</scope>
         <optional>true</optional>
@@ -1795,6 +1832,11 @@
         <version>${zookeeper.version}</version>
       </dependency>
       <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-collections4</artifactId>
+        <version>${commons.collections.version}</version>
+      </dependency>
+      <dependency>
         <groupId>org.apache.curator</groupId>
         <artifactId>curator-client</artifactId>
         <version>${curator.version}</version>
@@ -1806,6 +1848,10 @@
           <exclusion>
             <groupId>io.netty</groupId>
             <artifactId>netty</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-transport-native-epoll</artifactId>
           </exclusion>
         </exclusions>
       </dependency>
@@ -2814,43 +2860,10 @@
           <!--Eclipse Jetty dependecies-->
           <dependency>
             <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-server</artifactId>
+            <artifactId>jetty-bom</artifactId>
             <version>${jetty.version}</version>
-          </dependency>
-          <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-servlet</artifactId>
-            <version>${jetty.version}</version>
-          </dependency>
-          <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-servlets</artifactId>
-            <version>${jetty.version}</version>
-          </dependency>
-          <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-security</artifactId>
-            <version>${jetty.version}</version>
-          </dependency>
-          <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-util</artifactId>
-            <version>${jetty.version}</version>
-          </dependency>
-          <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-io</artifactId>
-            <version>${jetty.version}</version>
-          </dependency>
-          <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-webapp</artifactId>
-            <version>${jetty.version}</version>
-          </dependency>
-          <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-xml</artifactId>
-            <version>${jetty.version}</version>
+            <type>pom</type>
+            <scope>import</scope>
           </dependency>
           <!--Eclipse Jetty dependecies-->
 
@@ -3640,6 +3653,12 @@
         <repository>
           <id>cloudera</id>
           <url>https://repository.cloudera.com/artifactory/cloudera-repos/</url>
+          <releases>
+            <checksumPolicy>fail</checksumPolicy>
+          </releases>
+          <snapshots>
+            <checksumPolicy>fail</checksumPolicy>
+          </snapshots>
         </repository>
       </repositories>
     </profile>
@@ -3771,7 +3790,7 @@
           <releases>
             <enabled>true</enabled>
             <updatePolicy>always</updatePolicy>
-            <checksumPolicy>warn</checksumPolicy>
+            <checksumPolicy>fail</checksumPolicy>
           </releases>
           <snapshots>
             <enabled>false</enabled>
@@ -3780,7 +3799,7 @@
           </snapshots>
           <id>HDPReleases</id>
           <name>HDP Releases</name>
-          <url>http://repo.hortonworks.com/content/repositories/releases</url>
+          <url>https://repo.hortonworks.com/content/repositories/releases</url>
           <layout>default</layout>
         </repository>
       </repositories>

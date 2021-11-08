@@ -34,12 +34,10 @@ import org.apache.drill.exec.record.MaterializedField;
 import org.apache.drill.exec.record.metadata.MetadataUtils;
 import org.apache.drill.exec.record.metadata.TupleMetadata;
 import org.apache.drill.exec.record.selection.SelectionVector2;
+import org.apache.drill.exec.vector.DateUtilities;
 import org.apache.drill.exec.vector.accessor.ScalarWriter;
 import org.apache.drill.exec.vector.accessor.ValueType;
 import org.joda.time.Duration;
-import org.joda.time.Instant;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalTime;
 import org.joda.time.Period;
 
 /**
@@ -88,6 +86,8 @@ public class RowSetUtilities {
     switch (valueType) {
     case BYTES:
       return Integer.toHexString(value).getBytes();
+    case FLOAT:
+      return (float) value;
     case DOUBLE:
       return (double) value;
     case INTEGER:
@@ -114,11 +114,11 @@ public class RowSetUtilities {
     case PERIOD:
       return periodFromInt(dataType.getMinorType(), value);
     case DATE:
-      return new LocalDate(value);
+      return DateUtilities.fromDrillDate(value);
     case TIME:
-      return new LocalTime(value);
+      return DateUtilities.fromDrillTime(value);
     case TIMESTAMP:
-      return new Instant(value);
+      return DateUtilities.fromDrillTimestamp(value);
     default:
       throw new IllegalStateException("Unknown writer type: " + valueType);
     }
@@ -165,6 +165,9 @@ public class RowSetUtilities {
         assertTrue(msg, Arrays.equals(expected, actual));
         break;
      }
+      case FLOAT:
+       assertEquals(msg, (float) expectedObj, (float) actualObj, 0.0001);
+       break;
      case DOUBLE:
        assertEquals(msg, (double) expectedObj, (double) actualObj, 0.0001);
        break;

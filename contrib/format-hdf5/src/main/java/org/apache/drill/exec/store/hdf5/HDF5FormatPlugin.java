@@ -18,62 +18,54 @@
 
 package org.apache.drill.exec.store.hdf5;
 
-import org.apache.drill.common.config.DrillConfig;
-import org.apache.drill.common.exceptions.ExecutionSetupException;
 import org.apache.drill.common.logical.StoragePluginConfig;
 import org.apache.drill.common.types.TypeProtos;
 import org.apache.drill.common.types.Types;
-import org.apache.drill.exec.ExecConstants;
 import org.apache.drill.exec.physical.impl.scan.file.FileScanFramework;
 import org.apache.drill.exec.physical.impl.scan.file.FileScanFramework.FileScanBuilder;
 
 import org.apache.drill.exec.physical.impl.scan.framework.ManagedReader;
-import org.apache.drill.exec.proto.UserBitShared;
 import org.apache.drill.exec.server.DrillbitContext;
 import org.apache.drill.exec.server.options.OptionManager;
 import org.apache.drill.exec.store.dfs.easy.EasySubScan;
-import org.apache.drill.shaded.guava.com.google.common.io.Files;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.drill.exec.store.dfs.easy.EasyFormatPlugin;
 import org.apache.drill.exec.store.hdf5.HDF5BatchReader.HDF5ReaderConfig;
 
-import java.io.File;
 
 
 public class HDF5FormatPlugin extends EasyFormatPlugin<HDF5FormatConfig> {
 
   public static final String DEFAULT_NAME = "hdf5";
 
-  private final DrillbitContext context;
 
   public HDF5FormatPlugin(String name, DrillbitContext context,
                           Configuration fsConf,
                           StoragePluginConfig storageConfig,
                           HDF5FormatConfig formatConfig) {
     super(name, easyConfig(fsConf, formatConfig), context, storageConfig, formatConfig);
-    this.context = context;
   }
 
   private static EasyFormatConfig easyConfig(Configuration fsConf, HDF5FormatConfig pluginConfig) {
-    EasyFormatConfig config = new EasyFormatConfig();
-    config.readable = true;
-    config.writable = false;
-    config.blockSplittable = false;
-    config.compressible = true;
-    config.supportsProjectPushdown = true;
-    config.extensions = pluginConfig.getExtensions();
-    config.fsConf = fsConf;
-    config.defaultName = DEFAULT_NAME;
-    config.readerOperatorType = UserBitShared.CoreOperatorType.HDF5_SUB_SCAN_VALUE;
-    config.useEnhancedScan = true;
-    return config;
+    return EasyFormatConfig.builder()
+        .readable(true)
+        .writable(false)
+        .blockSplittable(false)
+        .compressible(true)
+        .supportsProjectPushdown(true)
+        .extensions(pluginConfig.getExtensions())
+        .fsConf(fsConf)
+        .defaultName(DEFAULT_NAME)
+        .useEnhancedScan(true)
+        .supportsLimitPushdown(true)
+        .build();
   }
 
   @Override
-  protected FileScanBuilder frameworkBuilder(OptionManager options, EasySubScan scan) throws ExecutionSetupException {
+  protected FileScanBuilder frameworkBuilder(OptionManager options, EasySubScan scan) {
     FileScanBuilder builder = new FileScanBuilder();
 
-    builder.setReaderFactory(new HDF5ReaderFactory(new HDF5BatchReader.HDF5ReaderConfig(this, formatConfig)));
+    builder.setReaderFactory(new HDF5ReaderFactory(new HDF5BatchReader.HDF5ReaderConfig(this, formatConfig), scan.getMaxRecords()));
     initScanBuilder(builder, scan);
     builder.nullType(Types.optional(TypeProtos.MinorType.VARCHAR));
     return builder;
@@ -81,37 +73,17 @@ public class HDF5FormatPlugin extends EasyFormatPlugin<HDF5FormatConfig> {
 
   public static class HDF5ReaderFactory extends FileScanFramework.FileReaderFactory {
     private final HDF5ReaderConfig readerConfig;
+    private final int maxRecords;
 
-    HDF5ReaderFactory(HDF5ReaderConfig config) {
+
+    HDF5ReaderFactory(HDF5ReaderConfig config, int maxRecords) {
       readerConfig = config;
+      this.maxRecords = maxRecords;
     }
 
     @Override
     public ManagedReader<? extends FileScanFramework.FileSchemaNegotiator> newReader() {
-      return new HDF5BatchReader(readerConfig);
+      return new HDF5BatchReader(readerConfig, maxRecords);
     }
-  }
-
-  /**
-   * First tries to get drill temporary directory value from from config ${drill.tmp-dir},
-   * then checks environmental variable $DRILL_TMP_DIR.
-   * If value is still missing, generates directory using {@link Files#createTempDir()}.
-   *
-   * @return drill temporary directory path
-   */
-  protected File getTmpDir() {
-    DrillConfig config = context.getConfig();
-    String drillTempDir;
-    if (config.hasPath(ExecConstants.DRILL_TMP_DIR)) {
-      drillTempDir = config.getString(ExecConstants.DRILL_TMP_DIR);
-    } else {
-      drillTempDir = System.getenv("DRILL_TMP_DIR");
-    }
-
-    if (drillTempDir == null) {
-      return Files.createTempDir();
-    }
-
-    return new File(drillTempDir);
   }
 }

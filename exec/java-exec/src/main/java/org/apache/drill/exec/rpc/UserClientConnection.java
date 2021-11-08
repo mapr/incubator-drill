@@ -17,7 +17,7 @@
  */
 package org.apache.drill.exec.rpc;
 
-import io.netty.channel.ChannelFuture;
+import io.netty.util.concurrent.Future;
 
 import org.apache.drill.exec.physical.impl.materialize.QueryDataPackage;
 import org.apache.drill.exec.proto.GeneralRPCProtos.Ack;
@@ -46,24 +46,24 @@ public interface UserClientConnection extends AutoCloseable {
   /**
    * Send query result outcome to client. Outcome is returned through {@code listener}.
    *
-   * @param listener
-   * @param result
+   * @param listener The listener
+   * @param result The query result to be sent
    */
   void sendResult(RpcOutcomeListener<Ack> listener, QueryResult result);
 
   /**
    * Send query data to client. Outcome is returned through {@code listener}.
    *
-   * @param listener
-   * @param result
+   * @param listener The listener
+   * @param data The data to be sent
    */
   void sendData(RpcOutcomeListener<Ack> listener, QueryDataPackage data);
 
   /**
-   * Returns the {@link ChannelFuture} which will be notified when this
+   * Returns the {@link Future} which will be notified when this
    * channel is closed.  This method always returns the same future instance.
    */
-  ChannelFuture getChannelClosureFuture();
+  Future<Void> getClosureFuture();
 
   /**
    * @return Return the client node address.

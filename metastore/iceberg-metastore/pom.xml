@@ -24,11 +24,11 @@
   <parent>
     <artifactId>metastore-parent</artifactId>
     <groupId>org.apache.drill.metastore</groupId>
-    <version>1.18.0-mapr-SNAPSHOT</version>
+    <version>1.19.0-mapr-SNAPSHOT</version>
   </parent>
 
   <artifactId>drill-iceberg-metastore</artifactId>
-  <name>metastore/Drill Iceberg Metastore</name>
+  <name>Drill : Metastore : Iceberg</name>
 
   <properties>
     <iceberg.version>93d51b9</iceberg.version>

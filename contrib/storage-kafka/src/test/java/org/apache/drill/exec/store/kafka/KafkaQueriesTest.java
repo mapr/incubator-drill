@@ -17,19 +17,23 @@
  */
 package org.apache.drill.exec.store.kafka;
 
+import io.confluent.kafka.serializers.KafkaAvroDeserializer;
 import org.apache.drill.categories.KafkaStorageTest;
 import org.apache.drill.categories.SlowTest;
 import org.apache.drill.common.exceptions.UserException;
 import org.apache.drill.exec.ExecConstants;
 import org.apache.drill.exec.rpc.RpcException;
 import org.apache.kafka.clients.consumer.Consumer;
+import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.serialization.ByteArrayDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.junit.Assert;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.junit.runners.MethodSorters;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -39,6 +43,7 @@ import java.util.Set;
 import static org.apache.drill.exec.store.kafka.TestKafkaSuit.embeddedKafkaCluster;
 import static org.junit.Assert.fail;
 
+@FixMethodOrder(MethodSorters.JVM)
 @Category({KafkaStorageTest.class, SlowTest.class})
 public class KafkaQueriesTest extends KafkaTestBase {
 
@@ -58,9 +63,27 @@ public class KafkaQueriesTest extends KafkaTestBase {
   }
 
   @Test
-  public void testResultCount() throws Exception {
+  public void testResultCount() {
     String queryString = String.format(TestQueryConstants.MSG_SELECT_QUERY, TestQueryConstants.JSON_TOPIC);
     runKafkaSQLVerifyCount(queryString, TestKafkaSuit.NUM_JSON_MSG);
+  }
+
+  @Test
+  public void testAvroResultCount() {
+    try {
+      client.alterSession(ExecConstants.KAFKA_RECORD_READER,
+          "org.apache.drill.exec.store.kafka.decoders.AvroMessageReader");
+
+      KafkaStoragePluginConfig config = (KafkaStoragePluginConfig) cluster.drillbit().getContext()
+              .getStorage().getStoredConfig(KafkaStoragePluginConfig.NAME);
+      config.getKafkaConsumerProps().put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG,
+              KafkaAvroDeserializer.class.getName());
+
+      String queryString = String.format(TestQueryConstants.MSG_SELECT_QUERY, TestQueryConstants.AVRO_TOPIC);
+      runKafkaSQLVerifyCount(queryString, TestKafkaSuit.NUM_JSON_MSG);
+    } finally {
+      client.resetSession(ExecConstants.KAFKA_RECORD_READER);
+    }
   }
 
   @Test
@@ -94,13 +117,13 @@ public class KafkaQueriesTest extends KafkaTestBase {
   @Test
   public void testInformationSchema() throws Exception {
     String query = "select * from information_schema.`views`";
-    runSQL(query);
+    queryBuilder().sql(query).run();
   }
 
   private Map<TopicPartition, Long> fetchOffsets(int flag) {
     Consumer<byte[], byte[]> kafkaConsumer = null;
     try {
-     kafkaConsumer = new KafkaConsumer<>(storagePluginConfig.getKafkaConsumerProps(),
+      kafkaConsumer = new KafkaConsumer<>(storagePluginConfig.getKafkaConsumerProps(),
         new ByteArrayDeserializer(), new ByteArrayDeserializer());
 
       Map<TopicPartition, Long> offsetsMap = new HashMap<>();
@@ -136,7 +159,21 @@ public class KafkaQueriesTest extends KafkaTestBase {
   @Test
   public void testPhysicalPlanSubmission() throws Exception {
     String query = String.format(TestQueryConstants.MSG_SELECT_QUERY, TestQueryConstants.JSON_TOPIC);
-    testPhysicalPlanExecutionBasedOnQuery(query);
+    String plan = queryBuilder().sql(query).explainJson();
+    queryBuilder().physical(plan).run();
+  }
+
+  @Test
+  public void testPhysicalPlanSubmissionAvro() throws Exception {
+    try {
+      client.alterSession(ExecConstants.KAFKA_RECORD_READER,
+          "org.apache.drill.exec.store.kafka.decoders.AvroMessageReader");
+      String query = String.format(TestQueryConstants.MSG_SELECT_QUERY, TestQueryConstants.AVRO_TOPIC);
+      String plan = queryBuilder().sql(query).explainJson();
+      queryBuilder().physical(plan).run();
+    } finally {
+      client.resetSession(ExecConstants.KAFKA_RECORD_READER);
+    }
   }
 
   @Test
@@ -162,15 +199,15 @@ public class KafkaQueriesTest extends KafkaTestBase {
       KafkaMessageGenerator generator = new KafkaMessageGenerator(embeddedKafkaCluster.getKafkaBrokerList(), StringSerializer.class);
       generator.populateMessages(topicName, "Test");
 
-      alterSession(ExecConstants.KAFKA_READER_SKIP_INVALID_RECORDS, false);
+      client.alterSession(ExecConstants.KAFKA_READER_SKIP_INVALID_RECORDS, false);
       try {
-        test("select * from kafka.`%s`", topicName);
+        queryBuilder().sql("select * from kafka.`%s`", topicName).run();
         fail();
       } catch (UserException e) {
         // expected
       }
 
-      alterSession(ExecConstants.KAFKA_READER_SKIP_INVALID_RECORDS, true);
+      client.alterSession(ExecConstants.KAFKA_READER_SKIP_INVALID_RECORDS, true);
       testBuilder()
         .sqlQuery("select * from kafka.`%s`", topicName)
         .expectsEmptyResultSet();
@@ -185,7 +222,7 @@ public class KafkaQueriesTest extends KafkaTestBase {
         .baselineValues(2L)
         .go();
     } finally {
-      resetSessionOption(ExecConstants.KAFKA_READER_SKIP_INVALID_RECORDS);
+      client.resetSession(ExecConstants.KAFKA_READER_SKIP_INVALID_RECORDS);
     }
   }
 
@@ -197,15 +234,15 @@ public class KafkaQueriesTest extends KafkaTestBase {
       KafkaMessageGenerator generator = new KafkaMessageGenerator(embeddedKafkaCluster.getKafkaBrokerList(), StringSerializer.class);
       generator.populateMessages(topicName, "{\"nan_col\":NaN, \"inf_col\":Infinity}");
 
-      alterSession(ExecConstants.KAFKA_READER_NAN_INF_NUMBERS, false);
+      client.alterSession(ExecConstants.KAFKA_READER_NAN_INF_NUMBERS, false);
       try {
-        test("select nan_col, inf_col from kafka.`%s`", topicName);
+        queryBuilder().sql("select nan_col, inf_col from kafka.`%s`", topicName).run();
         fail();
       } catch (UserException e) {
         // expected
       }
 
-      alterSession(ExecConstants.KAFKA_READER_NAN_INF_NUMBERS, true);
+      client.alterSession(ExecConstants.KAFKA_READER_NAN_INF_NUMBERS, true);
       testBuilder()
         .sqlQuery("select nan_col, inf_col from kafka.`%s`", topicName)
         .unOrdered()
@@ -213,7 +250,7 @@ public class KafkaQueriesTest extends KafkaTestBase {
         .baselineValues(Double.NaN, Double.POSITIVE_INFINITY)
         .go();
     } finally {
-      resetSessionOption(ExecConstants.KAFKA_READER_NAN_INF_NUMBERS);
+      client.resetSession(ExecConstants.KAFKA_READER_NAN_INF_NUMBERS);
     }
   }
 
@@ -225,15 +262,15 @@ public class KafkaQueriesTest extends KafkaTestBase {
       KafkaMessageGenerator generator = new KafkaMessageGenerator(embeddedKafkaCluster.getKafkaBrokerList(), StringSerializer.class);
       generator.populateMessages(topicName, "{\"name\": \"AB\\\"\\C\"}");
 
-      alterSession(ExecConstants.KAFKA_READER_ESCAPE_ANY_CHAR, false);
+      client.alterSession(ExecConstants.KAFKA_READER_ESCAPE_ANY_CHAR, false);
       try {
-        test("select name from kafka.`%s`", topicName);
+        queryBuilder().sql("select name from kafka.`%s`", topicName).run();
         fail();
       } catch (UserException e) {
         // expected
       }
 
-      alterSession(ExecConstants.KAFKA_READER_ESCAPE_ANY_CHAR, true);
+      client.alterSession(ExecConstants.KAFKA_READER_ESCAPE_ANY_CHAR, true);
       testBuilder()
         .sqlQuery("select name from kafka.`%s`", topicName)
         .unOrdered()
@@ -241,7 +278,7 @@ public class KafkaQueriesTest extends KafkaTestBase {
         .baselineValues("AB\"C")
         .go();
     } finally {
-      resetSessionOption(ExecConstants.KAFKA_READER_ESCAPE_ANY_CHAR);
+      client.resetSession(ExecConstants.KAFKA_READER_ESCAPE_ANY_CHAR);
     }
   }
 }

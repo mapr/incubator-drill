@@ -17,7 +17,6 @@
  */
 package org.apache.drill.exec.store.kafka;
 
-import org.apache.drill.PlanTestBase;
 import org.apache.drill.categories.KafkaStorageTest;
 import org.apache.drill.categories.SlowTest;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -39,7 +38,7 @@ public class KafkaFilterPushdownTest extends KafkaTestBase {
   public static void setup() throws Exception {
     TestKafkaSuit.createTopicHelper(TestQueryConstants.JSON_PUSHDOWN_TOPIC, NUM_PARTITIONS);
     KafkaMessageGenerator generator = new KafkaMessageGenerator(embeddedKafkaCluster.getKafkaBrokerList(),
-        StringSerializer.class);
+      StringSerializer.class);
     generator.populateJsonMsgWithTimestamps(TestQueryConstants.JSON_PUSHDOWN_TOPIC, NUM_JSON_MSG);
     String query = String.format(TestQueryConstants.MSG_SELECT_QUERY, TestQueryConstants.JSON_PUSHDOWN_TOPIC);
     //Ensure messages are present
@@ -56,11 +55,14 @@ public class KafkaFilterPushdownTest extends KafkaTestBase {
     final int expectedRowCount = 5; //1 * NUM_PARTITIONS
 
     final String queryString = String.format(TestQueryConstants.QUERY_TEMPLATE_AND,
-        TestQueryConstants.JSON_PUSHDOWN_TOPIC, predicate1, predicate2);
+      TestQueryConstants.JSON_PUSHDOWN_TOPIC, predicate1, predicate2);
 
     runKafkaSQLVerifyCount(queryString, expectedRowCount);
-    PlanTestBase.testPlanMatchingPatterns(queryString, JSON_FORMAT,
-        new String[] {String.format(EXPECTED_PATTERN, expectedRowCount)}, null);
+    queryBuilder()
+      .sql(queryString)
+      .jsonPlanMatcher()
+      .include(String.format(EXPECTED_PATTERN, expectedRowCount))
+      .match();
   }
 
   /**
@@ -72,11 +74,14 @@ public class KafkaFilterPushdownTest extends KafkaTestBase {
     final int expectedRowCount = NUM_JSON_MSG;
 
     final String queryString = String.format(TestQueryConstants.QUERY_TEMPLATE_BASIC,
-        TestQueryConstants.JSON_PUSHDOWN_TOPIC, predicate);
+      TestQueryConstants.JSON_PUSHDOWN_TOPIC, predicate);
 
     runKafkaSQLVerifyCount(queryString, expectedRowCount);
-    PlanTestBase.testPlanMatchingPatterns(queryString, JSON_FORMAT,
-        new String[] {String.format(EXPECTED_PATTERN, expectedRowCount)}, null);
+    queryBuilder()
+      .sql(queryString)
+      .jsonPlanMatcher()
+      .include(String.format(EXPECTED_PATTERN, expectedRowCount))
+      .match();
   }
 
   /**
@@ -88,11 +93,14 @@ public class KafkaFilterPushdownTest extends KafkaTestBase {
     final int expectedRowCount = 20;
 
     final String queryString = String.format(TestQueryConstants.QUERY_TEMPLATE_BASIC,
-        TestQueryConstants.JSON_PUSHDOWN_TOPIC, predicate);
+      TestQueryConstants.JSON_PUSHDOWN_TOPIC, predicate);
 
     runKafkaSQLVerifyCount(queryString,expectedRowCount);
-    PlanTestBase.testPlanMatchingPatterns(queryString, JSON_FORMAT,
-        new String[] {String.format(EXPECTED_PATTERN, expectedRowCount)}, null);
+    queryBuilder()
+      .sql(queryString)
+      .jsonPlanMatcher()
+      .include(String.format(EXPECTED_PATTERN, expectedRowCount))
+      .match();
   }
 
   /**
@@ -105,11 +113,14 @@ public class KafkaFilterPushdownTest extends KafkaTestBase {
     final int expectedRowCount = 5;
 
     final String queryString = String.format(TestQueryConstants.QUERY_TEMPLATE_BASIC,
-        TestQueryConstants.JSON_PUSHDOWN_TOPIC, predicate);
+      TestQueryConstants.JSON_PUSHDOWN_TOPIC, predicate);
 
     runKafkaSQLVerifyCount(queryString,expectedRowCount);
-    PlanTestBase.testPlanMatchingPatterns(queryString, JSON_FORMAT,
-        new String[] {String.format(EXPECTED_PATTERN, expectedRowInPlan)}, null);
+    queryBuilder()
+      .sql(queryString)
+      .jsonPlanMatcher()
+      .include(String.format(EXPECTED_PATTERN, expectedRowInPlan))
+      .match();
   }
 
   /**
@@ -121,11 +132,14 @@ public class KafkaFilterPushdownTest extends KafkaTestBase {
     final int expectedRowCount = 0;
 
     final String queryString = String.format(TestQueryConstants.QUERY_TEMPLATE_BASIC,
-        TestQueryConstants.JSON_PUSHDOWN_TOPIC, predicate);
+      TestQueryConstants.JSON_PUSHDOWN_TOPIC, predicate);
 
     runKafkaSQLVerifyCount(queryString,expectedRowCount);
-    PlanTestBase.testPlanMatchingPatterns(queryString, JSON_FORMAT,
-        new String[] {String.format(EXPECTED_PATTERN, expectedRowCount)}, null);
+    queryBuilder()
+      .sql(queryString)
+      .jsonPlanMatcher()
+      .include(String.format(EXPECTED_PATTERN, expectedRowCount))
+      .match();
   }
 
   /**
@@ -137,11 +151,14 @@ public class KafkaFilterPushdownTest extends KafkaTestBase {
     final int expectedRowCount = 0;
 
     final String queryString = String.format(TestQueryConstants.QUERY_TEMPLATE_BASIC,
-        TestQueryConstants.JSON_PUSHDOWN_TOPIC, predicate);
+      TestQueryConstants.JSON_PUSHDOWN_TOPIC, predicate);
 
     runKafkaSQLVerifyCount(queryString,expectedRowCount);
-    PlanTestBase.testPlanMatchingPatterns(queryString, JSON_FORMAT,
-        new String[] {String.format(EXPECTED_PATTERN, expectedRowCount)}, null);
+    queryBuilder()
+      .sql(queryString)
+      .jsonPlanMatcher()
+      .include(String.format(EXPECTED_PATTERN, expectedRowCount))
+      .match();
   }
 
   /**
@@ -154,11 +171,14 @@ public class KafkaFilterPushdownTest extends KafkaTestBase {
     final int expectedRowCount = 0;
 
     final String queryString = String.format(TestQueryConstants.QUERY_TEMPLATE_AND,
-        TestQueryConstants.JSON_PUSHDOWN_TOPIC, predicate1, predicate2);
+      TestQueryConstants.JSON_PUSHDOWN_TOPIC, predicate1, predicate2);
 
     runKafkaSQLVerifyCount(queryString,expectedRowCount);
-    PlanTestBase.testPlanMatchingPatterns(queryString, JSON_FORMAT,
-        new String[] {String.format(EXPECTED_PATTERN, expectedRowCount)}, null);
+    queryBuilder()
+      .sql(queryString)
+      .jsonPlanMatcher()
+      .include(String.format(EXPECTED_PATTERN, expectedRowCount))
+      .match();
   }
 
   /**
@@ -171,51 +191,69 @@ public class KafkaFilterPushdownTest extends KafkaTestBase {
 
     //"equal" such that value = endOffset
     String queryString = String.format(TestQueryConstants.QUERY_TEMPLATE_BASIC,
-        TestQueryConstants.JSON_PUSHDOWN_TOPIC, "kafkaMsgOffset = 10");
+      TestQueryConstants.JSON_PUSHDOWN_TOPIC, "kafkaMsgOffset = 10");
 
     runKafkaSQLVerifyCount(queryString,expectedRowCount);
-    PlanTestBase.testPlanMatchingPatterns(queryString, JSON_FORMAT,
-        new String[] {String.format(EXPECTED_PATTERN, expectedRowCount)}, null);
+    queryBuilder()
+      .sql(queryString)
+      .jsonPlanMatcher()
+      .include(String.format(EXPECTED_PATTERN, expectedRowCount))
+      .match();
 
     //"equal" such that value < startOffset
     queryString = String.format(TestQueryConstants.QUERY_TEMPLATE_BASIC,
-        TestQueryConstants.JSON_PUSHDOWN_TOPIC, "kafkaMsgOffset = -1");
+      TestQueryConstants.JSON_PUSHDOWN_TOPIC, "kafkaMsgOffset = -1");
 
     runKafkaSQLVerifyCount(queryString,expectedRowCount);
-    PlanTestBase.testPlanMatchingPatterns(queryString, JSON_FORMAT,
-        new String[] {String.format(EXPECTED_PATTERN, expectedRowCount)}, null);
+    queryBuilder()
+      .sql(queryString)
+      .jsonPlanMatcher()
+      .include(String.format(EXPECTED_PATTERN, expectedRowCount))
+      .match();
 
     //"greater_than" such that value = endOffset-1
     queryString = String.format(TestQueryConstants.QUERY_TEMPLATE_BASIC,
-        TestQueryConstants.JSON_PUSHDOWN_TOPIC, "kafkaMsgOffset > 9");
+      TestQueryConstants.JSON_PUSHDOWN_TOPIC, "kafkaMsgOffset > 9");
 
     runKafkaSQLVerifyCount(queryString,expectedRowCount);
-    PlanTestBase.testPlanMatchingPatterns(queryString, JSON_FORMAT,
-        new String[] {String.format(EXPECTED_PATTERN, expectedRowCount)}, null);
+    queryBuilder()
+      .sql(queryString)
+      .jsonPlanMatcher()
+      .include(String.format(EXPECTED_PATTERN, expectedRowCount))
+      .match();
 
     //"greater_than_or_equal" such that value = endOffset
     queryString = String.format(TestQueryConstants.QUERY_TEMPLATE_BASIC,
-        TestQueryConstants.JSON_PUSHDOWN_TOPIC, "kafkaMsgOffset >= 10");
+      TestQueryConstants.JSON_PUSHDOWN_TOPIC, "kafkaMsgOffset >= 10");
 
     runKafkaSQLVerifyCount(queryString,expectedRowCount);
-    PlanTestBase.testPlanMatchingPatterns(queryString, JSON_FORMAT,
-        new String[] {String.format(EXPECTED_PATTERN, expectedRowCount)}, null);
+    queryBuilder()
+      .sql(queryString)
+      .jsonPlanMatcher()
+      .include(String.format(EXPECTED_PATTERN, expectedRowCount))
+      .match();
 
     //"less_than" such that value = startOffset
     queryString = String.format(TestQueryConstants.QUERY_TEMPLATE_BASIC,
-        TestQueryConstants.JSON_PUSHDOWN_TOPIC, "kafkaMsgOffset < 0");
+      TestQueryConstants.JSON_PUSHDOWN_TOPIC, "kafkaMsgOffset < 0");
 
     runKafkaSQLVerifyCount(queryString,expectedRowCount);
-    PlanTestBase.testPlanMatchingPatterns(queryString, JSON_FORMAT,
-        new String[] {String.format(EXPECTED_PATTERN, expectedRowCount)}, null);
+    queryBuilder()
+      .sql(queryString)
+      .jsonPlanMatcher()
+      .include(String.format(EXPECTED_PATTERN, expectedRowCount))
+      .match();
 
     //"less_than_or_equal" such that value < startOffset
     queryString = String.format(TestQueryConstants.QUERY_TEMPLATE_BASIC,
-        TestQueryConstants.JSON_PUSHDOWN_TOPIC, "kafkaMsgOffset <= -1");
+      TestQueryConstants.JSON_PUSHDOWN_TOPIC, "kafkaMsgOffset <= -1");
 
     runKafkaSQLVerifyCount(queryString,expectedRowCount);
-    PlanTestBase.testPlanMatchingPatterns(queryString, JSON_FORMAT,
-        new String[] {String.format(EXPECTED_PATTERN, expectedRowCount)}, null);
+    queryBuilder()
+      .sql(queryString)
+      .jsonPlanMatcher()
+      .include(String.format(EXPECTED_PATTERN, expectedRowCount))
+      .match();
   }
 
   /**
@@ -228,27 +266,36 @@ public class KafkaFilterPushdownTest extends KafkaTestBase {
 
     //"equal" such that value = endOffset-1
     String queryString = String.format(TestQueryConstants.QUERY_TEMPLATE_BASIC,
-        TestQueryConstants.JSON_PUSHDOWN_TOPIC, "kafkaMsgOffset = 9");
+      TestQueryConstants.JSON_PUSHDOWN_TOPIC, "kafkaMsgOffset = 9");
 
     runKafkaSQLVerifyCount(queryString, expectedRowCount);
-    PlanTestBase.testPlanMatchingPatterns(queryString, JSON_FORMAT,
-        new String[] {String.format(EXPECTED_PATTERN, expectedRowCount)}, null);
+    queryBuilder()
+      .sql(queryString)
+      .jsonPlanMatcher()
+      .include(String.format(EXPECTED_PATTERN, expectedRowCount))
+      .match();
 
     //"greater_than" such that value = endOffset-2
     queryString = String.format(TestQueryConstants.QUERY_TEMPLATE_BASIC,
-        TestQueryConstants.JSON_PUSHDOWN_TOPIC, "kafkaMsgOffset > 8");
+      TestQueryConstants.JSON_PUSHDOWN_TOPIC, "kafkaMsgOffset > 8");
 
     runKafkaSQLVerifyCount(queryString,expectedRowCount);
-    PlanTestBase.testPlanMatchingPatterns(queryString, JSON_FORMAT,
-        new String[] {String.format(EXPECTED_PATTERN, expectedRowCount)}, null);
+    queryBuilder()
+      .sql(queryString)
+      .jsonPlanMatcher()
+      .include(String.format(EXPECTED_PATTERN, expectedRowCount))
+      .match();
 
     //"greater_than_or_equal" such that value = endOffset-1
     queryString = String.format(TestQueryConstants.QUERY_TEMPLATE_BASIC,
-        TestQueryConstants.JSON_PUSHDOWN_TOPIC, "kafkaMsgOffset >= 9");
+      TestQueryConstants.JSON_PUSHDOWN_TOPIC, "kafkaMsgOffset >= 9");
 
     runKafkaSQLVerifyCount(queryString,expectedRowCount);
-    PlanTestBase.testPlanMatchingPatterns(queryString, JSON_FORMAT,
-        new String[] {String.format(EXPECTED_PATTERN, expectedRowCount)}, null);
+    queryBuilder()
+      .sql(queryString)
+      .jsonPlanMatcher()
+      .include(String.format(EXPECTED_PATTERN, expectedRowCount))
+      .match();
   }
 
   /**
@@ -262,11 +309,14 @@ public class KafkaFilterPushdownTest extends KafkaTestBase {
     final int expectedRowCount = 26;
 
     final String queryString = String.format(TestQueryConstants.QUERY_TEMPLATE_OR,
-        TestQueryConstants.JSON_PUSHDOWN_TOPIC, predicate1, predicate2);
+      TestQueryConstants.JSON_PUSHDOWN_TOPIC, predicate1, predicate2);
 
     runKafkaSQLVerifyCount(queryString,expectedRowCount);
-    PlanTestBase.testPlanMatchingPatterns(queryString, JSON_FORMAT,
-        new String[] {String.format(EXPECTED_PATTERN, expectedRowCount)}, null);
+    queryBuilder()
+      .sql(queryString)
+      .jsonPlanMatcher()
+      .include(String.format(EXPECTED_PATTERN, expectedRowCount))
+      .match();
   }
 
   /**
@@ -280,11 +330,14 @@ public class KafkaFilterPushdownTest extends KafkaTestBase {
     final int expectedRowCount = 10;
 
     final String queryString = String.format(TestQueryConstants.QUERY_TEMPLATE_OR,
-        TestQueryConstants.JSON_PUSHDOWN_TOPIC, predicate1, predicate2);
+      TestQueryConstants.JSON_PUSHDOWN_TOPIC, predicate1, predicate2);
 
     runKafkaSQLVerifyCount(queryString,expectedRowCount);
-    PlanTestBase.testPlanMatchingPatterns(queryString, JSON_FORMAT,
-        new String[] {String.format(EXPECTED_PATTERN, expectedRowInPlan)}, null);
+    queryBuilder()
+      .sql(queryString)
+      .jsonPlanMatcher()
+      .include(String.format(EXPECTED_PATTERN, expectedRowInPlan))
+      .match();
   }
 
   /**
@@ -298,11 +351,14 @@ public class KafkaFilterPushdownTest extends KafkaTestBase {
     final int expectedRowCount = 8;
 
     final String queryString = String.format(TestQueryConstants.QUERY_TEMPLATE_AND_OR_PATTERN_1,
-        TestQueryConstants.JSON_PUSHDOWN_TOPIC, predicate1, predicate2, predicate3);
+      TestQueryConstants.JSON_PUSHDOWN_TOPIC, predicate1, predicate2, predicate3);
 
     runKafkaSQLVerifyCount(queryString,expectedRowCount);
-    PlanTestBase.testPlanMatchingPatterns(queryString, JSON_FORMAT,
-        new String[] {String.format(EXPECTED_PATTERN, expectedRowCount)}, null);
+    queryBuilder()
+      .sql(queryString)
+      .jsonPlanMatcher()
+      .include(String.format(EXPECTED_PATTERN, expectedRowCount))
+      .match();
   }
 
   /**
@@ -318,11 +374,14 @@ public class KafkaFilterPushdownTest extends KafkaTestBase {
     final int expectedRowCount = 4;
 
     final String queryString = String.format(TestQueryConstants.QUERY_TEMPLATE_AND_OR_PATTERN_3,
-        TestQueryConstants.JSON_PUSHDOWN_TOPIC, predicate1, predicate2, predicate3, predicate4);
+      TestQueryConstants.JSON_PUSHDOWN_TOPIC, predicate1, predicate2, predicate3, predicate4);
 
     runKafkaSQLVerifyCount(queryString,expectedRowCount);
-    PlanTestBase.testPlanMatchingPatterns(queryString, JSON_FORMAT,
-        new String[] {String.format(EXPECTED_PATTERN, expectedRowCountInPlan)}, null);
+    queryBuilder()
+      .sql(queryString)
+      .jsonPlanMatcher()
+      .include(String.format(EXPECTED_PATTERN, expectedRowCountInPlan))
+      .match();
   }
 
   /**
@@ -337,11 +396,14 @@ public class KafkaFilterPushdownTest extends KafkaTestBase {
     final int expectedRowCount = 10;
 
     final String queryString = String.format(TestQueryConstants.QUERY_TEMPLATE_AND,
-        TestQueryConstants.JSON_PUSHDOWN_TOPIC, predicate1, predicate2);
+      TestQueryConstants.JSON_PUSHDOWN_TOPIC, predicate1, predicate2);
 
     runKafkaSQLVerifyCount(queryString,expectedRowCount);
-    PlanTestBase.testPlanMatchingPatterns(queryString, JSON_FORMAT,
-        new String[] {String.format(EXPECTED_PATTERN, expectedRowCountInPlan)}, null);
+    queryBuilder()
+      .sql(queryString)
+      .jsonPlanMatcher()
+      .include(String.format(EXPECTED_PATTERN, expectedRowCountInPlan))
+      .match();
   }
 
   /**
@@ -357,10 +419,13 @@ public class KafkaFilterPushdownTest extends KafkaTestBase {
     final int expectedRowCount = 30;
 
     final String queryString = String.format(TestQueryConstants.QUERY_TEMPLATE_AND_OR_PATTERN_2,
-        TestQueryConstants.JSON_PUSHDOWN_TOPIC, predicate1, predicate2, predicate3);
+      TestQueryConstants.JSON_PUSHDOWN_TOPIC, predicate1, predicate2, predicate3);
 
     runKafkaSQLVerifyCount(queryString,expectedRowCount);
-    PlanTestBase.testPlanMatchingPatterns(queryString, JSON_FORMAT,
-        new String[] {String.format(EXPECTED_PATTERN, expectedRowCountInPlan)}, null);
+    queryBuilder()
+      .sql(queryString)
+      .jsonPlanMatcher()
+      .include(String.format(EXPECTED_PATTERN, expectedRowCountInPlan))
+      .match();
   }
 }

@@ -26,7 +26,6 @@ import org.apache.drill.exec.physical.impl.scan.file.FileScanFramework.FileScanB
 import org.apache.drill.exec.physical.impl.scan.file.FileScanFramework.FileSchemaNegotiator;
 
 import org.apache.drill.exec.physical.impl.scan.framework.ManagedReader;
-import org.apache.drill.exec.proto.UserBitShared;
 import org.apache.drill.exec.server.DrillbitContext;
 import org.apache.drill.exec.server.options.OptionManager;
 import org.apache.drill.exec.store.dfs.easy.EasyFormatPlugin;
@@ -40,9 +39,15 @@ public class SpssFormatPlugin extends EasyFormatPlugin<SpssFormatConfig> {
 
   private static class SpssReaderFactory extends FileReaderFactory {
 
+    private final int maxRecords;
+
+    public SpssReaderFactory(int maxRecords) {
+      this.maxRecords = maxRecords;
+    }
+
     @Override
     public ManagedReader<? extends FileSchemaNegotiator> newReader() {
-      return new SpssBatchReader();
+      return new SpssBatchReader(maxRecords);
     }
   }
 
@@ -53,30 +58,30 @@ public class SpssFormatPlugin extends EasyFormatPlugin<SpssFormatConfig> {
   }
 
   private static EasyFormatConfig easyConfig(Configuration fsConf, SpssFormatConfig pluginConfig) {
-    EasyFormatConfig config = new EasyFormatConfig();
-    config.readable = true;
-    config.writable = false;
-    config.blockSplittable = false;
-    config.compressible = true;
-    config.supportsProjectPushdown = true;
-    config.extensions = pluginConfig.getExtensions();
-    config.fsConf = fsConf;
-    config.defaultName = DEFAULT_NAME;
-    config.readerOperatorType = UserBitShared.CoreOperatorType.SPSS_SUB_SCAN_VALUE;
-    config.useEnhancedScan = true;
-    return config;
+    return EasyFormatConfig.builder()
+        .readable(true)
+        .writable(false)
+        .blockSplittable(false)
+        .compressible(true)
+        .supportsProjectPushdown(true)
+        .extensions(pluginConfig.getExtensions())
+        .fsConf(fsConf)
+        .defaultName(DEFAULT_NAME)
+        .useEnhancedScan(true)
+        .supportsLimitPushdown(true)
+        .build();
   }
 
   @Override
   public ManagedReader<? extends FileSchemaNegotiator> newBatchReader(
     EasySubScan scan, OptionManager options)  {
-    return new SpssBatchReader();
+    return new SpssBatchReader(scan.getMaxRecords());
   }
 
   @Override
   protected FileScanBuilder frameworkBuilder(OptionManager options, EasySubScan scan) {
     FileScanBuilder builder = new FileScanBuilder();
-    builder.setReaderFactory(new SpssReaderFactory());
+    builder.setReaderFactory(new SpssReaderFactory(scan.getMaxRecords()));
 
     initScanBuilder(builder, scan);
     builder.nullType(Types.optional(TypeProtos.MinorType.VARCHAR));

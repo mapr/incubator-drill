@@ -23,12 +23,12 @@
   <parent>
     <artifactId>drill-root</artifactId>
     <groupId>org.apache.drill</groupId>
-    <version>1.18.0-mapr-SNAPSHOT</version>
+    <version>1.19.0-mapr-SNAPSHOT</version>
   </parent>
 
   <groupId>org.apache.drill.contrib</groupId>
   <artifactId>drill-contrib-parent</artifactId>
-  <name>contrib/Parent Pom</name>
+  <name>Drill : Contrib : </name>
   <packaging>pom</packaging>
 
   <properties>
@@ -46,17 +46,24 @@
     <module>format-syslog</module>
     <module>format-ltsv</module>
     <module>format-excel</module>
+    <module>format-httpd</module>
     <module>format-esri</module>
     <module>format-hdf5</module>
     <module>format-spss</module>
+    <module>format-xml</module>
+    <module>format-image</module>
+    <module>format-pcapng</module>
     <module>storage-hive</module>
     <module>storage-mongo</module>
     <module>storage-jdbc</module>
     <module>storage-kafka</module>
     <module>storage-kudu</module>
     <module>storage-opentsdb</module>
+    <module>storage-splunk</module>
     <module>storage-http</module>
     <module>storage-druid</module>
+    <module>storage-elasticsearch</module>
+    <module>storage-cassandra</module>
     <module>auth-mechanism-maprsasl</module>
   </modules>
 

@@ -24,11 +24,11 @@
   <parent>
     <groupId>org.apache.drill.metastore</groupId>
     <artifactId>metastore-parent</artifactId>
-    <version>1.18.0-mapr-SNAPSHOT</version>
+    <version>1.19.0-mapr-SNAPSHOT</version>
   </parent>
 
   <artifactId>drill-metastore-api</artifactId>
-  <name>metastore/Drill Metastore API</name>
+  <name>Drill : Metastore : API</name>
 
   <dependencies>
     <dependency>
@@ -49,7 +49,6 @@
     <dependency>
       <groupId>com.fasterxml.jackson.datatype</groupId>
       <artifactId>jackson-datatype-joda</artifactId>
-      <version>${jackson.version}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.hadoop</groupId>

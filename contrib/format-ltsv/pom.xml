@@ -24,11 +24,11 @@
   <parent>
     <artifactId>drill-contrib-parent</artifactId>
     <groupId>org.apache.drill.contrib</groupId>
-    <version>1.18.0-mapr-SNAPSHOT</version>
+    <version>1.19.0-mapr-SNAPSHOT</version>
   </parent>
 
   <artifactId>drill-format-ltsv</artifactId>
-  <name>contrib/ltsv-format-plugin</name>
+  <name>Drill : Contrib : Format : LTSV</name>
 
   <dependencies>
     <dependency>

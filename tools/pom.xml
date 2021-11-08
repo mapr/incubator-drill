@@ -23,13 +23,13 @@
   <parent>
     <artifactId>drill-root</artifactId>
     <groupId>org.apache.drill</groupId>
-    <version>1.18.0-mapr-SNAPSHOT</version>
+    <version>1.19.0-mapr-SNAPSHOT</version>
   </parent>
 
   <groupId>org.apache.drill.tools</groupId>
   <artifactId>tools-parent</artifactId>
   <packaging>pom</packaging>
-  <name>tools/Parent Pom</name>
+  <name>Drill : Tools : </name>
 
   <modules>
     <module>fmpp</module>

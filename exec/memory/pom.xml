@@ -23,13 +23,13 @@
   <parent>
     <artifactId>exec-parent</artifactId>
     <groupId>org.apache.drill.exec</groupId>
-    <version>1.18.0-mapr-SNAPSHOT</version>
+    <version>1.19.0-mapr-SNAPSHOT</version>
   </parent>
 
   <groupId>org.apache.drill.memory</groupId>
   <artifactId>memory-parent</artifactId>
   <packaging>pom</packaging>
-  <name>exec/memory/Parent Pom</name>
+  <name>Drill : Exec : Memory : </name>
 
   <modules>
     <module>base</module>

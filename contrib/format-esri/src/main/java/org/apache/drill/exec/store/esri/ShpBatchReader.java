@@ -37,7 +37,6 @@ import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.mapred.FileSplit;
 import org.jamel.dbf.DbfReader;
 import org.jamel.dbf.structure.DbfField;
-import org.joda.time.Instant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,6 +44,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
+import java.time.Instant;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -59,7 +59,6 @@ public class ShpBatchReader implements ManagedReader<FileSchemaNegotiator> {
 
   private FileSplit split;
   private ResultSetLoader loader;
-  private final ShpReaderConfig readerConfig;
   private Path hadoopShp;
   private Path hadoopDbf;
   private Path hadoopPrj;
@@ -75,17 +74,10 @@ public class ShpBatchReader implements ManagedReader<FileSchemaNegotiator> {
   private RowSetLoader rowWriter;
   private int srid;
   private SpatialReference spatialReference;
+  private final int maxRecords;
 
-  public static class ShpReaderConfig {
-    protected final ShpFormatPlugin plugin;
-
-    public ShpReaderConfig(ShpFormatPlugin plugin) {
-      this.plugin = plugin;
-    }
-  }
-
-  public ShpBatchReader(ShpReaderConfig readerConfig) {
-    this.readerConfig = readerConfig;
+  public ShpBatchReader(int maxRecords) {
+    this.maxRecords = maxRecords;
   }
 
   @Override
@@ -133,7 +125,7 @@ public class ShpBatchReader implements ManagedReader<FileSchemaNegotiator> {
 
   private void openFile(FileSchemaNegotiator negotiator) {
     try {
-      fileReaderShp = negotiator.fileSystem().open(split.getPath());
+      fileReaderShp = negotiator.fileSystem().openPossiblyCompressedStream(split.getPath());
       byte[] shpBuf = new byte[fileReaderShp.available()];
       fileReaderShp.read(shpBuf);
 
@@ -143,10 +135,10 @@ public class ShpBatchReader implements ManagedReader<FileSchemaNegotiator> {
       ShapefileReader shpReader = new ShapefileReader();
       geomCursor = shpReader.getGeometryCursor(byteBuffer);
 
-      fileReaderDbf = negotiator.fileSystem().open(hadoopDbf);
+      fileReaderDbf = negotiator.fileSystem().openPossiblyCompressedStream(hadoopDbf);
       dbfReader = new DbfReader(fileReaderDbf);
 
-      fileReaderPrj = negotiator.fileSystem().open(hadoopPrj);
+      fileReaderPrj = negotiator.fileSystem().openPossiblyCompressedStream(hadoopPrj);
       byte[] prjBuf = new byte[fileReaderPrj.available()];
       fileReaderPrj.read(prjBuf);
       fileReaderPrj.close();
@@ -170,16 +162,11 @@ public class ShpBatchReader implements ManagedReader<FileSchemaNegotiator> {
     }
   }
 
-  private String byteArrayToString(byte[] in) {
-    char out[] = new char[in.length * 2];
-    for (int i = 0; i < in.length; i++) {
-      out[i * 2] = "0123456789ABCDEF".charAt((in[i] >> 4) & 15);
-      out[i * 2 + 1] = "0123456789ABCDEF".charAt(in[i] & 15);
-    }
-    return new String(out);
-  }
-
   private void processShapefileSet(RowSetLoader rowWriter, final int gid, final Geometry geom, final Object[] dbfRow) {
+    if (rowWriter.limitReached(maxRecords)) {
+      return;
+    }
+
     rowWriter.start();
 
     gidWriter.setInt(gid);
@@ -282,7 +269,7 @@ public class ShpBatchReader implements ManagedReader<FileSchemaNegotiator> {
 
   private void writeTimeColumn(TupleWriter rowWriter, String name, long value) {
     int index = rowWriter.tupleSchema().index(name);
-    Instant instant = new Instant(value);
+    Instant instant = Instant.ofEpochMilli(value);
     if (index == -1) {
       ColumnMetadata colSchema = MetadataUtils.newScalar(name, TypeProtos.MinorType.INT, TypeProtos.DataMode.OPTIONAL);
       index = rowWriter.addColumn(colSchema);

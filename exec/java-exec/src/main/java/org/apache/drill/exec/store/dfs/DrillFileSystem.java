@@ -783,14 +783,33 @@ public class DrillFileSystem extends FileSystem implements OpenFileTracker {
     underlyingFs.removeXAttr(path, name);
   }
 
+  /**
+   * Returns an InputStream from a Hadoop path. If the data is compressed, this method will return a compressed
+   * InputStream depending on the codec.
+   * @param path Input file path
+   * @return InputStream of opened file path
+   * @throws IOException If the file is unreachable, unavailable or otherwise unreadable
+   */
   public InputStream openPossiblyCompressedStream(Path path) throws IOException {
-    CompressionCodec codec = codecFactory.getCodec(path); // infers from file ext.
+    CompressionCodec codec = getCodec(path); // infers from file ext.
+    InputStream inputStream = open(path);
     if (codec != null) {
-      return codec.createInputStream(open(path));
-    } else {
-      return open(path);
+      inputStream = codec.createInputStream(inputStream);
     }
+    return inputStream;
   }
+
+  /**
+   * Returns the {@link org.apache.hadoop.io.compress.CompressionCodec} for a given file.  This
+   * can be used to determine the type of compression (if any) which was used.  Returns null if the
+   * file is not compressed.
+   * @param path The file of unknown compression
+   * @return CompressionCodec used by the file. Null if the file is not compressed.
+   */
+  public CompressionCodec getCodec(Path path) {
+    return codecFactory.getCodec(path);
+  }
+
   @Override
   public void fileOpened(Path path, DrillFSDataInputStream fsDataInputStream) {
     openedFiles.put(fsDataInputStream, new DebugStackTrace(path, Thread.currentThread().getStackTrace()));

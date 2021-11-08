@@ -23,6 +23,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.drill.common.PlanStringBuilder;
 import org.apache.drill.common.exceptions.ExecutionSetupException;
 import org.apache.drill.common.expression.SchemaPath;
 import org.apache.drill.common.logical.StoragePluginConfig;
@@ -30,11 +31,8 @@ import org.apache.drill.exec.physical.base.AbstractBase;
 import org.apache.drill.exec.physical.base.PhysicalOperator;
 import org.apache.drill.exec.physical.base.PhysicalVisitor;
 import org.apache.drill.exec.physical.base.SubScan;
-import org.apache.drill.exec.proto.UserBitShared.CoreOperatorType;
 import org.apache.drill.exec.store.StoragePluginRegistry;
 import org.bson.Document;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.annotation.JacksonInject;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -45,7 +43,8 @@ import org.apache.drill.shaded.guava.com.google.common.base.Preconditions;
 
 @JsonTypeName("mongo-shard-read")
 public class MongoSubScan extends AbstractBase implements SubScan {
-  static final Logger logger = LoggerFactory.getLogger(MongoSubScan.class);
+
+  public static final String OPERATOR_TYPE = "MONGO_SUB_SCAN";
 
   @JsonProperty
   private final MongoStoragePluginConfig mongoPluginConfig;
@@ -114,8 +113,8 @@ public class MongoSubScan extends AbstractBase implements SubScan {
   }
 
   @Override
-  public int getOperatorType() {
-    return CoreOperatorType.MONGO_SUB_SCAN_VALUE;
+  public String getOperatorType() {
+    return OPERATOR_TYPE;
   }
 
   @Override
@@ -130,6 +129,7 @@ public class MongoSubScan extends AbstractBase implements SubScan {
     protected List<String> hosts;
     protected Map<String, Object> minFilters;
     protected Map<String, Object> maxFilters;
+    protected int maxRecords;
 
     protected Document filter;
 
@@ -139,13 +139,15 @@ public class MongoSubScan extends AbstractBase implements SubScan {
         @JsonProperty("hosts") List<String> hosts,
         @JsonProperty("minFilters") Map<String, Object> minFilters,
         @JsonProperty("maxFilters") Map<String, Object> maxFilters,
-        @JsonProperty("filters") Document filters) {
+        @JsonProperty("filters") Document filters,
+        @JsonProperty("maxRecords") int maxRecords) {
       this.dbName = dbName;
       this.collectionName = collectionName;
       this.hosts = hosts;
       this.minFilters = minFilters;
       this.maxFilters = maxFilters;
       this.filter = filters;
+      this.maxRecords = maxRecords;
     }
 
     MongoSubScanSpec() {
@@ -179,6 +181,13 @@ public class MongoSubScan extends AbstractBase implements SubScan {
       return this;
     }
 
+    public int getMaxRecords() { return maxRecords; }
+
+    public MongoSubScanSpec setMaxRecords (int maxRecords) {
+      this.maxRecords = maxRecords;
+      return this;
+    }
+
     public Map<String, Object> getMinFilters() {
       return minFilters;
     }
@@ -208,9 +217,16 @@ public class MongoSubScan extends AbstractBase implements SubScan {
 
     @Override
     public String toString() {
-      return "MongoSubScanSpec [dbName=" + dbName + ", collectionName="
-          + collectionName + ", hosts=" + hosts + ", minFilters=" + minFilters
-          + ", maxFilters=" + maxFilters + ", filter=" + filter + "]";
+      return new PlanStringBuilder(this)
+        .field("dbName", dbName)
+        .field("collectionName", collectionName)
+        .field("hosts", hosts)
+        .field("minFilters", minFilters)
+        .field("maxFilters", maxFilters)
+        .field("filter", filter)
+        .field("maxRecords", maxRecords)
+        .toString();
+
     }
 
   }

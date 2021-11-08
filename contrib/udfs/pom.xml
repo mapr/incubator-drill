@@ -24,11 +24,11 @@
   <parent>
     <artifactId>drill-contrib-parent</artifactId>
     <groupId>org.apache.drill.contrib</groupId>
-  <version>1.18.0-mapr-SNAPSHOT</version>
+    <version>1.19.0-mapr-SNAPSHOT</version>
   </parent>
 
   <artifactId>drill-udfs</artifactId>
-  <name>contrib/drill-udfs</name>
+  <name>Drill : Contrib : UDFs</name>
 
   <dependencies>
     <dependency>
@@ -63,10 +63,11 @@
       <artifactId>proj4j</artifactId>
       <version>0.1.0</version>
     </dependency>
+
     <dependency>
       <groupId>nl.basjes.parse.useragent</groupId>
       <artifactId>yauaa</artifactId>
-      <version>5.16</version>
+      <version>${yauaa.version}</version>
     </dependency>
 
     <!-- Test dependencies -->

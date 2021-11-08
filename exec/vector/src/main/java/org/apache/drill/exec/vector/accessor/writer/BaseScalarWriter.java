@@ -18,13 +18,13 @@
 package org.apache.drill.exec.vector.accessor.writer;
 
 import java.math.BigDecimal;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 import org.apache.drill.exec.record.metadata.ColumnMetadata;
 import org.apache.drill.exec.vector.accessor.UnsupportedConversionError;
 import org.apache.drill.exec.vector.accessor.impl.HierarchicalFormatter;
-import org.joda.time.Instant;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalTime;
 import org.joda.time.Period;
 
 import io.netty.buffer.DrillBuf;
@@ -238,6 +238,11 @@ public abstract class BaseScalarWriter extends AbstractScalarWriterImpl {
   @Override
   public void setLong(long value) {
     throw conversionError("long");
+  }
+
+  @Override
+  public void setFloat(float value) {
+    throw conversionError("float");
   }
 
   @Override

@@ -46,7 +46,6 @@ import org.apache.drill.exec.physical.impl.scan.file.FileScanFramework.FileSchem
 import org.apache.drill.exec.physical.impl.scan.framework.ManagedReader;
 import org.apache.drill.exec.planner.physical.PlannerSettings;
 import org.apache.drill.exec.proto.ExecProtos.FragmentHandle;
-import org.apache.drill.exec.proto.UserBitShared.CoreOperatorType;
 import org.apache.drill.exec.record.metadata.Propertied;
 import org.apache.drill.exec.server.DrillbitContext;
 import org.apache.drill.exec.server.options.OptionManager;
@@ -83,6 +82,7 @@ import java.util.Objects;
  * as to support provided schema.)
  */
 public class TextFormatPlugin extends EasyFormatPlugin<TextFormatPlugin.TextFormatConfig> {
+
   private final static String PLUGIN_NAME = "text";
 
   public static final int MAXIMUM_NUMBER_COLUMNS = 64 * 1024;
@@ -108,6 +108,8 @@ public class TextFormatPlugin extends EasyFormatPlugin<TextFormatPlugin.TextForm
   public static final String LINE_DELIM_PROP = TEXT_PREFIX + "lineDelimiter";
   public static final String TRIM_WHITESPACE_PROP = TEXT_PREFIX + "trim";
   public static final String PARSE_UNESCAPED_QUOTES_PROP = TEXT_PREFIX + "parseQuotes";
+
+  public static final String WRITER_OPERATOR_TYPE = "TEXT_WRITER";
 
   @JsonTypeName(PLUGIN_NAME)
   @JsonInclude(Include.NON_DEFAULT)
@@ -143,8 +145,8 @@ public class TextFormatPlugin extends EasyFormatPlugin<TextFormatPlugin.TextForm
       this.quote = Strings.isNullOrEmpty(quote) ? '"' : quote.charAt(0);
       this.escape = Strings.isNullOrEmpty(escape) ? '"' : escape.charAt(0);
       this.comment = Strings.isNullOrEmpty(comment) ? '#' : comment.charAt(0);
-      this.skipFirstLine = skipFirstLine == null ? false : skipFirstLine;
-      this.extractHeader = extractHeader == null ? false : extractHeader;
+      this.skipFirstLine = skipFirstLine != null && skipFirstLine;
+      this.extractHeader = extractHeader != null && extractHeader;
     }
 
     public TextFormatConfig() {
@@ -207,14 +209,16 @@ public class TextFormatPlugin extends EasyFormatPlugin<TextFormatPlugin.TextForm
   private static class ColumnsReaderFactory extends FileReaderFactory {
 
     private final TextParsingSettings settings;
+    private final int maxRecords;
 
-    public ColumnsReaderFactory(TextParsingSettings settings) {
+    public ColumnsReaderFactory(TextParsingSettings settings, int maxRecords) {
       this.settings = settings;
+      this.maxRecords = maxRecords;
     }
 
     @Override
     public ManagedReader<? extends FileSchemaNegotiator> newReader() {
-       return new CompliantTextBatchReader(settings);
+       return new CompliantTextBatchReader(settings, maxRecords);
     }
   }
 
@@ -229,19 +233,19 @@ public class TextFormatPlugin extends EasyFormatPlugin<TextFormatPlugin.TextForm
   }
 
   private static EasyFormatConfig easyConfig(Configuration fsConf, TextFormatConfig pluginConfig) {
-    EasyFormatConfig config = new EasyFormatConfig();
-    config.readable = true;
-    config.writable = true;
-    config.blockSplittable = true;
-    config.compressible = true;
-    config.supportsProjectPushdown = true;
-    config.extensions = pluginConfig.getExtensions();
-    config.fsConf = fsConf;
-    config.defaultName = PLUGIN_NAME;
-    config.readerOperatorType = CoreOperatorType.TEXT_SUB_SCAN_VALUE;
-    config.writerOperatorType = CoreOperatorType.TEXT_WRITER_VALUE;
-    config.useEnhancedScan = true;
-    return config;
+    return EasyFormatConfig.builder()
+        .readable(true)
+        .writable(true)
+        .blockSplittable(true)
+        .compressible(true)
+        .supportsProjectPushdown(true)
+        .extensions(pluginConfig.getExtensions())
+        .fsConf(fsConf)
+        .defaultName(PLUGIN_NAME)
+        .writerOperatorType(WRITER_OPERATOR_TYPE)
+        .useEnhancedScan(true)
+        .supportsLimitPushdown(true)
+        .build();
   }
 
   @Override
@@ -270,7 +274,7 @@ public class TextFormatPlugin extends EasyFormatPlugin<TextFormatPlugin.TextForm
 
     TextParsingSettings settings =
         new TextParsingSettings(getConfig(), scan.getSchema());
-    builder.setReaderFactory(new ColumnsReaderFactory(settings));
+    builder.setReaderFactory(new ColumnsReaderFactory(settings, scan.getMaxRecords()));
 
     // If this format has no headers, or wants to skip them,
     // then we must use the columns column to hold the data.
@@ -338,8 +342,14 @@ public class TextFormatPlugin extends EasyFormatPlugin<TextFormatPlugin.TextForm
     for (final CompleteFileWork work : scan.getWorkIterable()) {
       data += work.getTotalBytes();
     }
+
     final double estimatedRowSize = settings.getOptions().getOption(ExecConstants.TEXT_ESTIMATED_ROW_SIZE);
-    final double estRowCount = data / estimatedRowSize;
-    return new ScanStats(GroupScanProperty.NO_EXACT_ROW_COUNT, (long) estRowCount, 1, data);
+
+    if (scan.supportsLimitPushdown() && scan.getMaxRecords() > 0) {
+      return new ScanStats(GroupScanProperty.EXACT_ROW_COUNT, (long)scan.getMaxRecords(), 1, data);
+    } else {
+      final double estRowCount = data / estimatedRowSize;
+      return new ScanStats(GroupScanProperty.NO_EXACT_ROW_COUNT, (long) estRowCount, 1, data);
+    }
   }
 }

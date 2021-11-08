@@ -23,6 +23,7 @@ import com.github.pjfanning.xlsx.impl.StreamingWorkbook;
 import org.apache.drill.common.exceptions.CustomErrorContext;
 import org.apache.drill.common.exceptions.UserException;
 import org.apache.drill.common.types.TypeProtos;
+import org.apache.drill.common.types.TypeProtos.DataMode;
 import org.apache.drill.common.types.TypeProtos.MinorType;
 import org.apache.drill.exec.physical.impl.scan.file.FileScanFramework;
 import org.apache.drill.exec.physical.impl.scan.file.FileScanFramework.FileSchemaNegotiator;
@@ -42,12 +43,12 @@ import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.joda.time.Instant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -116,10 +117,28 @@ public class ExcelBatchReader implements ManagedReader<FileSchemaNegotiator> {
     }
   }
 
+  private enum IMPLICIT_LIST_COLUMN {
+    /**
+     * A list of the available sheets in the file.
+     */
+    SHEETS("_sheets");
+
+    private final String fieldName;
+
+    IMPLICIT_LIST_COLUMN(String fieldName) {
+      this.fieldName = fieldName;
+    }
+
+    public String getFieldName() {
+      return fieldName;
+    }
+  }
+
   private static final int ROW_CACHE_SIZE = 100;
   private static final int BUFFER_SIZE = 4096;
 
   private final ExcelReaderConfig readerConfig;
+  private final int maxRecords;
   private Sheet sheet;
   private Row currentRow;
   private StreamingWorkbook streamingWorkbook;
@@ -128,6 +147,7 @@ public class ExcelBatchReader implements ManagedReader<FileSchemaNegotiator> {
   private List<ScalarWriter> columnWriters;
   private List<CellWriter> cellWriterArray;
   private List<ScalarWriter> metadataColumnWriters;
+  private ScalarWriter sheetNameWriter;
   private Iterator<Row> rowIterator;
   private RowSetLoader rowWriter;
   private int totalColumnCount;
@@ -136,6 +156,7 @@ public class ExcelBatchReader implements ManagedReader<FileSchemaNegotiator> {
   private int recordCount;
   private Map<String, String> stringMetadata;
   private Map<String, Date> dateMetadata;
+  private Map<String, List<String>> listMetadata;
   private CustomErrorContext errorContext;
 
 
@@ -159,8 +180,9 @@ public class ExcelBatchReader implements ManagedReader<FileSchemaNegotiator> {
     }
   }
 
-  public ExcelBatchReader(ExcelReaderConfig readerConfig) {
+  public ExcelBatchReader(ExcelReaderConfig readerConfig, int maxRecords) {
     this.readerConfig = readerConfig;
+    this.maxRecords = maxRecords;
     firstLine = true;
   }
 
@@ -215,9 +237,6 @@ public class ExcelBatchReader implements ManagedReader<FileSchemaNegotiator> {
   }
 
   private void getColumnHeaders(SchemaBuilder builder) {
-    //Get the field names
-    int columnCount;
-
     // Case for empty sheet
     if (sheet.getLastRowNum() == 0) {
       builder.buildSchema();
@@ -231,7 +250,7 @@ public class ExcelBatchReader implements ManagedReader<FileSchemaNegotiator> {
 
     // Get the number of columns.
     // This menthod also advances the row reader to the location of the first row of data
-    columnCount = getColumnCount();
+    setFirstRow();
 
     excelFieldNames = new ArrayList<>();
     cellWriterArray = new ArrayList<>();
@@ -285,7 +304,9 @@ public class ExcelBatchReader implements ManagedReader<FileSchemaNegotiator> {
             excelFieldNames.add(colPosition, tempColumnName);
             break;
           case FORMULA:
-            case NUMERIC:
+          case NUMERIC:
+          case _NONE:
+          case BLANK:
             tempColumnName = cell.getStringCellValue();
             makeColumn(builder, tempColumnName, TypeProtos.MinorType.FLOAT8);
             excelFieldNames.add(colPosition, tempColumnName);
@@ -321,11 +342,10 @@ public class ExcelBatchReader implements ManagedReader<FileSchemaNegotiator> {
   }
 
   /**
-   * Returns the column count.  There are a few gotchas here in that we have to know the header row and count the physical number of cells
+   * There are a few gotchas here in that we have to know the header row and count the physical number of cells
    * in that row.  This function also has to move the rowIterator object to the first row of data.
-   * @return The number of actual columns
    */
-  private int getColumnCount() {
+  private void setFirstRow() {
     // Initialize
     currentRow = rowIterator.next();
     int rowNumber = readerConfig.headerRow > 0 ? sheet.getFirstRowNum() : 0;
@@ -335,8 +355,6 @@ public class ExcelBatchReader implements ManagedReader<FileSchemaNegotiator> {
     for (int i = 1; i < rowNumber; i++) {
       currentRow = rowIterator.next();
     }
-
-    return currentRow.getPhysicalNumberOfCells();
   }
 
   @Override
@@ -372,6 +390,11 @@ public class ExcelBatchReader implements ManagedReader<FileSchemaNegotiator> {
     if (readerConfig.lastColumn != 0) {
       finalColumn = readerConfig.lastColumn - 1;
     }
+
+    if (rowWriter.limitReached(maxRecords)) {
+      return false;
+    }
+
     rowWriter.start();
     for (int colWriterIndex = 0; colPosition < finalColumn; colWriterIndex++) {
       Cell cell = currentRow.getCell(colPosition);
@@ -408,6 +431,7 @@ public class ExcelBatchReader implements ManagedReader<FileSchemaNegotiator> {
 
     stringMetadata = new HashMap<>();
     dateMetadata = new HashMap<>();
+    listMetadata = new HashMap<>();
 
     // Populate String metadata columns
     stringMetadata.put(IMPLICIT_STRING_COLUMN.CATEGORY.getFieldName(), fileMetadata.getCategory());
@@ -426,6 +450,9 @@ public class ExcelBatchReader implements ManagedReader<FileSchemaNegotiator> {
     dateMetadata.put(IMPLICIT_TIMESTAMP_COLUMN.CREATED.getFieldName(), fileMetadata.getCreated());
     dateMetadata.put(IMPLICIT_TIMESTAMP_COLUMN.LAST_PRINTED.getFieldName(), fileMetadata.getLastPrinted());
     dateMetadata.put(IMPLICIT_TIMESTAMP_COLUMN.MODIFIED.getFieldName(), fileMetadata.getModified());
+
+    // Populate List columns
+    listMetadata.put(IMPLICIT_LIST_COLUMN.SHEETS.getFieldName(), getSheetNames());
   }
 
   /**
@@ -450,7 +477,15 @@ public class ExcelBatchReader implements ManagedReader<FileSchemaNegotiator> {
     } else if (cellType == CellType.NUMERIC && DateUtil.isCellDateFormatted(cell)) {
       // Case if the column is a date or time
       addColumnToArray(rowWriter, excelFieldNames.get(colPosition), MinorType.TIMESTAMP, false);
-    } else if (cellType == CellType.NUMERIC || cellType == CellType.FORMULA) {
+    } else if (cellType == CellType.FORMULA) {
+      // Cells with formulae can return either strings or numbers.
+      CellType formulaCellType = cell.getCachedFormulaResultType();
+      if (formulaCellType == CellType.STRING) {
+        addColumnToArray(rowWriter, excelFieldNames.get(colPosition), MinorType.VARCHAR, false);
+      } else {
+        addColumnToArray(rowWriter, excelFieldNames.get(colPosition), MinorType.FLOAT8, false);
+      }
+    } else if (cellType == CellType.NUMERIC || cellType == CellType.BLANK || cellType == CellType._NONE) {
       // Case if the column is numeric
       addColumnToArray(rowWriter, excelFieldNames.get(colPosition), MinorType.FLOAT8, false);
     } else {
@@ -468,9 +503,14 @@ public class ExcelBatchReader implements ManagedReader<FileSchemaNegotiator> {
     for (IMPLICIT_TIMESTAMP_COLUMN name : IMPLICIT_TIMESTAMP_COLUMN.values()) {
       makeColumn(builder, name.getFieldName(), MinorType.TIMESTAMP);
     }
+
+    // Add List Column Names
+    for (IMPLICIT_LIST_COLUMN name : IMPLICIT_LIST_COLUMN.values()) {
+      makeColumn(builder, name.getFieldName(), MinorType.LIST);
+    }
   }
 
-  private void makeColumn(SchemaBuilder builder, String name, TypeProtos.MinorType type) {
+  private void makeColumn(SchemaBuilder builder, String name, MinorType type) {
     // Verify supported types
     switch (type) {
       // The Excel Reader only Supports Strings, Floats and Date/Times
@@ -480,6 +520,9 @@ public class ExcelBatchReader implements ManagedReader<FileSchemaNegotiator> {
       case TIMESTAMP:
       case TIME:
         builder.addNullable(name, type);
+        break;
+      case LIST:
+        builder.addArray(name, MinorType.VARCHAR);
         break;
       default:
         throw UserException
@@ -546,9 +589,37 @@ public class ExcelBatchReader implements ManagedReader<FileSchemaNegotiator> {
       if (timeValue == null) {
         metadataColumnWriters.get(index).setNull();
       } else {
-        metadataColumnWriters.get(index).setTimestamp(new Instant(timeValue));
+        metadataColumnWriters.get(index).setTimestamp(Instant.ofEpochMilli(timeValue.getTime()));
       }
     }
+
+    // Write the sheet names.  Since this is the only list field
+    int listIndex = IMPLICIT_STRING_COLUMN.values().length + IMPLICIT_TIMESTAMP_COLUMN.values().length;
+    String sheetColumnName = IMPLICIT_LIST_COLUMN.SHEETS.fieldName;
+    List<String> sheetNames = listMetadata.get(sheetColumnName);
+
+    if (sheetNameWriter == null) {
+      int sheetColumnIndex = rowWriter.tupleSchema().index(IMPLICIT_LIST_COLUMN.SHEETS.getFieldName());
+      if (sheetColumnIndex == -1) {
+        ColumnMetadata colSchema = MetadataUtils.newScalar(sheetColumnName, MinorType.VARCHAR, DataMode.REPEATED);
+        colSchema.setBooleanProperty(ColumnMetadata.EXCLUDE_FROM_WILDCARD, true);
+        listIndex = rowWriter.addColumn(colSchema);
+      }
+      sheetNameWriter = rowWriter.column(listIndex).array().scalar();
+    }
+
+    for (String sheetName : sheetNames) {
+      sheetNameWriter.setString(sheetName);
+    }
+  }
+
+  private List<String> getSheetNames() {
+    List<String> sheets = new ArrayList<>();
+    int sheetCount = streamingWorkbook.getNumberOfSheets();
+    for (int i = 0; i < sheetCount; i++) {
+      sheets.add(streamingWorkbook.getSheetName(i));
+    }
+    return sheets;
   }
 
   @Override
@@ -587,6 +658,7 @@ public class ExcelBatchReader implements ManagedReader<FileSchemaNegotiator> {
       super(columnWriter);
     }
 
+    @Override
     public void load(Cell cell) {
       if (cell == null) {
         columnWriter.setNull();
@@ -605,6 +677,7 @@ public class ExcelBatchReader implements ManagedReader<FileSchemaNegotiator> {
       super(columnWriter);
     }
 
+    @Override
     public void load(Cell cell) {
       if (cell == null) {
         columnWriter.setNull();
@@ -620,6 +693,7 @@ public class ExcelBatchReader implements ManagedReader<FileSchemaNegotiator> {
       super(columnWriter);
     }
 
+    @Override
     public void load(Cell cell) {
       if (cell == null) {
         columnWriter.setNull();
@@ -635,13 +709,14 @@ public class ExcelBatchReader implements ManagedReader<FileSchemaNegotiator> {
       super(columnWriter);
     }
 
+    @Override
     public void load(Cell cell) {
       if (cell == null) {
         columnWriter.setNull();
       } else {
         logger.debug("Cell value: {}", cell.getNumericCellValue());
         Date dt = DateUtil.getJavaDate(cell.getNumericCellValue(), TimeZone.getTimeZone("UTC"));
-        Instant timeStamp = new Instant(dt.toInstant().getEpochSecond() * 1000);
+        Instant timeStamp = Instant.ofEpochMilli(dt.toInstant().getEpochSecond() * 1000);
         columnWriter.setTimestamp(timeStamp);
       }
     }

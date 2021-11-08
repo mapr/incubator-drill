@@ -6,6 +6,14 @@ Currently, the Apache Drill build process is known to work on Linux, Windows and
   * Java 8
   * Maven 3.6.3 or greater
 
+## Docker based build environment
+
+The `start-build-env.sh` script in the root of the project source builds and starts a preconfigured environment
+that contains all the tools needed to build Apache Drill from source.
+
+This is known to work on Ubuntu 20.04 with Docker installed.
+On other systems your success may vary. On Redhat/CentOS based systems no longer have Docker.
+
 ## Confirm settings
     # java -version
     java version "1.8.0_161"
@@ -15,6 +23,11 @@ Currently, the Apache Drill build process is known to work on Linux, Windows and
     # mvn --version
     Apache Maven 3.6.3
 
+## Formatter Configuration
+
+Setting up IDE formatters is recommended and can be done by importing the following settings into your browser.
+[Formatter File](../../dev-support/formatter)
+
 ## Checkout
 
     git clone https://github.com/apache/drill.git
@@ -23,6 +36,14 @@ Currently, the Apache Drill build process is known to work on Linux, Windows and
 
     cd drill
     mvn clean install -DskipTests
+
+## Build Quickly
+This command works to build Drill in about 2 minutes for quick testing. 
+
+    mvn install -T 4 -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Drat.skip=true -Dlicense.skip=true -Dcheckstyle.skip=true -Dfindbugs.skip=true -Dmaven.site.skip=true -Denforcer.skip=true -DskipIfEmpty=true -Dmaven.compiler.optimize=true
+
+## Generate Dependency Report
+    mvn clean site
 
 ## Explode tarball in installation directory
    

@@ -24,12 +24,12 @@
   <parent>
     <groupId>org.apache.drill.contrib.storage-hive</groupId>
     <artifactId>drill-contrib-storage-hive-parent</artifactId>
-    <version>1.18.0-mapr-SNAPSHOT</version>
+    <version>1.19.0-mapr-SNAPSHOT</version>
   </parent>
 
   <artifactId>drill-hive-exec-shaded</artifactId>
   <packaging>jar</packaging>
-  <name>contrib/hive-storage-plugin/hive-exec-shaded</name>
+  <name>Drill : Contrib : Storage : Hive : Exec Shaded</name>
 
   <properties>
     <hive.parquet.version>1.8.3</hive.parquet.version>

@@ -18,12 +18,12 @@
 
 package org.apache.drill.exec.store.hdf5.writers;
 
+import java.time.Instant;
+
+import io.jhdf.HdfFile;
 import org.apache.drill.common.types.TypeProtos;
 import org.apache.drill.exec.store.hdf5.HDF5Utils;
 import org.apache.drill.exec.vector.accessor.ValueWriter;
-import org.joda.time.Instant;
-
-import ch.systemsx.cisd.hdf5.IHDF5Reader;
 
 public class HDF5TimestampDataWriter extends HDF5DataWriter {
 
@@ -32,9 +32,9 @@ public class HDF5TimestampDataWriter extends HDF5DataWriter {
   private final ValueWriter colWriter;
 
   // This constructor is used when the data is a 1D column.  The column is inferred from the datapath
-  public HDF5TimestampDataWriter(IHDF5Reader reader, WriterSpec writerSpec, String datapath) {
+  public HDF5TimestampDataWriter(HdfFile reader, WriterSpec writerSpec, String datapath) {
     super(reader, datapath);
-    data = reader.time().readTimeStampArray(datapath);
+    data = (long[]) reader.getDatasetByPath(datapath).getData();
 
     fieldName = HDF5Utils.getNameFromPath(datapath);
     colWriter = writerSpec.makeWriter(fieldName, TypeProtos.MinorType.TIMESTAMP, TypeProtos.DataMode.OPTIONAL);
@@ -45,7 +45,7 @@ public class HDF5TimestampDataWriter extends HDF5DataWriter {
     if (counter > data.length) {
       return false;
     } else {
-      colWriter.setTimestamp(new Instant(data[counter++]));
+      colWriter.setTimestamp(Instant.ofEpochMilli(data[counter++]));
       return true;
     }
   }

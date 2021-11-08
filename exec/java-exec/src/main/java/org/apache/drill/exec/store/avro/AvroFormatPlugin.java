@@ -22,7 +22,6 @@ import org.apache.drill.common.types.TypeProtos;
 import org.apache.drill.common.types.Types;
 import org.apache.drill.exec.physical.impl.scan.file.FileScanFramework;
 import org.apache.drill.exec.physical.impl.scan.framework.ManagedReader;
-import org.apache.drill.exec.proto.UserBitShared.CoreOperatorType;
 import org.apache.drill.exec.server.DrillbitContext;
 import org.apache.drill.exec.server.options.OptionManager;
 import org.apache.drill.exec.store.dfs.easy.EasyFormatPlugin;
@@ -45,24 +44,24 @@ public class AvroFormatPlugin extends EasyFormatPlugin<AvroFormatConfig> {
   }
 
   private static EasyFormatConfig easyConfig(Configuration fsConf, AvroFormatConfig formatConfig) {
-    EasyFormatConfig config = new EasyFormatConfig();
-    config.readable = true;
-    config.writable = false;
-    config.blockSplittable = true;
-    config.compressible = false;
-    config.supportsProjectPushdown = true;
-    config.extensions = formatConfig.getExtensions();
-    config.fsConf = fsConf;
-    config.defaultName = DEFAULT_NAME;
-    config.readerOperatorType = CoreOperatorType.AVRO_SUB_SCAN_VALUE;
-    config.useEnhancedScan = true;
-    return config;
+    return EasyFormatConfig.builder()
+        .readable(true)
+        .writable(false)
+        .blockSplittable(true)
+        .compressible(false)
+        .supportsProjectPushdown(true)
+        .extensions(formatConfig.getExtensions())
+        .fsConf(fsConf)
+        .defaultName(DEFAULT_NAME)
+        .useEnhancedScan(true)
+        .supportsLimitPushdown(true)
+        .build();
   }
 
   @Override
   protected FileScanFramework.FileScanBuilder frameworkBuilder(OptionManager options, EasySubScan scan) {
     FileScanFramework.FileScanBuilder builder = new FileScanFramework.FileScanBuilder();
-    builder.setReaderFactory(new AvroReaderFactory());
+    builder.setReaderFactory(new AvroReaderFactory(scan.getMaxRecords()));
     initScanBuilder(builder, scan);
     builder.nullType(Types.optional(TypeProtos.MinorType.VARCHAR));
     return builder;
@@ -70,9 +69,14 @@ public class AvroFormatPlugin extends EasyFormatPlugin<AvroFormatConfig> {
 
   private static class AvroReaderFactory extends FileScanFramework.FileReaderFactory {
 
+    private final int maxRecords;
+    public AvroReaderFactory(int maxRecords) {
+      this.maxRecords = maxRecords;
+    }
+
     @Override
     public ManagedReader<? extends FileScanFramework.FileSchemaNegotiator> newReader() {
-      return new AvroBatchReader();
+      return new AvroBatchReader(maxRecords);
     }
   }
 }

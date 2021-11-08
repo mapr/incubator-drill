@@ -18,14 +18,15 @@
 package org.apache.drill.exec.vector.accessor.writer;
 
 import java.math.BigDecimal;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.Date;
 
 import org.apache.drill.exec.vector.accessor.ScalarWriter;
 import org.apache.drill.exec.vector.accessor.UnsupportedConversionError;
 import org.apache.drill.exec.vector.accessor.ValueType;
 import org.apache.drill.exec.vector.accessor.writer.WriterEvents.ColumnWriterListener;
-import org.joda.time.Instant;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalTime;
 import org.joda.time.Period;
 
 /**
@@ -50,7 +51,7 @@ public abstract class AbstractScalarWriter implements ScalarWriter {
     } else if (value instanceof Double) {
       setDouble((Double) value);
     } else if (value instanceof Float) {
-      setDouble((Float) value);
+      setFloat((Float) value);
     } else if (value instanceof BigDecimal) {
       setDecimal((BigDecimal) value);
     } else if (value instanceof Period) {
@@ -61,6 +62,8 @@ public abstract class AbstractScalarWriter implements ScalarWriter {
       setDate((LocalDate) value);
     } else if (value instanceof Instant) {
       setTimestamp((Instant) value);
+    } else if (value instanceof Date) {
+      setTimestamp(Instant.ofEpochMilli(((Date) value).getTime()));
     } else if (value instanceof byte[]) {
       final byte[] bytes = (byte[]) value;
       setBytes(bytes, bytes.length);

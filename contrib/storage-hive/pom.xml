@@ -23,12 +23,12 @@
   <parent>
     <groupId>org.apache.drill.contrib</groupId>
     <artifactId>drill-contrib-parent</artifactId>
-    <version>1.18.0-mapr-SNAPSHOT</version>
+    <version>1.19.0-mapr-SNAPSHOT</version>
   </parent>
 
   <groupId>org.apache.drill.contrib.storage-hive</groupId>
   <artifactId>drill-contrib-storage-hive-parent</artifactId>
-  <name>contrib/hive-storage-plugin/Parent Pom</name>
+  <name>Drill : Contrib : Storage : Hive : </name>
   <packaging>pom</packaging>
 
   <dependencies>

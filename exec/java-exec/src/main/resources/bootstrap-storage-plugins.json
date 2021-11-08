@@ -31,23 +31,12 @@
           "extensions" : [ "tsv" ],
           "fieldDelimiter" : "\t"
         },
-        "httpd" : {
-          "type" : "httpd",
-          "logFormat" : "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-agent}i\"",
-          "timestampFormat" : "dd/MMM/yyyy:HH:mm:ss ZZ"
-        },
         "parquet" : {
           "type" : "parquet"
         },
         "json" : {
           "type" : "json",
           "extensions" : [ "json" ]
-        },
-        "pcap" : {
-          "type" : "pcap"
-        },
-        "pcapng" : {
-          "type" : "pcapng"
         },
         "avro" : {
           "type" : "avro",
@@ -62,10 +51,6 @@
           "extensions" : [ "csvh" ],
           "delimiter" : ",",
           "extractHeader" : true
-        },
-        "image" : {
-          "type" : "image",
-          "extensions" : [ "jpg", "jpeg", "jpe", "tif", "tiff", "dng", "psd", "png", "bmp", "gif", "ico", "pcx", "wav", "wave", "avi", "webp", "mov", "mp4", "m4a", "m4p", "m4b", "m4r", "m4v", "3gp", "3g2", "eps", "epsf", "epsi", "ai", "arw", "crw", "cr2", "nef", "orf", "raf", "rw2", "rwl", "srw", "x3f" ]
         }
       },
       "enabled" : true
@@ -110,12 +95,6 @@
           "type" : "json",
           "extensions" : [ "json" ]
         },
-        "pcap" : {
-          "type" : "pcap"
-        },
-        "pcapng" : {
-          "type" : "pcapng"
-        },
        "avro" : {
           "type" : "avro"
         },
@@ -150,12 +129,6 @@
           "type" : "json",
           "extensions" : [ "json" ]
         },
-        "pcap" : {
-          "type" : "pcap"
-        },
-        "pcapng" : {
-          "type" : "pcapng"
-        },
         "parquet" : {
           "type" : "parquet"
         },
@@ -167,10 +140,6 @@
           "extensions" : [ "csvh" ],
           "fieldDelimiter" : ",",
           "extractHeader" : true
-        },
-        "image" : {
-          "type" : "image",
-          "extensions" : [ "jpg", "jpeg", "jpe", "tif", "tiff", "dng", "psd", "png", "bmp", "gif", "ico", "pcx", "wav", "wave", "avi", "webp", "mov", "mp4", "m4a", "m4p", "m4b", "m4r", "m4v", "3gp", "3g2", "eps", "epsf", "epsi", "ai", "arw", "crw", "cr2", "nef", "orf", "raf", "rw2", "rwl", "srw", "x3f" ]
         }
       },
       "enabled" : true
