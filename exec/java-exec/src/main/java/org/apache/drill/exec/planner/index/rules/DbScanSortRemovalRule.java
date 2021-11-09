@@ -198,7 +198,7 @@ public class DbScanSortRemovalRule extends AbstractIndexPrule {
           if (planGen.convertChild() != null) {
             indexContext.getCall().transformTo(planGen.convertChild());
           } else {
-            logger.debug("Not able to generate index plan in ", this.getClass().toString());
+            logger.debug("Not able to generate index plan in {}", this.getClass().toString());
           }
         } catch (Exception e) {
           logger.warn("Exception while trying to generate indexscan to remove sort", e);
@@ -223,7 +223,7 @@ public class DbScanSortRemovalRule extends AbstractIndexPrule {
                   indexContext.exch != null);
 
         if (finalRel == null) {
-          logger.debug("Not able to generate index plan in ", this.getClass().toString());
+          logger.debug("Not able to generate index plan in {}", this.getClass().toString());
           return;
         }
 
