@@ -131,6 +131,9 @@
     <commons.beanutils.version>1.9.4</commons.beanutils.version>
     <httpdlog-parser.version>5.7</httpdlog-parser.version>
     <yauaa.version>5.20</yauaa.version>
+    <spring.version>5.0.19.RELEASE</spring.version>
+    <bcfips.version>1.0.2.1</bcfips.version>
+    <bctlsfips.version>1.0.11.4</bctlsfips.version>
   </properties>
 
   <scm>
@@ -2074,6 +2077,47 @@
             <artifactId>commons-logging</artifactId>
           </exclusion>
         </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-beans</artifactId>
+        <version>${spring.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-core</artifactId>
+        <version>${spring.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-context</artifactId>
+        <version>${spring.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-web</artifactId>
+        <version>${spring.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework.security</groupId>
+        <artifactId>spring-security-core</artifactId>
+        <version>${spring.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework.security</groupId>
+        <artifactId>spring-security-web</artifactId>
+        <version>${spring.version}</version>
+      </dependency>
+      <!-- Fips Dependencies -->
+      <dependency>
+        <groupId>org.bouncycastle</groupId>
+        <artifactId>bc-fips</artifactId>
+        <version>${bcfips.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.bouncycastle</groupId>
+        <artifactId>bctls-fips</artifactId>
+        <version>${bctlsfips.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
