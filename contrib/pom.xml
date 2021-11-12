@@ -65,6 +65,7 @@
     <module>storage-elasticsearch</module>
     <module>storage-cassandra</module>
     <module>auth-mechanism-maprsasl</module>
+    <module>format-iceberg</module>
   </modules>
 
 </project>

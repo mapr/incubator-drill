@@ -22,7 +22,6 @@ import org.apache.calcite.rel.RelNode;
 import org.apache.calcite.rel.type.RelDataType;
 import org.apache.calcite.rel.type.RelDataTypeField;
 import org.apache.calcite.rex.RexBuilder;
-import org.apache.calcite.rex.RexLiteral;
 import org.apache.calcite.rex.RexNode;
 import org.apache.calcite.sql.fun.SqlStdOperatorTable;
 import org.apache.calcite.sql.type.SqlTypeName;
@@ -68,53 +67,24 @@ public class ExprToRex extends AbstractExprVisitor<RexNode, Void, RuntimeExcepti
     return null;
   }
 
-  private RexNode makeItemOperator(Object[] paths, int index, RelDataType rowType) {
-    if (index == 0) { //last one, return ITEM([0]-inputRef, [1] Literal)
-      final RelDataTypeField field = findField((String)paths[0], rowType);
-      return field == null ? null : builder.makeInputRef(field.getType(), field.getIndex());
-    }
-    RexLiteral literal;
-    if (paths[index] instanceof Integer) {
-      int value = (Integer)paths[index];
-      literal = builder.makeBigintLiteral(BigDecimal.valueOf(value));
-    } else {
-      literal = builder.makeLiteral((String)paths[index]);
-    }
-    return builder.makeCall(SqlStdOperatorTable.ITEM,
-                            makeItemOperator(paths, index - 1, rowType),
-                            literal);
-  }
-
   @Override
   public RexNode visitSchemaPath(SchemaPath path, Void value) throws RuntimeException {
-    PathSegment rootSegment = path.getRootSegment();
-    if (rootSegment.isLastPath()) {
-      if (rootSegment.isNamed()) {  // named segment
-        String segmentPath = ((PathSegment.NameSegment)rootSegment).getExpr();
-        final RelDataTypeField field = findField(segmentPath, newRowType);
-        return field == null ? null : builder.makeInputRef(field.getType(), field.getIndex());
-      } else {  // array segment
-        // TODO: for array segment such as a[-1],  build a corresponding ITEM($n, -1) expression
-        throw new IllegalArgumentException("Unexpected array segment encountered");
-      }
-    }
-    // a path may be a string or an integer (e.g for array indexes)
-    List<Object> paths = Lists.newArrayList();
+    PathSegment pathSegment = path.getRootSegment();
 
-    while (rootSegment != null) {
-      if (rootSegment.isNamed()) {
-        paths.add(((PathSegment.NameSegment)rootSegment).getPath());
-        rootSegment = rootSegment.getChild();
+    RelDataTypeField field = findField(pathSegment.getNameSegment().getPath(), newRowType);
+    RexNode rexNode = field == null ? null : builder.makeInputRef(field.getType(), field.getIndex());
+    while (!pathSegment.isLastPath()) {
+      pathSegment = pathSegment.getChild();
+      RexNode ref;
+      if (pathSegment.isNamed()) {
+        ref = builder.makeLiteral(pathSegment.getNameSegment().getPath());
       } else {
-        // this is an array segment, so use an index of '-1' which will be
-        // used to create the appropriate ITEM expr
-        int index = ((PathSegment.ArraySegment)rootSegment).getIndex();
-        paths.add(Integer.valueOf(index));
-        rootSegment = rootSegment.getChild();
-        // throw new IllegalArgumentException("Unexpected array segment encountered");
+        ref = builder.makeBigintLiteral(BigDecimal.valueOf(pathSegment.getArraySegment().getIndex()));
       }
+      rexNode = builder.makeCall(SqlStdOperatorTable.ITEM, rexNode, ref);
     }
-    return makeItemOperator(paths.toArray(new Object[0]), paths.size() - 1, newRowType);
+
+    return rexNode;
   }
 
   @Override
