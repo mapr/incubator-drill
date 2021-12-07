@@ -203,7 +203,7 @@ public class SemiJoinIndexScanPrule extends AbstractIndexPrule {
     private DrillAggregateRel getAgg(DrillSemiJoinRel semijoinRel, RelNode input) {
       Pair<ImmutableBitSet, List<ImmutableBitSet>> grpSets = createGroupSets(semijoinRel);
       return new DrillAggregateRel(semijoinRel.getCluster(), semijoinRel.getTraitSet().plus(DRILL_LOGICAL),
-              input, false, grpSets.left, grpSets.right, new ArrayList<>());
+              input, grpSets.left, grpSets.right, new ArrayList<>());
     }
 
     private Pair<ImmutableBitSet, List<ImmutableBitSet>> createGroupSets(DrillSemiJoinRel semiJoinRel) {

@@ -224,7 +224,6 @@ public class StreamAggPrule extends AggPruleBase {
             aggregate.getCluster(),
             traits,
             convertedInput,
-            aggregate.indicator,
             aggregate.getGroupSet(),
             aggregate.getGroupSets(),
             aggregate.getAggCallList(),

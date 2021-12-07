@@ -88,7 +88,7 @@ public class SemiJoinToCoveringIndexScanGenerator extends CoveringIndexPlanGener
 
       //build the Drill logical Aggregate with _id as distinct and other columns as any_value(colname).
       DrillAggregateRel aggregateRel = new DrillAggregateRel(input.getCluster(), input.getTraitSet().plus(DRILL_LOGICAL),
-          coveringIndexScanRel, false, grpSets.left, grpSets.right, aggregateCalls);
+          coveringIndexScanRel, grpSets.left, grpSets.right, aggregateCalls);
       //build StreamAgg for distinct processing
       List<RelNode> agg = SemiJoinIndexPlanUtils.buildStreamAgg(joinContext, aggregateRel, coveringIndexScanRel);
       logger.debug("semi_join_index_plan_info: generated stream aggregation operators: {}", agg);

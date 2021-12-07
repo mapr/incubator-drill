@@ -136,7 +136,7 @@ public class ExprToRex extends AbstractExprVisitor<RexNode, Void, RuntimeExcepti
   @Override
   public RexNode visitFunctionCall(FunctionCall call, Void value) throws RuntimeException {
     List<RexNode> operands = Lists.newArrayList();
-    for (LogicalExpression arg : call.args) {
+    for (LogicalExpression arg : call.args()) {
       operands.add(arg.accept(this, null));
     }
     final DrillSqlOperator operator =
