@@ -349,6 +349,11 @@
       <outputDirectory>bin</outputDirectory>
     </file>
     <file>
+      <source>src/main/resources/get-jars-list.sh</source>
+      <fileMode>0755</fileMode>
+      <outputDirectory>bin</outputDirectory>
+    </file>
+    <file>
       <source>src/main/resources/drill-setup.sh</source>
       <fileMode>0750</fileMode>
       <outputDirectory>conf</outputDirectory>
