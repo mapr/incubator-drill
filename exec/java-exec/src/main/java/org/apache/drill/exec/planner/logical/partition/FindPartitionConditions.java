@@ -273,6 +273,14 @@ public class FindPartitionConditions extends RexVisitorImpl<Void> {
   }
 
   /*
+    MD-6191
+    To enable directory prunning if the "CURRENT_DATE" operator is used.
+   */
+  private boolean isDynDetOperatorTreatedAsNoPush(SqlOperator op){
+    return !op.getName().equals("CURRENT_DATE");
+  }
+
+  /*
    * Traverse over the RexCall recursively. All children that are potential
    * PUSH are added as children to the current operator. Once all children
    * of the current operator are processed and if it satisfies to be a
@@ -309,7 +317,7 @@ public class FindPartitionConditions extends RexVisitorImpl<Void> {
     // be non-deterministic.
     if (!call.getOperator().isDeterministic()) {
       callPushDirFilter = PushDirFilter.NO_PUSH;
-    } else if (call.getOperator().isDynamicFunction()) {
+    } else if (call.getOperator().isDynamicFunction() && isDynDetOperatorTreatedAsNoPush(call.getOperator())) {
       // For now, treat it same as non-deterministic.
       callPushDirFilter = PushDirFilter.NO_PUSH;
     }
