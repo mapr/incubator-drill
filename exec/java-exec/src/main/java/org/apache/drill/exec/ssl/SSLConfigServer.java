@@ -38,13 +38,14 @@ import org.bouncycastle.jcajce.provider.BouncyCastleFipsProvider;
 import org.bouncycastle.jsse.provider.BouncyCastleJsseProvider;
 
 import java.security.Security;
+import java.util.HashMap;
 
 public class SSLConfigServer extends SSLConfig {
 
   private static final Logger logger = LoggerFactory.getLogger(SSLConfigServer.class);
   private static final String BCFKS_KEYSTORE_TYPE = "bcfks";
 
-  private final DrillConfig config;
+  private DrillConfig config;
   private final Configuration hadoopConfig;
   private final boolean userSslEnabled;
   private final boolean httpsEnabled;
@@ -58,44 +59,41 @@ public class SSLConfigServer extends SSLConfig {
   private final String protocol;
   private final String provider;
 
-  public SSLConfigServer(DrillConfig config, Configuration hadoopConfig) throws DrillException {
-    this.config = config;
+  public SSLConfigServer(HashMap<String,String> configMap, Configuration hadoopConfig){
+    this.config = null;
+    httpsEnabled = Boolean.parseBoolean(configMap.getOrDefault("HTTP_ENABLE_SSL", "true"));
+    userSslEnabled = Boolean.parseBoolean(configMap.getOrDefault("USER_SSL_ENABLED", "false"));
     Mode mode = Mode.SERVER;
-    httpsEnabled =
-        config.hasPath(ExecConstants.HTTP_ENABLE_SSL) && config.getBoolean(ExecConstants.HTTP_ENABLE_SSL);
+    boolean enableHadoopConfig = Boolean.parseBoolean(configMap.get("SSL_USE_HADOOP_CONF"));
     // For testing we will mock up a hadoop configuration, however for regular use, we find the actual hadoop config.
-    boolean enableHadoopConfig = config.getBoolean(ExecConstants.SSL_USE_HADOOP_CONF);
     if (enableHadoopConfig) {
       if (hadoopConfig == null) {
         this.hadoopConfig = new Configuration(); // get hadoop configuration
       } else {
         this.hadoopConfig = hadoopConfig;
       }
-      String hadoopSSLConfigFile =
-          this.hadoopConfig.get(resolveHadoopPropertyName(HADOOP_SSL_CONF_TPL_KEY, getMode()));
+      String hadoopSSLConfigFile = this.hadoopConfig.get(resolveHadoopPropertyName(HADOOP_SSL_CONF_TPL_KEY, getMode()));
       logger.debug("Using Hadoop configuration for SSL");
       logger.debug("Hadoop SSL configuration file: {}", hadoopSSLConfigFile);
       this.hadoopConfig.addResource(hadoopSSLConfigFile);
     } else {
       this.hadoopConfig = null;
     }
-    userSslEnabled =
-        config.hasPath(ExecConstants.USER_SSL_ENABLED) && config.getBoolean(ExecConstants.USER_SSL_ENABLED);
     SSLCredentialsProvider credentialsProvider = SSLCredentialsProvider.getSSLCredentialsProvider(
         this::getConfigParam,
         this::getPasswordConfigParam,
         Mode.SERVER,
-        config.getBoolean(ExecConstants.SSL_USE_MAPR_CONFIG));
+        Boolean.parseBoolean(configMap.get("SSL_USE_MAPR_CONFIG")));
     keyStoreType = credentialsProvider.getKeyStoreType(
-            ExecConstants.SSL_KEYSTORE_TYPE, resolveHadoopPropertyName(HADOOP_SSL_KEYSTORE_TYPE_TPL_KEY, mode));
+        ExecConstants.SSL_KEYSTORE_TYPE, resolveHadoopPropertyName(HADOOP_SSL_KEYSTORE_TYPE_TPL_KEY, mode));
     if (keyStoreType.equalsIgnoreCase(BCFKS_KEYSTORE_TYPE)) {
       Security.addProvider(new BouncyCastleFipsProvider());
       Security.addProvider(new BouncyCastleJsseProvider());
     }
     keyStorePath = credentialsProvider.getKeyStoreLocation(
-            ExecConstants.SSL_KEYSTORE_PATH, resolveHadoopPropertyName(HADOOP_SSL_KEYSTORE_LOCATION_TPL_KEY, mode));
+        ExecConstants.SSL_KEYSTORE_PATH, resolveHadoopPropertyName(HADOOP_SSL_KEYSTORE_LOCATION_TPL_KEY, mode));
     keyStorePassword = credentialsProvider.getKeyStorePassword(
-            ExecConstants.SSL_KEYSTORE_PASSWORD, resolveHadoopPropertyName(HADOOP_SSL_KEYSTORE_PASSWORD_TPL_KEY, mode));
+        ExecConstants.SSL_KEYSTORE_PASSWORD, resolveHadoopPropertyName(HADOOP_SSL_KEYSTORE_PASSWORD_TPL_KEY, mode));
     trustStoreType = credentialsProvider.getTrustStoreType(
         ExecConstants.SSL_TRUSTSTORE_TYPE, resolveHadoopPropertyName(HADOOP_SSL_TRUSTSTORE_TYPE_TPL_KEY, mode));
     trustStorePath = credentialsProvider.getTrustStoreLocation(
@@ -106,7 +104,7 @@ public class SSLConfigServer extends SSLConfig {
         ExecConstants.SSL_KEY_PASSWORD, resolveHadoopPropertyName(HADOOP_SSL_KEYSTORE_KEYPASSWORD_TPL_KEY, mode));
     // if no keypassword specified, use keystore password
     keyPassword = keyPass.isEmpty() ? keyStorePassword : keyPass;
-    protocol = config.getString(ExecConstants.SSL_PROTOCOL);
+    protocol = configMap.getOrDefault("SSL_PROTOCOL", "TLSv1.2");
     // If provider is OPENSSL then to debug or run this code in an IDE, you will need to enable
     // the dependency on netty-tcnative with the correct classifier for the platform you use.
     // This can be done by enabling the openssl profile.
@@ -115,7 +113,25 @@ public class SSLConfigServer extends SSLConfig {
     // or from your local maven repository:
     // ~/.m2/repository/kr/motd/maven/os-maven-plugin/1.6.1/os-maven-plugin-1.6.1.jar
     // Note that installing this plugin may require you to start with a new workspace
-    provider = config.getString(ExecConstants.SSL_PROVIDER);
+    provider = configMap.getOrDefault("SSL_PROVIDER", "JDK");
+  }
+
+  public SSLConfigServer(DrillConfig config, Configuration hadoopConfig) throws DrillException {
+    this(extractConfigs(config),hadoopConfig);
+    this.config = config;
+  }
+
+  static HashMap<String, String> extractConfigs(DrillConfig config){
+    HashMap<String,String> map = new HashMap<>();
+    map.put("HTTP_ENABLE_SSL", String.valueOf(config.hasPath(ExecConstants.HTTP_ENABLE_SSL) &&
+            config.getBoolean(ExecConstants.HTTP_ENABLE_SSL)));
+    map.put("USER_SSL_ENABLED", String.valueOf(config.hasPath(ExecConstants.USER_SSL_ENABLED) &&
+            config.getBoolean(ExecConstants.USER_SSL_ENABLED)));
+    map.put("SSL_USE_HADOOP_CONF", config.getString(ExecConstants.SSL_USE_HADOOP_CONF));
+    map.put("SSL_USE_MAPR_CONFIG", config.getString(ExecConstants.SSL_USE_MAPR_CONFIG));
+    map.put("SSL_PROTOCOL", config.getString(ExecConstants.SSL_PROTOCOL));
+    map.put("SSL_PROVIDER", config.getString(ExecConstants.SSL_PROVIDER));
+    return map;
   }
 
   @Override
@@ -225,7 +241,7 @@ public class SSLConfigServer extends SSLConfig {
     if (hadoopConfig != null) {
       value = getHadoopConfigParam(hadoopName);
     }
-    if (value.isEmpty() && config.hasPath(name)) {
+    if (value.isEmpty() && config != null && config.hasPath(name)) {
       value = config.getString(name);
     }
     value = value.trim();

@@ -144,7 +144,7 @@ public class StopCommand extends ClientCommand {
       if (opts.force) {
         System.out.println("Forcing shutdown");
       } else {
-        stopped = gracefulStop(reporter.getAmUrl());
+        stopped = gracefulStop(reporter.getAppUrl());
       }
 
       // If that did not work, then forcibly kill the AM.

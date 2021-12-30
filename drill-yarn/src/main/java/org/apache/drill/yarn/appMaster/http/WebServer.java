@@ -19,16 +19,10 @@ package org.apache.drill.yarn.appMaster.http;
 
 import static org.apache.drill.exec.server.rest.auth.DrillUserPrincipal.ADMIN_ROLE;
 
-import java.math.BigInteger;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.KeyStore;
 import java.security.Principal;
-import java.security.SecureRandom;
-import java.security.cert.X509Certificate;
 import java.util.Collections;
-import java.util.Date;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.Set;
 
 import javax.servlet.DispatcherType;
@@ -37,21 +31,14 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
-import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.drill.exec.server.rest.CsrfTokenInjectFilter;
 import org.apache.drill.exec.server.rest.CsrfTokenValidateFilter;
+import org.apache.drill.exec.server.rest.ssl.SslContextFactoryConfigurator;
 import org.apache.drill.shaded.guava.com.google.common.collect.ImmutableSet;
 import org.apache.drill.yarn.appMaster.Dispatcher;
 import org.apache.drill.yarn.core.DrillOnYarnConfig;
-import org.bouncycastle.asn1.x500.X500NameBuilder;
-import org.bouncycastle.asn1.x500.style.BCStyle;
-import org.bouncycastle.cert.X509v3CertificateBuilder;
-import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
-import org.bouncycastle.cert.jcajce.JcaX509v3CertificateBuilder;
-import org.bouncycastle.operator.ContentSigner;
-import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 import org.eclipse.jetty.http.HttpVersion;
 import org.eclipse.jetty.security.ConstraintSecurityHandler;
 import org.eclipse.jetty.security.DefaultIdentityService;
@@ -76,7 +63,6 @@ import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.resource.Resource;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.glassfish.jersey.servlet.ServletContainer;
-import org.joda.time.DateTime;
 
 import com.typesafe.config.Config;
 
@@ -304,7 +290,10 @@ public class WebServer implements AutoCloseable {
   }
 
   /**
-   * It creates A {@link SessionHandler}
+   * It creates a {@link SessionHandler} with a {@link org.eclipse.jetty.server.session.DefaultSessionCache}
+   * which has {@link org.eclipse.jetty.server.session.NullSessionDataStore}.
+   *
+   * All sessions are stored in memory and on server restart are all destroyed.
    *
    * @param config Drill configs
    * @param securityHandler Set of initparameters that are used by the Authentication
@@ -355,15 +344,24 @@ public class WebServer implements AutoCloseable {
     return httpConnector;
   }
 
+  private HashMap<String,String> extractDrillYarnConfigs(Config config){
+    HashMap<String,String> configMap = new HashMap<>();
+    configMap.put("SSL_USE_HADOOP_CONF", String.valueOf(config.hasPath(DrillOnYarnConfig.SSL_USE_HADOOP_CONF)
+            && config.getBoolean(DrillOnYarnConfig.SSL_USE_HADOOP_CONF)));
+    configMap.put("SSL_USE_MAPR_CONFIG", String.valueOf(config.hasPath(DrillOnYarnConfig.SSL_USE_MAPR_CONFIG)
+            && config.getBoolean(DrillOnYarnConfig.SSL_USE_MAPR_CONFIG)));
+    return configMap;
+  }
+
   /**
    * Create an HTTPS connector for given jetty server instance. If the admin has
    * specified keystore/truststore settings they will be used else a self-signed
    * certificate is generated and used.
    * <p>
-   * This is a shameless copy of
-   * org.apache.drill.exec.server.rest.WebServer#createHttpsConnector(int, int, int).
-   * The two should be merged at some point. The primary issue is that the Drill
-   * version is tightly coupled to Drillbit configuration.
+   * With the use of {@link SslContextFactoryConfigurator} and configureNewDOYContextFactory
+   * function this mechanism creates {@link ServerConnector}, in the same style as
+   * org.apache.drill.exec.server.rest.WebServer#createHttpsConnector(int, int, int),
+   * but with its own configs
    *
    * @return Initialized {@link ServerConnector} for HTTPS connections.
    * @throws Exception when unable to create HTTPS connector
@@ -371,73 +369,13 @@ public class WebServer implements AutoCloseable {
   private ServerConnector createHttpsConnector(Config config) throws Exception {
     LOG.info("Setting up HTTPS connector for web server");
 
-    final SslContextFactory sslContextFactory = new SslContextFactory.Server();
+//    TODO add valid domain to create self-signed certificate
+//    String thisHostName = NetUtils.getHostname();
+//    String names[] = thisHostName.split("/");
+//    String domain = names[names.length - 1];
 
-    // if (config.hasPath(ExecConstants.HTTP_KEYSTORE_PATH) &&
-    // !Strings.isNullOrEmpty(config.getString(ExecConstants.HTTP_KEYSTORE_PATH)))
-    // {
-    // LOG.info("Using configured SSL settings for web server");
-    // sslContextFactory.setKeyStorePath(config.getString(ExecConstants.HTTP_KEYSTORE_PATH));
-    // sslContextFactory.setKeyStorePassword(config.getString(ExecConstants.HTTP_KEYSTORE_PASSWORD));
-    //
-    // // TrustStore and TrustStore password are optional
-    // if (config.hasPath(ExecConstants.HTTP_TRUSTSTORE_PATH)) {
-    // sslContextFactory.setTrustStorePath(config.getString(ExecConstants.HTTP_TRUSTSTORE_PATH));
-    // if (config.hasPath(ExecConstants.HTTP_TRUSTSTORE_PASSWORD)) {
-    // sslContextFactory.setTrustStorePassword(config.getString(ExecConstants.HTTP_TRUSTSTORE_PASSWORD));
-    // }
-    // }
-    // } else {
-    LOG.info("Using generated self-signed SSL settings for web server");
-    final SecureRandom random = new SecureRandom();
-
-    // Generate a private-public key pair
-    final KeyPairGenerator keyPairGenerator = KeyPairGenerator
-        .getInstance("RSA");
-    keyPairGenerator.initialize(1024, random);
-    final KeyPair keyPair = keyPairGenerator.generateKeyPair();
-
-    final DateTime now = DateTime.now();
-
-    // Create builder for certificate attributes
-    final X500NameBuilder nameBuilder = new X500NameBuilder(BCStyle.INSTANCE)
-        .addRDN(BCStyle.OU, "Apache Drill (auth-generated)")
-        .addRDN(BCStyle.O, "Apache Software Foundation (auto-generated)")
-        .addRDN(BCStyle.CN, "Drill AM");
-
-    final Date notBefore = now.minusMinutes(1).toDate();
-    final Date notAfter = now.plusYears(5).toDate();
-    final BigInteger serialNumber = new BigInteger(128, random);
-
-    // Create a certificate valid for 5years from now.
-    final X509v3CertificateBuilder certificateBuilder = new JcaX509v3CertificateBuilder(
-        nameBuilder.build(), // attributes
-        serialNumber, notBefore, notAfter, nameBuilder.build(),
-        keyPair.getPublic());
-
-    // Sign the certificate using the private key
-    final ContentSigner contentSigner = new JcaContentSignerBuilder(
-        "SHA256WithRSAEncryption").build(keyPair.getPrivate());
-    final X509Certificate certificate = new JcaX509CertificateConverter()
-        .getCertificate(certificateBuilder.build(contentSigner));
-
-    // Check the validity
-    certificate.checkValidity(now.toDate());
-
-    // Make sure the certificate is self-signed.
-    certificate.verify(certificate.getPublicKey());
-
-    // Generate a random password for keystore protection
-    final String keyStorePasswd = RandomStringUtils.random(20);
-    final KeyStore keyStore = KeyStore.getInstance("JKS");
-    keyStore.load(null, null);
-    keyStore.setKeyEntry("DrillAutoGeneratedCert", keyPair.getPrivate(),
-        keyStorePasswd.toCharArray(),
-        new java.security.cert.Certificate[] { certificate });
-
-    sslContextFactory.setKeyStore(keyStore);
-    sslContextFactory.setKeyStorePassword(keyStorePasswd);
-    // }
+    SslContextFactory sslContextFactory = new SslContextFactoryConfigurator(null,"Drill AM")
+            .configureNewDOYContextFactory(extractDrillYarnConfigs(config));
 
     final HttpConfiguration httpsConfig = baseHttpConfig();
     httpsConfig.addCustomizer(new SecureRequestCustomizer());

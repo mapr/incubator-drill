@@ -68,4 +68,7 @@ public class SslContextFactoryConfiguratorTest extends ClusterTest {
     assertTrue(sslContextFactory.getWantClientAuth());
     assertArrayEquals(new String[]{"TLSv1.0", "TLSv1.1"}, sslContextFactory.getExcludeProtocols());
   }
+
+  //TODO Add tests for the configureNewDOYSslContextFactory function
+
 }

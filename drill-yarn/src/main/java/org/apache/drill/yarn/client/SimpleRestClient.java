@@ -20,14 +20,29 @@ package org.apache.drill.yarn.client;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
 
-import org.apache.http.HttpResponse;
+import com.typesafe.config.Config;
+import org.apache.drill.yarn.core.DrillOnYarnConfig;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
-import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.config.Registry;
+import org.apache.http.config.RegistryBuilder;
+import org.apache.http.conn.socket.ConnectionSocketFactory;
+import org.apache.http.conn.socket.PlainConnectionSocketFactory;
+import org.apache.http.conn.ssl.NoopHostnameVerifier;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.conn.BasicHttpClientConnectionManager;
+import org.apache.http.ssl.SSLContexts;
+
+import javax.net.ssl.SSLContext;
 
 public class SimpleRestClient {
   public String send(String baseUrl, String resource, boolean isPost)
@@ -38,26 +53,49 @@ public class SimpleRestClient {
     }
     url += resource;
     try {
-      HttpClient client = new DefaultHttpClient();
-      HttpRequestBase request;
-      if (isPost) {
-        request = new HttpPost(url);
-      } else {
-        request = new HttpGet(url);
+      SSLContext sslContext = SSLContexts.createDefault();
+      Config config = DrillOnYarnConfig.config();
+      if (config.hasPath(DrillOnYarnConfig.DISABLE_CERT_VERIFICATION) && config.getBoolean(DrillOnYarnConfig.DISABLE_CERT_VERIFICATION)) {
+        sslContext = SSLContexts.custom().loadTrustMaterial(null, (cert, authType) -> true).build();
       }
 
-      HttpResponse response = client.execute(request);
-      BufferedReader rd = new BufferedReader(
-          new InputStreamReader(response.getEntity().getContent()));
-      StringBuilder buf = new StringBuilder();
-      String line = null;
-      while ((line = rd.readLine()) != null) {
-        buf.append(line);
+      SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslContext);
+      if (config.hasPath(DrillOnYarnConfig.DISABLE_HOST_VERIFICATION) && config.getBoolean(DrillOnYarnConfig.DISABLE_HOST_VERIFICATION) ||
+              config.hasPath(DrillOnYarnConfig.DISABLE_CERT_VERIFICATION) && config.getBoolean(DrillOnYarnConfig.DISABLE_CERT_VERIFICATION)) {
+        sslsf = new SSLConnectionSocketFactory(sslContext, NoopHostnameVerifier.INSTANCE);
       }
-      return buf.toString().trim();
-    } catch (ClientProtocolException e) {
-      throw new ClientException("Internal REST error", e);
-    } catch (IllegalStateException e) {
+
+      Registry<ConnectionSocketFactory> socketFactoryRegistry =
+              RegistryBuilder.<ConnectionSocketFactory>create()
+                      .register("https", sslsf)
+                      .register("http", new PlainConnectionSocketFactory())
+                      .build();
+
+      BasicHttpClientConnectionManager connectionManager =
+              new BasicHttpClientConnectionManager(socketFactoryRegistry);
+
+      try (CloseableHttpClient httpClient = HttpClients.custom().setSSLSocketFactory(sslsf)
+              .setConnectionManager(connectionManager).build()) {
+        HttpRequestBase request;
+        if (isPost) {
+          request = new HttpPost(url);
+        } else {
+          request = new HttpGet(url);
+        }
+
+        try (CloseableHttpResponse response = httpClient.execute(request)){
+          BufferedReader rd = new BufferedReader(
+                  new InputStreamReader(response.getEntity().getContent()));
+          StringBuilder buf = new StringBuilder();
+          String line = null;
+          while ((line = rd.readLine()) != null) {
+            buf.append(line);
+          }
+          return buf.toString().trim();
+        }
+      }
+    } catch (ClientProtocolException | KeyStoreException | NoSuchAlgorithmException
+            | KeyManagementException | IllegalStateException e) {
       throw new ClientException("Internal REST error", e);
     } catch (IOException e) {
       throw new ClientException("REST request failed: " + url, e);

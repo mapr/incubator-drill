@@ -64,6 +64,7 @@ public class DrillOnYarnConfig {
   public static final String FILES_PARENT = append(DRILL_ON_YARN_PARENT, "drill-install");
   public static final String DFS_PARENT = append(DRILL_ON_YARN_PARENT, "dfs");
   public static final String HTTP_PARENT = append(DRILL_ON_YARN_PARENT, "http");
+  public static final String SSL_PARENT = append(DRILL_ON_YARN_PARENT, "ssl");
   public static final String YARN_PARENT = append(DRILL_ON_YARN_PARENT, "yarn");
   public static final String HADOOP_PARENT = append(DRILL_ON_YARN_PARENT, "hadoop");
   public static final String CLIENT_PARENT = append(DRILL_ON_YARN_PARENT, "client");
@@ -154,6 +155,11 @@ public class DrillOnYarnConfig {
   public static final String HTTP_REFRESH_SECS = append(HTTP_PARENT, "refresh-secs");
   public static final String HTTP_USER_NAME = append(HTTP_PARENT, "user-name");
   public static final String HTTP_PASSWORD = append(HTTP_PARENT, "password");
+
+  public static final String SSL_USE_HADOOP_CONF = append(SSL_PARENT, "useHadoopConfig");
+  public static final String SSL_USE_MAPR_CONFIG = append(SSL_PARENT, "useMapRSSLConfig");
+  public static final String DISABLE_HOST_VERIFICATION = append(SSL_PARENT, "disableHostVerification");
+  public static final String DISABLE_CERT_VERIFICATION = append(SSL_PARENT, "disableCertificateVerification");
 
   public static final String AUTH_TYPE_NONE = "none";
   public static final String AUTH_TYPE_DRILL = "drill";
