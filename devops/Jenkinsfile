@@ -37,6 +37,8 @@ pipeline {
   parameters {
     choice(name: 'BUILD_TYPE', choices: ['Dev','EBF','Release'], description: 'default - Dev. EBF and Release args you can use only in release branches')
     string(name: 'MAKEFILE_ENV_VARS', defaultValue: '', description: 'Variables you can pass to makefile (command will be: make {THIS VAR} {project-name}). Please DO NOT put component_branch_name')
+    string(name: 'PRIVATE_PKG_BRANCH', defaultValue: 'MEP-8.0.0', description: 'default - MEP-8.0.0. You can set any branch for private-pkg')
+    string(name: 'PRIVATE_CONF_BRANCH', defaultValue: 'master', description: 'default - master. You can set any branch for private-configuration')
   }
   stages {
     stage("Setup settings and variables") {
@@ -100,11 +102,11 @@ pipeline {
                       sh """
                         rm -rf ${PROJECT}; git clone git@github.com:mapr/private-pkg.git ${PROJECT}; \
                         cd ${PROJECT}; \
-                        git checkout MEP-4.0.0 ; \
-                        make mapr-drill-internal-${COMPONENT_VERSION} ${MAKEFILE_ARGS} TIMESTAMP=${ID} DRILL_COMMIT_ID=${GIT_SHORT_COMMIT_SHA} ; \
-                        make ${PROJECT} ${MAKEFILE_ARGS} TIMESTAMP=${ID} DRILL_COMMIT_ID=${GIT_SHORT_COMMIT_SHA}; \
-                        make mapr-drill-yarn-${COMPONENT_VERSION} ${MAKEFILE_ARGS} TIMESTAMP=${ID} DRILL_COMMIT_ID=${GIT_SHORT_COMMIT_SHA} ; \
-                        make mapr-drill-internal-${COMPONENT_VERSION}-deploy ${MAKEFILE_ARGS} TIMESTAMP=${ID} DRILL_COMMIT_ID=${GIT_SHORT_COMMIT_SHA} ; \
+                        git checkout ${params.PRIVATE_PKG_BRANCH} ; \
+                        make mapr-drill-internal-${COMPONENT_VERSION} ${MAKEFILE_ARGS} TIMESTAMP=${ID} DRILL_COMMIT_ID=${GIT_SHORT_COMMIT_SHA} PRIVATE_CONFIG_BRANCH_NAME=${params.PRIVATE_CONF_BRANCH} ; \
+                        make ${PROJECT} ${MAKEFILE_ARGS} TIMESTAMP=${ID} DRILL_COMMIT_ID=${GIT_SHORT_COMMIT_SHA} PRIVATE_CONFIG_BRANCH_NAME=${params.PRIVATE_CONF_BRANCH}; \
+                        make mapr-drill-yarn-${COMPONENT_VERSION} ${MAKEFILE_ARGS} TIMESTAMP=${ID} DRILL_COMMIT_ID=${GIT_SHORT_COMMIT_SHA} PRIVATE_CONFIG_BRANCH_NAME=${params.PRIVATE_CONF_BRANCH} ; \
+                        make mapr-drill-internal-${COMPONENT_VERSION}-deploy ${MAKEFILE_ARGS} TIMESTAMP=${ID} DRILL_COMMIT_ID=${GIT_SHORT_COMMIT_SHA} PRIVATE_CONFIG_BRANCH_NAME=${params.PRIVATE_CONF_BRANCH} ; \
                       """
                     }
                   }
@@ -166,11 +168,11 @@ pipeline {
                       sh """
                         rm -rf ${PROJECT}; git clone git@github.com:mapr/private-pkg.git ${PROJECT}; \
                         cd ${PROJECT}; \
-                        git checkout MEP-4.0.0 ; \
-                        make mapr-drill-internal-${COMPONENT_VERSION} ${MAKEFILE_ARGS} TIMESTAMP=${ID} DRILL_COMMIT_ID=${GIT_SHORT_COMMIT_SHA} ; \
-                        make ${PROJECT} ${MAKEFILE_ARGS} TIMESTAMP=${ID} DRILL_COMMIT_ID=${GIT_SHORT_COMMIT_SHA}; \
-                        make mapr-drill-yarn-${COMPONENT_VERSION} ${MAKEFILE_ARGS} TIMESTAMP=${ID} DRILL_COMMIT_ID=${GIT_SHORT_COMMIT_SHA} ; \
-                        make mapr-drill-internal-${COMPONENT_VERSION}-deploy ${MAKEFILE_ARGS} TIMESTAMP=${ID} DRILL_COMMIT_ID=${GIT_SHORT_COMMIT_SHA} ; \
+                        git checkout ${params.PRIVATE_PKG_BRANCH} ; \
+                        make mapr-drill-internal-${COMPONENT_VERSION} ${MAKEFILE_ARGS} TIMESTAMP=${ID} DRILL_COMMIT_ID=${GIT_SHORT_COMMIT_SHA} PRIVATE_CONFIG_BRANCH_NAME=${params.PRIVATE_CONF_BRANCH} ; \
+                        make ${PROJECT} ${MAKEFILE_ARGS} TIMESTAMP=${ID} DRILL_COMMIT_ID=${GIT_SHORT_COMMIT_SHA} PRIVATE_CONFIG_BRANCH_NAME=${params.PRIVATE_CONF_BRANCH}; \
+                        make mapr-drill-yarn-${COMPONENT_VERSION} ${MAKEFILE_ARGS} TIMESTAMP=${ID} DRILL_COMMIT_ID=${GIT_SHORT_COMMIT_SHA} PRIVATE_CONFIG_BRANCH_NAME=${params.PRIVATE_CONF_BRANCH} ; \
+                        make mapr-drill-internal-${COMPONENT_VERSION}-deploy ${MAKEFILE_ARGS} TIMESTAMP=${ID} DRILL_COMMIT_ID=${GIT_SHORT_COMMIT_SHA} PRIVATE_CONFIG_BRANCH_NAME=${params.PRIVATE_CONF_BRANCH} ; \
                       """
                     }
                   }
