@@ -413,6 +413,7 @@
             <exclude>**/git.properties</exclude>
             <exclude>**/*.csv</exclude>
             <exclude>**/*.csvh</exclude>
+            <exclude>**/*.pdf</exclude>
             <exclude>**/*.csvh-test</exclude>
             <exclude>**/*.tsv</exclude>
             <exclude>**/*.txt</exclude>
@@ -728,6 +729,7 @@
               <exclude>**/git.properties</exclude>
               <exclude>**/*.csv</exclude>
               <exclude>**/*.csvh</exclude>
+              <exclude>**/*.pdf</exclude>
               <exclude>**/*.csvh-test</exclude>
               <exclude>**/*.tsv</exclude>
               <exclude>**/*.txt</exclude>
