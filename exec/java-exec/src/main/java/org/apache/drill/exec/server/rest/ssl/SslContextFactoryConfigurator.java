@@ -96,7 +96,7 @@ public class SslContextFactoryConfigurator {
    * @throws Exception when generation of self-signed certificate failed
    */
   public SslContextFactory configureNewDOYContextFactory(HashMap<String,String> configMap) throws Exception {
-    SSLConfig sslConf = new SSLConfigServer(configMap, null);
+    SSLConfig sslConf = new SSLConfigServer(configMap, null, null);
     sslConf.validateKeyStore();
     final SslContextFactory sslContextFactory = new SslContextFactory.Server();
     if (sslConf.isSslValid()) {

@@ -59,12 +59,12 @@ public class SSLConfigServer extends SSLConfig {
   private final String protocol;
   private final String provider;
 
-  public SSLConfigServer(HashMap<String,String> configMap, Configuration hadoopConfig){
-    this.config = null;
-    httpsEnabled = Boolean.parseBoolean(configMap.getOrDefault("HTTP_ENABLE_SSL", "true"));
-    userSslEnabled = Boolean.parseBoolean(configMap.getOrDefault("USER_SSL_ENABLED", "false"));
+  public SSLConfigServer(HashMap<String,String> commonConfigMap, Configuration hadoopConfig, DrillConfig config){
+    this.config = config;
+    httpsEnabled = Boolean.parseBoolean(commonConfigMap.getOrDefault("HTTP_ENABLE_SSL", "true"));
+    userSslEnabled = Boolean.parseBoolean(commonConfigMap.getOrDefault("USER_SSL_ENABLED", "false"));
     Mode mode = Mode.SERVER;
-    boolean enableHadoopConfig = Boolean.parseBoolean(configMap.get("SSL_USE_HADOOP_CONF"));
+    boolean enableHadoopConfig = Boolean.parseBoolean(commonConfigMap.get("SSL_USE_HADOOP_CONF"));
     // For testing we will mock up a hadoop configuration, however for regular use, we find the actual hadoop config.
     if (enableHadoopConfig) {
       if (hadoopConfig == null) {
@@ -83,7 +83,7 @@ public class SSLConfigServer extends SSLConfig {
         this::getConfigParam,
         this::getPasswordConfigParam,
         Mode.SERVER,
-        Boolean.parseBoolean(configMap.get("SSL_USE_MAPR_CONFIG")));
+        Boolean.parseBoolean(commonConfigMap.get("SSL_USE_MAPR_CONFIG")));
     keyStoreType = credentialsProvider.getKeyStoreType(
         ExecConstants.SSL_KEYSTORE_TYPE, resolveHadoopPropertyName(HADOOP_SSL_KEYSTORE_TYPE_TPL_KEY, mode));
     if (keyStoreType.equalsIgnoreCase(BCFKS_KEYSTORE_TYPE)) {
@@ -104,7 +104,7 @@ public class SSLConfigServer extends SSLConfig {
         ExecConstants.SSL_KEY_PASSWORD, resolveHadoopPropertyName(HADOOP_SSL_KEYSTORE_KEYPASSWORD_TPL_KEY, mode));
     // if no keypassword specified, use keystore password
     keyPassword = keyPass.isEmpty() ? keyStorePassword : keyPass;
-    protocol = configMap.getOrDefault("SSL_PROTOCOL", "TLSv1.2");
+    protocol = commonConfigMap.getOrDefault("SSL_PROTOCOL", "TLSv1.2");
     // If provider is OPENSSL then to debug or run this code in an IDE, you will need to enable
     // the dependency on netty-tcnative with the correct classifier for the platform you use.
     // This can be done by enabling the openssl profile.
@@ -113,12 +113,11 @@ public class SSLConfigServer extends SSLConfig {
     // or from your local maven repository:
     // ~/.m2/repository/kr/motd/maven/os-maven-plugin/1.6.1/os-maven-plugin-1.6.1.jar
     // Note that installing this plugin may require you to start with a new workspace
-    provider = configMap.getOrDefault("SSL_PROVIDER", "JDK");
+    provider = commonConfigMap.getOrDefault("SSL_PROVIDER", "JDK");
   }
 
-  public SSLConfigServer(DrillConfig config, Configuration hadoopConfig) throws DrillException {
-    this(extractConfigs(config),hadoopConfig);
-    this.config = config;
+  public SSLConfigServer(DrillConfig config, Configuration hadoopConfig){
+    this(extractConfigs(config),hadoopConfig,config);
   }
 
   static HashMap<String, String> extractConfigs(DrillConfig config){
