@@ -3087,7 +3087,7 @@ public final class UserProtos {
   /**
    * Protobuf type {@code exec.user.Property}
    */
-  public  static final class Property extends
+  public static final class Property extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:exec.user.Property)
       PropertyOrBuilder {
@@ -3183,6 +3183,7 @@ public final class UserProtos {
      * <code>required string key = 1;</code>
      * @return Whether the key field is set.
      */
+    @java.lang.Override
     public boolean hasKey() {
       return ((bitField0_ & 0x00000001) != 0);
     }
@@ -3190,6 +3191,7 @@ public final class UserProtos {
      * <code>required string key = 1;</code>
      * @return The key.
      */
+    @java.lang.Override
     public java.lang.String getKey() {
       java.lang.Object ref = key_;
       if (ref instanceof java.lang.String) {
@@ -3208,6 +3210,7 @@ public final class UserProtos {
      * <code>required string key = 1;</code>
      * @return The bytes for key.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getKeyBytes() {
       java.lang.Object ref = key_;
@@ -3228,6 +3231,7 @@ public final class UserProtos {
      * <code>required string value = 2;</code>
      * @return Whether the value field is set.
      */
+    @java.lang.Override
     public boolean hasValue() {
       return ((bitField0_ & 0x00000002) != 0);
     }
@@ -3235,6 +3239,7 @@ public final class UserProtos {
      * <code>required string value = 2;</code>
      * @return The value.
      */
+    @java.lang.Override
     public java.lang.String getValue() {
       java.lang.Object ref = value_;
       if (ref instanceof java.lang.String) {
@@ -3253,6 +3258,7 @@ public final class UserProtos {
      * <code>required string value = 2;</code>
      * @return The bytes for value.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getValueBytes() {
       java.lang.Object ref = value_;
@@ -3873,7 +3879,7 @@ public final class UserProtos {
   /**
    * Protobuf type {@code exec.user.UserProperties}
    */
-  public  static final class UserProperties extends
+  public static final class UserProperties extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:exec.user.UserProperties)
       UserPropertiesOrBuilder {
@@ -3966,12 +3972,14 @@ public final class UserProtos {
     /**
      * <code>repeated .exec.user.Property properties = 1;</code>
      */
+    @java.lang.Override
     public java.util.List<org.apache.drill.exec.proto.UserProtos.Property> getPropertiesList() {
       return properties_;
     }
     /**
      * <code>repeated .exec.user.Property properties = 1;</code>
      */
+    @java.lang.Override
     public java.util.List<? extends org.apache.drill.exec.proto.UserProtos.PropertyOrBuilder> 
         getPropertiesOrBuilderList() {
       return properties_;
@@ -3979,18 +3987,21 @@ public final class UserProtos {
     /**
      * <code>repeated .exec.user.Property properties = 1;</code>
      */
+    @java.lang.Override
     public int getPropertiesCount() {
       return properties_.size();
     }
     /**
      * <code>repeated .exec.user.Property properties = 1;</code>
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.Property getProperties(int index) {
       return properties_.get(index);
     }
     /**
      * <code>repeated .exec.user.Property properties = 1;</code>
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.PropertyOrBuilder getPropertiesOrBuilder(
         int index) {
       return properties_.get(index);
@@ -4840,7 +4851,7 @@ public final class UserProtos {
   /**
    * Protobuf type {@code exec.user.RpcEndpointInfos}
    */
-  public  static final class RpcEndpointInfos extends
+  public static final class RpcEndpointInfos extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:exec.user.RpcEndpointInfos)
       RpcEndpointInfosOrBuilder {
@@ -4974,6 +4985,7 @@ public final class UserProtos {
      * <code>optional string name = 1;</code>
      * @return Whether the name field is set.
      */
+    @java.lang.Override
     public boolean hasName() {
       return ((bitField0_ & 0x00000001) != 0);
     }
@@ -4985,6 +4997,7 @@ public final class UserProtos {
      * <code>optional string name = 1;</code>
      * @return The name.
      */
+    @java.lang.Override
     public java.lang.String getName() {
       java.lang.Object ref = name_;
       if (ref instanceof java.lang.String) {
@@ -5007,6 +5020,7 @@ public final class UserProtos {
      * <code>optional string name = 1;</code>
      * @return The bytes for name.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getNameBytes() {
       java.lang.Object ref = name_;
@@ -5031,6 +5045,7 @@ public final class UserProtos {
      * <code>optional string version = 2;</code>
      * @return Whether the version field is set.
      */
+    @java.lang.Override
     public boolean hasVersion() {
       return ((bitField0_ & 0x00000002) != 0);
     }
@@ -5042,6 +5057,7 @@ public final class UserProtos {
      * <code>optional string version = 2;</code>
      * @return The version.
      */
+    @java.lang.Override
     public java.lang.String getVersion() {
       java.lang.Object ref = version_;
       if (ref instanceof java.lang.String) {
@@ -5064,6 +5080,7 @@ public final class UserProtos {
      * <code>optional string version = 2;</code>
      * @return The bytes for version.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getVersionBytes() {
       java.lang.Object ref = version_;
@@ -5088,6 +5105,7 @@ public final class UserProtos {
      * <code>optional uint32 majorVersion = 3;</code>
      * @return Whether the majorVersion field is set.
      */
+    @java.lang.Override
     public boolean hasMajorVersion() {
       return ((bitField0_ & 0x00000004) != 0);
     }
@@ -5099,6 +5117,7 @@ public final class UserProtos {
      * <code>optional uint32 majorVersion = 3;</code>
      * @return The majorVersion.
      */
+    @java.lang.Override
     public int getMajorVersion() {
       return majorVersion_;
     }
@@ -5113,6 +5132,7 @@ public final class UserProtos {
      * <code>optional uint32 minorVersion = 4;</code>
      * @return Whether the minorVersion field is set.
      */
+    @java.lang.Override
     public boolean hasMinorVersion() {
       return ((bitField0_ & 0x00000008) != 0);
     }
@@ -5124,6 +5144,7 @@ public final class UserProtos {
      * <code>optional uint32 minorVersion = 4;</code>
      * @return The minorVersion.
      */
+    @java.lang.Override
     public int getMinorVersion() {
       return minorVersion_;
     }
@@ -5138,6 +5159,7 @@ public final class UserProtos {
      * <code>optional uint32 patchVersion = 5;</code>
      * @return Whether the patchVersion field is set.
      */
+    @java.lang.Override
     public boolean hasPatchVersion() {
       return ((bitField0_ & 0x00000010) != 0);
     }
@@ -5149,6 +5171,7 @@ public final class UserProtos {
      * <code>optional uint32 patchVersion = 5;</code>
      * @return The patchVersion.
      */
+    @java.lang.Override
     public int getPatchVersion() {
       return patchVersion_;
     }
@@ -5163,6 +5186,7 @@ public final class UserProtos {
      * <code>optional string application = 6;</code>
      * @return Whether the application field is set.
      */
+    @java.lang.Override
     public boolean hasApplication() {
       return ((bitField0_ & 0x00000020) != 0);
     }
@@ -5174,6 +5198,7 @@ public final class UserProtos {
      * <code>optional string application = 6;</code>
      * @return The application.
      */
+    @java.lang.Override
     public java.lang.String getApplication() {
       java.lang.Object ref = application_;
       if (ref instanceof java.lang.String) {
@@ -5196,6 +5221,7 @@ public final class UserProtos {
      * <code>optional string application = 6;</code>
      * @return The bytes for application.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getApplicationBytes() {
       java.lang.Object ref = application_;
@@ -5220,6 +5246,7 @@ public final class UserProtos {
      * <code>optional uint32 buildNumber = 7;</code>
      * @return Whether the buildNumber field is set.
      */
+    @java.lang.Override
     public boolean hasBuildNumber() {
       return ((bitField0_ & 0x00000040) != 0);
     }
@@ -5231,6 +5258,7 @@ public final class UserProtos {
      * <code>optional uint32 buildNumber = 7;</code>
      * @return The buildNumber.
      */
+    @java.lang.Override
     public int getBuildNumber() {
       return buildNumber_;
     }
@@ -5245,6 +5273,7 @@ public final class UserProtos {
      * <code>optional string versionQualifier = 8;</code>
      * @return Whether the versionQualifier field is set.
      */
+    @java.lang.Override
     public boolean hasVersionQualifier() {
       return ((bitField0_ & 0x00000080) != 0);
     }
@@ -5256,6 +5285,7 @@ public final class UserProtos {
      * <code>optional string versionQualifier = 8;</code>
      * @return The versionQualifier.
      */
+    @java.lang.Override
     public java.lang.String getVersionQualifier() {
       java.lang.Object ref = versionQualifier_;
       if (ref instanceof java.lang.String) {
@@ -5278,6 +5308,7 @@ public final class UserProtos {
      * <code>optional string versionQualifier = 8;</code>
      * @return The bytes for versionQualifier.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getVersionQualifierBytes() {
       java.lang.Object ref = versionQualifier_;
@@ -6010,6 +6041,7 @@ public final class UserProtos {
        * <code>optional uint32 majorVersion = 3;</code>
        * @return Whether the majorVersion field is set.
        */
+      @java.lang.Override
       public boolean hasMajorVersion() {
         return ((bitField0_ & 0x00000004) != 0);
       }
@@ -6021,6 +6053,7 @@ public final class UserProtos {
        * <code>optional uint32 majorVersion = 3;</code>
        * @return The majorVersion.
        */
+      @java.lang.Override
       public int getMajorVersion() {
         return majorVersion_;
       }
@@ -6063,6 +6096,7 @@ public final class UserProtos {
        * <code>optional uint32 minorVersion = 4;</code>
        * @return Whether the minorVersion field is set.
        */
+      @java.lang.Override
       public boolean hasMinorVersion() {
         return ((bitField0_ & 0x00000008) != 0);
       }
@@ -6074,6 +6108,7 @@ public final class UserProtos {
        * <code>optional uint32 minorVersion = 4;</code>
        * @return The minorVersion.
        */
+      @java.lang.Override
       public int getMinorVersion() {
         return minorVersion_;
       }
@@ -6116,6 +6151,7 @@ public final class UserProtos {
        * <code>optional uint32 patchVersion = 5;</code>
        * @return Whether the patchVersion field is set.
        */
+      @java.lang.Override
       public boolean hasPatchVersion() {
         return ((bitField0_ & 0x00000010) != 0);
       }
@@ -6127,6 +6163,7 @@ public final class UserProtos {
        * <code>optional uint32 patchVersion = 5;</code>
        * @return The patchVersion.
        */
+      @java.lang.Override
       public int getPatchVersion() {
         return patchVersion_;
       }
@@ -6277,6 +6314,7 @@ public final class UserProtos {
        * <code>optional uint32 buildNumber = 7;</code>
        * @return Whether the buildNumber field is set.
        */
+      @java.lang.Override
       public boolean hasBuildNumber() {
         return ((bitField0_ & 0x00000040) != 0);
       }
@@ -6288,6 +6326,7 @@ public final class UserProtos {
        * <code>optional uint32 buildNumber = 7;</code>
        * @return The buildNumber.
        */
+      @java.lang.Override
       public int getBuildNumber() {
         return buildNumber_;
       }
@@ -6629,7 +6668,7 @@ public final class UserProtos {
   /**
    * Protobuf type {@code exec.user.UserToBitHandshake}
    */
-  public  static final class UserToBitHandshake extends
+  public static final class UserToBitHandshake extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:exec.user.UserToBitHandshake)
       UserToBitHandshakeOrBuilder {
@@ -6806,14 +6845,14 @@ public final class UserProtos {
      * <code>optional .exec.shared.RpcChannel channel = 1 [default = USER];</code>
      * @return Whether the channel field is set.
      */
-    public boolean hasChannel() {
+    @java.lang.Override public boolean hasChannel() {
       return ((bitField0_ & 0x00000001) != 0);
     }
     /**
      * <code>optional .exec.shared.RpcChannel channel = 1 [default = USER];</code>
      * @return The channel.
      */
-    public org.apache.drill.exec.proto.UserBitShared.RpcChannel getChannel() {
+    @java.lang.Override public org.apache.drill.exec.proto.UserBitShared.RpcChannel getChannel() {
       @SuppressWarnings("deprecation")
       org.apache.drill.exec.proto.UserBitShared.RpcChannel result = org.apache.drill.exec.proto.UserBitShared.RpcChannel.valueOf(channel_);
       return result == null ? org.apache.drill.exec.proto.UserBitShared.RpcChannel.USER : result;
@@ -6825,6 +6864,7 @@ public final class UserProtos {
      * <code>optional bool support_listening = 2;</code>
      * @return Whether the supportListening field is set.
      */
+    @java.lang.Override
     public boolean hasSupportListening() {
       return ((bitField0_ & 0x00000002) != 0);
     }
@@ -6832,6 +6872,7 @@ public final class UserProtos {
      * <code>optional bool support_listening = 2;</code>
      * @return The supportListening.
      */
+    @java.lang.Override
     public boolean getSupportListening() {
       return supportListening_;
     }
@@ -6842,6 +6883,7 @@ public final class UserProtos {
      * <code>optional int32 rpc_version = 3;</code>
      * @return Whether the rpcVersion field is set.
      */
+    @java.lang.Override
     public boolean hasRpcVersion() {
       return ((bitField0_ & 0x00000004) != 0);
     }
@@ -6849,6 +6891,7 @@ public final class UserProtos {
      * <code>optional int32 rpc_version = 3;</code>
      * @return The rpcVersion.
      */
+    @java.lang.Override
     public int getRpcVersion() {
       return rpcVersion_;
     }
@@ -6859,6 +6902,7 @@ public final class UserProtos {
      * <code>optional .exec.shared.UserCredentials credentials = 4;</code>
      * @return Whether the credentials field is set.
      */
+    @java.lang.Override
     public boolean hasCredentials() {
       return ((bitField0_ & 0x00000008) != 0);
     }
@@ -6866,12 +6910,14 @@ public final class UserProtos {
      * <code>optional .exec.shared.UserCredentials credentials = 4;</code>
      * @return The credentials.
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserBitShared.UserCredentials getCredentials() {
       return credentials_ == null ? org.apache.drill.exec.proto.UserBitShared.UserCredentials.getDefaultInstance() : credentials_;
     }
     /**
      * <code>optional .exec.shared.UserCredentials credentials = 4;</code>
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserBitShared.UserCredentialsOrBuilder getCredentialsOrBuilder() {
       return credentials_ == null ? org.apache.drill.exec.proto.UserBitShared.UserCredentials.getDefaultInstance() : credentials_;
     }
@@ -6882,6 +6928,7 @@ public final class UserProtos {
      * <code>optional .exec.user.UserProperties properties = 5;</code>
      * @return Whether the properties field is set.
      */
+    @java.lang.Override
     public boolean hasProperties() {
       return ((bitField0_ & 0x00000010) != 0);
     }
@@ -6889,12 +6936,14 @@ public final class UserProtos {
      * <code>optional .exec.user.UserProperties properties = 5;</code>
      * @return The properties.
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.UserProperties getProperties() {
       return properties_ == null ? org.apache.drill.exec.proto.UserProtos.UserProperties.getDefaultInstance() : properties_;
     }
     /**
      * <code>optional .exec.user.UserProperties properties = 5;</code>
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.UserPropertiesOrBuilder getPropertiesOrBuilder() {
       return properties_ == null ? org.apache.drill.exec.proto.UserProtos.UserProperties.getDefaultInstance() : properties_;
     }
@@ -6905,6 +6954,7 @@ public final class UserProtos {
      * <code>optional bool support_complex_types = 6 [default = false];</code>
      * @return Whether the supportComplexTypes field is set.
      */
+    @java.lang.Override
     public boolean hasSupportComplexTypes() {
       return ((bitField0_ & 0x00000020) != 0);
     }
@@ -6912,6 +6962,7 @@ public final class UserProtos {
      * <code>optional bool support_complex_types = 6 [default = false];</code>
      * @return The supportComplexTypes.
      */
+    @java.lang.Override
     public boolean getSupportComplexTypes() {
       return supportComplexTypes_;
     }
@@ -6922,6 +6973,7 @@ public final class UserProtos {
      * <code>optional bool support_timeout = 7 [default = false];</code>
      * @return Whether the supportTimeout field is set.
      */
+    @java.lang.Override
     public boolean hasSupportTimeout() {
       return ((bitField0_ & 0x00000040) != 0);
     }
@@ -6929,6 +6981,7 @@ public final class UserProtos {
      * <code>optional bool support_timeout = 7 [default = false];</code>
      * @return The supportTimeout.
      */
+    @java.lang.Override
     public boolean getSupportTimeout() {
       return supportTimeout_;
     }
@@ -6939,6 +6992,7 @@ public final class UserProtos {
      * <code>optional .exec.user.RpcEndpointInfos client_infos = 8;</code>
      * @return Whether the clientInfos field is set.
      */
+    @java.lang.Override
     public boolean hasClientInfos() {
       return ((bitField0_ & 0x00000080) != 0);
     }
@@ -6946,12 +7000,14 @@ public final class UserProtos {
      * <code>optional .exec.user.RpcEndpointInfos client_infos = 8;</code>
      * @return The clientInfos.
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.RpcEndpointInfos getClientInfos() {
       return clientInfos_ == null ? org.apache.drill.exec.proto.UserProtos.RpcEndpointInfos.getDefaultInstance() : clientInfos_;
     }
     /**
      * <code>optional .exec.user.RpcEndpointInfos client_infos = 8;</code>
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.RpcEndpointInfosOrBuilder getClientInfosOrBuilder() {
       return clientInfos_ == null ? org.apache.drill.exec.proto.UserProtos.RpcEndpointInfos.getDefaultInstance() : clientInfos_;
     }
@@ -6962,14 +7018,14 @@ public final class UserProtos {
      * <code>optional .exec.user.SaslSupport sasl_support = 9;</code>
      * @return Whether the saslSupport field is set.
      */
-    public boolean hasSaslSupport() {
+    @java.lang.Override public boolean hasSaslSupport() {
       return ((bitField0_ & 0x00000100) != 0);
     }
     /**
      * <code>optional .exec.user.SaslSupport sasl_support = 9;</code>
      * @return The saslSupport.
      */
-    public org.apache.drill.exec.proto.UserProtos.SaslSupport getSaslSupport() {
+    @java.lang.Override public org.apache.drill.exec.proto.UserProtos.SaslSupport getSaslSupport() {
       @SuppressWarnings("deprecation")
       org.apache.drill.exec.proto.UserProtos.SaslSupport result = org.apache.drill.exec.proto.UserProtos.SaslSupport.valueOf(saslSupport_);
       return result == null ? org.apache.drill.exec.proto.UserProtos.SaslSupport.UNKNOWN_SASL_SUPPORT : result;
@@ -7626,13 +7682,14 @@ public final class UserProtos {
        * <code>optional .exec.shared.RpcChannel channel = 1 [default = USER];</code>
        * @return Whether the channel field is set.
        */
-      public boolean hasChannel() {
+      @java.lang.Override public boolean hasChannel() {
         return ((bitField0_ & 0x00000001) != 0);
       }
       /**
        * <code>optional .exec.shared.RpcChannel channel = 1 [default = USER];</code>
        * @return The channel.
        */
+      @java.lang.Override
       public org.apache.drill.exec.proto.UserBitShared.RpcChannel getChannel() {
         @SuppressWarnings("deprecation")
         org.apache.drill.exec.proto.UserBitShared.RpcChannel result = org.apache.drill.exec.proto.UserBitShared.RpcChannel.valueOf(channel_);
@@ -7668,6 +7725,7 @@ public final class UserProtos {
        * <code>optional bool support_listening = 2;</code>
        * @return Whether the supportListening field is set.
        */
+      @java.lang.Override
       public boolean hasSupportListening() {
         return ((bitField0_ & 0x00000002) != 0);
       }
@@ -7675,6 +7733,7 @@ public final class UserProtos {
        * <code>optional bool support_listening = 2;</code>
        * @return The supportListening.
        */
+      @java.lang.Override
       public boolean getSupportListening() {
         return supportListening_;
       }
@@ -7705,6 +7764,7 @@ public final class UserProtos {
        * <code>optional int32 rpc_version = 3;</code>
        * @return Whether the rpcVersion field is set.
        */
+      @java.lang.Override
       public boolean hasRpcVersion() {
         return ((bitField0_ & 0x00000004) != 0);
       }
@@ -7712,6 +7772,7 @@ public final class UserProtos {
        * <code>optional int32 rpc_version = 3;</code>
        * @return The rpcVersion.
        */
+      @java.lang.Override
       public int getRpcVersion() {
         return rpcVersion_;
       }
@@ -7982,6 +8043,7 @@ public final class UserProtos {
        * <code>optional bool support_complex_types = 6 [default = false];</code>
        * @return Whether the supportComplexTypes field is set.
        */
+      @java.lang.Override
       public boolean hasSupportComplexTypes() {
         return ((bitField0_ & 0x00000020) != 0);
       }
@@ -7989,6 +8051,7 @@ public final class UserProtos {
        * <code>optional bool support_complex_types = 6 [default = false];</code>
        * @return The supportComplexTypes.
        */
+      @java.lang.Override
       public boolean getSupportComplexTypes() {
         return supportComplexTypes_;
       }
@@ -8019,6 +8082,7 @@ public final class UserProtos {
        * <code>optional bool support_timeout = 7 [default = false];</code>
        * @return Whether the supportTimeout field is set.
        */
+      @java.lang.Override
       public boolean hasSupportTimeout() {
         return ((bitField0_ & 0x00000040) != 0);
       }
@@ -8026,6 +8090,7 @@ public final class UserProtos {
        * <code>optional bool support_timeout = 7 [default = false];</code>
        * @return The supportTimeout.
        */
+      @java.lang.Override
       public boolean getSupportTimeout() {
         return supportTimeout_;
       }
@@ -8176,13 +8241,14 @@ public final class UserProtos {
        * <code>optional .exec.user.SaslSupport sasl_support = 9;</code>
        * @return Whether the saslSupport field is set.
        */
-      public boolean hasSaslSupport() {
+      @java.lang.Override public boolean hasSaslSupport() {
         return ((bitField0_ & 0x00000100) != 0);
       }
       /**
        * <code>optional .exec.user.SaslSupport sasl_support = 9;</code>
        * @return The saslSupport.
        */
+      @java.lang.Override
       public org.apache.drill.exec.proto.UserProtos.SaslSupport getSaslSupport() {
         @SuppressWarnings("deprecation")
         org.apache.drill.exec.proto.UserProtos.SaslSupport result = org.apache.drill.exec.proto.UserProtos.SaslSupport.valueOf(saslSupport_);
@@ -8388,7 +8454,7 @@ public final class UserProtos {
   /**
    * Protobuf type {@code exec.user.RequestResults}
    */
-  public  static final class RequestResults extends
+  public static final class RequestResults extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:exec.user.RequestResults)
       RequestResultsOrBuilder {
@@ -8488,6 +8554,7 @@ public final class UserProtos {
      * <code>optional .exec.shared.QueryId query_id = 1;</code>
      * @return Whether the queryId field is set.
      */
+    @java.lang.Override
     public boolean hasQueryId() {
       return ((bitField0_ & 0x00000001) != 0);
     }
@@ -8495,12 +8562,14 @@ public final class UserProtos {
      * <code>optional .exec.shared.QueryId query_id = 1;</code>
      * @return The queryId.
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserBitShared.QueryId getQueryId() {
       return queryId_ == null ? org.apache.drill.exec.proto.UserBitShared.QueryId.getDefaultInstance() : queryId_;
     }
     /**
      * <code>optional .exec.shared.QueryId query_id = 1;</code>
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserBitShared.QueryIdOrBuilder getQueryIdOrBuilder() {
       return queryId_ == null ? org.apache.drill.exec.proto.UserBitShared.QueryId.getDefaultInstance() : queryId_;
     }
@@ -8511,6 +8580,7 @@ public final class UserProtos {
      * <code>optional int32 maximum_responses = 2;</code>
      * @return Whether the maximumResponses field is set.
      */
+    @java.lang.Override
     public boolean hasMaximumResponses() {
       return ((bitField0_ & 0x00000002) != 0);
     }
@@ -8518,6 +8588,7 @@ public final class UserProtos {
      * <code>optional int32 maximum_responses = 2;</code>
      * @return The maximumResponses.
      */
+    @java.lang.Override
     public int getMaximumResponses() {
       return maximumResponses_;
     }
@@ -8995,6 +9066,7 @@ public final class UserProtos {
        * <code>optional int32 maximum_responses = 2;</code>
        * @return Whether the maximumResponses field is set.
        */
+      @java.lang.Override
       public boolean hasMaximumResponses() {
         return ((bitField0_ & 0x00000002) != 0);
       }
@@ -9002,6 +9074,7 @@ public final class UserProtos {
        * <code>optional int32 maximum_responses = 2;</code>
        * @return The maximumResponses.
        */
+      @java.lang.Override
       public int getMaximumResponses() {
         return maximumResponses_;
       }
@@ -9125,7 +9198,7 @@ public final class UserProtos {
   /**
    * Protobuf type {@code exec.user.GetQueryPlanFragments}
    */
-  public  static final class GetQueryPlanFragments extends
+  public static final class GetQueryPlanFragments extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:exec.user.GetQueryPlanFragments)
       GetQueryPlanFragmentsOrBuilder {
@@ -9232,6 +9305,7 @@ public final class UserProtos {
      * <code>required string query = 1;</code>
      * @return Whether the query field is set.
      */
+    @java.lang.Override
     public boolean hasQuery() {
       return ((bitField0_ & 0x00000001) != 0);
     }
@@ -9239,6 +9313,7 @@ public final class UserProtos {
      * <code>required string query = 1;</code>
      * @return The query.
      */
+    @java.lang.Override
     public java.lang.String getQuery() {
       java.lang.Object ref = query_;
       if (ref instanceof java.lang.String) {
@@ -9257,6 +9332,7 @@ public final class UserProtos {
      * <code>required string query = 1;</code>
      * @return The bytes for query.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getQueryBytes() {
       java.lang.Object ref = query_;
@@ -9277,14 +9353,14 @@ public final class UserProtos {
      * <code>optional .exec.shared.QueryType type = 2;</code>
      * @return Whether the type field is set.
      */
-    public boolean hasType() {
+    @java.lang.Override public boolean hasType() {
       return ((bitField0_ & 0x00000002) != 0);
     }
     /**
      * <code>optional .exec.shared.QueryType type = 2;</code>
      * @return The type.
      */
-    public org.apache.drill.exec.proto.UserBitShared.QueryType getType() {
+    @java.lang.Override public org.apache.drill.exec.proto.UserBitShared.QueryType getType() {
       @SuppressWarnings("deprecation")
       org.apache.drill.exec.proto.UserBitShared.QueryType result = org.apache.drill.exec.proto.UserBitShared.QueryType.valueOf(type_);
       return result == null ? org.apache.drill.exec.proto.UserBitShared.QueryType.SQL : result;
@@ -9296,6 +9372,7 @@ public final class UserProtos {
      * <code>optional bool split_plan = 3 [default = false];</code>
      * @return Whether the splitPlan field is set.
      */
+    @java.lang.Override
     public boolean hasSplitPlan() {
       return ((bitField0_ & 0x00000004) != 0);
     }
@@ -9303,6 +9380,7 @@ public final class UserProtos {
      * <code>optional bool split_plan = 3 [default = false];</code>
      * @return The splitPlan.
      */
+    @java.lang.Override
     public boolean getSplitPlan() {
       return splitPlan_;
     }
@@ -9768,13 +9846,14 @@ public final class UserProtos {
        * <code>optional .exec.shared.QueryType type = 2;</code>
        * @return Whether the type field is set.
        */
-      public boolean hasType() {
+      @java.lang.Override public boolean hasType() {
         return ((bitField0_ & 0x00000002) != 0);
       }
       /**
        * <code>optional .exec.shared.QueryType type = 2;</code>
        * @return The type.
        */
+      @java.lang.Override
       public org.apache.drill.exec.proto.UserBitShared.QueryType getType() {
         @SuppressWarnings("deprecation")
         org.apache.drill.exec.proto.UserBitShared.QueryType result = org.apache.drill.exec.proto.UserBitShared.QueryType.valueOf(type_);
@@ -9810,6 +9889,7 @@ public final class UserProtos {
        * <code>optional bool split_plan = 3 [default = false];</code>
        * @return Whether the splitPlan field is set.
        */
+      @java.lang.Override
       public boolean hasSplitPlan() {
         return ((bitField0_ & 0x00000004) != 0);
       }
@@ -9817,6 +9897,7 @@ public final class UserProtos {
        * <code>optional bool split_plan = 3 [default = false];</code>
        * @return The splitPlan.
        */
+      @java.lang.Override
       public boolean getSplitPlan() {
         return splitPlan_;
       }
@@ -9966,7 +10047,7 @@ public final class UserProtos {
   /**
    * Protobuf type {@code exec.user.QueryPlanFragments}
    */
-  public  static final class QueryPlanFragments extends
+  public static final class QueryPlanFragments extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:exec.user.QueryPlanFragments)
       QueryPlanFragmentsOrBuilder {
@@ -10100,14 +10181,14 @@ public final class UserProtos {
      * <code>required .exec.shared.QueryResult.QueryState status = 1;</code>
      * @return Whether the status field is set.
      */
-    public boolean hasStatus() {
+    @java.lang.Override public boolean hasStatus() {
       return ((bitField0_ & 0x00000001) != 0);
     }
     /**
      * <code>required .exec.shared.QueryResult.QueryState status = 1;</code>
      * @return The status.
      */
-    public org.apache.drill.exec.proto.UserBitShared.QueryResult.QueryState getStatus() {
+    @java.lang.Override public org.apache.drill.exec.proto.UserBitShared.QueryResult.QueryState getStatus() {
       @SuppressWarnings("deprecation")
       org.apache.drill.exec.proto.UserBitShared.QueryResult.QueryState result = org.apache.drill.exec.proto.UserBitShared.QueryResult.QueryState.valueOf(status_);
       return result == null ? org.apache.drill.exec.proto.UserBitShared.QueryResult.QueryState.STARTING : result;
@@ -10119,6 +10200,7 @@ public final class UserProtos {
      * <code>optional .exec.shared.QueryId query_id = 2;</code>
      * @return Whether the queryId field is set.
      */
+    @java.lang.Override
     public boolean hasQueryId() {
       return ((bitField0_ & 0x00000002) != 0);
     }
@@ -10126,12 +10208,14 @@ public final class UserProtos {
      * <code>optional .exec.shared.QueryId query_id = 2;</code>
      * @return The queryId.
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserBitShared.QueryId getQueryId() {
       return queryId_ == null ? org.apache.drill.exec.proto.UserBitShared.QueryId.getDefaultInstance() : queryId_;
     }
     /**
      * <code>optional .exec.shared.QueryId query_id = 2;</code>
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserBitShared.QueryIdOrBuilder getQueryIdOrBuilder() {
       return queryId_ == null ? org.apache.drill.exec.proto.UserBitShared.QueryId.getDefaultInstance() : queryId_;
     }
@@ -10141,12 +10225,14 @@ public final class UserProtos {
     /**
      * <code>repeated .exec.bit.control.PlanFragment fragments = 3;</code>
      */
+    @java.lang.Override
     public java.util.List<org.apache.drill.exec.proto.BitControl.PlanFragment> getFragmentsList() {
       return fragments_;
     }
     /**
      * <code>repeated .exec.bit.control.PlanFragment fragments = 3;</code>
      */
+    @java.lang.Override
     public java.util.List<? extends org.apache.drill.exec.proto.BitControl.PlanFragmentOrBuilder> 
         getFragmentsOrBuilderList() {
       return fragments_;
@@ -10154,18 +10240,21 @@ public final class UserProtos {
     /**
      * <code>repeated .exec.bit.control.PlanFragment fragments = 3;</code>
      */
+    @java.lang.Override
     public int getFragmentsCount() {
       return fragments_.size();
     }
     /**
      * <code>repeated .exec.bit.control.PlanFragment fragments = 3;</code>
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.BitControl.PlanFragment getFragments(int index) {
       return fragments_.get(index);
     }
     /**
      * <code>repeated .exec.bit.control.PlanFragment fragments = 3;</code>
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.BitControl.PlanFragmentOrBuilder getFragmentsOrBuilder(
         int index) {
       return fragments_.get(index);
@@ -10177,6 +10266,7 @@ public final class UserProtos {
      * <code>optional .exec.shared.DrillPBError error = 4;</code>
      * @return Whether the error field is set.
      */
+    @java.lang.Override
     public boolean hasError() {
       return ((bitField0_ & 0x00000004) != 0);
     }
@@ -10184,12 +10274,14 @@ public final class UserProtos {
      * <code>optional .exec.shared.DrillPBError error = 4;</code>
      * @return The error.
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserBitShared.DrillPBError getError() {
       return error_ == null ? org.apache.drill.exec.proto.UserBitShared.DrillPBError.getDefaultInstance() : error_;
     }
     /**
      * <code>optional .exec.shared.DrillPBError error = 4;</code>
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserBitShared.DrillPBErrorOrBuilder getErrorOrBuilder() {
       return error_ == null ? org.apache.drill.exec.proto.UserBitShared.DrillPBError.getDefaultInstance() : error_;
     }
@@ -10642,13 +10734,14 @@ public final class UserProtos {
        * <code>required .exec.shared.QueryResult.QueryState status = 1;</code>
        * @return Whether the status field is set.
        */
-      public boolean hasStatus() {
+      @java.lang.Override public boolean hasStatus() {
         return ((bitField0_ & 0x00000001) != 0);
       }
       /**
        * <code>required .exec.shared.QueryResult.QueryState status = 1;</code>
        * @return The status.
        */
+      @java.lang.Override
       public org.apache.drill.exec.proto.UserBitShared.QueryResult.QueryState getStatus() {
         @SuppressWarnings("deprecation")
         org.apache.drill.exec.proto.UserBitShared.QueryResult.QueryState result = org.apache.drill.exec.proto.UserBitShared.QueryResult.QueryState.valueOf(status_);
@@ -11353,7 +11446,7 @@ public final class UserProtos {
   /**
    * Protobuf type {@code exec.user.BitToUserHandshake}
    */
-  public  static final class BitToUserHandshake extends
+  public static final class BitToUserHandshake extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:exec.user.BitToUserHandshake)
       BitToUserHandshakeOrBuilder {
@@ -11542,6 +11635,7 @@ public final class UserProtos {
      * <code>optional int32 rpc_version = 2;</code>
      * @return Whether the rpcVersion field is set.
      */
+    @java.lang.Override
     public boolean hasRpcVersion() {
       return ((bitField0_ & 0x00000001) != 0);
     }
@@ -11549,6 +11643,7 @@ public final class UserProtos {
      * <code>optional int32 rpc_version = 2;</code>
      * @return The rpcVersion.
      */
+    @java.lang.Override
     public int getRpcVersion() {
       return rpcVersion_;
     }
@@ -11559,14 +11654,14 @@ public final class UserProtos {
      * <code>optional .exec.user.HandshakeStatus status = 3;</code>
      * @return Whether the status field is set.
      */
-    public boolean hasStatus() {
+    @java.lang.Override public boolean hasStatus() {
       return ((bitField0_ & 0x00000002) != 0);
     }
     /**
      * <code>optional .exec.user.HandshakeStatus status = 3;</code>
      * @return The status.
      */
-    public org.apache.drill.exec.proto.UserProtos.HandshakeStatus getStatus() {
+    @java.lang.Override public org.apache.drill.exec.proto.UserProtos.HandshakeStatus getStatus() {
       @SuppressWarnings("deprecation")
       org.apache.drill.exec.proto.UserProtos.HandshakeStatus result = org.apache.drill.exec.proto.UserProtos.HandshakeStatus.valueOf(status_);
       return result == null ? org.apache.drill.exec.proto.UserProtos.HandshakeStatus.SUCCESS : result;
@@ -11578,6 +11673,7 @@ public final class UserProtos {
      * <code>optional string errorId = 4;</code>
      * @return Whether the errorId field is set.
      */
+    @java.lang.Override
     public boolean hasErrorId() {
       return ((bitField0_ & 0x00000004) != 0);
     }
@@ -11585,6 +11681,7 @@ public final class UserProtos {
      * <code>optional string errorId = 4;</code>
      * @return The errorId.
      */
+    @java.lang.Override
     public java.lang.String getErrorId() {
       java.lang.Object ref = errorId_;
       if (ref instanceof java.lang.String) {
@@ -11603,6 +11700,7 @@ public final class UserProtos {
      * <code>optional string errorId = 4;</code>
      * @return The bytes for errorId.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getErrorIdBytes() {
       java.lang.Object ref = errorId_;
@@ -11623,6 +11721,7 @@ public final class UserProtos {
      * <code>optional string errorMessage = 5;</code>
      * @return Whether the errorMessage field is set.
      */
+    @java.lang.Override
     public boolean hasErrorMessage() {
       return ((bitField0_ & 0x00000008) != 0);
     }
@@ -11630,6 +11729,7 @@ public final class UserProtos {
      * <code>optional string errorMessage = 5;</code>
      * @return The errorMessage.
      */
+    @java.lang.Override
     public java.lang.String getErrorMessage() {
       java.lang.Object ref = errorMessage_;
       if (ref instanceof java.lang.String) {
@@ -11648,6 +11748,7 @@ public final class UserProtos {
      * <code>optional string errorMessage = 5;</code>
      * @return The bytes for errorMessage.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getErrorMessageBytes() {
       java.lang.Object ref = errorMessage_;
@@ -11668,6 +11769,7 @@ public final class UserProtos {
      * <code>optional .exec.user.RpcEndpointInfos server_infos = 6;</code>
      * @return Whether the serverInfos field is set.
      */
+    @java.lang.Override
     public boolean hasServerInfos() {
       return ((bitField0_ & 0x00000010) != 0);
     }
@@ -11675,12 +11777,14 @@ public final class UserProtos {
      * <code>optional .exec.user.RpcEndpointInfos server_infos = 6;</code>
      * @return The serverInfos.
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.RpcEndpointInfos getServerInfos() {
       return serverInfos_ == null ? org.apache.drill.exec.proto.UserProtos.RpcEndpointInfos.getDefaultInstance() : serverInfos_;
     }
     /**
      * <code>optional .exec.user.RpcEndpointInfos server_infos = 6;</code>
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.RpcEndpointInfosOrBuilder getServerInfosOrBuilder() {
       return serverInfos_ == null ? org.apache.drill.exec.proto.UserProtos.RpcEndpointInfos.getDefaultInstance() : serverInfos_;
     }
@@ -11736,6 +11840,7 @@ public final class UserProtos {
      * <code>repeated .exec.user.RpcType supported_methods = 8;</code>
      * @return A list containing the supportedMethods.
      */
+    @java.lang.Override
     public java.util.List<org.apache.drill.exec.proto.UserProtos.RpcType> getSupportedMethodsList() {
       return new com.google.protobuf.Internal.ListAdapter<
           java.lang.Integer, org.apache.drill.exec.proto.UserProtos.RpcType>(supportedMethods_, supportedMethods_converter_);
@@ -11744,6 +11849,7 @@ public final class UserProtos {
      * <code>repeated .exec.user.RpcType supported_methods = 8;</code>
      * @return The count of supportedMethods.
      */
+    @java.lang.Override
     public int getSupportedMethodsCount() {
       return supportedMethods_.size();
     }
@@ -11752,6 +11858,7 @@ public final class UserProtos {
      * @param index The index of the element to return.
      * @return The supportedMethods at the given index.
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.RpcType getSupportedMethods(int index) {
       return supportedMethods_converter_.convert(supportedMethods_.get(index));
     }
@@ -11762,6 +11869,7 @@ public final class UserProtos {
      * <code>optional bool encrypted = 9;</code>
      * @return Whether the encrypted field is set.
      */
+    @java.lang.Override
     public boolean hasEncrypted() {
       return ((bitField0_ & 0x00000020) != 0);
     }
@@ -11769,6 +11877,7 @@ public final class UserProtos {
      * <code>optional bool encrypted = 9;</code>
      * @return The encrypted.
      */
+    @java.lang.Override
     public boolean getEncrypted() {
       return encrypted_;
     }
@@ -11779,6 +11888,7 @@ public final class UserProtos {
      * <code>optional int32 maxWrappedSize = 10;</code>
      * @return Whether the maxWrappedSize field is set.
      */
+    @java.lang.Override
     public boolean hasMaxWrappedSize() {
       return ((bitField0_ & 0x00000040) != 0);
     }
@@ -11786,6 +11896,7 @@ public final class UserProtos {
      * <code>optional int32 maxWrappedSize = 10;</code>
      * @return The maxWrappedSize.
      */
+    @java.lang.Override
     public int getMaxWrappedSize() {
       return maxWrappedSize_;
     }
@@ -12338,6 +12449,7 @@ public final class UserProtos {
        * <code>optional int32 rpc_version = 2;</code>
        * @return Whether the rpcVersion field is set.
        */
+      @java.lang.Override
       public boolean hasRpcVersion() {
         return ((bitField0_ & 0x00000001) != 0);
       }
@@ -12345,6 +12457,7 @@ public final class UserProtos {
        * <code>optional int32 rpc_version = 2;</code>
        * @return The rpcVersion.
        */
+      @java.lang.Override
       public int getRpcVersion() {
         return rpcVersion_;
       }
@@ -12375,13 +12488,14 @@ public final class UserProtos {
        * <code>optional .exec.user.HandshakeStatus status = 3;</code>
        * @return Whether the status field is set.
        */
-      public boolean hasStatus() {
+      @java.lang.Override public boolean hasStatus() {
         return ((bitField0_ & 0x00000002) != 0);
       }
       /**
        * <code>optional .exec.user.HandshakeStatus status = 3;</code>
        * @return The status.
        */
+      @java.lang.Override
       public org.apache.drill.exec.proto.UserProtos.HandshakeStatus getStatus() {
         @SuppressWarnings("deprecation")
         org.apache.drill.exec.proto.UserProtos.HandshakeStatus result = org.apache.drill.exec.proto.UserProtos.HandshakeStatus.valueOf(status_);
@@ -12900,6 +13014,7 @@ public final class UserProtos {
        * <code>optional bool encrypted = 9;</code>
        * @return Whether the encrypted field is set.
        */
+      @java.lang.Override
       public boolean hasEncrypted() {
         return ((bitField0_ & 0x00000080) != 0);
       }
@@ -12907,6 +13022,7 @@ public final class UserProtos {
        * <code>optional bool encrypted = 9;</code>
        * @return The encrypted.
        */
+      @java.lang.Override
       public boolean getEncrypted() {
         return encrypted_;
       }
@@ -12937,6 +13053,7 @@ public final class UserProtos {
        * <code>optional int32 maxWrappedSize = 10;</code>
        * @return Whether the maxWrappedSize field is set.
        */
+      @java.lang.Override
       public boolean hasMaxWrappedSize() {
         return ((bitField0_ & 0x00000100) != 0);
       }
@@ -12944,6 +13061,7 @@ public final class UserProtos {
        * <code>optional int32 maxWrappedSize = 10;</code>
        * @return The maxWrappedSize.
        */
+      @java.lang.Override
       public int getMaxWrappedSize() {
         return maxWrappedSize_;
       }
@@ -13090,7 +13208,7 @@ public final class UserProtos {
    *
    * Protobuf type {@code exec.user.LikeFilter}
    */
-  public  static final class LikeFilter extends
+  public static final class LikeFilter extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:exec.user.LikeFilter)
       LikeFilterOrBuilder {
@@ -13190,6 +13308,7 @@ public final class UserProtos {
      * <code>optional string pattern = 1;</code>
      * @return Whether the pattern field is set.
      */
+    @java.lang.Override
     public boolean hasPattern() {
       return ((bitField0_ & 0x00000001) != 0);
     }
@@ -13201,6 +13320,7 @@ public final class UserProtos {
      * <code>optional string pattern = 1;</code>
      * @return The pattern.
      */
+    @java.lang.Override
     public java.lang.String getPattern() {
       java.lang.Object ref = pattern_;
       if (ref instanceof java.lang.String) {
@@ -13223,6 +13343,7 @@ public final class UserProtos {
      * <code>optional string pattern = 1;</code>
      * @return The bytes for pattern.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getPatternBytes() {
       java.lang.Object ref = pattern_;
@@ -13247,6 +13368,7 @@ public final class UserProtos {
      * <code>optional string escape = 2;</code>
      * @return Whether the escape field is set.
      */
+    @java.lang.Override
     public boolean hasEscape() {
       return ((bitField0_ & 0x00000002) != 0);
     }
@@ -13258,6 +13380,7 @@ public final class UserProtos {
      * <code>optional string escape = 2;</code>
      * @return The escape.
      */
+    @java.lang.Override
     public java.lang.String getEscape() {
       java.lang.Object ref = escape_;
       if (ref instanceof java.lang.String) {
@@ -13280,6 +13403,7 @@ public final class UserProtos {
      * <code>optional string escape = 2;</code>
      * @return The bytes for escape.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getEscapeBytes() {
       java.lang.Object ref = escape_;
@@ -13933,7 +14057,7 @@ public final class UserProtos {
    *
    * Protobuf type {@code exec.user.GetCatalogsReq}
    */
-  public  static final class GetCatalogsReq extends
+  public static final class GetCatalogsReq extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:exec.user.GetCatalogsReq)
       GetCatalogsReqOrBuilder {
@@ -14028,6 +14152,7 @@ public final class UserProtos {
      * <code>optional .exec.user.LikeFilter catalog_name_filter = 1;</code>
      * @return Whether the catalogNameFilter field is set.
      */
+    @java.lang.Override
     public boolean hasCatalogNameFilter() {
       return ((bitField0_ & 0x00000001) != 0);
     }
@@ -14035,12 +14160,14 @@ public final class UserProtos {
      * <code>optional .exec.user.LikeFilter catalog_name_filter = 1;</code>
      * @return The catalogNameFilter.
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.LikeFilter getCatalogNameFilter() {
       return catalogNameFilter_ == null ? org.apache.drill.exec.proto.UserProtos.LikeFilter.getDefaultInstance() : catalogNameFilter_;
     }
     /**
      * <code>optional .exec.user.LikeFilter catalog_name_filter = 1;</code>
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.LikeFilterOrBuilder getCatalogNameFilterOrBuilder() {
       return catalogNameFilter_ == null ? org.apache.drill.exec.proto.UserProtos.LikeFilter.getDefaultInstance() : catalogNameFilter_;
     }
@@ -14606,7 +14733,7 @@ public final class UserProtos {
    *
    * Protobuf type {@code exec.user.CatalogMetadata}
    */
-  public  static final class CatalogMetadata extends
+  public static final class CatalogMetadata extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:exec.user.CatalogMetadata)
       CatalogMetadataOrBuilder {
@@ -14709,6 +14836,7 @@ public final class UserProtos {
      * <code>optional string catalog_name = 1;</code>
      * @return Whether the catalogName field is set.
      */
+    @java.lang.Override
     public boolean hasCatalogName() {
       return ((bitField0_ & 0x00000001) != 0);
     }
@@ -14716,6 +14844,7 @@ public final class UserProtos {
      * <code>optional string catalog_name = 1;</code>
      * @return The catalogName.
      */
+    @java.lang.Override
     public java.lang.String getCatalogName() {
       java.lang.Object ref = catalogName_;
       if (ref instanceof java.lang.String) {
@@ -14734,6 +14863,7 @@ public final class UserProtos {
      * <code>optional string catalog_name = 1;</code>
      * @return The bytes for catalogName.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getCatalogNameBytes() {
       java.lang.Object ref = catalogName_;
@@ -14754,6 +14884,7 @@ public final class UserProtos {
      * <code>optional string description = 2;</code>
      * @return Whether the description field is set.
      */
+    @java.lang.Override
     public boolean hasDescription() {
       return ((bitField0_ & 0x00000002) != 0);
     }
@@ -14761,6 +14892,7 @@ public final class UserProtos {
      * <code>optional string description = 2;</code>
      * @return The description.
      */
+    @java.lang.Override
     public java.lang.String getDescription() {
       java.lang.Object ref = description_;
       if (ref instanceof java.lang.String) {
@@ -14779,6 +14911,7 @@ public final class UserProtos {
      * <code>optional string description = 2;</code>
      * @return The bytes for description.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getDescriptionBytes() {
       java.lang.Object ref = description_;
@@ -14799,6 +14932,7 @@ public final class UserProtos {
      * <code>optional string connect = 3;</code>
      * @return Whether the connect field is set.
      */
+    @java.lang.Override
     public boolean hasConnect() {
       return ((bitField0_ & 0x00000004) != 0);
     }
@@ -14806,6 +14940,7 @@ public final class UserProtos {
      * <code>optional string connect = 3;</code>
      * @return The connect.
      */
+    @java.lang.Override
     public java.lang.String getConnect() {
       java.lang.Object ref = connect_;
       if (ref instanceof java.lang.String) {
@@ -14824,6 +14959,7 @@ public final class UserProtos {
      * <code>optional string connect = 3;</code>
      * @return The bytes for connect.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getConnectBytes() {
       java.lang.Object ref = connect_;
@@ -15574,7 +15710,7 @@ public final class UserProtos {
    *
    * Protobuf type {@code exec.user.GetCatalogsResp}
    */
-  public  static final class GetCatalogsResp extends
+  public static final class GetCatalogsResp extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:exec.user.GetCatalogsResp)
       GetCatalogsRespOrBuilder {
@@ -15695,14 +15831,14 @@ public final class UserProtos {
      * <code>optional .exec.user.RequestStatus status = 1;</code>
      * @return Whether the status field is set.
      */
-    public boolean hasStatus() {
+    @java.lang.Override public boolean hasStatus() {
       return ((bitField0_ & 0x00000001) != 0);
     }
     /**
      * <code>optional .exec.user.RequestStatus status = 1;</code>
      * @return The status.
      */
-    public org.apache.drill.exec.proto.UserProtos.RequestStatus getStatus() {
+    @java.lang.Override public org.apache.drill.exec.proto.UserProtos.RequestStatus getStatus() {
       @SuppressWarnings("deprecation")
       org.apache.drill.exec.proto.UserProtos.RequestStatus result = org.apache.drill.exec.proto.UserProtos.RequestStatus.valueOf(status_);
       return result == null ? org.apache.drill.exec.proto.UserProtos.RequestStatus.UNKNOWN_STATUS : result;
@@ -15713,12 +15849,14 @@ public final class UserProtos {
     /**
      * <code>repeated .exec.user.CatalogMetadata catalogs = 2;</code>
      */
+    @java.lang.Override
     public java.util.List<org.apache.drill.exec.proto.UserProtos.CatalogMetadata> getCatalogsList() {
       return catalogs_;
     }
     /**
      * <code>repeated .exec.user.CatalogMetadata catalogs = 2;</code>
      */
+    @java.lang.Override
     public java.util.List<? extends org.apache.drill.exec.proto.UserProtos.CatalogMetadataOrBuilder> 
         getCatalogsOrBuilderList() {
       return catalogs_;
@@ -15726,18 +15864,21 @@ public final class UserProtos {
     /**
      * <code>repeated .exec.user.CatalogMetadata catalogs = 2;</code>
      */
+    @java.lang.Override
     public int getCatalogsCount() {
       return catalogs_.size();
     }
     /**
      * <code>repeated .exec.user.CatalogMetadata catalogs = 2;</code>
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.CatalogMetadata getCatalogs(int index) {
       return catalogs_.get(index);
     }
     /**
      * <code>repeated .exec.user.CatalogMetadata catalogs = 2;</code>
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.CatalogMetadataOrBuilder getCatalogsOrBuilder(
         int index) {
       return catalogs_.get(index);
@@ -15749,6 +15890,7 @@ public final class UserProtos {
      * <code>optional .exec.shared.DrillPBError error = 3;</code>
      * @return Whether the error field is set.
      */
+    @java.lang.Override
     public boolean hasError() {
       return ((bitField0_ & 0x00000002) != 0);
     }
@@ -15756,12 +15898,14 @@ public final class UserProtos {
      * <code>optional .exec.shared.DrillPBError error = 3;</code>
      * @return The error.
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserBitShared.DrillPBError getError() {
       return error_ == null ? org.apache.drill.exec.proto.UserBitShared.DrillPBError.getDefaultInstance() : error_;
     }
     /**
      * <code>optional .exec.shared.DrillPBError error = 3;</code>
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserBitShared.DrillPBErrorOrBuilder getErrorOrBuilder() {
       return error_ == null ? org.apache.drill.exec.proto.UserBitShared.DrillPBError.getDefaultInstance() : error_;
     }
@@ -16177,13 +16321,14 @@ public final class UserProtos {
        * <code>optional .exec.user.RequestStatus status = 1;</code>
        * @return Whether the status field is set.
        */
-      public boolean hasStatus() {
+      @java.lang.Override public boolean hasStatus() {
         return ((bitField0_ & 0x00000001) != 0);
       }
       /**
        * <code>optional .exec.user.RequestStatus status = 1;</code>
        * @return The status.
        */
+      @java.lang.Override
       public org.apache.drill.exec.proto.UserProtos.RequestStatus getStatus() {
         @SuppressWarnings("deprecation")
         org.apache.drill.exec.proto.UserProtos.RequestStatus result = org.apache.drill.exec.proto.UserProtos.RequestStatus.valueOf(status_);
@@ -16667,7 +16812,7 @@ public final class UserProtos {
    *
    * Protobuf type {@code exec.user.GetSchemasReq}
    */
-  public  static final class GetSchemasReq extends
+  public static final class GetSchemasReq extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:exec.user.GetSchemasReq)
       GetSchemasReqOrBuilder {
@@ -16775,6 +16920,7 @@ public final class UserProtos {
      * <code>optional .exec.user.LikeFilter catalog_name_filter = 1;</code>
      * @return Whether the catalogNameFilter field is set.
      */
+    @java.lang.Override
     public boolean hasCatalogNameFilter() {
       return ((bitField0_ & 0x00000001) != 0);
     }
@@ -16782,12 +16928,14 @@ public final class UserProtos {
      * <code>optional .exec.user.LikeFilter catalog_name_filter = 1;</code>
      * @return The catalogNameFilter.
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.LikeFilter getCatalogNameFilter() {
       return catalogNameFilter_ == null ? org.apache.drill.exec.proto.UserProtos.LikeFilter.getDefaultInstance() : catalogNameFilter_;
     }
     /**
      * <code>optional .exec.user.LikeFilter catalog_name_filter = 1;</code>
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.LikeFilterOrBuilder getCatalogNameFilterOrBuilder() {
       return catalogNameFilter_ == null ? org.apache.drill.exec.proto.UserProtos.LikeFilter.getDefaultInstance() : catalogNameFilter_;
     }
@@ -16798,6 +16946,7 @@ public final class UserProtos {
      * <code>optional .exec.user.LikeFilter schema_name_filter = 2;</code>
      * @return Whether the schemaNameFilter field is set.
      */
+    @java.lang.Override
     public boolean hasSchemaNameFilter() {
       return ((bitField0_ & 0x00000002) != 0);
     }
@@ -16805,12 +16954,14 @@ public final class UserProtos {
      * <code>optional .exec.user.LikeFilter schema_name_filter = 2;</code>
      * @return The schemaNameFilter.
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.LikeFilter getSchemaNameFilter() {
       return schemaNameFilter_ == null ? org.apache.drill.exec.proto.UserProtos.LikeFilter.getDefaultInstance() : schemaNameFilter_;
     }
     /**
      * <code>optional .exec.user.LikeFilter schema_name_filter = 2;</code>
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.LikeFilterOrBuilder getSchemaNameFilterOrBuilder() {
       return schemaNameFilter_ == null ? org.apache.drill.exec.proto.UserProtos.LikeFilter.getDefaultInstance() : schemaNameFilter_;
     }
@@ -17576,7 +17727,7 @@ public final class UserProtos {
    *
    * Protobuf type {@code exec.user.SchemaMetadata}
    */
-  public  static final class SchemaMetadata extends
+  public static final class SchemaMetadata extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:exec.user.SchemaMetadata)
       SchemaMetadataOrBuilder {
@@ -17693,6 +17844,7 @@ public final class UserProtos {
      * <code>optional string catalog_name = 1;</code>
      * @return Whether the catalogName field is set.
      */
+    @java.lang.Override
     public boolean hasCatalogName() {
       return ((bitField0_ & 0x00000001) != 0);
     }
@@ -17700,6 +17852,7 @@ public final class UserProtos {
      * <code>optional string catalog_name = 1;</code>
      * @return The catalogName.
      */
+    @java.lang.Override
     public java.lang.String getCatalogName() {
       java.lang.Object ref = catalogName_;
       if (ref instanceof java.lang.String) {
@@ -17718,6 +17871,7 @@ public final class UserProtos {
      * <code>optional string catalog_name = 1;</code>
      * @return The bytes for catalogName.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getCatalogNameBytes() {
       java.lang.Object ref = catalogName_;
@@ -17738,6 +17892,7 @@ public final class UserProtos {
      * <code>optional string schema_name = 2;</code>
      * @return Whether the schemaName field is set.
      */
+    @java.lang.Override
     public boolean hasSchemaName() {
       return ((bitField0_ & 0x00000002) != 0);
     }
@@ -17745,6 +17900,7 @@ public final class UserProtos {
      * <code>optional string schema_name = 2;</code>
      * @return The schemaName.
      */
+    @java.lang.Override
     public java.lang.String getSchemaName() {
       java.lang.Object ref = schemaName_;
       if (ref instanceof java.lang.String) {
@@ -17763,6 +17919,7 @@ public final class UserProtos {
      * <code>optional string schema_name = 2;</code>
      * @return The bytes for schemaName.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getSchemaNameBytes() {
       java.lang.Object ref = schemaName_;
@@ -17783,6 +17940,7 @@ public final class UserProtos {
      * <code>optional string owner = 3;</code>
      * @return Whether the owner field is set.
      */
+    @java.lang.Override
     public boolean hasOwner() {
       return ((bitField0_ & 0x00000004) != 0);
     }
@@ -17790,6 +17948,7 @@ public final class UserProtos {
      * <code>optional string owner = 3;</code>
      * @return The owner.
      */
+    @java.lang.Override
     public java.lang.String getOwner() {
       java.lang.Object ref = owner_;
       if (ref instanceof java.lang.String) {
@@ -17808,6 +17967,7 @@ public final class UserProtos {
      * <code>optional string owner = 3;</code>
      * @return The bytes for owner.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getOwnerBytes() {
       java.lang.Object ref = owner_;
@@ -17832,6 +17992,7 @@ public final class UserProtos {
      * <code>optional string type = 4;</code>
      * @return Whether the type field is set.
      */
+    @java.lang.Override
     public boolean hasType() {
       return ((bitField0_ & 0x00000008) != 0);
     }
@@ -17843,6 +18004,7 @@ public final class UserProtos {
      * <code>optional string type = 4;</code>
      * @return The type.
      */
+    @java.lang.Override
     public java.lang.String getType() {
       java.lang.Object ref = type_;
       if (ref instanceof java.lang.String) {
@@ -17865,6 +18027,7 @@ public final class UserProtos {
      * <code>optional string type = 4;</code>
      * @return The bytes for type.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getTypeBytes() {
       java.lang.Object ref = type_;
@@ -17885,6 +18048,7 @@ public final class UserProtos {
      * <code>optional string mutable = 5;</code>
      * @return Whether the mutable field is set.
      */
+    @java.lang.Override
     public boolean hasMutable() {
       return ((bitField0_ & 0x00000010) != 0);
     }
@@ -17892,6 +18056,7 @@ public final class UserProtos {
      * <code>optional string mutable = 5;</code>
      * @return The mutable.
      */
+    @java.lang.Override
     public java.lang.String getMutable() {
       java.lang.Object ref = mutable_;
       if (ref instanceof java.lang.String) {
@@ -17910,6 +18075,7 @@ public final class UserProtos {
      * <code>optional string mutable = 5;</code>
      * @return The bytes for mutable.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getMutableBytes() {
       java.lang.Object ref = mutable_;
@@ -18904,7 +19070,7 @@ public final class UserProtos {
    *
    * Protobuf type {@code exec.user.GetSchemasResp}
    */
-  public  static final class GetSchemasResp extends
+  public static final class GetSchemasResp extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:exec.user.GetSchemasResp)
       GetSchemasRespOrBuilder {
@@ -19025,14 +19191,14 @@ public final class UserProtos {
      * <code>optional .exec.user.RequestStatus status = 1;</code>
      * @return Whether the status field is set.
      */
-    public boolean hasStatus() {
+    @java.lang.Override public boolean hasStatus() {
       return ((bitField0_ & 0x00000001) != 0);
     }
     /**
      * <code>optional .exec.user.RequestStatus status = 1;</code>
      * @return The status.
      */
-    public org.apache.drill.exec.proto.UserProtos.RequestStatus getStatus() {
+    @java.lang.Override public org.apache.drill.exec.proto.UserProtos.RequestStatus getStatus() {
       @SuppressWarnings("deprecation")
       org.apache.drill.exec.proto.UserProtos.RequestStatus result = org.apache.drill.exec.proto.UserProtos.RequestStatus.valueOf(status_);
       return result == null ? org.apache.drill.exec.proto.UserProtos.RequestStatus.UNKNOWN_STATUS : result;
@@ -19043,12 +19209,14 @@ public final class UserProtos {
     /**
      * <code>repeated .exec.user.SchemaMetadata schemas = 2;</code>
      */
+    @java.lang.Override
     public java.util.List<org.apache.drill.exec.proto.UserProtos.SchemaMetadata> getSchemasList() {
       return schemas_;
     }
     /**
      * <code>repeated .exec.user.SchemaMetadata schemas = 2;</code>
      */
+    @java.lang.Override
     public java.util.List<? extends org.apache.drill.exec.proto.UserProtos.SchemaMetadataOrBuilder> 
         getSchemasOrBuilderList() {
       return schemas_;
@@ -19056,18 +19224,21 @@ public final class UserProtos {
     /**
      * <code>repeated .exec.user.SchemaMetadata schemas = 2;</code>
      */
+    @java.lang.Override
     public int getSchemasCount() {
       return schemas_.size();
     }
     /**
      * <code>repeated .exec.user.SchemaMetadata schemas = 2;</code>
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.SchemaMetadata getSchemas(int index) {
       return schemas_.get(index);
     }
     /**
      * <code>repeated .exec.user.SchemaMetadata schemas = 2;</code>
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.SchemaMetadataOrBuilder getSchemasOrBuilder(
         int index) {
       return schemas_.get(index);
@@ -19079,6 +19250,7 @@ public final class UserProtos {
      * <code>optional .exec.shared.DrillPBError error = 3;</code>
      * @return Whether the error field is set.
      */
+    @java.lang.Override
     public boolean hasError() {
       return ((bitField0_ & 0x00000002) != 0);
     }
@@ -19086,12 +19258,14 @@ public final class UserProtos {
      * <code>optional .exec.shared.DrillPBError error = 3;</code>
      * @return The error.
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserBitShared.DrillPBError getError() {
       return error_ == null ? org.apache.drill.exec.proto.UserBitShared.DrillPBError.getDefaultInstance() : error_;
     }
     /**
      * <code>optional .exec.shared.DrillPBError error = 3;</code>
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserBitShared.DrillPBErrorOrBuilder getErrorOrBuilder() {
       return error_ == null ? org.apache.drill.exec.proto.UserBitShared.DrillPBError.getDefaultInstance() : error_;
     }
@@ -19507,13 +19681,14 @@ public final class UserProtos {
        * <code>optional .exec.user.RequestStatus status = 1;</code>
        * @return Whether the status field is set.
        */
-      public boolean hasStatus() {
+      @java.lang.Override public boolean hasStatus() {
         return ((bitField0_ & 0x00000001) != 0);
       }
       /**
        * <code>optional .exec.user.RequestStatus status = 1;</code>
        * @return The status.
        */
+      @java.lang.Override
       public org.apache.drill.exec.proto.UserProtos.RequestStatus getStatus() {
         @SuppressWarnings("deprecation")
         org.apache.drill.exec.proto.UserProtos.RequestStatus result = org.apache.drill.exec.proto.UserProtos.RequestStatus.valueOf(status_);
@@ -20037,7 +20212,7 @@ public final class UserProtos {
    *
    * Protobuf type {@code exec.user.GetTablesReq}
    */
-  public  static final class GetTablesReq extends
+  public static final class GetTablesReq extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:exec.user.GetTablesReq)
       GetTablesReqOrBuilder {
@@ -20171,6 +20346,7 @@ public final class UserProtos {
      * <code>optional .exec.user.LikeFilter catalog_name_filter = 1;</code>
      * @return Whether the catalogNameFilter field is set.
      */
+    @java.lang.Override
     public boolean hasCatalogNameFilter() {
       return ((bitField0_ & 0x00000001) != 0);
     }
@@ -20178,12 +20354,14 @@ public final class UserProtos {
      * <code>optional .exec.user.LikeFilter catalog_name_filter = 1;</code>
      * @return The catalogNameFilter.
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.LikeFilter getCatalogNameFilter() {
       return catalogNameFilter_ == null ? org.apache.drill.exec.proto.UserProtos.LikeFilter.getDefaultInstance() : catalogNameFilter_;
     }
     /**
      * <code>optional .exec.user.LikeFilter catalog_name_filter = 1;</code>
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.LikeFilterOrBuilder getCatalogNameFilterOrBuilder() {
       return catalogNameFilter_ == null ? org.apache.drill.exec.proto.UserProtos.LikeFilter.getDefaultInstance() : catalogNameFilter_;
     }
@@ -20194,6 +20372,7 @@ public final class UserProtos {
      * <code>optional .exec.user.LikeFilter schema_name_filter = 2;</code>
      * @return Whether the schemaNameFilter field is set.
      */
+    @java.lang.Override
     public boolean hasSchemaNameFilter() {
       return ((bitField0_ & 0x00000002) != 0);
     }
@@ -20201,12 +20380,14 @@ public final class UserProtos {
      * <code>optional .exec.user.LikeFilter schema_name_filter = 2;</code>
      * @return The schemaNameFilter.
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.LikeFilter getSchemaNameFilter() {
       return schemaNameFilter_ == null ? org.apache.drill.exec.proto.UserProtos.LikeFilter.getDefaultInstance() : schemaNameFilter_;
     }
     /**
      * <code>optional .exec.user.LikeFilter schema_name_filter = 2;</code>
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.LikeFilterOrBuilder getSchemaNameFilterOrBuilder() {
       return schemaNameFilter_ == null ? org.apache.drill.exec.proto.UserProtos.LikeFilter.getDefaultInstance() : schemaNameFilter_;
     }
@@ -20217,6 +20398,7 @@ public final class UserProtos {
      * <code>optional .exec.user.LikeFilter table_name_filter = 3;</code>
      * @return Whether the tableNameFilter field is set.
      */
+    @java.lang.Override
     public boolean hasTableNameFilter() {
       return ((bitField0_ & 0x00000004) != 0);
     }
@@ -20224,12 +20406,14 @@ public final class UserProtos {
      * <code>optional .exec.user.LikeFilter table_name_filter = 3;</code>
      * @return The tableNameFilter.
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.LikeFilter getTableNameFilter() {
       return tableNameFilter_ == null ? org.apache.drill.exec.proto.UserProtos.LikeFilter.getDefaultInstance() : tableNameFilter_;
     }
     /**
      * <code>optional .exec.user.LikeFilter table_name_filter = 3;</code>
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.LikeFilterOrBuilder getTableNameFilterOrBuilder() {
       return tableNameFilter_ == null ? org.apache.drill.exec.proto.UserProtos.LikeFilter.getDefaultInstance() : tableNameFilter_;
     }
@@ -21310,7 +21494,7 @@ public final class UserProtos {
    *
    * Protobuf type {@code exec.user.TableMetadata}
    */
-  public  static final class TableMetadata extends
+  public static final class TableMetadata extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:exec.user.TableMetadata)
       TableMetadataOrBuilder {
@@ -21420,6 +21604,7 @@ public final class UserProtos {
      * <code>optional string catalog_name = 1;</code>
      * @return Whether the catalogName field is set.
      */
+    @java.lang.Override
     public boolean hasCatalogName() {
       return ((bitField0_ & 0x00000001) != 0);
     }
@@ -21427,6 +21612,7 @@ public final class UserProtos {
      * <code>optional string catalog_name = 1;</code>
      * @return The catalogName.
      */
+    @java.lang.Override
     public java.lang.String getCatalogName() {
       java.lang.Object ref = catalogName_;
       if (ref instanceof java.lang.String) {
@@ -21445,6 +21631,7 @@ public final class UserProtos {
      * <code>optional string catalog_name = 1;</code>
      * @return The bytes for catalogName.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getCatalogNameBytes() {
       java.lang.Object ref = catalogName_;
@@ -21465,6 +21652,7 @@ public final class UserProtos {
      * <code>optional string schema_name = 2;</code>
      * @return Whether the schemaName field is set.
      */
+    @java.lang.Override
     public boolean hasSchemaName() {
       return ((bitField0_ & 0x00000002) != 0);
     }
@@ -21472,6 +21660,7 @@ public final class UserProtos {
      * <code>optional string schema_name = 2;</code>
      * @return The schemaName.
      */
+    @java.lang.Override
     public java.lang.String getSchemaName() {
       java.lang.Object ref = schemaName_;
       if (ref instanceof java.lang.String) {
@@ -21490,6 +21679,7 @@ public final class UserProtos {
      * <code>optional string schema_name = 2;</code>
      * @return The bytes for schemaName.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getSchemaNameBytes() {
       java.lang.Object ref = schemaName_;
@@ -21510,6 +21700,7 @@ public final class UserProtos {
      * <code>optional string table_name = 3;</code>
      * @return Whether the tableName field is set.
      */
+    @java.lang.Override
     public boolean hasTableName() {
       return ((bitField0_ & 0x00000004) != 0);
     }
@@ -21517,6 +21708,7 @@ public final class UserProtos {
      * <code>optional string table_name = 3;</code>
      * @return The tableName.
      */
+    @java.lang.Override
     public java.lang.String getTableName() {
       java.lang.Object ref = tableName_;
       if (ref instanceof java.lang.String) {
@@ -21535,6 +21727,7 @@ public final class UserProtos {
      * <code>optional string table_name = 3;</code>
      * @return The bytes for tableName.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getTableNameBytes() {
       java.lang.Object ref = tableName_;
@@ -21559,6 +21752,7 @@ public final class UserProtos {
      * <code>optional string type = 4;</code>
      * @return Whether the type field is set.
      */
+    @java.lang.Override
     public boolean hasType() {
       return ((bitField0_ & 0x00000008) != 0);
     }
@@ -21570,6 +21764,7 @@ public final class UserProtos {
      * <code>optional string type = 4;</code>
      * @return The type.
      */
+    @java.lang.Override
     public java.lang.String getType() {
       java.lang.Object ref = type_;
       if (ref instanceof java.lang.String) {
@@ -21592,6 +21787,7 @@ public final class UserProtos {
      * <code>optional string type = 4;</code>
      * @return The bytes for type.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getTypeBytes() {
       java.lang.Object ref = type_;
@@ -22476,7 +22672,7 @@ public final class UserProtos {
    *
    * Protobuf type {@code exec.user.GetTablesResp}
    */
-  public  static final class GetTablesResp extends
+  public static final class GetTablesResp extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:exec.user.GetTablesResp)
       GetTablesRespOrBuilder {
@@ -22597,14 +22793,14 @@ public final class UserProtos {
      * <code>optional .exec.user.RequestStatus status = 1;</code>
      * @return Whether the status field is set.
      */
-    public boolean hasStatus() {
+    @java.lang.Override public boolean hasStatus() {
       return ((bitField0_ & 0x00000001) != 0);
     }
     /**
      * <code>optional .exec.user.RequestStatus status = 1;</code>
      * @return The status.
      */
-    public org.apache.drill.exec.proto.UserProtos.RequestStatus getStatus() {
+    @java.lang.Override public org.apache.drill.exec.proto.UserProtos.RequestStatus getStatus() {
       @SuppressWarnings("deprecation")
       org.apache.drill.exec.proto.UserProtos.RequestStatus result = org.apache.drill.exec.proto.UserProtos.RequestStatus.valueOf(status_);
       return result == null ? org.apache.drill.exec.proto.UserProtos.RequestStatus.UNKNOWN_STATUS : result;
@@ -22615,12 +22811,14 @@ public final class UserProtos {
     /**
      * <code>repeated .exec.user.TableMetadata tables = 2;</code>
      */
+    @java.lang.Override
     public java.util.List<org.apache.drill.exec.proto.UserProtos.TableMetadata> getTablesList() {
       return tables_;
     }
     /**
      * <code>repeated .exec.user.TableMetadata tables = 2;</code>
      */
+    @java.lang.Override
     public java.util.List<? extends org.apache.drill.exec.proto.UserProtos.TableMetadataOrBuilder> 
         getTablesOrBuilderList() {
       return tables_;
@@ -22628,18 +22826,21 @@ public final class UserProtos {
     /**
      * <code>repeated .exec.user.TableMetadata tables = 2;</code>
      */
+    @java.lang.Override
     public int getTablesCount() {
       return tables_.size();
     }
     /**
      * <code>repeated .exec.user.TableMetadata tables = 2;</code>
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.TableMetadata getTables(int index) {
       return tables_.get(index);
     }
     /**
      * <code>repeated .exec.user.TableMetadata tables = 2;</code>
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.TableMetadataOrBuilder getTablesOrBuilder(
         int index) {
       return tables_.get(index);
@@ -22651,6 +22852,7 @@ public final class UserProtos {
      * <code>optional .exec.shared.DrillPBError error = 3;</code>
      * @return Whether the error field is set.
      */
+    @java.lang.Override
     public boolean hasError() {
       return ((bitField0_ & 0x00000002) != 0);
     }
@@ -22658,12 +22860,14 @@ public final class UserProtos {
      * <code>optional .exec.shared.DrillPBError error = 3;</code>
      * @return The error.
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserBitShared.DrillPBError getError() {
       return error_ == null ? org.apache.drill.exec.proto.UserBitShared.DrillPBError.getDefaultInstance() : error_;
     }
     /**
      * <code>optional .exec.shared.DrillPBError error = 3;</code>
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserBitShared.DrillPBErrorOrBuilder getErrorOrBuilder() {
       return error_ == null ? org.apache.drill.exec.proto.UserBitShared.DrillPBError.getDefaultInstance() : error_;
     }
@@ -23079,13 +23283,14 @@ public final class UserProtos {
        * <code>optional .exec.user.RequestStatus status = 1;</code>
        * @return Whether the status field is set.
        */
-      public boolean hasStatus() {
+      @java.lang.Override public boolean hasStatus() {
         return ((bitField0_ & 0x00000001) != 0);
       }
       /**
        * <code>optional .exec.user.RequestStatus status = 1;</code>
        * @return The status.
        */
+      @java.lang.Override
       public org.apache.drill.exec.proto.UserProtos.RequestStatus getStatus() {
         @SuppressWarnings("deprecation")
         org.apache.drill.exec.proto.UserProtos.RequestStatus result = org.apache.drill.exec.proto.UserProtos.RequestStatus.valueOf(status_);
@@ -23599,7 +23804,7 @@ public final class UserProtos {
    *
    * Protobuf type {@code exec.user.GetColumnsReq}
    */
-  public  static final class GetColumnsReq extends
+  public static final class GetColumnsReq extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:exec.user.GetColumnsReq)
       GetColumnsReqOrBuilder {
@@ -23733,6 +23938,7 @@ public final class UserProtos {
      * <code>optional .exec.user.LikeFilter catalog_name_filter = 1;</code>
      * @return Whether the catalogNameFilter field is set.
      */
+    @java.lang.Override
     public boolean hasCatalogNameFilter() {
       return ((bitField0_ & 0x00000001) != 0);
     }
@@ -23740,12 +23946,14 @@ public final class UserProtos {
      * <code>optional .exec.user.LikeFilter catalog_name_filter = 1;</code>
      * @return The catalogNameFilter.
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.LikeFilter getCatalogNameFilter() {
       return catalogNameFilter_ == null ? org.apache.drill.exec.proto.UserProtos.LikeFilter.getDefaultInstance() : catalogNameFilter_;
     }
     /**
      * <code>optional .exec.user.LikeFilter catalog_name_filter = 1;</code>
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.LikeFilterOrBuilder getCatalogNameFilterOrBuilder() {
       return catalogNameFilter_ == null ? org.apache.drill.exec.proto.UserProtos.LikeFilter.getDefaultInstance() : catalogNameFilter_;
     }
@@ -23756,6 +23964,7 @@ public final class UserProtos {
      * <code>optional .exec.user.LikeFilter schema_name_filter = 2;</code>
      * @return Whether the schemaNameFilter field is set.
      */
+    @java.lang.Override
     public boolean hasSchemaNameFilter() {
       return ((bitField0_ & 0x00000002) != 0);
     }
@@ -23763,12 +23972,14 @@ public final class UserProtos {
      * <code>optional .exec.user.LikeFilter schema_name_filter = 2;</code>
      * @return The schemaNameFilter.
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.LikeFilter getSchemaNameFilter() {
       return schemaNameFilter_ == null ? org.apache.drill.exec.proto.UserProtos.LikeFilter.getDefaultInstance() : schemaNameFilter_;
     }
     /**
      * <code>optional .exec.user.LikeFilter schema_name_filter = 2;</code>
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.LikeFilterOrBuilder getSchemaNameFilterOrBuilder() {
       return schemaNameFilter_ == null ? org.apache.drill.exec.proto.UserProtos.LikeFilter.getDefaultInstance() : schemaNameFilter_;
     }
@@ -23779,6 +23990,7 @@ public final class UserProtos {
      * <code>optional .exec.user.LikeFilter table_name_filter = 3;</code>
      * @return Whether the tableNameFilter field is set.
      */
+    @java.lang.Override
     public boolean hasTableNameFilter() {
       return ((bitField0_ & 0x00000004) != 0);
     }
@@ -23786,12 +23998,14 @@ public final class UserProtos {
      * <code>optional .exec.user.LikeFilter table_name_filter = 3;</code>
      * @return The tableNameFilter.
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.LikeFilter getTableNameFilter() {
       return tableNameFilter_ == null ? org.apache.drill.exec.proto.UserProtos.LikeFilter.getDefaultInstance() : tableNameFilter_;
     }
     /**
      * <code>optional .exec.user.LikeFilter table_name_filter = 3;</code>
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.LikeFilterOrBuilder getTableNameFilterOrBuilder() {
       return tableNameFilter_ == null ? org.apache.drill.exec.proto.UserProtos.LikeFilter.getDefaultInstance() : tableNameFilter_;
     }
@@ -23802,6 +24016,7 @@ public final class UserProtos {
      * <code>optional .exec.user.LikeFilter column_name_filter = 4;</code>
      * @return Whether the columnNameFilter field is set.
      */
+    @java.lang.Override
     public boolean hasColumnNameFilter() {
       return ((bitField0_ & 0x00000008) != 0);
     }
@@ -23809,12 +24024,14 @@ public final class UserProtos {
      * <code>optional .exec.user.LikeFilter column_name_filter = 4;</code>
      * @return The columnNameFilter.
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.LikeFilter getColumnNameFilter() {
       return columnNameFilter_ == null ? org.apache.drill.exec.proto.UserProtos.LikeFilter.getDefaultInstance() : columnNameFilter_;
     }
     /**
      * <code>optional .exec.user.LikeFilter column_name_filter = 4;</code>
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.LikeFilterOrBuilder getColumnNameFilterOrBuilder() {
       return columnNameFilter_ == null ? org.apache.drill.exec.proto.UserProtos.LikeFilter.getDefaultInstance() : columnNameFilter_;
     }
@@ -25020,7 +25237,7 @@ public final class UserProtos {
    *
    * Protobuf type {@code exec.user.ColumnMetadata}
    */
-  public  static final class ColumnMetadata extends
+  public static final class ColumnMetadata extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:exec.user.ColumnMetadata)
       ColumnMetadataOrBuilder {
@@ -25201,6 +25418,7 @@ public final class UserProtos {
      * <code>optional string catalog_name = 1;</code>
      * @return Whether the catalogName field is set.
      */
+    @java.lang.Override
     public boolean hasCatalogName() {
       return ((bitField0_ & 0x00000001) != 0);
     }
@@ -25208,6 +25426,7 @@ public final class UserProtos {
      * <code>optional string catalog_name = 1;</code>
      * @return The catalogName.
      */
+    @java.lang.Override
     public java.lang.String getCatalogName() {
       java.lang.Object ref = catalogName_;
       if (ref instanceof java.lang.String) {
@@ -25226,6 +25445,7 @@ public final class UserProtos {
      * <code>optional string catalog_name = 1;</code>
      * @return The bytes for catalogName.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getCatalogNameBytes() {
       java.lang.Object ref = catalogName_;
@@ -25246,6 +25466,7 @@ public final class UserProtos {
      * <code>optional string schema_name = 2;</code>
      * @return Whether the schemaName field is set.
      */
+    @java.lang.Override
     public boolean hasSchemaName() {
       return ((bitField0_ & 0x00000002) != 0);
     }
@@ -25253,6 +25474,7 @@ public final class UserProtos {
      * <code>optional string schema_name = 2;</code>
      * @return The schemaName.
      */
+    @java.lang.Override
     public java.lang.String getSchemaName() {
       java.lang.Object ref = schemaName_;
       if (ref instanceof java.lang.String) {
@@ -25271,6 +25493,7 @@ public final class UserProtos {
      * <code>optional string schema_name = 2;</code>
      * @return The bytes for schemaName.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getSchemaNameBytes() {
       java.lang.Object ref = schemaName_;
@@ -25291,6 +25514,7 @@ public final class UserProtos {
      * <code>optional string table_name = 3;</code>
      * @return Whether the tableName field is set.
      */
+    @java.lang.Override
     public boolean hasTableName() {
       return ((bitField0_ & 0x00000004) != 0);
     }
@@ -25298,6 +25522,7 @@ public final class UserProtos {
      * <code>optional string table_name = 3;</code>
      * @return The tableName.
      */
+    @java.lang.Override
     public java.lang.String getTableName() {
       java.lang.Object ref = tableName_;
       if (ref instanceof java.lang.String) {
@@ -25316,6 +25541,7 @@ public final class UserProtos {
      * <code>optional string table_name = 3;</code>
      * @return The bytes for tableName.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getTableNameBytes() {
       java.lang.Object ref = tableName_;
@@ -25336,6 +25562,7 @@ public final class UserProtos {
      * <code>optional string column_name = 4;</code>
      * @return Whether the columnName field is set.
      */
+    @java.lang.Override
     public boolean hasColumnName() {
       return ((bitField0_ & 0x00000008) != 0);
     }
@@ -25343,6 +25570,7 @@ public final class UserProtos {
      * <code>optional string column_name = 4;</code>
      * @return The columnName.
      */
+    @java.lang.Override
     public java.lang.String getColumnName() {
       java.lang.Object ref = columnName_;
       if (ref instanceof java.lang.String) {
@@ -25361,6 +25589,7 @@ public final class UserProtos {
      * <code>optional string column_name = 4;</code>
      * @return The bytes for columnName.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getColumnNameBytes() {
       java.lang.Object ref = columnName_;
@@ -25381,6 +25610,7 @@ public final class UserProtos {
      * <code>optional int32 ordinal_position = 5;</code>
      * @return Whether the ordinalPosition field is set.
      */
+    @java.lang.Override
     public boolean hasOrdinalPosition() {
       return ((bitField0_ & 0x00000010) != 0);
     }
@@ -25388,6 +25618,7 @@ public final class UserProtos {
      * <code>optional int32 ordinal_position = 5;</code>
      * @return The ordinalPosition.
      */
+    @java.lang.Override
     public int getOrdinalPosition() {
       return ordinalPosition_;
     }
@@ -25398,6 +25629,7 @@ public final class UserProtos {
      * <code>optional string default_value = 6;</code>
      * @return Whether the defaultValue field is set.
      */
+    @java.lang.Override
     public boolean hasDefaultValue() {
       return ((bitField0_ & 0x00000020) != 0);
     }
@@ -25405,6 +25637,7 @@ public final class UserProtos {
      * <code>optional string default_value = 6;</code>
      * @return The defaultValue.
      */
+    @java.lang.Override
     public java.lang.String getDefaultValue() {
       java.lang.Object ref = defaultValue_;
       if (ref instanceof java.lang.String) {
@@ -25423,6 +25656,7 @@ public final class UserProtos {
      * <code>optional string default_value = 6;</code>
      * @return The bytes for defaultValue.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getDefaultValueBytes() {
       java.lang.Object ref = defaultValue_;
@@ -25443,6 +25677,7 @@ public final class UserProtos {
      * <code>optional bool is_nullable = 7;</code>
      * @return Whether the isNullable field is set.
      */
+    @java.lang.Override
     public boolean hasIsNullable() {
       return ((bitField0_ & 0x00000040) != 0);
     }
@@ -25450,6 +25685,7 @@ public final class UserProtos {
      * <code>optional bool is_nullable = 7;</code>
      * @return The isNullable.
      */
+    @java.lang.Override
     public boolean getIsNullable() {
       return isNullable_;
     }
@@ -25460,6 +25696,7 @@ public final class UserProtos {
      * <code>optional string data_type = 8;</code>
      * @return Whether the dataType field is set.
      */
+    @java.lang.Override
     public boolean hasDataType() {
       return ((bitField0_ & 0x00000080) != 0);
     }
@@ -25467,6 +25704,7 @@ public final class UserProtos {
      * <code>optional string data_type = 8;</code>
      * @return The dataType.
      */
+    @java.lang.Override
     public java.lang.String getDataType() {
       java.lang.Object ref = dataType_;
       if (ref instanceof java.lang.String) {
@@ -25485,6 +25723,7 @@ public final class UserProtos {
      * <code>optional string data_type = 8;</code>
      * @return The bytes for dataType.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getDataTypeBytes() {
       java.lang.Object ref = dataType_;
@@ -25505,6 +25744,7 @@ public final class UserProtos {
      * <code>optional int32 char_max_length = 9;</code>
      * @return Whether the charMaxLength field is set.
      */
+    @java.lang.Override
     public boolean hasCharMaxLength() {
       return ((bitField0_ & 0x00000100) != 0);
     }
@@ -25512,6 +25752,7 @@ public final class UserProtos {
      * <code>optional int32 char_max_length = 9;</code>
      * @return The charMaxLength.
      */
+    @java.lang.Override
     public int getCharMaxLength() {
       return charMaxLength_;
     }
@@ -25522,6 +25763,7 @@ public final class UserProtos {
      * <code>optional int32 char_octet_length = 10;</code>
      * @return Whether the charOctetLength field is set.
      */
+    @java.lang.Override
     public boolean hasCharOctetLength() {
       return ((bitField0_ & 0x00000200) != 0);
     }
@@ -25529,6 +25771,7 @@ public final class UserProtos {
      * <code>optional int32 char_octet_length = 10;</code>
      * @return The charOctetLength.
      */
+    @java.lang.Override
     public int getCharOctetLength() {
       return charOctetLength_;
     }
@@ -25539,6 +25782,7 @@ public final class UserProtos {
      * <code>optional int32 numeric_precision = 11;</code>
      * @return Whether the numericPrecision field is set.
      */
+    @java.lang.Override
     public boolean hasNumericPrecision() {
       return ((bitField0_ & 0x00000400) != 0);
     }
@@ -25546,6 +25790,7 @@ public final class UserProtos {
      * <code>optional int32 numeric_precision = 11;</code>
      * @return The numericPrecision.
      */
+    @java.lang.Override
     public int getNumericPrecision() {
       return numericPrecision_;
     }
@@ -25556,6 +25801,7 @@ public final class UserProtos {
      * <code>optional int32 numeric_precision_radix = 12;</code>
      * @return Whether the numericPrecisionRadix field is set.
      */
+    @java.lang.Override
     public boolean hasNumericPrecisionRadix() {
       return ((bitField0_ & 0x00000800) != 0);
     }
@@ -25563,6 +25809,7 @@ public final class UserProtos {
      * <code>optional int32 numeric_precision_radix = 12;</code>
      * @return The numericPrecisionRadix.
      */
+    @java.lang.Override
     public int getNumericPrecisionRadix() {
       return numericPrecisionRadix_;
     }
@@ -25573,6 +25820,7 @@ public final class UserProtos {
      * <code>optional int32 numeric_scale = 13;</code>
      * @return Whether the numericScale field is set.
      */
+    @java.lang.Override
     public boolean hasNumericScale() {
       return ((bitField0_ & 0x00001000) != 0);
     }
@@ -25580,6 +25828,7 @@ public final class UserProtos {
      * <code>optional int32 numeric_scale = 13;</code>
      * @return The numericScale.
      */
+    @java.lang.Override
     public int getNumericScale() {
       return numericScale_;
     }
@@ -25590,6 +25839,7 @@ public final class UserProtos {
      * <code>optional int32 date_time_precision = 14;</code>
      * @return Whether the dateTimePrecision field is set.
      */
+    @java.lang.Override
     public boolean hasDateTimePrecision() {
       return ((bitField0_ & 0x00002000) != 0);
     }
@@ -25597,6 +25847,7 @@ public final class UserProtos {
      * <code>optional int32 date_time_precision = 14;</code>
      * @return The dateTimePrecision.
      */
+    @java.lang.Override
     public int getDateTimePrecision() {
       return dateTimePrecision_;
     }
@@ -25607,6 +25858,7 @@ public final class UserProtos {
      * <code>optional string interval_type = 15;</code>
      * @return Whether the intervalType field is set.
      */
+    @java.lang.Override
     public boolean hasIntervalType() {
       return ((bitField0_ & 0x00004000) != 0);
     }
@@ -25614,6 +25866,7 @@ public final class UserProtos {
      * <code>optional string interval_type = 15;</code>
      * @return The intervalType.
      */
+    @java.lang.Override
     public java.lang.String getIntervalType() {
       java.lang.Object ref = intervalType_;
       if (ref instanceof java.lang.String) {
@@ -25632,6 +25885,7 @@ public final class UserProtos {
      * <code>optional string interval_type = 15;</code>
      * @return The bytes for intervalType.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getIntervalTypeBytes() {
       java.lang.Object ref = intervalType_;
@@ -25652,6 +25906,7 @@ public final class UserProtos {
      * <code>optional int32 interval_precision = 16;</code>
      * @return Whether the intervalPrecision field is set.
      */
+    @java.lang.Override
     public boolean hasIntervalPrecision() {
       return ((bitField0_ & 0x00008000) != 0);
     }
@@ -25659,6 +25914,7 @@ public final class UserProtos {
      * <code>optional int32 interval_precision = 16;</code>
      * @return The intervalPrecision.
      */
+    @java.lang.Override
     public int getIntervalPrecision() {
       return intervalPrecision_;
     }
@@ -25669,6 +25925,7 @@ public final class UserProtos {
      * <code>optional int32 column_size = 17;</code>
      * @return Whether the columnSize field is set.
      */
+    @java.lang.Override
     public boolean hasColumnSize() {
       return ((bitField0_ & 0x00010000) != 0);
     }
@@ -25676,6 +25933,7 @@ public final class UserProtos {
      * <code>optional int32 column_size = 17;</code>
      * @return The columnSize.
      */
+    @java.lang.Override
     public int getColumnSize() {
       return columnSize_;
     }
@@ -26747,6 +27005,7 @@ public final class UserProtos {
        * <code>optional int32 ordinal_position = 5;</code>
        * @return Whether the ordinalPosition field is set.
        */
+      @java.lang.Override
       public boolean hasOrdinalPosition() {
         return ((bitField0_ & 0x00000010) != 0);
       }
@@ -26754,6 +27013,7 @@ public final class UserProtos {
        * <code>optional int32 ordinal_position = 5;</code>
        * @return The ordinalPosition.
        */
+      @java.lang.Override
       public int getOrdinalPosition() {
         return ordinalPosition_;
       }
@@ -26868,6 +27128,7 @@ public final class UserProtos {
        * <code>optional bool is_nullable = 7;</code>
        * @return Whether the isNullable field is set.
        */
+      @java.lang.Override
       public boolean hasIsNullable() {
         return ((bitField0_ & 0x00000040) != 0);
       }
@@ -26875,6 +27136,7 @@ public final class UserProtos {
        * <code>optional bool is_nullable = 7;</code>
        * @return The isNullable.
        */
+      @java.lang.Override
       public boolean getIsNullable() {
         return isNullable_;
       }
@@ -26989,6 +27251,7 @@ public final class UserProtos {
        * <code>optional int32 char_max_length = 9;</code>
        * @return Whether the charMaxLength field is set.
        */
+      @java.lang.Override
       public boolean hasCharMaxLength() {
         return ((bitField0_ & 0x00000100) != 0);
       }
@@ -26996,6 +27259,7 @@ public final class UserProtos {
        * <code>optional int32 char_max_length = 9;</code>
        * @return The charMaxLength.
        */
+      @java.lang.Override
       public int getCharMaxLength() {
         return charMaxLength_;
       }
@@ -27026,6 +27290,7 @@ public final class UserProtos {
        * <code>optional int32 char_octet_length = 10;</code>
        * @return Whether the charOctetLength field is set.
        */
+      @java.lang.Override
       public boolean hasCharOctetLength() {
         return ((bitField0_ & 0x00000200) != 0);
       }
@@ -27033,6 +27298,7 @@ public final class UserProtos {
        * <code>optional int32 char_octet_length = 10;</code>
        * @return The charOctetLength.
        */
+      @java.lang.Override
       public int getCharOctetLength() {
         return charOctetLength_;
       }
@@ -27063,6 +27329,7 @@ public final class UserProtos {
        * <code>optional int32 numeric_precision = 11;</code>
        * @return Whether the numericPrecision field is set.
        */
+      @java.lang.Override
       public boolean hasNumericPrecision() {
         return ((bitField0_ & 0x00000400) != 0);
       }
@@ -27070,6 +27337,7 @@ public final class UserProtos {
        * <code>optional int32 numeric_precision = 11;</code>
        * @return The numericPrecision.
        */
+      @java.lang.Override
       public int getNumericPrecision() {
         return numericPrecision_;
       }
@@ -27100,6 +27368,7 @@ public final class UserProtos {
        * <code>optional int32 numeric_precision_radix = 12;</code>
        * @return Whether the numericPrecisionRadix field is set.
        */
+      @java.lang.Override
       public boolean hasNumericPrecisionRadix() {
         return ((bitField0_ & 0x00000800) != 0);
       }
@@ -27107,6 +27376,7 @@ public final class UserProtos {
        * <code>optional int32 numeric_precision_radix = 12;</code>
        * @return The numericPrecisionRadix.
        */
+      @java.lang.Override
       public int getNumericPrecisionRadix() {
         return numericPrecisionRadix_;
       }
@@ -27137,6 +27407,7 @@ public final class UserProtos {
        * <code>optional int32 numeric_scale = 13;</code>
        * @return Whether the numericScale field is set.
        */
+      @java.lang.Override
       public boolean hasNumericScale() {
         return ((bitField0_ & 0x00001000) != 0);
       }
@@ -27144,6 +27415,7 @@ public final class UserProtos {
        * <code>optional int32 numeric_scale = 13;</code>
        * @return The numericScale.
        */
+      @java.lang.Override
       public int getNumericScale() {
         return numericScale_;
       }
@@ -27174,6 +27446,7 @@ public final class UserProtos {
        * <code>optional int32 date_time_precision = 14;</code>
        * @return Whether the dateTimePrecision field is set.
        */
+      @java.lang.Override
       public boolean hasDateTimePrecision() {
         return ((bitField0_ & 0x00002000) != 0);
       }
@@ -27181,6 +27454,7 @@ public final class UserProtos {
        * <code>optional int32 date_time_precision = 14;</code>
        * @return The dateTimePrecision.
        */
+      @java.lang.Override
       public int getDateTimePrecision() {
         return dateTimePrecision_;
       }
@@ -27295,6 +27569,7 @@ public final class UserProtos {
        * <code>optional int32 interval_precision = 16;</code>
        * @return Whether the intervalPrecision field is set.
        */
+      @java.lang.Override
       public boolean hasIntervalPrecision() {
         return ((bitField0_ & 0x00008000) != 0);
       }
@@ -27302,6 +27577,7 @@ public final class UserProtos {
        * <code>optional int32 interval_precision = 16;</code>
        * @return The intervalPrecision.
        */
+      @java.lang.Override
       public int getIntervalPrecision() {
         return intervalPrecision_;
       }
@@ -27332,6 +27608,7 @@ public final class UserProtos {
        * <code>optional int32 column_size = 17;</code>
        * @return Whether the columnSize field is set.
        */
+      @java.lang.Override
       public boolean hasColumnSize() {
         return ((bitField0_ & 0x00010000) != 0);
       }
@@ -27339,6 +27616,7 @@ public final class UserProtos {
        * <code>optional int32 column_size = 17;</code>
        * @return The columnSize.
        */
+      @java.lang.Override
       public int getColumnSize() {
         return columnSize_;
       }
@@ -27477,7 +27755,7 @@ public final class UserProtos {
    *
    * Protobuf type {@code exec.user.GetColumnsResp}
    */
-  public  static final class GetColumnsResp extends
+  public static final class GetColumnsResp extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:exec.user.GetColumnsResp)
       GetColumnsRespOrBuilder {
@@ -27598,14 +27876,14 @@ public final class UserProtos {
      * <code>optional .exec.user.RequestStatus status = 1;</code>
      * @return Whether the status field is set.
      */
-    public boolean hasStatus() {
+    @java.lang.Override public boolean hasStatus() {
       return ((bitField0_ & 0x00000001) != 0);
     }
     /**
      * <code>optional .exec.user.RequestStatus status = 1;</code>
      * @return The status.
      */
-    public org.apache.drill.exec.proto.UserProtos.RequestStatus getStatus() {
+    @java.lang.Override public org.apache.drill.exec.proto.UserProtos.RequestStatus getStatus() {
       @SuppressWarnings("deprecation")
       org.apache.drill.exec.proto.UserProtos.RequestStatus result = org.apache.drill.exec.proto.UserProtos.RequestStatus.valueOf(status_);
       return result == null ? org.apache.drill.exec.proto.UserProtos.RequestStatus.UNKNOWN_STATUS : result;
@@ -27616,12 +27894,14 @@ public final class UserProtos {
     /**
      * <code>repeated .exec.user.ColumnMetadata columns = 2;</code>
      */
+    @java.lang.Override
     public java.util.List<org.apache.drill.exec.proto.UserProtos.ColumnMetadata> getColumnsList() {
       return columns_;
     }
     /**
      * <code>repeated .exec.user.ColumnMetadata columns = 2;</code>
      */
+    @java.lang.Override
     public java.util.List<? extends org.apache.drill.exec.proto.UserProtos.ColumnMetadataOrBuilder> 
         getColumnsOrBuilderList() {
       return columns_;
@@ -27629,18 +27909,21 @@ public final class UserProtos {
     /**
      * <code>repeated .exec.user.ColumnMetadata columns = 2;</code>
      */
+    @java.lang.Override
     public int getColumnsCount() {
       return columns_.size();
     }
     /**
      * <code>repeated .exec.user.ColumnMetadata columns = 2;</code>
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.ColumnMetadata getColumns(int index) {
       return columns_.get(index);
     }
     /**
      * <code>repeated .exec.user.ColumnMetadata columns = 2;</code>
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.ColumnMetadataOrBuilder getColumnsOrBuilder(
         int index) {
       return columns_.get(index);
@@ -27652,6 +27935,7 @@ public final class UserProtos {
      * <code>optional .exec.shared.DrillPBError error = 3;</code>
      * @return Whether the error field is set.
      */
+    @java.lang.Override
     public boolean hasError() {
       return ((bitField0_ & 0x00000002) != 0);
     }
@@ -27659,12 +27943,14 @@ public final class UserProtos {
      * <code>optional .exec.shared.DrillPBError error = 3;</code>
      * @return The error.
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserBitShared.DrillPBError getError() {
       return error_ == null ? org.apache.drill.exec.proto.UserBitShared.DrillPBError.getDefaultInstance() : error_;
     }
     /**
      * <code>optional .exec.shared.DrillPBError error = 3;</code>
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserBitShared.DrillPBErrorOrBuilder getErrorOrBuilder() {
       return error_ == null ? org.apache.drill.exec.proto.UserBitShared.DrillPBError.getDefaultInstance() : error_;
     }
@@ -28080,13 +28366,14 @@ public final class UserProtos {
        * <code>optional .exec.user.RequestStatus status = 1;</code>
        * @return Whether the status field is set.
        */
-      public boolean hasStatus() {
+      @java.lang.Override public boolean hasStatus() {
         return ((bitField0_ & 0x00000001) != 0);
       }
       /**
        * <code>optional .exec.user.RequestStatus status = 1;</code>
        * @return The status.
        */
+      @java.lang.Override
       public org.apache.drill.exec.proto.UserProtos.RequestStatus getStatus() {
         @SuppressWarnings("deprecation")
         org.apache.drill.exec.proto.UserProtos.RequestStatus result = org.apache.drill.exec.proto.UserProtos.RequestStatus.valueOf(status_);
@@ -28559,7 +28846,7 @@ public final class UserProtos {
    *
    * Protobuf type {@code exec.user.CreatePreparedStatementReq}
    */
-  public  static final class CreatePreparedStatementReq extends
+  public static final class CreatePreparedStatementReq extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:exec.user.CreatePreparedStatementReq)
       CreatePreparedStatementReqOrBuilder {
@@ -28648,6 +28935,7 @@ public final class UserProtos {
      * <code>optional string sql_query = 1;</code>
      * @return Whether the sqlQuery field is set.
      */
+    @java.lang.Override
     public boolean hasSqlQuery() {
       return ((bitField0_ & 0x00000001) != 0);
     }
@@ -28655,6 +28943,7 @@ public final class UserProtos {
      * <code>optional string sql_query = 1;</code>
      * @return The sqlQuery.
      */
+    @java.lang.Override
     public java.lang.String getSqlQuery() {
       java.lang.Object ref = sqlQuery_;
       if (ref instanceof java.lang.String) {
@@ -28673,6 +28962,7 @@ public final class UserProtos {
      * <code>optional string sql_query = 1;</code>
      * @return The bytes for sqlQuery.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getSqlQueryBytes() {
       java.lang.Object ref = sqlQuery_;
@@ -29608,7 +29898,7 @@ public final class UserProtos {
    *
    * Protobuf type {@code exec.user.ResultColumnMetadata}
    */
-  public  static final class ResultColumnMetadata extends
+  public static final class ResultColumnMetadata extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:exec.user.ResultColumnMetadata)
       ResultColumnMetadataOrBuilder {
@@ -29820,6 +30110,7 @@ public final class UserProtos {
      * <code>optional string catalog_name = 1;</code>
      * @return Whether the catalogName field is set.
      */
+    @java.lang.Override
     public boolean hasCatalogName() {
       return ((bitField0_ & 0x00000001) != 0);
     }
@@ -29832,6 +30123,7 @@ public final class UserProtos {
      * <code>optional string catalog_name = 1;</code>
      * @return The catalogName.
      */
+    @java.lang.Override
     public java.lang.String getCatalogName() {
       java.lang.Object ref = catalogName_;
       if (ref instanceof java.lang.String) {
@@ -29855,6 +30147,7 @@ public final class UserProtos {
      * <code>optional string catalog_name = 1;</code>
      * @return The bytes for catalogName.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getCatalogNameBytes() {
       java.lang.Object ref = catalogName_;
@@ -29881,6 +30174,7 @@ public final class UserProtos {
      * <code>optional string schema_name = 2;</code>
      * @return Whether the schemaName field is set.
      */
+    @java.lang.Override
     public boolean hasSchemaName() {
       return ((bitField0_ & 0x00000002) != 0);
     }
@@ -29894,6 +30188,7 @@ public final class UserProtos {
      * <code>optional string schema_name = 2;</code>
      * @return The schemaName.
      */
+    @java.lang.Override
     public java.lang.String getSchemaName() {
       java.lang.Object ref = schemaName_;
       if (ref instanceof java.lang.String) {
@@ -29918,6 +30213,7 @@ public final class UserProtos {
      * <code>optional string schema_name = 2;</code>
      * @return The bytes for schemaName.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getSchemaNameBytes() {
       java.lang.Object ref = schemaName_;
@@ -29944,6 +30240,7 @@ public final class UserProtos {
      * <code>optional string table_name = 3;</code>
      * @return Whether the tableName field is set.
      */
+    @java.lang.Override
     public boolean hasTableName() {
       return ((bitField0_ & 0x00000004) != 0);
     }
@@ -29957,6 +30254,7 @@ public final class UserProtos {
      * <code>optional string table_name = 3;</code>
      * @return The tableName.
      */
+    @java.lang.Override
     public java.lang.String getTableName() {
       java.lang.Object ref = tableName_;
       if (ref instanceof java.lang.String) {
@@ -29981,6 +30279,7 @@ public final class UserProtos {
      * <code>optional string table_name = 3;</code>
      * @return The bytes for tableName.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getTableNameBytes() {
       java.lang.Object ref = tableName_;
@@ -30005,6 +30304,7 @@ public final class UserProtos {
      * <code>optional string column_name = 4;</code>
      * @return Whether the columnName field is set.
      */
+    @java.lang.Override
     public boolean hasColumnName() {
       return ((bitField0_ & 0x00000008) != 0);
     }
@@ -30016,6 +30316,7 @@ public final class UserProtos {
      * <code>optional string column_name = 4;</code>
      * @return The columnName.
      */
+    @java.lang.Override
     public java.lang.String getColumnName() {
       java.lang.Object ref = columnName_;
       if (ref instanceof java.lang.String) {
@@ -30038,6 +30339,7 @@ public final class UserProtos {
      * <code>optional string column_name = 4;</code>
      * @return The bytes for columnName.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getColumnNameBytes() {
       java.lang.Object ref = columnName_;
@@ -30063,6 +30365,7 @@ public final class UserProtos {
      * <code>optional string label = 5;</code>
      * @return Whether the label field is set.
      */
+    @java.lang.Override
     public boolean hasLabel() {
       return ((bitField0_ & 0x00000010) != 0);
     }
@@ -30075,6 +30378,7 @@ public final class UserProtos {
      * <code>optional string label = 5;</code>
      * @return The label.
      */
+    @java.lang.Override
     public java.lang.String getLabel() {
       java.lang.Object ref = label_;
       if (ref instanceof java.lang.String) {
@@ -30098,6 +30402,7 @@ public final class UserProtos {
      * <code>optional string label = 5;</code>
      * @return The bytes for label.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getLabelBytes() {
       java.lang.Object ref = label_;
@@ -30122,6 +30427,7 @@ public final class UserProtos {
      * <code>optional string data_type = 6;</code>
      * @return Whether the dataType field is set.
      */
+    @java.lang.Override
     public boolean hasDataType() {
       return ((bitField0_ & 0x00000020) != 0);
     }
@@ -30133,6 +30439,7 @@ public final class UserProtos {
      * <code>optional string data_type = 6;</code>
      * @return The dataType.
      */
+    @java.lang.Override
     public java.lang.String getDataType() {
       java.lang.Object ref = dataType_;
       if (ref instanceof java.lang.String) {
@@ -30155,6 +30462,7 @@ public final class UserProtos {
      * <code>optional string data_type = 6;</code>
      * @return The bytes for dataType.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getDataTypeBytes() {
       java.lang.Object ref = dataType_;
@@ -30175,6 +30483,7 @@ public final class UserProtos {
      * <code>optional bool is_nullable = 7;</code>
      * @return Whether the isNullable field is set.
      */
+    @java.lang.Override
     public boolean hasIsNullable() {
       return ((bitField0_ & 0x00000040) != 0);
     }
@@ -30182,6 +30491,7 @@ public final class UserProtos {
      * <code>optional bool is_nullable = 7;</code>
      * @return The isNullable.
      */
+    @java.lang.Override
     public boolean getIsNullable() {
       return isNullable_;
     }
@@ -30201,6 +30511,7 @@ public final class UserProtos {
      * <code>optional int32 precision = 8;</code>
      * @return Whether the precision field is set.
      */
+    @java.lang.Override
     public boolean hasPrecision() {
       return ((bitField0_ & 0x00000080) != 0);
     }
@@ -30217,6 +30528,7 @@ public final class UserProtos {
      * <code>optional int32 precision = 8;</code>
      * @return The precision.
      */
+    @java.lang.Override
     public int getPrecision() {
       return precision_;
     }
@@ -30232,6 +30544,7 @@ public final class UserProtos {
      * <code>optional int32 scale = 9;</code>
      * @return Whether the scale field is set.
      */
+    @java.lang.Override
     public boolean hasScale() {
       return ((bitField0_ & 0x00000100) != 0);
     }
@@ -30244,6 +30557,7 @@ public final class UserProtos {
      * <code>optional int32 scale = 9;</code>
      * @return The scale.
      */
+    @java.lang.Override
     public int getScale() {
       return scale_;
     }
@@ -30258,6 +30572,7 @@ public final class UserProtos {
      * <code>optional bool signed = 10;</code>
      * @return Whether the signed field is set.
      */
+    @java.lang.Override
     public boolean hasSigned() {
       return ((bitField0_ & 0x00000200) != 0);
     }
@@ -30269,6 +30584,7 @@ public final class UserProtos {
      * <code>optional bool signed = 10;</code>
      * @return The signed.
      */
+    @java.lang.Override
     public boolean getSigned() {
       return signed_;
     }
@@ -30283,6 +30599,7 @@ public final class UserProtos {
      * <code>optional int32 display_size = 11;</code>
      * @return Whether the displaySize field is set.
      */
+    @java.lang.Override
     public boolean hasDisplaySize() {
       return ((bitField0_ & 0x00000400) != 0);
     }
@@ -30294,6 +30611,7 @@ public final class UserProtos {
      * <code>optional int32 display_size = 11;</code>
      * @return The displaySize.
      */
+    @java.lang.Override
     public int getDisplaySize() {
       return displaySize_;
     }
@@ -30309,6 +30627,7 @@ public final class UserProtos {
      * <code>optional bool is_aliased = 12;</code>
      * @return Whether the isAliased field is set.
      */
+    @java.lang.Override
     public boolean hasIsAliased() {
       return ((bitField0_ & 0x00000800) != 0);
     }
@@ -30321,6 +30640,7 @@ public final class UserProtos {
      * <code>optional bool is_aliased = 12;</code>
      * @return The isAliased.
      */
+    @java.lang.Override
     public boolean getIsAliased() {
       return isAliased_;
     }
@@ -30331,14 +30651,14 @@ public final class UserProtos {
      * <code>optional .exec.user.ColumnSearchability searchability = 13;</code>
      * @return Whether the searchability field is set.
      */
-    public boolean hasSearchability() {
+    @java.lang.Override public boolean hasSearchability() {
       return ((bitField0_ & 0x00001000) != 0);
     }
     /**
      * <code>optional .exec.user.ColumnSearchability searchability = 13;</code>
      * @return The searchability.
      */
-    public org.apache.drill.exec.proto.UserProtos.ColumnSearchability getSearchability() {
+    @java.lang.Override public org.apache.drill.exec.proto.UserProtos.ColumnSearchability getSearchability() {
       @SuppressWarnings("deprecation")
       org.apache.drill.exec.proto.UserProtos.ColumnSearchability result = org.apache.drill.exec.proto.UserProtos.ColumnSearchability.valueOf(searchability_);
       return result == null ? org.apache.drill.exec.proto.UserProtos.ColumnSearchability.UNKNOWN_SEARCHABILITY : result;
@@ -30354,7 +30674,7 @@ public final class UserProtos {
      * <code>optional .exec.user.ColumnUpdatability updatability = 14;</code>
      * @return Whether the updatability field is set.
      */
-    public boolean hasUpdatability() {
+    @java.lang.Override public boolean hasUpdatability() {
       return ((bitField0_ & 0x00002000) != 0);
     }
     /**
@@ -30365,7 +30685,7 @@ public final class UserProtos {
      * <code>optional .exec.user.ColumnUpdatability updatability = 14;</code>
      * @return The updatability.
      */
-    public org.apache.drill.exec.proto.UserProtos.ColumnUpdatability getUpdatability() {
+    @java.lang.Override public org.apache.drill.exec.proto.UserProtos.ColumnUpdatability getUpdatability() {
       @SuppressWarnings("deprecation")
       org.apache.drill.exec.proto.UserProtos.ColumnUpdatability result = org.apache.drill.exec.proto.UserProtos.ColumnUpdatability.valueOf(updatability_);
       return result == null ? org.apache.drill.exec.proto.UserProtos.ColumnUpdatability.UNKNOWN_UPDATABILITY : result;
@@ -30381,6 +30701,7 @@ public final class UserProtos {
      * <code>optional bool auto_increment = 15;</code>
      * @return Whether the autoIncrement field is set.
      */
+    @java.lang.Override
     public boolean hasAutoIncrement() {
       return ((bitField0_ & 0x00004000) != 0);
     }
@@ -30392,6 +30713,7 @@ public final class UserProtos {
      * <code>optional bool auto_increment = 15;</code>
      * @return The autoIncrement.
      */
+    @java.lang.Override
     public boolean getAutoIncrement() {
       return autoIncrement_;
     }
@@ -30406,6 +30728,7 @@ public final class UserProtos {
      * <code>optional bool case_sensitivity = 16;</code>
      * @return Whether the caseSensitivity field is set.
      */
+    @java.lang.Override
     public boolean hasCaseSensitivity() {
       return ((bitField0_ & 0x00008000) != 0);
     }
@@ -30417,6 +30740,7 @@ public final class UserProtos {
      * <code>optional bool case_sensitivity = 16;</code>
      * @return The caseSensitivity.
      */
+    @java.lang.Override
     public boolean getCaseSensitivity() {
       return caseSensitivity_;
     }
@@ -30431,6 +30755,7 @@ public final class UserProtos {
      * <code>optional bool sortable = 17;</code>
      * @return Whether the sortable field is set.
      */
+    @java.lang.Override
     public boolean hasSortable() {
       return ((bitField0_ & 0x00010000) != 0);
     }
@@ -30442,6 +30767,7 @@ public final class UserProtos {
      * <code>optional bool sortable = 17;</code>
      * @return The sortable.
      */
+    @java.lang.Override
     public boolean getSortable() {
       return sortable_;
     }
@@ -30458,6 +30784,7 @@ public final class UserProtos {
      * <code>optional string class_name = 18;</code>
      * @return Whether the className field is set.
      */
+    @java.lang.Override
     public boolean hasClassName() {
       return ((bitField0_ & 0x00020000) != 0);
     }
@@ -30471,6 +30798,7 @@ public final class UserProtos {
      * <code>optional string class_name = 18;</code>
      * @return The className.
      */
+    @java.lang.Override
     public java.lang.String getClassName() {
       java.lang.Object ref = className_;
       if (ref instanceof java.lang.String) {
@@ -30495,6 +30823,7 @@ public final class UserProtos {
      * <code>optional string class_name = 18;</code>
      * @return The bytes for className.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getClassNameBytes() {
       java.lang.Object ref = className_;
@@ -30519,6 +30848,7 @@ public final class UserProtos {
      * <code>optional bool is_currency = 20;</code>
      * @return Whether the isCurrency field is set.
      */
+    @java.lang.Override
     public boolean hasIsCurrency() {
       return ((bitField0_ & 0x00040000) != 0);
     }
@@ -30530,6 +30860,7 @@ public final class UserProtos {
      * <code>optional bool is_currency = 20;</code>
      * @return The isCurrency.
      */
+    @java.lang.Override
     public boolean getIsCurrency() {
       return isCurrency_;
     }
@@ -32003,6 +32334,7 @@ public final class UserProtos {
        * <code>optional bool is_nullable = 7;</code>
        * @return Whether the isNullable field is set.
        */
+      @java.lang.Override
       public boolean hasIsNullable() {
         return ((bitField0_ & 0x00000040) != 0);
       }
@@ -32010,6 +32342,7 @@ public final class UserProtos {
        * <code>optional bool is_nullable = 7;</code>
        * @return The isNullable.
        */
+      @java.lang.Override
       public boolean getIsNullable() {
         return isNullable_;
       }
@@ -32049,6 +32382,7 @@ public final class UserProtos {
        * <code>optional int32 precision = 8;</code>
        * @return Whether the precision field is set.
        */
+      @java.lang.Override
       public boolean hasPrecision() {
         return ((bitField0_ & 0x00000080) != 0);
       }
@@ -32065,6 +32399,7 @@ public final class UserProtos {
        * <code>optional int32 precision = 8;</code>
        * @return The precision.
        */
+      @java.lang.Override
       public int getPrecision() {
         return precision_;
       }
@@ -32118,6 +32453,7 @@ public final class UserProtos {
        * <code>optional int32 scale = 9;</code>
        * @return Whether the scale field is set.
        */
+      @java.lang.Override
       public boolean hasScale() {
         return ((bitField0_ & 0x00000100) != 0);
       }
@@ -32130,6 +32466,7 @@ public final class UserProtos {
        * <code>optional int32 scale = 9;</code>
        * @return The scale.
        */
+      @java.lang.Override
       public int getScale() {
         return scale_;
       }
@@ -32174,6 +32511,7 @@ public final class UserProtos {
        * <code>optional bool signed = 10;</code>
        * @return Whether the signed field is set.
        */
+      @java.lang.Override
       public boolean hasSigned() {
         return ((bitField0_ & 0x00000200) != 0);
       }
@@ -32185,6 +32523,7 @@ public final class UserProtos {
        * <code>optional bool signed = 10;</code>
        * @return The signed.
        */
+      @java.lang.Override
       public boolean getSigned() {
         return signed_;
       }
@@ -32227,6 +32566,7 @@ public final class UserProtos {
        * <code>optional int32 display_size = 11;</code>
        * @return Whether the displaySize field is set.
        */
+      @java.lang.Override
       public boolean hasDisplaySize() {
         return ((bitField0_ & 0x00000400) != 0);
       }
@@ -32238,6 +32578,7 @@ public final class UserProtos {
        * <code>optional int32 display_size = 11;</code>
        * @return The displaySize.
        */
+      @java.lang.Override
       public int getDisplaySize() {
         return displaySize_;
       }
@@ -32281,6 +32622,7 @@ public final class UserProtos {
        * <code>optional bool is_aliased = 12;</code>
        * @return Whether the isAliased field is set.
        */
+      @java.lang.Override
       public boolean hasIsAliased() {
         return ((bitField0_ & 0x00000800) != 0);
       }
@@ -32293,6 +32635,7 @@ public final class UserProtos {
        * <code>optional bool is_aliased = 12;</code>
        * @return The isAliased.
        */
+      @java.lang.Override
       public boolean getIsAliased() {
         return isAliased_;
       }
@@ -32333,13 +32676,14 @@ public final class UserProtos {
        * <code>optional .exec.user.ColumnSearchability searchability = 13;</code>
        * @return Whether the searchability field is set.
        */
-      public boolean hasSearchability() {
+      @java.lang.Override public boolean hasSearchability() {
         return ((bitField0_ & 0x00001000) != 0);
       }
       /**
        * <code>optional .exec.user.ColumnSearchability searchability = 13;</code>
        * @return The searchability.
        */
+      @java.lang.Override
       public org.apache.drill.exec.proto.UserProtos.ColumnSearchability getSearchability() {
         @SuppressWarnings("deprecation")
         org.apache.drill.exec.proto.UserProtos.ColumnSearchability result = org.apache.drill.exec.proto.UserProtos.ColumnSearchability.valueOf(searchability_);
@@ -32379,7 +32723,7 @@ public final class UserProtos {
        * <code>optional .exec.user.ColumnUpdatability updatability = 14;</code>
        * @return Whether the updatability field is set.
        */
-      public boolean hasUpdatability() {
+      @java.lang.Override public boolean hasUpdatability() {
         return ((bitField0_ & 0x00002000) != 0);
       }
       /**
@@ -32390,6 +32734,7 @@ public final class UserProtos {
        * <code>optional .exec.user.ColumnUpdatability updatability = 14;</code>
        * @return The updatability.
        */
+      @java.lang.Override
       public org.apache.drill.exec.proto.UserProtos.ColumnUpdatability getUpdatability() {
         @SuppressWarnings("deprecation")
         org.apache.drill.exec.proto.UserProtos.ColumnUpdatability result = org.apache.drill.exec.proto.UserProtos.ColumnUpdatability.valueOf(updatability_);
@@ -32437,6 +32782,7 @@ public final class UserProtos {
        * <code>optional bool auto_increment = 15;</code>
        * @return Whether the autoIncrement field is set.
        */
+      @java.lang.Override
       public boolean hasAutoIncrement() {
         return ((bitField0_ & 0x00004000) != 0);
       }
@@ -32448,6 +32794,7 @@ public final class UserProtos {
        * <code>optional bool auto_increment = 15;</code>
        * @return The autoIncrement.
        */
+      @java.lang.Override
       public boolean getAutoIncrement() {
         return autoIncrement_;
       }
@@ -32490,6 +32837,7 @@ public final class UserProtos {
        * <code>optional bool case_sensitivity = 16;</code>
        * @return Whether the caseSensitivity field is set.
        */
+      @java.lang.Override
       public boolean hasCaseSensitivity() {
         return ((bitField0_ & 0x00008000) != 0);
       }
@@ -32501,6 +32849,7 @@ public final class UserProtos {
        * <code>optional bool case_sensitivity = 16;</code>
        * @return The caseSensitivity.
        */
+      @java.lang.Override
       public boolean getCaseSensitivity() {
         return caseSensitivity_;
       }
@@ -32543,6 +32892,7 @@ public final class UserProtos {
        * <code>optional bool sortable = 17;</code>
        * @return Whether the sortable field is set.
        */
+      @java.lang.Override
       public boolean hasSortable() {
         return ((bitField0_ & 0x00010000) != 0);
       }
@@ -32554,6 +32904,7 @@ public final class UserProtos {
        * <code>optional bool sortable = 17;</code>
        * @return The sortable.
        */
+      @java.lang.Override
       public boolean getSortable() {
         return sortable_;
       }
@@ -32716,6 +33067,7 @@ public final class UserProtos {
        * <code>optional bool is_currency = 20;</code>
        * @return Whether the isCurrency field is set.
        */
+      @java.lang.Override
       public boolean hasIsCurrency() {
         return ((bitField0_ & 0x00040000) != 0);
       }
@@ -32727,6 +33079,7 @@ public final class UserProtos {
        * <code>optional bool is_currency = 20;</code>
        * @return The isCurrency.
        */
+      @java.lang.Override
       public boolean getIsCurrency() {
         return isCurrency_;
       }
@@ -32836,7 +33189,7 @@ public final class UserProtos {
    *
    * Protobuf type {@code exec.user.PreparedStatementHandle}
    */
-  public  static final class PreparedStatementHandle extends
+  public static final class PreparedStatementHandle extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:exec.user.PreparedStatementHandle)
       PreparedStatementHandleOrBuilder {
@@ -32924,6 +33277,7 @@ public final class UserProtos {
      * <code>optional bytes server_info = 1;</code>
      * @return Whether the serverInfo field is set.
      */
+    @java.lang.Override
     public boolean hasServerInfo() {
       return ((bitField0_ & 0x00000001) != 0);
     }
@@ -32931,6 +33285,7 @@ public final class UserProtos {
      * <code>optional bytes server_info = 1;</code>
      * @return The serverInfo.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString getServerInfo() {
       return serverInfo_;
     }
@@ -33260,6 +33615,7 @@ public final class UserProtos {
        * <code>optional bytes server_info = 1;</code>
        * @return Whether the serverInfo field is set.
        */
+      @java.lang.Override
       public boolean hasServerInfo() {
         return ((bitField0_ & 0x00000001) != 0);
       }
@@ -33267,6 +33623,7 @@ public final class UserProtos {
        * <code>optional bytes server_info = 1;</code>
        * @return The serverInfo.
        */
+      @java.lang.Override
       public com.google.protobuf.ByteString getServerInfo() {
         return serverInfo_;
       }
@@ -33413,7 +33770,7 @@ public final class UserProtos {
    *
    * Protobuf type {@code exec.user.PreparedStatement}
    */
-  public  static final class PreparedStatement extends
+  public static final class PreparedStatement extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:exec.user.PreparedStatement)
       PreparedStatementOrBuilder {
@@ -33520,12 +33877,14 @@ public final class UserProtos {
     /**
      * <code>repeated .exec.user.ResultColumnMetadata columns = 1;</code>
      */
+    @java.lang.Override
     public java.util.List<org.apache.drill.exec.proto.UserProtos.ResultColumnMetadata> getColumnsList() {
       return columns_;
     }
     /**
      * <code>repeated .exec.user.ResultColumnMetadata columns = 1;</code>
      */
+    @java.lang.Override
     public java.util.List<? extends org.apache.drill.exec.proto.UserProtos.ResultColumnMetadataOrBuilder> 
         getColumnsOrBuilderList() {
       return columns_;
@@ -33533,18 +33892,21 @@ public final class UserProtos {
     /**
      * <code>repeated .exec.user.ResultColumnMetadata columns = 1;</code>
      */
+    @java.lang.Override
     public int getColumnsCount() {
       return columns_.size();
     }
     /**
      * <code>repeated .exec.user.ResultColumnMetadata columns = 1;</code>
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.ResultColumnMetadata getColumns(int index) {
       return columns_.get(index);
     }
     /**
      * <code>repeated .exec.user.ResultColumnMetadata columns = 1;</code>
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.ResultColumnMetadataOrBuilder getColumnsOrBuilder(
         int index) {
       return columns_.get(index);
@@ -33561,6 +33923,7 @@ public final class UserProtos {
      * <code>optional .exec.user.PreparedStatementHandle server_handle = 2;</code>
      * @return Whether the serverHandle field is set.
      */
+    @java.lang.Override
     public boolean hasServerHandle() {
       return ((bitField0_ & 0x00000001) != 0);
     }
@@ -33573,6 +33936,7 @@ public final class UserProtos {
      * <code>optional .exec.user.PreparedStatementHandle server_handle = 2;</code>
      * @return The serverHandle.
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.PreparedStatementHandle getServerHandle() {
       return serverHandle_ == null ? org.apache.drill.exec.proto.UserProtos.PreparedStatementHandle.getDefaultInstance() : serverHandle_;
     }
@@ -33584,6 +33948,7 @@ public final class UserProtos {
      *
      * <code>optional .exec.user.PreparedStatementHandle server_handle = 2;</code>
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.PreparedStatementHandleOrBuilder getServerHandleOrBuilder() {
       return serverHandle_ == null ? org.apache.drill.exec.proto.UserProtos.PreparedStatementHandle.getDefaultInstance() : serverHandle_;
     }
@@ -34480,7 +34845,7 @@ public final class UserProtos {
    *
    * Protobuf type {@code exec.user.CreatePreparedStatementResp}
    */
-  public  static final class CreatePreparedStatementResp extends
+  public static final class CreatePreparedStatementResp extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:exec.user.CreatePreparedStatementResp)
       CreatePreparedStatementRespOrBuilder {
@@ -34601,14 +34966,14 @@ public final class UserProtos {
      * <code>optional .exec.user.RequestStatus status = 1;</code>
      * @return Whether the status field is set.
      */
-    public boolean hasStatus() {
+    @java.lang.Override public boolean hasStatus() {
       return ((bitField0_ & 0x00000001) != 0);
     }
     /**
      * <code>optional .exec.user.RequestStatus status = 1;</code>
      * @return The status.
      */
-    public org.apache.drill.exec.proto.UserProtos.RequestStatus getStatus() {
+    @java.lang.Override public org.apache.drill.exec.proto.UserProtos.RequestStatus getStatus() {
       @SuppressWarnings("deprecation")
       org.apache.drill.exec.proto.UserProtos.RequestStatus result = org.apache.drill.exec.proto.UserProtos.RequestStatus.valueOf(status_);
       return result == null ? org.apache.drill.exec.proto.UserProtos.RequestStatus.UNKNOWN_STATUS : result;
@@ -34620,6 +34985,7 @@ public final class UserProtos {
      * <code>optional .exec.user.PreparedStatement prepared_statement = 2;</code>
      * @return Whether the preparedStatement field is set.
      */
+    @java.lang.Override
     public boolean hasPreparedStatement() {
       return ((bitField0_ & 0x00000002) != 0);
     }
@@ -34627,12 +34993,14 @@ public final class UserProtos {
      * <code>optional .exec.user.PreparedStatement prepared_statement = 2;</code>
      * @return The preparedStatement.
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.PreparedStatement getPreparedStatement() {
       return preparedStatement_ == null ? org.apache.drill.exec.proto.UserProtos.PreparedStatement.getDefaultInstance() : preparedStatement_;
     }
     /**
      * <code>optional .exec.user.PreparedStatement prepared_statement = 2;</code>
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.PreparedStatementOrBuilder getPreparedStatementOrBuilder() {
       return preparedStatement_ == null ? org.apache.drill.exec.proto.UserProtos.PreparedStatement.getDefaultInstance() : preparedStatement_;
     }
@@ -34643,6 +35011,7 @@ public final class UserProtos {
      * <code>optional .exec.shared.DrillPBError error = 3;</code>
      * @return Whether the error field is set.
      */
+    @java.lang.Override
     public boolean hasError() {
       return ((bitField0_ & 0x00000004) != 0);
     }
@@ -34650,12 +35019,14 @@ public final class UserProtos {
      * <code>optional .exec.shared.DrillPBError error = 3;</code>
      * @return The error.
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserBitShared.DrillPBError getError() {
       return error_ == null ? org.apache.drill.exec.proto.UserBitShared.DrillPBError.getDefaultInstance() : error_;
     }
     /**
      * <code>optional .exec.shared.DrillPBError error = 3;</code>
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserBitShared.DrillPBErrorOrBuilder getErrorOrBuilder() {
       return error_ == null ? org.apache.drill.exec.proto.UserBitShared.DrillPBError.getDefaultInstance() : error_;
     }
@@ -35050,13 +35421,14 @@ public final class UserProtos {
        * <code>optional .exec.user.RequestStatus status = 1;</code>
        * @return Whether the status field is set.
        */
-      public boolean hasStatus() {
+      @java.lang.Override public boolean hasStatus() {
         return ((bitField0_ & 0x00000001) != 0);
       }
       /**
        * <code>optional .exec.user.RequestStatus status = 1;</code>
        * @return The status.
        */
+      @java.lang.Override
       public org.apache.drill.exec.proto.UserProtos.RequestStatus getStatus() {
         @SuppressWarnings("deprecation")
         org.apache.drill.exec.proto.UserProtos.RequestStatus result = org.apache.drill.exec.proto.UserProtos.RequestStatus.valueOf(status_);
@@ -35390,7 +35762,7 @@ public final class UserProtos {
    *
    * Protobuf type {@code exec.user.GetServerMetaReq}
    */
-  public  static final class GetServerMetaReq extends
+  public static final class GetServerMetaReq extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:exec.user.GetServerMetaReq)
       GetServerMetaReqOrBuilder {
@@ -35834,7 +36206,7 @@ public final class UserProtos {
   /**
    * Protobuf type {@code exec.user.ConvertSupport}
    */
-  public  static final class ConvertSupport extends
+  public static final class ConvertSupport extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:exec.user.ConvertSupport)
       ConvertSupportOrBuilder {
@@ -35942,14 +36314,14 @@ public final class UserProtos {
      * <code>required .common.MinorType from = 1;</code>
      * @return Whether the from field is set.
      */
-    public boolean hasFrom() {
+    @java.lang.Override public boolean hasFrom() {
       return ((bitField0_ & 0x00000001) != 0);
     }
     /**
      * <code>required .common.MinorType from = 1;</code>
      * @return The from.
      */
-    public org.apache.drill.common.types.TypeProtos.MinorType getFrom() {
+    @java.lang.Override public org.apache.drill.common.types.TypeProtos.MinorType getFrom() {
       @SuppressWarnings("deprecation")
       org.apache.drill.common.types.TypeProtos.MinorType result = org.apache.drill.common.types.TypeProtos.MinorType.valueOf(from_);
       return result == null ? org.apache.drill.common.types.TypeProtos.MinorType.LATE : result;
@@ -35961,14 +36333,14 @@ public final class UserProtos {
      * <code>required .common.MinorType to = 2;</code>
      * @return Whether the to field is set.
      */
-    public boolean hasTo() {
+    @java.lang.Override public boolean hasTo() {
       return ((bitField0_ & 0x00000002) != 0);
     }
     /**
      * <code>required .common.MinorType to = 2;</code>
      * @return The to.
      */
-    public org.apache.drill.common.types.TypeProtos.MinorType getTo() {
+    @java.lang.Override public org.apache.drill.common.types.TypeProtos.MinorType getTo() {
       @SuppressWarnings("deprecation")
       org.apache.drill.common.types.TypeProtos.MinorType result = org.apache.drill.common.types.TypeProtos.MinorType.valueOf(to_);
       return result == null ? org.apache.drill.common.types.TypeProtos.MinorType.LATE : result;
@@ -36330,13 +36702,14 @@ public final class UserProtos {
        * <code>required .common.MinorType from = 1;</code>
        * @return Whether the from field is set.
        */
-      public boolean hasFrom() {
+      @java.lang.Override public boolean hasFrom() {
         return ((bitField0_ & 0x00000001) != 0);
       }
       /**
        * <code>required .common.MinorType from = 1;</code>
        * @return The from.
        */
+      @java.lang.Override
       public org.apache.drill.common.types.TypeProtos.MinorType getFrom() {
         @SuppressWarnings("deprecation")
         org.apache.drill.common.types.TypeProtos.MinorType result = org.apache.drill.common.types.TypeProtos.MinorType.valueOf(from_);
@@ -36372,13 +36745,14 @@ public final class UserProtos {
        * <code>required .common.MinorType to = 2;</code>
        * @return Whether the to field is set.
        */
-      public boolean hasTo() {
+      @java.lang.Override public boolean hasTo() {
         return ((bitField0_ & 0x00000002) != 0);
       }
       /**
        * <code>required .common.MinorType to = 2;</code>
        * @return The to.
        */
+      @java.lang.Override
       public org.apache.drill.common.types.TypeProtos.MinorType getTo() {
         @SuppressWarnings("deprecation")
         org.apache.drill.common.types.TypeProtos.MinorType result = org.apache.drill.common.types.TypeProtos.MinorType.valueOf(to_);
@@ -36513,7 +36887,7 @@ public final class UserProtos {
    *
    * Protobuf type {@code exec.user.GetServerMetaResp}
    */
-  public  static final class GetServerMetaResp extends
+  public static final class GetServerMetaResp extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:exec.user.GetServerMetaResp)
       GetServerMetaRespOrBuilder {
@@ -36634,14 +37008,14 @@ public final class UserProtos {
      * <code>optional .exec.user.RequestStatus status = 1;</code>
      * @return Whether the status field is set.
      */
-    public boolean hasStatus() {
+    @java.lang.Override public boolean hasStatus() {
       return ((bitField0_ & 0x00000001) != 0);
     }
     /**
      * <code>optional .exec.user.RequestStatus status = 1;</code>
      * @return The status.
      */
-    public org.apache.drill.exec.proto.UserProtos.RequestStatus getStatus() {
+    @java.lang.Override public org.apache.drill.exec.proto.UserProtos.RequestStatus getStatus() {
       @SuppressWarnings("deprecation")
       org.apache.drill.exec.proto.UserProtos.RequestStatus result = org.apache.drill.exec.proto.UserProtos.RequestStatus.valueOf(status_);
       return result == null ? org.apache.drill.exec.proto.UserProtos.RequestStatus.UNKNOWN_STATUS : result;
@@ -36653,6 +37027,7 @@ public final class UserProtos {
      * <code>optional .exec.user.ServerMeta server_meta = 2;</code>
      * @return Whether the serverMeta field is set.
      */
+    @java.lang.Override
     public boolean hasServerMeta() {
       return ((bitField0_ & 0x00000002) != 0);
     }
@@ -36660,12 +37035,14 @@ public final class UserProtos {
      * <code>optional .exec.user.ServerMeta server_meta = 2;</code>
      * @return The serverMeta.
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.ServerMeta getServerMeta() {
       return serverMeta_ == null ? org.apache.drill.exec.proto.UserProtos.ServerMeta.getDefaultInstance() : serverMeta_;
     }
     /**
      * <code>optional .exec.user.ServerMeta server_meta = 2;</code>
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.ServerMetaOrBuilder getServerMetaOrBuilder() {
       return serverMeta_ == null ? org.apache.drill.exec.proto.UserProtos.ServerMeta.getDefaultInstance() : serverMeta_;
     }
@@ -36676,6 +37053,7 @@ public final class UserProtos {
      * <code>optional .exec.shared.DrillPBError error = 3;</code>
      * @return Whether the error field is set.
      */
+    @java.lang.Override
     public boolean hasError() {
       return ((bitField0_ & 0x00000004) != 0);
     }
@@ -36683,12 +37061,14 @@ public final class UserProtos {
      * <code>optional .exec.shared.DrillPBError error = 3;</code>
      * @return The error.
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserBitShared.DrillPBError getError() {
       return error_ == null ? org.apache.drill.exec.proto.UserBitShared.DrillPBError.getDefaultInstance() : error_;
     }
     /**
      * <code>optional .exec.shared.DrillPBError error = 3;</code>
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserBitShared.DrillPBErrorOrBuilder getErrorOrBuilder() {
       return error_ == null ? org.apache.drill.exec.proto.UserBitShared.DrillPBError.getDefaultInstance() : error_;
     }
@@ -37094,13 +37474,14 @@ public final class UserProtos {
        * <code>optional .exec.user.RequestStatus status = 1;</code>
        * @return Whether the status field is set.
        */
-      public boolean hasStatus() {
+      @java.lang.Override public boolean hasStatus() {
         return ((bitField0_ & 0x00000001) != 0);
       }
       /**
        * <code>optional .exec.user.RequestStatus status = 1;</code>
        * @return The status.
        */
+      @java.lang.Override
       public org.apache.drill.exec.proto.UserProtos.RequestStatus getStatus() {
         @SuppressWarnings("deprecation")
         org.apache.drill.exec.proto.UserProtos.RequestStatus result = org.apache.drill.exec.proto.UserProtos.RequestStatus.valueOf(status_);
@@ -38655,7 +39036,7 @@ public final class UserProtos {
   /**
    * Protobuf type {@code exec.user.ServerMeta}
    */
-  public  static final class ServerMeta extends
+  public static final class ServerMeta extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:exec.user.ServerMeta)
       ServerMetaOrBuilder {
@@ -39301,6 +39682,7 @@ public final class UserProtos {
      * <code>optional bool all_tables_selectable = 1;</code>
      * @return Whether the allTablesSelectable field is set.
      */
+    @java.lang.Override
     public boolean hasAllTablesSelectable() {
       return ((bitField0_ & 0x00000001) != 0);
     }
@@ -39312,6 +39694,7 @@ public final class UserProtos {
      * <code>optional bool all_tables_selectable = 1;</code>
      * @return The allTablesSelectable.
      */
+    @java.lang.Override
     public boolean getAllTablesSelectable() {
       return allTablesSelectable_;
     }
@@ -39326,6 +39709,7 @@ public final class UserProtos {
      * <code>optional bool blob_included_in_max_row_size = 2;</code>
      * @return Whether the blobIncludedInMaxRowSize field is set.
      */
+    @java.lang.Override
     public boolean hasBlobIncludedInMaxRowSize() {
       return ((bitField0_ & 0x00000002) != 0);
     }
@@ -39337,6 +39721,7 @@ public final class UserProtos {
      * <code>optional bool blob_included_in_max_row_size = 2;</code>
      * @return The blobIncludedInMaxRowSize.
      */
+    @java.lang.Override
     public boolean getBlobIncludedInMaxRowSize() {
       return blobIncludedInMaxRowSize_;
     }
@@ -39351,6 +39736,7 @@ public final class UserProtos {
      * <code>optional bool catalog_at_start = 3;</code>
      * @return Whether the catalogAtStart field is set.
      */
+    @java.lang.Override
     public boolean hasCatalogAtStart() {
       return ((bitField0_ & 0x00000004) != 0);
     }
@@ -39362,6 +39748,7 @@ public final class UserProtos {
      * <code>optional bool catalog_at_start = 3;</code>
      * @return The catalogAtStart.
      */
+    @java.lang.Override
     public boolean getCatalogAtStart() {
       return catalogAtStart_;
     }
@@ -39376,6 +39763,7 @@ public final class UserProtos {
      * <code>optional string catalog_separator = 4;</code>
      * @return Whether the catalogSeparator field is set.
      */
+    @java.lang.Override
     public boolean hasCatalogSeparator() {
       return ((bitField0_ & 0x00000008) != 0);
     }
@@ -39387,6 +39775,7 @@ public final class UserProtos {
      * <code>optional string catalog_separator = 4;</code>
      * @return The catalogSeparator.
      */
+    @java.lang.Override
     public java.lang.String getCatalogSeparator() {
       java.lang.Object ref = catalogSeparator_;
       if (ref instanceof java.lang.String) {
@@ -39409,6 +39798,7 @@ public final class UserProtos {
      * <code>optional string catalog_separator = 4;</code>
      * @return The bytes for catalogSeparator.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getCatalogSeparatorBytes() {
       java.lang.Object ref = catalogSeparator_;
@@ -39433,6 +39823,7 @@ public final class UserProtos {
      * <code>optional string catalog_term = 5;</code>
      * @return Whether the catalogTerm field is set.
      */
+    @java.lang.Override
     public boolean hasCatalogTerm() {
       return ((bitField0_ & 0x00000010) != 0);
     }
@@ -39444,6 +39835,7 @@ public final class UserProtos {
      * <code>optional string catalog_term = 5;</code>
      * @return The catalogTerm.
      */
+    @java.lang.Override
     public java.lang.String getCatalogTerm() {
       java.lang.Object ref = catalogTerm_;
       if (ref instanceof java.lang.String) {
@@ -39466,6 +39858,7 @@ public final class UserProtos {
      * <code>optional string catalog_term = 5;</code>
      * @return The bytes for catalogTerm.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getCatalogTermBytes() {
       java.lang.Object ref = catalogTerm_;
@@ -39500,6 +39893,7 @@ public final class UserProtos {
      * <code>repeated .exec.user.CollateSupport collate_support = 6;</code>
      * @return A list containing the collateSupport.
      */
+    @java.lang.Override
     public java.util.List<org.apache.drill.exec.proto.UserProtos.CollateSupport> getCollateSupportList() {
       return new com.google.protobuf.Internal.ListAdapter<
           java.lang.Integer, org.apache.drill.exec.proto.UserProtos.CollateSupport>(collateSupport_, collateSupport_converter_);
@@ -39512,6 +39906,7 @@ public final class UserProtos {
      * <code>repeated .exec.user.CollateSupport collate_support = 6;</code>
      * @return The count of collateSupport.
      */
+    @java.lang.Override
     public int getCollateSupportCount() {
       return collateSupport_.size();
     }
@@ -39524,6 +39919,7 @@ public final class UserProtos {
      * @param index The index of the element to return.
      * @return The collateSupport at the given index.
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.CollateSupport getCollateSupport(int index) {
       return collateSupport_converter_.convert(collateSupport_.get(index));
     }
@@ -39538,6 +39934,7 @@ public final class UserProtos {
      * <code>optional bool column_aliasing_supported = 7;</code>
      * @return Whether the columnAliasingSupported field is set.
      */
+    @java.lang.Override
     public boolean hasColumnAliasingSupported() {
       return ((bitField0_ & 0x00000020) != 0);
     }
@@ -39549,6 +39946,7 @@ public final class UserProtos {
      * <code>optional bool column_aliasing_supported = 7;</code>
      * @return The columnAliasingSupported.
      */
+    @java.lang.Override
     public boolean getColumnAliasingSupported() {
       return columnAliasingSupported_;
     }
@@ -39562,6 +39960,7 @@ public final class UserProtos {
      *
      * <code>repeated .exec.user.ConvertSupport convert_support = 8;</code>
      */
+    @java.lang.Override
     public java.util.List<org.apache.drill.exec.proto.UserProtos.ConvertSupport> getConvertSupportList() {
       return convertSupport_;
     }
@@ -39572,6 +39971,7 @@ public final class UserProtos {
      *
      * <code>repeated .exec.user.ConvertSupport convert_support = 8;</code>
      */
+    @java.lang.Override
     public java.util.List<? extends org.apache.drill.exec.proto.UserProtos.ConvertSupportOrBuilder> 
         getConvertSupportOrBuilderList() {
       return convertSupport_;
@@ -39583,6 +39983,7 @@ public final class UserProtos {
      *
      * <code>repeated .exec.user.ConvertSupport convert_support = 8;</code>
      */
+    @java.lang.Override
     public int getConvertSupportCount() {
       return convertSupport_.size();
     }
@@ -39593,6 +39994,7 @@ public final class UserProtos {
      *
      * <code>repeated .exec.user.ConvertSupport convert_support = 8;</code>
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.ConvertSupport getConvertSupport(int index) {
       return convertSupport_.get(index);
     }
@@ -39603,6 +40005,7 @@ public final class UserProtos {
      *
      * <code>repeated .exec.user.ConvertSupport convert_support = 8;</code>
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.ConvertSupportOrBuilder getConvertSupportOrBuilder(
         int index) {
       return convertSupport_.get(index);
@@ -39618,7 +40021,7 @@ public final class UserProtos {
      * <code>optional .exec.user.CorrelationNamesSupport correlation_names_support = 9;</code>
      * @return Whether the correlationNamesSupport field is set.
      */
-    public boolean hasCorrelationNamesSupport() {
+    @java.lang.Override public boolean hasCorrelationNamesSupport() {
       return ((bitField0_ & 0x00000040) != 0);
     }
     /**
@@ -39629,7 +40032,7 @@ public final class UserProtos {
      * <code>optional .exec.user.CorrelationNamesSupport correlation_names_support = 9;</code>
      * @return The correlationNamesSupport.
      */
-    public org.apache.drill.exec.proto.UserProtos.CorrelationNamesSupport getCorrelationNamesSupport() {
+    @java.lang.Override public org.apache.drill.exec.proto.UserProtos.CorrelationNamesSupport getCorrelationNamesSupport() {
       @SuppressWarnings("deprecation")
       org.apache.drill.exec.proto.UserProtos.CorrelationNamesSupport result = org.apache.drill.exec.proto.UserProtos.CorrelationNamesSupport.valueOf(correlationNamesSupport_);
       return result == null ? org.apache.drill.exec.proto.UserProtos.CorrelationNamesSupport.CN_NONE : result;
@@ -39706,6 +40109,7 @@ public final class UserProtos {
      * <code>repeated .exec.user.DateTimeLiteralsSupport date_time_literals_support = 11;</code>
      * @return A list containing the dateTimeLiteralsSupport.
      */
+    @java.lang.Override
     public java.util.List<org.apache.drill.exec.proto.UserProtos.DateTimeLiteralsSupport> getDateTimeLiteralsSupportList() {
       return new com.google.protobuf.Internal.ListAdapter<
           java.lang.Integer, org.apache.drill.exec.proto.UserProtos.DateTimeLiteralsSupport>(dateTimeLiteralsSupport_, dateTimeLiteralsSupport_converter_);
@@ -39718,6 +40122,7 @@ public final class UserProtos {
      * <code>repeated .exec.user.DateTimeLiteralsSupport date_time_literals_support = 11;</code>
      * @return The count of dateTimeLiteralsSupport.
      */
+    @java.lang.Override
     public int getDateTimeLiteralsSupportCount() {
       return dateTimeLiteralsSupport_.size();
     }
@@ -39730,6 +40135,7 @@ public final class UserProtos {
      * @param index The index of the element to return.
      * @return The dateTimeLiteralsSupport at the given index.
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.DateTimeLiteralsSupport getDateTimeLiteralsSupport(int index) {
       return dateTimeLiteralsSupport_converter_.convert(dateTimeLiteralsSupport_.get(index));
     }
@@ -39744,7 +40150,7 @@ public final class UserProtos {
      * <code>optional .exec.user.GroupBySupport group_by_support = 12;</code>
      * @return Whether the groupBySupport field is set.
      */
-    public boolean hasGroupBySupport() {
+    @java.lang.Override public boolean hasGroupBySupport() {
       return ((bitField0_ & 0x00000080) != 0);
     }
     /**
@@ -39755,7 +40161,7 @@ public final class UserProtos {
      * <code>optional .exec.user.GroupBySupport group_by_support = 12;</code>
      * @return The groupBySupport.
      */
-    public org.apache.drill.exec.proto.UserProtos.GroupBySupport getGroupBySupport() {
+    @java.lang.Override public org.apache.drill.exec.proto.UserProtos.GroupBySupport getGroupBySupport() {
       @SuppressWarnings("deprecation")
       org.apache.drill.exec.proto.UserProtos.GroupBySupport result = org.apache.drill.exec.proto.UserProtos.GroupBySupport.valueOf(groupBySupport_);
       return result == null ? org.apache.drill.exec.proto.UserProtos.GroupBySupport.GB_NONE : result;
@@ -39771,7 +40177,7 @@ public final class UserProtos {
      * <code>optional .exec.user.IdentifierCasing identifier_casing = 13;</code>
      * @return Whether the identifierCasing field is set.
      */
-    public boolean hasIdentifierCasing() {
+    @java.lang.Override public boolean hasIdentifierCasing() {
       return ((bitField0_ & 0x00000100) != 0);
     }
     /**
@@ -39782,7 +40188,7 @@ public final class UserProtos {
      * <code>optional .exec.user.IdentifierCasing identifier_casing = 13;</code>
      * @return The identifierCasing.
      */
-    public org.apache.drill.exec.proto.UserProtos.IdentifierCasing getIdentifierCasing() {
+    @java.lang.Override public org.apache.drill.exec.proto.UserProtos.IdentifierCasing getIdentifierCasing() {
       @SuppressWarnings("deprecation")
       org.apache.drill.exec.proto.UserProtos.IdentifierCasing result = org.apache.drill.exec.proto.UserProtos.IdentifierCasing.valueOf(identifierCasing_);
       return result == null ? org.apache.drill.exec.proto.UserProtos.IdentifierCasing.IC_UNKNOWN : result;
@@ -39798,6 +40204,7 @@ public final class UserProtos {
      * <code>optional string identifier_quote_string = 14;</code>
      * @return Whether the identifierQuoteString field is set.
      */
+    @java.lang.Override
     public boolean hasIdentifierQuoteString() {
       return ((bitField0_ & 0x00000200) != 0);
     }
@@ -39809,6 +40216,7 @@ public final class UserProtos {
      * <code>optional string identifier_quote_string = 14;</code>
      * @return The identifierQuoteString.
      */
+    @java.lang.Override
     public java.lang.String getIdentifierQuoteString() {
       java.lang.Object ref = identifierQuoteString_;
       if (ref instanceof java.lang.String) {
@@ -39831,6 +40239,7 @@ public final class UserProtos {
      * <code>optional string identifier_quote_string = 14;</code>
      * @return The bytes for identifierQuoteString.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getIdentifierQuoteStringBytes() {
       java.lang.Object ref = identifierQuoteString_;
@@ -39855,6 +40264,7 @@ public final class UserProtos {
      * <code>optional bool like_escape_clause_supported = 15;</code>
      * @return Whether the likeEscapeClauseSupported field is set.
      */
+    @java.lang.Override
     public boolean hasLikeEscapeClauseSupported() {
       return ((bitField0_ & 0x00000400) != 0);
     }
@@ -39866,6 +40276,7 @@ public final class UserProtos {
      * <code>optional bool like_escape_clause_supported = 15;</code>
      * @return The likeEscapeClauseSupported.
      */
+    @java.lang.Override
     public boolean getLikeEscapeClauseSupported() {
       return likeEscapeClauseSupported_;
     }
@@ -39880,6 +40291,7 @@ public final class UserProtos {
      * <code>optional uint32 max_binary_literal_length = 16;</code>
      * @return Whether the maxBinaryLiteralLength field is set.
      */
+    @java.lang.Override
     public boolean hasMaxBinaryLiteralLength() {
       return ((bitField0_ & 0x00000800) != 0);
     }
@@ -39891,6 +40303,7 @@ public final class UserProtos {
      * <code>optional uint32 max_binary_literal_length = 16;</code>
      * @return The maxBinaryLiteralLength.
      */
+    @java.lang.Override
     public int getMaxBinaryLiteralLength() {
       return maxBinaryLiteralLength_;
     }
@@ -39905,6 +40318,7 @@ public final class UserProtos {
      * <code>optional uint32 max_catalog_name_length = 17;</code>
      * @return Whether the maxCatalogNameLength field is set.
      */
+    @java.lang.Override
     public boolean hasMaxCatalogNameLength() {
       return ((bitField0_ & 0x00001000) != 0);
     }
@@ -39916,6 +40330,7 @@ public final class UserProtos {
      * <code>optional uint32 max_catalog_name_length = 17;</code>
      * @return The maxCatalogNameLength.
      */
+    @java.lang.Override
     public int getMaxCatalogNameLength() {
       return maxCatalogNameLength_;
     }
@@ -39930,6 +40345,7 @@ public final class UserProtos {
      * <code>optional uint32 max_char_literal_length = 18;</code>
      * @return Whether the maxCharLiteralLength field is set.
      */
+    @java.lang.Override
     public boolean hasMaxCharLiteralLength() {
       return ((bitField0_ & 0x00002000) != 0);
     }
@@ -39941,6 +40357,7 @@ public final class UserProtos {
      * <code>optional uint32 max_char_literal_length = 18;</code>
      * @return The maxCharLiteralLength.
      */
+    @java.lang.Override
     public int getMaxCharLiteralLength() {
       return maxCharLiteralLength_;
     }
@@ -39955,6 +40372,7 @@ public final class UserProtos {
      * <code>optional uint32 max_column_name_length = 19;</code>
      * @return Whether the maxColumnNameLength field is set.
      */
+    @java.lang.Override
     public boolean hasMaxColumnNameLength() {
       return ((bitField0_ & 0x00004000) != 0);
     }
@@ -39966,6 +40384,7 @@ public final class UserProtos {
      * <code>optional uint32 max_column_name_length = 19;</code>
      * @return The maxColumnNameLength.
      */
+    @java.lang.Override
     public int getMaxColumnNameLength() {
       return maxColumnNameLength_;
     }
@@ -39980,6 +40399,7 @@ public final class UserProtos {
      * <code>optional uint32 max_columns_in_group_by = 20;</code>
      * @return Whether the maxColumnsInGroupBy field is set.
      */
+    @java.lang.Override
     public boolean hasMaxColumnsInGroupBy() {
       return ((bitField0_ & 0x00008000) != 0);
     }
@@ -39991,6 +40411,7 @@ public final class UserProtos {
      * <code>optional uint32 max_columns_in_group_by = 20;</code>
      * @return The maxColumnsInGroupBy.
      */
+    @java.lang.Override
     public int getMaxColumnsInGroupBy() {
       return maxColumnsInGroupBy_;
     }
@@ -40005,6 +40426,7 @@ public final class UserProtos {
      * <code>optional uint32 max_columns_in_order_by = 21;</code>
      * @return Whether the maxColumnsInOrderBy field is set.
      */
+    @java.lang.Override
     public boolean hasMaxColumnsInOrderBy() {
       return ((bitField0_ & 0x00010000) != 0);
     }
@@ -40016,6 +40438,7 @@ public final class UserProtos {
      * <code>optional uint32 max_columns_in_order_by = 21;</code>
      * @return The maxColumnsInOrderBy.
      */
+    @java.lang.Override
     public int getMaxColumnsInOrderBy() {
       return maxColumnsInOrderBy_;
     }
@@ -40030,6 +40453,7 @@ public final class UserProtos {
      * <code>optional uint32 max_columns_in_select = 22;</code>
      * @return Whether the maxColumnsInSelect field is set.
      */
+    @java.lang.Override
     public boolean hasMaxColumnsInSelect() {
       return ((bitField0_ & 0x00020000) != 0);
     }
@@ -40041,6 +40465,7 @@ public final class UserProtos {
      * <code>optional uint32 max_columns_in_select = 22;</code>
      * @return The maxColumnsInSelect.
      */
+    @java.lang.Override
     public int getMaxColumnsInSelect() {
       return maxColumnsInSelect_;
     }
@@ -40055,6 +40480,7 @@ public final class UserProtos {
      * <code>optional uint32 max_cursor_name_length = 23;</code>
      * @return Whether the maxCursorNameLength field is set.
      */
+    @java.lang.Override
     public boolean hasMaxCursorNameLength() {
       return ((bitField0_ & 0x00040000) != 0);
     }
@@ -40066,6 +40492,7 @@ public final class UserProtos {
      * <code>optional uint32 max_cursor_name_length = 23;</code>
      * @return The maxCursorNameLength.
      */
+    @java.lang.Override
     public int getMaxCursorNameLength() {
       return maxCursorNameLength_;
     }
@@ -40080,6 +40507,7 @@ public final class UserProtos {
      * <code>optional uint32 max_logical_lob_size = 24;</code>
      * @return Whether the maxLogicalLobSize field is set.
      */
+    @java.lang.Override
     public boolean hasMaxLogicalLobSize() {
       return ((bitField0_ & 0x00080000) != 0);
     }
@@ -40091,6 +40519,7 @@ public final class UserProtos {
      * <code>optional uint32 max_logical_lob_size = 24;</code>
      * @return The maxLogicalLobSize.
      */
+    @java.lang.Override
     public int getMaxLogicalLobSize() {
       return maxLogicalLobSize_;
     }
@@ -40105,6 +40534,7 @@ public final class UserProtos {
      * <code>optional uint32 max_row_size = 25;</code>
      * @return Whether the maxRowSize field is set.
      */
+    @java.lang.Override
     public boolean hasMaxRowSize() {
       return ((bitField0_ & 0x00100000) != 0);
     }
@@ -40116,6 +40546,7 @@ public final class UserProtos {
      * <code>optional uint32 max_row_size = 25;</code>
      * @return The maxRowSize.
      */
+    @java.lang.Override
     public int getMaxRowSize() {
       return maxRowSize_;
     }
@@ -40130,6 +40561,7 @@ public final class UserProtos {
      * <code>optional uint32 max_schema_name_length = 26;</code>
      * @return Whether the maxSchemaNameLength field is set.
      */
+    @java.lang.Override
     public boolean hasMaxSchemaNameLength() {
       return ((bitField0_ & 0x00200000) != 0);
     }
@@ -40141,6 +40573,7 @@ public final class UserProtos {
      * <code>optional uint32 max_schema_name_length = 26;</code>
      * @return The maxSchemaNameLength.
      */
+    @java.lang.Override
     public int getMaxSchemaNameLength() {
       return maxSchemaNameLength_;
     }
@@ -40155,6 +40588,7 @@ public final class UserProtos {
      * <code>optional uint32 max_statement_length = 27;</code>
      * @return Whether the maxStatementLength field is set.
      */
+    @java.lang.Override
     public boolean hasMaxStatementLength() {
       return ((bitField0_ & 0x00400000) != 0);
     }
@@ -40166,6 +40600,7 @@ public final class UserProtos {
      * <code>optional uint32 max_statement_length = 27;</code>
      * @return The maxStatementLength.
      */
+    @java.lang.Override
     public int getMaxStatementLength() {
       return maxStatementLength_;
     }
@@ -40180,6 +40615,7 @@ public final class UserProtos {
      * <code>optional uint32 max_statements = 28;</code>
      * @return Whether the maxStatements field is set.
      */
+    @java.lang.Override
     public boolean hasMaxStatements() {
       return ((bitField0_ & 0x00800000) != 0);
     }
@@ -40191,6 +40627,7 @@ public final class UserProtos {
      * <code>optional uint32 max_statements = 28;</code>
      * @return The maxStatements.
      */
+    @java.lang.Override
     public int getMaxStatements() {
       return maxStatements_;
     }
@@ -40205,6 +40642,7 @@ public final class UserProtos {
      * <code>optional uint32 max_table_name_length = 29;</code>
      * @return Whether the maxTableNameLength field is set.
      */
+    @java.lang.Override
     public boolean hasMaxTableNameLength() {
       return ((bitField0_ & 0x01000000) != 0);
     }
@@ -40216,6 +40654,7 @@ public final class UserProtos {
      * <code>optional uint32 max_table_name_length = 29;</code>
      * @return The maxTableNameLength.
      */
+    @java.lang.Override
     public int getMaxTableNameLength() {
       return maxTableNameLength_;
     }
@@ -40230,6 +40669,7 @@ public final class UserProtos {
      * <code>optional uint32 max_tables_in_select = 30;</code>
      * @return Whether the maxTablesInSelect field is set.
      */
+    @java.lang.Override
     public boolean hasMaxTablesInSelect() {
       return ((bitField0_ & 0x02000000) != 0);
     }
@@ -40241,6 +40681,7 @@ public final class UserProtos {
      * <code>optional uint32 max_tables_in_select = 30;</code>
      * @return The maxTablesInSelect.
      */
+    @java.lang.Override
     public int getMaxTablesInSelect() {
       return maxTablesInSelect_;
     }
@@ -40255,6 +40696,7 @@ public final class UserProtos {
      * <code>optional uint32 max_user_name_length = 31;</code>
      * @return Whether the maxUserNameLength field is set.
      */
+    @java.lang.Override
     public boolean hasMaxUserNameLength() {
       return ((bitField0_ & 0x04000000) != 0);
     }
@@ -40266,6 +40708,7 @@ public final class UserProtos {
      * <code>optional uint32 max_user_name_length = 31;</code>
      * @return The maxUserNameLength.
      */
+    @java.lang.Override
     public int getMaxUserNameLength() {
       return maxUserNameLength_;
     }
@@ -40280,7 +40723,7 @@ public final class UserProtos {
      * <code>optional .exec.user.NullCollation null_collation = 32;</code>
      * @return Whether the nullCollation field is set.
      */
-    public boolean hasNullCollation() {
+    @java.lang.Override public boolean hasNullCollation() {
       return ((bitField0_ & 0x08000000) != 0);
     }
     /**
@@ -40291,7 +40734,7 @@ public final class UserProtos {
      * <code>optional .exec.user.NullCollation null_collation = 32;</code>
      * @return The nullCollation.
      */
-    public org.apache.drill.exec.proto.UserProtos.NullCollation getNullCollation() {
+    @java.lang.Override public org.apache.drill.exec.proto.UserProtos.NullCollation getNullCollation() {
       @SuppressWarnings("deprecation")
       org.apache.drill.exec.proto.UserProtos.NullCollation result = org.apache.drill.exec.proto.UserProtos.NullCollation.valueOf(nullCollation_);
       return result == null ? org.apache.drill.exec.proto.UserProtos.NullCollation.NC_UNKNOWN : result;
@@ -40307,6 +40750,7 @@ public final class UserProtos {
      * <code>optional bool null_plus_non_null_equals_null = 33;</code>
      * @return Whether the nullPlusNonNullEqualsNull field is set.
      */
+    @java.lang.Override
     public boolean hasNullPlusNonNullEqualsNull() {
       return ((bitField0_ & 0x10000000) != 0);
     }
@@ -40318,6 +40762,7 @@ public final class UserProtos {
      * <code>optional bool null_plus_non_null_equals_null = 33;</code>
      * @return The nullPlusNonNullEqualsNull.
      */
+    @java.lang.Override
     public boolean getNullPlusNonNullEqualsNull() {
       return nullPlusNonNullEqualsNull_;
     }
@@ -40393,6 +40838,7 @@ public final class UserProtos {
      * <code>repeated .exec.user.OrderBySupport order_by_support = 35;</code>
      * @return A list containing the orderBySupport.
      */
+    @java.lang.Override
     public java.util.List<org.apache.drill.exec.proto.UserProtos.OrderBySupport> getOrderBySupportList() {
       return new com.google.protobuf.Internal.ListAdapter<
           java.lang.Integer, org.apache.drill.exec.proto.UserProtos.OrderBySupport>(orderBySupport_, orderBySupport_converter_);
@@ -40405,6 +40851,7 @@ public final class UserProtos {
      * <code>repeated .exec.user.OrderBySupport order_by_support = 35;</code>
      * @return The count of orderBySupport.
      */
+    @java.lang.Override
     public int getOrderBySupportCount() {
       return orderBySupport_.size();
     }
@@ -40417,6 +40864,7 @@ public final class UserProtos {
      * @param index The index of the element to return.
      * @return The orderBySupport at the given index.
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.OrderBySupport getOrderBySupport(int index) {
       return orderBySupport_converter_.convert(orderBySupport_.get(index));
     }
@@ -40441,6 +40889,7 @@ public final class UserProtos {
      * <code>repeated .exec.user.OuterJoinSupport outer_join_support = 36;</code>
      * @return A list containing the outerJoinSupport.
      */
+    @java.lang.Override
     public java.util.List<org.apache.drill.exec.proto.UserProtos.OuterJoinSupport> getOuterJoinSupportList() {
       return new com.google.protobuf.Internal.ListAdapter<
           java.lang.Integer, org.apache.drill.exec.proto.UserProtos.OuterJoinSupport>(outerJoinSupport_, outerJoinSupport_converter_);
@@ -40453,6 +40902,7 @@ public final class UserProtos {
      * <code>repeated .exec.user.OuterJoinSupport outer_join_support = 36;</code>
      * @return The count of outerJoinSupport.
      */
+    @java.lang.Override
     public int getOuterJoinSupportCount() {
       return outerJoinSupport_.size();
     }
@@ -40465,6 +40915,7 @@ public final class UserProtos {
      * @param index The index of the element to return.
      * @return The outerJoinSupport at the given index.
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.OuterJoinSupport getOuterJoinSupport(int index) {
       return outerJoinSupport_converter_.convert(outerJoinSupport_.get(index));
     }
@@ -40479,7 +40930,7 @@ public final class UserProtos {
      * <code>optional .exec.user.IdentifierCasing quoted_identifier_casing = 37;</code>
      * @return Whether the quotedIdentifierCasing field is set.
      */
-    public boolean hasQuotedIdentifierCasing() {
+    @java.lang.Override public boolean hasQuotedIdentifierCasing() {
       return ((bitField0_ & 0x20000000) != 0);
     }
     /**
@@ -40490,7 +40941,7 @@ public final class UserProtos {
      * <code>optional .exec.user.IdentifierCasing quoted_identifier_casing = 37;</code>
      * @return The quotedIdentifierCasing.
      */
-    public org.apache.drill.exec.proto.UserProtos.IdentifierCasing getQuotedIdentifierCasing() {
+    @java.lang.Override public org.apache.drill.exec.proto.UserProtos.IdentifierCasing getQuotedIdentifierCasing() {
       @SuppressWarnings("deprecation")
       org.apache.drill.exec.proto.UserProtos.IdentifierCasing result = org.apache.drill.exec.proto.UserProtos.IdentifierCasing.valueOf(quotedIdentifierCasing_);
       return result == null ? org.apache.drill.exec.proto.UserProtos.IdentifierCasing.IC_UNKNOWN : result;
@@ -40506,6 +40957,7 @@ public final class UserProtos {
      * <code>optional bool read_only = 38;</code>
      * @return Whether the readOnly field is set.
      */
+    @java.lang.Override
     public boolean hasReadOnly() {
       return ((bitField0_ & 0x40000000) != 0);
     }
@@ -40517,6 +40969,7 @@ public final class UserProtos {
      * <code>optional bool read_only = 38;</code>
      * @return The readOnly.
      */
+    @java.lang.Override
     public boolean getReadOnly() {
       return readOnly_;
     }
@@ -40531,6 +40984,7 @@ public final class UserProtos {
      * <code>optional string schema_term = 39;</code>
      * @return Whether the schemaTerm field is set.
      */
+    @java.lang.Override
     public boolean hasSchemaTerm() {
       return ((bitField0_ & 0x80000000) != 0);
     }
@@ -40542,6 +40996,7 @@ public final class UserProtos {
      * <code>optional string schema_term = 39;</code>
      * @return The schemaTerm.
      */
+    @java.lang.Override
     public java.lang.String getSchemaTerm() {
       java.lang.Object ref = schemaTerm_;
       if (ref instanceof java.lang.String) {
@@ -40564,6 +41019,7 @@ public final class UserProtos {
      * <code>optional string schema_term = 39;</code>
      * @return The bytes for schemaTerm.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getSchemaTermBytes() {
       java.lang.Object ref = schemaTerm_;
@@ -40588,6 +41044,7 @@ public final class UserProtos {
      * <code>optional string search_escape_string = 40;</code>
      * @return Whether the searchEscapeString field is set.
      */
+    @java.lang.Override
     public boolean hasSearchEscapeString() {
       return ((bitField1_ & 0x00000001) != 0);
     }
@@ -40599,6 +41056,7 @@ public final class UserProtos {
      * <code>optional string search_escape_string = 40;</code>
      * @return The searchEscapeString.
      */
+    @java.lang.Override
     public java.lang.String getSearchEscapeString() {
       java.lang.Object ref = searchEscapeString_;
       if (ref instanceof java.lang.String) {
@@ -40621,6 +41079,7 @@ public final class UserProtos {
      * <code>optional string search_escape_string = 40;</code>
      * @return The bytes for searchEscapeString.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getSearchEscapeStringBytes() {
       java.lang.Object ref = searchEscapeString_;
@@ -40645,6 +41104,7 @@ public final class UserProtos {
      * <code>optional bool select_for_update_supported = 41;</code>
      * @return Whether the selectForUpdateSupported field is set.
      */
+    @java.lang.Override
     public boolean hasSelectForUpdateSupported() {
       return ((bitField1_ & 0x00000002) != 0);
     }
@@ -40656,6 +41116,7 @@ public final class UserProtos {
      * <code>optional bool select_for_update_supported = 41;</code>
      * @return The selectForUpdateSupported.
      */
+    @java.lang.Override
     public boolean getSelectForUpdateSupported() {
       return selectForUpdateSupported_;
     }
@@ -40670,6 +41131,7 @@ public final class UserProtos {
      * <code>optional string special_characters = 42;</code>
      * @return Whether the specialCharacters field is set.
      */
+    @java.lang.Override
     public boolean hasSpecialCharacters() {
       return ((bitField1_ & 0x00000004) != 0);
     }
@@ -40681,6 +41143,7 @@ public final class UserProtos {
      * <code>optional string special_characters = 42;</code>
      * @return The specialCharacters.
      */
+    @java.lang.Override
     public java.lang.String getSpecialCharacters() {
       java.lang.Object ref = specialCharacters_;
       if (ref instanceof java.lang.String) {
@@ -40703,6 +41166,7 @@ public final class UserProtos {
      * <code>optional string special_characters = 42;</code>
      * @return The bytes for specialCharacters.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getSpecialCharactersBytes() {
       java.lang.Object ref = specialCharacters_;
@@ -40839,6 +41303,7 @@ public final class UserProtos {
      * <code>repeated .exec.user.SubQuerySupport subquery_support = 45;</code>
      * @return A list containing the subquerySupport.
      */
+    @java.lang.Override
     public java.util.List<org.apache.drill.exec.proto.UserProtos.SubQuerySupport> getSubquerySupportList() {
       return new com.google.protobuf.Internal.ListAdapter<
           java.lang.Integer, org.apache.drill.exec.proto.UserProtos.SubQuerySupport>(subquerySupport_, subquerySupport_converter_);
@@ -40851,6 +41316,7 @@ public final class UserProtos {
      * <code>repeated .exec.user.SubQuerySupport subquery_support = 45;</code>
      * @return The count of subquerySupport.
      */
+    @java.lang.Override
     public int getSubquerySupportCount() {
       return subquerySupport_.size();
     }
@@ -40863,6 +41329,7 @@ public final class UserProtos {
      * @param index The index of the element to return.
      * @return The subquerySupport at the given index.
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.SubQuerySupport getSubquerySupport(int index) {
       return subquerySupport_converter_.convert(subquerySupport_.get(index));
     }
@@ -40928,6 +41395,7 @@ public final class UserProtos {
      * <code>optional string table_term = 47;</code>
      * @return Whether the tableTerm field is set.
      */
+    @java.lang.Override
     public boolean hasTableTerm() {
       return ((bitField1_ & 0x00000008) != 0);
     }
@@ -40939,6 +41407,7 @@ public final class UserProtos {
      * <code>optional string table_term = 47;</code>
      * @return The tableTerm.
      */
+    @java.lang.Override
     public java.lang.String getTableTerm() {
       java.lang.Object ref = tableTerm_;
       if (ref instanceof java.lang.String) {
@@ -40961,6 +41430,7 @@ public final class UserProtos {
      * <code>optional string table_term = 47;</code>
      * @return The bytes for tableTerm.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getTableTermBytes() {
       java.lang.Object ref = tableTerm_;
@@ -40985,6 +41455,7 @@ public final class UserProtos {
      * <code>optional bool transaction_supported = 48;</code>
      * @return Whether the transactionSupported field is set.
      */
+    @java.lang.Override
     public boolean hasTransactionSupported() {
       return ((bitField1_ & 0x00000010) != 0);
     }
@@ -40996,6 +41467,7 @@ public final class UserProtos {
      * <code>optional bool transaction_supported = 48;</code>
      * @return The transactionSupported.
      */
+    @java.lang.Override
     public boolean getTransactionSupported() {
       return transactionSupported_;
     }
@@ -41020,6 +41492,7 @@ public final class UserProtos {
      * <code>repeated .exec.user.UnionSupport union_support = 49;</code>
      * @return A list containing the unionSupport.
      */
+    @java.lang.Override
     public java.util.List<org.apache.drill.exec.proto.UserProtos.UnionSupport> getUnionSupportList() {
       return new com.google.protobuf.Internal.ListAdapter<
           java.lang.Integer, org.apache.drill.exec.proto.UserProtos.UnionSupport>(unionSupport_, unionSupport_converter_);
@@ -41032,6 +41505,7 @@ public final class UserProtos {
      * <code>repeated .exec.user.UnionSupport union_support = 49;</code>
      * @return The count of unionSupport.
      */
+    @java.lang.Override
     public int getUnionSupportCount() {
       return unionSupport_.size();
     }
@@ -41044,6 +41518,7 @@ public final class UserProtos {
      * @param index The index of the element to return.
      * @return The unionSupport at the given index.
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.UnionSupport getUnionSupport(int index) {
       return unionSupport_converter_.convert(unionSupport_.get(index));
     }
@@ -41058,6 +41533,7 @@ public final class UserProtos {
      * <code>optional string current_schema = 50;</code>
      * @return Whether the currentSchema field is set.
      */
+    @java.lang.Override
     public boolean hasCurrentSchema() {
       return ((bitField1_ & 0x00000020) != 0);
     }
@@ -41069,6 +41545,7 @@ public final class UserProtos {
      * <code>optional string current_schema = 50;</code>
      * @return The currentSchema.
      */
+    @java.lang.Override
     public java.lang.String getCurrentSchema() {
       java.lang.Object ref = currentSchema_;
       if (ref instanceof java.lang.String) {
@@ -41091,6 +41568,7 @@ public final class UserProtos {
      * <code>optional string current_schema = 50;</code>
      * @return The bytes for currentSchema.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getCurrentSchemaBytes() {
       java.lang.Object ref = currentSchema_;
@@ -42809,6 +43287,7 @@ public final class UserProtos {
        * <code>optional bool all_tables_selectable = 1;</code>
        * @return Whether the allTablesSelectable field is set.
        */
+      @java.lang.Override
       public boolean hasAllTablesSelectable() {
         return ((bitField0_ & 0x00000001) != 0);
       }
@@ -42820,6 +43299,7 @@ public final class UserProtos {
        * <code>optional bool all_tables_selectable = 1;</code>
        * @return The allTablesSelectable.
        */
+      @java.lang.Override
       public boolean getAllTablesSelectable() {
         return allTablesSelectable_;
       }
@@ -42862,6 +43342,7 @@ public final class UserProtos {
        * <code>optional bool blob_included_in_max_row_size = 2;</code>
        * @return Whether the blobIncludedInMaxRowSize field is set.
        */
+      @java.lang.Override
       public boolean hasBlobIncludedInMaxRowSize() {
         return ((bitField0_ & 0x00000002) != 0);
       }
@@ -42873,6 +43354,7 @@ public final class UserProtos {
        * <code>optional bool blob_included_in_max_row_size = 2;</code>
        * @return The blobIncludedInMaxRowSize.
        */
+      @java.lang.Override
       public boolean getBlobIncludedInMaxRowSize() {
         return blobIncludedInMaxRowSize_;
       }
@@ -42915,6 +43397,7 @@ public final class UserProtos {
        * <code>optional bool catalog_at_start = 3;</code>
        * @return Whether the catalogAtStart field is set.
        */
+      @java.lang.Override
       public boolean hasCatalogAtStart() {
         return ((bitField0_ & 0x00000004) != 0);
       }
@@ -42926,6 +43409,7 @@ public final class UserProtos {
        * <code>optional bool catalog_at_start = 3;</code>
        * @return The catalogAtStart.
        */
+      @java.lang.Override
       public boolean getCatalogAtStart() {
         return catalogAtStart_;
       }
@@ -43298,6 +43782,7 @@ public final class UserProtos {
        * <code>optional bool column_aliasing_supported = 7;</code>
        * @return Whether the columnAliasingSupported field is set.
        */
+      @java.lang.Override
       public boolean hasColumnAliasingSupported() {
         return ((bitField0_ & 0x00000040) != 0);
       }
@@ -43309,6 +43794,7 @@ public final class UserProtos {
        * <code>optional bool column_aliasing_supported = 7;</code>
        * @return The columnAliasingSupported.
        */
+      @java.lang.Override
       public boolean getColumnAliasingSupported() {
         return columnAliasingSupported_;
       }
@@ -43663,7 +44149,7 @@ public final class UserProtos {
        * <code>optional .exec.user.CorrelationNamesSupport correlation_names_support = 9;</code>
        * @return Whether the correlationNamesSupport field is set.
        */
-      public boolean hasCorrelationNamesSupport() {
+      @java.lang.Override public boolean hasCorrelationNamesSupport() {
         return ((bitField0_ & 0x00000100) != 0);
       }
       /**
@@ -43674,6 +44160,7 @@ public final class UserProtos {
        * <code>optional .exec.user.CorrelationNamesSupport correlation_names_support = 9;</code>
        * @return The correlationNamesSupport.
        */
+      @java.lang.Override
       public org.apache.drill.exec.proto.UserProtos.CorrelationNamesSupport getCorrelationNamesSupport() {
         @SuppressWarnings("deprecation")
         org.apache.drill.exec.proto.UserProtos.CorrelationNamesSupport result = org.apache.drill.exec.proto.UserProtos.CorrelationNamesSupport.valueOf(correlationNamesSupport_);
@@ -43980,7 +44467,7 @@ public final class UserProtos {
        * <code>optional .exec.user.GroupBySupport group_by_support = 12;</code>
        * @return Whether the groupBySupport field is set.
        */
-      public boolean hasGroupBySupport() {
+      @java.lang.Override public boolean hasGroupBySupport() {
         return ((bitField0_ & 0x00000800) != 0);
       }
       /**
@@ -43991,6 +44478,7 @@ public final class UserProtos {
        * <code>optional .exec.user.GroupBySupport group_by_support = 12;</code>
        * @return The groupBySupport.
        */
+      @java.lang.Override
       public org.apache.drill.exec.proto.UserProtos.GroupBySupport getGroupBySupport() {
         @SuppressWarnings("deprecation")
         org.apache.drill.exec.proto.UserProtos.GroupBySupport result = org.apache.drill.exec.proto.UserProtos.GroupBySupport.valueOf(groupBySupport_);
@@ -44038,7 +44526,7 @@ public final class UserProtos {
        * <code>optional .exec.user.IdentifierCasing identifier_casing = 13;</code>
        * @return Whether the identifierCasing field is set.
        */
-      public boolean hasIdentifierCasing() {
+      @java.lang.Override public boolean hasIdentifierCasing() {
         return ((bitField0_ & 0x00001000) != 0);
       }
       /**
@@ -44049,6 +44537,7 @@ public final class UserProtos {
        * <code>optional .exec.user.IdentifierCasing identifier_casing = 13;</code>
        * @return The identifierCasing.
        */
+      @java.lang.Override
       public org.apache.drill.exec.proto.UserProtos.IdentifierCasing getIdentifierCasing() {
         @SuppressWarnings("deprecation")
         org.apache.drill.exec.proto.UserProtos.IdentifierCasing result = org.apache.drill.exec.proto.UserProtos.IdentifierCasing.valueOf(identifierCasing_);
@@ -44204,6 +44693,7 @@ public final class UserProtos {
        * <code>optional bool like_escape_clause_supported = 15;</code>
        * @return Whether the likeEscapeClauseSupported field is set.
        */
+      @java.lang.Override
       public boolean hasLikeEscapeClauseSupported() {
         return ((bitField0_ & 0x00004000) != 0);
       }
@@ -44215,6 +44705,7 @@ public final class UserProtos {
        * <code>optional bool like_escape_clause_supported = 15;</code>
        * @return The likeEscapeClauseSupported.
        */
+      @java.lang.Override
       public boolean getLikeEscapeClauseSupported() {
         return likeEscapeClauseSupported_;
       }
@@ -44257,6 +44748,7 @@ public final class UserProtos {
        * <code>optional uint32 max_binary_literal_length = 16;</code>
        * @return Whether the maxBinaryLiteralLength field is set.
        */
+      @java.lang.Override
       public boolean hasMaxBinaryLiteralLength() {
         return ((bitField0_ & 0x00008000) != 0);
       }
@@ -44268,6 +44760,7 @@ public final class UserProtos {
        * <code>optional uint32 max_binary_literal_length = 16;</code>
        * @return The maxBinaryLiteralLength.
        */
+      @java.lang.Override
       public int getMaxBinaryLiteralLength() {
         return maxBinaryLiteralLength_;
       }
@@ -44310,6 +44803,7 @@ public final class UserProtos {
        * <code>optional uint32 max_catalog_name_length = 17;</code>
        * @return Whether the maxCatalogNameLength field is set.
        */
+      @java.lang.Override
       public boolean hasMaxCatalogNameLength() {
         return ((bitField0_ & 0x00010000) != 0);
       }
@@ -44321,6 +44815,7 @@ public final class UserProtos {
        * <code>optional uint32 max_catalog_name_length = 17;</code>
        * @return The maxCatalogNameLength.
        */
+      @java.lang.Override
       public int getMaxCatalogNameLength() {
         return maxCatalogNameLength_;
       }
@@ -44363,6 +44858,7 @@ public final class UserProtos {
        * <code>optional uint32 max_char_literal_length = 18;</code>
        * @return Whether the maxCharLiteralLength field is set.
        */
+      @java.lang.Override
       public boolean hasMaxCharLiteralLength() {
         return ((bitField0_ & 0x00020000) != 0);
       }
@@ -44374,6 +44870,7 @@ public final class UserProtos {
        * <code>optional uint32 max_char_literal_length = 18;</code>
        * @return The maxCharLiteralLength.
        */
+      @java.lang.Override
       public int getMaxCharLiteralLength() {
         return maxCharLiteralLength_;
       }
@@ -44416,6 +44913,7 @@ public final class UserProtos {
        * <code>optional uint32 max_column_name_length = 19;</code>
        * @return Whether the maxColumnNameLength field is set.
        */
+      @java.lang.Override
       public boolean hasMaxColumnNameLength() {
         return ((bitField0_ & 0x00040000) != 0);
       }
@@ -44427,6 +44925,7 @@ public final class UserProtos {
        * <code>optional uint32 max_column_name_length = 19;</code>
        * @return The maxColumnNameLength.
        */
+      @java.lang.Override
       public int getMaxColumnNameLength() {
         return maxColumnNameLength_;
       }
@@ -44469,6 +44968,7 @@ public final class UserProtos {
        * <code>optional uint32 max_columns_in_group_by = 20;</code>
        * @return Whether the maxColumnsInGroupBy field is set.
        */
+      @java.lang.Override
       public boolean hasMaxColumnsInGroupBy() {
         return ((bitField0_ & 0x00080000) != 0);
       }
@@ -44480,6 +44980,7 @@ public final class UserProtos {
        * <code>optional uint32 max_columns_in_group_by = 20;</code>
        * @return The maxColumnsInGroupBy.
        */
+      @java.lang.Override
       public int getMaxColumnsInGroupBy() {
         return maxColumnsInGroupBy_;
       }
@@ -44522,6 +45023,7 @@ public final class UserProtos {
        * <code>optional uint32 max_columns_in_order_by = 21;</code>
        * @return Whether the maxColumnsInOrderBy field is set.
        */
+      @java.lang.Override
       public boolean hasMaxColumnsInOrderBy() {
         return ((bitField0_ & 0x00100000) != 0);
       }
@@ -44533,6 +45035,7 @@ public final class UserProtos {
        * <code>optional uint32 max_columns_in_order_by = 21;</code>
        * @return The maxColumnsInOrderBy.
        */
+      @java.lang.Override
       public int getMaxColumnsInOrderBy() {
         return maxColumnsInOrderBy_;
       }
@@ -44575,6 +45078,7 @@ public final class UserProtos {
        * <code>optional uint32 max_columns_in_select = 22;</code>
        * @return Whether the maxColumnsInSelect field is set.
        */
+      @java.lang.Override
       public boolean hasMaxColumnsInSelect() {
         return ((bitField0_ & 0x00200000) != 0);
       }
@@ -44586,6 +45090,7 @@ public final class UserProtos {
        * <code>optional uint32 max_columns_in_select = 22;</code>
        * @return The maxColumnsInSelect.
        */
+      @java.lang.Override
       public int getMaxColumnsInSelect() {
         return maxColumnsInSelect_;
       }
@@ -44628,6 +45133,7 @@ public final class UserProtos {
        * <code>optional uint32 max_cursor_name_length = 23;</code>
        * @return Whether the maxCursorNameLength field is set.
        */
+      @java.lang.Override
       public boolean hasMaxCursorNameLength() {
         return ((bitField0_ & 0x00400000) != 0);
       }
@@ -44639,6 +45145,7 @@ public final class UserProtos {
        * <code>optional uint32 max_cursor_name_length = 23;</code>
        * @return The maxCursorNameLength.
        */
+      @java.lang.Override
       public int getMaxCursorNameLength() {
         return maxCursorNameLength_;
       }
@@ -44681,6 +45188,7 @@ public final class UserProtos {
        * <code>optional uint32 max_logical_lob_size = 24;</code>
        * @return Whether the maxLogicalLobSize field is set.
        */
+      @java.lang.Override
       public boolean hasMaxLogicalLobSize() {
         return ((bitField0_ & 0x00800000) != 0);
       }
@@ -44692,6 +45200,7 @@ public final class UserProtos {
        * <code>optional uint32 max_logical_lob_size = 24;</code>
        * @return The maxLogicalLobSize.
        */
+      @java.lang.Override
       public int getMaxLogicalLobSize() {
         return maxLogicalLobSize_;
       }
@@ -44734,6 +45243,7 @@ public final class UserProtos {
        * <code>optional uint32 max_row_size = 25;</code>
        * @return Whether the maxRowSize field is set.
        */
+      @java.lang.Override
       public boolean hasMaxRowSize() {
         return ((bitField0_ & 0x01000000) != 0);
       }
@@ -44745,6 +45255,7 @@ public final class UserProtos {
        * <code>optional uint32 max_row_size = 25;</code>
        * @return The maxRowSize.
        */
+      @java.lang.Override
       public int getMaxRowSize() {
         return maxRowSize_;
       }
@@ -44787,6 +45298,7 @@ public final class UserProtos {
        * <code>optional uint32 max_schema_name_length = 26;</code>
        * @return Whether the maxSchemaNameLength field is set.
        */
+      @java.lang.Override
       public boolean hasMaxSchemaNameLength() {
         return ((bitField0_ & 0x02000000) != 0);
       }
@@ -44798,6 +45310,7 @@ public final class UserProtos {
        * <code>optional uint32 max_schema_name_length = 26;</code>
        * @return The maxSchemaNameLength.
        */
+      @java.lang.Override
       public int getMaxSchemaNameLength() {
         return maxSchemaNameLength_;
       }
@@ -44840,6 +45353,7 @@ public final class UserProtos {
        * <code>optional uint32 max_statement_length = 27;</code>
        * @return Whether the maxStatementLength field is set.
        */
+      @java.lang.Override
       public boolean hasMaxStatementLength() {
         return ((bitField0_ & 0x04000000) != 0);
       }
@@ -44851,6 +45365,7 @@ public final class UserProtos {
        * <code>optional uint32 max_statement_length = 27;</code>
        * @return The maxStatementLength.
        */
+      @java.lang.Override
       public int getMaxStatementLength() {
         return maxStatementLength_;
       }
@@ -44893,6 +45408,7 @@ public final class UserProtos {
        * <code>optional uint32 max_statements = 28;</code>
        * @return Whether the maxStatements field is set.
        */
+      @java.lang.Override
       public boolean hasMaxStatements() {
         return ((bitField0_ & 0x08000000) != 0);
       }
@@ -44904,6 +45420,7 @@ public final class UserProtos {
        * <code>optional uint32 max_statements = 28;</code>
        * @return The maxStatements.
        */
+      @java.lang.Override
       public int getMaxStatements() {
         return maxStatements_;
       }
@@ -44946,6 +45463,7 @@ public final class UserProtos {
        * <code>optional uint32 max_table_name_length = 29;</code>
        * @return Whether the maxTableNameLength field is set.
        */
+      @java.lang.Override
       public boolean hasMaxTableNameLength() {
         return ((bitField0_ & 0x10000000) != 0);
       }
@@ -44957,6 +45475,7 @@ public final class UserProtos {
        * <code>optional uint32 max_table_name_length = 29;</code>
        * @return The maxTableNameLength.
        */
+      @java.lang.Override
       public int getMaxTableNameLength() {
         return maxTableNameLength_;
       }
@@ -44999,6 +45518,7 @@ public final class UserProtos {
        * <code>optional uint32 max_tables_in_select = 30;</code>
        * @return Whether the maxTablesInSelect field is set.
        */
+      @java.lang.Override
       public boolean hasMaxTablesInSelect() {
         return ((bitField0_ & 0x20000000) != 0);
       }
@@ -45010,6 +45530,7 @@ public final class UserProtos {
        * <code>optional uint32 max_tables_in_select = 30;</code>
        * @return The maxTablesInSelect.
        */
+      @java.lang.Override
       public int getMaxTablesInSelect() {
         return maxTablesInSelect_;
       }
@@ -45052,6 +45573,7 @@ public final class UserProtos {
        * <code>optional uint32 max_user_name_length = 31;</code>
        * @return Whether the maxUserNameLength field is set.
        */
+      @java.lang.Override
       public boolean hasMaxUserNameLength() {
         return ((bitField0_ & 0x40000000) != 0);
       }
@@ -45063,6 +45585,7 @@ public final class UserProtos {
        * <code>optional uint32 max_user_name_length = 31;</code>
        * @return The maxUserNameLength.
        */
+      @java.lang.Override
       public int getMaxUserNameLength() {
         return maxUserNameLength_;
       }
@@ -45105,7 +45628,7 @@ public final class UserProtos {
        * <code>optional .exec.user.NullCollation null_collation = 32;</code>
        * @return Whether the nullCollation field is set.
        */
-      public boolean hasNullCollation() {
+      @java.lang.Override public boolean hasNullCollation() {
         return ((bitField0_ & 0x80000000) != 0);
       }
       /**
@@ -45116,6 +45639,7 @@ public final class UserProtos {
        * <code>optional .exec.user.NullCollation null_collation = 32;</code>
        * @return The nullCollation.
        */
+      @java.lang.Override
       public org.apache.drill.exec.proto.UserProtos.NullCollation getNullCollation() {
         @SuppressWarnings("deprecation")
         org.apache.drill.exec.proto.UserProtos.NullCollation result = org.apache.drill.exec.proto.UserProtos.NullCollation.valueOf(nullCollation_);
@@ -45163,6 +45687,7 @@ public final class UserProtos {
        * <code>optional bool null_plus_non_null_equals_null = 33;</code>
        * @return Whether the nullPlusNonNullEqualsNull field is set.
        */
+      @java.lang.Override
       public boolean hasNullPlusNonNullEqualsNull() {
         return ((bitField1_ & 0x00000001) != 0);
       }
@@ -45174,6 +45699,7 @@ public final class UserProtos {
        * <code>optional bool null_plus_non_null_equals_null = 33;</code>
        * @return The nullPlusNonNullEqualsNull.
        */
+      @java.lang.Override
       public boolean getNullPlusNonNullEqualsNull() {
         return nullPlusNonNullEqualsNull_;
       }
@@ -45589,7 +46115,7 @@ public final class UserProtos {
        * <code>optional .exec.user.IdentifierCasing quoted_identifier_casing = 37;</code>
        * @return Whether the quotedIdentifierCasing field is set.
        */
-      public boolean hasQuotedIdentifierCasing() {
+      @java.lang.Override public boolean hasQuotedIdentifierCasing() {
         return ((bitField1_ & 0x00000010) != 0);
       }
       /**
@@ -45600,6 +46126,7 @@ public final class UserProtos {
        * <code>optional .exec.user.IdentifierCasing quoted_identifier_casing = 37;</code>
        * @return The quotedIdentifierCasing.
        */
+      @java.lang.Override
       public org.apache.drill.exec.proto.UserProtos.IdentifierCasing getQuotedIdentifierCasing() {
         @SuppressWarnings("deprecation")
         org.apache.drill.exec.proto.UserProtos.IdentifierCasing result = org.apache.drill.exec.proto.UserProtos.IdentifierCasing.valueOf(quotedIdentifierCasing_);
@@ -45647,6 +46174,7 @@ public final class UserProtos {
        * <code>optional bool read_only = 38;</code>
        * @return Whether the readOnly field is set.
        */
+      @java.lang.Override
       public boolean hasReadOnly() {
         return ((bitField1_ & 0x00000020) != 0);
       }
@@ -45658,6 +46186,7 @@ public final class UserProtos {
        * <code>optional bool read_only = 38;</code>
        * @return The readOnly.
        */
+      @java.lang.Override
       public boolean getReadOnly() {
         return readOnly_;
       }
@@ -45916,6 +46445,7 @@ public final class UserProtos {
        * <code>optional bool select_for_update_supported = 41;</code>
        * @return Whether the selectForUpdateSupported field is set.
        */
+      @java.lang.Override
       public boolean hasSelectForUpdateSupported() {
         return ((bitField1_ & 0x00000100) != 0);
       }
@@ -45927,6 +46457,7 @@ public final class UserProtos {
        * <code>optional bool select_for_update_supported = 41;</code>
        * @return The selectForUpdateSupported.
        */
+      @java.lang.Override
       public boolean getSelectForUpdateSupported() {
         return selectForUpdateSupported_;
       }
@@ -46734,6 +47265,7 @@ public final class UserProtos {
        * <code>optional bool transaction_supported = 48;</code>
        * @return Whether the transactionSupported field is set.
        */
+      @java.lang.Override
       public boolean hasTransactionSupported() {
         return ((bitField1_ & 0x00008000) != 0);
       }
@@ -46745,6 +47277,7 @@ public final class UserProtos {
        * <code>optional bool transaction_supported = 48;</code>
        * @return The transactionSupported.
        */
+      @java.lang.Override
       public boolean getTransactionSupported() {
         return transactionSupported_;
       }
@@ -47207,7 +47740,7 @@ public final class UserProtos {
    *
    * Protobuf type {@code exec.user.RunQuery}
    */
-  public  static final class RunQuery extends
+  public static final class RunQuery extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:exec.user.RunQuery)
       RunQueryOrBuilder {
@@ -47353,14 +47886,14 @@ public final class UserProtos {
      * <code>optional .exec.user.QueryResultsMode results_mode = 1;</code>
      * @return Whether the resultsMode field is set.
      */
-    public boolean hasResultsMode() {
+    @java.lang.Override public boolean hasResultsMode() {
       return ((bitField0_ & 0x00000001) != 0);
     }
     /**
      * <code>optional .exec.user.QueryResultsMode results_mode = 1;</code>
      * @return The resultsMode.
      */
-    public org.apache.drill.exec.proto.UserProtos.QueryResultsMode getResultsMode() {
+    @java.lang.Override public org.apache.drill.exec.proto.UserProtos.QueryResultsMode getResultsMode() {
       @SuppressWarnings("deprecation")
       org.apache.drill.exec.proto.UserProtos.QueryResultsMode result = org.apache.drill.exec.proto.UserProtos.QueryResultsMode.valueOf(resultsMode_);
       return result == null ? org.apache.drill.exec.proto.UserProtos.QueryResultsMode.STREAM_FULL : result;
@@ -47372,14 +47905,14 @@ public final class UserProtos {
      * <code>optional .exec.shared.QueryType type = 2;</code>
      * @return Whether the type field is set.
      */
-    public boolean hasType() {
+    @java.lang.Override public boolean hasType() {
       return ((bitField0_ & 0x00000002) != 0);
     }
     /**
      * <code>optional .exec.shared.QueryType type = 2;</code>
      * @return The type.
      */
-    public org.apache.drill.exec.proto.UserBitShared.QueryType getType() {
+    @java.lang.Override public org.apache.drill.exec.proto.UserBitShared.QueryType getType() {
       @SuppressWarnings("deprecation")
       org.apache.drill.exec.proto.UserBitShared.QueryType result = org.apache.drill.exec.proto.UserBitShared.QueryType.valueOf(type_);
       return result == null ? org.apache.drill.exec.proto.UserBitShared.QueryType.SQL : result;
@@ -47395,6 +47928,7 @@ public final class UserProtos {
      * <code>optional string plan = 3;</code>
      * @return Whether the plan field is set.
      */
+    @java.lang.Override
     public boolean hasPlan() {
       return ((bitField0_ & 0x00000004) != 0);
     }
@@ -47406,6 +47940,7 @@ public final class UserProtos {
      * <code>optional string plan = 3;</code>
      * @return The plan.
      */
+    @java.lang.Override
     public java.lang.String getPlan() {
       java.lang.Object ref = plan_;
       if (ref instanceof java.lang.String) {
@@ -47428,6 +47963,7 @@ public final class UserProtos {
      * <code>optional string plan = 3;</code>
      * @return The bytes for plan.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getPlanBytes() {
       java.lang.Object ref = plan_;
@@ -47451,6 +47987,7 @@ public final class UserProtos {
      *
      * <code>repeated .exec.bit.control.PlanFragment fragments = 4;</code>
      */
+    @java.lang.Override
     public java.util.List<org.apache.drill.exec.proto.BitControl.PlanFragment> getFragmentsList() {
       return fragments_;
     }
@@ -47461,6 +47998,7 @@ public final class UserProtos {
      *
      * <code>repeated .exec.bit.control.PlanFragment fragments = 4;</code>
      */
+    @java.lang.Override
     public java.util.List<? extends org.apache.drill.exec.proto.BitControl.PlanFragmentOrBuilder> 
         getFragmentsOrBuilderList() {
       return fragments_;
@@ -47472,6 +48010,7 @@ public final class UserProtos {
      *
      * <code>repeated .exec.bit.control.PlanFragment fragments = 4;</code>
      */
+    @java.lang.Override
     public int getFragmentsCount() {
       return fragments_.size();
     }
@@ -47482,6 +48021,7 @@ public final class UserProtos {
      *
      * <code>repeated .exec.bit.control.PlanFragment fragments = 4;</code>
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.BitControl.PlanFragment getFragments(int index) {
       return fragments_.get(index);
     }
@@ -47492,6 +48032,7 @@ public final class UserProtos {
      *
      * <code>repeated .exec.bit.control.PlanFragment fragments = 4;</code>
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.BitControl.PlanFragmentOrBuilder getFragmentsOrBuilder(
         int index) {
       return fragments_.get(index);
@@ -47508,6 +48049,7 @@ public final class UserProtos {
      * <code>optional .exec.user.PreparedStatementHandle prepared_statement_handle = 5;</code>
      * @return Whether the preparedStatementHandle field is set.
      */
+    @java.lang.Override
     public boolean hasPreparedStatementHandle() {
       return ((bitField0_ & 0x00000008) != 0);
     }
@@ -47520,6 +48062,7 @@ public final class UserProtos {
      * <code>optional .exec.user.PreparedStatementHandle prepared_statement_handle = 5;</code>
      * @return The preparedStatementHandle.
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.PreparedStatementHandle getPreparedStatementHandle() {
       return preparedStatementHandle_ == null ? org.apache.drill.exec.proto.UserProtos.PreparedStatementHandle.getDefaultInstance() : preparedStatementHandle_;
     }
@@ -47531,6 +48074,7 @@ public final class UserProtos {
      *
      * <code>optional .exec.user.PreparedStatementHandle prepared_statement_handle = 5;</code>
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.PreparedStatementHandleOrBuilder getPreparedStatementHandleOrBuilder() {
       return preparedStatementHandle_ == null ? org.apache.drill.exec.proto.UserProtos.PreparedStatementHandle.getDefaultInstance() : preparedStatementHandle_;
     }
@@ -47545,6 +48089,7 @@ public final class UserProtos {
      * <code>optional int32 autolimit_rowcount = 6;</code>
      * @return Whether the autolimitRowcount field is set.
      */
+    @java.lang.Override
     public boolean hasAutolimitRowcount() {
       return ((bitField0_ & 0x00000010) != 0);
     }
@@ -47556,6 +48101,7 @@ public final class UserProtos {
      * <code>optional int32 autolimit_rowcount = 6;</code>
      * @return The autolimitRowcount.
      */
+    @java.lang.Override
     public int getAutolimitRowcount() {
       return autolimitRowcount_;
     }
@@ -48046,13 +48592,14 @@ public final class UserProtos {
        * <code>optional .exec.user.QueryResultsMode results_mode = 1;</code>
        * @return Whether the resultsMode field is set.
        */
-      public boolean hasResultsMode() {
+      @java.lang.Override public boolean hasResultsMode() {
         return ((bitField0_ & 0x00000001) != 0);
       }
       /**
        * <code>optional .exec.user.QueryResultsMode results_mode = 1;</code>
        * @return The resultsMode.
        */
+      @java.lang.Override
       public org.apache.drill.exec.proto.UserProtos.QueryResultsMode getResultsMode() {
         @SuppressWarnings("deprecation")
         org.apache.drill.exec.proto.UserProtos.QueryResultsMode result = org.apache.drill.exec.proto.UserProtos.QueryResultsMode.valueOf(resultsMode_);
@@ -48088,13 +48635,14 @@ public final class UserProtos {
        * <code>optional .exec.shared.QueryType type = 2;</code>
        * @return Whether the type field is set.
        */
-      public boolean hasType() {
+      @java.lang.Override public boolean hasType() {
         return ((bitField0_ & 0x00000002) != 0);
       }
       /**
        * <code>optional .exec.shared.QueryType type = 2;</code>
        * @return The type.
        */
+      @java.lang.Override
       public org.apache.drill.exec.proto.UserBitShared.QueryType getType() {
         @SuppressWarnings("deprecation")
         org.apache.drill.exec.proto.UserBitShared.QueryType result = org.apache.drill.exec.proto.UserBitShared.QueryType.valueOf(type_);
@@ -48719,6 +49267,7 @@ public final class UserProtos {
        * <code>optional int32 autolimit_rowcount = 6;</code>
        * @return Whether the autolimitRowcount field is set.
        */
+      @java.lang.Override
       public boolean hasAutolimitRowcount() {
         return ((bitField0_ & 0x00000020) != 0);
       }
@@ -48730,6 +49279,7 @@ public final class UserProtos {
        * <code>optional int32 autolimit_rowcount = 6;</code>
        * @return The autolimitRowcount.
        */
+      @java.lang.Override
       public int getAutolimitRowcount() {
         return autolimitRowcount_;
       }
