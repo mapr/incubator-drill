@@ -44,6 +44,7 @@ import org.apache.hadoop.fs.Path;
 import org.junit.Assert;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestWatcher;
@@ -512,6 +513,7 @@ public class TestParquetFilterPushDown extends PlanTestBase {
     testParquetFilterPD(query3, 49, 2, false);
   }
 
+  @Ignore
   @Test
   public void testBooleanPredicate() throws Exception {
     // Table blnTbl was created by CTAS in drill 1.12.0 and consist of 4 files withe the next data:

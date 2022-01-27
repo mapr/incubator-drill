@@ -62,7 +62,7 @@
     <avatica.version>1.17.0</avatica.version>
     <janino.version>3.0.11</janino.version>
     <sqlline.version>1.9.0</sqlline.version>
-    <jackson.version>2.12.1</jackson.version>
+    <jackson.version>2.11.1</jackson.version>
     <zookeeper.version>3.5.7</zookeeper.version>
     <mapr.release.version>6.2.0-mapr-SNAPSHOT</mapr.release.version>
     <ojai.version>3.0-mapr-1808</ojai.version>
@@ -3028,7 +3028,7 @@
       <id>mapr</id>
       <properties>
         <alt-hadoop>mapr</alt-hadoop>
-        <hive.version>2.3.8-mapr-SNAPSHOT</hive.version>
+        <hive.version>2.3.9.0-eep-810-SNAPSHOT</hive.version>
         <hbase.version>1.4.13.0-mapr-SNAPSHOT</hbase.version>
         <hadoop.version>2.7.5.0-mapr-710-SNAPSHOT</hadoop.version>
         <zookeeper.version>3.5.6.0-mapr-2009</zookeeper.version>

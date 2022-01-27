@@ -43,6 +43,7 @@ import org.apache.drill.test.ClusterFixture;
 import org.apache.drill.test.ClusterTest;
 import org.junit.Assert;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -581,6 +582,7 @@ public class TestCastFunctions extends ClusterTest {
     }
   }
 
+  @Ignore
   @Test // DRILL-4970
   public void testCastNegativeDecimalToVarChar() throws Exception {
     try {

@@ -30,7 +30,7 @@
     </parent>
 
     <artifactId>drill-auth-mechanism-maprsasl</artifactId>
-    <name>contrib/auth-mechanism-maprsasl</name>
+    <name>Drill : Contrib : Auth mechanism : MapR-SASL</name>
 
     <dependencies>
 
