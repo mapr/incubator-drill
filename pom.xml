@@ -30,7 +30,7 @@
 
   <groupId>org.apache.drill</groupId>
   <artifactId>drill-root</artifactId>
-  <version>1.19.0-mapr-SNAPSHOT</version>
+  <version>1.19.0.0-eep-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>Drill : </name>
