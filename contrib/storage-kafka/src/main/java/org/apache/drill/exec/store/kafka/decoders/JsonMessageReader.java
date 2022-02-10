@@ -35,9 +35,11 @@ import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.ByteArrayDeserializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.drill.shaded.guava.com.google.common.base.Charsets;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Properties;
 import java.util.StringJoiner;
@@ -110,6 +112,10 @@ public class JsonMessageReader implements MessageReader {
       writeValue(rowWriter, MetaDataField.KAFKA_OFFSET, record.offset());
       writeValue(rowWriter, MetaDataField.KAFKA_TIMESTAMP, record.timestamp());
       writeValue(rowWriter, MetaDataField.KAFKA_MSG_KEY, record.key() != null ? record.key().toString() : null);
+      if (record.headers() != null) {
+        Arrays.stream(record.headers().toArray())
+                .forEach(x -> writeHeader(rowWriter, x.key(), new String(x.value(), Charsets.UTF_8)));
+      }
       rowWriter.save();
     }
   }
@@ -120,6 +126,14 @@ public class JsonMessageReader implements MessageReader {
       rowWriter.addColumn(colSchema);
     }
     rowWriter.column(metaDataField.getFieldName()).setObject(value);
+  }
+
+  private <T> void writeHeader(RowSetLoader rowWriter, String headerName, T value) {
+    if (rowWriter.tupleSchema().column(headerName) == null) {
+      ColumnMetadata colSchema = MetadataUtils.newScalar(headerName, TypeProtos.MinorType.VARCHAR, TypeProtos.DataMode.OPTIONAL);
+      rowWriter.addColumn(colSchema);
+    }
+    rowWriter.column(headerName).setObject(value);
   }
 
   @Override

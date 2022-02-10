@@ -23,6 +23,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Properties;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -76,6 +77,7 @@ public class KafkaGroupScan extends AbstractGroupScan {
   private List<SchemaPath> columns;
   private ListMultimap<Integer, PartitionScanWork> assignments;
   private List<EndpointAffinity> affinities;
+  private Properties propsForConsumer = new Properties();
 
   private Map<TopicPartition, PartitionScanWork> partitionWorkMap;
 
@@ -167,9 +169,19 @@ public class KafkaGroupScan extends AbstractGroupScan {
     List<PartitionInfo> topicPartitions;
     String topicName = kafkaScanSpec.getTopicName();
 
+    kafkaStoragePlugin.getConfig().getKafkaConsumerProps().entrySet().stream()
+      .forEach(entry -> {
+        if(entry.getKey().equals("streams.consumer.default.stream")
+                && topicName.charAt(0)=='/' && topicName.indexOf(':') != -1){
+          propsForConsumer.put(entry.getKey(),topicName.substring(0,topicName.indexOf(':')));
+        }else{
+          propsForConsumer.put(entry.getKey(),entry.getValue());
+        }
+    });
+
     KafkaConsumer<?, ?> kafkaConsumer = null;
     try {
-      kafkaConsumer = new KafkaConsumer<>(kafkaStoragePlugin.getConfig().getKafkaConsumerProps(),
+      kafkaConsumer = new KafkaConsumer<>(propsForConsumer,
         new ByteArrayDeserializer(), new ByteArrayDeserializer());
       if (!kafkaConsumer.listTopics().containsKey(topicName)) {
         throw UserException.dataReadError()
@@ -182,7 +194,7 @@ public class KafkaGroupScan extends AbstractGroupScan {
       // evaluates lazily, seeking to the first/last offset in all partitions only
       // when poll(long) or
       // position(TopicPartition) are called
-      kafkaConsumer.poll(0);
+      kafkaConsumer.poll(1000);
       Set<TopicPartition> assignments = kafkaConsumer.assignment();
       topicPartitions = kafkaConsumer.partitionsFor(topicName);
 
