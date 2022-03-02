@@ -207,9 +207,9 @@ public class StorageResources {
 
   @POST
   @Path("/storage/{name}/update_refresh_token")
+  @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public Response updateRefreshToken(@PathParam("name") String name,
-                                    @FormParam("refresh_token") String refreshToken) {
+  public Response updateRefreshToken(@PathParam("name") String name, OAuthTokenContainer tokens) {
     try {
       if (storage.getPlugin(name).getConfig() instanceof AbstractSecuredStoragePluginConfig) {
         DrillbitContext context = ((AbstractStoragePlugin) storage.getPlugin(name)).getContext();
@@ -217,7 +217,7 @@ public class StorageResources {
         PersistentTokenTable tokenTable = tokenProvider.getOauthTokenRegistry().getTokenTable(name);
 
         // Set the access token
-        tokenTable.setRefreshToken(refreshToken);
+        tokenTable.setRefreshToken(tokens.getRefreshToken());
 
         return Response.status(Status.OK)
           .entity("Refresh token have been updated.")
@@ -238,9 +238,9 @@ public class StorageResources {
 
   @POST
   @Path("/storage/{name}/update_access_token")
+  @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public Response updateAccessToken(@PathParam("name") String name,
-                                    @FormParam("access_token") String accessToken) {
+  public Response updateAccessToken(@PathParam("name") String name, OAuthTokenContainer tokens) {
     try {
       if (storage.getPlugin(name).getConfig() instanceof AbstractSecuredStoragePluginConfig) {
         DrillbitContext context = ((AbstractStoragePlugin) storage.getPlugin(name)).getContext();
@@ -248,7 +248,7 @@ public class StorageResources {
         PersistentTokenTable tokenTable = tokenProvider.getOauthTokenRegistry().getTokenTable(name);
 
         // Set the access token
-        tokenTable.setAccessToken(accessToken);
+        tokenTable.setAccessToken(tokens.getAccessToken());
 
         return Response.status(Status.OK)
           .entity("Access tokens have been updated.")
@@ -269,10 +269,10 @@ public class StorageResources {
 
   @POST
   @Path("/storage/{name}/update_oauth_tokens")
+  @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public Response updateOAuthTokens(@PathParam("name") String name,
-                                    @FormParam("access_token") String accessToken,
-                                    @FormParam("refresh_token") String refreshToken) {
+                                    OAuthTokenContainer tokenContainer) {
     try {
       if (storage.getPlugin(name).getConfig() instanceof AbstractSecuredStoragePluginConfig) {
         DrillbitContext context = ((AbstractStoragePlugin) storage.getPlugin(name)).getContext();
@@ -280,8 +280,8 @@ public class StorageResources {
         PersistentTokenTable tokenTable = tokenProvider.getOauthTokenRegistry().getTokenTable(name);
 
         // Set the access and refresh token
-        tokenTable.setAccessToken(accessToken);
-        tokenTable.setRefreshToken(refreshToken);
+        tokenTable.setAccessToken(tokenContainer.getAccessToken());
+        tokenTable.setRefreshToken(tokenContainer.getRefreshToken());
 
         return Response.status(Status.OK)
           .entity("Access tokens have been updated.")
