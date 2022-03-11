@@ -18,14 +18,15 @@
     limitations under the License.
 
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
     <groupId>org.apache</groupId>
     <artifactId>apache</artifactId>
     <version>24</version>
-    <relativePath />
+    <relativePath/>
   </parent>
 
   <groupId>org.apache.drill</groupId>
@@ -33,7 +34,7 @@
   <version>1.21.1.0-eep-SNAPSHOT</version>
   <packaging>pom</packaging>
 
-  <name>Drill : </name>
+  <name>Drill :</name>
   <description>Apache Drill is an open source, low latency SQL query engine for Hadoop and NoSQL.</description>
   <url>https://drill.apache.org/</url>
 
@@ -70,7 +71,7 @@
     <ojai.version>3.0-mapr-1808</ojai.version>
     <kerby.version>1.0.0</kerby.version>
     <findbugs.version>3.0.0</findbugs.version>
-    <netty.tcnative.classifier />
+    <netty.tcnative.classifier/>
     <commons.io.version>2.7</commons.io.version>
     <commons.collections.version>4.4</commons.collections.version>
     <hamcrest.version>2.2</hamcrest.version>
@@ -98,7 +99,7 @@
     <jersey.version>2.34</jersey.version>
     <javax.validation.api>2.0.1.Final</javax.validation.api>
     <asm.version>9.2</asm.version>
-    <excludedGroups />
+    <excludedGroups/>
     <memoryMb>2500</memoryMb>
     <directMemoryMb>4500</directMemoryMb>
     <rat.skip>true</rat.skip>
@@ -140,7 +141,8 @@
     <iceberg.version>0.12.1</iceberg.version>
     <univocity-parsers.version>2.8.3</univocity-parsers.version>
     <mongo.version>4.3.3</mongo.version>
-    <junit.args />
+    <swagger.version>2.1.12</swagger.version>
+    <junit.args/>
   </properties>
 
   <scm>
@@ -284,20 +286,20 @@
               <version>${hadoop.version}</version>
               <classifier>tests</classifier>
             </dependency>
- <!--  Remove dependency on tests - see DRILL-6637
-            <dependency>
-              <groupId>org.apache.drill.exec</groupId>
-              <artifactId>drill-java-exec</artifactId>
-              <version>${project.version}</version>
-              <classifier>tests</classifier>
-            </dependency>
-            <dependency>
-              <groupId>org.apache.drill</groupId>
-              <artifactId>drill-common</artifactId>
-              <version>${project.version}</version>
-              <classifier>tests</classifier>
-            </dependency>
- -->
+            <!--  Remove dependency on tests - see DRILL-6637
+                       <dependency>
+                         <groupId>org.apache.drill.exec</groupId>
+                         <artifactId>drill-java-exec</artifactId>
+                         <version>${project.version}</version>
+                         <classifier>tests</classifier>
+                       </dependency>
+                       <dependency>
+                         <groupId>org.apache.drill</groupId>
+                         <artifactId>drill-common</artifactId>
+                         <version>${project.version}</version>
+                         <classifier>tests</classifier>
+                       </dependency>
+            -->
             <dependency>
               <groupId>com.github.tomakehurst</groupId>
               <artifactId>wiremock-standalone</artifactId>
@@ -856,7 +858,7 @@
               <goals>
                 <goal>test</goal>
               </goals>
-          </execution>
+            </execution>
           </executions>
           <dependencies>
             <dependency>
@@ -931,7 +933,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore />
+                    <ignore/>
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -944,7 +946,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore />
+                    <ignore/>
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -957,7 +959,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore />
+                    <ignore/>
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -972,7 +974,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore />
+                    <ignore/>
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -985,7 +987,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore />
+                    <ignore/>
                   </action>
                 </pluginExecution>
               </pluginExecutions>
@@ -1234,24 +1236,24 @@
         <version>${jna.version}</version>
       </dependency>
       <dependency>
-          <groupId>org.slf4j</groupId>
-          <artifactId>slf4j-api</artifactId>
-          <version>${slf4j.version}</version>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>${slf4j.version}</version>
       </dependency>
       <dependency>
-          <groupId>org.slf4j</groupId>
-          <artifactId>jul-to-slf4j</artifactId>
-          <version>${slf4j.version}</version>
+        <groupId>org.slf4j</groupId>
+        <artifactId>jul-to-slf4j</artifactId>
+        <version>${slf4j.version}</version>
       </dependency>
       <dependency>
-          <groupId>org.slf4j</groupId>
-          <artifactId>jcl-over-slf4j</artifactId>
-          <version>${slf4j.version}</version>
+        <groupId>org.slf4j</groupId>
+        <artifactId>jcl-over-slf4j</artifactId>
+        <version>${slf4j.version}</version>
       </dependency>
       <dependency>
-          <groupId>org.slf4j</groupId>
-          <artifactId>log4j-over-slf4j</artifactId>
-          <version>${slf4j.version}</version>
+        <groupId>org.slf4j</groupId>
+        <artifactId>log4j-over-slf4j</artifactId>
+        <version>${slf4j.version}</version>
       </dependency>
       <dependency>
         <groupId>${calcite.groupId}</groupId>
@@ -1453,8 +1455,8 @@
             <artifactId>apache-curator</artifactId>
           </exclusion>
           <exclusion>
-              <groupId>io.netty</groupId>
-              <artifactId>netty</artifactId>
+            <groupId>io.netty</groupId>
+            <artifactId>netty</artifactId>
           </exclusion>
           <exclusion>
             <groupId>javax.servlet</groupId>
@@ -1619,8 +1621,8 @@
             <artifactId>hive-common</artifactId>
           </exclusion>
           <exclusion>
-              <groupId>io.netty</groupId>
-              <artifactId>netty</artifactId>
+            <groupId>io.netty</groupId>
+            <artifactId>netty</artifactId>
           </exclusion>
         </exclusions>
       </dependency>
@@ -2821,10 +2823,10 @@
             </exclusions>
           </dependency>
           <dependency>
-          	<groupId>org.apache.parquet</groupId>
-          	<artifactId>parquet-hadoop</artifactId>
-          	<version>${parquet.version}</version>
-          	<exclusions>
+            <groupId>org.apache.parquet</groupId>
+            <artifactId>parquet-hadoop</artifactId>
+            <version>${parquet.version}</version>
+            <exclusions>
               <exclusion>
                 <groupId>org.apache.hadoop</groupId>
                 <artifactId>hadoop-client</artifactId>
@@ -2833,11 +2835,11 @@
                 <groupId>org.apache.hadoop</groupId>
                 <artifactId>hadoop-common</artifactId>
               </exclusion>
-          		<exclusion>
-          			<groupId>org.xerial.snappy</groupId>
-          			<artifactId>snappy-java</artifactId>
-          		</exclusion>
-          	</exclusions>
+              <exclusion>
+                <groupId>org.xerial.snappy</groupId>
+                <artifactId>snappy-java</artifactId>
+              </exclusion>
+            </exclusions>
           </dependency>
           <dependency>
             <groupId>org.apache.hbase</groupId>
@@ -3467,15 +3469,15 @@
             <version>${xerces.version}</version>
           </dependency>
           <dependency>
-          	<groupId>org.apache.parquet</groupId>
-          	<artifactId>parquet-hadoop</artifactId>
-          	<version>${parquet.version}</version>
-          	<exclusions>
-          		<exclusion>
-          			<groupId>org.xerial.snappy</groupId>
-          			<artifactId>snappy-java</artifactId>
-          		</exclusion>
-          	</exclusions>
+            <groupId>org.apache.parquet</groupId>
+            <artifactId>parquet-hadoop</artifactId>
+            <version>${parquet.version}</version>
+            <exclusions>
+              <exclusion>
+                <groupId>org.xerial.snappy</groupId>
+                <artifactId>snappy-java</artifactId>
+              </exclusion>
+            </exclusions>
           </dependency>
           <!-- Test Dependencies -->
           <dependency>

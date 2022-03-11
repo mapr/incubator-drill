@@ -50,6 +50,8 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.SecurityContext;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import io.swagger.v3.oas.annotations.ExternalDocumentation;
+import io.swagger.v3.oas.annotations.Operation;
 import okhttp3.OkHttpClient;
 import okhttp3.OkHttpClient.Builder;
 import okhttp3.Request;
@@ -107,7 +109,7 @@ public class StorageResources {
   private static final String OAUTH_SUCCESS_PAGE = "/rest/storage/success.html";
 
   private static final Comparator<PluginConfigWrapper> PLUGIN_COMPARATOR =
-      Comparator.comparing(PluginConfigWrapper::getName);
+    Comparator.comparing(PluginConfigWrapper::getName);
 
   /**
    * Regex allows the following paths:<pre><code>
@@ -129,16 +131,17 @@ public class StorageResources {
       ? Response.ok()
         .entity(getConfigsFor(pluginGroup).toArray())
         .header(HttpHeaders.CONTENT_DISPOSITION, String.format("attachment;filename=\"%s_storage_plugins.%s\"",
-            pluginGroup, format))
+          pluginGroup, format))
         .build()
       : Response.status(Response.Status.NOT_ACCEPTABLE)
-          .entity(message("Unknown \"%s\" file format for Storage Plugin config", format))
-          .build();
+        .entity(message("Unknown \"%s\" file format for Storage Plugin config", format))
+        .build();
   }
 
   @GET
   @Path("/storage.json")
   @Produces(MediaType.APPLICATION_JSON)
+  @Operation(externalDocs = @ExternalDocumentation(description = "Apache Drill REST API documentation:", url = "https://drill.apache.org/docs/rest-api-introduction/"))
   public List<PluginConfigWrapper> getPluginsJSON() {
     return getConfigsFor(ALL_PLUGINS);
   }
@@ -148,8 +151,8 @@ public class StorageResources {
   @Produces(MediaType.TEXT_HTML)
   public Viewable getPlugins() {
     List<StoragePluginModel> model = getPluginsJSON().stream()
-        .map(plugin -> new StoragePluginModel(plugin, request))
-        .collect(Collectors.toList());
+      .map(plugin -> new StoragePluginModel(plugin, request))
+      .collect(Collectors.toList());
     // Creating an empty model with CSRF token, if there are no storage plugins
     if (model.isEmpty()) {
       model.add(new StoragePluginModel(null, request));
@@ -160,6 +163,7 @@ public class StorageResources {
   @GET
   @Path("/storage/{name}.json")
   @Produces(MediaType.APPLICATION_JSON)
+  @Operation(externalDocs = @ExternalDocumentation(description = "Apache Drill REST API documentation:", url = "https://drill.apache.org/docs/rest-api-introduction/"))
   public Response getPluginConfig(@PathParam("name") String name) {
     try {
       return Response.ok(new PluginConfigWrapper(name, storage.getStoredConfig(name)))
@@ -182,13 +186,14 @@ public class StorageResources {
       request
     );
     return ViewableWithPermissions.create(authEnabled.get(), "/rest/storage/update.ftl", sc,
-        model);
+      model);
   }
 
   @POST
   @Path("/storage/{name}/enable/{val}")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
+  @Operation(externalDocs = @ExternalDocumentation(description = "Apache Drill REST API documentation:", url = "https://drill.apache.org/docs/rest-api-introduction/"))
   public Response enablePlugin(@PathParam("name") String name, @PathParam("val") Boolean enable) {
     try {
       storage.setEnabled(name, enable);
@@ -198,7 +203,7 @@ public class StorageResources {
         .entity(message("No plugin exists with the given name: " + name))
         .build();
     } catch (PluginException e) {
-      logger.info("Error when enabling storage name: {} flag: {}",  name, enable);
+      logger.info("Error when enabling storage name: {} flag: {}", name, enable);
       return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
         .entity(message("Unable to enable/disable plugin: %s", e.getMessage()))
         .build();
@@ -363,6 +368,7 @@ public class StorageResources {
   @GET
   @Path("/storage/{name}/enable/{val}")
   @Produces(MediaType.APPLICATION_JSON)
+  @Operation(externalDocs = @ExternalDocumentation(description = "Apache Drill REST API documentation:", url = "https://drill.apache.org/docs/rest-api-introduction/"))
   @Deprecated
   public Response enablePluginViaGet(@PathParam("name") String name, @PathParam("val") Boolean enable) {
     return enablePlugin(name, enable);
@@ -393,6 +399,7 @@ public class StorageResources {
   @DELETE
   @Path("/storage/{name}.json")
   @Produces(MediaType.APPLICATION_JSON)
+  @Operation(externalDocs = @ExternalDocumentation(description = "Apache Drill REST API documentation:", url = "https://drill.apache.org/docs/rest-api-introduction/"))
   public Response deletePlugin(@PathParam("name") String name) {
     try {
       TokenRegistry tokenRegistry = workManager.getContext()
@@ -406,7 +413,7 @@ public class StorageResources {
       return Response.ok().entity(message("Success")).build();
     } catch (PluginException e) {
       return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-        .entity(message("Error while deleting plugin: %s",  e.getMessage()))
+        .entity(message("Error while deleting plugin: %s", e.getMessage()))
         .build();
     }
   }
@@ -415,6 +422,7 @@ public class StorageResources {
   @Path("/storage/{name}.json")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
+  @Operation(externalDocs = @ExternalDocumentation(description = "Apache Drill REST API documentation:", url = "https://drill.apache.org/docs/rest-api-introduction/"))
   public Response createOrUpdatePluginJSON(PluginConfigWrapper plugin) {
     try {
       plugin.createOrUpdateInStorage(storage);
@@ -503,10 +511,10 @@ public class StorageResources {
     }
     pluginGroup = StringUtils.isNotEmpty(pluginGroup) ? pluginGroup.replace("/", "") : ALL_PLUGINS;
     return StreamSupport.stream(
-        Spliterators.spliteratorUnknownSize(storage.storedConfigs(filter).entrySet().iterator(), Spliterator.ORDERED), false)
-            .map(entry -> new PluginConfigWrapper(entry.getKey(), entry.getValue()))
-            .sorted(PLUGIN_COMPARATOR)
-            .collect(Collectors.toList());
+      Spliterators.spliteratorUnknownSize(storage.storedConfigs(filter).entrySet().iterator(), Spliterator.ORDERED), false)
+        .map(entry -> new PluginConfigWrapper(entry.getKey(), entry.getValue()))
+        .sorted(PLUGIN_COMPARATOR)
+        .collect(Collectors.toList());
   }
 
   /**
