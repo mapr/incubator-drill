@@ -64,7 +64,7 @@
     <sqlline.version>1.9.0</sqlline.version>
     <jackson.version>2.11.1</jackson.version>
     <zookeeper.version>3.5.7</zookeeper.version>
-    <mapr.release.version>6.2.0-mapr-SNAPSHOT</mapr.release.version>
+    <mapr.release.version>6.2.0.0-mapr</mapr.release.version>
     <ojai.version>3.0-mapr-1808</ojai.version>
     <kerby.version>1.0.0</kerby.version>
     <findbugs.version>3.0.0</findbugs.version>
@@ -3029,8 +3029,8 @@
       <properties>
         <alt-hadoop>mapr</alt-hadoop>
         <hive.version>2.3.9.0-eep-810-SNAPSHOT</hive.version>
-        <hbase.version>1.4.13.0-mapr-SNAPSHOT</hbase.version>
-        <hadoop.version>2.7.5.0-mapr-710-SNAPSHOT</hadoop.version>
+        <hbase.version>1.4.13.0-eep-810-SNAPSHOT</hbase.version>
+        <hadoop.version>2.7.6.200-eep-810-SNAPSHOT</hadoop.version>
         <zookeeper.version>3.5.6.0-mapr-2009</zookeeper.version>
         <guava.version>28.2-jre</guava.version>
       </properties>
