@@ -96,7 +96,7 @@
         </exclusion>
         <exclusion>
           <groupId>org.bouncycastle</groupId>
-          <artifactId>bcpkix-jdk15on</artifactId>
+          <artifactId>bcpkix-fips</artifactId>
         </exclusion>
         <exclusion>
           <groupId>commons-codec</groupId>
