@@ -20,16 +20,12 @@ package org.apache.drill.yarn.client;
 import org.apache.drill.yarn.core.DoYUtil;
 import org.apache.drill.yarn.core.YarnClientException;
 import org.apache.drill.yarn.core.YarnRMClient;
-import org.apache.hadoop.net.NetUtils;
 import org.apache.hadoop.yarn.api.records.ApplicationReport;
 import org.apache.hadoop.yarn.api.records.FinalApplicationStatus;
 import org.apache.hadoop.yarn.api.records.YarnApplicationState;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-
-import java.net.MalformedURLException;
-import java.net.URL;
 
 public class StatusCommand extends ClientCommand {
   public static class Reporter {
@@ -64,13 +60,13 @@ public class StatusCommand extends ClientCommand {
       }
       System.out.println("Tracking URL: " + report.getTrackingUrl());
       if (isNew) {
-        System.out.println("Application Master URL: " + getAppUrl());
+        System.out.println("Application Master URL: " + getAmUrl());
       }
       showFinalStatus();
     }
 
-    public String getAppUrl() {
-      return StatusCommand.getAppUrl(report);
+    public String getAmUrl() {
+      return StatusCommand.getAmUrl(report);
     }
 
     public void showFinalStatus() {
@@ -117,19 +113,6 @@ public class StatusCommand extends ClientCommand {
     return DoYUtil.unwrapAmUrl(report.getOriginalTrackingUrl());
   }
 
-  public static String getAppUrl(ApplicationReport report) {
-    String defaultUrl = getAmUrl(report);
-    try {
-      URL amUrl = new URL(defaultUrl);
-      String hostName = NetUtils.getHostNameOfIP(amUrl.getHost());
-      String domainUrl = new URL(amUrl.getProtocol(),hostName, ":" + amUrl.getPort() + "/").toString();
-      defaultUrl = domainUrl;
-    } catch (MalformedURLException e) {
-      return defaultUrl;
-    }
-    return defaultUrl;
-  }
-
   @Override
   public void run() throws ClientException {
     YarnRMClient client = getClient();
@@ -150,7 +133,7 @@ public class StatusCommand extends ClientCommand {
 
   private void showAmStatus(ApplicationReport report) {
     try {
-      String baseUrl = getAppUrl(report); //"https://node3.cluster.com:8048";
+      String baseUrl = getAmUrl(report);
       if (DoYUtil.isBlank(baseUrl)) {
         return;
       }

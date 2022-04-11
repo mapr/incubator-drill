@@ -117,9 +117,9 @@ public class AMYarnFacadeImpl implements AMYarnFacade {
     LOG.debug("Host Name from YARN: " + thisHostName);
     if (trackingUrl != null) {
       // YARN seems to provide multiple names: MACHNAME.local/10.250.56.235
-      // The second seems to be the IP address, which is what we want.
+      // The second seems to be the Fully Qualified Domain Name, which is what we want.
       String names[] = thisHostName.split("/");
-      amHost = names[names.length - 1];
+      amHost = names[0];
       appMasterTrackingUrl = trackingUrl.replace("<host>", amHost);
       LOG.info("Tracking URL: " + appMasterTrackingUrl);
     }

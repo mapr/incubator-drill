@@ -65,7 +65,7 @@ public class ResizeCommand extends ClientCommand {
         System.out.println("Resizing cluster to " + quantity + " nodes.");
       }
     }
-    if (sendResize(reporter.getAppUrl(), cmd, quantity)) {
+    if (sendResize(reporter.getAmUrl(), cmd, quantity)) {
       System.out.println("Use web UI or status command to check progress.");
     }
   }
