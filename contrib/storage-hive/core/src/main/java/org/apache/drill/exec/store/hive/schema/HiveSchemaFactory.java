@@ -99,7 +99,7 @@ public class HiveSchemaFactory extends AbstractSchemaFactory {
    * connections, but just ignore any errors.
    */
   public void close() {
-    AutoCloseables.closeSilently(processUserMetastoreClient, metaStoreClientLoadingCache::invalidateAll);
+    AutoCloseables.closeSilently(processUserMetastoreClient::close, metaStoreClientLoadingCache::invalidateAll);
   }
 
   @Override
