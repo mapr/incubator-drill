@@ -36,6 +36,7 @@ public class HttpScanSpec implements DrillTableSelection {
   private final HttpStoragePluginConfig config;
   private final StoragePluginRegistry registry;
   private final PersistentTokenTable tokenTable;
+  private final String queryUserName;
 
   @JsonCreator
   public HttpScanSpec(@JsonProperty("pluginName") String pluginName,
@@ -43,6 +44,7 @@ public class HttpScanSpec implements DrillTableSelection {
                       @JsonProperty("tableName") String tableName,
                       @JsonProperty("config") HttpStoragePluginConfig config,
                       @JsonProperty("tokenTable") PersistentTokenTable tokenTable,
+                      @JsonProperty("queryUserName") String queryUserName,
                       @JacksonInject StoragePluginRegistry engineRegistry) {
     this.pluginName = pluginName;
     this.connectionName = connectionName;
@@ -50,6 +52,7 @@ public class HttpScanSpec implements DrillTableSelection {
     this.config = config;
     this.registry = engineRegistry;
     this.tokenTable = tokenTable;
+    this.queryUserName = queryUserName;
   }
 
   @JsonProperty("pluginName")
@@ -70,6 +73,11 @@ public class HttpScanSpec implements DrillTableSelection {
   @JsonProperty("config")
   public HttpStoragePluginConfig config() {
     return config;
+  }
+
+  @JsonProperty("queryUserName")
+  public String queryUserName() {
+    return queryUserName;
   }
 
   @JsonIgnore
@@ -99,6 +107,7 @@ public class HttpScanSpec implements DrillTableSelection {
       .field("database", connectionName)
       .field("tableName", tableName)
       .field("config", config)
+      .field("queryUserName", queryUserName)
       .toString();
   }
 

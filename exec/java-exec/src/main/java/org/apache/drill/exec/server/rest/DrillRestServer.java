@@ -90,6 +90,7 @@ public class DrillRestServer extends ResourceConfig {
     register(StatusResources.class);
     register(StorageResources.class);
     register(ProfileResources.class);
+    register(CredentialResources.class);
     register(QueryResources.class);
     register(MetricsResources.class);
     register(ThreadsResources.class);

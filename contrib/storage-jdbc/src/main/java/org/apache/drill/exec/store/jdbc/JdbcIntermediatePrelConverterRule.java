@@ -33,8 +33,9 @@ class JdbcIntermediatePrelConverterRule extends RelOptRule {
 
   private final RelTrait inTrait;
   private final RelTrait outTrait;
+  private final String username;
 
-  public JdbcIntermediatePrelConverterRule(JdbcConvention jdbcConvention) {
+  public JdbcIntermediatePrelConverterRule(JdbcConvention jdbcConvention, String username) {
     super(
         RelOptHelper.some(VertexDrel.class, DrillRel.DRILL_LOGICAL,
             RelOptHelper.any(RelNode.class, jdbcConvention)),
@@ -42,6 +43,7 @@ class JdbcIntermediatePrelConverterRule extends RelOptRule {
 
     this.inTrait = DrillRel.DRILL_LOGICAL;
     this.outTrait = Prel.DRILL_PHYSICAL;
+    this.username = username;
   }
 
   @Override
@@ -50,7 +52,7 @@ class JdbcIntermediatePrelConverterRule extends RelOptRule {
     RelNode jdbcIntermediatePrel = new JdbcIntermediatePrel(
         in.getCluster(),
         in.getTraitSet().replace(outTrait).plus(DrillDistributionTrait.SINGLETON),
-        in.getInput(0));
+        in.getInput(0), username);
     call.transformTo(jdbcIntermediatePrel);
   }
 
