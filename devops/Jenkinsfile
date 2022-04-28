@@ -79,7 +79,9 @@ pipeline {
                     sh "cat ${env.mvn_settings} > settings.xml"
                   }
                   withCredentials([usernamePassword(credentialsId: 'artifactory_user_pass', passwordVariable: 'pass', usernameVariable: 'user')]) {
-                    docker.image("docker.artifactory.lab/ubuntu18-java11-gcc7:protobuf316").inside (
+                    ubuntuImage = docker.image("docker.artifactory.lab/ubuntu18-java11-gcc7:protobuf316")
+                    sh "docker inspect ${ubuntuImage.imageName()}"
+                    ubuntuImage.inside (
                     "-e MAPR_MIRROR=${MAPR_MIRROR} \
                     -e MAPR_CENTRAL=${MAPR_CENTRAL} \
                     -e MAVEN_CENTRAL=${MAVEN_CENTRAL} \
@@ -145,7 +147,9 @@ pipeline {
                     sh "cat ${env.mvn_settings} > settings.xml"
                   }
                   withCredentials([usernamePassword(credentialsId: 'artifactory_user_pass', passwordVariable: 'pass', usernameVariable: 'user')]) {
-                    docker.image("docker.artifactory.lab/centos8-java11-gcc8:protobuf316").inside (
+                    centosImage = docker.image("docker.artifactory.lab/centos8-java11-gcc8:protobuf316")
+                    sh "docker inspect ${centosImage.imageName()}"
+                    centosImage.inside (
                     "-e MAPR_MIRROR=${MAPR_MIRROR} \
                     -e MAPR_CENTRAL=${MAPR_CENTRAL} \
                     -e MAVEN_CENTRAL=${MAVEN_CENTRAL} \
