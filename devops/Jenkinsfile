@@ -80,6 +80,7 @@ pipeline {
                   }
                   withCredentials([usernamePassword(credentialsId: 'artifactory_user_pass', passwordVariable: 'pass', usernameVariable: 'user')]) {
                     ubuntuImage = docker.image("docker.artifactory.lab/ubuntu18-java11-gcc7:protobuf316")
+                    ubuntuImage.pull()
                     sh "docker inspect ${ubuntuImage.imageName()}"
                     ubuntuImage.inside (
                     "-e MAPR_MIRROR=${MAPR_MIRROR} \
@@ -148,6 +149,7 @@ pipeline {
                   }
                   withCredentials([usernamePassword(credentialsId: 'artifactory_user_pass', passwordVariable: 'pass', usernameVariable: 'user')]) {
                     centosImage = docker.image("docker.artifactory.lab/centos8-java11-gcc8:protobuf316")
+                    centosImage.pull()
                     sh "docker inspect ${centosImage.imageName()}"
                     centosImage.inside (
                     "-e MAPR_MIRROR=${MAPR_MIRROR} \
