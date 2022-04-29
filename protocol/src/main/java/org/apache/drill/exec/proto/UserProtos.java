@@ -908,6 +908,7 @@ public final class UserProtos {
 
   /**
    * <pre>
+   *
    * Enum indicating the request status.
    * </pre>
    *
@@ -1036,6 +1037,7 @@ public final class UserProtos {
 
   /**
    * <pre>
+   *
    * How a column can be used in WHERE clause
    * </pre>
    *
@@ -1195,6 +1197,7 @@ public final class UserProtos {
 
   /**
    * <pre>
+   *
    * Whether a column can be updatable.
    * </pre>
    *
@@ -7037,6 +7040,7 @@ public final class UserProtos {
      * <code>optional bool enable_multiplex = 10 [default = false];</code>
      * @return Whether the enableMultiplex field is set.
      */
+    @java.lang.Override
     public boolean hasEnableMultiplex() {
       return ((bitField0_ & 0x00000200) != 0);
     }
@@ -7044,6 +7048,7 @@ public final class UserProtos {
      * <code>optional bool enable_multiplex = 10 [default = false];</code>
      * @return The enableMultiplex.
      */
+    @java.lang.Override
     public boolean getEnableMultiplex() {
       return enableMultiplex_;
     }
@@ -7058,6 +7063,7 @@ public final class UserProtos {
      * <code>optional int32 capabilities_version = 11 [default = 0];</code>
      * @return Whether the capabilitiesVersion field is set.
      */
+    @java.lang.Override
     public boolean hasCapabilitiesVersion() {
       return ((bitField0_ & 0x00000400) != 0);
     }
@@ -7069,6 +7075,7 @@ public final class UserProtos {
      * <code>optional int32 capabilities_version = 11 [default = 0];</code>
      * @return The capabilitiesVersion.
      */
+    @java.lang.Override
     public int getCapabilitiesVersion() {
       return capabilitiesVersion_;
     }
@@ -8284,6 +8291,7 @@ public final class UserProtos {
        * <code>optional bool enable_multiplex = 10 [default = false];</code>
        * @return Whether the enableMultiplex field is set.
        */
+      @java.lang.Override
       public boolean hasEnableMultiplex() {
         return ((bitField0_ & 0x00000200) != 0);
       }
@@ -8291,6 +8299,7 @@ public final class UserProtos {
        * <code>optional bool enable_multiplex = 10 [default = false];</code>
        * @return The enableMultiplex.
        */
+      @java.lang.Override
       public boolean getEnableMultiplex() {
         return enableMultiplex_;
       }
@@ -8325,6 +8334,7 @@ public final class UserProtos {
        * <code>optional int32 capabilities_version = 11 [default = 0];</code>
        * @return Whether the capabilitiesVersion field is set.
        */
+      @java.lang.Override
       public boolean hasCapabilitiesVersion() {
         return ((bitField0_ & 0x00000400) != 0);
       }
@@ -8336,6 +8346,7 @@ public final class UserProtos {
        * <code>optional int32 capabilities_version = 11 [default = 0];</code>
        * @return The capabilitiesVersion.
        */
+      @java.lang.Override
       public int getCapabilitiesVersion() {
         return capabilitiesVersion_;
       }
@@ -13203,6 +13214,7 @@ public final class UserProtos {
   }
   /**
    * <pre>
+   *
    * Simple filter which encapsulates the SQL LIKE ... ESCAPE function
    * </pre>
    *
@@ -13594,6 +13606,7 @@ public final class UserProtos {
     }
     /**
      * <pre>
+     *
      * Simple filter which encapsulates the SQL LIKE ... ESCAPE function
      * </pre>
      *
@@ -14052,6 +14065,7 @@ public final class UserProtos {
   }
   /**
    * <pre>
+   *
    * Request message for getting the metadata for catalogs satisfying the given optional filter.
    * </pre>
    *
@@ -14334,6 +14348,7 @@ public final class UserProtos {
     }
     /**
      * <pre>
+     *
      * Request message for getting the metadata for catalogs satisfying the given optional filter.
      * </pre>
      *
@@ -14728,6 +14743,7 @@ public final class UserProtos {
   }
   /**
    * <pre>
+   *
    * Message encapsulating metadata for a Catalog.
    * </pre>
    *
@@ -15165,6 +15181,7 @@ public final class UserProtos {
     }
     /**
      * <pre>
+     *
      * Message encapsulating metadata for a Catalog.
      * </pre>
      *
@@ -15705,6 +15722,7 @@ public final class UserProtos {
   }
   /**
    * <pre>
+   *
    * Response message for GetCatalogReq.
    * </pre>
    *
@@ -16100,6 +16118,7 @@ public final class UserProtos {
     }
     /**
      * <pre>
+     *
      * Response message for GetCatalogReq.
      * </pre>
      *
@@ -16807,6 +16826,7 @@ public final class UserProtos {
   }
   /**
    * <pre>
+   *
    * Request message for getting the metadata for schemas satisfying the given optional filters.
    * </pre>
    *
@@ -17144,6 +17164,7 @@ public final class UserProtos {
     }
     /**
      * <pre>
+     *
      * Request message for getting the metadata for schemas satisfying the given optional filters.
      * </pre>
      *
@@ -17722,6 +17743,7 @@ public final class UserProtos {
   }
   /**
    * <pre>
+   *
    * Message encapsulating metadata for a Schema.
    * </pre>
    *
@@ -18311,6 +18333,7 @@ public final class UserProtos {
     }
     /**
      * <pre>
+     *
      * Message encapsulating metadata for a Schema.
      * </pre>
      *
@@ -19065,6 +19088,7 @@ public final class UserProtos {
   }
   /**
    * <pre>
+   *
    * Response message for GetSchemasReq.
    * </pre>
    *
@@ -19460,6 +19484,7 @@ public final class UserProtos {
     }
     /**
      * <pre>
+     *
      * Response message for GetSchemasReq.
      * </pre>
      *
@@ -20207,6 +20232,7 @@ public final class UserProtos {
   }
   /**
    * <pre>
+   *
    * Request message for getting the metadata for tables satisfying the given optional filters.
    * </pre>
    *
@@ -20664,6 +20690,7 @@ public final class UserProtos {
     }
     /**
      * <pre>
+     *
      * Request message for getting the metadata for tables satisfying the given optional filters.
      * </pre>
      *
@@ -21489,6 +21516,7 @@ public final class UserProtos {
   }
   /**
    * <pre>
+   *
    * Message encapsulating metadata for a Table.
    * </pre>
    *
@@ -22008,6 +22036,7 @@ public final class UserProtos {
     }
     /**
      * <pre>
+     *
      * Message encapsulating metadata for a Table.
      * </pre>
      *
@@ -22667,6 +22696,7 @@ public final class UserProtos {
   }
   /**
    * <pre>
+   *
    * Response message for GetTablesReq.
    * </pre>
    *
@@ -23062,6 +23092,7 @@ public final class UserProtos {
     }
     /**
      * <pre>
+     *
      * Response message for GetTablesReq.
      * </pre>
      *
@@ -23799,6 +23830,7 @@ public final class UserProtos {
   }
   /**
    * <pre>
+   *
    * Request message for getting the metadata for columns satisfying the given optional filters.
    * </pre>
    *
@@ -24246,6 +24278,7 @@ public final class UserProtos {
     }
     /**
      * <pre>
+     *
      * Request message for getting the metadata for columns satisfying the given optional filters.
      * </pre>
      *
@@ -25232,6 +25265,7 @@ public final class UserProtos {
   }
   /**
    * <pre>
+   *
    * Message encapsulating metadata for a Column.
    * </pre>
    *
@@ -26350,6 +26384,7 @@ public final class UserProtos {
     }
     /**
      * <pre>
+     *
      * Message encapsulating metadata for a Column.
      * </pre>
      *
@@ -27750,6 +27785,7 @@ public final class UserProtos {
   }
   /**
    * <pre>
+   *
    * Response message for GetColumnsReq.
    * </pre>
    *
@@ -28145,6 +28181,7 @@ public final class UserProtos {
     }
     /**
      * <pre>
+     *
      * Response message for GetColumnsReq.
      * </pre>
      *
@@ -28839,6 +28876,7 @@ public final class UserProtos {
   }
   /**
    * <pre>
+   *
    * Request message to create a prepared statement. Currently prepared
    * statement only accepts a SQL query. Query parameter support is not
    * included in current implementation.
@@ -29138,6 +29176,7 @@ public final class UserProtos {
     }
     /**
      * <pre>
+     *
      * Request message to create a prepared statement. Currently prepared
      * statement only accepts a SQL query. Query parameter support is not
      * included in current implementation.
@@ -29440,6 +29479,7 @@ public final class UserProtos {
 
     /**
      * <pre>
+     *
      * Designated column's catalog name. Empty string if not applicable.
      * Defaults to "DRILL" as drill has only one catalog.
      * </pre>
@@ -29450,6 +29490,7 @@ public final class UserProtos {
     boolean hasCatalogName();
     /**
      * <pre>
+     *
      * Designated column's catalog name. Empty string if not applicable.
      * Defaults to "DRILL" as drill has only one catalog.
      * </pre>
@@ -29460,6 +29501,7 @@ public final class UserProtos {
     java.lang.String getCatalogName();
     /**
      * <pre>
+     *
      * Designated column's catalog name. Empty string if not applicable.
      * Defaults to "DRILL" as drill has only one catalog.
      * </pre>
@@ -29472,6 +29514,7 @@ public final class UserProtos {
 
     /**
      * <pre>
+     *
      * Designated column's schema name. Not set if not applicable. Initial implementation
      * defaults to no value as we use LIMIT 0 queries to get the schema and schema info
      * is lost. If we derive the schema from plan, we may get the right value.
@@ -29483,6 +29526,7 @@ public final class UserProtos {
     boolean hasSchemaName();
     /**
      * <pre>
+     *
      * Designated column's schema name. Not set if not applicable. Initial implementation
      * defaults to no value as we use LIMIT 0 queries to get the schema and schema info
      * is lost. If we derive the schema from plan, we may get the right value.
@@ -29494,6 +29538,7 @@ public final class UserProtos {
     java.lang.String getSchemaName();
     /**
      * <pre>
+     *
      * Designated column's schema name. Not set if not applicable. Initial implementation
      * defaults to no value as we use LIMIT 0 queries to get the schema and schema info
      * is lost. If we derive the schema from plan, we may get the right value.
@@ -29507,6 +29552,7 @@ public final class UserProtos {
 
     /**
      * <pre>
+     *
      * Designated column's table name. Not set if not applicable. Initial implementation
      * defaults to no value as we use LIMIT 0 queries to get the schema and table info
      * is lost. If we derive the schema from query plan, we may get the right value.
@@ -29518,6 +29564,7 @@ public final class UserProtos {
     boolean hasTableName();
     /**
      * <pre>
+     *
      * Designated column's table name. Not set if not applicable. Initial implementation
      * defaults to no value as we use LIMIT 0 queries to get the schema and table info
      * is lost. If we derive the schema from query plan, we may get the right value.
@@ -29529,6 +29576,7 @@ public final class UserProtos {
     java.lang.String getTableName();
     /**
      * <pre>
+     *
      * Designated column's table name. Not set if not applicable. Initial implementation
      * defaults to no value as we use LIMIT 0 queries to get the schema and table info
      * is lost. If we derive the schema from query plan, we may get the right value.
@@ -29571,6 +29619,7 @@ public final class UserProtos {
 
     /**
      * <pre>
+     *
      * Column label name for display or print purposes.
      * Ex. a column named "empName" might be labeled as "Employee Name".
      * </pre>
@@ -29581,6 +29630,7 @@ public final class UserProtos {
     boolean hasLabel();
     /**
      * <pre>
+     *
      * Column label name for display or print purposes.
      * Ex. a column named "empName" might be labeled as "Employee Name".
      * </pre>
@@ -29591,6 +29641,7 @@ public final class UserProtos {
     java.lang.String getLabel();
     /**
      * <pre>
+     *
      * Column label name for display or print purposes.
      * Ex. a column named "empName" might be labeled as "Employee Name".
      * </pre>
@@ -29603,6 +29654,7 @@ public final class UserProtos {
 
     /**
      * <pre>
+     *
      * Data type in string format. Value is SQL standard type.
      * </pre>
      *
@@ -29612,6 +29664,7 @@ public final class UserProtos {
     boolean hasDataType();
     /**
      * <pre>
+     *
      * Data type in string format. Value is SQL standard type.
      * </pre>
      *
@@ -29621,6 +29674,7 @@ public final class UserProtos {
     java.lang.String getDataType();
     /**
      * <pre>
+     *
      * Data type in string format. Value is SQL standard type.
      * </pre>
      *
@@ -29643,6 +29697,7 @@ public final class UserProtos {
 
     /**
      * <pre>
+     *
      * For numeric data, this is the maximum precision.
      * For character data, this is the length in characters.
      * For datetime datatypes, this is the length in characters of the String representation
@@ -29657,6 +29712,7 @@ public final class UserProtos {
     boolean hasPrecision();
     /**
      * <pre>
+     *
      * For numeric data, this is the maximum precision.
      * For character data, this is the length in characters.
      * For datetime datatypes, this is the length in characters of the String representation
@@ -29672,6 +29728,7 @@ public final class UserProtos {
 
     /**
      * <pre>
+     *
      * Column's number of digits to right of the decimal point.
      * 0 is returned for types where the scale is not applicable
      * </pre>
@@ -29682,6 +29739,7 @@ public final class UserProtos {
     boolean hasScale();
     /**
      * <pre>
+     *
      * Column's number of digits to right of the decimal point.
      * 0 is returned for types where the scale is not applicable
      * </pre>
@@ -29693,6 +29751,7 @@ public final class UserProtos {
 
     /**
      * <pre>
+     *
      * Indicates whether values in the designated column are signed numbers.
      * </pre>
      *
@@ -29702,6 +29761,7 @@ public final class UserProtos {
     boolean hasSigned();
     /**
      * <pre>
+     *
      * Indicates whether values in the designated column are signed numbers.
      * </pre>
      *
@@ -29712,6 +29772,7 @@ public final class UserProtos {
 
     /**
      * <pre>
+     *
      * Maximum number of characters required to display data from the column.
      * </pre>
      *
@@ -29721,6 +29782,7 @@ public final class UserProtos {
     boolean hasDisplaySize();
     /**
      * <pre>
+     *
      * Maximum number of characters required to display data from the column.
      * </pre>
      *
@@ -29731,6 +29793,7 @@ public final class UserProtos {
 
     /**
      * <pre>
+     *
      * Is the column an aliased column. Initial implementation defaults to
      * true as we derive schema from LIMIT 0 query and not the query plan.
      * </pre>
@@ -29741,6 +29804,7 @@ public final class UserProtos {
     boolean hasIsAliased();
     /**
      * <pre>
+     *
      * Is the column an aliased column. Initial implementation defaults to
      * true as we derive schema from LIMIT 0 query and not the query plan.
      * </pre>
@@ -29763,6 +29827,7 @@ public final class UserProtos {
 
     /**
      * <pre>
+     *
      * Defaults to READ_ONLY
      * </pre>
      *
@@ -29772,6 +29837,7 @@ public final class UserProtos {
     boolean hasUpdatability();
     /**
      * <pre>
+     *
      * Defaults to READ_ONLY
      * </pre>
      *
@@ -29782,6 +29848,7 @@ public final class UserProtos {
 
     /**
      * <pre>
+     *
      * whether the designated column is automatically incremented.
      * </pre>
      *
@@ -29791,6 +29858,7 @@ public final class UserProtos {
     boolean hasAutoIncrement();
     /**
      * <pre>
+     *
      * whether the designated column is automatically incremented.
      * </pre>
      *
@@ -29801,6 +29869,7 @@ public final class UserProtos {
 
     /**
      * <pre>
+     *
      * Whether column's case matters for collations and comparisons. Defaults to true.
      * </pre>
      *
@@ -29810,6 +29879,7 @@ public final class UserProtos {
     boolean hasCaseSensitivity();
     /**
      * <pre>
+     *
      * Whether column's case matters for collations and comparisons. Defaults to true.
      * </pre>
      *
@@ -29820,6 +29890,7 @@ public final class UserProtos {
 
     /**
      * <pre>
+     *
      * whether the column can be used in ORDER BY clause
      * </pre>
      *
@@ -29829,6 +29900,7 @@ public final class UserProtos {
     boolean hasSortable();
     /**
      * <pre>
+     *
      * whether the column can be used in ORDER BY clause
      * </pre>
      *
@@ -29839,6 +29911,7 @@ public final class UserProtos {
 
     /**
      * <pre>
+     *
      * A fully-qualified name of the Java class whose instances are created
      * if the method ResultSet.getObject is called to retrieve
      * a value from the column. Applicable only to JDBC clients.
@@ -29850,6 +29923,7 @@ public final class UserProtos {
     boolean hasClassName();
     /**
      * <pre>
+     *
      * A fully-qualified name of the Java class whose instances are created
      * if the method ResultSet.getObject is called to retrieve
      * a value from the column. Applicable only to JDBC clients.
@@ -29861,6 +29935,7 @@ public final class UserProtos {
     java.lang.String getClassName();
     /**
      * <pre>
+     *
      * A fully-qualified name of the Java class whose instances are created
      * if the method ResultSet.getObject is called to retrieve
      * a value from the column. Applicable only to JDBC clients.
@@ -29874,6 +29949,7 @@ public final class UserProtos {
 
     /**
      * <pre>
+     *
      * Is the data type a currency type? For JDBC only.
      * </pre>
      *
@@ -29883,6 +29959,7 @@ public final class UserProtos {
     boolean hasIsCurrency();
     /**
      * <pre>
+     *
      * Is the data type a currency type? For JDBC only.
      * </pre>
      *
@@ -29893,6 +29970,7 @@ public final class UserProtos {
   }
   /**
    * <pre>
+   *
    * Metadata of a column in query result set
    * </pre>
    *
@@ -30103,6 +30181,7 @@ public final class UserProtos {
     private volatile java.lang.Object catalogName_;
     /**
      * <pre>
+     *
      * Designated column's catalog name. Empty string if not applicable.
      * Defaults to "DRILL" as drill has only one catalog.
      * </pre>
@@ -30116,6 +30195,7 @@ public final class UserProtos {
     }
     /**
      * <pre>
+     *
      * Designated column's catalog name. Empty string if not applicable.
      * Defaults to "DRILL" as drill has only one catalog.
      * </pre>
@@ -30140,6 +30220,7 @@ public final class UserProtos {
     }
     /**
      * <pre>
+     *
      * Designated column's catalog name. Empty string if not applicable.
      * Defaults to "DRILL" as drill has only one catalog.
      * </pre>
@@ -30166,6 +30247,7 @@ public final class UserProtos {
     private volatile java.lang.Object schemaName_;
     /**
      * <pre>
+     *
      * Designated column's schema name. Not set if not applicable. Initial implementation
      * defaults to no value as we use LIMIT 0 queries to get the schema and schema info
      * is lost. If we derive the schema from plan, we may get the right value.
@@ -30180,6 +30262,7 @@ public final class UserProtos {
     }
     /**
      * <pre>
+     *
      * Designated column's schema name. Not set if not applicable. Initial implementation
      * defaults to no value as we use LIMIT 0 queries to get the schema and schema info
      * is lost. If we derive the schema from plan, we may get the right value.
@@ -30205,6 +30288,7 @@ public final class UserProtos {
     }
     /**
      * <pre>
+     *
      * Designated column's schema name. Not set if not applicable. Initial implementation
      * defaults to no value as we use LIMIT 0 queries to get the schema and schema info
      * is lost. If we derive the schema from plan, we may get the right value.
@@ -30232,6 +30316,7 @@ public final class UserProtos {
     private volatile java.lang.Object tableName_;
     /**
      * <pre>
+     *
      * Designated column's table name. Not set if not applicable. Initial implementation
      * defaults to no value as we use LIMIT 0 queries to get the schema and table info
      * is lost. If we derive the schema from query plan, we may get the right value.
@@ -30246,6 +30331,7 @@ public final class UserProtos {
     }
     /**
      * <pre>
+     *
      * Designated column's table name. Not set if not applicable. Initial implementation
      * defaults to no value as we use LIMIT 0 queries to get the schema and table info
      * is lost. If we derive the schema from query plan, we may get the right value.
@@ -30271,6 +30357,7 @@ public final class UserProtos {
     }
     /**
      * <pre>
+     *
      * Designated column's table name. Not set if not applicable. Initial implementation
      * defaults to no value as we use LIMIT 0 queries to get the schema and table info
      * is lost. If we derive the schema from query plan, we may get the right value.
@@ -30358,6 +30445,7 @@ public final class UserProtos {
     private volatile java.lang.Object label_;
     /**
      * <pre>
+     *
      * Column label name for display or print purposes.
      * Ex. a column named "empName" might be labeled as "Employee Name".
      * </pre>
@@ -30371,6 +30459,7 @@ public final class UserProtos {
     }
     /**
      * <pre>
+     *
      * Column label name for display or print purposes.
      * Ex. a column named "empName" might be labeled as "Employee Name".
      * </pre>
@@ -30395,6 +30484,7 @@ public final class UserProtos {
     }
     /**
      * <pre>
+     *
      * Column label name for display or print purposes.
      * Ex. a column named "empName" might be labeled as "Employee Name".
      * </pre>
@@ -30421,6 +30511,7 @@ public final class UserProtos {
     private volatile java.lang.Object dataType_;
     /**
      * <pre>
+     *
      * Data type in string format. Value is SQL standard type.
      * </pre>
      *
@@ -30433,6 +30524,7 @@ public final class UserProtos {
     }
     /**
      * <pre>
+     *
      * Data type in string format. Value is SQL standard type.
      * </pre>
      *
@@ -30456,6 +30548,7 @@ public final class UserProtos {
     }
     /**
      * <pre>
+     *
      * Data type in string format. Value is SQL standard type.
      * </pre>
      *
@@ -30500,6 +30593,7 @@ public final class UserProtos {
     private int precision_;
     /**
      * <pre>
+     *
      * For numeric data, this is the maximum precision.
      * For character data, this is the length in characters.
      * For datetime datatypes, this is the length in characters of the String representation
@@ -30517,6 +30611,7 @@ public final class UserProtos {
     }
     /**
      * <pre>
+     *
      * For numeric data, this is the maximum precision.
      * For character data, this is the length in characters.
      * For datetime datatypes, this is the length in characters of the String representation
@@ -30537,6 +30632,7 @@ public final class UserProtos {
     private int scale_;
     /**
      * <pre>
+     *
      * Column's number of digits to right of the decimal point.
      * 0 is returned for types where the scale is not applicable
      * </pre>
@@ -30550,6 +30646,7 @@ public final class UserProtos {
     }
     /**
      * <pre>
+     *
      * Column's number of digits to right of the decimal point.
      * 0 is returned for types where the scale is not applicable
      * </pre>
@@ -30566,6 +30663,7 @@ public final class UserProtos {
     private boolean signed_;
     /**
      * <pre>
+     *
      * Indicates whether values in the designated column are signed numbers.
      * </pre>
      *
@@ -30578,6 +30676,7 @@ public final class UserProtos {
     }
     /**
      * <pre>
+     *
      * Indicates whether values in the designated column are signed numbers.
      * </pre>
      *
@@ -30593,6 +30692,7 @@ public final class UserProtos {
     private int displaySize_;
     /**
      * <pre>
+     *
      * Maximum number of characters required to display data from the column.
      * </pre>
      *
@@ -30605,6 +30705,7 @@ public final class UserProtos {
     }
     /**
      * <pre>
+     *
      * Maximum number of characters required to display data from the column.
      * </pre>
      *
@@ -30620,6 +30721,7 @@ public final class UserProtos {
     private boolean isAliased_;
     /**
      * <pre>
+     *
      * Is the column an aliased column. Initial implementation defaults to
      * true as we derive schema from LIMIT 0 query and not the query plan.
      * </pre>
@@ -30633,6 +30735,7 @@ public final class UserProtos {
     }
     /**
      * <pre>
+     *
      * Is the column an aliased column. Initial implementation defaults to
      * true as we derive schema from LIMIT 0 query and not the query plan.
      * </pre>
@@ -30668,6 +30771,7 @@ public final class UserProtos {
     private int updatability_;
     /**
      * <pre>
+     *
      * Defaults to READ_ONLY
      * </pre>
      *
@@ -30679,6 +30783,7 @@ public final class UserProtos {
     }
     /**
      * <pre>
+     *
      * Defaults to READ_ONLY
      * </pre>
      *
@@ -30695,6 +30800,7 @@ public final class UserProtos {
     private boolean autoIncrement_;
     /**
      * <pre>
+     *
      * whether the designated column is automatically incremented.
      * </pre>
      *
@@ -30707,6 +30813,7 @@ public final class UserProtos {
     }
     /**
      * <pre>
+     *
      * whether the designated column is automatically incremented.
      * </pre>
      *
@@ -30722,6 +30829,7 @@ public final class UserProtos {
     private boolean caseSensitivity_;
     /**
      * <pre>
+     *
      * Whether column's case matters for collations and comparisons. Defaults to true.
      * </pre>
      *
@@ -30734,6 +30842,7 @@ public final class UserProtos {
     }
     /**
      * <pre>
+     *
      * Whether column's case matters for collations and comparisons. Defaults to true.
      * </pre>
      *
@@ -30749,6 +30858,7 @@ public final class UserProtos {
     private boolean sortable_;
     /**
      * <pre>
+     *
      * whether the column can be used in ORDER BY clause
      * </pre>
      *
@@ -30761,6 +30871,7 @@ public final class UserProtos {
     }
     /**
      * <pre>
+     *
      * whether the column can be used in ORDER BY clause
      * </pre>
      *
@@ -30776,6 +30887,7 @@ public final class UserProtos {
     private volatile java.lang.Object className_;
     /**
      * <pre>
+     *
      * A fully-qualified name of the Java class whose instances are created
      * if the method ResultSet.getObject is called to retrieve
      * a value from the column. Applicable only to JDBC clients.
@@ -30790,6 +30902,7 @@ public final class UserProtos {
     }
     /**
      * <pre>
+     *
      * A fully-qualified name of the Java class whose instances are created
      * if the method ResultSet.getObject is called to retrieve
      * a value from the column. Applicable only to JDBC clients.
@@ -30815,6 +30928,7 @@ public final class UserProtos {
     }
     /**
      * <pre>
+     *
      * A fully-qualified name of the Java class whose instances are created
      * if the method ResultSet.getObject is called to retrieve
      * a value from the column. Applicable only to JDBC clients.
@@ -30842,6 +30956,7 @@ public final class UserProtos {
     private boolean isCurrency_;
     /**
      * <pre>
+     *
      * Is the data type a currency type? For JDBC only.
      * </pre>
      *
@@ -30854,6 +30969,7 @@ public final class UserProtos {
     }
     /**
      * <pre>
+     *
      * Is the data type a currency type? For JDBC only.
      * </pre>
      *
@@ -31313,6 +31429,7 @@ public final class UserProtos {
     }
     /**
      * <pre>
+     *
      * Metadata of a column in query result set
      * </pre>
      *
@@ -31648,6 +31765,7 @@ public final class UserProtos {
       private java.lang.Object catalogName_ = "";
       /**
        * <pre>
+       *
        * Designated column's catalog name. Empty string if not applicable.
        * Defaults to "DRILL" as drill has only one catalog.
        * </pre>
@@ -31660,6 +31778,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Designated column's catalog name. Empty string if not applicable.
        * Defaults to "DRILL" as drill has only one catalog.
        * </pre>
@@ -31683,6 +31802,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Designated column's catalog name. Empty string if not applicable.
        * Defaults to "DRILL" as drill has only one catalog.
        * </pre>
@@ -31705,6 +31825,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Designated column's catalog name. Empty string if not applicable.
        * Defaults to "DRILL" as drill has only one catalog.
        * </pre>
@@ -31725,6 +31846,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Designated column's catalog name. Empty string if not applicable.
        * Defaults to "DRILL" as drill has only one catalog.
        * </pre>
@@ -31740,6 +31862,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Designated column's catalog name. Empty string if not applicable.
        * Defaults to "DRILL" as drill has only one catalog.
        * </pre>
@@ -31762,6 +31885,7 @@ public final class UserProtos {
       private java.lang.Object schemaName_ = "";
       /**
        * <pre>
+       *
        * Designated column's schema name. Not set if not applicable. Initial implementation
        * defaults to no value as we use LIMIT 0 queries to get the schema and schema info
        * is lost. If we derive the schema from plan, we may get the right value.
@@ -31775,6 +31899,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Designated column's schema name. Not set if not applicable. Initial implementation
        * defaults to no value as we use LIMIT 0 queries to get the schema and schema info
        * is lost. If we derive the schema from plan, we may get the right value.
@@ -31799,6 +31924,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Designated column's schema name. Not set if not applicable. Initial implementation
        * defaults to no value as we use LIMIT 0 queries to get the schema and schema info
        * is lost. If we derive the schema from plan, we may get the right value.
@@ -31822,6 +31948,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Designated column's schema name. Not set if not applicable. Initial implementation
        * defaults to no value as we use LIMIT 0 queries to get the schema and schema info
        * is lost. If we derive the schema from plan, we may get the right value.
@@ -31843,6 +31970,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Designated column's schema name. Not set if not applicable. Initial implementation
        * defaults to no value as we use LIMIT 0 queries to get the schema and schema info
        * is lost. If we derive the schema from plan, we may get the right value.
@@ -31859,6 +31987,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Designated column's schema name. Not set if not applicable. Initial implementation
        * defaults to no value as we use LIMIT 0 queries to get the schema and schema info
        * is lost. If we derive the schema from plan, we may get the right value.
@@ -31882,6 +32011,7 @@ public final class UserProtos {
       private java.lang.Object tableName_ = "";
       /**
        * <pre>
+       *
        * Designated column's table name. Not set if not applicable. Initial implementation
        * defaults to no value as we use LIMIT 0 queries to get the schema and table info
        * is lost. If we derive the schema from query plan, we may get the right value.
@@ -31895,6 +32025,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Designated column's table name. Not set if not applicable. Initial implementation
        * defaults to no value as we use LIMIT 0 queries to get the schema and table info
        * is lost. If we derive the schema from query plan, we may get the right value.
@@ -31919,6 +32050,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Designated column's table name. Not set if not applicable. Initial implementation
        * defaults to no value as we use LIMIT 0 queries to get the schema and table info
        * is lost. If we derive the schema from query plan, we may get the right value.
@@ -31942,6 +32074,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Designated column's table name. Not set if not applicable. Initial implementation
        * defaults to no value as we use LIMIT 0 queries to get the schema and table info
        * is lost. If we derive the schema from query plan, we may get the right value.
@@ -31963,6 +32096,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Designated column's table name. Not set if not applicable. Initial implementation
        * defaults to no value as we use LIMIT 0 queries to get the schema and table info
        * is lost. If we derive the schema from query plan, we may get the right value.
@@ -31979,6 +32113,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Designated column's table name. Not set if not applicable. Initial implementation
        * defaults to no value as we use LIMIT 0 queries to get the schema and table info
        * is lost. If we derive the schema from query plan, we may get the right value.
@@ -32110,6 +32245,7 @@ public final class UserProtos {
       private java.lang.Object label_ = "";
       /**
        * <pre>
+       *
        * Column label name for display or print purposes.
        * Ex. a column named "empName" might be labeled as "Employee Name".
        * </pre>
@@ -32122,6 +32258,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Column label name for display or print purposes.
        * Ex. a column named "empName" might be labeled as "Employee Name".
        * </pre>
@@ -32145,6 +32282,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Column label name for display or print purposes.
        * Ex. a column named "empName" might be labeled as "Employee Name".
        * </pre>
@@ -32167,6 +32305,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Column label name for display or print purposes.
        * Ex. a column named "empName" might be labeled as "Employee Name".
        * </pre>
@@ -32187,6 +32326,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Column label name for display or print purposes.
        * Ex. a column named "empName" might be labeled as "Employee Name".
        * </pre>
@@ -32202,6 +32342,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Column label name for display or print purposes.
        * Ex. a column named "empName" might be labeled as "Employee Name".
        * </pre>
@@ -32224,6 +32365,7 @@ public final class UserProtos {
       private java.lang.Object dataType_ = "";
       /**
        * <pre>
+       *
        * Data type in string format. Value is SQL standard type.
        * </pre>
        *
@@ -32235,6 +32377,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Data type in string format. Value is SQL standard type.
        * </pre>
        *
@@ -32257,6 +32400,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Data type in string format. Value is SQL standard type.
        * </pre>
        *
@@ -32278,6 +32422,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Data type in string format. Value is SQL standard type.
        * </pre>
        *
@@ -32297,6 +32442,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Data type in string format. Value is SQL standard type.
        * </pre>
        *
@@ -32311,6 +32457,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Data type in string format. Value is SQL standard type.
        * </pre>
        *
@@ -32371,6 +32518,7 @@ public final class UserProtos {
       private int precision_ ;
       /**
        * <pre>
+       *
        * For numeric data, this is the maximum precision.
        * For character data, this is the length in characters.
        * For datetime datatypes, this is the length in characters of the String representation
@@ -32388,6 +32536,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * For numeric data, this is the maximum precision.
        * For character data, this is the length in characters.
        * For datetime datatypes, this is the length in characters of the String representation
@@ -32405,6 +32554,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * For numeric data, this is the maximum precision.
        * For character data, this is the length in characters.
        * For datetime datatypes, this is the length in characters of the String representation
@@ -32425,6 +32575,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * For numeric data, this is the maximum precision.
        * For character data, this is the length in characters.
        * For datetime datatypes, this is the length in characters of the String representation
@@ -32446,6 +32597,7 @@ public final class UserProtos {
       private int scale_ ;
       /**
        * <pre>
+       *
        * Column's number of digits to right of the decimal point.
        * 0 is returned for types where the scale is not applicable
        * </pre>
@@ -32459,6 +32611,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Column's number of digits to right of the decimal point.
        * 0 is returned for types where the scale is not applicable
        * </pre>
@@ -32472,6 +32625,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Column's number of digits to right of the decimal point.
        * 0 is returned for types where the scale is not applicable
        * </pre>
@@ -32488,6 +32642,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Column's number of digits to right of the decimal point.
        * 0 is returned for types where the scale is not applicable
        * </pre>
@@ -32505,6 +32660,7 @@ public final class UserProtos {
       private boolean signed_ ;
       /**
        * <pre>
+       *
        * Indicates whether values in the designated column are signed numbers.
        * </pre>
        *
@@ -32517,6 +32673,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Indicates whether values in the designated column are signed numbers.
        * </pre>
        *
@@ -32529,6 +32686,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Indicates whether values in the designated column are signed numbers.
        * </pre>
        *
@@ -32544,6 +32702,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Indicates whether values in the designated column are signed numbers.
        * </pre>
        *
@@ -32560,6 +32719,7 @@ public final class UserProtos {
       private int displaySize_ ;
       /**
        * <pre>
+       *
        * Maximum number of characters required to display data from the column.
        * </pre>
        *
@@ -32572,6 +32732,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Maximum number of characters required to display data from the column.
        * </pre>
        *
@@ -32584,6 +32745,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Maximum number of characters required to display data from the column.
        * </pre>
        *
@@ -32599,6 +32761,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Maximum number of characters required to display data from the column.
        * </pre>
        *
@@ -32615,6 +32778,7 @@ public final class UserProtos {
       private boolean isAliased_ ;
       /**
        * <pre>
+       *
        * Is the column an aliased column. Initial implementation defaults to
        * true as we derive schema from LIMIT 0 query and not the query plan.
        * </pre>
@@ -32628,6 +32792,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Is the column an aliased column. Initial implementation defaults to
        * true as we derive schema from LIMIT 0 query and not the query plan.
        * </pre>
@@ -32641,6 +32806,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Is the column an aliased column. Initial implementation defaults to
        * true as we derive schema from LIMIT 0 query and not the query plan.
        * </pre>
@@ -32657,6 +32823,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Is the column an aliased column. Initial implementation defaults to
        * true as we derive schema from LIMIT 0 query and not the query plan.
        * </pre>
@@ -32717,6 +32884,7 @@ public final class UserProtos {
       private int updatability_ = 0;
       /**
        * <pre>
+       *
        * Defaults to READ_ONLY
        * </pre>
        *
@@ -32728,6 +32896,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Defaults to READ_ONLY
        * </pre>
        *
@@ -32742,6 +32911,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Defaults to READ_ONLY
        * </pre>
        *
@@ -32760,6 +32930,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Defaults to READ_ONLY
        * </pre>
        *
@@ -32776,6 +32947,7 @@ public final class UserProtos {
       private boolean autoIncrement_ ;
       /**
        * <pre>
+       *
        * whether the designated column is automatically incremented.
        * </pre>
        *
@@ -32788,6 +32960,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * whether the designated column is automatically incremented.
        * </pre>
        *
@@ -32800,6 +32973,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * whether the designated column is automatically incremented.
        * </pre>
        *
@@ -32815,6 +32989,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * whether the designated column is automatically incremented.
        * </pre>
        *
@@ -32831,6 +33006,7 @@ public final class UserProtos {
       private boolean caseSensitivity_ ;
       /**
        * <pre>
+       *
        * Whether column's case matters for collations and comparisons. Defaults to true.
        * </pre>
        *
@@ -32843,6 +33019,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Whether column's case matters for collations and comparisons. Defaults to true.
        * </pre>
        *
@@ -32855,6 +33032,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Whether column's case matters for collations and comparisons. Defaults to true.
        * </pre>
        *
@@ -32870,6 +33048,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Whether column's case matters for collations and comparisons. Defaults to true.
        * </pre>
        *
@@ -32886,6 +33065,7 @@ public final class UserProtos {
       private boolean sortable_ ;
       /**
        * <pre>
+       *
        * whether the column can be used in ORDER BY clause
        * </pre>
        *
@@ -32898,6 +33078,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * whether the column can be used in ORDER BY clause
        * </pre>
        *
@@ -32910,6 +33091,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * whether the column can be used in ORDER BY clause
        * </pre>
        *
@@ -32925,6 +33107,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * whether the column can be used in ORDER BY clause
        * </pre>
        *
@@ -32941,6 +33124,7 @@ public final class UserProtos {
       private java.lang.Object className_ = "";
       /**
        * <pre>
+       *
        * A fully-qualified name of the Java class whose instances are created
        * if the method ResultSet.getObject is called to retrieve
        * a value from the column. Applicable only to JDBC clients.
@@ -32954,6 +33138,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * A fully-qualified name of the Java class whose instances are created
        * if the method ResultSet.getObject is called to retrieve
        * a value from the column. Applicable only to JDBC clients.
@@ -32978,6 +33163,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * A fully-qualified name of the Java class whose instances are created
        * if the method ResultSet.getObject is called to retrieve
        * a value from the column. Applicable only to JDBC clients.
@@ -33001,6 +33187,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * A fully-qualified name of the Java class whose instances are created
        * if the method ResultSet.getObject is called to retrieve
        * a value from the column. Applicable only to JDBC clients.
@@ -33022,6 +33209,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * A fully-qualified name of the Java class whose instances are created
        * if the method ResultSet.getObject is called to retrieve
        * a value from the column. Applicable only to JDBC clients.
@@ -33038,6 +33226,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * A fully-qualified name of the Java class whose instances are created
        * if the method ResultSet.getObject is called to retrieve
        * a value from the column. Applicable only to JDBC clients.
@@ -33061,6 +33250,7 @@ public final class UserProtos {
       private boolean isCurrency_ ;
       /**
        * <pre>
+       *
        * Is the data type a currency type? For JDBC only.
        * </pre>
        *
@@ -33073,6 +33263,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Is the data type a currency type? For JDBC only.
        * </pre>
        *
@@ -33085,6 +33276,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Is the data type a currency type? For JDBC only.
        * </pre>
        *
@@ -33100,6 +33292,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Is the data type a currency type? For JDBC only.
        * </pre>
        *
@@ -33182,6 +33375,7 @@ public final class UserProtos {
   }
   /**
    * <pre>
+   *
    * Server state of prepared statement. Contents are opaque to
    * client. Client just need to submit this object in RunQuery to
    * the prepared statement.
@@ -33452,6 +33646,7 @@ public final class UserProtos {
     }
     /**
      * <pre>
+     *
      * Server state of prepared statement. Contents are opaque to
      * client. Client just need to submit this object in RunQuery to
      * the prepared statement.
@@ -33734,6 +33929,7 @@ public final class UserProtos {
 
     /**
      * <pre>
+     *
      * In order to execute the prepared statement,
      * clients need to submit this object in RunQuery message.
      * </pre>
@@ -33744,6 +33940,7 @@ public final class UserProtos {
     boolean hasServerHandle();
     /**
      * <pre>
+     *
      * In order to execute the prepared statement,
      * clients need to submit this object in RunQuery message.
      * </pre>
@@ -33754,6 +33951,7 @@ public final class UserProtos {
     org.apache.drill.exec.proto.UserProtos.PreparedStatementHandle getServerHandle();
     /**
      * <pre>
+     *
      * In order to execute the prepared statement,
      * clients need to submit this object in RunQuery message.
      * </pre>
@@ -33764,6 +33962,7 @@ public final class UserProtos {
   }
   /**
    * <pre>
+   *
    * Prepared statement. It contains the query metadata and handle to prepared
    * statement state on server.
    * </pre>
@@ -33916,6 +34115,7 @@ public final class UserProtos {
     private org.apache.drill.exec.proto.UserProtos.PreparedStatementHandle serverHandle_;
     /**
      * <pre>
+     *
      * In order to execute the prepared statement,
      * clients need to submit this object in RunQuery message.
      * </pre>
@@ -33929,6 +34129,7 @@ public final class UserProtos {
     }
     /**
      * <pre>
+     *
      * In order to execute the prepared statement,
      * clients need to submit this object in RunQuery message.
      * </pre>
@@ -33942,6 +34143,7 @@ public final class UserProtos {
     }
     /**
      * <pre>
+     *
      * In order to execute the prepared statement,
      * clients need to submit this object in RunQuery message.
      * </pre>
@@ -34128,6 +34330,7 @@ public final class UserProtos {
     }
     /**
      * <pre>
+     *
      * Prepared statement. It contains the query metadata and handle to prepared
      * statement state on server.
      * </pre>
@@ -34581,6 +34784,7 @@ public final class UserProtos {
           org.apache.drill.exec.proto.UserProtos.PreparedStatementHandle, org.apache.drill.exec.proto.UserProtos.PreparedStatementHandle.Builder, org.apache.drill.exec.proto.UserProtos.PreparedStatementHandleOrBuilder> serverHandleBuilder_;
       /**
        * <pre>
+       *
        * In order to execute the prepared statement,
        * clients need to submit this object in RunQuery message.
        * </pre>
@@ -34593,6 +34797,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * In order to execute the prepared statement,
        * clients need to submit this object in RunQuery message.
        * </pre>
@@ -34609,6 +34814,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * In order to execute the prepared statement,
        * clients need to submit this object in RunQuery message.
        * </pre>
@@ -34630,6 +34836,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * In order to execute the prepared statement,
        * clients need to submit this object in RunQuery message.
        * </pre>
@@ -34649,6 +34856,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * In order to execute the prepared statement,
        * clients need to submit this object in RunQuery message.
        * </pre>
@@ -34674,6 +34882,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * In order to execute the prepared statement,
        * clients need to submit this object in RunQuery message.
        * </pre>
@@ -34692,6 +34901,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * In order to execute the prepared statement,
        * clients need to submit this object in RunQuery message.
        * </pre>
@@ -34705,6 +34915,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * In order to execute the prepared statement,
        * clients need to submit this object in RunQuery message.
        * </pre>
@@ -34721,6 +34932,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * In order to execute the prepared statement,
        * clients need to submit this object in RunQuery message.
        * </pre>
@@ -34840,6 +35052,7 @@ public final class UserProtos {
   }
   /**
    * <pre>
+   *
    * Response message for CreatePreparedStatementReq.
    * </pre>
    *
@@ -35224,6 +35437,7 @@ public final class UserProtos {
     }
     /**
      * <pre>
+     *
      * Response message for CreatePreparedStatementReq.
      * </pre>
      *
@@ -35757,6 +35971,7 @@ public final class UserProtos {
   }
   /**
    * <pre>
+   *
    * Request message for getting server metadata
    * </pre>
    *
@@ -35982,6 +36197,7 @@ public final class UserProtos {
     }
     /**
      * <pre>
+     *
      * Request message for getting server metadata
      * </pre>
      *
@@ -36882,6 +37098,7 @@ public final class UserProtos {
   }
   /**
    * <pre>
+   *
    * Response message for GetServerMetaReq
    * </pre>
    *
@@ -37272,6 +37489,7 @@ public final class UserProtos {
     }
     /**
      * <pre>
+     *
      * Response message for GetServerMetaReq
      * </pre>
      *
@@ -47613,6 +47831,7 @@ public final class UserProtos {
 
     /**
      * <pre>
+     *
      * Input for query type LOGICAL, PHYSICAL or SQL.
      * </pre>
      *
@@ -47622,6 +47841,7 @@ public final class UserProtos {
     boolean hasPlan();
     /**
      * <pre>
+     *
      * Input for query type LOGICAL, PHYSICAL or SQL.
      * </pre>
      *
@@ -47631,6 +47851,7 @@ public final class UserProtos {
     java.lang.String getPlan();
     /**
      * <pre>
+     *
      * Input for query type LOGICAL, PHYSICAL or SQL.
      * </pre>
      *
@@ -47642,6 +47863,7 @@ public final class UserProtos {
 
     /**
      * <pre>
+     *
      * Input for query type EXECUTION. Input is a set of executable fragments.
      * </pre>
      *
@@ -47651,6 +47873,7 @@ public final class UserProtos {
         getFragmentsList();
     /**
      * <pre>
+     *
      * Input for query type EXECUTION. Input is a set of executable fragments.
      * </pre>
      *
@@ -47659,6 +47882,7 @@ public final class UserProtos {
     org.apache.drill.exec.proto.BitControl.PlanFragment getFragments(int index);
     /**
      * <pre>
+     *
      * Input for query type EXECUTION. Input is a set of executable fragments.
      * </pre>
      *
@@ -47667,6 +47891,7 @@ public final class UserProtos {
     int getFragmentsCount();
     /**
      * <pre>
+     *
      * Input for query type EXECUTION. Input is a set of executable fragments.
      * </pre>
      *
@@ -47676,6 +47901,7 @@ public final class UserProtos {
         getFragmentsOrBuilderList();
     /**
      * <pre>
+     *
      * Input for query type EXECUTION. Input is a set of executable fragments.
      * </pre>
      *
@@ -47686,6 +47912,7 @@ public final class UserProtos {
 
     /**
      * <pre>
+     *
      * Input for query type PREPARED_STATEMENT. Input is a prepared statement handle
      * to state on server side which is returned in response to CreatePreparedStatementReq.
      * </pre>
@@ -47696,6 +47923,7 @@ public final class UserProtos {
     boolean hasPreparedStatementHandle();
     /**
      * <pre>
+     *
      * Input for query type PREPARED_STATEMENT. Input is a prepared statement handle
      * to state on server side which is returned in response to CreatePreparedStatementReq.
      * </pre>
@@ -47706,6 +47934,7 @@ public final class UserProtos {
     org.apache.drill.exec.proto.UserProtos.PreparedStatementHandle getPreparedStatementHandle();
     /**
      * <pre>
+     *
      * Input for query type PREPARED_STATEMENT. Input is a prepared statement handle
      * to state on server side which is returned in response to CreatePreparedStatementReq.
      * </pre>
@@ -47716,6 +47945,7 @@ public final class UserProtos {
 
     /**
      * <pre>
+     *
      * Input for indicating the limit on a query's result set.
      * </pre>
      *
@@ -47725,6 +47955,7 @@ public final class UserProtos {
     boolean hasAutolimitRowcount();
     /**
      * <pre>
+     *
      * Input for indicating the limit on a query's result set.
      * </pre>
      *
@@ -47735,6 +47966,7 @@ public final class UserProtos {
   }
   /**
    * <pre>
+   *
    * Request message for running a query.
    * </pre>
    *
@@ -47922,6 +48154,7 @@ public final class UserProtos {
     private volatile java.lang.Object plan_;
     /**
      * <pre>
+     *
      * Input for query type LOGICAL, PHYSICAL or SQL.
      * </pre>
      *
@@ -47934,6 +48167,7 @@ public final class UserProtos {
     }
     /**
      * <pre>
+     *
      * Input for query type LOGICAL, PHYSICAL or SQL.
      * </pre>
      *
@@ -47957,6 +48191,7 @@ public final class UserProtos {
     }
     /**
      * <pre>
+     *
      * Input for query type LOGICAL, PHYSICAL or SQL.
      * </pre>
      *
@@ -47982,6 +48217,7 @@ public final class UserProtos {
     private java.util.List<org.apache.drill.exec.proto.BitControl.PlanFragment> fragments_;
     /**
      * <pre>
+     *
      * Input for query type EXECUTION. Input is a set of executable fragments.
      * </pre>
      *
@@ -47993,6 +48229,7 @@ public final class UserProtos {
     }
     /**
      * <pre>
+     *
      * Input for query type EXECUTION. Input is a set of executable fragments.
      * </pre>
      *
@@ -48005,6 +48242,7 @@ public final class UserProtos {
     }
     /**
      * <pre>
+     *
      * Input for query type EXECUTION. Input is a set of executable fragments.
      * </pre>
      *
@@ -48016,6 +48254,7 @@ public final class UserProtos {
     }
     /**
      * <pre>
+     *
      * Input for query type EXECUTION. Input is a set of executable fragments.
      * </pre>
      *
@@ -48027,6 +48266,7 @@ public final class UserProtos {
     }
     /**
      * <pre>
+     *
      * Input for query type EXECUTION. Input is a set of executable fragments.
      * </pre>
      *
@@ -48042,6 +48282,7 @@ public final class UserProtos {
     private org.apache.drill.exec.proto.UserProtos.PreparedStatementHandle preparedStatementHandle_;
     /**
      * <pre>
+     *
      * Input for query type PREPARED_STATEMENT. Input is a prepared statement handle
      * to state on server side which is returned in response to CreatePreparedStatementReq.
      * </pre>
@@ -48055,6 +48296,7 @@ public final class UserProtos {
     }
     /**
      * <pre>
+     *
      * Input for query type PREPARED_STATEMENT. Input is a prepared statement handle
      * to state on server side which is returned in response to CreatePreparedStatementReq.
      * </pre>
@@ -48068,6 +48310,7 @@ public final class UserProtos {
     }
     /**
      * <pre>
+     *
      * Input for query type PREPARED_STATEMENT. Input is a prepared statement handle
      * to state on server side which is returned in response to CreatePreparedStatementReq.
      * </pre>
@@ -48083,6 +48326,7 @@ public final class UserProtos {
     private int autolimitRowcount_;
     /**
      * <pre>
+     *
      * Input for indicating the limit on a query's result set.
      * </pre>
      *
@@ -48095,6 +48339,7 @@ public final class UserProtos {
     }
     /**
      * <pre>
+     *
      * Input for indicating the limit on a query's result set.
      * </pre>
      *
@@ -48342,6 +48587,7 @@ public final class UserProtos {
     }
     /**
      * <pre>
+     *
      * Request message for running a query.
      * </pre>
      *
@@ -48676,6 +48922,7 @@ public final class UserProtos {
       private java.lang.Object plan_ = "";
       /**
        * <pre>
+       *
        * Input for query type LOGICAL, PHYSICAL or SQL.
        * </pre>
        *
@@ -48687,6 +48934,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Input for query type LOGICAL, PHYSICAL or SQL.
        * </pre>
        *
@@ -48709,6 +48957,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Input for query type LOGICAL, PHYSICAL or SQL.
        * </pre>
        *
@@ -48730,6 +48979,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Input for query type LOGICAL, PHYSICAL or SQL.
        * </pre>
        *
@@ -48749,6 +48999,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Input for query type LOGICAL, PHYSICAL or SQL.
        * </pre>
        *
@@ -48763,6 +49014,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Input for query type LOGICAL, PHYSICAL or SQL.
        * </pre>
        *
@@ -48795,6 +49047,7 @@ public final class UserProtos {
 
       /**
        * <pre>
+       *
        * Input for query type EXECUTION. Input is a set of executable fragments.
        * </pre>
        *
@@ -48809,6 +49062,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Input for query type EXECUTION. Input is a set of executable fragments.
        * </pre>
        *
@@ -48823,6 +49077,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Input for query type EXECUTION. Input is a set of executable fragments.
        * </pre>
        *
@@ -48837,6 +49092,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Input for query type EXECUTION. Input is a set of executable fragments.
        * </pre>
        *
@@ -48858,6 +49114,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Input for query type EXECUTION. Input is a set of executable fragments.
        * </pre>
        *
@@ -48876,6 +49133,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Input for query type EXECUTION. Input is a set of executable fragments.
        * </pre>
        *
@@ -48896,6 +49154,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Input for query type EXECUTION. Input is a set of executable fragments.
        * </pre>
        *
@@ -48917,6 +49176,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Input for query type EXECUTION. Input is a set of executable fragments.
        * </pre>
        *
@@ -48935,6 +49195,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Input for query type EXECUTION. Input is a set of executable fragments.
        * </pre>
        *
@@ -48953,6 +49214,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Input for query type EXECUTION. Input is a set of executable fragments.
        * </pre>
        *
@@ -48972,6 +49234,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Input for query type EXECUTION. Input is a set of executable fragments.
        * </pre>
        *
@@ -48989,6 +49252,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Input for query type EXECUTION. Input is a set of executable fragments.
        * </pre>
        *
@@ -49006,6 +49270,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Input for query type EXECUTION. Input is a set of executable fragments.
        * </pre>
        *
@@ -49017,6 +49282,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Input for query type EXECUTION. Input is a set of executable fragments.
        * </pre>
        *
@@ -49031,6 +49297,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Input for query type EXECUTION. Input is a set of executable fragments.
        * </pre>
        *
@@ -49046,6 +49313,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Input for query type EXECUTION. Input is a set of executable fragments.
        * </pre>
        *
@@ -49057,6 +49325,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Input for query type EXECUTION. Input is a set of executable fragments.
        * </pre>
        *
@@ -49069,6 +49338,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Input for query type EXECUTION. Input is a set of executable fragments.
        * </pre>
        *
@@ -49098,6 +49368,7 @@ public final class UserProtos {
           org.apache.drill.exec.proto.UserProtos.PreparedStatementHandle, org.apache.drill.exec.proto.UserProtos.PreparedStatementHandle.Builder, org.apache.drill.exec.proto.UserProtos.PreparedStatementHandleOrBuilder> preparedStatementHandleBuilder_;
       /**
        * <pre>
+       *
        * Input for query type PREPARED_STATEMENT. Input is a prepared statement handle
        * to state on server side which is returned in response to CreatePreparedStatementReq.
        * </pre>
@@ -49110,6 +49381,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Input for query type PREPARED_STATEMENT. Input is a prepared statement handle
        * to state on server side which is returned in response to CreatePreparedStatementReq.
        * </pre>
@@ -49126,6 +49398,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Input for query type PREPARED_STATEMENT. Input is a prepared statement handle
        * to state on server side which is returned in response to CreatePreparedStatementReq.
        * </pre>
@@ -49147,6 +49420,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Input for query type PREPARED_STATEMENT. Input is a prepared statement handle
        * to state on server side which is returned in response to CreatePreparedStatementReq.
        * </pre>
@@ -49166,6 +49440,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Input for query type PREPARED_STATEMENT. Input is a prepared statement handle
        * to state on server side which is returned in response to CreatePreparedStatementReq.
        * </pre>
@@ -49191,6 +49466,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Input for query type PREPARED_STATEMENT. Input is a prepared statement handle
        * to state on server side which is returned in response to CreatePreparedStatementReq.
        * </pre>
@@ -49209,6 +49485,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Input for query type PREPARED_STATEMENT. Input is a prepared statement handle
        * to state on server side which is returned in response to CreatePreparedStatementReq.
        * </pre>
@@ -49222,6 +49499,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Input for query type PREPARED_STATEMENT. Input is a prepared statement handle
        * to state on server side which is returned in response to CreatePreparedStatementReq.
        * </pre>
@@ -49238,6 +49516,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Input for query type PREPARED_STATEMENT. Input is a prepared statement handle
        * to state on server side which is returned in response to CreatePreparedStatementReq.
        * </pre>
@@ -49261,6 +49540,7 @@ public final class UserProtos {
       private int autolimitRowcount_ ;
       /**
        * <pre>
+       *
        * Input for indicating the limit on a query's result set.
        * </pre>
        *
@@ -49273,6 +49553,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Input for indicating the limit on a query's result set.
        * </pre>
        *
@@ -49285,6 +49566,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Input for indicating the limit on a query's result set.
        * </pre>
        *
@@ -49300,6 +49582,7 @@ public final class UserProtos {
       }
       /**
        * <pre>
+       *
        * Input for indicating the limit on a query's result set.
        * </pre>
        *
@@ -49387,7 +49670,7 @@ public final class UserProtos {
   /**
    * Protobuf type {@code exec.user.NewSessionRequest}
    */
-  public  static final class NewSessionRequest extends
+  public static final class NewSessionRequest extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:exec.user.NewSessionRequest)
       NewSessionRequestOrBuilder {
@@ -49482,6 +49765,7 @@ public final class UserProtos {
      * <code>optional .exec.user.UserProperties properties = 1;</code>
      * @return Whether the properties field is set.
      */
+    @java.lang.Override
     public boolean hasProperties() {
       return ((bitField0_ & 0x00000001) != 0);
     }
@@ -49489,12 +49773,14 @@ public final class UserProtos {
      * <code>optional .exec.user.UserProperties properties = 1;</code>
      * @return The properties.
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.UserProperties getProperties() {
       return properties_ == null ? org.apache.drill.exec.proto.UserProtos.UserProperties.getDefaultInstance() : properties_;
     }
     /**
      * <code>optional .exec.user.UserProperties properties = 1;</code>
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.UserPropertiesOrBuilder getPropertiesOrBuilder() {
       return properties_ == null ? org.apache.drill.exec.proto.UserProtos.UserProperties.getDefaultInstance() : properties_;
     }
@@ -50029,7 +50315,7 @@ public final class UserProtos {
   /**
    * Protobuf type {@code exec.user.SessionHandle}
    */
-  public  static final class SessionHandle extends
+  public static final class SessionHandle extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:exec.user.SessionHandle)
       SessionHandleOrBuilder {
@@ -50118,6 +50404,7 @@ public final class UserProtos {
      * <code>optional string session_id = 1;</code>
      * @return Whether the sessionId field is set.
      */
+    @java.lang.Override
     public boolean hasSessionId() {
       return ((bitField0_ & 0x00000001) != 0);
     }
@@ -50125,6 +50412,7 @@ public final class UserProtos {
      * <code>optional string session_id = 1;</code>
      * @return The sessionId.
      */
+    @java.lang.Override
     public java.lang.String getSessionId() {
       java.lang.Object ref = sessionId_;
       if (ref instanceof java.lang.String) {
@@ -50143,6 +50431,7 @@ public final class UserProtos {
      * <code>optional string session_id = 1;</code>
      * @return The bytes for sessionId.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getSessionIdBytes() {
       java.lang.Object ref = sessionId_;
@@ -50645,7 +50934,7 @@ public final class UserProtos {
   /**
    * Protobuf type {@code exec.user.RunQueryWithSessionHandle}
    */
-  public  static final class RunQueryWithSessionHandle extends
+  public static final class RunQueryWithSessionHandle extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:exec.user.RunQueryWithSessionHandle)
       RunQueryWithSessionHandleOrBuilder {
@@ -50753,6 +51042,7 @@ public final class UserProtos {
      * <code>optional .exec.user.RunQuery runQuery = 1;</code>
      * @return Whether the runQuery field is set.
      */
+    @java.lang.Override
     public boolean hasRunQuery() {
       return ((bitField0_ & 0x00000001) != 0);
     }
@@ -50760,12 +51050,14 @@ public final class UserProtos {
      * <code>optional .exec.user.RunQuery runQuery = 1;</code>
      * @return The runQuery.
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.RunQuery getRunQuery() {
       return runQuery_ == null ? org.apache.drill.exec.proto.UserProtos.RunQuery.getDefaultInstance() : runQuery_;
     }
     /**
      * <code>optional .exec.user.RunQuery runQuery = 1;</code>
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.RunQueryOrBuilder getRunQueryOrBuilder() {
       return runQuery_ == null ? org.apache.drill.exec.proto.UserProtos.RunQuery.getDefaultInstance() : runQuery_;
     }
@@ -50776,6 +51068,7 @@ public final class UserProtos {
      * <code>optional .exec.user.SessionHandle sessionHandle = 2;</code>
      * @return Whether the sessionHandle field is set.
      */
+    @java.lang.Override
     public boolean hasSessionHandle() {
       return ((bitField0_ & 0x00000002) != 0);
     }
@@ -50783,12 +51076,14 @@ public final class UserProtos {
      * <code>optional .exec.user.SessionHandle sessionHandle = 2;</code>
      * @return The sessionHandle.
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.SessionHandle getSessionHandle() {
       return sessionHandle_ == null ? org.apache.drill.exec.proto.UserProtos.SessionHandle.getDefaultInstance() : sessionHandle_;
     }
     /**
      * <code>optional .exec.user.SessionHandle sessionHandle = 2;</code>
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.SessionHandleOrBuilder getSessionHandleOrBuilder() {
       return sessionHandle_ == null ? org.apache.drill.exec.proto.UserProtos.SessionHandle.getDefaultInstance() : sessionHandle_;
     }
@@ -51479,7 +51774,7 @@ public final class UserProtos {
   /**
    * Protobuf type {@code exec.user.CancelQueryWithSessionHandle}
    */
-  public  static final class CancelQueryWithSessionHandle extends
+  public static final class CancelQueryWithSessionHandle extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:exec.user.CancelQueryWithSessionHandle)
       CancelQueryWithSessionHandleOrBuilder {
@@ -51587,6 +51882,7 @@ public final class UserProtos {
      * <code>optional .exec.shared.QueryId query_id = 1;</code>
      * @return Whether the queryId field is set.
      */
+    @java.lang.Override
     public boolean hasQueryId() {
       return ((bitField0_ & 0x00000001) != 0);
     }
@@ -51594,12 +51890,14 @@ public final class UserProtos {
      * <code>optional .exec.shared.QueryId query_id = 1;</code>
      * @return The queryId.
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserBitShared.QueryId getQueryId() {
       return queryId_ == null ? org.apache.drill.exec.proto.UserBitShared.QueryId.getDefaultInstance() : queryId_;
     }
     /**
      * <code>optional .exec.shared.QueryId query_id = 1;</code>
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserBitShared.QueryIdOrBuilder getQueryIdOrBuilder() {
       return queryId_ == null ? org.apache.drill.exec.proto.UserBitShared.QueryId.getDefaultInstance() : queryId_;
     }
@@ -51610,6 +51908,7 @@ public final class UserProtos {
      * <code>optional .exec.user.SessionHandle session_handle = 2;</code>
      * @return Whether the sessionHandle field is set.
      */
+    @java.lang.Override
     public boolean hasSessionHandle() {
       return ((bitField0_ & 0x00000002) != 0);
     }
@@ -51617,12 +51916,14 @@ public final class UserProtos {
      * <code>optional .exec.user.SessionHandle session_handle = 2;</code>
      * @return The sessionHandle.
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.SessionHandle getSessionHandle() {
       return sessionHandle_ == null ? org.apache.drill.exec.proto.UserProtos.SessionHandle.getDefaultInstance() : sessionHandle_;
     }
     /**
      * <code>optional .exec.user.SessionHandle session_handle = 2;</code>
      */
+    @java.lang.Override
     public org.apache.drill.exec.proto.UserProtos.SessionHandleOrBuilder getSessionHandleOrBuilder() {
       return sessionHandle_ == null ? org.apache.drill.exec.proto.UserProtos.SessionHandle.getDefaultInstance() : sessionHandle_;
     }

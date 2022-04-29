@@ -11850,6 +11850,7 @@ public final class UserBitShared {
   }
   /**
    * <pre>
+   *
    * Used by the server to report informations about the query state to the client
    * </pre>
    *
@@ -12460,6 +12461,7 @@ public final class UserBitShared {
     }
     /**
      * <pre>
+     *
      * Used by the server to report informations about the query state to the client
      * </pre>
      *
@@ -13189,6 +13191,7 @@ public final class UserBitShared {
   }
   /**
    * <pre>
+   *
    * Used by the server when sending query result data batches to the client
    * </pre>
    *
@@ -13606,6 +13609,7 @@ public final class UserBitShared {
     }
     /**
      * <pre>
+     *
      * Used by the server when sending query result data batches to the client
      * </pre>
      *

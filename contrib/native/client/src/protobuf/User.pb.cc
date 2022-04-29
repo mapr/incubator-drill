@@ -71,8 +71,10 @@ constexpr UserToBitHandshake::UserToBitHandshake(
   , support_listening_(false)
   , support_complex_types_(false)
   , support_timeout_(false)
+  , enable_multiplex_(false)
   , sasl_support_(0)
 
+  , capabilities_version_(0)
   , channel_(2)
 {}
 struct UserToBitHandshakeDefaultTypeInternal {
@@ -560,9 +562,59 @@ struct RunQueryDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT RunQueryDefaultTypeInternal _RunQuery_default_instance_;
+constexpr NewSessionRequest::NewSessionRequest(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : properties_(nullptr){}
+struct NewSessionRequestDefaultTypeInternal {
+  constexpr NewSessionRequestDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~NewSessionRequestDefaultTypeInternal() {}
+  union {
+    NewSessionRequest _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT NewSessionRequestDefaultTypeInternal _NewSessionRequest_default_instance_;
+constexpr SessionHandle::SessionHandle(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : session_id_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string){}
+struct SessionHandleDefaultTypeInternal {
+  constexpr SessionHandleDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~SessionHandleDefaultTypeInternal() {}
+  union {
+    SessionHandle _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT SessionHandleDefaultTypeInternal _SessionHandle_default_instance_;
+constexpr RunQueryWithSessionHandle::RunQueryWithSessionHandle(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : runquery_(nullptr)
+  , sessionhandle_(nullptr){}
+struct RunQueryWithSessionHandleDefaultTypeInternal {
+  constexpr RunQueryWithSessionHandleDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~RunQueryWithSessionHandleDefaultTypeInternal() {}
+  union {
+    RunQueryWithSessionHandle _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT RunQueryWithSessionHandleDefaultTypeInternal _RunQueryWithSessionHandle_default_instance_;
+constexpr CancelQueryWithSessionHandle::CancelQueryWithSessionHandle(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : query_id_(nullptr)
+  , session_handle_(nullptr){}
+struct CancelQueryWithSessionHandleDefaultTypeInternal {
+  constexpr CancelQueryWithSessionHandleDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~CancelQueryWithSessionHandleDefaultTypeInternal() {}
+  union {
+    CancelQueryWithSessionHandle _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT CancelQueryWithSessionHandleDefaultTypeInternal _CancelQueryWithSessionHandle_default_instance_;
 }  // namespace user
 }  // namespace exec
-static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_User_2eproto[31];
+static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_User_2eproto[35];
 static const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* file_level_enum_descriptors_User_2eproto[17];
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_User_2eproto = nullptr;
 
@@ -617,7 +669,9 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_User_2eproto::offsets[] PROTOB
   PROTOBUF_FIELD_OFFSET(::exec::user::UserToBitHandshake, support_timeout_),
   PROTOBUF_FIELD_OFFSET(::exec::user::UserToBitHandshake, client_infos_),
   PROTOBUF_FIELD_OFFSET(::exec::user::UserToBitHandshake, sasl_support_),
-  8,
+  PROTOBUF_FIELD_OFFSET(::exec::user::UserToBitHandshake, enable_multiplex_),
+  PROTOBUF_FIELD_OFFSET(::exec::user::UserToBitHandshake, capabilities_version_),
+  10,
   4,
   3,
   0,
@@ -625,7 +679,9 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_User_2eproto::offsets[] PROTOB
   5,
   6,
   2,
+  8,
   7,
+  9,
   PROTOBUF_FIELD_OFFSET(::exec::user::RequestResults, _has_bits_),
   PROTOBUF_FIELD_OFFSET(::exec::user::RequestResults, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -1079,39 +1135,75 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_User_2eproto::offsets[] PROTOB
   ~0u,
   1,
   2,
+  PROTOBUF_FIELD_OFFSET(::exec::user::NewSessionRequest, _has_bits_),
+  PROTOBUF_FIELD_OFFSET(::exec::user::NewSessionRequest, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::exec::user::NewSessionRequest, properties_),
+  0,
+  PROTOBUF_FIELD_OFFSET(::exec::user::SessionHandle, _has_bits_),
+  PROTOBUF_FIELD_OFFSET(::exec::user::SessionHandle, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::exec::user::SessionHandle, session_id_),
+  0,
+  PROTOBUF_FIELD_OFFSET(::exec::user::RunQueryWithSessionHandle, _has_bits_),
+  PROTOBUF_FIELD_OFFSET(::exec::user::RunQueryWithSessionHandle, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::exec::user::RunQueryWithSessionHandle, runquery_),
+  PROTOBUF_FIELD_OFFSET(::exec::user::RunQueryWithSessionHandle, sessionhandle_),
+  0,
+  1,
+  PROTOBUF_FIELD_OFFSET(::exec::user::CancelQueryWithSessionHandle, _has_bits_),
+  PROTOBUF_FIELD_OFFSET(::exec::user::CancelQueryWithSessionHandle, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::exec::user::CancelQueryWithSessionHandle, query_id_),
+  PROTOBUF_FIELD_OFFSET(::exec::user::CancelQueryWithSessionHandle, session_handle_),
+  0,
+  1,
 };
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, 7, sizeof(::exec::user::Property)},
   { 9, -1, sizeof(::exec::user::UserProperties)},
   { 15, 28, sizeof(::exec::user::RpcEndpointInfos)},
-  { 36, 50, sizeof(::exec::user::UserToBitHandshake)},
-  { 59, 66, sizeof(::exec::user::RequestResults)},
-  { 68, 76, sizeof(::exec::user::GetQueryPlanFragments)},
-  { 79, 88, sizeof(::exec::user::QueryPlanFragments)},
-  { 92, 106, sizeof(::exec::user::BitToUserHandshake)},
-  { 115, 122, sizeof(::exec::user::LikeFilter)},
-  { 124, 130, sizeof(::exec::user::GetCatalogsReq)},
-  { 131, 139, sizeof(::exec::user::CatalogMetadata)},
-  { 142, 150, sizeof(::exec::user::GetCatalogsResp)},
-  { 153, 160, sizeof(::exec::user::GetSchemasReq)},
-  { 162, 172, sizeof(::exec::user::SchemaMetadata)},
-  { 177, 185, sizeof(::exec::user::GetSchemasResp)},
-  { 188, 197, sizeof(::exec::user::GetTablesReq)},
-  { 201, 210, sizeof(::exec::user::TableMetadata)},
-  { 214, 222, sizeof(::exec::user::GetTablesResp)},
-  { 225, 234, sizeof(::exec::user::GetColumnsReq)},
-  { 238, 260, sizeof(::exec::user::ColumnMetadata)},
-  { 277, 285, sizeof(::exec::user::GetColumnsResp)},
-  { 288, 294, sizeof(::exec::user::CreatePreparedStatementReq)},
-  { 295, 319, sizeof(::exec::user::ResultColumnMetadata)},
-  { 338, 344, sizeof(::exec::user::PreparedStatementHandle)},
-  { 345, 352, sizeof(::exec::user::PreparedStatement)},
-  { 354, 362, sizeof(::exec::user::CreatePreparedStatementResp)},
-  { 365, -1, sizeof(::exec::user::GetServerMetaReq)},
-  { 370, 377, sizeof(::exec::user::ConvertSupport)},
-  { 379, 387, sizeof(::exec::user::GetServerMetaResp)},
-  { 390, 445, sizeof(::exec::user::ServerMeta)},
-  { 495, 506, sizeof(::exec::user::RunQuery)},
+  { 36, 52, sizeof(::exec::user::UserToBitHandshake)},
+  { 63, 70, sizeof(::exec::user::RequestResults)},
+  { 72, 80, sizeof(::exec::user::GetQueryPlanFragments)},
+  { 83, 92, sizeof(::exec::user::QueryPlanFragments)},
+  { 96, 110, sizeof(::exec::user::BitToUserHandshake)},
+  { 119, 126, sizeof(::exec::user::LikeFilter)},
+  { 128, 134, sizeof(::exec::user::GetCatalogsReq)},
+  { 135, 143, sizeof(::exec::user::CatalogMetadata)},
+  { 146, 154, sizeof(::exec::user::GetCatalogsResp)},
+  { 157, 164, sizeof(::exec::user::GetSchemasReq)},
+  { 166, 176, sizeof(::exec::user::SchemaMetadata)},
+  { 181, 189, sizeof(::exec::user::GetSchemasResp)},
+  { 192, 201, sizeof(::exec::user::GetTablesReq)},
+  { 205, 214, sizeof(::exec::user::TableMetadata)},
+  { 218, 226, sizeof(::exec::user::GetTablesResp)},
+  { 229, 238, sizeof(::exec::user::GetColumnsReq)},
+  { 242, 264, sizeof(::exec::user::ColumnMetadata)},
+  { 281, 289, sizeof(::exec::user::GetColumnsResp)},
+  { 292, 298, sizeof(::exec::user::CreatePreparedStatementReq)},
+  { 299, 323, sizeof(::exec::user::ResultColumnMetadata)},
+  { 342, 348, sizeof(::exec::user::PreparedStatementHandle)},
+  { 349, 356, sizeof(::exec::user::PreparedStatement)},
+  { 358, 366, sizeof(::exec::user::CreatePreparedStatementResp)},
+  { 369, -1, sizeof(::exec::user::GetServerMetaReq)},
+  { 374, 381, sizeof(::exec::user::ConvertSupport)},
+  { 383, 391, sizeof(::exec::user::GetServerMetaResp)},
+  { 394, 449, sizeof(::exec::user::ServerMeta)},
+  { 499, 510, sizeof(::exec::user::RunQuery)},
+  { 516, 522, sizeof(::exec::user::NewSessionRequest)},
+  { 523, 529, sizeof(::exec::user::SessionHandle)},
+  { 530, 537, sizeof(::exec::user::RunQueryWithSessionHandle)},
+  { 539, 546, sizeof(::exec::user::CancelQueryWithSessionHandle)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -1146,6 +1238,10 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::exec::user::_GetServerMetaResp_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::exec::user::_ServerMeta_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::exec::user::_RunQuery_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::exec::user::_NewSessionRequest_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::exec::user::_SessionHandle_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::exec::user::_RunQueryWithSessionHandle_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::exec::user::_CancelQueryWithSessionHandle_default_instance_),
 };
 
 const char descriptor_table_protodef_User_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
@@ -1159,7 +1255,7 @@ const char descriptor_table_protodef_User_2eproto[] PROTOBUF_SECTION_VARIABLE(pr
   "\t\022\024\n\014majorVersion\030\003 \001(\r\022\024\n\014minorVersion\030"
   "\004 \001(\r\022\024\n\014patchVersion\030\005 \001(\r\022\023\n\013applicati"
   "on\030\006 \001(\t\022\023\n\013buildNumber\030\007 \001(\r\022\030\n\020version"
-  "Qualifier\030\010 \001(\t\"\375\002\n\022UserToBitHandshake\022."
+  "Qualifier\030\010 \001(\t\"\277\003\n\022UserToBitHandshake\022."
   "\n\007channel\030\001 \001(\0162\027.exec.shared.RpcChannel"
   ":\004USER\022\031\n\021support_listening\030\002 \001(\010\022\023\n\013rpc"
   "_version\030\003 \001(\005\0221\n\013credentials\030\004 \001(\0132\034.ex"
@@ -1168,211 +1264,224 @@ const char descriptor_table_protodef_User_2eproto[] PROTOBUF_SECTION_VARIABLE(pr
   "ort_complex_types\030\006 \001(\010:\005false\022\036\n\017suppor"
   "t_timeout\030\007 \001(\010:\005false\0221\n\014client_infos\030\010"
   " \001(\0132\033.exec.user.RpcEndpointInfos\022,\n\014sas"
-  "l_support\030\t \001(\0162\026.exec.user.SaslSupport\""
-  "S\n\016RequestResults\022&\n\010query_id\030\001 \001(\0132\024.ex"
-  "ec.shared.QueryId\022\031\n\021maximum_responses\030\002"
-  " \001(\005\"g\n\025GetQueryPlanFragments\022\r\n\005query\030\001"
-  " \002(\t\022$\n\004type\030\002 \001(\0162\026.exec.shared.QueryTy"
-  "pe\022\031\n\nsplit_plan\030\003 \001(\010:\005false\"\316\001\n\022QueryP"
-  "lanFragments\0223\n\006status\030\001 \002(\0162#.exec.shar"
-  "ed.QueryResult.QueryState\022&\n\010query_id\030\002 "
-  "\001(\0132\024.exec.shared.QueryId\0221\n\tfragments\030\003"
-  " \003(\0132\036.exec.bit.control.PlanFragment\022(\n\005"
-  "error\030\004 \001(\0132\031.exec.shared.DrillPBError\"\253"
-  "\002\n\022BitToUserHandshake\022\023\n\013rpc_version\030\002 \001"
-  "(\005\022*\n\006status\030\003 \001(\0162\032.exec.user.Handshake"
-  "Status\022\017\n\007errorId\030\004 \001(\t\022\024\n\014errorMessage\030"
-  "\005 \001(\t\0221\n\014server_infos\030\006 \001(\0132\033.exec.user."
-  "RpcEndpointInfos\022 \n\030authenticationMechan"
-  "isms\030\007 \003(\t\022-\n\021supported_methods\030\010 \003(\0162\022."
-  "exec.user.RpcType\022\021\n\tencrypted\030\t \001(\010\022\026\n\016"
-  "maxWrappedSize\030\n \001(\005\"-\n\nLikeFilter\022\017\n\007pa"
-  "ttern\030\001 \001(\t\022\016\n\006escape\030\002 \001(\t\"D\n\016GetCatalo"
-  "gsReq\0222\n\023catalog_name_filter\030\001 \001(\0132\025.exe"
-  "c.user.LikeFilter\"M\n\017CatalogMetadata\022\024\n\014"
-  "catalog_name\030\001 \001(\t\022\023\n\013description\030\002 \001(\t\022"
-  "\017\n\007connect\030\003 \001(\t\"\223\001\n\017GetCatalogsResp\022(\n\006"
-  "status\030\001 \001(\0162\030.exec.user.RequestStatus\022,"
-  "\n\010catalogs\030\002 \003(\0132\032.exec.user.CatalogMeta"
+  "l_support\030\t \001(\0162\026.exec.user.SaslSupport\022"
+  "\037\n\020enable_multiplex\030\n \001(\010:\005false\022\037\n\024capa"
+  "bilities_version\030\013 \001(\005:\0010\"S\n\016RequestResu"
+  "lts\022&\n\010query_id\030\001 \001(\0132\024.exec.shared.Quer"
+  "yId\022\031\n\021maximum_responses\030\002 \001(\005\"g\n\025GetQue"
+  "ryPlanFragments\022\r\n\005query\030\001 \002(\t\022$\n\004type\030\002"
+  " \001(\0162\026.exec.shared.QueryType\022\031\n\nsplit_pl"
+  "an\030\003 \001(\010:\005false\"\316\001\n\022QueryPlanFragments\0223"
+  "\n\006status\030\001 \002(\0162#.exec.shared.QueryResult"
+  ".QueryState\022&\n\010query_id\030\002 \001(\0132\024.exec.sha"
+  "red.QueryId\0221\n\tfragments\030\003 \003(\0132\036.exec.bi"
+  "t.control.PlanFragment\022(\n\005error\030\004 \001(\0132\031."
+  "exec.shared.DrillPBError\"\253\002\n\022BitToUserHa"
+  "ndshake\022\023\n\013rpc_version\030\002 \001(\005\022*\n\006status\030\003"
+  " \001(\0162\032.exec.user.HandshakeStatus\022\017\n\007erro"
+  "rId\030\004 \001(\t\022\024\n\014errorMessage\030\005 \001(\t\0221\n\014serve"
+  "r_infos\030\006 \001(\0132\033.exec.user.RpcEndpointInf"
+  "os\022 \n\030authenticationMechanisms\030\007 \003(\t\022-\n\021"
+  "supported_methods\030\010 \003(\0162\022.exec.user.RpcT"
+  "ype\022\021\n\tencrypted\030\t \001(\010\022\026\n\016maxWrappedSize"
+  "\030\n \001(\005\"-\n\nLikeFilter\022\017\n\007pattern\030\001 \001(\t\022\016\n"
+  "\006escape\030\002 \001(\t\"D\n\016GetCatalogsReq\0222\n\023catal"
+  "og_name_filter\030\001 \001(\0132\025.exec.user.LikeFil"
+  "ter\"M\n\017CatalogMetadata\022\024\n\014catalog_name\030\001"
+  " \001(\t\022\023\n\013description\030\002 \001(\t\022\017\n\007connect\030\003 \001"
+  "(\t\"\223\001\n\017GetCatalogsResp\022(\n\006status\030\001 \001(\0162\030"
+  ".exec.user.RequestStatus\022,\n\010catalogs\030\002 \003"
+  "(\0132\032.exec.user.CatalogMetadata\022(\n\005error\030"
+  "\003 \001(\0132\031.exec.shared.DrillPBError\"v\n\rGetS"
+  "chemasReq\0222\n\023catalog_name_filter\030\001 \001(\0132\025"
+  ".exec.user.LikeFilter\0221\n\022schema_name_fil"
+  "ter\030\002 \001(\0132\025.exec.user.LikeFilter\"i\n\016Sche"
+  "maMetadata\022\024\n\014catalog_name\030\001 \001(\t\022\023\n\013sche"
+  "ma_name\030\002 \001(\t\022\r\n\005owner\030\003 \001(\t\022\014\n\004type\030\004 \001"
+  "(\t\022\017\n\007mutable\030\005 \001(\t\"\220\001\n\016GetSchemasResp\022("
+  "\n\006status\030\001 \001(\0162\030.exec.user.RequestStatus"
+  "\022*\n\007schemas\030\002 \003(\0132\031.exec.user.SchemaMeta"
   "data\022(\n\005error\030\003 \001(\0132\031.exec.shared.DrillP"
-  "BError\"v\n\rGetSchemasReq\0222\n\023catalog_name_"
+  "BError\"\302\001\n\014GetTablesReq\0222\n\023catalog_name_"
   "filter\030\001 \001(\0132\025.exec.user.LikeFilter\0221\n\022s"
   "chema_name_filter\030\002 \001(\0132\025.exec.user.Like"
-  "Filter\"i\n\016SchemaMetadata\022\024\n\014catalog_name"
-  "\030\001 \001(\t\022\023\n\013schema_name\030\002 \001(\t\022\r\n\005owner\030\003 \001"
-  "(\t\022\014\n\004type\030\004 \001(\t\022\017\n\007mutable\030\005 \001(\t\"\220\001\n\016Ge"
-  "tSchemasResp\022(\n\006status\030\001 \001(\0162\030.exec.user"
-  ".RequestStatus\022*\n\007schemas\030\002 \003(\0132\031.exec.u"
-  "ser.SchemaMetadata\022(\n\005error\030\003 \001(\0132\031.exec"
-  ".shared.DrillPBError\"\302\001\n\014GetTablesReq\0222\n"
-  "\023catalog_name_filter\030\001 \001(\0132\025.exec.user.L"
-  "ikeFilter\0221\n\022schema_name_filter\030\002 \001(\0132\025."
-  "exec.user.LikeFilter\0220\n\021table_name_filte"
-  "r\030\003 \001(\0132\025.exec.user.LikeFilter\022\031\n\021table_"
-  "type_filter\030\004 \003(\t\"\\\n\rTableMetadata\022\024\n\014ca"
-  "talog_name\030\001 \001(\t\022\023\n\013schema_name\030\002 \001(\t\022\022\n"
-  "\ntable_name\030\003 \001(\t\022\014\n\004type\030\004 \001(\t\"\215\001\n\rGetT"
-  "ablesResp\022(\n\006status\030\001 \001(\0162\030.exec.user.Re"
-  "questStatus\022(\n\006tables\030\002 \003(\0132\030.exec.user."
-  "TableMetadata\022(\n\005error\030\003 \001(\0132\031.exec.shar"
-  "ed.DrillPBError\"\333\001\n\rGetColumnsReq\0222\n\023cat"
-  "alog_name_filter\030\001 \001(\0132\025.exec.user.LikeF"
-  "ilter\0221\n\022schema_name_filter\030\002 \001(\0132\025.exec"
-  ".user.LikeFilter\0220\n\021table_name_filter\030\003 "
-  "\001(\0132\025.exec.user.LikeFilter\0221\n\022column_nam"
-  "e_filter\030\004 \001(\0132\025.exec.user.LikeFilter\"\251\003"
-  "\n\016ColumnMetadata\022\024\n\014catalog_name\030\001 \001(\t\022\023"
-  "\n\013schema_name\030\002 \001(\t\022\022\n\ntable_name\030\003 \001(\t\022"
-  "\023\n\013column_name\030\004 \001(\t\022\030\n\020ordinal_position"
-  "\030\005 \001(\005\022\025\n\rdefault_value\030\006 \001(\t\022\023\n\013is_null"
-  "able\030\007 \001(\010\022\021\n\tdata_type\030\010 \001(\t\022\027\n\017char_ma"
-  "x_length\030\t \001(\005\022\031\n\021char_octet_length\030\n \001("
-  "\005\022\031\n\021numeric_precision\030\013 \001(\005\022\037\n\027numeric_"
-  "precision_radix\030\014 \001(\005\022\025\n\rnumeric_scale\030\r"
-  " \001(\005\022\033\n\023date_time_precision\030\016 \001(\005\022\025\n\rint"
-  "erval_type\030\017 \001(\t\022\032\n\022interval_precision\030\020"
-  " \001(\005\022\023\n\013column_size\030\021 \001(\005\"\220\001\n\016GetColumns"
-  "Resp\022(\n\006status\030\001 \001(\0162\030.exec.user.Request"
-  "Status\022*\n\007columns\030\002 \003(\0132\031.exec.user.Colu"
-  "mnMetadata\022(\n\005error\030\003 \001(\0132\031.exec.shared."
-  "DrillPBError\"/\n\032CreatePreparedStatementR"
-  "eq\022\021\n\tsql_query\030\001 \001(\t\"\326\003\n\024ResultColumnMe"
-  "tadata\022\024\n\014catalog_name\030\001 \001(\t\022\023\n\013schema_n"
-  "ame\030\002 \001(\t\022\022\n\ntable_name\030\003 \001(\t\022\023\n\013column_"
-  "name\030\004 \001(\t\022\r\n\005label\030\005 \001(\t\022\021\n\tdata_type\030\006"
-  " \001(\t\022\023\n\013is_nullable\030\007 \001(\010\022\021\n\tprecision\030\010"
-  " \001(\005\022\r\n\005scale\030\t \001(\005\022\016\n\006signed\030\n \001(\010\022\024\n\014d"
-  "isplay_size\030\013 \001(\005\022\022\n\nis_aliased\030\014 \001(\010\0225\n"
-  "\rsearchability\030\r \001(\0162\036.exec.user.ColumnS"
-  "earchability\0223\n\014updatability\030\016 \001(\0162\035.exe"
-  "c.user.ColumnUpdatability\022\026\n\016auto_increm"
-  "ent\030\017 \001(\010\022\030\n\020case_sensitivity\030\020 \001(\010\022\020\n\010s"
-  "ortable\030\021 \001(\010\022\022\n\nclass_name\030\022 \001(\t\022\023\n\013is_"
-  "currency\030\024 \001(\010\".\n\027PreparedStatementHandl"
-  "e\022\023\n\013server_info\030\001 \001(\014\"\200\001\n\021PreparedState"
-  "ment\0220\n\007columns\030\001 \003(\0132\037.exec.user.Result"
-  "ColumnMetadata\0229\n\rserver_handle\030\002 \001(\0132\"."
-  "exec.user.PreparedStatementHandle\"\253\001\n\033Cr"
-  "eatePreparedStatementResp\022(\n\006status\030\001 \001("
-  "\0162\030.exec.user.RequestStatus\0228\n\022prepared_"
-  "statement\030\002 \001(\0132\034.exec.user.PreparedStat"
-  "ement\022(\n\005error\030\003 \001(\0132\031.exec.shared.Drill"
-  "PBError\"\022\n\020GetServerMetaReq\"P\n\016ConvertSu"
-  "pport\022\037\n\004from\030\001 \002(\0162\021.common.MinorType\022\035"
-  "\n\002to\030\002 \002(\0162\021.common.MinorType\"\223\001\n\021GetSer"
-  "verMetaResp\022(\n\006status\030\001 \001(\0162\030.exec.user."
-  "RequestStatus\022*\n\013server_meta\030\002 \001(\0132\025.exe"
-  "c.user.ServerMeta\022(\n\005error\030\003 \001(\0132\031.exec."
-  "shared.DrillPBError\"\227\016\n\nServerMeta\022\035\n\025al"
-  "l_tables_selectable\030\001 \001(\010\022%\n\035blob_includ"
-  "ed_in_max_row_size\030\002 \001(\010\022\030\n\020catalog_at_s"
-  "tart\030\003 \001(\010\022\031\n\021catalog_separator\030\004 \001(\t\022\024\n"
-  "\014catalog_term\030\005 \001(\t\0222\n\017collate_support\030\006"
-  " \003(\0162\031.exec.user.CollateSupport\022!\n\031colum"
-  "n_aliasing_supported\030\007 \001(\010\0222\n\017convert_su"
-  "pport\030\010 \003(\0132\031.exec.user.ConvertSupport\022E"
-  "\n\031correlation_names_support\030\t \001(\0162\".exec"
-  ".user.CorrelationNamesSupport\022\033\n\023date_ti"
-  "me_functions\030\n \003(\t\022F\n\032date_time_literals"
-  "_support\030\013 \003(\0162\".exec.user.DateTimeLiter"
-  "alsSupport\0223\n\020group_by_support\030\014 \001(\0162\031.e"
-  "xec.user.GroupBySupport\0226\n\021identifier_ca"
-  "sing\030\r \001(\0162\033.exec.user.IdentifierCasing\022"
-  "\037\n\027identifier_quote_string\030\016 \001(\t\022$\n\034like"
-  "_escape_clause_supported\030\017 \001(\010\022!\n\031max_bi"
-  "nary_literal_length\030\020 \001(\r\022\037\n\027max_catalog"
-  "_name_length\030\021 \001(\r\022\037\n\027max_char_literal_l"
-  "ength\030\022 \001(\r\022\036\n\026max_column_name_length\030\023 "
-  "\001(\r\022\037\n\027max_columns_in_group_by\030\024 \001(\r\022\037\n\027"
-  "max_columns_in_order_by\030\025 \001(\r\022\035\n\025max_col"
-  "umns_in_select\030\026 \001(\r\022\036\n\026max_cursor_name_"
-  "length\030\027 \001(\r\022\034\n\024max_logical_lob_size\030\030 \001"
-  "(\r\022\024\n\014max_row_size\030\031 \001(\r\022\036\n\026max_schema_n"
-  "ame_length\030\032 \001(\r\022\034\n\024max_statement_length"
-  "\030\033 \001(\r\022\026\n\016max_statements\030\034 \001(\r\022\035\n\025max_ta"
-  "ble_name_length\030\035 \001(\r\022\034\n\024max_tables_in_s"
-  "elect\030\036 \001(\r\022\034\n\024max_user_name_length\030\037 \001("
-  "\r\0220\n\016null_collation\030  \001(\0162\030.exec.user.Nu"
-  "llCollation\022&\n\036null_plus_non_null_equals"
-  "_null\030! \001(\010\022\031\n\021numeric_functions\030\" \003(\t\0223"
-  "\n\020order_by_support\030# \003(\0162\031.exec.user.Ord"
-  "erBySupport\0227\n\022outer_join_support\030$ \003(\0162"
-  "\033.exec.user.OuterJoinSupport\022=\n\030quoted_i"
-  "dentifier_casing\030% \001(\0162\033.exec.user.Ident"
-  "ifierCasing\022\021\n\tread_only\030& \001(\010\022\023\n\013schema"
-  "_term\030\' \001(\t\022\034\n\024search_escape_string\030( \001("
-  "\t\022#\n\033select_for_update_supported\030) \001(\010\022\032"
-  "\n\022special_characters\030* \001(\t\022\024\n\014sql_keywor"
-  "ds\030+ \003(\t\022\030\n\020string_functions\030, \003(\t\0224\n\020su"
-  "bquery_support\030- \003(\0162\032.exec.user.SubQuer"
-  "ySupport\022\030\n\020system_functions\030. \003(\t\022\022\n\nta"
-  "ble_term\030/ \001(\t\022\035\n\025transaction_supported\030"
-  "0 \001(\010\022.\n\runion_support\0301 \003(\0162\027.exec.user"
-  ".UnionSupport\022\026\n\016current_schema\0302 \001(\t\"\207\002"
-  "\n\010RunQuery\0221\n\014results_mode\030\001 \001(\0162\033.exec."
-  "user.QueryResultsMode\022$\n\004type\030\002 \001(\0162\026.ex"
-  "ec.shared.QueryType\022\014\n\004plan\030\003 \001(\t\0221\n\tfra"
-  "gments\030\004 \003(\0132\036.exec.bit.control.PlanFrag"
-  "ment\022E\n\031prepared_statement_handle\030\005 \001(\0132"
-  "\".exec.user.PreparedStatementHandle\022\032\n\022a"
-  "utolimit_rowcount\030\006 \001(\005*\320\003\n\007RpcType\022\r\n\tH"
-  "ANDSHAKE\020\000\022\007\n\003ACK\020\001\022\013\n\007GOODBYE\020\002\022\r\n\tRUN_"
-  "QUERY\020\003\022\020\n\014CANCEL_QUERY\020\004\022\023\n\017REQUEST_RES"
-  "ULTS\020\005\022\027\n\023RESUME_PAUSED_QUERY\020\013\022\034\n\030GET_Q"
-  "UERY_PLAN_FRAGMENTS\020\014\022\020\n\014GET_CATALOGS\020\016\022"
-  "\017\n\013GET_SCHEMAS\020\017\022\016\n\nGET_TABLES\020\020\022\017\n\013GET_"
-  "COLUMNS\020\021\022\035\n\031CREATE_PREPARED_STATEMENT\020\026"
-  "\022\023\n\017GET_SERVER_META\020\010\022\016\n\nQUERY_DATA\020\006\022\020\n"
-  "\014QUERY_HANDLE\020\007\022\030\n\024QUERY_PLAN_FRAGMENTS\020"
-  "\r\022\014\n\010CATALOGS\020\022\022\013\n\007SCHEMAS\020\023\022\n\n\006TABLES\020\024"
-  "\022\013\n\007COLUMNS\020\025\022\026\n\022PREPARED_STATEMENT\020\027\022\017\n"
-  "\013SERVER_META\020\t\022\020\n\014QUERY_RESULT\020\n\022\020\n\014SASL"
-  "_MESSAGE\020\030*H\n\013SaslSupport\022\030\n\024UNKNOWN_SAS"
-  "L_SUPPORT\020\000\022\r\n\tSASL_AUTH\020\001\022\020\n\014SASL_PRIVA"
-  "CY\020\002*#\n\020QueryResultsMode\022\017\n\013STREAM_FULL\020"
-  "\001*q\n\017HandshakeStatus\022\013\n\007SUCCESS\020\001\022\030\n\024RPC"
-  "_VERSION_MISMATCH\020\002\022\017\n\013AUTH_FAILED\020\003\022\023\n\017"
-  "UNKNOWN_FAILURE\020\004\022\021\n\rAUTH_REQUIRED\020\005*D\n\r"
-  "RequestStatus\022\022\n\016UNKNOWN_STATUS\020\000\022\006\n\002OK\020"
-  "\001\022\n\n\006FAILED\020\002\022\013\n\007TIMEOUT\020\003*Y\n\023ColumnSear"
-  "chability\022\031\n\025UNKNOWN_SEARCHABILITY\020\000\022\010\n\004"
-  "NONE\020\001\022\010\n\004CHAR\020\002\022\n\n\006NUMBER\020\003\022\007\n\003ALL\020\004*K\n"
-  "\022ColumnUpdatability\022\030\n\024UNKNOWN_UPDATABIL"
-  "ITY\020\000\022\r\n\tREAD_ONLY\020\001\022\014\n\010WRITABLE\020\002*1\n\016Co"
-  "llateSupport\022\016\n\nCS_UNKNOWN\020\000\022\017\n\013CS_GROUP"
-  "_BY\020\001*J\n\027CorrelationNamesSupport\022\013\n\007CN_N"
-  "ONE\020\001\022\026\n\022CN_DIFFERENT_NAMES\020\002\022\n\n\006CN_ANY\020"
-  "\003*\271\003\n\027DateTimeLiteralsSupport\022\016\n\nDL_UNKN"
-  "OWN\020\000\022\013\n\007DL_DATE\020\001\022\013\n\007DL_TIME\020\002\022\020\n\014DL_TI"
-  "MESTAMP\020\003\022\024\n\020DL_INTERVAL_YEAR\020\004\022\025\n\021DL_IN"
-  "TERVAL_MONTH\020\005\022\023\n\017DL_INTERVAL_DAY\020\006\022\024\n\020D"
-  "L_INTERVAL_HOUR\020\007\022\026\n\022DL_INTERVAL_MINUTE\020"
-  "\010\022\026\n\022DL_INTERVAL_SECOND\020\t\022\035\n\031DL_INTERVAL"
-  "_YEAR_TO_MONTH\020\n\022\033\n\027DL_INTERVAL_DAY_TO_H"
-  "OUR\020\013\022\035\n\031DL_INTERVAL_DAY_TO_MINUTE\020\014\022\035\n\031"
-  "DL_INTERVAL_DAY_TO_SECOND\020\r\022\036\n\032DL_INTERV"
-  "AL_HOUR_TO_MINUTE\020\016\022\036\n\032DL_INTERVAL_HOUR_"
-  "TO_SECOND\020\017\022 \n\034DL_INTERVAL_MINUTE_TO_SEC"
-  "OND\020\020*Y\n\016GroupBySupport\022\013\n\007GB_NONE\020\001\022\022\n\016"
-  "GB_SELECT_ONLY\020\002\022\024\n\020GB_BEYOND_SELECT\020\003\022\020"
-  "\n\014GB_UNRELATED\020\004*x\n\020IdentifierCasing\022\016\n\n"
-  "IC_UNKNOWN\020\000\022\023\n\017IC_STORES_LOWER\020\001\022\023\n\017IC_"
-  "STORES_MIXED\020\002\022\023\n\017IC_STORES_UPPER\020\003\022\025\n\021I"
-  "C_SUPPORTS_MIXED\020\004*X\n\rNullCollation\022\016\n\nN"
-  "C_UNKNOWN\020\000\022\017\n\013NC_AT_START\020\001\022\r\n\tNC_AT_EN"
-  "D\020\002\022\013\n\007NC_HIGH\020\003\022\n\n\006NC_LOW\020\004*E\n\016OrderByS"
-  "upport\022\016\n\nOB_UNKNOWN\020\000\022\020\n\014OB_UNRELATED\020\001"
-  "\022\021\n\rOB_EXPRESSION\020\002*\226\001\n\020OuterJoinSupport"
-  "\022\016\n\nOJ_UNKNOWN\020\000\022\013\n\007OJ_LEFT\020\001\022\014\n\010OJ_RIGH"
-  "T\020\002\022\013\n\007OJ_FULL\020\003\022\r\n\tOJ_NESTED\020\004\022\022\n\016OJ_NO"
-  "T_ORDERED\020\005\022\014\n\010OJ_INNER\020\006\022\031\n\025OJ_ALL_COMP"
-  "ARISON_OPS\020\007*\204\001\n\017SubQuerySupport\022\016\n\nSQ_U"
-  "NKNOWN\020\000\022\021\n\rSQ_CORRELATED\020\001\022\024\n\020SQ_IN_COM"
-  "PARISON\020\002\022\020\n\014SQ_IN_EXISTS\020\003\022\020\n\014SQ_IN_INS"
-  "ERT\020\004\022\024\n\020SQ_IN_QUANTIFIED\020\005*;\n\014UnionSupp"
-  "ort\022\r\n\tU_UNKNOWN\020\000\022\013\n\007U_UNION\020\001\022\017\n\013U_UNI"
-  "ON_ALL\020\002B+\n\033org.apache.drill.exec.protoB"
-  "\nUserProtosH\001"
+  "Filter\0220\n\021table_name_filter\030\003 \001(\0132\025.exec"
+  ".user.LikeFilter\022\031\n\021table_type_filter\030\004 "
+  "\003(\t\"\\\n\rTableMetadata\022\024\n\014catalog_name\030\001 \001"
+  "(\t\022\023\n\013schema_name\030\002 \001(\t\022\022\n\ntable_name\030\003 "
+  "\001(\t\022\014\n\004type\030\004 \001(\t\"\215\001\n\rGetTablesResp\022(\n\006s"
+  "tatus\030\001 \001(\0162\030.exec.user.RequestStatus\022(\n"
+  "\006tables\030\002 \003(\0132\030.exec.user.TableMetadata\022"
+  "(\n\005error\030\003 \001(\0132\031.exec.shared.DrillPBErro"
+  "r\"\333\001\n\rGetColumnsReq\0222\n\023catalog_name_filt"
+  "er\030\001 \001(\0132\025.exec.user.LikeFilter\0221\n\022schem"
+  "a_name_filter\030\002 \001(\0132\025.exec.user.LikeFilt"
+  "er\0220\n\021table_name_filter\030\003 \001(\0132\025.exec.use"
+  "r.LikeFilter\0221\n\022column_name_filter\030\004 \001(\013"
+  "2\025.exec.user.LikeFilter\"\251\003\n\016ColumnMetada"
+  "ta\022\024\n\014catalog_name\030\001 \001(\t\022\023\n\013schema_name\030"
+  "\002 \001(\t\022\022\n\ntable_name\030\003 \001(\t\022\023\n\013column_name"
+  "\030\004 \001(\t\022\030\n\020ordinal_position\030\005 \001(\005\022\025\n\rdefa"
+  "ult_value\030\006 \001(\t\022\023\n\013is_nullable\030\007 \001(\010\022\021\n\t"
+  "data_type\030\010 \001(\t\022\027\n\017char_max_length\030\t \001(\005"
+  "\022\031\n\021char_octet_length\030\n \001(\005\022\031\n\021numeric_p"
+  "recision\030\013 \001(\005\022\037\n\027numeric_precision_radi"
+  "x\030\014 \001(\005\022\025\n\rnumeric_scale\030\r \001(\005\022\033\n\023date_t"
+  "ime_precision\030\016 \001(\005\022\025\n\rinterval_type\030\017 \001"
+  "(\t\022\032\n\022interval_precision\030\020 \001(\005\022\023\n\013column"
+  "_size\030\021 \001(\005\"\220\001\n\016GetColumnsResp\022(\n\006status"
+  "\030\001 \001(\0162\030.exec.user.RequestStatus\022*\n\007colu"
+  "mns\030\002 \003(\0132\031.exec.user.ColumnMetadata\022(\n\005"
+  "error\030\003 \001(\0132\031.exec.shared.DrillPBError\"/"
+  "\n\032CreatePreparedStatementReq\022\021\n\tsql_quer"
+  "y\030\001 \001(\t\"\326\003\n\024ResultColumnMetadata\022\024\n\014cata"
+  "log_name\030\001 \001(\t\022\023\n\013schema_name\030\002 \001(\t\022\022\n\nt"
+  "able_name\030\003 \001(\t\022\023\n\013column_name\030\004 \001(\t\022\r\n\005"
+  "label\030\005 \001(\t\022\021\n\tdata_type\030\006 \001(\t\022\023\n\013is_nul"
+  "lable\030\007 \001(\010\022\021\n\tprecision\030\010 \001(\005\022\r\n\005scale\030"
+  "\t \001(\005\022\016\n\006signed\030\n \001(\010\022\024\n\014display_size\030\013 "
+  "\001(\005\022\022\n\nis_aliased\030\014 \001(\010\0225\n\rsearchability"
+  "\030\r \001(\0162\036.exec.user.ColumnSearchability\0223"
+  "\n\014updatability\030\016 \001(\0162\035.exec.user.ColumnU"
+  "pdatability\022\026\n\016auto_increment\030\017 \001(\010\022\030\n\020c"
+  "ase_sensitivity\030\020 \001(\010\022\020\n\010sortable\030\021 \001(\010\022"
+  "\022\n\nclass_name\030\022 \001(\t\022\023\n\013is_currency\030\024 \001(\010"
+  "\".\n\027PreparedStatementHandle\022\023\n\013server_in"
+  "fo\030\001 \001(\014\"\200\001\n\021PreparedStatement\0220\n\007column"
+  "s\030\001 \003(\0132\037.exec.user.ResultColumnMetadata"
+  "\0229\n\rserver_handle\030\002 \001(\0132\".exec.user.Prep"
+  "aredStatementHandle\"\253\001\n\033CreatePreparedSt"
+  "atementResp\022(\n\006status\030\001 \001(\0162\030.exec.user."
+  "RequestStatus\0228\n\022prepared_statement\030\002 \001("
+  "\0132\034.exec.user.PreparedStatement\022(\n\005error"
+  "\030\003 \001(\0132\031.exec.shared.DrillPBError\"\022\n\020Get"
+  "ServerMetaReq\"P\n\016ConvertSupport\022\037\n\004from\030"
+  "\001 \002(\0162\021.common.MinorType\022\035\n\002to\030\002 \002(\0162\021.c"
+  "ommon.MinorType\"\223\001\n\021GetServerMetaResp\022(\n"
+  "\006status\030\001 \001(\0162\030.exec.user.RequestStatus\022"
+  "*\n\013server_meta\030\002 \001(\0132\025.exec.user.ServerM"
+  "eta\022(\n\005error\030\003 \001(\0132\031.exec.shared.DrillPB"
+  "Error\"\227\016\n\nServerMeta\022\035\n\025all_tables_selec"
+  "table\030\001 \001(\010\022%\n\035blob_included_in_max_row_"
+  "size\030\002 \001(\010\022\030\n\020catalog_at_start\030\003 \001(\010\022\031\n\021"
+  "catalog_separator\030\004 \001(\t\022\024\n\014catalog_term\030"
+  "\005 \001(\t\0222\n\017collate_support\030\006 \003(\0162\031.exec.us"
+  "er.CollateSupport\022!\n\031column_aliasing_sup"
+  "ported\030\007 \001(\010\0222\n\017convert_support\030\010 \003(\0132\031."
+  "exec.user.ConvertSupport\022E\n\031correlation_"
+  "names_support\030\t \001(\0162\".exec.user.Correlat"
+  "ionNamesSupport\022\033\n\023date_time_functions\030\n"
+  " \003(\t\022F\n\032date_time_literals_support\030\013 \003(\016"
+  "2\".exec.user.DateTimeLiteralsSupport\0223\n\020"
+  "group_by_support\030\014 \001(\0162\031.exec.user.Group"
+  "BySupport\0226\n\021identifier_casing\030\r \001(\0162\033.e"
+  "xec.user.IdentifierCasing\022\037\n\027identifier_"
+  "quote_string\030\016 \001(\t\022$\n\034like_escape_clause"
+  "_supported\030\017 \001(\010\022!\n\031max_binary_literal_l"
+  "ength\030\020 \001(\r\022\037\n\027max_catalog_name_length\030\021"
+  " \001(\r\022\037\n\027max_char_literal_length\030\022 \001(\r\022\036\n"
+  "\026max_column_name_length\030\023 \001(\r\022\037\n\027max_col"
+  "umns_in_group_by\030\024 \001(\r\022\037\n\027max_columns_in"
+  "_order_by\030\025 \001(\r\022\035\n\025max_columns_in_select"
+  "\030\026 \001(\r\022\036\n\026max_cursor_name_length\030\027 \001(\r\022\034"
+  "\n\024max_logical_lob_size\030\030 \001(\r\022\024\n\014max_row_"
+  "size\030\031 \001(\r\022\036\n\026max_schema_name_length\030\032 \001"
+  "(\r\022\034\n\024max_statement_length\030\033 \001(\r\022\026\n\016max_"
+  "statements\030\034 \001(\r\022\035\n\025max_table_name_lengt"
+  "h\030\035 \001(\r\022\034\n\024max_tables_in_select\030\036 \001(\r\022\034\n"
+  "\024max_user_name_length\030\037 \001(\r\0220\n\016null_coll"
+  "ation\030  \001(\0162\030.exec.user.NullCollation\022&\n"
+  "\036null_plus_non_null_equals_null\030! \001(\010\022\031\n"
+  "\021numeric_functions\030\" \003(\t\0223\n\020order_by_sup"
+  "port\030# \003(\0162\031.exec.user.OrderBySupport\0227\n"
+  "\022outer_join_support\030$ \003(\0162\033.exec.user.Ou"
+  "terJoinSupport\022=\n\030quoted_identifier_casi"
+  "ng\030% \001(\0162\033.exec.user.IdentifierCasing\022\021\n"
+  "\tread_only\030& \001(\010\022\023\n\013schema_term\030\' \001(\t\022\034\n"
+  "\024search_escape_string\030( \001(\t\022#\n\033select_fo"
+  "r_update_supported\030) \001(\010\022\032\n\022special_char"
+  "acters\030* \001(\t\022\024\n\014sql_keywords\030+ \003(\t\022\030\n\020st"
+  "ring_functions\030, \003(\t\0224\n\020subquery_support"
+  "\030- \003(\0162\032.exec.user.SubQuerySupport\022\030\n\020sy"
+  "stem_functions\030. \003(\t\022\022\n\ntable_term\030/ \001(\t"
+  "\022\035\n\025transaction_supported\0300 \001(\010\022.\n\runion"
+  "_support\0301 \003(\0162\027.exec.user.UnionSupport\022"
+  "\026\n\016current_schema\0302 \001(\t\"\207\002\n\010RunQuery\0221\n\014"
+  "results_mode\030\001 \001(\0162\033.exec.user.QueryResu"
+  "ltsMode\022$\n\004type\030\002 \001(\0162\026.exec.shared.Quer"
+  "yType\022\014\n\004plan\030\003 \001(\t\0221\n\tfragments\030\004 \003(\0132\036"
+  ".exec.bit.control.PlanFragment\022E\n\031prepar"
+  "ed_statement_handle\030\005 \001(\0132\".exec.user.Pr"
+  "eparedStatementHandle\022\032\n\022autolimit_rowco"
+  "unt\030\006 \001(\005\"B\n\021NewSessionRequest\022-\n\nproper"
+  "ties\030\001 \001(\0132\031.exec.user.UserProperties\"#\n"
+  "\rSessionHandle\022\022\n\nsession_id\030\001 \001(\t\"s\n\031Ru"
+  "nQueryWithSessionHandle\022%\n\010runQuery\030\001 \001("
+  "\0132\023.exec.user.RunQuery\022/\n\rsessionHandle\030"
+  "\002 \001(\0132\030.exec.user.SessionHandle\"x\n\034Cance"
+  "lQueryWithSessionHandle\022&\n\010query_id\030\001 \001("
+  "\0132\024.exec.shared.QueryId\0220\n\016session_handl"
+  "e\030\002 \001(\0132\030.exec.user.SessionHandle*\310\004\n\007Rp"
+  "cType\022\r\n\tHANDSHAKE\020\000\022\007\n\003ACK\020\001\022\013\n\007GOODBYE"
+  "\020\002\022\r\n\tRUN_QUERY\020\003\022\020\n\014CANCEL_QUERY\020\004\022\023\n\017R"
+  "EQUEST_RESULTS\020\005\022\027\n\023RESUME_PAUSED_QUERY\020"
+  "\013\022\034\n\030GET_QUERY_PLAN_FRAGMENTS\020\014\022\020\n\014GET_C"
+  "ATALOGS\020\016\022\017\n\013GET_SCHEMAS\020\017\022\016\n\nGET_TABLES"
+  "\020\020\022\017\n\013GET_COLUMNS\020\021\022\035\n\031CREATE_PREPARED_S"
+  "TATEMENT\020\026\022\023\n\017GET_SERVER_META\020\010\022\020\n\013NEW_S"
+  "ESSION\020\201\010\022\033\n\026RUN_QUERY_WITH_SESSION\020\203\010\022\022"
+  "\n\rCLOSE_SESSION\020\204\010\022\036\n\031CANCEL_QUERY_WITH_"
+  "SESSION\020\205\010\022\016\n\nQUERY_DATA\020\006\022\020\n\014QUERY_HAND"
+  "LE\020\007\022\030\n\024QUERY_PLAN_FRAGMENTS\020\r\022\014\n\010CATALO"
+  "GS\020\022\022\013\n\007SCHEMAS\020\023\022\n\n\006TABLES\020\024\022\013\n\007COLUMNS"
+  "\020\025\022\026\n\022PREPARED_STATEMENT\020\027\022\017\n\013SERVER_MET"
+  "A\020\t\022\020\n\014QUERY_RESULT\020\n\022\023\n\016SESSION_HANDLE\020"
+  "\202\010\022\020\n\014SASL_MESSAGE\020\030*H\n\013SaslSupport\022\030\n\024U"
+  "NKNOWN_SASL_SUPPORT\020\000\022\r\n\tSASL_AUTH\020\001\022\020\n\014"
+  "SASL_PRIVACY\020\002*#\n\020QueryResultsMode\022\017\n\013ST"
+  "REAM_FULL\020\001*q\n\017HandshakeStatus\022\013\n\007SUCCES"
+  "S\020\001\022\030\n\024RPC_VERSION_MISMATCH\020\002\022\017\n\013AUTH_FA"
+  "ILED\020\003\022\023\n\017UNKNOWN_FAILURE\020\004\022\021\n\rAUTH_REQU"
+  "IRED\020\005*D\n\rRequestStatus\022\022\n\016UNKNOWN_STATU"
+  "S\020\000\022\006\n\002OK\020\001\022\n\n\006FAILED\020\002\022\013\n\007TIMEOUT\020\003*Y\n\023"
+  "ColumnSearchability\022\031\n\025UNKNOWN_SEARCHABI"
+  "LITY\020\000\022\010\n\004NONE\020\001\022\010\n\004CHAR\020\002\022\n\n\006NUMBER\020\003\022\007"
+  "\n\003ALL\020\004*K\n\022ColumnUpdatability\022\030\n\024UNKNOWN"
+  "_UPDATABILITY\020\000\022\r\n\tREAD_ONLY\020\001\022\014\n\010WRITAB"
+  "LE\020\002*1\n\016CollateSupport\022\016\n\nCS_UNKNOWN\020\000\022\017"
+  "\n\013CS_GROUP_BY\020\001*J\n\027CorrelationNamesSuppo"
+  "rt\022\013\n\007CN_NONE\020\001\022\026\n\022CN_DIFFERENT_NAMES\020\002\022"
+  "\n\n\006CN_ANY\020\003*\271\003\n\027DateTimeLiteralsSupport\022"
+  "\016\n\nDL_UNKNOWN\020\000\022\013\n\007DL_DATE\020\001\022\013\n\007DL_TIME\020"
+  "\002\022\020\n\014DL_TIMESTAMP\020\003\022\024\n\020DL_INTERVAL_YEAR\020"
+  "\004\022\025\n\021DL_INTERVAL_MONTH\020\005\022\023\n\017DL_INTERVAL_"
+  "DAY\020\006\022\024\n\020DL_INTERVAL_HOUR\020\007\022\026\n\022DL_INTERV"
+  "AL_MINUTE\020\010\022\026\n\022DL_INTERVAL_SECOND\020\t\022\035\n\031D"
+  "L_INTERVAL_YEAR_TO_MONTH\020\n\022\033\n\027DL_INTERVA"
+  "L_DAY_TO_HOUR\020\013\022\035\n\031DL_INTERVAL_DAY_TO_MI"
+  "NUTE\020\014\022\035\n\031DL_INTERVAL_DAY_TO_SECOND\020\r\022\036\n"
+  "\032DL_INTERVAL_HOUR_TO_MINUTE\020\016\022\036\n\032DL_INTE"
+  "RVAL_HOUR_TO_SECOND\020\017\022 \n\034DL_INTERVAL_MIN"
+  "UTE_TO_SECOND\020\020*Y\n\016GroupBySupport\022\013\n\007GB_"
+  "NONE\020\001\022\022\n\016GB_SELECT_ONLY\020\002\022\024\n\020GB_BEYOND_"
+  "SELECT\020\003\022\020\n\014GB_UNRELATED\020\004*x\n\020Identifier"
+  "Casing\022\016\n\nIC_UNKNOWN\020\000\022\023\n\017IC_STORES_LOWE"
+  "R\020\001\022\023\n\017IC_STORES_MIXED\020\002\022\023\n\017IC_STORES_UP"
+  "PER\020\003\022\025\n\021IC_SUPPORTS_MIXED\020\004*X\n\rNullColl"
+  "ation\022\016\n\nNC_UNKNOWN\020\000\022\017\n\013NC_AT_START\020\001\022\r"
+  "\n\tNC_AT_END\020\002\022\013\n\007NC_HIGH\020\003\022\n\n\006NC_LOW\020\004*E"
+  "\n\016OrderBySupport\022\016\n\nOB_UNKNOWN\020\000\022\020\n\014OB_U"
+  "NRELATED\020\001\022\021\n\rOB_EXPRESSION\020\002*\226\001\n\020OuterJ"
+  "oinSupport\022\016\n\nOJ_UNKNOWN\020\000\022\013\n\007OJ_LEFT\020\001\022"
+  "\014\n\010OJ_RIGHT\020\002\022\013\n\007OJ_FULL\020\003\022\r\n\tOJ_NESTED\020"
+  "\004\022\022\n\016OJ_NOT_ORDERED\020\005\022\014\n\010OJ_INNER\020\006\022\031\n\025O"
+  "J_ALL_COMPARISON_OPS\020\007*\204\001\n\017SubQuerySuppo"
+  "rt\022\016\n\nSQ_UNKNOWN\020\000\022\021\n\rSQ_CORRELATED\020\001\022\024\n"
+  "\020SQ_IN_COMPARISON\020\002\022\020\n\014SQ_IN_EXISTS\020\003\022\020\n"
+  "\014SQ_IN_INSERT\020\004\022\024\n\020SQ_IN_QUANTIFIED\020\005*;\n"
+  "\014UnionSupport\022\r\n\tU_UNKNOWN\020\000\022\013\n\007U_UNION\020"
+  "\001\022\017\n\013U_UNION_ALL\020\002B+\n\033org.apache.drill.e"
+  "xec.protoB\nUserProtosH\001"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_User_2eproto_deps[6] = {
   &::descriptor_table_BitControl_2eproto,
@@ -1384,8 +1493,8 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor
 };
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_User_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_User_2eproto = {
-  false, false, 8933, descriptor_table_protodef_User_2eproto, "User.proto", 
-  &descriptor_table_User_2eproto_once, descriptor_table_User_2eproto_deps, 6, 31,
+  false, false, 9463, descriptor_table_protodef_User_2eproto, "User.proto", 
+  &descriptor_table_User_2eproto_once, descriptor_table_User_2eproto_deps, 6, 35,
   schemas, file_default_instances, TableStruct_User_2eproto::offsets,
   file_level_metadata_User_2eproto, file_level_enum_descriptors_User_2eproto, file_level_service_descriptors_User_2eproto,
 };
@@ -1428,6 +1537,11 @@ bool RpcType_IsValid(int value) {
     case 22:
     case 23:
     case 24:
+    case 1025:
+    case 1026:
+    case 1027:
+    case 1028:
+    case 1029:
       return true;
     default:
       return false;
@@ -2682,7 +2796,7 @@ class UserToBitHandshake::_Internal {
  public:
   using HasBits = decltype(std::declval<UserToBitHandshake>()._has_bits_);
   static void set_has_channel(HasBits* has_bits) {
-    (*has_bits)[0] |= 256u;
+    (*has_bits)[0] |= 1024u;
   }
   static void set_has_support_listening(HasBits* has_bits) {
     (*has_bits)[0] |= 16u;
@@ -2709,7 +2823,13 @@ class UserToBitHandshake::_Internal {
     (*has_bits)[0] |= 4u;
   }
   static void set_has_sasl_support(HasBits* has_bits) {
+    (*has_bits)[0] |= 256u;
+  }
+  static void set_has_enable_multiplex(HasBits* has_bits) {
     (*has_bits)[0] |= 128u;
+  }
+  static void set_has_capabilities_version(HasBits* has_bits) {
+    (*has_bits)[0] |= 512u;
   }
 };
 
@@ -2763,8 +2883,8 @@ UserToBitHandshake::UserToBitHandshake(const UserToBitHandshake& from)
 void UserToBitHandshake::SharedCtor() {
 ::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
     reinterpret_cast<char*>(&credentials_) - reinterpret_cast<char*>(this)),
-    0, static_cast<size_t>(reinterpret_cast<char*>(&sasl_support_) -
-    reinterpret_cast<char*>(&credentials_)) + sizeof(sasl_support_));
+    0, static_cast<size_t>(reinterpret_cast<char*>(&capabilities_version_) -
+    reinterpret_cast<char*>(&credentials_)) + sizeof(capabilities_version_));
 channel_ = 2;
 }
 
@@ -2814,10 +2934,15 @@ void UserToBitHandshake::Clear() {
   }
   if (cached_has_bits & 0x000000f8u) {
     ::memset(&rpc_version_, 0, static_cast<size_t>(
-        reinterpret_cast<char*>(&sasl_support_) -
-        reinterpret_cast<char*>(&rpc_version_)) + sizeof(sasl_support_));
+        reinterpret_cast<char*>(&enable_multiplex_) -
+        reinterpret_cast<char*>(&rpc_version_)) + sizeof(enable_multiplex_));
   }
-  channel_ = 2;
+  if (cached_has_bits & 0x00000700u) {
+    ::memset(&sasl_support_, 0, static_cast<size_t>(
+        reinterpret_cast<char*>(&capabilities_version_) -
+        reinterpret_cast<char*>(&sasl_support_)) + sizeof(capabilities_version_));
+    channel_ = 2;
+  }
   _has_bits_.Clear();
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
@@ -2906,6 +3031,22 @@ const char* UserToBitHandshake::_InternalParse(const char* ptr, ::PROTOBUF_NAMES
           }
         } else goto handle_unusual;
         continue;
+      // optional bool enable_multiplex = 10 [default = false];
+      case 10:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 80)) {
+          _Internal::set_has_enable_multiplex(&has_bits);
+          enable_multiplex_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // optional int32 capabilities_version = 11 [default = 0];
+      case 11:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 88)) {
+          _Internal::set_has_capabilities_version(&has_bits);
+          capabilities_version_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
       default: {
       handle_unusual:
         if ((tag == 0) || ((tag & 7) == 4)) {
@@ -2938,7 +3079,7 @@ failure:
 
   cached_has_bits = _has_bits_[0];
   // optional .exec.shared.RpcChannel channel = 1 [default = USER];
-  if (cached_has_bits & 0x00000100u) {
+  if (cached_has_bits & 0x00000400u) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteEnumToArray(
       1, this->_internal_channel(), target);
@@ -2993,10 +3134,22 @@ failure:
   }
 
   // optional .exec.user.SaslSupport sasl_support = 9;
-  if (cached_has_bits & 0x00000080u) {
+  if (cached_has_bits & 0x00000100u) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteEnumToArray(
       9, this->_internal_sasl_support(), target);
+  }
+
+  // optional bool enable_multiplex = 10 [default = false];
+  if (cached_has_bits & 0x00000080u) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBoolToArray(10, this->_internal_enable_multiplex(), target);
+  }
+
+  // optional int32 capabilities_version = 11 [default = 0];
+  if (cached_has_bits & 0x00000200u) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(11, this->_internal_capabilities_version(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -3060,19 +3213,33 @@ size_t UserToBitHandshake::ByteSizeLong() const {
       total_size += 1 + 1;
     }
 
-    // optional .exec.user.SaslSupport sasl_support = 9;
+    // optional bool enable_multiplex = 10 [default = false];
     if (cached_has_bits & 0x00000080u) {
+      total_size += 1 + 1;
+    }
+
+  }
+  if (cached_has_bits & 0x00000700u) {
+    // optional .exec.user.SaslSupport sasl_support = 9;
+    if (cached_has_bits & 0x00000100u) {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::EnumSize(this->_internal_sasl_support());
     }
 
-  }
-  // optional .exec.shared.RpcChannel channel = 1 [default = USER];
-  if (cached_has_bits & 0x00000100u) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::EnumSize(this->_internal_channel());
-  }
+    // optional int32 capabilities_version = 11 [default = 0];
+    if (cached_has_bits & 0x00000200u) {
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+          this->_internal_capabilities_version());
+    }
 
+    // optional .exec.shared.RpcChannel channel = 1 [default = USER];
+    if (cached_has_bits & 0x00000400u) {
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::EnumSize(this->_internal_channel());
+    }
+
+  }
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
         _internal_metadata_, total_size, &_cached_size_);
@@ -3128,12 +3295,21 @@ void UserToBitHandshake::MergeFrom(const UserToBitHandshake& from) {
       support_timeout_ = from.support_timeout_;
     }
     if (cached_has_bits & 0x00000080u) {
-      sasl_support_ = from.sasl_support_;
+      enable_multiplex_ = from.enable_multiplex_;
     }
     _has_bits_[0] |= cached_has_bits;
   }
-  if (cached_has_bits & 0x00000100u) {
-    _internal_set_channel(from._internal_channel());
+  if (cached_has_bits & 0x00000700u) {
+    if (cached_has_bits & 0x00000100u) {
+      sasl_support_ = from.sasl_support_;
+    }
+    if (cached_has_bits & 0x00000200u) {
+      capabilities_version_ = from.capabilities_version_;
+    }
+    if (cached_has_bits & 0x00000400u) {
+      channel_ = from.channel_;
+    }
+    _has_bits_[0] |= cached_has_bits;
   }
 }
 
@@ -3163,8 +3339,8 @@ void UserToBitHandshake::InternalSwap(UserToBitHandshake* other) {
   _internal_metadata_.Swap<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(&other->_internal_metadata_);
   swap(_has_bits_[0], other->_has_bits_[0]);
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(UserToBitHandshake, sasl_support_)
-      + sizeof(UserToBitHandshake::sasl_support_)
+      PROTOBUF_FIELD_OFFSET(UserToBitHandshake, capabilities_version_)
+      + sizeof(UserToBitHandshake::capabilities_version_)
       - PROTOBUF_FIELD_OFFSET(UserToBitHandshake, credentials_)>(
           reinterpret_cast<char*>(&credentials_),
           reinterpret_cast<char*>(&other->credentials_));
@@ -14061,6 +14237,997 @@ void RunQuery::InternalSwap(RunQuery* other) {
       file_level_metadata_User_2eproto[30]);
 }
 
+// ===================================================================
+
+class NewSessionRequest::_Internal {
+ public:
+  using HasBits = decltype(std::declval<NewSessionRequest>()._has_bits_);
+  static const ::exec::user::UserProperties& properties(const NewSessionRequest* msg);
+  static void set_has_properties(HasBits* has_bits) {
+    (*has_bits)[0] |= 1u;
+  }
+};
+
+const ::exec::user::UserProperties&
+NewSessionRequest::_Internal::properties(const NewSessionRequest* msg) {
+  return *msg->properties_;
+}
+NewSessionRequest::NewSessionRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
+  SharedCtor();
+  RegisterArenaDtor(arena);
+  // @@protoc_insertion_point(arena_constructor:exec.user.NewSessionRequest)
+}
+NewSessionRequest::NewSessionRequest(const NewSessionRequest& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message(),
+      _has_bits_(from._has_bits_) {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  if (from._internal_has_properties()) {
+    properties_ = new ::exec::user::UserProperties(*from.properties_);
+  } else {
+    properties_ = nullptr;
+  }
+  // @@protoc_insertion_point(copy_constructor:exec.user.NewSessionRequest)
+}
+
+void NewSessionRequest::SharedCtor() {
+properties_ = nullptr;
+}
+
+NewSessionRequest::~NewSessionRequest() {
+  // @@protoc_insertion_point(destructor:exec.user.NewSessionRequest)
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+void NewSessionRequest::SharedDtor() {
+  GOOGLE_DCHECK(GetArena() == nullptr);
+  if (this != internal_default_instance()) delete properties_;
+}
+
+void NewSessionRequest::ArenaDtor(void* object) {
+  NewSessionRequest* _this = reinterpret_cast< NewSessionRequest* >(object);
+  (void)_this;
+}
+void NewSessionRequest::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void NewSessionRequest::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+
+void NewSessionRequest::Clear() {
+// @@protoc_insertion_point(message_clear_start:exec.user.NewSessionRequest)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  cached_has_bits = _has_bits_[0];
+  if (cached_has_bits & 0x00000001u) {
+    GOOGLE_DCHECK(properties_ != nullptr);
+    properties_->Clear();
+  }
+  _has_bits_.Clear();
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* NewSessionRequest::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  _Internal::HasBits has_bits{};
+  while (!ctx->Done(&ptr)) {
+    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // optional .exec.user.UserProperties properties = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
+          ptr = ctx->ParseMessage(_internal_mutable_properties(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      default: {
+      handle_unusual:
+        if ((tag == 0) || ((tag & 7) == 4)) {
+          CHK_(ptr);
+          ctx->SetLastTag(tag);
+          goto success;
+        }
+        ptr = UnknownFieldParse(tag,
+            _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+            ptr, ctx);
+        CHK_(ptr != nullptr);
+        continue;
+      }
+    }  // switch
+  }  // while
+success:
+  _has_bits_.Or(has_bits);
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto success;
+#undef CHK_
+}
+
+::PROTOBUF_NAMESPACE_ID::uint8* NewSessionRequest::_InternalSerialize(
+    ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:exec.user.NewSessionRequest)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  cached_has_bits = _has_bits_[0];
+  // optional .exec.user.UserProperties properties = 1;
+  if (cached_has_bits & 0x00000001u) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        1, _Internal::properties(this), target, stream);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:exec.user.NewSessionRequest)
+  return target;
+}
+
+size_t NewSessionRequest::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:exec.user.NewSessionRequest)
+  size_t total_size = 0;
+
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // optional .exec.user.UserProperties properties = 1;
+  cached_has_bits = _has_bits_[0];
+  if (cached_has_bits & 0x00000001u) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *properties_);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
+        _internal_metadata_, total_size, &_cached_size_);
+  }
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void NewSessionRequest::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:exec.user.NewSessionRequest)
+  GOOGLE_DCHECK_NE(&from, this);
+  const NewSessionRequest* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<NewSessionRequest>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:exec.user.NewSessionRequest)
+    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:exec.user.NewSessionRequest)
+    MergeFrom(*source);
+  }
+}
+
+void NewSessionRequest::MergeFrom(const NewSessionRequest& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:exec.user.NewSessionRequest)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from._internal_has_properties()) {
+    _internal_mutable_properties()->::exec::user::UserProperties::MergeFrom(from._internal_properties());
+  }
+}
+
+void NewSessionRequest::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:exec.user.NewSessionRequest)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void NewSessionRequest::CopyFrom(const NewSessionRequest& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:exec.user.NewSessionRequest)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool NewSessionRequest::IsInitialized() const {
+  if (_internal_has_properties()) {
+    if (!properties_->IsInitialized()) return false;
+  }
+  return true;
+}
+
+void NewSessionRequest::InternalSwap(NewSessionRequest* other) {
+  using std::swap;
+  _internal_metadata_.Swap<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(&other->_internal_metadata_);
+  swap(_has_bits_[0], other->_has_bits_[0]);
+  swap(properties_, other->properties_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata NewSessionRequest::GetMetadata() const {
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_User_2eproto_getter, &descriptor_table_User_2eproto_once,
+      file_level_metadata_User_2eproto[31]);
+}
+
+// ===================================================================
+
+class SessionHandle::_Internal {
+ public:
+  using HasBits = decltype(std::declval<SessionHandle>()._has_bits_);
+  static void set_has_session_id(HasBits* has_bits) {
+    (*has_bits)[0] |= 1u;
+  }
+};
+
+SessionHandle::SessionHandle(::PROTOBUF_NAMESPACE_ID::Arena* arena)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
+  SharedCtor();
+  RegisterArenaDtor(arena);
+  // @@protoc_insertion_point(arena_constructor:exec.user.SessionHandle)
+}
+SessionHandle::SessionHandle(const SessionHandle& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message(),
+      _has_bits_(from._has_bits_) {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  session_id_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (from._internal_has_session_id()) {
+    session_id_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_session_id(), 
+      GetArena());
+  }
+  // @@protoc_insertion_point(copy_constructor:exec.user.SessionHandle)
+}
+
+void SessionHandle::SharedCtor() {
+session_id_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+
+SessionHandle::~SessionHandle() {
+  // @@protoc_insertion_point(destructor:exec.user.SessionHandle)
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+void SessionHandle::SharedDtor() {
+  GOOGLE_DCHECK(GetArena() == nullptr);
+  session_id_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+
+void SessionHandle::ArenaDtor(void* object) {
+  SessionHandle* _this = reinterpret_cast< SessionHandle* >(object);
+  (void)_this;
+}
+void SessionHandle::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void SessionHandle::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+
+void SessionHandle::Clear() {
+// @@protoc_insertion_point(message_clear_start:exec.user.SessionHandle)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  cached_has_bits = _has_bits_[0];
+  if (cached_has_bits & 0x00000001u) {
+    session_id_.ClearNonDefaultToEmpty();
+  }
+  _has_bits_.Clear();
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* SessionHandle::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  _Internal::HasBits has_bits{};
+  while (!ctx->Done(&ptr)) {
+    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // optional string session_id = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
+          auto str = _internal_mutable_session_id();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          #ifndef NDEBUG
+          ::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "exec.user.SessionHandle.session_id");
+          #endif  // !NDEBUG
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      default: {
+      handle_unusual:
+        if ((tag == 0) || ((tag & 7) == 4)) {
+          CHK_(ptr);
+          ctx->SetLastTag(tag);
+          goto success;
+        }
+        ptr = UnknownFieldParse(tag,
+            _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+            ptr, ctx);
+        CHK_(ptr != nullptr);
+        continue;
+      }
+    }  // switch
+  }  // while
+success:
+  _has_bits_.Or(has_bits);
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto success;
+#undef CHK_
+}
+
+::PROTOBUF_NAMESPACE_ID::uint8* SessionHandle::_InternalSerialize(
+    ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:exec.user.SessionHandle)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  cached_has_bits = _has_bits_[0];
+  // optional string session_id = 1;
+  if (cached_has_bits & 0x00000001u) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->_internal_session_id().data(), static_cast<int>(this->_internal_session_id().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SERIALIZE,
+      "exec.user.SessionHandle.session_id");
+    target = stream->WriteStringMaybeAliased(
+        1, this->_internal_session_id(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:exec.user.SessionHandle)
+  return target;
+}
+
+size_t SessionHandle::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:exec.user.SessionHandle)
+  size_t total_size = 0;
+
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // optional string session_id = 1;
+  cached_has_bits = _has_bits_[0];
+  if (cached_has_bits & 0x00000001u) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_session_id());
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
+        _internal_metadata_, total_size, &_cached_size_);
+  }
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void SessionHandle::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:exec.user.SessionHandle)
+  GOOGLE_DCHECK_NE(&from, this);
+  const SessionHandle* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<SessionHandle>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:exec.user.SessionHandle)
+    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:exec.user.SessionHandle)
+    MergeFrom(*source);
+  }
+}
+
+void SessionHandle::MergeFrom(const SessionHandle& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:exec.user.SessionHandle)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from._internal_has_session_id()) {
+    _internal_set_session_id(from._internal_session_id());
+  }
+}
+
+void SessionHandle::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:exec.user.SessionHandle)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void SessionHandle::CopyFrom(const SessionHandle& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:exec.user.SessionHandle)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool SessionHandle::IsInitialized() const {
+  return true;
+}
+
+void SessionHandle::InternalSwap(SessionHandle* other) {
+  using std::swap;
+  _internal_metadata_.Swap<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(&other->_internal_metadata_);
+  swap(_has_bits_[0], other->_has_bits_[0]);
+  session_id_.Swap(&other->session_id_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata SessionHandle::GetMetadata() const {
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_User_2eproto_getter, &descriptor_table_User_2eproto_once,
+      file_level_metadata_User_2eproto[32]);
+}
+
+// ===================================================================
+
+class RunQueryWithSessionHandle::_Internal {
+ public:
+  using HasBits = decltype(std::declval<RunQueryWithSessionHandle>()._has_bits_);
+  static const ::exec::user::RunQuery& runquery(const RunQueryWithSessionHandle* msg);
+  static void set_has_runquery(HasBits* has_bits) {
+    (*has_bits)[0] |= 1u;
+  }
+  static const ::exec::user::SessionHandle& sessionhandle(const RunQueryWithSessionHandle* msg);
+  static void set_has_sessionhandle(HasBits* has_bits) {
+    (*has_bits)[0] |= 2u;
+  }
+};
+
+const ::exec::user::RunQuery&
+RunQueryWithSessionHandle::_Internal::runquery(const RunQueryWithSessionHandle* msg) {
+  return *msg->runquery_;
+}
+const ::exec::user::SessionHandle&
+RunQueryWithSessionHandle::_Internal::sessionhandle(const RunQueryWithSessionHandle* msg) {
+  return *msg->sessionhandle_;
+}
+RunQueryWithSessionHandle::RunQueryWithSessionHandle(::PROTOBUF_NAMESPACE_ID::Arena* arena)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
+  SharedCtor();
+  RegisterArenaDtor(arena);
+  // @@protoc_insertion_point(arena_constructor:exec.user.RunQueryWithSessionHandle)
+}
+RunQueryWithSessionHandle::RunQueryWithSessionHandle(const RunQueryWithSessionHandle& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message(),
+      _has_bits_(from._has_bits_) {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  if (from._internal_has_runquery()) {
+    runquery_ = new ::exec::user::RunQuery(*from.runquery_);
+  } else {
+    runquery_ = nullptr;
+  }
+  if (from._internal_has_sessionhandle()) {
+    sessionhandle_ = new ::exec::user::SessionHandle(*from.sessionhandle_);
+  } else {
+    sessionhandle_ = nullptr;
+  }
+  // @@protoc_insertion_point(copy_constructor:exec.user.RunQueryWithSessionHandle)
+}
+
+void RunQueryWithSessionHandle::SharedCtor() {
+::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
+    reinterpret_cast<char*>(&runquery_) - reinterpret_cast<char*>(this)),
+    0, static_cast<size_t>(reinterpret_cast<char*>(&sessionhandle_) -
+    reinterpret_cast<char*>(&runquery_)) + sizeof(sessionhandle_));
+}
+
+RunQueryWithSessionHandle::~RunQueryWithSessionHandle() {
+  // @@protoc_insertion_point(destructor:exec.user.RunQueryWithSessionHandle)
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+void RunQueryWithSessionHandle::SharedDtor() {
+  GOOGLE_DCHECK(GetArena() == nullptr);
+  if (this != internal_default_instance()) delete runquery_;
+  if (this != internal_default_instance()) delete sessionhandle_;
+}
+
+void RunQueryWithSessionHandle::ArenaDtor(void* object) {
+  RunQueryWithSessionHandle* _this = reinterpret_cast< RunQueryWithSessionHandle* >(object);
+  (void)_this;
+}
+void RunQueryWithSessionHandle::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void RunQueryWithSessionHandle::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+
+void RunQueryWithSessionHandle::Clear() {
+// @@protoc_insertion_point(message_clear_start:exec.user.RunQueryWithSessionHandle)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  cached_has_bits = _has_bits_[0];
+  if (cached_has_bits & 0x00000003u) {
+    if (cached_has_bits & 0x00000001u) {
+      GOOGLE_DCHECK(runquery_ != nullptr);
+      runquery_->Clear();
+    }
+    if (cached_has_bits & 0x00000002u) {
+      GOOGLE_DCHECK(sessionhandle_ != nullptr);
+      sessionhandle_->Clear();
+    }
+  }
+  _has_bits_.Clear();
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* RunQueryWithSessionHandle::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  _Internal::HasBits has_bits{};
+  while (!ctx->Done(&ptr)) {
+    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // optional .exec.user.RunQuery runQuery = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
+          ptr = ctx->ParseMessage(_internal_mutable_runquery(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // optional .exec.user.SessionHandle sessionHandle = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
+          ptr = ctx->ParseMessage(_internal_mutable_sessionhandle(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      default: {
+      handle_unusual:
+        if ((tag == 0) || ((tag & 7) == 4)) {
+          CHK_(ptr);
+          ctx->SetLastTag(tag);
+          goto success;
+        }
+        ptr = UnknownFieldParse(tag,
+            _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+            ptr, ctx);
+        CHK_(ptr != nullptr);
+        continue;
+      }
+    }  // switch
+  }  // while
+success:
+  _has_bits_.Or(has_bits);
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto success;
+#undef CHK_
+}
+
+::PROTOBUF_NAMESPACE_ID::uint8* RunQueryWithSessionHandle::_InternalSerialize(
+    ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:exec.user.RunQueryWithSessionHandle)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  cached_has_bits = _has_bits_[0];
+  // optional .exec.user.RunQuery runQuery = 1;
+  if (cached_has_bits & 0x00000001u) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        1, _Internal::runquery(this), target, stream);
+  }
+
+  // optional .exec.user.SessionHandle sessionHandle = 2;
+  if (cached_has_bits & 0x00000002u) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        2, _Internal::sessionhandle(this), target, stream);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:exec.user.RunQueryWithSessionHandle)
+  return target;
+}
+
+size_t RunQueryWithSessionHandle::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:exec.user.RunQueryWithSessionHandle)
+  size_t total_size = 0;
+
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  cached_has_bits = _has_bits_[0];
+  if (cached_has_bits & 0x00000003u) {
+    // optional .exec.user.RunQuery runQuery = 1;
+    if (cached_has_bits & 0x00000001u) {
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+          *runquery_);
+    }
+
+    // optional .exec.user.SessionHandle sessionHandle = 2;
+    if (cached_has_bits & 0x00000002u) {
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+          *sessionhandle_);
+    }
+
+  }
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
+        _internal_metadata_, total_size, &_cached_size_);
+  }
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void RunQueryWithSessionHandle::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:exec.user.RunQueryWithSessionHandle)
+  GOOGLE_DCHECK_NE(&from, this);
+  const RunQueryWithSessionHandle* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<RunQueryWithSessionHandle>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:exec.user.RunQueryWithSessionHandle)
+    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:exec.user.RunQueryWithSessionHandle)
+    MergeFrom(*source);
+  }
+}
+
+void RunQueryWithSessionHandle::MergeFrom(const RunQueryWithSessionHandle& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:exec.user.RunQueryWithSessionHandle)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  cached_has_bits = from._has_bits_[0];
+  if (cached_has_bits & 0x00000003u) {
+    if (cached_has_bits & 0x00000001u) {
+      _internal_mutable_runquery()->::exec::user::RunQuery::MergeFrom(from._internal_runquery());
+    }
+    if (cached_has_bits & 0x00000002u) {
+      _internal_mutable_sessionhandle()->::exec::user::SessionHandle::MergeFrom(from._internal_sessionhandle());
+    }
+  }
+}
+
+void RunQueryWithSessionHandle::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:exec.user.RunQueryWithSessionHandle)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void RunQueryWithSessionHandle::CopyFrom(const RunQueryWithSessionHandle& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:exec.user.RunQueryWithSessionHandle)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool RunQueryWithSessionHandle::IsInitialized() const {
+  return true;
+}
+
+void RunQueryWithSessionHandle::InternalSwap(RunQueryWithSessionHandle* other) {
+  using std::swap;
+  _internal_metadata_.Swap<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(&other->_internal_metadata_);
+  swap(_has_bits_[0], other->_has_bits_[0]);
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(RunQueryWithSessionHandle, sessionhandle_)
+      + sizeof(RunQueryWithSessionHandle::sessionhandle_)
+      - PROTOBUF_FIELD_OFFSET(RunQueryWithSessionHandle, runquery_)>(
+          reinterpret_cast<char*>(&runquery_),
+          reinterpret_cast<char*>(&other->runquery_));
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata RunQueryWithSessionHandle::GetMetadata() const {
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_User_2eproto_getter, &descriptor_table_User_2eproto_once,
+      file_level_metadata_User_2eproto[33]);
+}
+
+// ===================================================================
+
+class CancelQueryWithSessionHandle::_Internal {
+ public:
+  using HasBits = decltype(std::declval<CancelQueryWithSessionHandle>()._has_bits_);
+  static const ::exec::shared::QueryId& query_id(const CancelQueryWithSessionHandle* msg);
+  static void set_has_query_id(HasBits* has_bits) {
+    (*has_bits)[0] |= 1u;
+  }
+  static const ::exec::user::SessionHandle& session_handle(const CancelQueryWithSessionHandle* msg);
+  static void set_has_session_handle(HasBits* has_bits) {
+    (*has_bits)[0] |= 2u;
+  }
+};
+
+const ::exec::shared::QueryId&
+CancelQueryWithSessionHandle::_Internal::query_id(const CancelQueryWithSessionHandle* msg) {
+  return *msg->query_id_;
+}
+const ::exec::user::SessionHandle&
+CancelQueryWithSessionHandle::_Internal::session_handle(const CancelQueryWithSessionHandle* msg) {
+  return *msg->session_handle_;
+}
+void CancelQueryWithSessionHandle::clear_query_id() {
+  if (query_id_ != nullptr) query_id_->Clear();
+  _has_bits_[0] &= ~0x00000001u;
+}
+CancelQueryWithSessionHandle::CancelQueryWithSessionHandle(::PROTOBUF_NAMESPACE_ID::Arena* arena)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
+  SharedCtor();
+  RegisterArenaDtor(arena);
+  // @@protoc_insertion_point(arena_constructor:exec.user.CancelQueryWithSessionHandle)
+}
+CancelQueryWithSessionHandle::CancelQueryWithSessionHandle(const CancelQueryWithSessionHandle& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message(),
+      _has_bits_(from._has_bits_) {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  if (from._internal_has_query_id()) {
+    query_id_ = new ::exec::shared::QueryId(*from.query_id_);
+  } else {
+    query_id_ = nullptr;
+  }
+  if (from._internal_has_session_handle()) {
+    session_handle_ = new ::exec::user::SessionHandle(*from.session_handle_);
+  } else {
+    session_handle_ = nullptr;
+  }
+  // @@protoc_insertion_point(copy_constructor:exec.user.CancelQueryWithSessionHandle)
+}
+
+void CancelQueryWithSessionHandle::SharedCtor() {
+::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
+    reinterpret_cast<char*>(&query_id_) - reinterpret_cast<char*>(this)),
+    0, static_cast<size_t>(reinterpret_cast<char*>(&session_handle_) -
+    reinterpret_cast<char*>(&query_id_)) + sizeof(session_handle_));
+}
+
+CancelQueryWithSessionHandle::~CancelQueryWithSessionHandle() {
+  // @@protoc_insertion_point(destructor:exec.user.CancelQueryWithSessionHandle)
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+void CancelQueryWithSessionHandle::SharedDtor() {
+  GOOGLE_DCHECK(GetArena() == nullptr);
+  if (this != internal_default_instance()) delete query_id_;
+  if (this != internal_default_instance()) delete session_handle_;
+}
+
+void CancelQueryWithSessionHandle::ArenaDtor(void* object) {
+  CancelQueryWithSessionHandle* _this = reinterpret_cast< CancelQueryWithSessionHandle* >(object);
+  (void)_this;
+}
+void CancelQueryWithSessionHandle::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void CancelQueryWithSessionHandle::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+
+void CancelQueryWithSessionHandle::Clear() {
+// @@protoc_insertion_point(message_clear_start:exec.user.CancelQueryWithSessionHandle)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  cached_has_bits = _has_bits_[0];
+  if (cached_has_bits & 0x00000003u) {
+    if (cached_has_bits & 0x00000001u) {
+      GOOGLE_DCHECK(query_id_ != nullptr);
+      query_id_->Clear();
+    }
+    if (cached_has_bits & 0x00000002u) {
+      GOOGLE_DCHECK(session_handle_ != nullptr);
+      session_handle_->Clear();
+    }
+  }
+  _has_bits_.Clear();
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* CancelQueryWithSessionHandle::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  _Internal::HasBits has_bits{};
+  while (!ctx->Done(&ptr)) {
+    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // optional .exec.shared.QueryId query_id = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
+          ptr = ctx->ParseMessage(_internal_mutable_query_id(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // optional .exec.user.SessionHandle session_handle = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
+          ptr = ctx->ParseMessage(_internal_mutable_session_handle(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      default: {
+      handle_unusual:
+        if ((tag == 0) || ((tag & 7) == 4)) {
+          CHK_(ptr);
+          ctx->SetLastTag(tag);
+          goto success;
+        }
+        ptr = UnknownFieldParse(tag,
+            _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+            ptr, ctx);
+        CHK_(ptr != nullptr);
+        continue;
+      }
+    }  // switch
+  }  // while
+success:
+  _has_bits_.Or(has_bits);
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto success;
+#undef CHK_
+}
+
+::PROTOBUF_NAMESPACE_ID::uint8* CancelQueryWithSessionHandle::_InternalSerialize(
+    ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:exec.user.CancelQueryWithSessionHandle)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  cached_has_bits = _has_bits_[0];
+  // optional .exec.shared.QueryId query_id = 1;
+  if (cached_has_bits & 0x00000001u) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        1, _Internal::query_id(this), target, stream);
+  }
+
+  // optional .exec.user.SessionHandle session_handle = 2;
+  if (cached_has_bits & 0x00000002u) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        2, _Internal::session_handle(this), target, stream);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:exec.user.CancelQueryWithSessionHandle)
+  return target;
+}
+
+size_t CancelQueryWithSessionHandle::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:exec.user.CancelQueryWithSessionHandle)
+  size_t total_size = 0;
+
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  cached_has_bits = _has_bits_[0];
+  if (cached_has_bits & 0x00000003u) {
+    // optional .exec.shared.QueryId query_id = 1;
+    if (cached_has_bits & 0x00000001u) {
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+          *query_id_);
+    }
+
+    // optional .exec.user.SessionHandle session_handle = 2;
+    if (cached_has_bits & 0x00000002u) {
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+          *session_handle_);
+    }
+
+  }
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
+        _internal_metadata_, total_size, &_cached_size_);
+  }
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void CancelQueryWithSessionHandle::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:exec.user.CancelQueryWithSessionHandle)
+  GOOGLE_DCHECK_NE(&from, this);
+  const CancelQueryWithSessionHandle* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<CancelQueryWithSessionHandle>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:exec.user.CancelQueryWithSessionHandle)
+    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:exec.user.CancelQueryWithSessionHandle)
+    MergeFrom(*source);
+  }
+}
+
+void CancelQueryWithSessionHandle::MergeFrom(const CancelQueryWithSessionHandle& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:exec.user.CancelQueryWithSessionHandle)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  cached_has_bits = from._has_bits_[0];
+  if (cached_has_bits & 0x00000003u) {
+    if (cached_has_bits & 0x00000001u) {
+      _internal_mutable_query_id()->::exec::shared::QueryId::MergeFrom(from._internal_query_id());
+    }
+    if (cached_has_bits & 0x00000002u) {
+      _internal_mutable_session_handle()->::exec::user::SessionHandle::MergeFrom(from._internal_session_handle());
+    }
+  }
+}
+
+void CancelQueryWithSessionHandle::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:exec.user.CancelQueryWithSessionHandle)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void CancelQueryWithSessionHandle::CopyFrom(const CancelQueryWithSessionHandle& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:exec.user.CancelQueryWithSessionHandle)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool CancelQueryWithSessionHandle::IsInitialized() const {
+  return true;
+}
+
+void CancelQueryWithSessionHandle::InternalSwap(CancelQueryWithSessionHandle* other) {
+  using std::swap;
+  _internal_metadata_.Swap<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(&other->_internal_metadata_);
+  swap(_has_bits_[0], other->_has_bits_[0]);
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(CancelQueryWithSessionHandle, session_handle_)
+      + sizeof(CancelQueryWithSessionHandle::session_handle_)
+      - PROTOBUF_FIELD_OFFSET(CancelQueryWithSessionHandle, query_id_)>(
+          reinterpret_cast<char*>(&query_id_),
+          reinterpret_cast<char*>(&other->query_id_));
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata CancelQueryWithSessionHandle::GetMetadata() const {
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_User_2eproto_getter, &descriptor_table_User_2eproto_once,
+      file_level_metadata_User_2eproto[34]);
+}
+
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace user
 }  // namespace exec
@@ -14157,6 +15324,18 @@ template<> PROTOBUF_NOINLINE ::exec::user::ServerMeta* Arena::CreateMaybeMessage
 }
 template<> PROTOBUF_NOINLINE ::exec::user::RunQuery* Arena::CreateMaybeMessage< ::exec::user::RunQuery >(Arena* arena) {
   return Arena::CreateMessageInternal< ::exec::user::RunQuery >(arena);
+}
+template<> PROTOBUF_NOINLINE ::exec::user::NewSessionRequest* Arena::CreateMaybeMessage< ::exec::user::NewSessionRequest >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::exec::user::NewSessionRequest >(arena);
+}
+template<> PROTOBUF_NOINLINE ::exec::user::SessionHandle* Arena::CreateMaybeMessage< ::exec::user::SessionHandle >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::exec::user::SessionHandle >(arena);
+}
+template<> PROTOBUF_NOINLINE ::exec::user::RunQueryWithSessionHandle* Arena::CreateMaybeMessage< ::exec::user::RunQueryWithSessionHandle >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::exec::user::RunQueryWithSessionHandle >(arena);
+}
+template<> PROTOBUF_NOINLINE ::exec::user::CancelQueryWithSessionHandle* Arena::CreateMaybeMessage< ::exec::user::CancelQueryWithSessionHandle >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::exec::user::CancelQueryWithSessionHandle >(arena);
 }
 PROTOBUF_NAMESPACE_CLOSE
 

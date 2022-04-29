@@ -66,7 +66,7 @@ class BitToUserHandshake;
 struct BitToUserHandshakeDefaultTypeInternal;
 extern BitToUserHandshakeDefaultTypeInternal _BitToUserHandshake_default_instance_;
 class CancelQueryWithSessionHandle;
-class CancelQueryWithSessionHandleDefaultTypeInternal;
+struct CancelQueryWithSessionHandleDefaultTypeInternal;
 extern CancelQueryWithSessionHandleDefaultTypeInternal _CancelQueryWithSessionHandle_default_instance_;
 class CatalogMetadata;
 struct CatalogMetadataDefaultTypeInternal;
@@ -120,7 +120,7 @@ class LikeFilter;
 struct LikeFilterDefaultTypeInternal;
 extern LikeFilterDefaultTypeInternal _LikeFilter_default_instance_;
 class NewSessionRequest;
-class NewSessionRequestDefaultTypeInternal;
+struct NewSessionRequestDefaultTypeInternal;
 extern NewSessionRequestDefaultTypeInternal _NewSessionRequest_default_instance_;
 class PreparedStatement;
 struct PreparedStatementDefaultTypeInternal;
@@ -147,7 +147,7 @@ class RunQuery;
 struct RunQueryDefaultTypeInternal;
 extern RunQueryDefaultTypeInternal _RunQuery_default_instance_;
 class RunQueryWithSessionHandle;
-class RunQueryWithSessionHandleDefaultTypeInternal;
+struct RunQueryWithSessionHandleDefaultTypeInternal;
 extern RunQueryWithSessionHandleDefaultTypeInternal _RunQueryWithSessionHandle_default_instance_;
 class SchemaMetadata;
 struct SchemaMetadataDefaultTypeInternal;
@@ -156,7 +156,7 @@ class ServerMeta;
 struct ServerMetaDefaultTypeInternal;
 extern ServerMetaDefaultTypeInternal _ServerMeta_default_instance_;
 class SessionHandle;
-class SessionHandleDefaultTypeInternal;
+struct SessionHandleDefaultTypeInternal;
 extern SessionHandleDefaultTypeInternal _SessionHandle_default_instance_;
 class TableMetadata;
 struct TableMetadataDefaultTypeInternal;
@@ -7885,11 +7885,12 @@ class RunQuery PROTOBUF_FINAL :
 };
 // -------------------------------------------------------------------
 
-class NewSessionRequest :
+class NewSessionRequest PROTOBUF_FINAL :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:exec.user.NewSessionRequest) */ {
  public:
-  NewSessionRequest();
-  virtual ~NewSessionRequest();
+  inline NewSessionRequest() : NewSessionRequest(nullptr) {}
+  ~NewSessionRequest() override;
+  explicit constexpr NewSessionRequest(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
 
   NewSessionRequest(const NewSessionRequest& from);
   NewSessionRequest(NewSessionRequest&& from) noexcept
@@ -7902,7 +7903,7 @@ class NewSessionRequest :
     return *this;
   }
   inline NewSessionRequest& operator=(NewSessionRequest&& from) noexcept {
-    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+    if (GetArena() == from.GetArena()) {
       if (this != &from) InternalSwap(&from);
     } else {
       CopyFrom(from);
@@ -7911,24 +7912,24 @@ class NewSessionRequest :
   }
 
   inline const ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet& unknown_fields() const {
-    return _internal_metadata_.unknown_fields();
+    return _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance);
   }
   inline ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet* mutable_unknown_fields() {
-    return _internal_metadata_.mutable_unknown_fields();
+    return _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
   }
 
   static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
     return GetDescriptor();
   }
   static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
-    return GetMetadataStatic().descriptor;
+    return default_instance().GetMetadata().descriptor;
   }
   static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
-    return GetMetadataStatic().reflection;
+    return default_instance().GetMetadata().reflection;
   }
-  static const NewSessionRequest& default_instance();
-
-  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static const NewSessionRequest& default_instance() {
+    return *internal_default_instance();
+  }
   static inline const NewSessionRequest* internal_default_instance() {
     return reinterpret_cast<const NewSessionRequest*>(
                &_NewSessionRequest_default_instance_);
@@ -7941,6 +7942,15 @@ class NewSessionRequest :
   }
   inline void Swap(NewSessionRequest* other) {
     if (other == this) return;
+    if (GetArena() == other->GetArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(NewSessionRequest* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetArena() == other->GetArena());
     InternalSwap(other);
   }
 
@@ -7975,23 +7985,14 @@ class NewSessionRequest :
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
     return "exec.user.NewSessionRequest";
   }
+  protected:
+  explicit NewSessionRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena);
   private:
-  inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
-    return nullptr;
-  }
-  inline void* MaybeArenaPtr() const {
-    return nullptr;
-  }
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
   public:
 
   ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
-  private:
-  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
-    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_User_2eproto);
-    return ::descriptor_table_User_2eproto.file_level_metadata[kIndexInFileMessages];
-  }
-
-  public:
 
   // nested types ----------------------------------------------------
 
@@ -8014,12 +8015,17 @@ class NewSessionRequest :
   const ::exec::user::UserProperties& _internal_properties() const;
   ::exec::user::UserProperties* _internal_mutable_properties();
   public:
+  void unsafe_arena_set_allocated_properties(
+      ::exec::user::UserProperties* properties);
+  ::exec::user::UserProperties* unsafe_arena_release_properties();
 
   // @@protoc_insertion_point(class_scope:exec.user.NewSessionRequest)
  private:
   class _Internal;
 
-  ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
   ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   ::exec::user::UserProperties* properties_;
@@ -8027,11 +8033,12 @@ class NewSessionRequest :
 };
 // -------------------------------------------------------------------
 
-class SessionHandle :
+class SessionHandle PROTOBUF_FINAL :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:exec.user.SessionHandle) */ {
  public:
-  SessionHandle();
-  virtual ~SessionHandle();
+  inline SessionHandle() : SessionHandle(nullptr) {}
+  ~SessionHandle() override;
+  explicit constexpr SessionHandle(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
 
   SessionHandle(const SessionHandle& from);
   SessionHandle(SessionHandle&& from) noexcept
@@ -8044,7 +8051,7 @@ class SessionHandle :
     return *this;
   }
   inline SessionHandle& operator=(SessionHandle&& from) noexcept {
-    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+    if (GetArena() == from.GetArena()) {
       if (this != &from) InternalSwap(&from);
     } else {
       CopyFrom(from);
@@ -8053,24 +8060,24 @@ class SessionHandle :
   }
 
   inline const ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet& unknown_fields() const {
-    return _internal_metadata_.unknown_fields();
+    return _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance);
   }
   inline ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet* mutable_unknown_fields() {
-    return _internal_metadata_.mutable_unknown_fields();
+    return _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
   }
 
   static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
     return GetDescriptor();
   }
   static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
-    return GetMetadataStatic().descriptor;
+    return default_instance().GetMetadata().descriptor;
   }
   static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
-    return GetMetadataStatic().reflection;
+    return default_instance().GetMetadata().reflection;
   }
-  static const SessionHandle& default_instance();
-
-  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static const SessionHandle& default_instance() {
+    return *internal_default_instance();
+  }
   static inline const SessionHandle* internal_default_instance() {
     return reinterpret_cast<const SessionHandle*>(
                &_SessionHandle_default_instance_);
@@ -8083,6 +8090,15 @@ class SessionHandle :
   }
   inline void Swap(SessionHandle* other) {
     if (other == this) return;
+    if (GetArena() == other->GetArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(SessionHandle* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetArena() == other->GetArena());
     InternalSwap(other);
   }
 
@@ -8117,23 +8133,14 @@ class SessionHandle :
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
     return "exec.user.SessionHandle";
   }
+  protected:
+  explicit SessionHandle(::PROTOBUF_NAMESPACE_ID::Arena* arena);
   private:
-  inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
-    return nullptr;
-  }
-  inline void* MaybeArenaPtr() const {
-    return nullptr;
-  }
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
   public:
 
   ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
-  private:
-  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
-    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_User_2eproto);
-    return ::descriptor_table_User_2eproto.file_level_metadata[kIndexInFileMessages];
-  }
-
-  public:
 
   // nested types ----------------------------------------------------
 
@@ -8149,10 +8156,8 @@ class SessionHandle :
   public:
   void clear_session_id();
   const std::string& session_id() const;
-  void set_session_id(const std::string& value);
-  void set_session_id(std::string&& value);
-  void set_session_id(const char* value);
-  void set_session_id(const char* value, size_t size);
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_session_id(ArgT0&& arg0, ArgT... args);
   std::string* mutable_session_id();
   std::string* release_session_id();
   void set_allocated_session_id(std::string* session_id);
@@ -8166,7 +8171,9 @@ class SessionHandle :
  private:
   class _Internal;
 
-  ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
   ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr session_id_;
@@ -8174,11 +8181,12 @@ class SessionHandle :
 };
 // -------------------------------------------------------------------
 
-class RunQueryWithSessionHandle :
+class RunQueryWithSessionHandle PROTOBUF_FINAL :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:exec.user.RunQueryWithSessionHandle) */ {
  public:
-  RunQueryWithSessionHandle();
-  virtual ~RunQueryWithSessionHandle();
+  inline RunQueryWithSessionHandle() : RunQueryWithSessionHandle(nullptr) {}
+  ~RunQueryWithSessionHandle() override;
+  explicit constexpr RunQueryWithSessionHandle(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
 
   RunQueryWithSessionHandle(const RunQueryWithSessionHandle& from);
   RunQueryWithSessionHandle(RunQueryWithSessionHandle&& from) noexcept
@@ -8191,7 +8199,7 @@ class RunQueryWithSessionHandle :
     return *this;
   }
   inline RunQueryWithSessionHandle& operator=(RunQueryWithSessionHandle&& from) noexcept {
-    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+    if (GetArena() == from.GetArena()) {
       if (this != &from) InternalSwap(&from);
     } else {
       CopyFrom(from);
@@ -8200,24 +8208,24 @@ class RunQueryWithSessionHandle :
   }
 
   inline const ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet& unknown_fields() const {
-    return _internal_metadata_.unknown_fields();
+    return _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance);
   }
   inline ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet* mutable_unknown_fields() {
-    return _internal_metadata_.mutable_unknown_fields();
+    return _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
   }
 
   static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
     return GetDescriptor();
   }
   static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
-    return GetMetadataStatic().descriptor;
+    return default_instance().GetMetadata().descriptor;
   }
   static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
-    return GetMetadataStatic().reflection;
+    return default_instance().GetMetadata().reflection;
   }
-  static const RunQueryWithSessionHandle& default_instance();
-
-  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static const RunQueryWithSessionHandle& default_instance() {
+    return *internal_default_instance();
+  }
   static inline const RunQueryWithSessionHandle* internal_default_instance() {
     return reinterpret_cast<const RunQueryWithSessionHandle*>(
                &_RunQueryWithSessionHandle_default_instance_);
@@ -8230,6 +8238,15 @@ class RunQueryWithSessionHandle :
   }
   inline void Swap(RunQueryWithSessionHandle* other) {
     if (other == this) return;
+    if (GetArena() == other->GetArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(RunQueryWithSessionHandle* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetArena() == other->GetArena());
     InternalSwap(other);
   }
 
@@ -8264,23 +8281,14 @@ class RunQueryWithSessionHandle :
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
     return "exec.user.RunQueryWithSessionHandle";
   }
+  protected:
+  explicit RunQueryWithSessionHandle(::PROTOBUF_NAMESPACE_ID::Arena* arena);
   private:
-  inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
-    return nullptr;
-  }
-  inline void* MaybeArenaPtr() const {
-    return nullptr;
-  }
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
   public:
 
   ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
-  private:
-  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
-    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_User_2eproto);
-    return ::descriptor_table_User_2eproto.file_level_metadata[kIndexInFileMessages];
-  }
-
-  public:
 
   // nested types ----------------------------------------------------
 
@@ -8304,6 +8312,9 @@ class RunQueryWithSessionHandle :
   const ::exec::user::RunQuery& _internal_runquery() const;
   ::exec::user::RunQuery* _internal_mutable_runquery();
   public:
+  void unsafe_arena_set_allocated_runquery(
+      ::exec::user::RunQuery* runquery);
+  ::exec::user::RunQuery* unsafe_arena_release_runquery();
 
   // optional .exec.user.SessionHandle sessionHandle = 2;
   bool has_sessionhandle() const;
@@ -8319,12 +8330,17 @@ class RunQueryWithSessionHandle :
   const ::exec::user::SessionHandle& _internal_sessionhandle() const;
   ::exec::user::SessionHandle* _internal_mutable_sessionhandle();
   public:
+  void unsafe_arena_set_allocated_sessionhandle(
+      ::exec::user::SessionHandle* sessionhandle);
+  ::exec::user::SessionHandle* unsafe_arena_release_sessionhandle();
 
   // @@protoc_insertion_point(class_scope:exec.user.RunQueryWithSessionHandle)
  private:
   class _Internal;
 
-  ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
   ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   ::exec::user::RunQuery* runquery_;
@@ -8333,11 +8349,12 @@ class RunQueryWithSessionHandle :
 };
 // -------------------------------------------------------------------
 
-class CancelQueryWithSessionHandle :
+class CancelQueryWithSessionHandle PROTOBUF_FINAL :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:exec.user.CancelQueryWithSessionHandle) */ {
  public:
-  CancelQueryWithSessionHandle();
-  virtual ~CancelQueryWithSessionHandle();
+  inline CancelQueryWithSessionHandle() : CancelQueryWithSessionHandle(nullptr) {}
+  ~CancelQueryWithSessionHandle() override;
+  explicit constexpr CancelQueryWithSessionHandle(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
 
   CancelQueryWithSessionHandle(const CancelQueryWithSessionHandle& from);
   CancelQueryWithSessionHandle(CancelQueryWithSessionHandle&& from) noexcept
@@ -8350,7 +8367,7 @@ class CancelQueryWithSessionHandle :
     return *this;
   }
   inline CancelQueryWithSessionHandle& operator=(CancelQueryWithSessionHandle&& from) noexcept {
-    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+    if (GetArena() == from.GetArena()) {
       if (this != &from) InternalSwap(&from);
     } else {
       CopyFrom(from);
@@ -8359,24 +8376,24 @@ class CancelQueryWithSessionHandle :
   }
 
   inline const ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet& unknown_fields() const {
-    return _internal_metadata_.unknown_fields();
+    return _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance);
   }
   inline ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet* mutable_unknown_fields() {
-    return _internal_metadata_.mutable_unknown_fields();
+    return _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
   }
 
   static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
     return GetDescriptor();
   }
   static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
-    return GetMetadataStatic().descriptor;
+    return default_instance().GetMetadata().descriptor;
   }
   static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
-    return GetMetadataStatic().reflection;
+    return default_instance().GetMetadata().reflection;
   }
-  static const CancelQueryWithSessionHandle& default_instance();
-
-  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static const CancelQueryWithSessionHandle& default_instance() {
+    return *internal_default_instance();
+  }
   static inline const CancelQueryWithSessionHandle* internal_default_instance() {
     return reinterpret_cast<const CancelQueryWithSessionHandle*>(
                &_CancelQueryWithSessionHandle_default_instance_);
@@ -8389,6 +8406,15 @@ class CancelQueryWithSessionHandle :
   }
   inline void Swap(CancelQueryWithSessionHandle* other) {
     if (other == this) return;
+    if (GetArena() == other->GetArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(CancelQueryWithSessionHandle* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetArena() == other->GetArena());
     InternalSwap(other);
   }
 
@@ -8423,23 +8449,14 @@ class CancelQueryWithSessionHandle :
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
     return "exec.user.CancelQueryWithSessionHandle";
   }
+  protected:
+  explicit CancelQueryWithSessionHandle(::PROTOBUF_NAMESPACE_ID::Arena* arena);
   private:
-  inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
-    return nullptr;
-  }
-  inline void* MaybeArenaPtr() const {
-    return nullptr;
-  }
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
   public:
 
   ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
-  private:
-  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
-    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_User_2eproto);
-    return ::descriptor_table_User_2eproto.file_level_metadata[kIndexInFileMessages];
-  }
-
-  public:
 
   // nested types ----------------------------------------------------
 
@@ -8463,6 +8480,9 @@ class CancelQueryWithSessionHandle :
   const ::exec::shared::QueryId& _internal_query_id() const;
   ::exec::shared::QueryId* _internal_mutable_query_id();
   public:
+  void unsafe_arena_set_allocated_query_id(
+      ::exec::shared::QueryId* query_id);
+  ::exec::shared::QueryId* unsafe_arena_release_query_id();
 
   // optional .exec.user.SessionHandle session_handle = 2;
   bool has_session_handle() const;
@@ -8478,12 +8498,17 @@ class CancelQueryWithSessionHandle :
   const ::exec::user::SessionHandle& _internal_session_handle() const;
   ::exec::user::SessionHandle* _internal_mutable_session_handle();
   public:
+  void unsafe_arena_set_allocated_session_handle(
+      ::exec::user::SessionHandle* session_handle);
+  ::exec::user::SessionHandle* unsafe_arena_release_session_handle();
 
   // @@protoc_insertion_point(class_scope:exec.user.CancelQueryWithSessionHandle)
  private:
   class _Internal;
 
-  ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
   ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   ::exec::shared::QueryId* query_id_;
@@ -17101,14 +17126,36 @@ inline void NewSessionRequest::clear_properties() {
 }
 inline const ::exec::user::UserProperties& NewSessionRequest::_internal_properties() const {
   const ::exec::user::UserProperties* p = properties_;
-  return p != nullptr ? *p : *reinterpret_cast<const ::exec::user::UserProperties*>(
-      &::exec::user::_UserProperties_default_instance_);
+  return p != nullptr ? *p : reinterpret_cast<const ::exec::user::UserProperties&>(
+      ::exec::user::_UserProperties_default_instance_);
 }
 inline const ::exec::user::UserProperties& NewSessionRequest::properties() const {
   // @@protoc_insertion_point(field_get:exec.user.NewSessionRequest.properties)
   return _internal_properties();
 }
+inline void NewSessionRequest::unsafe_arena_set_allocated_properties(
+    ::exec::user::UserProperties* properties) {
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(properties_);
+  }
+  properties_ = properties;
+  if (properties) {
+    _has_bits_[0] |= 0x00000001u;
+  } else {
+    _has_bits_[0] &= ~0x00000001u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:exec.user.NewSessionRequest.properties)
+}
 inline ::exec::user::UserProperties* NewSessionRequest::release_properties() {
+  _has_bits_[0] &= ~0x00000001u;
+  ::exec::user::UserProperties* temp = properties_;
+  properties_ = nullptr;
+  if (GetArena() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+  return temp;
+}
+inline ::exec::user::UserProperties* NewSessionRequest::unsafe_arena_release_properties() {
   // @@protoc_insertion_point(field_release:exec.user.NewSessionRequest.properties)
   _has_bits_[0] &= ~0x00000001u;
   ::exec::user::UserProperties* temp = properties_;
@@ -17118,7 +17165,7 @@ inline ::exec::user::UserProperties* NewSessionRequest::release_properties() {
 inline ::exec::user::UserProperties* NewSessionRequest::_internal_mutable_properties() {
   _has_bits_[0] |= 0x00000001u;
   if (properties_ == nullptr) {
-    auto* p = CreateMaybeMessage<::exec::user::UserProperties>(GetArenaNoVirtual());
+    auto* p = CreateMaybeMessage<::exec::user::UserProperties>(GetArena());
     properties_ = p;
   }
   return properties_;
@@ -17128,12 +17175,13 @@ inline ::exec::user::UserProperties* NewSessionRequest::mutable_properties() {
   return _internal_mutable_properties();
 }
 inline void NewSessionRequest::set_allocated_properties(::exec::user::UserProperties* properties) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaNoVirtual();
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArena();
   if (message_arena == nullptr) {
     delete properties_;
   }
   if (properties) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena = nullptr;
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+      ::PROTOBUF_NAMESPACE_ID::Arena::GetArena(properties);
     if (message_arena != submessage_arena) {
       properties = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, properties, submessage_arena);
@@ -17159,15 +17207,18 @@ inline bool SessionHandle::has_session_id() const {
   return _internal_has_session_id();
 }
 inline void SessionHandle::clear_session_id() {
-  session_id_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  session_id_.ClearToEmpty();
   _has_bits_[0] &= ~0x00000001u;
 }
 inline const std::string& SessionHandle::session_id() const {
   // @@protoc_insertion_point(field_get:exec.user.SessionHandle.session_id)
   return _internal_session_id();
 }
-inline void SessionHandle::set_session_id(const std::string& value) {
-  _internal_set_session_id(value);
+template <typename ArgT0, typename... ArgT>
+PROTOBUF_ALWAYS_INLINE
+inline void SessionHandle::set_session_id(ArgT0&& arg0, ArgT... args) {
+ _has_bits_[0] |= 0x00000001u;
+ session_id_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArena());
   // @@protoc_insertion_point(field_set:exec.user.SessionHandle.session_id)
 }
 inline std::string* SessionHandle::mutable_session_id() {
@@ -17175,33 +17226,15 @@ inline std::string* SessionHandle::mutable_session_id() {
   return _internal_mutable_session_id();
 }
 inline const std::string& SessionHandle::_internal_session_id() const {
-  return session_id_.GetNoArena();
+  return session_id_.Get();
 }
 inline void SessionHandle::_internal_set_session_id(const std::string& value) {
   _has_bits_[0] |= 0x00000001u;
-  session_id_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
-}
-inline void SessionHandle::set_session_id(std::string&& value) {
-  _has_bits_[0] |= 0x00000001u;
-  session_id_.SetNoArena(
-    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:exec.user.SessionHandle.session_id)
-}
-inline void SessionHandle::set_session_id(const char* value) {
-  GOOGLE_DCHECK(value != nullptr);
-  _has_bits_[0] |= 0x00000001u;
-  session_id_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:exec.user.SessionHandle.session_id)
-}
-inline void SessionHandle::set_session_id(const char* value, size_t size) {
-  _has_bits_[0] |= 0x00000001u;
-  session_id_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:exec.user.SessionHandle.session_id)
+  session_id_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArena());
 }
 inline std::string* SessionHandle::_internal_mutable_session_id() {
   _has_bits_[0] |= 0x00000001u;
-  return session_id_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  return session_id_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArena());
 }
 inline std::string* SessionHandle::release_session_id() {
   // @@protoc_insertion_point(field_release:exec.user.SessionHandle.session_id)
@@ -17209,7 +17242,7 @@ inline std::string* SessionHandle::release_session_id() {
     return nullptr;
   }
   _has_bits_[0] &= ~0x00000001u;
-  return session_id_.ReleaseNonDefaultNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  return session_id_.ReleaseNonDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
 }
 inline void SessionHandle::set_allocated_session_id(std::string* session_id) {
   if (session_id != nullptr) {
@@ -17217,7 +17250,8 @@ inline void SessionHandle::set_allocated_session_id(std::string* session_id) {
   } else {
     _has_bits_[0] &= ~0x00000001u;
   }
-  session_id_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), session_id);
+  session_id_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), session_id,
+      GetArena());
   // @@protoc_insertion_point(field_set_allocated:exec.user.SessionHandle.session_id)
 }
 
@@ -17240,14 +17274,36 @@ inline void RunQueryWithSessionHandle::clear_runquery() {
 }
 inline const ::exec::user::RunQuery& RunQueryWithSessionHandle::_internal_runquery() const {
   const ::exec::user::RunQuery* p = runquery_;
-  return p != nullptr ? *p : *reinterpret_cast<const ::exec::user::RunQuery*>(
-      &::exec::user::_RunQuery_default_instance_);
+  return p != nullptr ? *p : reinterpret_cast<const ::exec::user::RunQuery&>(
+      ::exec::user::_RunQuery_default_instance_);
 }
 inline const ::exec::user::RunQuery& RunQueryWithSessionHandle::runquery() const {
   // @@protoc_insertion_point(field_get:exec.user.RunQueryWithSessionHandle.runQuery)
   return _internal_runquery();
 }
+inline void RunQueryWithSessionHandle::unsafe_arena_set_allocated_runquery(
+    ::exec::user::RunQuery* runquery) {
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(runquery_);
+  }
+  runquery_ = runquery;
+  if (runquery) {
+    _has_bits_[0] |= 0x00000001u;
+  } else {
+    _has_bits_[0] &= ~0x00000001u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:exec.user.RunQueryWithSessionHandle.runQuery)
+}
 inline ::exec::user::RunQuery* RunQueryWithSessionHandle::release_runquery() {
+  _has_bits_[0] &= ~0x00000001u;
+  ::exec::user::RunQuery* temp = runquery_;
+  runquery_ = nullptr;
+  if (GetArena() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+  return temp;
+}
+inline ::exec::user::RunQuery* RunQueryWithSessionHandle::unsafe_arena_release_runquery() {
   // @@protoc_insertion_point(field_release:exec.user.RunQueryWithSessionHandle.runQuery)
   _has_bits_[0] &= ~0x00000001u;
   ::exec::user::RunQuery* temp = runquery_;
@@ -17257,7 +17313,7 @@ inline ::exec::user::RunQuery* RunQueryWithSessionHandle::release_runquery() {
 inline ::exec::user::RunQuery* RunQueryWithSessionHandle::_internal_mutable_runquery() {
   _has_bits_[0] |= 0x00000001u;
   if (runquery_ == nullptr) {
-    auto* p = CreateMaybeMessage<::exec::user::RunQuery>(GetArenaNoVirtual());
+    auto* p = CreateMaybeMessage<::exec::user::RunQuery>(GetArena());
     runquery_ = p;
   }
   return runquery_;
@@ -17267,12 +17323,13 @@ inline ::exec::user::RunQuery* RunQueryWithSessionHandle::mutable_runquery() {
   return _internal_mutable_runquery();
 }
 inline void RunQueryWithSessionHandle::set_allocated_runquery(::exec::user::RunQuery* runquery) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaNoVirtual();
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArena();
   if (message_arena == nullptr) {
     delete runquery_;
   }
   if (runquery) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena = nullptr;
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+      ::PROTOBUF_NAMESPACE_ID::Arena::GetArena(runquery);
     if (message_arena != submessage_arena) {
       runquery = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, runquery, submessage_arena);
@@ -17300,14 +17357,36 @@ inline void RunQueryWithSessionHandle::clear_sessionhandle() {
 }
 inline const ::exec::user::SessionHandle& RunQueryWithSessionHandle::_internal_sessionhandle() const {
   const ::exec::user::SessionHandle* p = sessionhandle_;
-  return p != nullptr ? *p : *reinterpret_cast<const ::exec::user::SessionHandle*>(
-      &::exec::user::_SessionHandle_default_instance_);
+  return p != nullptr ? *p : reinterpret_cast<const ::exec::user::SessionHandle&>(
+      ::exec::user::_SessionHandle_default_instance_);
 }
 inline const ::exec::user::SessionHandle& RunQueryWithSessionHandle::sessionhandle() const {
   // @@protoc_insertion_point(field_get:exec.user.RunQueryWithSessionHandle.sessionHandle)
   return _internal_sessionhandle();
 }
+inline void RunQueryWithSessionHandle::unsafe_arena_set_allocated_sessionhandle(
+    ::exec::user::SessionHandle* sessionhandle) {
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(sessionhandle_);
+  }
+  sessionhandle_ = sessionhandle;
+  if (sessionhandle) {
+    _has_bits_[0] |= 0x00000002u;
+  } else {
+    _has_bits_[0] &= ~0x00000002u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:exec.user.RunQueryWithSessionHandle.sessionHandle)
+}
 inline ::exec::user::SessionHandle* RunQueryWithSessionHandle::release_sessionhandle() {
+  _has_bits_[0] &= ~0x00000002u;
+  ::exec::user::SessionHandle* temp = sessionhandle_;
+  sessionhandle_ = nullptr;
+  if (GetArena() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+  return temp;
+}
+inline ::exec::user::SessionHandle* RunQueryWithSessionHandle::unsafe_arena_release_sessionhandle() {
   // @@protoc_insertion_point(field_release:exec.user.RunQueryWithSessionHandle.sessionHandle)
   _has_bits_[0] &= ~0x00000002u;
   ::exec::user::SessionHandle* temp = sessionhandle_;
@@ -17317,7 +17396,7 @@ inline ::exec::user::SessionHandle* RunQueryWithSessionHandle::release_sessionha
 inline ::exec::user::SessionHandle* RunQueryWithSessionHandle::_internal_mutable_sessionhandle() {
   _has_bits_[0] |= 0x00000002u;
   if (sessionhandle_ == nullptr) {
-    auto* p = CreateMaybeMessage<::exec::user::SessionHandle>(GetArenaNoVirtual());
+    auto* p = CreateMaybeMessage<::exec::user::SessionHandle>(GetArena());
     sessionhandle_ = p;
   }
   return sessionhandle_;
@@ -17327,12 +17406,13 @@ inline ::exec::user::SessionHandle* RunQueryWithSessionHandle::mutable_sessionha
   return _internal_mutable_sessionhandle();
 }
 inline void RunQueryWithSessionHandle::set_allocated_sessionhandle(::exec::user::SessionHandle* sessionhandle) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaNoVirtual();
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArena();
   if (message_arena == nullptr) {
     delete sessionhandle_;
   }
   if (sessionhandle) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena = nullptr;
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+      ::PROTOBUF_NAMESPACE_ID::Arena::GetArena(sessionhandle);
     if (message_arena != submessage_arena) {
       sessionhandle = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, sessionhandle, submessage_arena);
@@ -17360,14 +17440,36 @@ inline bool CancelQueryWithSessionHandle::has_query_id() const {
 }
 inline const ::exec::shared::QueryId& CancelQueryWithSessionHandle::_internal_query_id() const {
   const ::exec::shared::QueryId* p = query_id_;
-  return p != nullptr ? *p : *reinterpret_cast<const ::exec::shared::QueryId*>(
-      &::exec::shared::_QueryId_default_instance_);
+  return p != nullptr ? *p : reinterpret_cast<const ::exec::shared::QueryId&>(
+      ::exec::shared::_QueryId_default_instance_);
 }
 inline const ::exec::shared::QueryId& CancelQueryWithSessionHandle::query_id() const {
   // @@protoc_insertion_point(field_get:exec.user.CancelQueryWithSessionHandle.query_id)
   return _internal_query_id();
 }
+inline void CancelQueryWithSessionHandle::unsafe_arena_set_allocated_query_id(
+    ::exec::shared::QueryId* query_id) {
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(query_id_);
+  }
+  query_id_ = query_id;
+  if (query_id) {
+    _has_bits_[0] |= 0x00000001u;
+  } else {
+    _has_bits_[0] &= ~0x00000001u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:exec.user.CancelQueryWithSessionHandle.query_id)
+}
 inline ::exec::shared::QueryId* CancelQueryWithSessionHandle::release_query_id() {
+  _has_bits_[0] &= ~0x00000001u;
+  ::exec::shared::QueryId* temp = query_id_;
+  query_id_ = nullptr;
+  if (GetArena() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+  return temp;
+}
+inline ::exec::shared::QueryId* CancelQueryWithSessionHandle::unsafe_arena_release_query_id() {
   // @@protoc_insertion_point(field_release:exec.user.CancelQueryWithSessionHandle.query_id)
   _has_bits_[0] &= ~0x00000001u;
   ::exec::shared::QueryId* temp = query_id_;
@@ -17377,7 +17479,7 @@ inline ::exec::shared::QueryId* CancelQueryWithSessionHandle::release_query_id()
 inline ::exec::shared::QueryId* CancelQueryWithSessionHandle::_internal_mutable_query_id() {
   _has_bits_[0] |= 0x00000001u;
   if (query_id_ == nullptr) {
-    auto* p = CreateMaybeMessage<::exec::shared::QueryId>(GetArenaNoVirtual());
+    auto* p = CreateMaybeMessage<::exec::shared::QueryId>(GetArena());
     query_id_ = p;
   }
   return query_id_;
@@ -17387,12 +17489,13 @@ inline ::exec::shared::QueryId* CancelQueryWithSessionHandle::mutable_query_id()
   return _internal_mutable_query_id();
 }
 inline void CancelQueryWithSessionHandle::set_allocated_query_id(::exec::shared::QueryId* query_id) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaNoVirtual();
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArena();
   if (message_arena == nullptr) {
     delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(query_id_);
   }
   if (query_id) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena = nullptr;
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+      reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(query_id)->GetArena();
     if (message_arena != submessage_arena) {
       query_id = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, query_id, submessage_arena);
@@ -17420,14 +17523,36 @@ inline void CancelQueryWithSessionHandle::clear_session_handle() {
 }
 inline const ::exec::user::SessionHandle& CancelQueryWithSessionHandle::_internal_session_handle() const {
   const ::exec::user::SessionHandle* p = session_handle_;
-  return p != nullptr ? *p : *reinterpret_cast<const ::exec::user::SessionHandle*>(
-      &::exec::user::_SessionHandle_default_instance_);
+  return p != nullptr ? *p : reinterpret_cast<const ::exec::user::SessionHandle&>(
+      ::exec::user::_SessionHandle_default_instance_);
 }
 inline const ::exec::user::SessionHandle& CancelQueryWithSessionHandle::session_handle() const {
   // @@protoc_insertion_point(field_get:exec.user.CancelQueryWithSessionHandle.session_handle)
   return _internal_session_handle();
 }
+inline void CancelQueryWithSessionHandle::unsafe_arena_set_allocated_session_handle(
+    ::exec::user::SessionHandle* session_handle) {
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(session_handle_);
+  }
+  session_handle_ = session_handle;
+  if (session_handle) {
+    _has_bits_[0] |= 0x00000002u;
+  } else {
+    _has_bits_[0] &= ~0x00000002u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:exec.user.CancelQueryWithSessionHandle.session_handle)
+}
 inline ::exec::user::SessionHandle* CancelQueryWithSessionHandle::release_session_handle() {
+  _has_bits_[0] &= ~0x00000002u;
+  ::exec::user::SessionHandle* temp = session_handle_;
+  session_handle_ = nullptr;
+  if (GetArena() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+  return temp;
+}
+inline ::exec::user::SessionHandle* CancelQueryWithSessionHandle::unsafe_arena_release_session_handle() {
   // @@protoc_insertion_point(field_release:exec.user.CancelQueryWithSessionHandle.session_handle)
   _has_bits_[0] &= ~0x00000002u;
   ::exec::user::SessionHandle* temp = session_handle_;
@@ -17437,7 +17562,7 @@ inline ::exec::user::SessionHandle* CancelQueryWithSessionHandle::release_sessio
 inline ::exec::user::SessionHandle* CancelQueryWithSessionHandle::_internal_mutable_session_handle() {
   _has_bits_[0] |= 0x00000002u;
   if (session_handle_ == nullptr) {
-    auto* p = CreateMaybeMessage<::exec::user::SessionHandle>(GetArenaNoVirtual());
+    auto* p = CreateMaybeMessage<::exec::user::SessionHandle>(GetArena());
     session_handle_ = p;
   }
   return session_handle_;
@@ -17447,12 +17572,13 @@ inline ::exec::user::SessionHandle* CancelQueryWithSessionHandle::mutable_sessio
   return _internal_mutable_session_handle();
 }
 inline void CancelQueryWithSessionHandle::set_allocated_session_handle(::exec::user::SessionHandle* session_handle) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaNoVirtual();
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArena();
   if (message_arena == nullptr) {
     delete session_handle_;
   }
   if (session_handle) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena = nullptr;
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+      ::PROTOBUF_NAMESPACE_ID::Arena::GetArena(session_handle);
     if (message_arena != submessage_arena) {
       session_handle = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, session_handle, submessage_arena);

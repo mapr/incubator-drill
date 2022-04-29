@@ -1092,6 +1092,7 @@ public final class ExecProtos {
   }
   /**
    * <pre>
+   *
    * Prepared statement state on server side. Clients do not
    * need to know the contents. They just need to submit it back to
    * server when executing the prepared statement.
@@ -1391,6 +1392,7 @@ public final class ExecProtos {
     }
     /**
      * <pre>
+     *
      * Prepared statement state on server side. Clients do not
      * need to know the contents. They just need to submit it back to
      * server when executing the prepared statement.
