@@ -104,19 +104,18 @@ pipeline {
                       sh """
 
                         # Install and shade boost library under namespae drill_boost
-                        BOOST_BUILD_DIR=/opt/drill-boost-build
-                        mkdir -p $BOOST_BUILD_DIR && \
-                        	pushd $BOOST_BUILD_DIR && \
+                        mkdir -p /opt/drill-boost-build && \
+                        	pushd /opt/drill-boost-build && \
                         	wget https://boostorg.jfrog.io/artifactory/main/release/1.64.0/source/boost_1_64_0.tar.gz && \
                         	tar zxf boost_1_64_0.tar.gz && \
-                        	cd $BOOST_BUILD_DIR/boost_1_64_0 && \
-                        	./bootstrap.sh --prefix=$BOOST_BUILD_DIR/boost_1_64_0/ && \
+                        	cd /opt/drill-boost-build/boost_1_64_0 && \
+                        	./bootstrap.sh --prefix=/opt/drill-boost-build/boost_1_64_0/ && \
                         	./b2 tools/bcp && \
-                        	mkdir -p $BOOST_BUILD_DIR/drill_boost_1_64_0 && \
-                        	$BOOST_BUILD_DIR/boost_1_64_0/dist/bin/bcp --namespace=drill_boost --namespace-alias --boost=$BOOST_BUILD_DIR/boost_1_64_0/ shared_ptr random context chrono date_time regex system timer thread asio smart_ptr bind config build regex config assign functional multiprecision algorithm $BOOST_BUILD_DIR/drill_boost_1_64_0 && \
-                        	cd $BOOST_BUILD_DIR/drill_boost_1_64_0 && \
-                        	./bootstrap.sh --prefix=$BOOST_BUILD_DIR/drill_boost_1_64_0/ && \
-                        	./b2 --build-dir=$BOOST_BUILD_DIR/drill_boost_1_64_0/build variant=release link=static threading=multi cxxflags="-fPIC" && \
+                        	mkdir -p /opt/drill-boost-build/drill_boost_1_64_0 && \
+                        	/opt/drill-boost-build/boost_1_64_0/dist/bin/bcp --namespace=drill_boost --namespace-alias --boost=/opt/drill-boost-build/boost_1_64_0/ shared_ptr random context chrono date_time regex system timer thread asio smart_ptr bind config build regex config assign functional multiprecision algorithm /opt/drill-boost-build/drill_boost_1_64_0 && \
+                        	cd /opt/drill-boost-build/drill_boost_1_64_0 && \
+                        	./bootstrap.sh --prefix=/opt/drill-boost-build/drill_boost_1_64_0/ && \
+                        	./b2 --build-dir=/opt/drill-boost-build/drill_boost_1_64_0/build variant=release link=static threading=multi cxxflags="-fPIC" && \
                         	popd; \
 
                         # install and shade zookeeper C client
@@ -210,18 +209,18 @@ pipeline {
                       sh """
                         # Install and shade boost library under namespae drill_boost
                         BOOST_BUILD_DIR=/opt/drill-boost-build
-                        mkdir -p $BOOST_BUILD_DIR && \
-                        	pushd $BOOST_BUILD_DIR && \
+                        mkdir -p /opt/drill-boost-build && \
+                        	pushd /opt/drill-boost-build && \
                         	wget https://boostorg.jfrog.io/artifactory/main/release/1.64.0/source/boost_1_64_0.tar.gz && \
                         	tar zxf boost_1_64_0.tar.gz && \
-                        	cd $BOOST_BUILD_DIR/boost_1_64_0 && \
-                        	./bootstrap.sh --prefix=$BOOST_BUILD_DIR/boost_1_64_0/ && \
+                        	cd /opt/drill-boost-build/boost_1_64_0 && \
+                        	./bootstrap.sh --prefix=/opt/drill-boost-build/boost_1_64_0/ && \
                         	./b2 tools/bcp && \
-                        	mkdir -p $BOOST_BUILD_DIR/drill_boost_1_64_0 && \
-                        	$BOOST_BUILD_DIR/boost_1_64_0/dist/bin/bcp --namespace=drill_boost --namespace-alias --boost=$BOOST_BUILD_DIR/boost_1_64_0/ shared_ptr random context chrono date_time regex system timer thread asio smart_ptr bind config build regex config assign functional multiprecision algorithm $BOOST_BUILD_DIR/drill_boost_1_64_0 && \
-                        	cd $BOOST_BUILD_DIR/drill_boost_1_64_0 && \
-                        	./bootstrap.sh --prefix=$BOOST_BUILD_DIR/drill_boost_1_64_0/ && \
-                        	./b2 --build-dir=$BOOST_BUILD_DIR/drill_boost_1_64_0/build variant=release link=static threading=multi cxxflags="-fPIC" && \
+                        	mkdir -p /opt/drill-boost-build/drill_boost_1_64_0 && \
+                        	/opt/drill-boost-build/boost_1_64_0/dist/bin/bcp --namespace=drill_boost --namespace-alias --boost=/opt/drill-boost-build/boost_1_64_0/ shared_ptr random context chrono date_time regex system timer thread asio smart_ptr bind config build regex config assign functional multiprecision algorithm /opt/drill-boost-build/drill_boost_1_64_0 && \
+                        	cd /opt/drill-boost-build/drill_boost_1_64_0 && \
+                        	./bootstrap.sh --prefix=/opt/drill-boost-build/drill_boost_1_64_0/ && \
+                        	./b2 --build-dir=/opt/drill-boost-build/drill_boost_1_64_0/build variant=release link=static threading=multi cxxflags="-fPIC" && \
                         	popd; \
 
                         # install and shade zookeeper C client
