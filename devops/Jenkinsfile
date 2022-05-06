@@ -79,7 +79,7 @@ pipeline {
                     sh "cat ${env.mvn_settings} > settings.xml"
                   }
                   withCredentials([usernamePassword(credentialsId: 'artifactory_user_pass', passwordVariable: 'pass', usernameVariable: 'user')]) {
-                    ubuntuImage = docker.image("docker.artifactory.lab/ubuntu18-java11-gcc7:drill-1.20")
+                    ubuntuImage = docker.image("dfdkr.mip.storage.hpecorp.net/ubuntu18-java11-gcc7:drill-1.20")
                     sh "docker inspect ${ubuntuImage.imageName()}"
                     ubuntuImage.inside (
                     "-e MAPR_MIRROR=${MAPR_MIRROR} \
@@ -147,7 +147,7 @@ pipeline {
                     sh "cat ${env.mvn_settings} > settings.xml"
                   }
                   withCredentials([usernamePassword(credentialsId: 'artifactory_user_pass', passwordVariable: 'pass', usernameVariable: 'user')]) {
-                    centosImage = docker.image("docker.artifactory.lab/centos8-java11-gcc8:drill-1.20")
+                    centosImage = docker.image("dfdkr.mip.storage.hpecorp.net/centos8-java11-gcc8:drill-1.20")
                     sh "docker inspect ${centosImage.imageName()}"
                     centosImage.inside (
                     "-e MAPR_MIRROR=${MAPR_MIRROR} \
