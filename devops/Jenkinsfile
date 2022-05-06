@@ -79,7 +79,7 @@ pipeline {
                     sh "cat ${env.mvn_settings} > settings.xml"
                   }
                   withCredentials([usernamePassword(credentialsId: 'artifactory_user_pass', passwordVariable: 'pass', usernameVariable: 'user')]) {
-                    ubuntuImage = docker.image("docker.artifactory.lab/ubuntu18-java11-gcc7:protobuf316")
+                    ubuntuImage = docker.image("docker.artifactory.lab/ubuntu18-java11-gcc7:drill-1.20")
                     sh "docker inspect ${ubuntuImage.imageName()}"
                     ubuntuImage.inside (
                     "-e MAPR_MIRROR=${MAPR_MIRROR} \
@@ -102,43 +102,6 @@ pipeline {
                     -v /root/.ssh:/root/.ssh:rw \
                     -v ${WORKSPACE}/settings.xml:/root/.m2/settings.xml:ro") {
                       sh """
-
-                        # Install and shade boost library under namespace drill_boost
-                        mkdir -p /opt/drill-boost-build ; \
-                        	cd /opt/drill-boost-build ; \
-                        	wget https://boostorg.jfrog.io/artifactory/main/release/1.64.0/source/boost_1_64_0.tar.gz ; \
-                        	tar zxf boost_1_64_0.tar.gz ; \
-                        	cd /opt/drill-boost-build/boost_1_64_0 ; \
-                        	./bootstrap.sh --prefix=/opt/drill-boost-build/boost_1_64_0/ ; \
-                        	./b2 tools/bcp ; \
-                        	mkdir -p /opt/drill-boost-build/drill_boost_1_64_0 ; \
-                        	/opt/drill-boost-build/boost_1_64_0/dist/bin/bcp --namespace=drill_boost --namespace-alias --boost=/opt/drill-boost-build/boost_1_64_0/ shared_ptr random context chrono date_time regex system timer thread asio smart_ptr bind config build regex config assign functional multiprecision algorithm /opt/drill-boost-build/drill_boost_1_64_0 ; \
-                        	cd /opt/drill-boost-build/drill_boost_1_64_0 ; \
-                        	./bootstrap.sh --prefix=/opt/drill-boost-build/drill_boost_1_64_0/ ; \
-                        	./b2 --build-dir=/opt/drill-boost-build/drill_boost_1_64_0/build variant=release link=static threading=multi cxxflags="-fPIC" ; \
-                        	cd $workspace/; \
-
-                        # install and shade zookeeper C client
-                        mkdir zookeeper-build-folder ; \
-                        	cd zookeeper-build-folder ; \
-                        	wget --no-check-certificate https://archive.apache.org/dist/zookeeper/zookeeper-3.5.6/apache-zookeeper-3.5.6.tar.gz ; \
-                        	tar zxf apache-zookeeper-3.5.6.tar.gz ; \
-                        	cd apache-zookeeper-3.5.6/zookeeper-client/zookeeper-client-c ; \
-                        	autoreconf -if ; \
-                        	./configure --enable-debug --with-syncapi --enable-static --enable-shared ; \
-                        	make && sudo make install ; \
-                        	cd ../../../../ ; \
-
-                        # install sasl library
-                        mkdir cyrus ; \
-                        	cd cyrus ; \
-                        	wget https://github.com/cyrusimap/cyrus-sasl/releases/download/cyrus-sasl-2.1.28/cyrus-sasl-2.1.28.tar.gz ; \
-                        	tar xzf cyrus-sasl-2.1.28.tar.gz ; \
-                        	cd cyrus-sasl-2.1.28 ; \
-                        	./configure ; \
-                        	make && make install ; \
-                        	cd ../../; \
-
                         rm -rf ${PROJECT}; git clone git@github.com:mapr/private-pkg.git ${PROJECT}; \
                         cd ${PROJECT}; \
                         git checkout ${params.PRIVATE_PKG_BRANCH} ; \
@@ -184,7 +147,7 @@ pipeline {
                     sh "cat ${env.mvn_settings} > settings.xml"
                   }
                   withCredentials([usernamePassword(credentialsId: 'artifactory_user_pass', passwordVariable: 'pass', usernameVariable: 'user')]) {
-                    centosImage = docker.image("docker.artifactory.lab/centos8-java11-gcc8:protobuf316")
+                    centosImage = docker.image("docker.artifactory.lab/centos8-java11-gcc8:drill-1.20")
                     sh "docker inspect ${centosImage.imageName()}"
                     centosImage.inside (
                     "-e MAPR_MIRROR=${MAPR_MIRROR} \
@@ -207,42 +170,6 @@ pipeline {
                     -v /root/.ssh:/root/.ssh:rw \
                     -v ${WORKSPACE}/settings.xml:/root/.m2/settings.xml:ro") {
                       sh """
-                        # Install and shade boost library under namespace drill_boost
-                        mkdir -p /opt/drill-boost-build ; \
-                        	pushd /opt/drill-boost-build ; \
-                        	wget https://boostorg.jfrog.io/artifactory/main/release/1.64.0/source/boost_1_64_0.tar.gz ; \
-                        	tar zxf boost_1_64_0.tar.gz ; \
-                        	cd /opt/drill-boost-build/boost_1_64_0 ; \
-                        	./bootstrap.sh --prefix=/opt/drill-boost-build/boost_1_64_0/ ; \
-                        	./b2 tools/bcp ; \
-                        	mkdir -p /opt/drill-boost-build/drill_boost_1_64_0 ; \
-                        	/opt/drill-boost-build/boost_1_64_0/dist/bin/bcp --namespace=drill_boost --namespace-alias --boost=/opt/drill-boost-build/boost_1_64_0/ shared_ptr random context chrono date_time regex system timer thread asio smart_ptr bind config build regex config assign functional multiprecision algorithm /opt/drill-boost-build/drill_boost_1_64_0 ; \
-                        	cd /opt/drill-boost-build/drill_boost_1_64_0 ; \
-                        	./bootstrap.sh --prefix=/opt/drill-boost-build/drill_boost_1_64_0/ ; \
-                        	./b2 --build-dir=/opt/drill-boost-build/drill_boost_1_64_0/build variant=release link=static threading=multi cxxflags="-fPIC" ; \
-                        	popd; \
-
-                        # install and shade zookeeper C client
-                        mkdir zookeeper-build-folder ; \
-                        	pushd zookeeper-build-folder ; \
-                        	wget --no-check-certificate https://archive.apache.org/dist/zookeeper/zookeeper-3.5.6/apache-zookeeper-3.5.6.tar.gz ; \
-                        	tar zxf apache-zookeeper-3.5.6.tar.gz ; \
-                        	cd apache-zookeeper-3.5.6/zookeeper-client/zookeeper-client-c ; \
-                        	autoreconf -if ; \
-                        	./configure --enable-debug --with-syncapi --enable-static --enable-shared ; \
-                        	make && sudo make install ; \
-                        	popd; \
-
-                        # install sasl library
-                        mkdir cyrus ; \
-                        	pushd cyrus ; \
-                        	wget https://github.com/cyrusimap/cyrus-sasl/releases/download/cyrus-sasl-2.1.28/cyrus-sasl-2.1.28.tar.gz ; \
-                        	tar xzf cyrus-sasl-2.1.28.tar.gz ; \
-                        	cd cyrus-sasl-2.1.28 ; \
-                        	./configure ; \
-                        	make && make install ; \
-                        	popd; \
-
                         rm -rf ${PROJECT}; git clone git@github.com:mapr/private-pkg.git ${PROJECT}; \
                         cd ${PROJECT}; \
                         git checkout ${params.PRIVATE_PKG_BRANCH} ; \
