@@ -30,7 +30,7 @@
 
   <groupId>org.apache.drill</groupId>
   <artifactId>drill-root</artifactId>
-  <version>1.20.0.0-eep-SNAPSHOT</version>
+  <version>1.20.1.0-eep-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>Drill : </name>
@@ -60,11 +60,11 @@
       avoid_bad_dependencies plugin found in the file.
     -->
     <calcite.groupId>com.github.vvysotskyi.drill-calcite</calcite.groupId>
-    <calcite.version>1.21.0-drill-r7</calcite.version>
+    <calcite.version>1.21.0-drill-r8</calcite.version>
     <avatica.version>1.17.0</avatica.version>
     <janino.version>3.0.11</janino.version>
     <sqlline.version>1.12.0</sqlline.version>
-    <jackson.version>2.12.6</jackson.version>
+    <jackson.version>2.13.2.20220328</jackson.version>
     <zookeeper.version>3.5.7</zookeeper.version>
     <mapr.release.version>6.2.0.0-mapr</mapr.release.version>
     <ojai.version>3.0-mapr-1808</ojai.version>
@@ -80,7 +80,7 @@
     <logback.version>1.2.9</logback.version>
     <mockito.version>3.11.2</mockito.version>
     <!--
-      Currently Hive storage plugin only supports Apache Hive 3.1.2 or vendor specific variants of the
+      Currently, Hive storage plugin only supports Apache Hive 3.1.2 or vendor specific variants of the
       Apache Hive 2.3.2. If the version is changed, make sure the jars and their dependencies are updated,
       for example parquet-hadoop-bundle and derby dependencies.
     -->
@@ -100,7 +100,7 @@
     <asm.version>9.2</asm.version>
     <excludedGroups />
     <memoryMb>2500</memoryMb>
-    <directMemoryMb>2500</directMemoryMb>
+    <directMemoryMb>4500</directMemoryMb>
     <rat.skip>true</rat.skip>
     <license.skip>true</license.skip>
     <docker.repository>apache/drill</docker.repository>
@@ -125,24 +125,22 @@
     <commons.cli.version>1.4</commons.cli.version>
     <snakeyaml.version>1.26</snakeyaml.version>
     <commons.lang3.version>3.10</commons.lang3.version>
-    <testcontainers.version>1.16.2</testcontainers.version>
+    <testcontainers.version>1.16.3</testcontainers.version>
     <typesafe.config.version>1.0.0</typesafe.config.version>
     <commons.codec.version>1.15</commons.codec.version>
-    <metadata.extractor.version>2.15.0</metadata.extractor.version>
     <xalan.version>2.7.2</xalan.version>
     <xerces.version>2.12.2</xerces.version>
     <commons.configuration.version>1.10</commons.configuration.version>
     <commons.beanutils.version>1.9.4</commons.beanutils.version>
     <httpdlog-parser.version>5.7</httpdlog-parser.version>
     <yauaa.version>5.20</yauaa.version>
-    <spring.version>5.0.19.RELEASE</spring.version>
     <bcfips.version>1.0.2.1</bcfips.version>
     <bctlsfips.version>1.0.11.4</bctlsfips.version>
     <aircompressor.version>0.20</aircompressor.version>
     <iceberg.version>0.12.1</iceberg.version>
     <univocity-parsers.version>2.8.3</univocity-parsers.version>
     <mongo.version>4.3.3</mongo.version>
-    <junit.args/>
+    <junit.args />
   </properties>
 
   <scm>
@@ -1240,6 +1238,13 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
+        <groupId>com.fasterxml.jackson</groupId>
+        <artifactId>jackson-bom</artifactId>
+        <version>${jackson.version}</version>
+        <scope>import</scope>
+        <type>pom</type>
+      </dependency>
+      <dependency>
         <groupId>net.java.dev.jna</groupId>
         <artifactId>jna</artifactId>
         <version>${jna.version}</version>
@@ -1275,10 +1280,6 @@
         <version>${calcite.version}</version>
         <exclusions>
           <exclusion>
-            <groupId>com.fasterxml.jackson.dataformat</groupId>
-            <artifactId>jackson-dataformat-yaml</artifactId>
-          </exclusion>
-          <exclusion>
             <groupId>org.apache.calcite.avatica</groupId>
             <artifactId>avatica-core</artifactId>
           </exclusion>
@@ -1289,18 +1290,6 @@
           <exclusion>
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>
-          </exclusion>
-          <exclusion>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-annotations</artifactId>
-          </exclusion>
-          <exclusion>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-core</artifactId>
-          </exclusion>
-          <exclusion>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
           </exclusion>
         </exclusions>
       </dependency>
@@ -1445,12 +1434,6 @@
             <artifactId>netty-all</artifactId>
           </exclusion>
         </exclusions>
-      </dependency>
-      <!--TODO: remove after avro-mapred upgrade -->
-      <dependency>
-        <groupId>org.apache.velocity</groupId>
-        <artifactId>velocity-engine-core</artifactId>
-        <version>2.3</version>
       </dependency>
       <dependency>
         <groupId>org.apache.hive</groupId>
@@ -1731,38 +1714,6 @@
         <groupId>org.codehaus.janino</groupId>
         <artifactId>commons-compiler</artifactId>
         <version>${janino.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.fasterxml.jackson.core</groupId>
-        <artifactId>jackson-annotations</artifactId>
-        <version>${jackson.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.fasterxml.jackson.core</groupId>
-        <artifactId>jackson-databind</artifactId>
-        <version>${jackson.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.fasterxml.jackson.core</groupId>
-        <artifactId>jackson-core</artifactId>
-        <version>${jackson.version}</version>
-      </dependency>
-      <!--TODO: remove after calcite-core upgrade -->
-      <dependency>
-        <groupId>com.fasterxml.jackson.dataformat</groupId>
-        <artifactId>jackson-dataformat-yaml</artifactId>
-        <version>${jackson.version}</version>
-      </dependency>
-      <!--TODO: remove after jersey-media-json-jackson upgrade -->
-      <dependency>
-        <groupId>com.fasterxml.jackson.jaxrs</groupId>
-        <artifactId>jackson-jaxrs-base</artifactId>
-        <version>${jackson.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.fasterxml.jackson.datatype</groupId>
-        <artifactId>jackson-datatype-joda</artifactId>
-        <version>${jackson.version}</version>
       </dependency>
       <dependency>
         <groupId>org.honton.chas.hocon</groupId>
@@ -2137,11 +2088,6 @@
         <version>${snakeyaml.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.drewnoakes</groupId>
-        <artifactId>metadata-extractor</artifactId>
-        <version>${metadata.extractor.version}</version>
-      </dependency>
-      <dependency>
         <groupId>xerces</groupId>
         <artifactId>xercesImpl</artifactId>
         <version>${xerces.version}</version>
@@ -2173,43 +2119,6 @@
           </exclusion>
         </exclusions>
       </dependency>
-
-      <dependency>
-        <groupId>junit</groupId>
-        <artifactId>junit</artifactId>
-        <version>${junit4.version}</version>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-beans</artifactId>
-        <version>${spring.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-core</artifactId>
-        <version>${spring.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-context</artifactId>
-        <version>${spring.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-web</artifactId>
-        <version>${spring.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework.security</groupId>
-        <artifactId>spring-security-core</artifactId>
-        <version>${spring.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework.security</groupId>
-        <artifactId>spring-security-web</artifactId>
-        <version>${spring.version}</version>
-      </dependency>
       <!-- Fips Dependencies -->
       <dependency>
         <groupId>org.bouncycastle</groupId>
@@ -2220,6 +2129,12 @@
         <groupId>org.bouncycastle</groupId>
         <artifactId>bctls-fips</artifactId>
         <version>${bctlsfips.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>${junit4.version}</version>
+        <scope>test</scope>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -3085,12 +3000,6 @@
             <groupId>org.glassfish.jersey.media</groupId>
             <artifactId>jersey-media-json-jackson</artifactId>
             <version>${jersey.version}</version>
-            <exclusions>
-              <exclusion>
-                <groupId>com.fasterxml.jackson.jaxrs</groupId>
-                <artifactId>jackson-jaxrs-base</artifactId>
-              </exclusion>
-            </exclusions>
           </dependency>
           <dependency>
             <groupId>org.glassfish.jersey.containers</groupId>
@@ -3480,88 +3389,8 @@
                 <artifactId>parquet-hadoop-bundle</artifactId>
               </exclusion>
               <exclusion>
-                <groupId>commons-logging</groupId>
-                <artifactId>commons-logging</artifactId>
-              </exclusion>
-              <exclusion>
-                <groupId>org.apache.logging.log4j</groupId>
-                <artifactId>log4j-core</artifactId>
-              </exclusion>
-              <exclusion>
-                <groupId>log4j</groupId>
-                <artifactId>log4j</artifactId>
-              </exclusion>
-              <exclusion>
-                <groupId>org.apache.logging.log4j</groupId>
-                <artifactId>log4j-1.2-api</artifactId>
-              </exclusion>
-              <exclusion>
                 <groupId>org.apache.logging.log4j</groupId>
                 <artifactId>log4j-slf4j-impl</artifactId>
-              </exclusion>
-              <exclusion>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-log4j12</artifactId>
-              </exclusion>
-              <exclusion>
-                <groupId>tomcat</groupId>
-                <artifactId>jasper-runtime</artifactId>
-              </exclusion>
-              <exclusion>
-                <groupId>tomcat</groupId>
-                <artifactId>jasper-compiler</artifactId>
-              </exclusion>
-              <exclusion>
-                <groupId>org.apache.tomcat.embed</groupId>
-                <artifactId>tomcat-embed-jasper</artifactId>
-              </exclusion>
-              <exclusion>
-                <groupId>commons-httpclient</groupId>
-                <artifactId>commons-httpclient</artifactId>
-              </exclusion>
-              <exclusion>
-                <groupId>io.netty</groupId>
-                <artifactId>netty-all</artifactId>
-              </exclusion>
-              <exclusion>
-                <groupId>com.sun.jersey</groupId>
-                <artifactId>jersey-core</artifactId>
-              </exclusion>
-              <exclusion>
-                <groupId>com.sun.jersey</groupId>
-                <artifactId>jersey-json</artifactId>
-              </exclusion>
-              <exclusion>
-                <groupId>com.sun.jersey</groupId>
-                <artifactId>jersey-client</artifactId>
-              </exclusion>
-              <exclusion>
-                <groupId>com.sun.jersey</groupId>
-                <artifactId>jersey-server</artifactId>
-              </exclusion>
-              <exclusion>
-                <groupId>com.sun.jersey</groupId>
-                <artifactId>jersey-servlet</artifactId>
-              </exclusion>
-              <exclusion>
-                <groupId>org.apache.tomcat</groupId>
-                <artifactId>tomcat-catalina</artifactId>
-              </exclusion>
-              <exclusion>
-                <groupId>org.apache.tomcat</groupId>
-                <artifactId>tomcat-jasper</artifactId>
-              </exclusion>
-              <exclusion>
-                <groupId>org.apache.tomcat.embed</groupId>
-                <artifactId>tomcat-embed-core</artifactId>
-              </exclusion>
-              <exclusion>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-rewrite</artifactId>
-              </exclusion>
-              <exclusion>
-                <groupId>org.apache.parquet</groupId>
-                <artifactId>parquet-hadoop-bundle</artifactId>
               </exclusion>
               <exclusion>
                 <groupId>org.apache.zookeeper</groupId>
