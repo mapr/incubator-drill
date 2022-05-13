@@ -33,7 +33,6 @@ import org.apache.drill.shaded.guava.com.google.common.base.Charsets;
 import org.apache.drill.shaded.guava.com.google.common.base.Preconditions;
 import org.apache.drill.shaded.guava.com.google.common.collect.Lists;
 
-import org.apache.calcite.adapter.enumerable.EnumerableTableScan;
 import org.apache.calcite.prepare.RelOptTableImpl;
 import org.apache.calcite.rel.core.TableScan;
 import org.apache.calcite.util.BitSets;
@@ -70,7 +69,8 @@ public class FileSystemPartitionDescriptor extends AbstractPartitionDescriptor {
   private final DrillTable table;
 
   public FileSystemPartitionDescriptor(PlannerSettings settings, TableScan scanRel) {
-    Preconditions.checkArgument(scanRel instanceof DrillScanRel || scanRel instanceof EnumerableTableScan);
+    Preconditions.checkArgument(scanRel instanceof DrillScanRel
+      || supportsScan(scanRel));
     this.partitionLabel = settings.getFsPartitionColumnLabel();
     this.partitionLabelLength = partitionLabel.length();
     this.scanRel = scanRel;
@@ -202,7 +202,7 @@ public class FileSystemPartitionDescriptor extends AbstractPartitionDescriptor {
         fileLocations = selection.getFiles();
         isExpandedPartial = selection.isExpandedPartial();
       }
-    } else if (scanRel instanceof EnumerableTableScan) {
+    } else if (supportsScan(scanRel)) {
       FileSelection selection = ((FormatSelection) table.getSelection()).getSelection();
       fileLocations = selection.getFiles();
       isExpandedPartial = selection.isExpandedPartial();
@@ -241,7 +241,7 @@ public class FileSystemPartitionDescriptor extends AbstractPartitionDescriptor {
                       scanRel.getRowType(),
                       ((DrillScanRel) scanRel).getColumns(),
                       true /*filter pushdown*/);
-    } else if (scanRel instanceof EnumerableTableScan) {
+    } else if (supportsScan(scanRel)) {
       FormatSelection newFormatSelection = new FormatSelection(formatSelection.getFormat(), newFileSelection);
 
       DynamicDrillTable dynamicDrillTable = new DynamicDrillTable(table.getPlugin(), table.getStorageEngineName(),
@@ -255,7 +255,7 @@ public class FileSystemPartitionDescriptor extends AbstractPartitionDescriptor {
       // return a SelectionBasedTableScan with fileSelection being part of digest of TableScan node.
       return SelectionBasedTableScan.create(scanRel.getCluster(), newOptTableImpl, newFileSelection.toString());
     } else {
-      throw new UnsupportedOperationException("Only DrillScanRel and EnumerableTableScan is allowed!");
+      throw new UnsupportedOperationException("Only DrillScanRel and SelectionBasedTableScan is allowed!");
     }
   }
 

@@ -17,7 +17,6 @@
  */
 package org.apache.drill.exec.planner.logical;
 
-import org.apache.calcite.adapter.enumerable.EnumerableTableScan;
 import org.apache.calcite.plan.RelOptRule;
 import org.apache.calcite.plan.RelOptRuleCall;
 import org.apache.calcite.plan.RelOptTable;
@@ -46,12 +45,12 @@ import java.util.stream.Collectors;
 public class DrillPushProjectIntoScanRule extends RelOptRule {
   public static final RelOptRule INSTANCE =
       new DrillPushProjectIntoScanRule(LogicalProject.class,
-          EnumerableTableScan.class,
-          "DrillPushProjectIntoScanRule:enumerable") {
+        SelectionBasedTableScan.class,
+          "DrillPushProjectIntoScanRule:none") {
 
         @Override
         protected boolean skipScanConversion(RelDataType projectRelDataType, TableScan scan) {
-          // do not allow skipping conversion of EnumerableTableScan to DrillScanRel if rule is applicable
+          // do not allow skipping conversion of SelectionBasedTableScan to DrillScanRel if rule is applicable
           return false;
         }
       };
