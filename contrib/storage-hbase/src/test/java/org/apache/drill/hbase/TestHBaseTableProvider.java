@@ -17,32 +17,52 @@
  */
 package org.apache.drill.hbase;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import org.apache.drill.shaded.guava.com.google.common.collect.Lists;
 import org.apache.drill.categories.HbaseStorageTest;
+import org.apache.drill.categories.SlowTest;
 import org.apache.drill.common.config.LogicalPlanPersistence;
 import org.apache.drill.exec.exception.StoreException;
 import org.apache.drill.exec.planner.PhysicalPlanReaderTestFactory;
 import org.apache.drill.exec.store.hbase.config.HBasePersistentStoreProvider;
 import org.apache.drill.exec.store.sys.PersistentStore;
 import org.apache.drill.exec.store.sys.PersistentStoreConfig;
-import org.apache.drill.categories.SlowTest;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.apache.drill.shaded.guava.com.google.common.collect.Lists;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameter;
+import org.junit.runners.Parameterized.Parameters;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Supplier;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+@RunWith(Parameterized.class)
 @Category({SlowTest.class, HbaseStorageTest.class})
 public class TestHBaseTableProvider extends BaseHBaseTest {
 
-  private static HBasePersistentStoreProvider provider;
+  @Parameters
+  public static List<Supplier> providers() {
+    return Arrays.asList(
+        () -> new HBasePersistentStoreProvider(storagePluginConfig.getHBaseConf(), "drill_store"),
+        () -> new HBasePersistentStoreProvider(storagePluginConfig.getHBaseConf(), "drill_store", "blob_drill_store")
+    );
+  }
 
-  @BeforeClass // mask HBase cluster start function
-  public static void setUpBeforeTestHBaseTableProvider() throws Exception {
-    provider = new HBasePersistentStoreProvider(storagePluginConfig.getHBaseConf(), "drill_store");
+  @Parameter(0)
+  public Supplier<HBasePersistentStoreProvider> providerSupplier;
+
+  private HBasePersistentStoreProvider provider;
+
+  @Before // mask HBase cluster start function
+  public void setUpBeforeTestHBaseTableProvider() throws Exception {
+    provider = providerSupplier.get();
     provider.start();
   }
 
@@ -82,8 +102,8 @@ public class TestHBaseTableProvider extends BaseHBaseTest {
     assertEquals(6, Lists.newArrayList(hbaseTestStore.getAll()).size());
   }
 
-  @AfterClass
-  public static void tearDownTestHBaseTableProvider() {
+  @After
+  public void tearDownTestHBaseTableProvider() {
     if (provider != null) {
       provider.close();
     }

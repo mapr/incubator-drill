@@ -63,7 +63,7 @@ public class HBasePersistentStore<V> extends BasePersistentStore<V> {
 
   @Override
   public PersistentStoreMode getMode() {
-    return PersistentStoreMode.PERSISTENT;
+    return config.getMode();
   }
 
   @Override

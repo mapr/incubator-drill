@@ -17,16 +17,14 @@
  */
 package org.apache.drill.exec.store.hbase.config;
 
-import java.io.IOException;
-import java.util.Map;
-
+import org.apache.drill.common.config.DrillConfig;
 import org.apache.drill.common.exceptions.DrillRuntimeException;
-import org.apache.drill.exec.exception.StoreException;
 import org.apache.drill.exec.store.hbase.DrillHBaseConstants;
 import org.apache.drill.exec.store.sys.PersistentStore;
 import org.apache.drill.exec.store.sys.PersistentStoreConfig;
 import org.apache.drill.exec.store.sys.PersistentStoreRegistry;
 import org.apache.drill.exec.store.sys.store.provider.BasePersistentStoreProvider;
+import org.apache.drill.shaded.guava.com.google.common.annotations.VisibleForTesting;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.HColumnDescriptor;
@@ -39,7 +37,10 @@ import org.apache.hadoop.hbase.client.ConnectionFactory;
 import org.apache.hadoop.hbase.client.Table;
 import org.apache.hadoop.hbase.util.Bytes;
 
-import org.apache.drill.shaded.guava.com.google.common.annotations.VisibleForTesting;
+import java.io.IOException;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 public class HBasePersistentStoreProvider extends BasePersistentStoreProvider {
   private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(HBasePersistentStoreProvider.class);
@@ -50,15 +51,19 @@ public class HBasePersistentStoreProvider extends BasePersistentStoreProvider {
 
   private final TableName hbaseTableName;
 
+  private final TableName hbaseBlobTableName;
+
   private Configuration hbaseConf;
 
   private Connection connection;
 
   private Table hbaseTable;
 
+  private Table hbaseBlobTable;
+
   public HBasePersistentStoreProvider(PersistentStoreRegistry registry) {
-    @SuppressWarnings("unchecked")
-    final Map<String, Object> config = (Map<String, Object>) registry.getConfig().getAnyRef(DrillHBaseConstants.SYS_STORE_PROVIDER_HBASE_CONFIG);
+    DrillConfig drillConfig = registry.getConfig();
+    final Map<String, Object> config = (Map<String, Object>) drillConfig.getAnyRef(DrillHBaseConstants.SYS_STORE_PROVIDER_HBASE_CONFIG);
     this.hbaseConf = HBaseConfiguration.create();
     this.hbaseConf.set(HConstants.HBASE_CLIENT_INSTANCE_ID, "drill-hbase-persistent-store-client");
     if (config != null) {
@@ -66,62 +71,88 @@ public class HBasePersistentStoreProvider extends BasePersistentStoreProvider {
         this.hbaseConf.set(entry.getKey(), String.valueOf(entry.getValue()));
       }
     }
-    this.hbaseTableName = TableName.valueOf(registry.getConfig().getString(DrillHBaseConstants.SYS_STORE_PROVIDER_HBASE_TABLE));
+    this.hbaseTableName = TableName.valueOf(drillConfig.getString(DrillHBaseConstants.SYS_STORE_PROVIDER_HBASE_TABLE));
+
+    if (drillConfig.hasPath(DrillHBaseConstants.SYS_STORE_PROVIDER_HBASE_BLOB_TABLE)) {
+      String blobTableName = drillConfig.getString(DrillHBaseConstants.SYS_STORE_PROVIDER_HBASE_BLOB_TABLE);
+      this.hbaseBlobTableName = TableName.valueOf(blobTableName);
+    } else {
+      this.hbaseBlobTableName = null;
+    }
   }
 
   @VisibleForTesting
   public HBasePersistentStoreProvider(Configuration conf, String storeTableName) {
     this.hbaseConf = conf;
     this.hbaseTableName = TableName.valueOf(storeTableName);
+    this.hbaseBlobTableName = null;
   }
 
+  @VisibleForTesting
+  public HBasePersistentStoreProvider(Configuration conf, String storeTableName, String blobStoreTableName) {
+    this.hbaseConf = conf;
+    this.hbaseTableName = TableName.valueOf(storeTableName);
+    this.hbaseBlobTableName = TableName.valueOf(blobStoreTableName);
+  }
 
 
   @Override
-  public <V> PersistentStore<V> getOrCreateStore(PersistentStoreConfig<V> config) throws StoreException {
-    switch(config.getMode()){
-    case BLOB_PERSISTENT:
-    case PERSISTENT:
-      return new HBasePersistentStore<>(config, this.hbaseTable);
-
-    default:
-      throw new IllegalStateException();
+  public <V> PersistentStore<V> getOrCreateStore(PersistentStoreConfig<V> config) {
+    switch (config.getMode()) {
+      case BLOB_PERSISTENT:
+        if (Objects.nonNull(hbaseBlobTableName)) {
+          return new HBasePersistentStore<>(config, this.hbaseBlobTable);
+        }
+      case PERSISTENT:
+        return new HBasePersistentStore<>(config, this.hbaseTable);
+      default:
+        throw new IllegalStateException();
     }
   }
-
 
   @Override
   public void start() throws IOException {
     this.connection = ConnectionFactory.createConnection(hbaseConf);
 
-    try(Admin admin = connection.getAdmin()) {
-      if (!admin.tableExists(hbaseTableName)) {
-        HTableDescriptor desc = new HTableDescriptor(hbaseTableName);
+    createTableIfNotExist(hbaseTableName);
+    this.hbaseTable = connection.getTable(hbaseTableName);
+
+    if (Objects.nonNull(hbaseBlobTableName)) {
+      createTableIfNotExist(hbaseBlobTableName);
+      this.hbaseBlobTable = connection.getTable(hbaseBlobTableName);
+    }
+  }
+
+  private void createTableIfNotExist(TableName table) throws IOException {
+    try (Admin admin = connection.getAdmin()) {
+      if (!admin.tableExists(table)) {
+        HTableDescriptor desc = new HTableDescriptor(table);
         desc.addFamily(new HColumnDescriptor(FAMILY).setMaxVersions(1));
         admin.createTable(desc);
       } else {
-        HTableDescriptor desc = admin.getTableDescriptor(hbaseTableName);
+        HTableDescriptor desc = admin.getTableDescriptor(table);
         if (!desc.hasFamily(FAMILY)) {
-          throw new DrillRuntimeException("The HBase table " + hbaseTableName
-              + " specified as persistent store exists but does not contain column family: "
-              + (Bytes.toString(FAMILY)));
+          DrillRuntimeException.create("The HBase table %s specified as persistent store exists but " +
+                  "does not contain column family: %s",
+              table,
+              FAMILY);
         }
       }
     }
-
-    this.hbaseTable = connection.getTable(hbaseTableName);
   }
 
   @Override
   public synchronized void close() {
-    if (this.hbaseTable != null) {
-      try {
-        this.hbaseTable.close();
-        this.hbaseTable = null;
-      } catch (IOException e) {
-        logger.warn("Caught exception while closing HBase table.", e);
-      }
-    }
+    Stream.of(hbaseTable, hbaseBlobTable)
+        .filter(Objects::nonNull)
+        .forEach(table -> {
+          try {
+            table.close();
+          } catch (IOException e) {
+            logger.warn(String.format("Caught exception while closing HBase table %s.", table.getName()), e);
+          }
+    });
+
     if (this.connection != null && !this.connection.isClosed()) {
       try {
         this.connection.close();

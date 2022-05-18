@@ -37,5 +37,7 @@ public interface DrillHBaseConstants {
 
   String SYS_STORE_PROVIDER_HBASE_TABLE = "drill.exec.sys.store.provider.hbase.table";
 
+  String SYS_STORE_PROVIDER_HBASE_BLOB_TABLE = "drill.exec.sys.store.provider.hbase.blob.table";
+
   String SYS_STORE_PROVIDER_HBASE_CONFIG = "drill.exec.sys.store.provider.hbase.config";
 }
