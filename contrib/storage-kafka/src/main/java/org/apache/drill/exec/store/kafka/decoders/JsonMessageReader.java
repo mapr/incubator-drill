@@ -169,24 +169,4 @@ public class JsonMessageReader implements MessageReader {
         .add("resultSetLoader=" + resultSetLoader)
         .toString();
   }
-
-  public static class SingleElementIterator<T> implements Iterator<T> {
-    private T value;
-
-    @Override
-    public boolean hasNext() {
-      return value != null;
-    }
-
-    @Override
-    public T next() {
-      T value = this.value;
-      this.value = null;
-      return value;
-    }
-
-    public void setValue(T value) {
-      this.value = value;
-    }
-  }
 }
