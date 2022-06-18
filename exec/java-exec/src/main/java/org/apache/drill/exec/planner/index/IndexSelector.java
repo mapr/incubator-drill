@@ -128,10 +128,7 @@ public class IndexSelector  {
   }
 
   private boolean requiredCollation() {
-    if (indexContext.getCollationList() != null && indexContext.getCollationList().size() > 0) {
-      return true;
-    }
-    return false;
+    return indexContext.getCollation() != null;
   }
 
   private boolean buildAndCheckCollation(IndexProperties indexProps) {

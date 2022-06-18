@@ -116,13 +116,6 @@ public class IndexLogicalPlanCallContext implements IndexCallContext {
     return scan;
   }
 
-  @Override
-  public List<RelCollation> getCollationList() {
-    if (sort != null) {
-      return sort.getCollationList();
-    }
-    return null;
-  }
 
   @Override
   public RelCollation getCollation() {
@@ -211,11 +204,10 @@ public class IndexLogicalPlanCallContext implements IndexCallContext {
   public RelNode getExchange() { return null; }
 
   @Override
-  public List<DistributionField> getDistributionFields() { return Collections.EMPTY_LIST; }
+  public List<DistributionField> getDistributionFields() { return Collections.emptyList(); }
 
   @Override
   public DrillParseContext getDefaultParseContext() {
     return defaultParseContext;
   }
-
 }

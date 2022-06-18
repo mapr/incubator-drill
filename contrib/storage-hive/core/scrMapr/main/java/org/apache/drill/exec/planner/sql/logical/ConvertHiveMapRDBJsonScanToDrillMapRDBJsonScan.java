@@ -110,7 +110,7 @@ public class ConvertHiveMapRDBJsonScanToDrillMapRDBJsonScan extends StoragePlugi
         and thus Hive Scan can be chosen instead of Drill native scan because costings allegedly lower for Hive.
         To ensure Drill MapR-DB Json scan will be chosen, reduce Hive scan importance to 0.
        */
-      call.getPlanner().setImportance(hiveScanRel, 0.0);
+      call.getPlanner().prune(hiveScanRel);
     } catch (Exception e) {
       // TODO: Improve error handling after allowing to throw IOException from StoragePlugin.getFormatPlugin()
       logger.warn("Failed to convert HiveScan to JsonScanSpec. Fallback to HiveMapR-DB connector.", e);

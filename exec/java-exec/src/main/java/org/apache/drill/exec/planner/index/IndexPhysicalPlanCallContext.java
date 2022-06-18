@@ -112,14 +112,6 @@ public class IndexPhysicalPlanCallContext implements IndexCallContext {
   }
 
   @Override
-  public List<RelCollation> getCollationList() {
-    if (sort != null) {
-      return sort.getCollationList();
-    }
-    return null;
-  }
-
-  @Override
   public RelCollation getCollation() {
     if (sort != null) {
       return sort.getCollation();

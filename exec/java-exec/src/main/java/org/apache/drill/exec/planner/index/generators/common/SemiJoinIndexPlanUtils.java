@@ -60,6 +60,7 @@ import org.apache.drill.exec.planner.physical.DrillDistributionTrait;
 import org.apache.drill.exec.planner.physical.StreamAggPrule;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -247,7 +248,7 @@ public class SemiJoinIndexPlanUtils {
             ListUtils.union(leftProjectsNames, rightProjectsNames), inputColMap);
     List<RexNode> listOfProjects = Lists.newArrayList();
     listOfProjects.addAll(combinedProjects);
-    Project proj1 = (Project) DrillRelFactories.DRILL_LOGICAL_PROJECT_FACTORY.createProject(input, normalizedInfo.left.left, normalizedInfo.left.right);
+    Project proj1 = (Project) DrillRelFactories.DRILL_LOGICAL_PROJECT_FACTORY.createProject(input, Collections.emptyList(), normalizedInfo.left.left, normalizedInfo.left.right);
     ProjectPrel upperProject = new ProjectPrel(input.getCluster(), input.getTraitSet(), input, proj1.getProjects(),
             proj1.getRowType());
     if (input instanceof ProjectPrel &&

@@ -40,6 +40,7 @@ import org.apache.drill.exec.planner.physical.ProjectPrel;
 import org.apache.drill.exec.planner.physical.ScanPrel;
 import org.apache.calcite.rel.RelNode;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -103,9 +104,11 @@ public class CoveringIndexPlanGenerator extends AbstractCoveringPlanGenerator {
 
     // replace the two projects with a combined projection
     if (topProject instanceof DrillProjectRel) {
-      ProjectPrel newProjectRel = (ProjectPrel)DrillRelFactories.DRILL_LOGICAL_PROJECT_FACTORY.createProject(
-          bottomProject.getInput(), newProjects,
-          topProject.getRowType().getFieldNames());
+      ProjectPrel newProjectRel = (ProjectPrel) DrillRelFactories.DRILL_LOGICAL_PROJECT_FACTORY.createProject(
+        bottomProject.getInput(),
+        Collections.emptyList(),
+        newProjects,
+        topProject.getRowType().getFieldNames());
 
       return newProjectRel;
     } else {

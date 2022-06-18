@@ -151,7 +151,8 @@ public class SemiJoinTransformUtils {
             ListUtils.union(leftProjects, rightProjects), functionRegistry, uniquify,
             ListUtils.union(leftProjectsNames, rightProjectsNames), inputColMap);
 
-    Project proj = (Project) DrillRelFactories.DRILL_LOGICAL_PROJECT_FACTORY.createProject(newScan, normalizedInfo.left.left, normalizedInfo.left.right);
+    Project proj = (Project) DrillRelFactories.DRILL_LOGICAL_PROJECT_FACTORY.createProject(newScan, Collections.emptyList(),
+      normalizedInfo.left.left, normalizedInfo.left.right);
     return Pair.of(DrillProjectRel.create(cluster, rightProject.getTraitSet().plus(DRILL_LOGICAL),
             proj.getInput(), proj.getProjects(),
             proj.getRowType()), normalizedInfo.right);
