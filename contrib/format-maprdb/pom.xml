@@ -31,7 +31,7 @@
   <name>Drill : Contrib : Format : MaprDB</name>
 
   <properties>
-    <mapr-format-plugin.hadoop.version>2.7.6.200-eep-810-SNAPSHOT</mapr-format-plugin.hadoop.version>
+    <mapr-format-plugin.hadoop.version>3.3.3.0-mapr-eep-000-SNAPSHOT</mapr-format-plugin.hadoop.version>
     <mapr-format-plugin.hbase.version>1.4.13.0-eep-810-SNAPSHOT</mapr-format-plugin.hbase.version>
     <mapr.TestSuite>**/MaprDBTestsSuite.class</mapr.TestSuite>
     <mapr.skip.tests>true</mapr.skip.tests>
@@ -71,6 +71,10 @@
         <artifactId>hadoop-common</artifactId>
         <version>${mapr-format-plugin.hadoop.version}</version>
         <exclusions>
+          <exclusion>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-reload4j</artifactId>
+          </exclusion>
           <exclusion>
             <artifactId>commons-logging</artifactId>
             <groupId>commons-logging</groupId>
