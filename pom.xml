@@ -66,7 +66,7 @@
     <sqlline.version>1.12.0</sqlline.version>
     <jackson.version>2.13.2.20220328</jackson.version>
     <zookeeper.version>3.5.7</zookeeper.version>
-    <mapr.release.version>6.2.0.0-mapr</mapr.release.version>
+    <mapr.release.version>7.0.0.0-mapr</mapr.release.version>
     <ojai.version>3.0-mapr-1808</ojai.version>
     <kerby.version>1.0.0</kerby.version>
     <findbugs.version>3.0.0</findbugs.version>
