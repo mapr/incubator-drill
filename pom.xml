@@ -3254,6 +3254,10 @@
             <scope>compile</scope>
             <exclusions>
               <exclusion>
+                <groupId>org.jline</groupId>
+                <artifactId>jline</artifactId>
+              </exclusion>
+              <exclusion>
                 <groupId>com.sun.jersey</groupId>
                 <artifactId>jersey-core</artifactId>
               </exclusion>
