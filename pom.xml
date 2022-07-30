@@ -1623,10 +1623,6 @@
               <groupId>io.netty</groupId>
               <artifactId>netty</artifactId>
           </exclusion>
-          <exclusion>
-            <groupId>io.netty</groupId>
-            <artifactId>netty-all</artifactId>
-          </exclusion>
         </exclusions>
       </dependency>
       <dependency>
@@ -2238,6 +2234,10 @@
                 <groupId>org.codehaus.jackson</groupId>
                 <artifactId>jackson-jaxrs</artifactId>
               </exclusion>
+              <exclusion>
+                <groupId>commons-httpclient</groupId>
+                <artifactId>commons-httpclient</artifactId>
+              </exclusion>
             </exclusions>
           </dependency>
           <dependency>
@@ -2266,7 +2266,7 @@
             <exclusions>
               <exclusion>
                 <groupId>io.netty</groupId>
-                <artifactId>netty-all</artifactId>
+                <artifactId>netty</artifactId>
               </exclusion>
             </exclusions>
           </dependency>
@@ -2415,7 +2415,6 @@
             <groupId>org.apache.hadoop</groupId>
             <artifactId>hadoop-hdfs</artifactId>
             <version>${hadoop.version}</version>
-            <scope>test</scope>
             <exclusions>
               <exclusion>
                 <groupId>commons-logging</groupId>
@@ -2430,16 +2429,16 @@
                 <artifactId>servlet-api</artifactId>
               </exclusion>
               <exclusion>
+                <groupId>log4j</groupId>
+                <artifactId>log4j</artifactId>
+              </exclusion>
+              <exclusion>
                 <groupId>io.netty</groupId>
                 <artifactId>netty-all</artifactId>
               </exclusion>
               <exclusion>
                 <groupId>io.netty</groupId>
                 <artifactId>netty</artifactId>
-              </exclusion>
-              <exclusion>
-                <groupId>log4j</groupId>
-                <artifactId>log4j</artifactId>
               </exclusion>
             </exclusions>
           </dependency>
@@ -2474,20 +2473,20 @@
                 <artifactId>jersey-core</artifactId>
               </exclusion>
               <exclusion>
-                <groupId>io.netty</groupId>
-                <artifactId>netty-all</artifactId>
-              </exclusion>
-              <exclusion>
-                <groupId>io.netty</groupId>
-                <artifactId>netty</artifactId>
-              </exclusion>
-              <exclusion>
                 <groupId>org.codehaus.jackson</groupId>
                 <artifactId>jackson-core-asl</artifactId>
               </exclusion>
               <exclusion>
                 <groupId>org.codehaus.jackson</groupId>
                 <artifactId>jackson-mapper-asl</artifactId>
+              </exclusion>
+              <exclusion>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-all</artifactId>
+              </exclusion>
+              <exclusion>
+                <groupId>io.netty</groupId>
+                <artifactId>netty</artifactId>
               </exclusion>
             </exclusions>
           </dependency>
@@ -2497,10 +2496,6 @@
             <artifactId>hadoop-client</artifactId>
             <version>${hadoop.version}</version>
             <exclusions>
-              <exclusion>
-                <groupId>io.netty</groupId>
-                <artifactId>netty-all</artifactId>
-              </exclusion>
               <exclusion>
                 <groupId>javax.servlet</groupId>
                 <artifactId>servlet-api</artifactId>
@@ -2580,6 +2575,10 @@
               <exclusion>
                 <groupId>org.codehaus.jackson</groupId>
                 <artifactId>jackson-jaxrs</artifactId>
+              </exclusion>
+              <exclusion>
+                <groupId>com.zaxxer</groupId>
+                <artifactId>HikariCP-java7</artifactId>
               </exclusion>
             </exclusions>
           </dependency>
@@ -2839,14 +2838,6 @@
             <version>${hbase.version}</version>
             <scope>test</scope>
             <exclusions>
-              <exclusion>
-                <groupId>io.netty</groupId>
-                <artifactId>netty</artifactId>
-              </exclusion>
-              <exclusion>
-                <groupId>io.netty</groupId>
-                <artifactId>netty-all</artifactId>
-              </exclusion>
               <exclusion>
                 <groupId>javax.servlet</groupId>
                 <artifactId>servlet-api</artifactId>
@@ -3278,10 +3269,6 @@
                 <artifactId>netty</artifactId>
               </exclusion>
               <exclusion>
-                <groupId>io.netty</groupId>
-                <artifactId>netty-all</artifactId>
-              </exclusion>
-              <exclusion>
                 <groupId>com.sun.jersey</groupId>
                 <artifactId>jersey-core</artifactId>
               </exclusion>
@@ -3520,10 +3507,6 @@
                 <artifactId>slf4j-reload4j</artifactId>
               </exclusion>
               <exclusion>
-                  <groupId>io.netty</groupId>
-                  <artifactId>netty</artifactId>
-              </exclusion>
-              <exclusion>
                 <groupId>io.netty</groupId>
                 <artifactId>netty-all</artifactId>
               </exclusion>
@@ -3603,10 +3586,6 @@
               <exclusion>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-reload4j</artifactId>
-              </exclusion>
-              <exclusion>
-                  <groupId>io.netty</groupId>
-                  <artifactId>netty</artifactId>
               </exclusion>
               <exclusion>
                 <groupId>io.netty</groupId>
@@ -3741,14 +3720,6 @@
                 <groupId>org.mortbay.jetty</groupId>
                 <artifactId>servlet-api-2.5</artifactId>
               </exclusion>
-              <exclusion>
-                  <groupId>io.netty</groupId>
-                  <artifactId>netty</artifactId>
-              </exclusion>
-              <exclusion>
-                  <groupId>io.netty</groupId>
-                  <artifactId>netty-all</artifactId>
-              </exclusion>
             </exclusions>
           </dependency>
           <dependency>
@@ -3868,14 +3839,6 @@
               <exclusion>
                 <groupId>org.mortbay.jetty</groupId>
                 <artifactId>servlet-api-2.5</artifactId>
-              </exclusion>
-              <exclusion>
-                  <groupId>io.netty</groupId>
-                  <artifactId>netty</artifactId>
-              </exclusion>
-              <exclusion>
-                  <groupId>io.netty</groupId>
-                  <artifactId>netty-all</artifactId>
               </exclusion>
             </exclusions>
           </dependency>
@@ -4153,6 +4116,14 @@
                 <groupId>org.slf4j</groupId>
               </exclusion>
               <exclusion>
+                <artifactId>reload4j</artifactId>
+                <groupId>ch.qos.reload4j</groupId>
+              </exclusion>
+              <exclusion>
+                <artifactId>slf4j-reload4j</artifactId>
+                <groupId>org.slf4j</groupId>
+              </exclusion>
+              <exclusion>
                 <artifactId>mockito-all</artifactId>
                 <groupId>org.mockito</groupId>
               </exclusion>
@@ -4179,10 +4150,6 @@
             <artifactId>hadoop-client</artifactId>
             <version>${hadoop.version}</version>
             <exclusions>
-              <exclusion>
-                <groupId>io.netty</groupId>
-                <artifactId>netty-all</artifactId>
-              </exclusion>
               <exclusion>
                 <artifactId>commons-logging</artifactId>
                 <groupId>commons-logging</groupId>
@@ -4213,6 +4180,10 @@
               </exclusion>
               <exclusion>
                 <artifactId>slf4j-log4j12</artifactId>
+                <groupId>org.slf4j</groupId>
+              </exclusion>
+              <exclusion>
+                <artifactId>slf4j-reload4j</artifactId>
                 <groupId>org.slf4j</groupId>
               </exclusion>
               <exclusion>
@@ -4262,6 +4233,62 @@
               <exclusion>
                 <groupId>org.apache.hadoop</groupId>
                 <artifactId>hadoop-core</artifactId>
+              </exclusion>
+              <exclusion>
+                <groupId>com.zaxxer</groupId>
+                <artifactId>HikariCP-java7</artifactId>
+              </exclusion>
+            </exclusions>
+          </dependency>
+          <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-mapreduce-client-core</artifactId>
+            <version>${hadoop.version}</version>
+            <scope>compile</scope>
+            <exclusions>
+              <exclusion>
+                <artifactId>reload4j</artifactId>
+                <groupId>ch.qos.reload4j</groupId>
+              </exclusion>
+              <exclusion>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-reload4j</artifactId>
+              </exclusion>
+              <exclusion>
+                <groupId>io.netty</groupId>
+                <artifactId>netty</artifactId>
+              </exclusion>
+            </exclusions>
+          </dependency>
+          <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-auth</artifactId>
+            <version>${hadoop.version}</version>
+            <scope>compile</scope>
+            <exclusions>
+              <exclusion>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-reload4j</artifactId>
+              </exclusion>
+              <exclusion>
+                <artifactId>reload4j</artifactId>
+                <groupId>ch.qos.reload4j</groupId>
+              </exclusion>
+              <exclusion>
+                <groupId>org.ow2.asm</groupId>
+                <artifactId>asm</artifactId>
+              </exclusion>
+            </exclusions>
+          </dependency>
+          <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-yarn-common</artifactId>
+            <version>${hadoop.version}</version>
+            <scope>compile</scope>
+            <exclusions>
+              <exclusion>
+                <artifactId>reload4j</artifactId>
+                <groupId>ch.qos.reload4j</groupId>
               </exclusion>
             </exclusions>
           </dependency>
@@ -4319,6 +4346,10 @@
                 <groupId>commons-logging</groupId>
                 <artifactId>commons-logging</artifactId>
               </exclusion>
+              <exclusion>
+                <artifactId>reload4j</artifactId>
+                <groupId>ch.qos.reload4j</groupId>
+              </exclusion>
             </exclusions>
           </dependency>
           <dependency>
@@ -4340,6 +4371,31 @@
           <!-- Test Dependencies -->
           <dependency>
             <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-common</artifactId>
+            <version>${hadoop.version}</version>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+            <exclusions>
+              <exclusion>
+                <groupId>commons-logging</groupId>
+                <artifactId>commons-logging</artifactId>
+              </exclusion>
+              <exclusion>
+                <artifactId>reload4j</artifactId>
+                <groupId>ch.qos.reload4j</groupId>
+              </exclusion>
+              <exclusion>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-reload4j</artifactId>
+              </exclusion>
+              <exclusion>
+                <groupId>javax.servlet</groupId>
+                <artifactId>servlet-api</artifactId>
+              </exclusion>
+            </exclusions>
+          </dependency>
+          <dependency>
+            <groupId>org.apache.hadoop</groupId>
             <artifactId>hadoop-hdfs</artifactId>
             <version>${hadoop.version}</version>
             <scope>test</scope>
@@ -4353,14 +4409,6 @@
                 <artifactId>servlet-api</artifactId>
               </exclusion>
               <exclusion>
-                <groupId>io.netty</groupId>
-                <artifactId>netty-all</artifactId>
-              </exclusion>
-              <exclusion>
-                <groupId>io.netty</groupId>
-                <artifactId>netty</artifactId>
-              </exclusion>
-              <exclusion>
                 <groupId>org.codehaus.jackson</groupId>
                 <artifactId>jackson-core-asl</artifactId>
               </exclusion>
@@ -4371,6 +4419,22 @@
               <exclusion>
                 <groupId>log4j</groupId>
                 <artifactId>log4j</artifactId>
+              </exclusion>
+              <exclusion>
+                <artifactId>reload4j</artifactId>
+                <groupId>ch.qos.reload4j</groupId>
+              </exclusion>
+              <exclusion>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-reload4j</artifactId>
+              </exclusion>
+              <exclusion>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-all</artifactId>
+              </exclusion>
+              <exclusion>
+                <groupId>io.netty</groupId>
+                <artifactId>netty</artifactId>
               </exclusion>
             </exclusions>
           </dependency>
@@ -4404,6 +4468,10 @@
             <version>${hbase.version}</version>
             <exclusions>
               <exclusion>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-all</artifactId>
+              </exclusion>
+              <exclusion>
                 <groupId>javax.servlet</groupId>
                 <artifactId>servlet-api</artifactId>
               </exclusion>
@@ -4418,6 +4486,10 @@
               <exclusion>
                 <artifactId>slf4j-log4j12</artifactId>
                 <groupId>org.slf4j</groupId>
+              </exclusion>
+              <exclusion>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-reload4j</artifactId>
               </exclusion>
               <exclusion>
                 <artifactId>log4j</artifactId>
@@ -4495,6 +4567,10 @@
                 <groupId>org.slf4j</groupId>
               </exclusion>
               <exclusion>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-reload4j</artifactId>
+              </exclusion>
+              <exclusion>
                 <artifactId>log4j</artifactId>
                 <groupId>log4j</groupId>
               </exclusion>
@@ -4524,14 +4600,6 @@
             <scope>test</scope>
             <exclusions>
               <exclusion>
-                <groupId>io.netty</groupId>
-                <artifactId>netty</artifactId>
-              </exclusion>
-              <exclusion>
-                <groupId>io.netty</groupId>
-                <artifactId>netty-all</artifactId>
-              </exclusion>
-              <exclusion>
                 <groupId>javax.servlet</groupId>
                 <artifactId>servlet-api</artifactId>
               </exclusion>
@@ -4545,6 +4613,10 @@
               </exclusion>
               <exclusion>
                 <artifactId>slf4j-log4j12</artifactId>
+                <groupId>org.slf4j</groupId>
+              </exclusion>
+              <exclusion>
+                <artifactId>slf4j-reload4j</artifactId>
                 <groupId>org.slf4j</groupId>
               </exclusion>
               <exclusion>
