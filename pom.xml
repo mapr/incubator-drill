@@ -30,7 +30,7 @@
 
   <groupId>org.apache.drill</groupId>
   <artifactId>drill-root</artifactId>
-  <version>1.20.1.0-eep-SNAPSHOT</version>
+  <version>1.20.2.0-eep-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>Drill : </name>
