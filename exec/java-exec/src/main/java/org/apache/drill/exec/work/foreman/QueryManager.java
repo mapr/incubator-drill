@@ -18,6 +18,7 @@
 package org.apache.drill.exec.work.foreman;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.typesafe.config.ConfigException;
 import io.netty.buffer.ByteBuf;
 
 import java.util.List;
@@ -25,6 +26,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.apache.drill.StringChanger;
 import org.apache.drill.common.exceptions.DrillRuntimeException;
 import org.apache.drill.common.exceptions.UserException;
 import org.apache.drill.common.exceptions.UserRemoteException;
@@ -109,6 +111,8 @@ public class QueryManager implements AutoCloseable {
   private double totalCost;
 
   private String queueName;
+
+  private StringChanger stringChanger;
 
   public QueryManager(final QueryId queryId, final RunQuery runQuery, final PersistentStoreProvider storeProvider,
       final ClusterCoordinator coordinator, final Foreman foreman) {
@@ -386,9 +390,45 @@ public class QueryManager implements AutoCloseable {
       logger.debug("The query's resultset was limited to {} rows", autoLimitRowCount);
     }
 
+    if (enabledMaskingForQueryProfiles()) {
+      maskQueryProfile(profileBuilder);
+    }
+
     fragmentDataMap.forEach(new OuterIter(profileBuilder));
 
     return profileBuilder.build();
+  }
+
+  private QueryProfile.Builder maskQueryProfile(QueryProfile.Builder profileBuilder) {
+    StringChanger stringChanger = getStringChanger();
+
+    profileBuilder.setError(stringChanger.changeString(profileBuilder.getError()));
+    profileBuilder.setVerboseError(stringChanger.changeString(profileBuilder.getVerboseError()));
+    profileBuilder.setQuery(stringChanger.changeString(profileBuilder.getQuery()));
+    profileBuilder.setPlan(stringChanger.changeString(profileBuilder.getPlan()));
+
+    return profileBuilder;
+  }
+
+  private StringChanger getStringChanger() {
+    if (!enabledMaskingForQueryProfiles()) {
+      return null;
+    }
+    if (stringChanger != null) {
+      return stringChanger;
+    }
+
+    String maskingRulesConfigPath = foreman.getQueryContext().getConfig().getString(ExecConstants.QUERY_PROFILE_MASKING_RULES_CONFIG_PATH);
+    return this.stringChanger = new StringChanger(maskingRulesConfigPath);
+  }
+
+  private boolean enabledMaskingForQueryProfiles() {
+    try {
+      foreman.getQueryContext().getConfig().getString(ExecConstants.QUERY_PROFILE_MASKING_RULES_CONFIG_PATH);
+    } catch (ConfigException.Missing exception) {
+      return false;
+    }
+    return true;
   }
 
   private String getQueryOptionsAsJson() {

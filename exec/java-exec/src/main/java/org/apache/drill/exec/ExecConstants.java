@@ -997,7 +997,7 @@ public final class ExecConstants {
   //Allow to skip writing Alter Session profiles
   public static final String SKIP_ALTER_SESSION_QUERY_PROFILE = "exec.query_profile.alter_session.skip";
   public static final BooleanValidator SKIP_SESSION_QUERY_PROFILE_VALIDATOR = new BooleanValidator(SKIP_ALTER_SESSION_QUERY_PROFILE, new OptionDescription("Skip saving ALTER SESSION profiles"));
-
+  public static final String QUERY_PROFILE_MASKING_RULES_CONFIG_PATH= "drill.exec.query_profile.masking_rules.config_path";
   /**
    * Profiles are normally written after the last client message to reduce latency.
    * When running tests, however, we want the profile written <i>before</i> the
