@@ -70,6 +70,10 @@
           <artifactId>slf4j-log4j12</artifactId>
           <groupId>org.slf4j</groupId>
         </exclusion>
+        <exclusion>
+          <artifactId>slf4j-reload4j</artifactId>
+          <groupId>org.slf4j</groupId>
+        </exclusion>
       </exclusions>
     </dependency>
     <dependency>
@@ -400,6 +404,14 @@
           <groupId>commons-codec</groupId>
           <artifactId>commons-codec</artifactId>
         </exclusion>
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-reload4j</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>ch.qos.reload4j</groupId>
+          <artifactId>reload4j</artifactId>
+        </exclusion>
       </exclusions>
     </dependency>
     <dependency>
@@ -419,6 +431,14 @@
         <exclusion>
           <groupId>log4j</groupId>
           <artifactId>log4j</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>ch.qos.reload4j</groupId>
+          <artifactId>reload4j</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-reload4j</artifactId>
         </exclusion>
         <exclusion>
           <groupId>org.eclipse.jetty</groupId>
@@ -450,6 +470,14 @@
           <groupId>commons-codec</groupId>
           <artifactId>commons-codec</artifactId>
         </exclusion>
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-reload4j</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>ch.qos.reload4j</groupId>
+          <artifactId>reload4j</artifactId>
+        </exclusion>
       </exclusions>
     </dependency>
     <dependency>
@@ -469,6 +497,10 @@
         <exclusion>
           <groupId>commons-codec</groupId>
           <artifactId>commons-codec</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>ch.qos.reload4j</groupId>
+          <artifactId>reload4j</artifactId>
         </exclusion>
       </exclusions>
     </dependency>
@@ -496,6 +528,10 @@
         <exclusion>
           <groupId>log4j</groupId>
           <artifactId>log4j</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>ch.qos.reload4j</groupId>
+          <artifactId>reload4j</artifactId>
         </exclusion>
       </exclusions>
     </dependency>
@@ -675,6 +711,14 @@
               <groupId>log4j</groupId>
               <artifactId>log4j</artifactId>
             </exclusion>
+            <exclusion>
+              <groupId>ch.qos.reload4j</groupId>
+              <artifactId>reload4j</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>org.slf4j</groupId>
+              <artifactId>slf4j-reload4j</artifactId>
+            </exclusion>
           </exclusions>
         </dependency>
       </dependencies>
@@ -759,6 +803,10 @@
             <exclusion>
               <groupId>log4j</groupId>
               <artifactId>log4j</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>ch.qos.reload4j</groupId>
+              <artifactId>reload4j</artifactId>
             </exclusion>
           </exclusions>
         </dependency>
