@@ -1,0 +1,20 @@
+[
+  {
+    "search": "password",
+    "replace": "hidden password",
+    "description": "Rule to hide password"
+  },
+  {
+    "search": "password",
+    "replace": "hidden password"
+  },
+  {
+    "replace": "hidden password"
+  },
+  {
+    "search": "password"
+  },
+  {
+    "description": "Rule to hide password"
+  }
+]
