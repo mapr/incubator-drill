@@ -2896,7 +2896,7 @@
           <dependency>
             <groupId>org.bouncycastle</groupId>
             <artifactId>bcpkix-fips</artifactId>
-            <version>1.0.5</version>
+            <version>1.0.6</version>
           </dependency>
 
           <!--Eclipse Jetty dependecies-->
