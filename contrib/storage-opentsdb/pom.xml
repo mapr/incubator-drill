@@ -79,6 +79,12 @@
             <groupId>com.madhukaraphatak</groupId>
             <artifactId>java-sizeof_2.11</artifactId>
             <version>0.1</version>
+          <exclusions>
+            <exclusion>
+              <groupId>org.scala-lang</groupId>
+              <artifactId>scala-library</artifactId>
+            </exclusion>
+          </exclusions>
         </dependency>
     </dependencies>
 
