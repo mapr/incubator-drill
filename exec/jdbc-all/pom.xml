@@ -386,7 +386,6 @@
               <exclude>org.pentaho:*</exclude>
               <exclude>org.msgpack:*</exclude>
               <exclude>xerces:*</exclude>
-              <exclude>xalan:*</exclude>
               <exclude>org.apache.avro:*</exclude>
               <exclude>org.mongodb:*</exclude>
               <exclude>com.googlecode.json-simple:*</exclude>
@@ -482,7 +481,6 @@
             <relocation><pattern>org.apache.regexp.</pattern><shadedPattern>oadd.org.apache.regexp.</shadedPattern></relocation>
             <relocation><pattern>org.apache.velocity.</pattern><shadedPattern>oadd.org.apache.velocity.</shadedPattern></relocation>
             <relocation><pattern>org.apache.wml.</pattern><shadedPattern>oadd.org.apache.wml.</shadedPattern></relocation>
-            <relocation><pattern>org.apache.xalan.</pattern><shadedPattern>oadd.org.apache.xalan.</shadedPattern></relocation>
             <relocation><pattern>org.apache.xerces.</pattern><shadedPattern>oadd.org.apache.xerces.</shadedPattern></relocation>
             <relocation><pattern>org.apache.xml.</pattern><shadedPattern>oadd.org.apache.xml.</shadedPattern></relocation>
             <relocation><pattern>org.apache.xmlcommons.</pattern><shadedPattern>oadd.org.apache.xmlcommons.</shadedPattern></relocation>
@@ -671,7 +669,6 @@
                     <exclude>org.pentaho:*</exclude>
                     <exclude>org.msgpack:*</exclude>
                     <exclude>xerces:*</exclude>
-                    <exclude>xalan:*</exclude>
                     <exclude>org.apache.avro:*</exclude>
                     <exclude>org.mongodb:*</exclude>
                     <exclude>com.googlecode.json-simple:*</exclude>
@@ -773,7 +770,6 @@
                   <relocation><pattern>org.apache.regexp.</pattern><shadedPattern>oadd.org.apache.regexp.</shadedPattern></relocation>
                   <relocation><pattern>org.apache.velocity.</pattern><shadedPattern>oadd.org.apache.velocity.</shadedPattern></relocation>
                   <relocation><pattern>org.apache.wml.</pattern><shadedPattern>oadd.org.apache.wml.</shadedPattern></relocation>
-                  <relocation><pattern>org.apache.xalan.</pattern><shadedPattern>oadd.org.apache.xalan.</shadedPattern></relocation>
                   <relocation><pattern>org.apache.xerces.</pattern><shadedPattern>oadd.org.apache.xerces.</shadedPattern></relocation>
                   <relocation><pattern>org.apache.xml.</pattern><shadedPattern>oadd.org.apache.xml.</shadedPattern></relocation>
                   <relocation><pattern>org.apache.xmlcommons.</pattern><shadedPattern>oadd.org.apache.xmlcommons.</shadedPattern></relocation>
