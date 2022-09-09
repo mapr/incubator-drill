@@ -31,9 +31,6 @@
   <name>Drill : Contrib : Storage : Hive : </name>
   <packaging>pom</packaging>
 
-  <dependencies>
-  </dependencies>
-
   <modules>
     <module>hive-exec-shade</module>
     <module>core</module>

@@ -249,6 +249,11 @@
 
     <profile>
       <id>mapr</id>
+      <activation>
+        <property>
+          <name>!skipMapr</name>
+        </property>
+      </activation>
       <properties>
         <alt-hadoop>mapr</alt-hadoop>
       </properties>

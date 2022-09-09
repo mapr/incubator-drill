@@ -52,10 +52,4 @@
 
     </dependencies>
 
-    <profiles>
-        <profile>
-            <id>mapr</id>
-        </profile>
-    </profiles>
-
 </project>

@@ -703,6 +703,11 @@
     </profile>
     <profile>
       <id>mapr</id>
+      <activation>
+        <property>
+          <name>!skipMapr</name>
+        </property>
+      </activation>
       <build>
         <plugins>
           <plugin>
