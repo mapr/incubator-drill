@@ -272,7 +272,7 @@ public abstract class AbstractIndexPlanGenerator extends SubsetTransformer<RelNo
     return true;
   }
 
-  public boolean go() throws InvalidRelException {
+  public void go() throws InvalidRelException {
     RelNode top = indexContext.getCall().rel(0);
     final RelNode input;
     if (top instanceof DrillProjectRel) {
@@ -286,16 +286,12 @@ public abstract class AbstractIndexPlanGenerator extends SubsetTransformer<RelNo
       DrillSortRel topSort = (DrillSortRel)top;
       input = topSort.getInput();
     }
-    else if ( top instanceof DrillSortRel) {
-      DrillSortRel topSort = (DrillSortRel) top;
-      input = topSort.getInput();
-    } else {
-      return false;
+    else {
+      return;
     }
     RelTraitSet traits = input.getTraitSet().plus(Prel.DRILL_PHYSICAL);
     RelNode convertedInput = Prule.convert(input, traits);
     this.go(top, convertedInput);
-    return true;
   }
 
   public boolean goMulti() throws InvalidRelException {
