@@ -207,7 +207,8 @@ if errorlevel 1 (
     --add-opens java.base/sun.nio.ch=ALL-UNNAMED ^
     --add-opens java.base/java.net=ALL-UNNAMED ^
     --add-opens java.base/java.nio=ALL-UNNAMED ^
-    --add-opens java.security.jgss/sun.security.krb5=ALL-UNNAMED
+    --add-opens java.security.jgss/sun.security.krb5=ALL-UNNAMED ^
+    --illegal-access=permit
 )
 
 set SQLLINE_CALL=sqlline.SqlLine -ac org.apache.drill.exec.client.DrillSqlLineApplication
