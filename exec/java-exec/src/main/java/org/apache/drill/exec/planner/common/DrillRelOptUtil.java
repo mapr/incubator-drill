@@ -62,7 +62,6 @@ import org.apache.calcite.util.Pair;
 import org.apache.calcite.util.Util;
 import org.apache.drill.common.expression.PathSegment;
 import org.apache.drill.common.expression.SchemaPath;
-import org.apache.drill.common.types.TypeProtos;
 import org.apache.drill.common.types.Types;
 import org.apache.drill.exec.expr.fn.FunctionImplementationRegistry;
 import org.apache.drill.exec.planner.index.ExprToRex;
@@ -130,10 +129,10 @@ public abstract class DrillRelOptUtil {
         }
 
         // Check if Drill implicit casting can resolve the incompatibility
-        List<TypeProtos.MinorType> types = Lists.newArrayListWithCapacity(2);
-        types.add(Types.getMinorTypeFromName(type1.getSqlTypeName().getName()));
-        types.add(Types.getMinorTypeFromName(type2.getSqlTypeName().getName()));
-        return TypeCastRules.getLeastRestrictiveType(types) != null;
+        return TypeCastRules.getLeastRestrictiveType(
+          Types.getMinorTypeFromName(type1.getSqlTypeName().getName()),
+          Types.getMinorTypeFromName(type2.getSqlTypeName().getName())
+        ) != null;
       }
     }
     return true;
