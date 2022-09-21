@@ -82,6 +82,7 @@ public class TestDrillSpnegoAuthenticator extends BaseTest {
   public static void setupTest() throws Exception {
     spnegoHelper = new KerberosHelper(TestDrillSpnegoAuthenticator.class.getSimpleName(), primaryName);
     spnegoHelper.setupKdc(BaseDirTestWatcher.createTempDir(dirTestWatcher.getTmpDir()));
+    System.setProperty("hadoop.login", "kerberos");
 
     // (1) Refresh Kerberos config.
     // This disabled call to an unsupported internal API does not appear to be

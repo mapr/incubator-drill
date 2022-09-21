@@ -51,4 +51,12 @@
     <name>datanucleus.autoCreateTables</name>
     <value>true</value>
   </property>
+  <property>
+    <name>hadoop.security.custom.auth.principal.class</name>
+    <value>com.mapr.security.MapRPrincipal</value>
+  </property>
+  <property>
+    <name>hadoop.security.custom.rpc.auth.method.class</name>
+    <value>org.apache.hadoop.security.rpcauth.MaprAuthMethod</value>
+  </property>
 </configuration>

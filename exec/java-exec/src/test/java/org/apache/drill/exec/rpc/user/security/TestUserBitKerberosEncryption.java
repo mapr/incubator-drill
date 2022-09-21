@@ -50,7 +50,7 @@ import static junit.framework.TestCase.fail;
 @Category(SecurityTest.class)
 public class TestUserBitKerberosEncryption extends ClusterTest {
   private static final org.slf4j.Logger logger =
-      org.slf4j.LoggerFactory.getLogger(TestUserBitKerberosEncryption.class);
+    org.slf4j.LoggerFactory.getLogger(TestUserBitKerberosEncryption.class);
 
   private static KerberosHelper krbHelper;
 
@@ -58,6 +58,7 @@ public class TestUserBitKerberosEncryption extends ClusterTest {
   public static void setupTest() throws Exception {
     krbHelper = new KerberosHelper(TestUserBitKerberosEncryption.class.getSimpleName(), null);
     krbHelper.setupKdc(BaseDirTestWatcher.createTempDir(dirTestWatcher.getTmpDir()));
+    System.setProperty("hadoop.login", "kerberos");
     cluster = defaultClusterConfig().build();
   }
 
@@ -81,18 +82,18 @@ public class TestUserBitKerberosEncryption extends ClusterTest {
   public void successKeytabWithoutChunking() throws Exception {
     try (
       ClientFixture client = cluster.clientBuilder()
-      .property(DrillProperties.SERVICE_PRINCIPAL, krbHelper.SERVER_PRINCIPAL)
-      .property(DrillProperties.USER, krbHelper.CLIENT_PRINCIPAL)
-      .property(DrillProperties.KEYTAB, krbHelper.clientKeytab.getAbsolutePath())
-      .build()
+        .property(DrillProperties.SERVICE_PRINCIPAL, krbHelper.SERVER_PRINCIPAL)
+        .property(DrillProperties.USER, krbHelper.CLIENT_PRINCIPAL)
+        .property(DrillProperties.KEYTAB, krbHelper.clientKeytab.getAbsolutePath())
+        .build()
     ) {
       // Run few queries using the new client
       client.testBuilder()
-          .sqlQuery("SELECT session_user FROM (SELECT * FROM sys.drillbits LIMIT 1)")
-          .unOrdered()
-          .baselineColumns("session_user")
-          .baselineValues(krbHelper.CLIENT_SHORT_NAME)
-          .go();
+        .sqlQuery("SELECT session_user FROM (SELECT * FROM sys.drillbits LIMIT 1)")
+        .unOrdered()
+        .baselineColumns("session_user")
+        .baselineValues(krbHelper.CLIENT_SHORT_NAME)
+        .go();
 
       client.runSqlSilently("SHOW SCHEMAS");
       client.runSqlSilently("USE INFORMATION_SCHEMA");
@@ -121,10 +122,10 @@ public class TestUserBitKerberosEncryption extends ClusterTest {
       // Use a dedicated cluster fixture so that the tested RPC counters have a clean start.
       ClusterFixture cluster = defaultClusterConfig().build();
       ClientFixture client = cluster.clientBuilder()
-      .property(DrillProperties.SERVICE_PRINCIPAL, krbHelper.SERVER_PRINCIPAL)
-      .property(DrillProperties.USER, krbHelper.CLIENT_PRINCIPAL)
-      .property(DrillProperties.KEYTAB, krbHelper.clientKeytab.getAbsolutePath())
-      .build()
+        .property(DrillProperties.SERVICE_PRINCIPAL, krbHelper.SERVER_PRINCIPAL)
+        .property(DrillProperties.USER, krbHelper.CLIENT_PRINCIPAL)
+        .property(DrillProperties.KEYTAB, krbHelper.clientKeytab.getAbsolutePath())
+        .build()
     ) {
       client.testBuilder()
         .sqlQuery("SELECT session_user FROM (SELECT * FROM sys.drillbits LIMIT 1)")
@@ -156,6 +157,8 @@ public class TestUserBitKerberosEncryption extends ClusterTest {
       krbHelper.clientKeytab.getAbsoluteFile()
     );
 
+    // to let client pass authentication without kerberos login as subject is already logged in
+    System.setProperty("hadoop.login", "simple");
     try (
       ClientFixture client = Subject.doAs(
         clientSubject,
@@ -165,12 +168,15 @@ public class TestUserBitKerberosEncryption extends ClusterTest {
           .build()
       )
     ) {
+      // to let the server(drillbit) correctly authenticate the client
+      System.setProperty("hadoop.login", "kerberos");
+
       client.testBuilder()
-          .sqlQuery("SELECT session_user FROM (SELECT * FROM sys.drillbits LIMIT 1)")
-          .unOrdered()
-          .baselineColumns("session_user")
-          .baselineValues(krbHelper.CLIENT_SHORT_NAME)
-          .go();
+        .sqlQuery("SELECT session_user FROM (SELECT * FROM sys.drillbits LIMIT 1)")
+        .unOrdered()
+        .baselineColumns("session_user")
+        .baselineValues(krbHelper.CLIENT_SHORT_NAME)
+        .go();
 
       client.runSqlSilently("SHOW SCHEMAS");
       client.runSqlSilently("USE INFORMATION_SCHEMA");
@@ -232,9 +238,9 @@ public class TestUserBitKerberosEncryption extends ClusterTest {
   }
 
   /**
-   *  This test will not cover the data channel since we are using only 1 Drillbit and the query doesn't involve
-   *  any exchange operator. But Data Channel encryption testing is covered separately in
-   *  {@link org.apache.drill.exec.rpc.data.TestBitBitKerberos}
+   * This test will not cover the data channel since we are using only 1 Drillbit and the query doesn't involve
+   * any exchange operator. But Data Channel encryption testing is covered separately in
+   * {@link org.apache.drill.exec.rpc.data.TestBitBitKerberos}
    */
   @Test
   public void successEncryptionAllChannelChunkMode() throws Exception {
@@ -261,18 +267,18 @@ public class TestUserBitKerberosEncryption extends ClusterTest {
         .baselineValues(krbHelper.CLIENT_SHORT_NAME)
         .go();
 
-        client.runSqlSilently("SHOW SCHEMAS");
-        client.runSqlSilently("USE INFORMATION_SCHEMA");
-        client.runSqlSilently("SHOW TABLES");
-        client.runSqlSilently("SELECT * FROM INFORMATION_SCHEMA.`TABLES` WHERE TABLE_NAME LIKE 'COLUMNS'");
-        client.runSqlSilently("SELECT * FROM cp.`region.json` LIMIT 5");
+      client.runSqlSilently("SHOW SCHEMAS");
+      client.runSqlSilently("USE INFORMATION_SCHEMA");
+      client.runSqlSilently("SHOW TABLES");
+      client.runSqlSilently("SELECT * FROM INFORMATION_SCHEMA.`TABLES` WHERE TABLE_NAME LIKE 'COLUMNS'");
+      client.runSqlSilently("SELECT * FROM cp.`region.json` LIMIT 5");
     }
   }
 
   /**
-   *  This test will not cover the data channel since we are using only 1 Drillbit and the query doesn't involve
-   *  any exchange operator. But Data Channel encryption testing is covered separately in
-   *  {@link org.apache.drill.exec.rpc.data.TestBitBitKerberos}
+   * This test will not cover the data channel since we are using only 1 Drillbit and the query doesn't involve
+   * any exchange operator. But Data Channel encryption testing is covered separately in
+   * {@link org.apache.drill.exec.rpc.data.TestBitBitKerberos}
    */
   @Test
   public void successEncryptionAllChannel() throws Exception {

@@ -53,6 +53,7 @@ public class TestUserBitKerberos extends ClusterTest {
   public static void setupTest() throws Exception {
     krbHelper = new KerberosHelper(TestUserBitKerberos.class.getSimpleName(), null);
     krbHelper.setupKdc(BaseDirTestWatcher.createTempDir(dirTestWatcher.getTmpDir()));
+    System.setProperty("hadoop.login", "kerberos");
     cluster = defaultClusterConfig().build();
   }
 
@@ -70,10 +71,10 @@ public class TestUserBitKerberos extends ClusterTest {
   public void successKeytab() throws Exception {
     try (
       ClientFixture client = cluster.clientBuilder()
-      .property(DrillProperties.SERVICE_PRINCIPAL, krbHelper.SERVER_PRINCIPAL)
-      .property(DrillProperties.USER, krbHelper.CLIENT_PRINCIPAL)
-      .property(DrillProperties.KEYTAB, krbHelper.clientKeytab.getAbsolutePath())
-      .build()
+        .property(DrillProperties.SERVICE_PRINCIPAL, krbHelper.SERVER_PRINCIPAL)
+        .property(DrillProperties.USER, krbHelper.CLIENT_PRINCIPAL)
+        .property(DrillProperties.KEYTAB, krbHelper.clientKeytab.getAbsolutePath())
+        .build()
     ) {
 
       // Run few queries using the new client
@@ -99,6 +100,8 @@ public class TestUserBitKerberos extends ClusterTest {
       krbHelper.clientKeytab.getAbsoluteFile()
     );
 
+    // to let client pass authentication without kerberos login as subject is already logged in
+    System.setProperty("hadoop.login", "simple");
     try (
       ClientFixture client = Subject.doAs(
         clientSubject,
@@ -108,22 +111,24 @@ public class TestUserBitKerberos extends ClusterTest {
           .build()
       )
     ) {
+      // to let the server(drillbit) correctly authenticate the client
+      System.setProperty("hadoop.login", "kerberos");
 
-    // Run few queries using the new client
-    client.testBuilder()
-      .sqlQuery("SELECT session_user FROM (SELECT * FROM sys.drillbits LIMIT 1)")
-      .unOrdered()
-      .baselineColumns("session_user")
-      .baselineValues(krbHelper.CLIENT_SHORT_NAME)
-      .go();
+      // Run few queries using the new client
+      client.testBuilder()
+        .sqlQuery("SELECT session_user FROM (SELECT * FROM sys.drillbits LIMIT 1)")
+        .unOrdered()
+        .baselineColumns("session_user")
+        .baselineValues(krbHelper.CLIENT_SHORT_NAME)
+        .go();
 
-    client.runSqlSilently("SHOW SCHEMAS");
-    client.runSqlSilently("USE INFORMATION_SCHEMA");
-    client.runSqlSilently("SHOW TABLES");
-    client.runSqlSilently("SELECT * FROM INFORMATION_SCHEMA.`TABLES` WHERE TABLE_NAME LIKE 'COLUMNS'");
-    client.runSqlSilently("SELECT * FROM cp.`region.json` LIMIT 5");
+      client.runSqlSilently("SHOW SCHEMAS");
+      client.runSqlSilently("USE INFORMATION_SCHEMA");
+      client.runSqlSilently("SHOW TABLES");
+      client.runSqlSilently("SELECT * FROM INFORMATION_SCHEMA.`TABLES` WHERE TABLE_NAME LIKE 'COLUMNS'");
+      client.runSqlSilently("SELECT * FROM cp.`region.json` LIMIT 5");
     }
-   }
+  }
 
   @Test
   @Ignore("See DRILL-5387. This test works in isolation but not when sharing counters with other tests")
@@ -145,11 +150,11 @@ public class TestUserBitKerberos extends ClusterTest {
       )
     ) {
       client.testBuilder()
-          .sqlQuery("SELECT session_user FROM (SELECT * FROM sys.drillbits LIMIT 1)")
-          .unOrdered()
-          .baselineColumns("session_user")
-          .baselineValues(krbHelper.CLIENT_SHORT_NAME)
-          .go();
+        .sqlQuery("SELECT session_user FROM (SELECT * FROM sys.drillbits LIMIT 1)")
+        .unOrdered()
+        .baselineColumns("session_user")
+        .baselineValues(krbHelper.CLIENT_SHORT_NAME)
+        .go();
 
       RpcMetrics userMetrics = UserRpcMetrics.getInstance(),
         ctrlMetrics = ControlRpcMetrics.getInstance(),
@@ -185,7 +190,7 @@ public class TestUserBitKerberos extends ClusterTest {
           .property(DrillProperties.KERBEROS_FROM_SUBJECT, "true")
           .build()
       )
-     ) {
+    ) {
       // Run query on memory system table this sends remote fragments to all Drillbit and Drillbits then send data
       // using data channel. In this test we have only 1 Drillbit so there should not be any control connection but a
       // local data connections

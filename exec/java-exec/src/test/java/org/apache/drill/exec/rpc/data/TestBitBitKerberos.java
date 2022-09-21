@@ -88,6 +88,7 @@ public class TestBitBitKerberos extends ClusterTest {
   public static void setupTest() throws Exception {
     krbHelper = new KerberosHelper(TestBitBitKerberos.class.getSimpleName(), null);
     krbHelper.setupKdc(BaseDirTestWatcher.createTempDir(dirTestWatcher.getTmpDir()));
+    System.setProperty("hadoop.login", "kerberos");
     cluster = defaultClusterConfig().build();
   }
 
