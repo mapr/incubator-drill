@@ -52,6 +52,9 @@ import org.apache.drill.exec.store.SchemaConfig;
 import org.apache.drill.exec.store.StoragePluginOptimizerRule;
 import org.apache.drill.exec.store.dfs.FormatPlugin;
 import org.apache.drill.exec.store.hive.schema.HiveSchemaFactory;
+import org.apache.drill.exec.store.mapr.db.MapRDBPushFilterIntoScan;
+import org.apache.drill.exec.store.mapr.db.MapRDBPushLimitIntoScan;
+import org.apache.drill.exec.store.mapr.db.MapRDBPushProjectIntoScan;
 import org.apache.drill.shaded.guava.com.google.common.collect.ImmutableSet;
 
 import org.apache.hadoop.conf.Configuration;
@@ -215,12 +218,19 @@ public class HiveStoragePlugin extends AbstractStoragePlugin {
         Class<?> hiveToDrillMapRDBJsonRuleClass =
             Class.forName("org.apache.drill.exec.planner.sql.logical.ConvertHiveMapRDBJsonScanToDrillMapRDBJsonScan");
         ruleBuilder.add((StoragePluginOptimizerRule) hiveToDrillMapRDBJsonRuleClass.getField("INSTANCE").get(null));
+        addMaprDBOptimizerRules(ruleBuilder);
       } catch (ReflectiveOperationException e) {
         logger.warn("Current Drill build is not designed for working with Hive MapR-DB tables. " +
             "Please disable {} option", ExecConstants.HIVE_OPTIMIZE_MAPRDB_JSON_SCAN_WITH_NATIVE_READER);
       }
     }
     return ruleBuilder.build();
+  }
+
+  private void addMaprDBOptimizerRules(ImmutableSet.Builder<StoragePluginOptimizerRule> ruleBuilder) {
+    ruleBuilder.add(MapRDBPushFilterIntoScan.FILTER_ON_SCAN, MapRDBPushFilterIntoScan.FILTER_ON_PROJECT,
+        MapRDBPushProjectIntoScan.PROJECT_ON_SCAN, MapRDBPushLimitIntoScan.LIMIT_ON_PROJECT,
+        MapRDBPushLimitIntoScan.LIMIT_ON_SCAN, MapRDBPushLimitIntoScan.LIMIT_ON_RKJOIN);
   }
 
   @Override
