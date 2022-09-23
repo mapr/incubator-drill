@@ -141,6 +141,7 @@
     <mongo.version>4.3.3</mongo.version>
     <junit.args />
     <log4j.version>2.17.2</log4j.version>
+    <scala-library.version>2.13.5</scala-library.version>
   </properties>
 
   <scm>
@@ -3684,6 +3685,11 @@
                 <groupId>commons-logging</groupId>
               </exclusion>
             </exclusions>
+          </dependency>
+          <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-library</artifactId>
+            <version>${scala-library.version}</version>
           </dependency>
         </dependencies>
       </dependencyManagement>
