@@ -402,8 +402,10 @@ public class QueryManager implements AutoCloseable {
   private QueryProfile.Builder maskQueryProfile(QueryProfile.Builder profileBuilder) {
     StringChanger stringChanger = getStringChanger();
 
-    profileBuilder.setError(stringChanger.changeString(profileBuilder.getError()));
-    profileBuilder.setVerboseError(stringChanger.changeString(profileBuilder.getVerboseError()));
+    if (!profileBuilder.getErrorId().isEmpty()) {
+      profileBuilder.setError(stringChanger.changeString(profileBuilder.getError()));
+      profileBuilder.setVerboseError(stringChanger.changeString(profileBuilder.getVerboseError()));
+    }
     profileBuilder.setQuery(stringChanger.changeString(profileBuilder.getQuery()));
     profileBuilder.setPlan(stringChanger.changeString(profileBuilder.getPlan()));
 

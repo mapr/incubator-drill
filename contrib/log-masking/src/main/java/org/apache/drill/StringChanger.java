@@ -37,8 +37,8 @@ public class StringChanger {
   public StringChanger(String jsonFilePath) {
     File jsonFile = new File(jsonFilePath);
 
-    if (jsonFile.exists() && jsonFile.length() == 0) {
-      logger.info("Configuration file {} is empty. No one masking rule will be applied.", jsonFile.getAbsolutePath());
+    if (!jsonFile.exists()) {
+      logger.error("Configuration file {} is not found. No one masking rule will be applied.", jsonFile.getAbsolutePath());
       return;
     }
 
@@ -53,8 +53,6 @@ public class StringChanger {
     } catch (IOException exception) {
       if (exception instanceof JsonMappingException) {
         logger.error("Configuration file {} has broken format", jsonFile.getAbsolutePath());
-      } else if (exception instanceof FileNotFoundException) {
-        logger.error("Configuration file {} is not found.", jsonFile.getAbsolutePath());
       }
       throw new RuntimeException(exception);
     }
