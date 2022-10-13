@@ -23,7 +23,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +38,11 @@ public class StringChanger {
 
     if (!jsonFile.exists()) {
       logger.error("Configuration file {} is not found. No one masking rule will be applied.", jsonFile.getAbsolutePath());
+      return;
+    }
+
+    if (jsonFile.length() == 0) {
+      logger.info("Configuration file {} is empty. No one masking rule will be applied.", jsonFile.getAbsolutePath());
       return;
     }
 

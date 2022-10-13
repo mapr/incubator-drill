@@ -24,7 +24,6 @@ import org.junit.jupiter.api.function.Executable;
 import org.mockito.MockedConstruction;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -43,26 +42,17 @@ import static org.mockito.Mockito.when;
 public class StringChangerTest {
 
   @Test
-  public void failOnInvalidFilePath() {
+  public void doNothingIfAbsentConfig() {
     //given
-    final String invalidFilePath = "folder1/.|?,{([";
-    final Executable sut = () -> new StringChanger(invalidFilePath);
-
+    final Executable sut = () -> {
+      StringChanger stringChanger = new StringChanger("src/test/resources/missing-config.json");
+      String expected = "Expected string";
+      String result = stringChanger.changeString(expected);
+      assertEquals(expected, result);
+    };
 
     //test
-    assertThrows(Exception.class, sut);
-  }
-
-  @Test
-  public void failOnMissingFile() {
-    //given
-    final Executable sut = () -> new StringChanger("src/test/resources/missing-config.json");
-    final Class expectedException = RuntimeException.class;
-    final Class expectedCause = FileNotFoundException.class;
-
-    //test
-    Throwable exceptionCause = assertThrows(expectedException, sut).getCause();
-    assertEquals(expectedCause, exceptionCause.getClass());
+    assertDoesNotThrow(sut);
   }
 
   @Test
