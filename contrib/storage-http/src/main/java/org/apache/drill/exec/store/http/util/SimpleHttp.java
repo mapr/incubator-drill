@@ -19,6 +19,7 @@ package org.apache.drill.exec.store.http.util;
 
 import com.typesafe.config.Config;
 import okhttp3.Cache;
+import okhttp3.ConnectionPool;
 import okhttp3.Credentials;
 import okhttp3.FormBody;
 import okhttp3.HttpUrl;
@@ -103,6 +104,12 @@ public class SimpleHttp implements AutoCloseable {
   private static final int DEFAULT_TIMEOUT = 1;
   private static final Pattern URL_PARAM_REGEX = Pattern.compile("\\{(\\w+)(?:=(\\w*))?}");
   public static final MediaType JSON_MEDIA_TYPE = MediaType.get("application/json; charset=utf-8");
+  private static final OkHttpClient SIMPLE_CLIENT = new OkHttpClient.Builder()
+    .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
+    .writeTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
+    .readTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
+    .build();
+
 
   private final OkHttpClient client;
   private final File tempDir;
@@ -233,6 +240,10 @@ public class SimpleHttp implements AutoCloseable {
     builder.connectTimeout(timeout, TimeUnit.SECONDS);
     builder.writeTimeout(timeout, TimeUnit.SECONDS);
     builder.readTimeout(timeout, TimeUnit.SECONDS);
+    // OkHttp's connection pooling is disabled because the HTTP plugin creates
+    // and discards potentially many OkHttp clients, each leaving lingering
+    // CLOSE_WAIT connections around if they have pooling enabled.
+    builder.connectionPool(new ConnectionPool(0, 1, TimeUnit.SECONDS));
 
     // Code to skip SSL Certificate validation
     // Sourced from https://stackoverflow.com/questions/60110848/how-to-disable-ssl-verification
@@ -323,7 +334,7 @@ public class SimpleHttp implements AutoCloseable {
    * Returns an InputStream based on the URL and config in the scanSpec. If anything goes wrong
    * the method throws a UserException.
    * @return An Inputstream of the data from the URL call. The caller is responsible for calling
-   * close() on the InputStream.
+   *         close() on the InputStream.
    */
   public InputStream getInputStream() {
 
@@ -393,7 +404,7 @@ public class SimpleHttp implements AutoCloseable {
         paginator.notifyPartialPage();
       }
 
-      // If the request is unsuccessful, clean up and throw a UserException
+      // If the request is unsuccessful clean up and throw a UserException
       if (!isSuccessful(responseCode)) {
         AutoCloseables.closeSilently(response);
         throw UserException
@@ -410,6 +421,7 @@ public class SimpleHttp implements AutoCloseable {
       // Return the InputStream of the response. Note that it is necessary and
       // and sufficient that the caller invokes close() on the returned stream.
       return Objects.requireNonNull(response.body()).byteStream();
+
     } catch (IOException e) {
       // response can only be null at this location so we do not attempt to close it.
       throw UserException
@@ -423,10 +435,14 @@ public class SimpleHttp implements AutoCloseable {
 
   public String getResultsFromApiCall() {
     InputStream inputStream = getInputStream();
-    return new BufferedReader(
-      new InputStreamReader(inputStream, StandardCharsets.UTF_8))
-      .lines()
-      .collect(Collectors.joining("\n"));
+    try {
+      return new BufferedReader(
+        new InputStreamReader(inputStream, StandardCharsets.UTF_8))
+        .lines()
+        .collect(Collectors.joining("\n"));
+    } finally {
+      AutoCloseables.closeSilently(inputStream);
+    }
   }
 
   public static HttpProxyConfig getProxySettings(HttpStoragePluginConfig config, Config drillConfig, HttpUrl url) {
@@ -922,25 +938,26 @@ public class SimpleHttp implements AutoCloseable {
       .build();
   }
 
-  public static OkHttpClient getSimpleHttpClient() {
-    return new OkHttpClient.Builder()
-      .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
-      .writeTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
-      .readTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
-      .build();
-  }
-
   public static String getRequestAndStringResponse(String url) {
+    ResponseBody respBody = null;
     try {
-      return makeSimpleGetRequest(url).string();
+      respBody = makeSimpleGetRequest(url);
+      return respBody.string();
     } catch (IOException e) {
       throw UserException
         .dataReadError(e)
         .message("HTTP request failed")
         .build(logger);
+    } finally {
+      AutoCloseables.closeSilently(respBody);
     }
   }
 
+  /**
+   *
+   * @param url
+   * @return an input stream which the caller is responsible for closing.
+   */
   public static InputStream getRequestAndStreamResponse(String url) {
     try {
       return makeSimpleGetRequest(url).byteStream();
@@ -952,8 +969,13 @@ public class SimpleHttp implements AutoCloseable {
     }
   }
 
+  /**
+   *
+   * @param url
+   * @return response body which the caller is responsible for closing.
+   * @throws IOException
+   */
   public static ResponseBody makeSimpleGetRequest(String url) throws IOException {
-    OkHttpClient client = getSimpleHttpClient();
     Request.Builder requestBuilder = new Request.Builder()
       .url(url);
 
@@ -961,8 +983,8 @@ public class SimpleHttp implements AutoCloseable {
     Request request = requestBuilder.build();
 
     // Execute the request
-      Response response = client.newCall(request).execute();
-      return response.body();
+    Response response = SIMPLE_CLIENT.newCall(request).execute();
+    return response.body();
   }
 
   @Override
@@ -973,6 +995,7 @@ public class SimpleHttp implements AutoCloseable {
       if (cache != null) {
         cache.close();
       }
+      client.connectionPool().evictAll();
     } catch (IOException e) {
       logger.warn("Error closing cache. {}", e.getMessage());
     }

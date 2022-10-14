@@ -58,11 +58,11 @@ public class HttpHelperFunctions {
     org.apache.drill.exec.store.easy.json.loader.JsonLoaderImpl jsonLoader;
 
     @Workspace
-    org.apache.drill.exec.store.easy.json.loader.SingleElementIterator<java.io.InputStream> stream;
+    org.apache.drill.exec.store.easy.json.loader.ClosingStreamIterator stream;
 
     @Override
     public void setup() {
-      stream = new org.apache.drill.exec.store.easy.json.loader.SingleElementIterator<>();
+      stream = new org.apache.drill.exec.store.easy.json.loader.ClosingStreamIterator();
       rsLoader.startBatch();
     }
 
@@ -93,6 +93,9 @@ public class HttpHelperFunctions {
         rowWriter.start();
         if (jsonLoader.parser().next()) {
           rowWriter.save();
+        } else {
+          jsonLoader.close();
+          results.close();
         }
       } catch (Exception e) {
         throw org.apache.drill.common.exceptions.UserException.dataReadError(e)
@@ -136,7 +139,7 @@ public class HttpHelperFunctions {
     org.apache.drill.exec.store.http.HttpApiConfig endpointConfig;
 
     @Workspace
-    org.apache.drill.exec.store.easy.json.loader.SingleElementIterator<java.io.InputStream> stream;
+    org.apache.drill.exec.store.easy.json.loader.ClosingStreamIterator stream;
 
     @Override
     public void setup() {
@@ -156,7 +159,7 @@ public class HttpHelperFunctions {
         endpointName,
         plugin.getConfig()
       );
-      stream = new org.apache.drill.exec.store.easy.json.loader.SingleElementIterator<>();
+      stream = new org.apache.drill.exec.store.easy.json.loader.ClosingStreamIterator();
       // Add JSON configuration from Storage plugin, if present.
       rsLoader.startBatch();
     }
@@ -186,6 +189,9 @@ public class HttpHelperFunctions {
         rowWriter.start();
         if (jsonLoader.parser().next()) {
           rowWriter.save();
+        } else {
+          jsonLoader.close();
+          results.close();
         }
       } catch (Exception e) {
         throw org.apache.drill.common.exceptions.UserException.dataReadError(e)
