@@ -131,8 +131,9 @@
     <xerces.version>2.12.2</xerces.version>
     <commons.configuration.version>1.10</commons.configuration.version>
     <commons.beanutils.version>1.9.4</commons.beanutils.version>
-    <httpdlog-parser.version>5.7</httpdlog-parser.version>
-    <yauaa.version>5.20</yauaa.version>
+    <httpdlog-parser.version>5.8</httpdlog-parser.version>
+    <yauaa.version>7.9.0</yauaa.version>
+    <log4j.version>2.18.0</log4j.version>
     <bcfips.version>1.0.2.1</bcfips.version>
     <bctlsfips.version>1.0.11.4</bctlsfips.version>
     <aircompressor.version>0.20</aircompressor.version>
@@ -140,7 +141,6 @@
     <univocity-parsers.version>2.8.3</univocity-parsers.version>
     <mongo.version>4.3.3</mongo.version>
     <junit.args />
-    <log4j.version>2.17.2</log4j.version>
   </properties>
 
   <scm>
