@@ -53,6 +53,7 @@ public class FileSystemConfig extends StoragePluginConfig {
   public static final String NAME = "file";
 
   private final String connection;
+  private final List<String> mountCommand, unmountCommand;
   private final Map<String, String> config;
   private final Map<String, WorkspaceConfig> workspaces;
   private final Map<String, FormatPluginConfig> formats;
@@ -64,7 +65,7 @@ public class FileSystemConfig extends StoragePluginConfig {
     Map<String, FormatPluginConfig> formats,
     OAuthConfig oAuthConfig,
     CredentialsProvider credentialsProvider) {
-    this(connection, config, workspaces, formats, oAuthConfig, null,
+    this(connection, null, null, config, workspaces, formats, oAuthConfig, null,
       credentialsProvider);
   }
 
@@ -73,12 +74,14 @@ public class FileSystemConfig extends StoragePluginConfig {
     Map<String, WorkspaceConfig> workspaces,
     Map<String, FormatPluginConfig> formats,
     CredentialsProvider credentialsProvider) {
-    this(connection, config, workspaces, formats, null, null,
+    this(connection, null, null, config, workspaces, formats, null, null,
       credentialsProvider);
   }
 
   @JsonCreator
   public FileSystemConfig(@JsonProperty("connection") String connection,
+                          @JsonProperty("mountCommand") List<String> mountCommand,
+                          @JsonProperty("unmountCommand") List<String> unmountCommand,
                           @JsonProperty("config") Map<String, String> config,
                           @JsonProperty("workspaces") Map<String, WorkspaceConfig> workspaces,
                           @JsonProperty("formats") Map<String, FormatPluginConfig> formats,
@@ -87,6 +90,8 @@ public class FileSystemConfig extends StoragePluginConfig {
                           @JsonProperty("credentialsProvider") CredentialsProvider credentialsProvider) {
     super(credentialsProvider, credentialsProvider == null, AuthMode.parseOrDefault(authMode, AuthMode.SHARED_USER), oAuthConfig);
     this.connection = connection;
+    this.mountCommand = mountCommand;
+    this.unmountCommand = unmountCommand;
 
     // Force creation of an empty map so that configs compare equal
     Builder<String, String> builder = ImmutableMap.builder();
@@ -104,6 +109,16 @@ public class FileSystemConfig extends StoragePluginConfig {
   @JsonProperty
   public String getConnection() {
     return connection;
+  }
+
+  @JsonProperty
+  public List<String> getMountCommand() {
+    return mountCommand;
+  }
+
+  @JsonProperty
+  public List<String> getUnmountCommand() {
+    return unmountCommand;
   }
 
   @JsonProperty
@@ -141,6 +156,8 @@ public class FileSystemConfig extends StoragePluginConfig {
     }
     FileSystemConfig other = (FileSystemConfig) obj;
     return Objects.equals(connection, other.connection) &&
+           Objects.equals(mountCommand, other.mountCommand) &&
+           Objects.equals(unmountCommand, other.unmountCommand) &&
            Objects.equals(config, other.config) &&
            Objects.equals(formats, other.formats) &&
            Objects.equals(workspaces, other.workspaces);
@@ -150,6 +167,8 @@ public class FileSystemConfig extends StoragePluginConfig {
   public String toString() {
     return new PlanStringBuilder(this)
         .field("connection", connection)
+        .field("mountCommand", mountCommand)
+        .field("unmountCommand", unmountCommand)
         .field("config", config)
         .field("formats", formats)
         .field("workspaces", workspaces)
@@ -183,9 +202,18 @@ public class FileSystemConfig extends StoragePluginConfig {
       formatsCopy = formatsCopy == null ? new LinkedHashMap<>() : formatsCopy;
       formatsCopy.putAll(newFormats);
     }
-    FileSystemConfig newConfig =
-        new FileSystemConfig(connection, configCopy, workspaces, formatsCopy, oAuthConfig,
-          authMode.name(), credentialsProvider);
+
+    FileSystemConfig newConfig = new FileSystemConfig(
+      connection,
+      mountCommand,
+      unmountCommand,
+      configCopy,
+      workspaces,
+      formatsCopy,
+      oAuthConfig,
+      authMode.name(),
+      credentialsProvider
+    );
     newConfig.setEnabled(isEnabled());
     return newConfig;
   }
