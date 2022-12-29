@@ -314,7 +314,7 @@ if [ $? -gt 0 ]; then
   REF_ACC_OPTS="$REF_ACC_OPTS --add-opens java.base/sun.nio.ch=ALL-UNNAMED"
   REF_ACC_OPTS="$REF_ACC_OPTS --add-opens java.base/java.nio=ALL-UNNAMED"
   REF_ACC_OPTS="$REF_ACC_OPTS --add-opens java.security.jgss/sun.security.krb5=ALL-UNNAMED"
-  export REF_ACC_OPTS="$REF_ACC_OPTS --illegal-access=permit"
+  export REF_ACC_OPTS
 
   export DRILLBIT_OPTS="$DRILLBIT_OPTS $REF_ACC_OPTS"
 fi
