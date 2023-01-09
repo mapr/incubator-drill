@@ -23,7 +23,7 @@
 # builds Drill native client and regenerates protobufs to ensure that committed files are up-to-date.
 name: Github CI
 
-on: [push, pull_request]
+#on: [push, pull_request]
 
 jobs:
   build:
