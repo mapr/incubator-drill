@@ -31,7 +31,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * This class extends from {@link TableScan}. It puts the file selection string into it's digest.
+ * This class extends from {@link TableScan}. It puts the file selection string into its digest.
  * When directory-based partition pruning applied, file selection could be different for the same
  * table.
  */
@@ -39,7 +39,7 @@ public class SelectionBasedTableScan extends TableScan {
   private final String digestFromSelection;
 
   public SelectionBasedTableScan(RelOptCluster cluster, RelTraitSet traitSet,
-      RelOptTable table, String digestFromSelection) {
+                                 RelOptTable table, String digestFromSelection) {
     super(cluster, traitSet, Collections.emptyList(), table);
     this.digestFromSelection = digestFromSelection;
   }
@@ -49,9 +49,9 @@ public class SelectionBasedTableScan extends TableScan {
     return new SelectionBasedTableScan(getCluster(), traitSet, table, digestFromSelection);
   }
 
-  /** Creates an SelectionBasedTableScan. */
-  public static SelectionBasedTableScan create(RelOptCluster cluster,
-      RelOptTable relOptTable, String digestFromSelection) {
+  /** Creates a SelectionBasedTableScan. */
+  public static TableScan create(RelOptCluster cluster,
+    RelOptTable relOptTable, String digestFromSelection) {
     Table table = relOptTable.unwrap(Table.class);
     RelTraitSet traitSet =
       cluster.traitSetOf(Convention.NONE)
@@ -59,7 +59,6 @@ public class SelectionBasedTableScan extends TableScan {
           () -> table != null
             ? table.getStatistic().getCollations()
             : Collections.emptyList());
-
     return new SelectionBasedTableScan(cluster, traitSet, relOptTable, digestFromSelection);
   }
 
