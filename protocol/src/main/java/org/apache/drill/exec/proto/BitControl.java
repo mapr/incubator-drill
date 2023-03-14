@@ -411,7 +411,8 @@ public final class BitControl {
     }
     private BitControlHandshake() {
       channel_ = 0;
-      authenticationMechanisms_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      authenticationMechanisms_ =
+          com.google.protobuf.LazyStringArrayList.emptyList();
     }
 
     @java.lang.Override
@@ -421,91 +422,6 @@ public final class BitControl {
       return new BitControlHandshake();
     }
 
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-    getUnknownFields() {
-      return this.unknownFields;
-    }
-    private BitControlHandshake(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            case 8: {
-              bitField0_ |= 0x00000001;
-              rpcVersion_ = input.readInt32();
-              break;
-            }
-            case 16: {
-              int rawValue = input.readEnum();
-                @SuppressWarnings("deprecation")
-              org.apache.drill.exec.proto.UserBitShared.RpcChannel value = org.apache.drill.exec.proto.UserBitShared.RpcChannel.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(2, rawValue);
-              } else {
-                bitField0_ |= 0x00000002;
-                channel_ = rawValue;
-              }
-              break;
-            }
-            case 26: {
-              org.apache.drill.exec.proto.CoordinationProtos.DrillbitEndpoint.Builder subBuilder = null;
-              if (((bitField0_ & 0x00000004) != 0)) {
-                subBuilder = endpoint_.toBuilder();
-              }
-              endpoint_ = input.readMessage(org.apache.drill.exec.proto.CoordinationProtos.DrillbitEndpoint.PARSER, extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(endpoint_);
-                endpoint_ = subBuilder.buildPartial();
-              }
-              bitField0_ |= 0x00000004;
-              break;
-            }
-            case 34: {
-              com.google.protobuf.ByteString bs = input.readBytes();
-              if (!((mutable_bitField0_ & 0x00000008) != 0)) {
-                authenticationMechanisms_ = new com.google.protobuf.LazyStringArrayList();
-                mutable_bitField0_ |= 0x00000008;
-              }
-              authenticationMechanisms_.add(bs);
-              break;
-            }
-            default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
-      } finally {
-        if (((mutable_bitField0_ & 0x00000008) != 0)) {
-          authenticationMechanisms_ = authenticationMechanisms_.getUnmodifiableView();
-        }
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.BitControl.internal_static_exec_bit_control_BitControlHandshake_descriptor;
@@ -521,7 +437,7 @@ public final class BitControl {
 
     private int bitField0_;
     public static final int RPC_VERSION_FIELD_NUMBER = 1;
-    private int rpcVersion_;
+    private int rpcVersion_ = 0;
     /**
      * <code>optional int32 rpc_version = 1;</code>
      * @return Whether the rpcVersion field is set.
@@ -540,7 +456,7 @@ public final class BitControl {
     }
 
     public static final int CHANNEL_FIELD_NUMBER = 2;
-    private int channel_;
+    private int channel_ = 0;
     /**
      * <code>optional .exec.shared.RpcChannel channel = 2 [default = BIT_CONTROL];</code>
      * @return Whether the channel field is set.
@@ -553,8 +469,7 @@ public final class BitControl {
      * @return The channel.
      */
     @java.lang.Override public org.apache.drill.exec.proto.UserBitShared.RpcChannel getChannel() {
-      @SuppressWarnings("deprecation")
-      org.apache.drill.exec.proto.UserBitShared.RpcChannel result = org.apache.drill.exec.proto.UserBitShared.RpcChannel.valueOf(channel_);
+      org.apache.drill.exec.proto.UserBitShared.RpcChannel result = org.apache.drill.exec.proto.UserBitShared.RpcChannel.forNumber(channel_);
       return result == null ? org.apache.drill.exec.proto.UserBitShared.RpcChannel.BIT_CONTROL : result;
     }
 
@@ -585,7 +500,9 @@ public final class BitControl {
     }
 
     public static final int AUTHENTICATIONMECHANISMS_FIELD_NUMBER = 4;
-    private com.google.protobuf.LazyStringList authenticationMechanisms_;
+    @SuppressWarnings("serial")
+    private com.google.protobuf.LazyStringArrayList authenticationMechanisms_ =
+        com.google.protobuf.LazyStringArrayList.emptyList();
     /**
      * <code>repeated string authenticationMechanisms = 4;</code>
      * @return A list containing the authenticationMechanisms.
@@ -645,7 +562,7 @@ public final class BitControl {
       for (int i = 0; i < authenticationMechanisms_.size(); i++) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 4, authenticationMechanisms_.getRaw(i));
       }
-      unknownFields.writeTo(output);
+      getUnknownFields().writeTo(output);
     }
 
     @java.lang.Override
@@ -674,7 +591,7 @@ public final class BitControl {
         size += dataSize;
         size += 1 * getAuthenticationMechanismsList().size();
       }
-      size += unknownFields.getSerializedSize();
+      size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
       return size;
     }
@@ -705,7 +622,7 @@ public final class BitControl {
       }
       if (!getAuthenticationMechanismsList()
           .equals(other.getAuthenticationMechanismsList())) return false;
-      if (!unknownFields.equals(other.unknownFields)) return false;
+      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
     }
 
@@ -732,7 +649,7 @@ public final class BitControl {
         hash = (37 * hash) + AUTHENTICATIONMECHANISMS_FIELD_NUMBER;
         hash = (53 * hash) + getAuthenticationMechanismsList().hashCode();
       }
-      hash = (29 * hash) + unknownFields.hashCode();
+      hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
     }
@@ -866,18 +783,16 @@ public final class BitControl {
       @java.lang.Override
       public Builder clear() {
         super.clear();
+        bitField0_ = 0;
         rpcVersion_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000001);
         channel_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000002);
-        if (endpointBuilder_ == null) {
-          endpoint_ = null;
-        } else {
-          endpointBuilder_.clear();
+        endpoint_ = null;
+        if (endpointBuilder_ != null) {
+          endpointBuilder_.dispose();
+          endpointBuilder_ = null;
         }
-        bitField0_ = (bitField0_ & ~0x00000004);
-        authenticationMechanisms_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-        bitField0_ = (bitField0_ & ~0x00000008);
+        authenticationMechanisms_ =
+            com.google.protobuf.LazyStringArrayList.emptyList();
         return this;
       }
 
@@ -904,6 +819,12 @@ public final class BitControl {
       @java.lang.Override
       public org.apache.drill.exec.proto.BitControl.BitControlHandshake buildPartial() {
         org.apache.drill.exec.proto.BitControl.BitControlHandshake result = new org.apache.drill.exec.proto.BitControl.BitControlHandshake(this);
+        if (bitField0_ != 0) { buildPartial0(result); }
+        onBuilt();
+        return result;
+      }
+
+      private void buildPartial0(org.apache.drill.exec.proto.BitControl.BitControlHandshake result) {
         int from_bitField0_ = bitField0_;
         int to_bitField0_ = 0;
         if (((from_bitField0_ & 0x00000001) != 0)) {
@@ -911,59 +832,22 @@ public final class BitControl {
           to_bitField0_ |= 0x00000001;
         }
         if (((from_bitField0_ & 0x00000002) != 0)) {
+          result.channel_ = channel_;
           to_bitField0_ |= 0x00000002;
         }
-        result.channel_ = channel_;
         if (((from_bitField0_ & 0x00000004) != 0)) {
-          if (endpointBuilder_ == null) {
-            result.endpoint_ = endpoint_;
-          } else {
-            result.endpoint_ = endpointBuilder_.build();
-          }
+          result.endpoint_ = endpointBuilder_ == null
+              ? endpoint_
+              : endpointBuilder_.build();
           to_bitField0_ |= 0x00000004;
         }
-        if (((bitField0_ & 0x00000008) != 0)) {
-          authenticationMechanisms_ = authenticationMechanisms_.getUnmodifiableView();
-          bitField0_ = (bitField0_ & ~0x00000008);
+        if (((from_bitField0_ & 0x00000008) != 0)) {
+          authenticationMechanisms_.makeImmutable();
+          result.authenticationMechanisms_ = authenticationMechanisms_;
         }
-        result.authenticationMechanisms_ = authenticationMechanisms_;
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
+        result.bitField0_ |= to_bitField0_;
       }
 
-      @java.lang.Override
-      public Builder clone() {
-        return super.clone();
-      }
-      @java.lang.Override
-      public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return super.setField(field, value);
-      }
-      @java.lang.Override
-      public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
-        return super.clearField(field);
-      }
-      @java.lang.Override
-      public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-        return super.clearOneof(oneof);
-      }
-      @java.lang.Override
-      public Builder setRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
-        return super.setRepeatedField(field, index, value);
-      }
-      @java.lang.Override
-      public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return super.addRepeatedField(field, value);
-      }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.BitControl.BitControlHandshake) {
@@ -988,14 +872,14 @@ public final class BitControl {
         if (!other.authenticationMechanisms_.isEmpty()) {
           if (authenticationMechanisms_.isEmpty()) {
             authenticationMechanisms_ = other.authenticationMechanisms_;
-            bitField0_ = (bitField0_ & ~0x00000008);
+            bitField0_ |= 0x00000008;
           } else {
             ensureAuthenticationMechanismsIsMutable();
             authenticationMechanisms_.addAll(other.authenticationMechanisms_);
           }
           onChanged();
         }
-        this.mergeUnknownFields(other.unknownFields);
+        this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
         return this;
       }
@@ -1010,17 +894,60 @@ public final class BitControl {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        org.apache.drill.exec.proto.BitControl.BitControlHandshake parsedMessage = null;
+        if (extensionRegistry == null) {
+          throw new java.lang.NullPointerException();
+        }
         try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              case 8: {
+                rpcVersion_ = input.readInt32();
+                bitField0_ |= 0x00000001;
+                break;
+              } // case 8
+              case 16: {
+                int tmpRaw = input.readEnum();
+                org.apache.drill.exec.proto.UserBitShared.RpcChannel tmpValue =
+                    org.apache.drill.exec.proto.UserBitShared.RpcChannel.forNumber(tmpRaw);
+                if (tmpValue == null) {
+                  mergeUnknownVarintField(2, tmpRaw);
+                } else {
+                  channel_ = tmpRaw;
+                  bitField0_ |= 0x00000002;
+                }
+                break;
+              } // case 16
+              case 26: {
+                input.readMessage(
+                    getEndpointFieldBuilder().getBuilder(),
+                    extensionRegistry);
+                bitField0_ |= 0x00000004;
+                break;
+              } // case 26
+              case 34: {
+                com.google.protobuf.ByteString bs = input.readBytes();
+                ensureAuthenticationMechanismsIsMutable();
+                authenticationMechanisms_.add(bs);
+                break;
+              } // case 34
+              default: {
+                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                  done = true; // was an endgroup tag
+                }
+                break;
+              } // default:
+            } // switch (tag)
+          } // while (!done)
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (org.apache.drill.exec.proto.BitControl.BitControlHandshake) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
+          onChanged();
+        } // finally
         return this;
       }
       private int bitField0_;
@@ -1048,8 +975,9 @@ public final class BitControl {
        * @return This builder for chaining.
        */
       public Builder setRpcVersion(int value) {
-        bitField0_ |= 0x00000001;
+
         rpcVersion_ = value;
+        bitField0_ |= 0x00000001;
         onChanged();
         return this;
       }
@@ -1078,8 +1006,7 @@ public final class BitControl {
        */
       @java.lang.Override
       public org.apache.drill.exec.proto.UserBitShared.RpcChannel getChannel() {
-        @SuppressWarnings("deprecation")
-        org.apache.drill.exec.proto.UserBitShared.RpcChannel result = org.apache.drill.exec.proto.UserBitShared.RpcChannel.valueOf(channel_);
+        org.apache.drill.exec.proto.UserBitShared.RpcChannel result = org.apache.drill.exec.proto.UserBitShared.RpcChannel.forNumber(channel_);
         return result == null ? org.apache.drill.exec.proto.UserBitShared.RpcChannel.BIT_CONTROL : result;
       }
       /**
@@ -1137,11 +1064,11 @@ public final class BitControl {
             throw new NullPointerException();
           }
           endpoint_ = value;
-          onChanged();
         } else {
           endpointBuilder_.setMessage(value);
         }
         bitField0_ |= 0x00000004;
+        onChanged();
         return this;
       }
       /**
@@ -1151,11 +1078,11 @@ public final class BitControl {
           org.apache.drill.exec.proto.CoordinationProtos.DrillbitEndpoint.Builder builderForValue) {
         if (endpointBuilder_ == null) {
           endpoint_ = builderForValue.build();
-          onChanged();
         } else {
           endpointBuilder_.setMessage(builderForValue.build());
         }
         bitField0_ |= 0x00000004;
+        onChanged();
         return this;
       }
       /**
@@ -1164,31 +1091,30 @@ public final class BitControl {
       public Builder mergeEndpoint(org.apache.drill.exec.proto.CoordinationProtos.DrillbitEndpoint value) {
         if (endpointBuilder_ == null) {
           if (((bitField0_ & 0x00000004) != 0) &&
-              endpoint_ != null &&
-              endpoint_ != org.apache.drill.exec.proto.CoordinationProtos.DrillbitEndpoint.getDefaultInstance()) {
-            endpoint_ =
-              org.apache.drill.exec.proto.CoordinationProtos.DrillbitEndpoint.newBuilder(endpoint_).mergeFrom(value).buildPartial();
+            endpoint_ != null &&
+            endpoint_ != org.apache.drill.exec.proto.CoordinationProtos.DrillbitEndpoint.getDefaultInstance()) {
+            getEndpointBuilder().mergeFrom(value);
           } else {
             endpoint_ = value;
           }
-          onChanged();
         } else {
           endpointBuilder_.mergeFrom(value);
         }
         bitField0_ |= 0x00000004;
+        onChanged();
         return this;
       }
       /**
        * <code>optional .exec.DrillbitEndpoint endpoint = 3;</code>
        */
       public Builder clearEndpoint() {
-        if (endpointBuilder_ == null) {
-          endpoint_ = null;
-          onChanged();
-        } else {
-          endpointBuilder_.clear();
-        }
         bitField0_ = (bitField0_ & ~0x00000004);
+        endpoint_ = null;
+        if (endpointBuilder_ != null) {
+          endpointBuilder_.dispose();
+          endpointBuilder_ = null;
+        }
+        onChanged();
         return this;
       }
       /**
@@ -1227,12 +1153,13 @@ public final class BitControl {
         return endpointBuilder_;
       }
 
-      private com.google.protobuf.LazyStringList authenticationMechanisms_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      private com.google.protobuf.LazyStringArrayList authenticationMechanisms_ =
+          com.google.protobuf.LazyStringArrayList.emptyList();
       private void ensureAuthenticationMechanismsIsMutable() {
-        if (!((bitField0_ & 0x00000008) != 0)) {
+        if (!authenticationMechanisms_.isModifiable()) {
           authenticationMechanisms_ = new com.google.protobuf.LazyStringArrayList(authenticationMechanisms_);
-          bitField0_ |= 0x00000008;
-         }
+        }
+        bitField0_ |= 0x00000008;
       }
       /**
        * <code>repeated string authenticationMechanisms = 4;</code>
@@ -1240,7 +1167,8 @@ public final class BitControl {
        */
       public com.google.protobuf.ProtocolStringList
           getAuthenticationMechanismsList() {
-        return authenticationMechanisms_.getUnmodifiableView();
+        authenticationMechanisms_.makeImmutable();
+        return authenticationMechanisms_;
       }
       /**
        * <code>repeated string authenticationMechanisms = 4;</code>
@@ -1274,11 +1202,10 @@ public final class BitControl {
        */
       public Builder setAuthenticationMechanisms(
           int index, java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  ensureAuthenticationMechanismsIsMutable();
+        if (value == null) { throw new NullPointerException(); }
+        ensureAuthenticationMechanismsIsMutable();
         authenticationMechanisms_.set(index, value);
+        bitField0_ |= 0x00000008;
         onChanged();
         return this;
       }
@@ -1289,11 +1216,10 @@ public final class BitControl {
        */
       public Builder addAuthenticationMechanisms(
           java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  ensureAuthenticationMechanismsIsMutable();
+        if (value == null) { throw new NullPointerException(); }
+        ensureAuthenticationMechanismsIsMutable();
         authenticationMechanisms_.add(value);
+        bitField0_ |= 0x00000008;
         onChanged();
         return this;
       }
@@ -1307,6 +1233,7 @@ public final class BitControl {
         ensureAuthenticationMechanismsIsMutable();
         com.google.protobuf.AbstractMessageLite.Builder.addAll(
             values, authenticationMechanisms_);
+        bitField0_ |= 0x00000008;
         onChanged();
         return this;
       }
@@ -1315,8 +1242,9 @@ public final class BitControl {
        * @return This builder for chaining.
        */
       public Builder clearAuthenticationMechanisms() {
-        authenticationMechanisms_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-        bitField0_ = (bitField0_ & ~0x00000008);
+        authenticationMechanisms_ =
+          com.google.protobuf.LazyStringArrayList.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000008);;
         onChanged();
         return this;
       }
@@ -1327,11 +1255,10 @@ public final class BitControl {
        */
       public Builder addAuthenticationMechanismsBytes(
           com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  ensureAuthenticationMechanismsIsMutable();
+        if (value == null) { throw new NullPointerException(); }
+        ensureAuthenticationMechanismsIsMutable();
         authenticationMechanisms_.add(value);
+        bitField0_ |= 0x00000008;
         onChanged();
         return this;
       }
@@ -1368,7 +1295,18 @@ public final class BitControl {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new BitControlHandshake(input, extensionRegistry);
+        Builder builder = newBuilder();
+        try {
+          builder.mergeFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(builder.buildPartial());
+        } catch (com.google.protobuf.UninitializedMessageException e) {
+          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(e)
+              .setUnfinishedMessage(builder.buildPartial());
+        }
+        return builder.buildPartial();
       }
     };
 
@@ -1439,61 +1377,6 @@ public final class BitControl {
       return new BitStatus();
     }
 
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-    getUnknownFields() {
-      return this.unknownFields;
-    }
-    private BitStatus(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            case 10: {
-              if (!((mutable_bitField0_ & 0x00000001) != 0)) {
-                fragmentStatus_ = new java.util.ArrayList<org.apache.drill.exec.proto.BitControl.FragmentStatus>();
-                mutable_bitField0_ |= 0x00000001;
-              }
-              fragmentStatus_.add(
-                  input.readMessage(org.apache.drill.exec.proto.BitControl.FragmentStatus.PARSER, extensionRegistry));
-              break;
-            }
-            default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
-      } finally {
-        if (((mutable_bitField0_ & 0x00000001) != 0)) {
-          fragmentStatus_ = java.util.Collections.unmodifiableList(fragmentStatus_);
-        }
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.BitControl.internal_static_exec_bit_control_BitStatus_descriptor;
@@ -1508,6 +1391,7 @@ public final class BitControl {
     }
 
     public static final int FRAGMENT_STATUS_FIELD_NUMBER = 1;
+    @SuppressWarnings("serial")
     private java.util.List<org.apache.drill.exec.proto.BitControl.FragmentStatus> fragmentStatus_;
     /**
      * <code>repeated .exec.bit.control.FragmentStatus fragment_status = 1;</code>
@@ -1564,7 +1448,7 @@ public final class BitControl {
       for (int i = 0; i < fragmentStatus_.size(); i++) {
         output.writeMessage(1, fragmentStatus_.get(i));
       }
-      unknownFields.writeTo(output);
+      getUnknownFields().writeTo(output);
     }
 
     @java.lang.Override
@@ -1577,7 +1461,7 @@ public final class BitControl {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(1, fragmentStatus_.get(i));
       }
-      size += unknownFields.getSerializedSize();
+      size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
       return size;
     }
@@ -1594,7 +1478,7 @@ public final class BitControl {
 
       if (!getFragmentStatusList()
           .equals(other.getFragmentStatusList())) return false;
-      if (!unknownFields.equals(other.unknownFields)) return false;
+      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
     }
 
@@ -1609,7 +1493,7 @@ public final class BitControl {
         hash = (37 * hash) + FRAGMENT_STATUS_FIELD_NUMBER;
         hash = (53 * hash) + getFragmentStatusList().hashCode();
       }
-      hash = (29 * hash) + unknownFields.hashCode();
+      hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
     }
@@ -1726,29 +1610,25 @@ public final class BitControl {
 
       // Construct using org.apache.drill.exec.proto.BitControl.BitStatus.newBuilder()
       private Builder() {
-        maybeForceBuilderInitialization();
+
       }
 
       private Builder(
           com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-          getFragmentStatusFieldBuilder();
-        }
+
       }
       @java.lang.Override
       public Builder clear() {
         super.clear();
+        bitField0_ = 0;
         if (fragmentStatusBuilder_ == null) {
           fragmentStatus_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000001);
         } else {
+          fragmentStatus_ = null;
           fragmentStatusBuilder_.clear();
         }
+        bitField0_ = (bitField0_ & ~0x00000001);
         return this;
       }
 
@@ -1775,7 +1655,13 @@ public final class BitControl {
       @java.lang.Override
       public org.apache.drill.exec.proto.BitControl.BitStatus buildPartial() {
         org.apache.drill.exec.proto.BitControl.BitStatus result = new org.apache.drill.exec.proto.BitControl.BitStatus(this);
-        int from_bitField0_ = bitField0_;
+        buildPartialRepeatedFields(result);
+        if (bitField0_ != 0) { buildPartial0(result); }
+        onBuilt();
+        return result;
+      }
+
+      private void buildPartialRepeatedFields(org.apache.drill.exec.proto.BitControl.BitStatus result) {
         if (fragmentStatusBuilder_ == null) {
           if (((bitField0_ & 0x00000001) != 0)) {
             fragmentStatus_ = java.util.Collections.unmodifiableList(fragmentStatus_);
@@ -1785,42 +1671,12 @@ public final class BitControl {
         } else {
           result.fragmentStatus_ = fragmentStatusBuilder_.build();
         }
-        onBuilt();
-        return result;
       }
 
-      @java.lang.Override
-      public Builder clone() {
-        return super.clone();
+      private void buildPartial0(org.apache.drill.exec.proto.BitControl.BitStatus result) {
+        int from_bitField0_ = bitField0_;
       }
-      @java.lang.Override
-      public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return super.setField(field, value);
-      }
-      @java.lang.Override
-      public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
-        return super.clearField(field);
-      }
-      @java.lang.Override
-      public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-        return super.clearOneof(oneof);
-      }
-      @java.lang.Override
-      public Builder setRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
-        return super.setRepeatedField(field, index, value);
-      }
-      @java.lang.Override
-      public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return super.addRepeatedField(field, value);
-      }
+
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.BitControl.BitStatus) {
@@ -1859,7 +1715,7 @@ public final class BitControl {
             }
           }
         }
-        this.mergeUnknownFields(other.unknownFields);
+        this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
         return this;
       }
@@ -1874,17 +1730,43 @@ public final class BitControl {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        org.apache.drill.exec.proto.BitControl.BitStatus parsedMessage = null;
+        if (extensionRegistry == null) {
+          throw new java.lang.NullPointerException();
+        }
         try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              case 10: {
+                org.apache.drill.exec.proto.BitControl.FragmentStatus m =
+                    input.readMessage(
+                        org.apache.drill.exec.proto.BitControl.FragmentStatus.PARSER,
+                        extensionRegistry);
+                if (fragmentStatusBuilder_ == null) {
+                  ensureFragmentStatusIsMutable();
+                  fragmentStatus_.add(m);
+                } else {
+                  fragmentStatusBuilder_.addMessage(m);
+                }
+                break;
+              } // case 10
+              default: {
+                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                  done = true; // was an endgroup tag
+                }
+                break;
+              } // default:
+            } // switch (tag)
+          } // while (!done)
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (org.apache.drill.exec.proto.BitControl.BitStatus) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
+          onChanged();
+        } // finally
         return this;
       }
       private int bitField0_;
@@ -2161,7 +2043,18 @@ public final class BitControl {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new BitStatus(input, extensionRegistry);
+        Builder builder = newBuilder();
+        try {
+          builder.mergeFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(builder.buildPartial());
+        } catch (com.google.protobuf.UninitializedMessageException e) {
+          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(e)
+              .setUnfinishedMessage(builder.buildPartial());
+        }
+        return builder.buildPartial();
       }
     };
 
@@ -2237,75 +2130,6 @@ public final class BitControl {
       return new FragmentStatus();
     }
 
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-    getUnknownFields() {
-      return this.unknownFields;
-    }
-    private FragmentStatus(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            case 10: {
-              org.apache.drill.exec.proto.UserBitShared.MinorFragmentProfile.Builder subBuilder = null;
-              if (((bitField0_ & 0x00000001) != 0)) {
-                subBuilder = profile_.toBuilder();
-              }
-              profile_ = input.readMessage(org.apache.drill.exec.proto.UserBitShared.MinorFragmentProfile.PARSER, extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(profile_);
-                profile_ = subBuilder.buildPartial();
-              }
-              bitField0_ |= 0x00000001;
-              break;
-            }
-            case 18: {
-              org.apache.drill.exec.proto.ExecProtos.FragmentHandle.Builder subBuilder = null;
-              if (((bitField0_ & 0x00000002) != 0)) {
-                subBuilder = handle_.toBuilder();
-              }
-              handle_ = input.readMessage(org.apache.drill.exec.proto.ExecProtos.FragmentHandle.PARSER, extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(handle_);
-                handle_ = subBuilder.buildPartial();
-              }
-              bitField0_ |= 0x00000002;
-              break;
-            }
-            default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
-      } finally {
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.BitControl.internal_static_exec_bit_control_FragmentStatus_descriptor;
@@ -2392,7 +2216,7 @@ public final class BitControl {
       if (((bitField0_ & 0x00000002) != 0)) {
         output.writeMessage(2, getHandle());
       }
-      unknownFields.writeTo(output);
+      getUnknownFields().writeTo(output);
     }
 
     @java.lang.Override
@@ -2409,7 +2233,7 @@ public final class BitControl {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(2, getHandle());
       }
-      size += unknownFields.getSerializedSize();
+      size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
       return size;
     }
@@ -2434,7 +2258,7 @@ public final class BitControl {
         if (!getHandle()
             .equals(other.getHandle())) return false;
       }
-      if (!unknownFields.equals(other.unknownFields)) return false;
+      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
     }
 
@@ -2453,7 +2277,7 @@ public final class BitControl {
         hash = (37 * hash) + HANDLE_FIELD_NUMBER;
         hash = (53 * hash) + getHandle().hashCode();
       }
-      hash = (29 * hash) + unknownFields.hashCode();
+      hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
     }
@@ -2588,18 +2412,17 @@ public final class BitControl {
       @java.lang.Override
       public Builder clear() {
         super.clear();
-        if (profileBuilder_ == null) {
-          profile_ = null;
-        } else {
-          profileBuilder_.clear();
+        bitField0_ = 0;
+        profile_ = null;
+        if (profileBuilder_ != null) {
+          profileBuilder_.dispose();
+          profileBuilder_ = null;
         }
-        bitField0_ = (bitField0_ & ~0x00000001);
-        if (handleBuilder_ == null) {
-          handle_ = null;
-        } else {
-          handleBuilder_.clear();
+        handle_ = null;
+        if (handleBuilder_ != null) {
+          handleBuilder_.dispose();
+          handleBuilder_ = null;
         }
-        bitField0_ = (bitField0_ & ~0x00000002);
         return this;
       }
 
@@ -2626,61 +2449,29 @@ public final class BitControl {
       @java.lang.Override
       public org.apache.drill.exec.proto.BitControl.FragmentStatus buildPartial() {
         org.apache.drill.exec.proto.BitControl.FragmentStatus result = new org.apache.drill.exec.proto.BitControl.FragmentStatus(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) != 0)) {
-          if (profileBuilder_ == null) {
-            result.profile_ = profile_;
-          } else {
-            result.profile_ = profileBuilder_.build();
-          }
-          to_bitField0_ |= 0x00000001;
-        }
-        if (((from_bitField0_ & 0x00000002) != 0)) {
-          if (handleBuilder_ == null) {
-            result.handle_ = handle_;
-          } else {
-            result.handle_ = handleBuilder_.build();
-          }
-          to_bitField0_ |= 0x00000002;
-        }
-        result.bitField0_ = to_bitField0_;
+        if (bitField0_ != 0) { buildPartial0(result); }
         onBuilt();
         return result;
       }
 
-      @java.lang.Override
-      public Builder clone() {
-        return super.clone();
+      private void buildPartial0(org.apache.drill.exec.proto.BitControl.FragmentStatus result) {
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) != 0)) {
+          result.profile_ = profileBuilder_ == null
+              ? profile_
+              : profileBuilder_.build();
+          to_bitField0_ |= 0x00000001;
+        }
+        if (((from_bitField0_ & 0x00000002) != 0)) {
+          result.handle_ = handleBuilder_ == null
+              ? handle_
+              : handleBuilder_.build();
+          to_bitField0_ |= 0x00000002;
+        }
+        result.bitField0_ |= to_bitField0_;
       }
-      @java.lang.Override
-      public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return super.setField(field, value);
-      }
-      @java.lang.Override
-      public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
-        return super.clearField(field);
-      }
-      @java.lang.Override
-      public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-        return super.clearOneof(oneof);
-      }
-      @java.lang.Override
-      public Builder setRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
-        return super.setRepeatedField(field, index, value);
-      }
-      @java.lang.Override
-      public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return super.addRepeatedField(field, value);
-      }
+
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.BitControl.FragmentStatus) {
@@ -2699,7 +2490,7 @@ public final class BitControl {
         if (other.hasHandle()) {
           mergeHandle(other.getHandle());
         }
-        this.mergeUnknownFields(other.unknownFields);
+        this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
         return this;
       }
@@ -2714,17 +2505,44 @@ public final class BitControl {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        org.apache.drill.exec.proto.BitControl.FragmentStatus parsedMessage = null;
+        if (extensionRegistry == null) {
+          throw new java.lang.NullPointerException();
+        }
         try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              case 10: {
+                input.readMessage(
+                    getProfileFieldBuilder().getBuilder(),
+                    extensionRegistry);
+                bitField0_ |= 0x00000001;
+                break;
+              } // case 10
+              case 18: {
+                input.readMessage(
+                    getHandleFieldBuilder().getBuilder(),
+                    extensionRegistry);
+                bitField0_ |= 0x00000002;
+                break;
+              } // case 18
+              default: {
+                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                  done = true; // was an endgroup tag
+                }
+                break;
+              } // default:
+            } // switch (tag)
+          } // while (!done)
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (org.apache.drill.exec.proto.BitControl.FragmentStatus) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
+          onChanged();
+        } // finally
         return this;
       }
       private int bitField0_;
@@ -2759,11 +2577,11 @@ public final class BitControl {
             throw new NullPointerException();
           }
           profile_ = value;
-          onChanged();
         } else {
           profileBuilder_.setMessage(value);
         }
         bitField0_ |= 0x00000001;
+        onChanged();
         return this;
       }
       /**
@@ -2773,11 +2591,11 @@ public final class BitControl {
           org.apache.drill.exec.proto.UserBitShared.MinorFragmentProfile.Builder builderForValue) {
         if (profileBuilder_ == null) {
           profile_ = builderForValue.build();
-          onChanged();
         } else {
           profileBuilder_.setMessage(builderForValue.build());
         }
         bitField0_ |= 0x00000001;
+        onChanged();
         return this;
       }
       /**
@@ -2786,31 +2604,30 @@ public final class BitControl {
       public Builder mergeProfile(org.apache.drill.exec.proto.UserBitShared.MinorFragmentProfile value) {
         if (profileBuilder_ == null) {
           if (((bitField0_ & 0x00000001) != 0) &&
-              profile_ != null &&
-              profile_ != org.apache.drill.exec.proto.UserBitShared.MinorFragmentProfile.getDefaultInstance()) {
-            profile_ =
-              org.apache.drill.exec.proto.UserBitShared.MinorFragmentProfile.newBuilder(profile_).mergeFrom(value).buildPartial();
+            profile_ != null &&
+            profile_ != org.apache.drill.exec.proto.UserBitShared.MinorFragmentProfile.getDefaultInstance()) {
+            getProfileBuilder().mergeFrom(value);
           } else {
             profile_ = value;
           }
-          onChanged();
         } else {
           profileBuilder_.mergeFrom(value);
         }
         bitField0_ |= 0x00000001;
+        onChanged();
         return this;
       }
       /**
        * <code>optional .exec.shared.MinorFragmentProfile profile = 1;</code>
        */
       public Builder clearProfile() {
-        if (profileBuilder_ == null) {
-          profile_ = null;
-          onChanged();
-        } else {
-          profileBuilder_.clear();
-        }
         bitField0_ = (bitField0_ & ~0x00000001);
+        profile_ = null;
+        if (profileBuilder_ != null) {
+          profileBuilder_.dispose();
+          profileBuilder_ = null;
+        }
+        onChanged();
         return this;
       }
       /**
@@ -2879,11 +2696,11 @@ public final class BitControl {
             throw new NullPointerException();
           }
           handle_ = value;
-          onChanged();
         } else {
           handleBuilder_.setMessage(value);
         }
         bitField0_ |= 0x00000002;
+        onChanged();
         return this;
       }
       /**
@@ -2893,11 +2710,11 @@ public final class BitControl {
           org.apache.drill.exec.proto.ExecProtos.FragmentHandle.Builder builderForValue) {
         if (handleBuilder_ == null) {
           handle_ = builderForValue.build();
-          onChanged();
         } else {
           handleBuilder_.setMessage(builderForValue.build());
         }
         bitField0_ |= 0x00000002;
+        onChanged();
         return this;
       }
       /**
@@ -2906,31 +2723,30 @@ public final class BitControl {
       public Builder mergeHandle(org.apache.drill.exec.proto.ExecProtos.FragmentHandle value) {
         if (handleBuilder_ == null) {
           if (((bitField0_ & 0x00000002) != 0) &&
-              handle_ != null &&
-              handle_ != org.apache.drill.exec.proto.ExecProtos.FragmentHandle.getDefaultInstance()) {
-            handle_ =
-              org.apache.drill.exec.proto.ExecProtos.FragmentHandle.newBuilder(handle_).mergeFrom(value).buildPartial();
+            handle_ != null &&
+            handle_ != org.apache.drill.exec.proto.ExecProtos.FragmentHandle.getDefaultInstance()) {
+            getHandleBuilder().mergeFrom(value);
           } else {
             handle_ = value;
           }
-          onChanged();
         } else {
           handleBuilder_.mergeFrom(value);
         }
         bitField0_ |= 0x00000002;
+        onChanged();
         return this;
       }
       /**
        * <code>optional .exec.bit.FragmentHandle handle = 2;</code>
        */
       public Builder clearHandle() {
-        if (handleBuilder_ == null) {
-          handle_ = null;
-          onChanged();
-        } else {
-          handleBuilder_.clear();
-        }
         bitField0_ = (bitField0_ & ~0x00000002);
+        handle_ = null;
+        if (handleBuilder_ != null) {
+          handleBuilder_.dispose();
+          handleBuilder_ = null;
+        }
+        onChanged();
         return this;
       }
       /**
@@ -3001,7 +2817,18 @@ public final class BitControl {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new FragmentStatus(input, extensionRegistry);
+        Builder builder = newBuilder();
+        try {
+          builder.mergeFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(builder.buildPartial());
+        } catch (com.google.protobuf.UninitializedMessageException e) {
+          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(e)
+              .setUnfinishedMessage(builder.buildPartial());
+        }
+        return builder.buildPartial();
       }
     };
 
@@ -3072,61 +2899,6 @@ public final class BitControl {
       return new InitializeFragments();
     }
 
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-    getUnknownFields() {
-      return this.unknownFields;
-    }
-    private InitializeFragments(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            case 10: {
-              if (!((mutable_bitField0_ & 0x00000001) != 0)) {
-                fragment_ = new java.util.ArrayList<org.apache.drill.exec.proto.BitControl.PlanFragment>();
-                mutable_bitField0_ |= 0x00000001;
-              }
-              fragment_.add(
-                  input.readMessage(org.apache.drill.exec.proto.BitControl.PlanFragment.PARSER, extensionRegistry));
-              break;
-            }
-            default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
-      } finally {
-        if (((mutable_bitField0_ & 0x00000001) != 0)) {
-          fragment_ = java.util.Collections.unmodifiableList(fragment_);
-        }
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.BitControl.internal_static_exec_bit_control_InitializeFragments_descriptor;
@@ -3141,6 +2913,7 @@ public final class BitControl {
     }
 
     public static final int FRAGMENT_FIELD_NUMBER = 1;
+    @SuppressWarnings("serial")
     private java.util.List<org.apache.drill.exec.proto.BitControl.PlanFragment> fragment_;
     /**
      * <code>repeated .exec.bit.control.PlanFragment fragment = 1;</code>
@@ -3197,7 +2970,7 @@ public final class BitControl {
       for (int i = 0; i < fragment_.size(); i++) {
         output.writeMessage(1, fragment_.get(i));
       }
-      unknownFields.writeTo(output);
+      getUnknownFields().writeTo(output);
     }
 
     @java.lang.Override
@@ -3210,7 +2983,7 @@ public final class BitControl {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(1, fragment_.get(i));
       }
-      size += unknownFields.getSerializedSize();
+      size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
       return size;
     }
@@ -3227,7 +3000,7 @@ public final class BitControl {
 
       if (!getFragmentList()
           .equals(other.getFragmentList())) return false;
-      if (!unknownFields.equals(other.unknownFields)) return false;
+      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
     }
 
@@ -3242,7 +3015,7 @@ public final class BitControl {
         hash = (37 * hash) + FRAGMENT_FIELD_NUMBER;
         hash = (53 * hash) + getFragmentList().hashCode();
       }
-      hash = (29 * hash) + unknownFields.hashCode();
+      hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
     }
@@ -3359,29 +3132,25 @@ public final class BitControl {
 
       // Construct using org.apache.drill.exec.proto.BitControl.InitializeFragments.newBuilder()
       private Builder() {
-        maybeForceBuilderInitialization();
+
       }
 
       private Builder(
           com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-          getFragmentFieldBuilder();
-        }
+
       }
       @java.lang.Override
       public Builder clear() {
         super.clear();
+        bitField0_ = 0;
         if (fragmentBuilder_ == null) {
           fragment_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000001);
         } else {
+          fragment_ = null;
           fragmentBuilder_.clear();
         }
+        bitField0_ = (bitField0_ & ~0x00000001);
         return this;
       }
 
@@ -3408,7 +3177,13 @@ public final class BitControl {
       @java.lang.Override
       public org.apache.drill.exec.proto.BitControl.InitializeFragments buildPartial() {
         org.apache.drill.exec.proto.BitControl.InitializeFragments result = new org.apache.drill.exec.proto.BitControl.InitializeFragments(this);
-        int from_bitField0_ = bitField0_;
+        buildPartialRepeatedFields(result);
+        if (bitField0_ != 0) { buildPartial0(result); }
+        onBuilt();
+        return result;
+      }
+
+      private void buildPartialRepeatedFields(org.apache.drill.exec.proto.BitControl.InitializeFragments result) {
         if (fragmentBuilder_ == null) {
           if (((bitField0_ & 0x00000001) != 0)) {
             fragment_ = java.util.Collections.unmodifiableList(fragment_);
@@ -3418,42 +3193,12 @@ public final class BitControl {
         } else {
           result.fragment_ = fragmentBuilder_.build();
         }
-        onBuilt();
-        return result;
       }
 
-      @java.lang.Override
-      public Builder clone() {
-        return super.clone();
+      private void buildPartial0(org.apache.drill.exec.proto.BitControl.InitializeFragments result) {
+        int from_bitField0_ = bitField0_;
       }
-      @java.lang.Override
-      public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return super.setField(field, value);
-      }
-      @java.lang.Override
-      public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
-        return super.clearField(field);
-      }
-      @java.lang.Override
-      public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-        return super.clearOneof(oneof);
-      }
-      @java.lang.Override
-      public Builder setRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
-        return super.setRepeatedField(field, index, value);
-      }
-      @java.lang.Override
-      public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return super.addRepeatedField(field, value);
-      }
+
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.BitControl.InitializeFragments) {
@@ -3492,7 +3237,7 @@ public final class BitControl {
             }
           }
         }
-        this.mergeUnknownFields(other.unknownFields);
+        this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
         return this;
       }
@@ -3507,17 +3252,43 @@ public final class BitControl {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        org.apache.drill.exec.proto.BitControl.InitializeFragments parsedMessage = null;
+        if (extensionRegistry == null) {
+          throw new java.lang.NullPointerException();
+        }
         try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              case 10: {
+                org.apache.drill.exec.proto.BitControl.PlanFragment m =
+                    input.readMessage(
+                        org.apache.drill.exec.proto.BitControl.PlanFragment.PARSER,
+                        extensionRegistry);
+                if (fragmentBuilder_ == null) {
+                  ensureFragmentIsMutable();
+                  fragment_.add(m);
+                } else {
+                  fragmentBuilder_.addMessage(m);
+                }
+                break;
+              } // case 10
+              default: {
+                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                  done = true; // was an endgroup tag
+                }
+                break;
+              } // default:
+            } // switch (tag)
+          } // while (!done)
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (org.apache.drill.exec.proto.BitControl.InitializeFragments) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
+          onChanged();
+        } // finally
         return this;
       }
       private int bitField0_;
@@ -3794,7 +3565,18 @@ public final class BitControl {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new InitializeFragments(input, extensionRegistry);
+        Builder builder = newBuilder();
+        try {
+          builder.mergeFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(builder.buildPartial());
+        } catch (com.google.protobuf.UninitializedMessageException e) {
+          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(e)
+              .setUnfinishedMessage(builder.buildPartial());
+        }
+        return builder.buildPartial();
       }
     };
 
@@ -3863,59 +3645,6 @@ public final class BitControl {
       return new CustomMessage();
     }
 
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-    getUnknownFields() {
-      return this.unknownFields;
-    }
-    private CustomMessage(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            case 8: {
-              bitField0_ |= 0x00000001;
-              type_ = input.readInt32();
-              break;
-            }
-            case 18: {
-              bitField0_ |= 0x00000002;
-              message_ = input.readBytes();
-              break;
-            }
-            default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
-      } finally {
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.BitControl.internal_static_exec_bit_control_CustomMessage_descriptor;
@@ -3931,7 +3660,7 @@ public final class BitControl {
 
     private int bitField0_;
     public static final int TYPE_FIELD_NUMBER = 1;
-    private int type_;
+    private int type_ = 0;
     /**
      * <code>optional int32 type = 1;</code>
      * @return Whether the type field is set.
@@ -3950,7 +3679,7 @@ public final class BitControl {
     }
 
     public static final int MESSAGE_FIELD_NUMBER = 2;
-    private com.google.protobuf.ByteString message_;
+    private com.google.protobuf.ByteString message_ = com.google.protobuf.ByteString.EMPTY;
     /**
      * <code>optional bytes message = 2;</code>
      * @return Whether the message field is set.
@@ -3988,7 +3717,7 @@ public final class BitControl {
       if (((bitField0_ & 0x00000002) != 0)) {
         output.writeBytes(2, message_);
       }
-      unknownFields.writeTo(output);
+      getUnknownFields().writeTo(output);
     }
 
     @java.lang.Override
@@ -4005,7 +3734,7 @@ public final class BitControl {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(2, message_);
       }
-      size += unknownFields.getSerializedSize();
+      size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
       return size;
     }
@@ -4030,7 +3759,7 @@ public final class BitControl {
         if (!getMessage()
             .equals(other.getMessage())) return false;
       }
-      if (!unknownFields.equals(other.unknownFields)) return false;
+      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
     }
 
@@ -4049,7 +3778,7 @@ public final class BitControl {
         hash = (37 * hash) + MESSAGE_FIELD_NUMBER;
         hash = (53 * hash) + getMessage().hashCode();
       }
-      hash = (29 * hash) + unknownFields.hashCode();
+      hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
     }
@@ -4166,26 +3895,20 @@ public final class BitControl {
 
       // Construct using org.apache.drill.exec.proto.BitControl.CustomMessage.newBuilder()
       private Builder() {
-        maybeForceBuilderInitialization();
+
       }
 
       private Builder(
           com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-        }
+
       }
       @java.lang.Override
       public Builder clear() {
         super.clear();
+        bitField0_ = 0;
         type_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000001);
         message_ = com.google.protobuf.ByteString.EMPTY;
-        bitField0_ = (bitField0_ & ~0x00000002);
         return this;
       }
 
@@ -4212,6 +3935,12 @@ public final class BitControl {
       @java.lang.Override
       public org.apache.drill.exec.proto.BitControl.CustomMessage buildPartial() {
         org.apache.drill.exec.proto.BitControl.CustomMessage result = new org.apache.drill.exec.proto.BitControl.CustomMessage(this);
+        if (bitField0_ != 0) { buildPartial0(result); }
+        onBuilt();
+        return result;
+      }
+
+      private void buildPartial0(org.apache.drill.exec.proto.BitControl.CustomMessage result) {
         int from_bitField0_ = bitField0_;
         int to_bitField0_ = 0;
         if (((from_bitField0_ & 0x00000001) != 0)) {
@@ -4219,46 +3948,12 @@ public final class BitControl {
           to_bitField0_ |= 0x00000001;
         }
         if (((from_bitField0_ & 0x00000002) != 0)) {
+          result.message_ = message_;
           to_bitField0_ |= 0x00000002;
         }
-        result.message_ = message_;
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
+        result.bitField0_ |= to_bitField0_;
       }
 
-      @java.lang.Override
-      public Builder clone() {
-        return super.clone();
-      }
-      @java.lang.Override
-      public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return super.setField(field, value);
-      }
-      @java.lang.Override
-      public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
-        return super.clearField(field);
-      }
-      @java.lang.Override
-      public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-        return super.clearOneof(oneof);
-      }
-      @java.lang.Override
-      public Builder setRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
-        return super.setRepeatedField(field, index, value);
-      }
-      @java.lang.Override
-      public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return super.addRepeatedField(field, value);
-      }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.BitControl.CustomMessage) {
@@ -4277,7 +3972,7 @@ public final class BitControl {
         if (other.hasMessage()) {
           setMessage(other.getMessage());
         }
-        this.mergeUnknownFields(other.unknownFields);
+        this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
         return this;
       }
@@ -4292,17 +3987,40 @@ public final class BitControl {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        org.apache.drill.exec.proto.BitControl.CustomMessage parsedMessage = null;
+        if (extensionRegistry == null) {
+          throw new java.lang.NullPointerException();
+        }
         try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              case 8: {
+                type_ = input.readInt32();
+                bitField0_ |= 0x00000001;
+                break;
+              } // case 8
+              case 18: {
+                message_ = input.readBytes();
+                bitField0_ |= 0x00000002;
+                break;
+              } // case 18
+              default: {
+                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                  done = true; // was an endgroup tag
+                }
+                break;
+              } // default:
+            } // switch (tag)
+          } // while (!done)
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (org.apache.drill.exec.proto.BitControl.CustomMessage) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
+          onChanged();
+        } // finally
         return this;
       }
       private int bitField0_;
@@ -4330,8 +4048,9 @@ public final class BitControl {
        * @return This builder for chaining.
        */
       public Builder setType(int value) {
-        bitField0_ |= 0x00000001;
+
         type_ = value;
+        bitField0_ |= 0x00000001;
         onChanged();
         return this;
       }
@@ -4369,11 +4088,9 @@ public final class BitControl {
        * @return This builder for chaining.
        */
       public Builder setMessage(com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000002;
+        if (value == null) { throw new NullPointerException(); }
         message_ = value;
+        bitField0_ |= 0x00000002;
         onChanged();
         return this;
       }
@@ -4420,7 +4137,18 @@ public final class BitControl {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new CustomMessage(input, extensionRegistry);
+        Builder builder = newBuilder();
+        try {
+          builder.mergeFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(builder.buildPartial());
+        } catch (com.google.protobuf.UninitializedMessageException e) {
+          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(e)
+              .setUnfinishedMessage(builder.buildPartial());
+        }
+        return builder.buildPartial();
       }
     };
 
@@ -4697,173 +4425,6 @@ public final class BitControl {
       return new PlanFragment();
     }
 
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-    getUnknownFields() {
-      return this.unknownFields;
-    }
-    private PlanFragment(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            case 10: {
-              org.apache.drill.exec.proto.ExecProtos.FragmentHandle.Builder subBuilder = null;
-              if (((bitField0_ & 0x00000001) != 0)) {
-                subBuilder = handle_.toBuilder();
-              }
-              handle_ = input.readMessage(org.apache.drill.exec.proto.ExecProtos.FragmentHandle.PARSER, extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(handle_);
-                handle_ = subBuilder.buildPartial();
-              }
-              bitField0_ |= 0x00000001;
-              break;
-            }
-            case 37: {
-              bitField0_ |= 0x00000002;
-              networkCost_ = input.readFloat();
-              break;
-            }
-            case 45: {
-              bitField0_ |= 0x00000004;
-              cpuCost_ = input.readFloat();
-              break;
-            }
-            case 53: {
-              bitField0_ |= 0x00000008;
-              diskCost_ = input.readFloat();
-              break;
-            }
-            case 61: {
-              bitField0_ |= 0x00000010;
-              memoryCost_ = input.readFloat();
-              break;
-            }
-            case 66: {
-              com.google.protobuf.ByteString bs = input.readBytes();
-              bitField0_ |= 0x00000020;
-              fragmentJson_ = bs;
-              break;
-            }
-            case 72: {
-              bitField0_ |= 0x00000040;
-              leafFragment_ = input.readBool();
-              break;
-            }
-            case 82: {
-              org.apache.drill.exec.proto.CoordinationProtos.DrillbitEndpoint.Builder subBuilder = null;
-              if (((bitField0_ & 0x00000080) != 0)) {
-                subBuilder = assignment_.toBuilder();
-              }
-              assignment_ = input.readMessage(org.apache.drill.exec.proto.CoordinationProtos.DrillbitEndpoint.PARSER, extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(assignment_);
-                assignment_ = subBuilder.buildPartial();
-              }
-              bitField0_ |= 0x00000080;
-              break;
-            }
-            case 90: {
-              org.apache.drill.exec.proto.CoordinationProtos.DrillbitEndpoint.Builder subBuilder = null;
-              if (((bitField0_ & 0x00000100) != 0)) {
-                subBuilder = foreman_.toBuilder();
-              }
-              foreman_ = input.readMessage(org.apache.drill.exec.proto.CoordinationProtos.DrillbitEndpoint.PARSER, extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(foreman_);
-                foreman_ = subBuilder.buildPartial();
-              }
-              bitField0_ |= 0x00000100;
-              break;
-            }
-            case 96: {
-              bitField0_ |= 0x00000200;
-              memInitial_ = input.readInt64();
-              break;
-            }
-            case 104: {
-              bitField0_ |= 0x00000400;
-              memMax_ = input.readInt64();
-              break;
-            }
-            case 114: {
-              org.apache.drill.exec.proto.UserBitShared.UserCredentials.Builder subBuilder = null;
-              if (((bitField0_ & 0x00000800) != 0)) {
-                subBuilder = credentials_.toBuilder();
-              }
-              credentials_ = input.readMessage(org.apache.drill.exec.proto.UserBitShared.UserCredentials.PARSER, extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(credentials_);
-                credentials_ = subBuilder.buildPartial();
-              }
-              bitField0_ |= 0x00000800;
-              break;
-            }
-            case 122: {
-              com.google.protobuf.ByteString bs = input.readBytes();
-              bitField0_ |= 0x00001000;
-              optionsJson_ = bs;
-              break;
-            }
-            case 130: {
-              org.apache.drill.exec.proto.BitControl.QueryContextInformation.Builder subBuilder = null;
-              if (((bitField0_ & 0x00002000) != 0)) {
-                subBuilder = context_.toBuilder();
-              }
-              context_ = input.readMessage(org.apache.drill.exec.proto.BitControl.QueryContextInformation.PARSER, extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(context_);
-                context_ = subBuilder.buildPartial();
-              }
-              bitField0_ |= 0x00002000;
-              break;
-            }
-            case 138: {
-              if (!((mutable_bitField0_ & 0x00004000) != 0)) {
-                collector_ = new java.util.ArrayList<org.apache.drill.exec.proto.BitControl.Collector>();
-                mutable_bitField0_ |= 0x00004000;
-              }
-              collector_.add(
-                  input.readMessage(org.apache.drill.exec.proto.BitControl.Collector.PARSER, extensionRegistry));
-              break;
-            }
-            default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
-      } finally {
-        if (((mutable_bitField0_ & 0x00004000) != 0)) {
-          collector_ = java.util.Collections.unmodifiableList(collector_);
-        }
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.BitControl.internal_static_exec_bit_control_PlanFragment_descriptor;
@@ -4905,7 +4466,7 @@ public final class BitControl {
     }
 
     public static final int NETWORK_COST_FIELD_NUMBER = 4;
-    private float networkCost_;
+    private float networkCost_ = 0F;
     /**
      * <code>optional float network_cost = 4;</code>
      * @return Whether the networkCost field is set.
@@ -4924,7 +4485,7 @@ public final class BitControl {
     }
 
     public static final int CPU_COST_FIELD_NUMBER = 5;
-    private float cpuCost_;
+    private float cpuCost_ = 0F;
     /**
      * <code>optional float cpu_cost = 5;</code>
      * @return Whether the cpuCost field is set.
@@ -4943,7 +4504,7 @@ public final class BitControl {
     }
 
     public static final int DISK_COST_FIELD_NUMBER = 6;
-    private float diskCost_;
+    private float diskCost_ = 0F;
     /**
      * <code>optional float disk_cost = 6;</code>
      * @return Whether the diskCost field is set.
@@ -4962,7 +4523,7 @@ public final class BitControl {
     }
 
     public static final int MEMORY_COST_FIELD_NUMBER = 7;
-    private float memoryCost_;
+    private float memoryCost_ = 0F;
     /**
      * <code>optional float memory_cost = 7;</code>
      * @return Whether the memoryCost field is set.
@@ -4981,7 +4542,8 @@ public final class BitControl {
     }
 
     public static final int FRAGMENT_JSON_FIELD_NUMBER = 8;
-    private volatile java.lang.Object fragmentJson_;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object fragmentJson_ = "";
     /**
      * <code>optional string fragment_json = 8;</code>
      * @return Whether the fragmentJson field is set.
@@ -5029,7 +4591,7 @@ public final class BitControl {
     }
 
     public static final int LEAF_FRAGMENT_FIELD_NUMBER = 9;
-    private boolean leafFragment_;
+    private boolean leafFragment_ = false;
     /**
      * <code>optional bool leaf_fragment = 9;</code>
      * @return Whether the leafFragment field is set.
@@ -5100,7 +4662,7 @@ public final class BitControl {
     }
 
     public static final int MEM_INITIAL_FIELD_NUMBER = 12;
-    private long memInitial_;
+    private long memInitial_ = 20000000L;
     /**
      * <pre>
      * 20 megs
@@ -5127,7 +4689,7 @@ public final class BitControl {
     }
 
     public static final int MEM_MAX_FIELD_NUMBER = 13;
-    private long memMax_;
+    private long memMax_ = 2000000000L;
     /**
      * <pre>
      * 20 gigs
@@ -5180,7 +4742,8 @@ public final class BitControl {
     }
 
     public static final int OPTIONS_JSON_FIELD_NUMBER = 15;
-    private volatile java.lang.Object optionsJson_;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object optionsJson_ = "";
     /**
      * <code>optional string options_json = 15;</code>
      * @return Whether the optionsJson field is set.
@@ -5254,6 +4817,7 @@ public final class BitControl {
     }
 
     public static final int COLLECTOR_FIELD_NUMBER = 17;
+    @SuppressWarnings("serial")
     private java.util.List<org.apache.drill.exec.proto.BitControl.Collector> collector_;
     /**
      * <code>repeated .exec.bit.control.Collector collector = 17;</code>
@@ -5352,7 +4916,7 @@ public final class BitControl {
       for (int i = 0; i < collector_.size(); i++) {
         output.writeMessage(17, collector_.get(i));
       }
-      unknownFields.writeTo(output);
+      getUnknownFields().writeTo(output);
     }
 
     @java.lang.Override
@@ -5419,7 +4983,7 @@ public final class BitControl {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(17, collector_.get(i));
       }
-      size += unknownFields.getSerializedSize();
+      size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
       return size;
     }
@@ -5510,7 +5074,7 @@ public final class BitControl {
       }
       if (!getCollectorList()
           .equals(other.getCollectorList())) return false;
-      if (!unknownFields.equals(other.unknownFields)) return false;
+      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
     }
 
@@ -5588,7 +5152,7 @@ public final class BitControl {
         hash = (37 * hash) + COLLECTOR_FIELD_NUMBER;
         hash = (53 * hash) + getCollectorList().hashCode();
       }
-      hash = (29 * hash) + unknownFields.hashCode();
+      hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
     }
@@ -5727,60 +5291,48 @@ public final class BitControl {
       @java.lang.Override
       public Builder clear() {
         super.clear();
-        if (handleBuilder_ == null) {
-          handle_ = null;
-        } else {
-          handleBuilder_.clear();
+        bitField0_ = 0;
+        handle_ = null;
+        if (handleBuilder_ != null) {
+          handleBuilder_.dispose();
+          handleBuilder_ = null;
         }
-        bitField0_ = (bitField0_ & ~0x00000001);
         networkCost_ = 0F;
-        bitField0_ = (bitField0_ & ~0x00000002);
         cpuCost_ = 0F;
-        bitField0_ = (bitField0_ & ~0x00000004);
         diskCost_ = 0F;
-        bitField0_ = (bitField0_ & ~0x00000008);
         memoryCost_ = 0F;
-        bitField0_ = (bitField0_ & ~0x00000010);
         fragmentJson_ = "";
-        bitField0_ = (bitField0_ & ~0x00000020);
         leafFragment_ = false;
-        bitField0_ = (bitField0_ & ~0x00000040);
-        if (assignmentBuilder_ == null) {
-          assignment_ = null;
-        } else {
-          assignmentBuilder_.clear();
+        assignment_ = null;
+        if (assignmentBuilder_ != null) {
+          assignmentBuilder_.dispose();
+          assignmentBuilder_ = null;
         }
-        bitField0_ = (bitField0_ & ~0x00000080);
-        if (foremanBuilder_ == null) {
-          foreman_ = null;
-        } else {
-          foremanBuilder_.clear();
+        foreman_ = null;
+        if (foremanBuilder_ != null) {
+          foremanBuilder_.dispose();
+          foremanBuilder_ = null;
         }
-        bitField0_ = (bitField0_ & ~0x00000100);
         memInitial_ = 20000000L;
-        bitField0_ = (bitField0_ & ~0x00000200);
         memMax_ = 2000000000L;
-        bitField0_ = (bitField0_ & ~0x00000400);
-        if (credentialsBuilder_ == null) {
-          credentials_ = null;
-        } else {
-          credentialsBuilder_.clear();
+        credentials_ = null;
+        if (credentialsBuilder_ != null) {
+          credentialsBuilder_.dispose();
+          credentialsBuilder_ = null;
         }
-        bitField0_ = (bitField0_ & ~0x00000800);
         optionsJson_ = "";
-        bitField0_ = (bitField0_ & ~0x00001000);
-        if (contextBuilder_ == null) {
-          context_ = null;
-        } else {
-          contextBuilder_.clear();
+        context_ = null;
+        if (contextBuilder_ != null) {
+          contextBuilder_.dispose();
+          contextBuilder_ = null;
         }
-        bitField0_ = (bitField0_ & ~0x00002000);
         if (collectorBuilder_ == null) {
           collector_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00004000);
         } else {
+          collector_ = null;
           collectorBuilder_.clear();
         }
+        bitField0_ = (bitField0_ & ~0x00004000);
         return this;
       }
 
@@ -5807,14 +5359,31 @@ public final class BitControl {
       @java.lang.Override
       public org.apache.drill.exec.proto.BitControl.PlanFragment buildPartial() {
         org.apache.drill.exec.proto.BitControl.PlanFragment result = new org.apache.drill.exec.proto.BitControl.PlanFragment(this);
+        buildPartialRepeatedFields(result);
+        if (bitField0_ != 0) { buildPartial0(result); }
+        onBuilt();
+        return result;
+      }
+
+      private void buildPartialRepeatedFields(org.apache.drill.exec.proto.BitControl.PlanFragment result) {
+        if (collectorBuilder_ == null) {
+          if (((bitField0_ & 0x00004000) != 0)) {
+            collector_ = java.util.Collections.unmodifiableList(collector_);
+            bitField0_ = (bitField0_ & ~0x00004000);
+          }
+          result.collector_ = collector_;
+        } else {
+          result.collector_ = collectorBuilder_.build();
+        }
+      }
+
+      private void buildPartial0(org.apache.drill.exec.proto.BitControl.PlanFragment result) {
         int from_bitField0_ = bitField0_;
         int to_bitField0_ = 0;
         if (((from_bitField0_ & 0x00000001) != 0)) {
-          if (handleBuilder_ == null) {
-            result.handle_ = handle_;
-          } else {
-            result.handle_ = handleBuilder_.build();
-          }
+          result.handle_ = handleBuilder_ == null
+              ? handle_
+              : handleBuilder_.build();
           to_bitField0_ |= 0x00000001;
         }
         if (((from_bitField0_ & 0x00000002) != 0)) {
@@ -5834,103 +5403,52 @@ public final class BitControl {
           to_bitField0_ |= 0x00000010;
         }
         if (((from_bitField0_ & 0x00000020) != 0)) {
+          result.fragmentJson_ = fragmentJson_;
           to_bitField0_ |= 0x00000020;
         }
-        result.fragmentJson_ = fragmentJson_;
         if (((from_bitField0_ & 0x00000040) != 0)) {
           result.leafFragment_ = leafFragment_;
           to_bitField0_ |= 0x00000040;
         }
         if (((from_bitField0_ & 0x00000080) != 0)) {
-          if (assignmentBuilder_ == null) {
-            result.assignment_ = assignment_;
-          } else {
-            result.assignment_ = assignmentBuilder_.build();
-          }
+          result.assignment_ = assignmentBuilder_ == null
+              ? assignment_
+              : assignmentBuilder_.build();
           to_bitField0_ |= 0x00000080;
         }
         if (((from_bitField0_ & 0x00000100) != 0)) {
-          if (foremanBuilder_ == null) {
-            result.foreman_ = foreman_;
-          } else {
-            result.foreman_ = foremanBuilder_.build();
-          }
+          result.foreman_ = foremanBuilder_ == null
+              ? foreman_
+              : foremanBuilder_.build();
           to_bitField0_ |= 0x00000100;
         }
         if (((from_bitField0_ & 0x00000200) != 0)) {
+          result.memInitial_ = memInitial_;
           to_bitField0_ |= 0x00000200;
         }
-        result.memInitial_ = memInitial_;
         if (((from_bitField0_ & 0x00000400) != 0)) {
+          result.memMax_ = memMax_;
           to_bitField0_ |= 0x00000400;
         }
-        result.memMax_ = memMax_;
         if (((from_bitField0_ & 0x00000800) != 0)) {
-          if (credentialsBuilder_ == null) {
-            result.credentials_ = credentials_;
-          } else {
-            result.credentials_ = credentialsBuilder_.build();
-          }
+          result.credentials_ = credentialsBuilder_ == null
+              ? credentials_
+              : credentialsBuilder_.build();
           to_bitField0_ |= 0x00000800;
         }
         if (((from_bitField0_ & 0x00001000) != 0)) {
+          result.optionsJson_ = optionsJson_;
           to_bitField0_ |= 0x00001000;
         }
-        result.optionsJson_ = optionsJson_;
         if (((from_bitField0_ & 0x00002000) != 0)) {
-          if (contextBuilder_ == null) {
-            result.context_ = context_;
-          } else {
-            result.context_ = contextBuilder_.build();
-          }
+          result.context_ = contextBuilder_ == null
+              ? context_
+              : contextBuilder_.build();
           to_bitField0_ |= 0x00002000;
         }
-        if (collectorBuilder_ == null) {
-          if (((bitField0_ & 0x00004000) != 0)) {
-            collector_ = java.util.Collections.unmodifiableList(collector_);
-            bitField0_ = (bitField0_ & ~0x00004000);
-          }
-          result.collector_ = collector_;
-        } else {
-          result.collector_ = collectorBuilder_.build();
-        }
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
+        result.bitField0_ |= to_bitField0_;
       }
 
-      @java.lang.Override
-      public Builder clone() {
-        return super.clone();
-      }
-      @java.lang.Override
-      public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return super.setField(field, value);
-      }
-      @java.lang.Override
-      public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
-        return super.clearField(field);
-      }
-      @java.lang.Override
-      public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-        return super.clearOneof(oneof);
-      }
-      @java.lang.Override
-      public Builder setRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
-        return super.setRepeatedField(field, index, value);
-      }
-      @java.lang.Override
-      public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return super.addRepeatedField(field, value);
-      }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.BitControl.PlanFragment) {
@@ -5959,8 +5477,8 @@ public final class BitControl {
           setMemoryCost(other.getMemoryCost());
         }
         if (other.hasFragmentJson()) {
-          bitField0_ |= 0x00000020;
           fragmentJson_ = other.fragmentJson_;
+          bitField0_ |= 0x00000020;
           onChanged();
         }
         if (other.hasLeafFragment()) {
@@ -5982,8 +5500,8 @@ public final class BitControl {
           mergeCredentials(other.getCredentials());
         }
         if (other.hasOptionsJson()) {
-          bitField0_ |= 0x00001000;
           optionsJson_ = other.optionsJson_;
+          bitField0_ |= 0x00001000;
           onChanged();
         }
         if (other.hasContext()) {
@@ -6015,7 +5533,7 @@ public final class BitControl {
             }
           }
         }
-        this.mergeUnknownFields(other.unknownFields);
+        this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
         return this;
       }
@@ -6030,17 +5548,123 @@ public final class BitControl {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        org.apache.drill.exec.proto.BitControl.PlanFragment parsedMessage = null;
+        if (extensionRegistry == null) {
+          throw new java.lang.NullPointerException();
+        }
         try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              case 10: {
+                input.readMessage(
+                    getHandleFieldBuilder().getBuilder(),
+                    extensionRegistry);
+                bitField0_ |= 0x00000001;
+                break;
+              } // case 10
+              case 37: {
+                networkCost_ = input.readFloat();
+                bitField0_ |= 0x00000002;
+                break;
+              } // case 37
+              case 45: {
+                cpuCost_ = input.readFloat();
+                bitField0_ |= 0x00000004;
+                break;
+              } // case 45
+              case 53: {
+                diskCost_ = input.readFloat();
+                bitField0_ |= 0x00000008;
+                break;
+              } // case 53
+              case 61: {
+                memoryCost_ = input.readFloat();
+                bitField0_ |= 0x00000010;
+                break;
+              } // case 61
+              case 66: {
+                fragmentJson_ = input.readBytes();
+                bitField0_ |= 0x00000020;
+                break;
+              } // case 66
+              case 72: {
+                leafFragment_ = input.readBool();
+                bitField0_ |= 0x00000040;
+                break;
+              } // case 72
+              case 82: {
+                input.readMessage(
+                    getAssignmentFieldBuilder().getBuilder(),
+                    extensionRegistry);
+                bitField0_ |= 0x00000080;
+                break;
+              } // case 82
+              case 90: {
+                input.readMessage(
+                    getForemanFieldBuilder().getBuilder(),
+                    extensionRegistry);
+                bitField0_ |= 0x00000100;
+                break;
+              } // case 90
+              case 96: {
+                memInitial_ = input.readInt64();
+                bitField0_ |= 0x00000200;
+                break;
+              } // case 96
+              case 104: {
+                memMax_ = input.readInt64();
+                bitField0_ |= 0x00000400;
+                break;
+              } // case 104
+              case 114: {
+                input.readMessage(
+                    getCredentialsFieldBuilder().getBuilder(),
+                    extensionRegistry);
+                bitField0_ |= 0x00000800;
+                break;
+              } // case 114
+              case 122: {
+                optionsJson_ = input.readBytes();
+                bitField0_ |= 0x00001000;
+                break;
+              } // case 122
+              case 130: {
+                input.readMessage(
+                    getContextFieldBuilder().getBuilder(),
+                    extensionRegistry);
+                bitField0_ |= 0x00002000;
+                break;
+              } // case 130
+              case 138: {
+                org.apache.drill.exec.proto.BitControl.Collector m =
+                    input.readMessage(
+                        org.apache.drill.exec.proto.BitControl.Collector.PARSER,
+                        extensionRegistry);
+                if (collectorBuilder_ == null) {
+                  ensureCollectorIsMutable();
+                  collector_.add(m);
+                } else {
+                  collectorBuilder_.addMessage(m);
+                }
+                break;
+              } // case 138
+              default: {
+                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                  done = true; // was an endgroup tag
+                }
+                break;
+              } // default:
+            } // switch (tag)
+          } // while (!done)
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (org.apache.drill.exec.proto.BitControl.PlanFragment) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
+          onChanged();
+        } // finally
         return this;
       }
       private int bitField0_;
@@ -6075,11 +5699,11 @@ public final class BitControl {
             throw new NullPointerException();
           }
           handle_ = value;
-          onChanged();
         } else {
           handleBuilder_.setMessage(value);
         }
         bitField0_ |= 0x00000001;
+        onChanged();
         return this;
       }
       /**
@@ -6089,11 +5713,11 @@ public final class BitControl {
           org.apache.drill.exec.proto.ExecProtos.FragmentHandle.Builder builderForValue) {
         if (handleBuilder_ == null) {
           handle_ = builderForValue.build();
-          onChanged();
         } else {
           handleBuilder_.setMessage(builderForValue.build());
         }
         bitField0_ |= 0x00000001;
+        onChanged();
         return this;
       }
       /**
@@ -6102,31 +5726,30 @@ public final class BitControl {
       public Builder mergeHandle(org.apache.drill.exec.proto.ExecProtos.FragmentHandle value) {
         if (handleBuilder_ == null) {
           if (((bitField0_ & 0x00000001) != 0) &&
-              handle_ != null &&
-              handle_ != org.apache.drill.exec.proto.ExecProtos.FragmentHandle.getDefaultInstance()) {
-            handle_ =
-              org.apache.drill.exec.proto.ExecProtos.FragmentHandle.newBuilder(handle_).mergeFrom(value).buildPartial();
+            handle_ != null &&
+            handle_ != org.apache.drill.exec.proto.ExecProtos.FragmentHandle.getDefaultInstance()) {
+            getHandleBuilder().mergeFrom(value);
           } else {
             handle_ = value;
           }
-          onChanged();
         } else {
           handleBuilder_.mergeFrom(value);
         }
         bitField0_ |= 0x00000001;
+        onChanged();
         return this;
       }
       /**
        * <code>optional .exec.bit.FragmentHandle handle = 1;</code>
        */
       public Builder clearHandle() {
-        if (handleBuilder_ == null) {
-          handle_ = null;
-          onChanged();
-        } else {
-          handleBuilder_.clear();
-        }
         bitField0_ = (bitField0_ & ~0x00000001);
+        handle_ = null;
+        if (handleBuilder_ != null) {
+          handleBuilder_.dispose();
+          handleBuilder_ = null;
+        }
+        onChanged();
         return this;
       }
       /**
@@ -6188,8 +5811,9 @@ public final class BitControl {
        * @return This builder for chaining.
        */
       public Builder setNetworkCost(float value) {
-        bitField0_ |= 0x00000002;
+
         networkCost_ = value;
+        bitField0_ |= 0x00000002;
         onChanged();
         return this;
       }
@@ -6227,8 +5851,9 @@ public final class BitControl {
        * @return This builder for chaining.
        */
       public Builder setCpuCost(float value) {
-        bitField0_ |= 0x00000004;
+
         cpuCost_ = value;
+        bitField0_ |= 0x00000004;
         onChanged();
         return this;
       }
@@ -6266,8 +5891,9 @@ public final class BitControl {
        * @return This builder for chaining.
        */
       public Builder setDiskCost(float value) {
-        bitField0_ |= 0x00000008;
+
         diskCost_ = value;
+        bitField0_ |= 0x00000008;
         onChanged();
         return this;
       }
@@ -6305,8 +5931,9 @@ public final class BitControl {
        * @return This builder for chaining.
        */
       public Builder setMemoryCost(float value) {
-        bitField0_ |= 0x00000010;
+
         memoryCost_ = value;
+        bitField0_ |= 0x00000010;
         onChanged();
         return this;
       }
@@ -6371,11 +5998,9 @@ public final class BitControl {
        */
       public Builder setFragmentJson(
           java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000020;
+        if (value == null) { throw new NullPointerException(); }
         fragmentJson_ = value;
+        bitField0_ |= 0x00000020;
         onChanged();
         return this;
       }
@@ -6384,8 +6009,8 @@ public final class BitControl {
        * @return This builder for chaining.
        */
       public Builder clearFragmentJson() {
-        bitField0_ = (bitField0_ & ~0x00000020);
         fragmentJson_ = getDefaultInstance().getFragmentJson();
+        bitField0_ = (bitField0_ & ~0x00000020);
         onChanged();
         return this;
       }
@@ -6396,11 +6021,9 @@ public final class BitControl {
        */
       public Builder setFragmentJsonBytes(
           com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000020;
+        if (value == null) { throw new NullPointerException(); }
         fragmentJson_ = value;
+        bitField0_ |= 0x00000020;
         onChanged();
         return this;
       }
@@ -6428,8 +6051,9 @@ public final class BitControl {
        * @return This builder for chaining.
        */
       public Builder setLeafFragment(boolean value) {
-        bitField0_ |= 0x00000040;
+
         leafFragment_ = value;
+        bitField0_ |= 0x00000040;
         onChanged();
         return this;
       }
@@ -6474,11 +6098,11 @@ public final class BitControl {
             throw new NullPointerException();
           }
           assignment_ = value;
-          onChanged();
         } else {
           assignmentBuilder_.setMessage(value);
         }
         bitField0_ |= 0x00000080;
+        onChanged();
         return this;
       }
       /**
@@ -6488,11 +6112,11 @@ public final class BitControl {
           org.apache.drill.exec.proto.CoordinationProtos.DrillbitEndpoint.Builder builderForValue) {
         if (assignmentBuilder_ == null) {
           assignment_ = builderForValue.build();
-          onChanged();
         } else {
           assignmentBuilder_.setMessage(builderForValue.build());
         }
         bitField0_ |= 0x00000080;
+        onChanged();
         return this;
       }
       /**
@@ -6501,31 +6125,30 @@ public final class BitControl {
       public Builder mergeAssignment(org.apache.drill.exec.proto.CoordinationProtos.DrillbitEndpoint value) {
         if (assignmentBuilder_ == null) {
           if (((bitField0_ & 0x00000080) != 0) &&
-              assignment_ != null &&
-              assignment_ != org.apache.drill.exec.proto.CoordinationProtos.DrillbitEndpoint.getDefaultInstance()) {
-            assignment_ =
-              org.apache.drill.exec.proto.CoordinationProtos.DrillbitEndpoint.newBuilder(assignment_).mergeFrom(value).buildPartial();
+            assignment_ != null &&
+            assignment_ != org.apache.drill.exec.proto.CoordinationProtos.DrillbitEndpoint.getDefaultInstance()) {
+            getAssignmentBuilder().mergeFrom(value);
           } else {
             assignment_ = value;
           }
-          onChanged();
         } else {
           assignmentBuilder_.mergeFrom(value);
         }
         bitField0_ |= 0x00000080;
+        onChanged();
         return this;
       }
       /**
        * <code>optional .exec.DrillbitEndpoint assignment = 10;</code>
        */
       public Builder clearAssignment() {
-        if (assignmentBuilder_ == null) {
-          assignment_ = null;
-          onChanged();
-        } else {
-          assignmentBuilder_.clear();
-        }
         bitField0_ = (bitField0_ & ~0x00000080);
+        assignment_ = null;
+        if (assignmentBuilder_ != null) {
+          assignmentBuilder_.dispose();
+          assignmentBuilder_ = null;
+        }
+        onChanged();
         return this;
       }
       /**
@@ -6594,11 +6217,11 @@ public final class BitControl {
             throw new NullPointerException();
           }
           foreman_ = value;
-          onChanged();
         } else {
           foremanBuilder_.setMessage(value);
         }
         bitField0_ |= 0x00000100;
+        onChanged();
         return this;
       }
       /**
@@ -6608,11 +6231,11 @@ public final class BitControl {
           org.apache.drill.exec.proto.CoordinationProtos.DrillbitEndpoint.Builder builderForValue) {
         if (foremanBuilder_ == null) {
           foreman_ = builderForValue.build();
-          onChanged();
         } else {
           foremanBuilder_.setMessage(builderForValue.build());
         }
         bitField0_ |= 0x00000100;
+        onChanged();
         return this;
       }
       /**
@@ -6621,31 +6244,30 @@ public final class BitControl {
       public Builder mergeForeman(org.apache.drill.exec.proto.CoordinationProtos.DrillbitEndpoint value) {
         if (foremanBuilder_ == null) {
           if (((bitField0_ & 0x00000100) != 0) &&
-              foreman_ != null &&
-              foreman_ != org.apache.drill.exec.proto.CoordinationProtos.DrillbitEndpoint.getDefaultInstance()) {
-            foreman_ =
-              org.apache.drill.exec.proto.CoordinationProtos.DrillbitEndpoint.newBuilder(foreman_).mergeFrom(value).buildPartial();
+            foreman_ != null &&
+            foreman_ != org.apache.drill.exec.proto.CoordinationProtos.DrillbitEndpoint.getDefaultInstance()) {
+            getForemanBuilder().mergeFrom(value);
           } else {
             foreman_ = value;
           }
-          onChanged();
         } else {
           foremanBuilder_.mergeFrom(value);
         }
         bitField0_ |= 0x00000100;
+        onChanged();
         return this;
       }
       /**
        * <code>optional .exec.DrillbitEndpoint foreman = 11;</code>
        */
       public Builder clearForeman() {
-        if (foremanBuilder_ == null) {
-          foreman_ = null;
-          onChanged();
-        } else {
-          foremanBuilder_.clear();
-        }
         bitField0_ = (bitField0_ & ~0x00000100);
+        foreman_ = null;
+        if (foremanBuilder_ != null) {
+          foremanBuilder_.dispose();
+          foremanBuilder_ = null;
+        }
+        onChanged();
         return this;
       }
       /**
@@ -6719,8 +6341,9 @@ public final class BitControl {
        * @return This builder for chaining.
        */
       public Builder setMemInitial(long value) {
-        bitField0_ |= 0x00000200;
+
         memInitial_ = value;
+        bitField0_ |= 0x00000200;
         onChanged();
         return this;
       }
@@ -6774,8 +6397,9 @@ public final class BitControl {
        * @return This builder for chaining.
        */
       public Builder setMemMax(long value) {
-        bitField0_ |= 0x00000400;
+
         memMax_ = value;
+        bitField0_ |= 0x00000400;
         onChanged();
         return this;
       }
@@ -6824,11 +6448,11 @@ public final class BitControl {
             throw new NullPointerException();
           }
           credentials_ = value;
-          onChanged();
         } else {
           credentialsBuilder_.setMessage(value);
         }
         bitField0_ |= 0x00000800;
+        onChanged();
         return this;
       }
       /**
@@ -6838,11 +6462,11 @@ public final class BitControl {
           org.apache.drill.exec.proto.UserBitShared.UserCredentials.Builder builderForValue) {
         if (credentialsBuilder_ == null) {
           credentials_ = builderForValue.build();
-          onChanged();
         } else {
           credentialsBuilder_.setMessage(builderForValue.build());
         }
         bitField0_ |= 0x00000800;
+        onChanged();
         return this;
       }
       /**
@@ -6851,31 +6475,30 @@ public final class BitControl {
       public Builder mergeCredentials(org.apache.drill.exec.proto.UserBitShared.UserCredentials value) {
         if (credentialsBuilder_ == null) {
           if (((bitField0_ & 0x00000800) != 0) &&
-              credentials_ != null &&
-              credentials_ != org.apache.drill.exec.proto.UserBitShared.UserCredentials.getDefaultInstance()) {
-            credentials_ =
-              org.apache.drill.exec.proto.UserBitShared.UserCredentials.newBuilder(credentials_).mergeFrom(value).buildPartial();
+            credentials_ != null &&
+            credentials_ != org.apache.drill.exec.proto.UserBitShared.UserCredentials.getDefaultInstance()) {
+            getCredentialsBuilder().mergeFrom(value);
           } else {
             credentials_ = value;
           }
-          onChanged();
         } else {
           credentialsBuilder_.mergeFrom(value);
         }
         bitField0_ |= 0x00000800;
+        onChanged();
         return this;
       }
       /**
        * <code>optional .exec.shared.UserCredentials credentials = 14;</code>
        */
       public Builder clearCredentials() {
-        if (credentialsBuilder_ == null) {
-          credentials_ = null;
-          onChanged();
-        } else {
-          credentialsBuilder_.clear();
-        }
         bitField0_ = (bitField0_ & ~0x00000800);
+        credentials_ = null;
+        if (credentialsBuilder_ != null) {
+          credentialsBuilder_.dispose();
+          credentialsBuilder_ = null;
+        }
+        onChanged();
         return this;
       }
       /**
@@ -6964,11 +6587,9 @@ public final class BitControl {
        */
       public Builder setOptionsJson(
           java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00001000;
+        if (value == null) { throw new NullPointerException(); }
         optionsJson_ = value;
+        bitField0_ |= 0x00001000;
         onChanged();
         return this;
       }
@@ -6977,8 +6598,8 @@ public final class BitControl {
        * @return This builder for chaining.
        */
       public Builder clearOptionsJson() {
-        bitField0_ = (bitField0_ & ~0x00001000);
         optionsJson_ = getDefaultInstance().getOptionsJson();
+        bitField0_ = (bitField0_ & ~0x00001000);
         onChanged();
         return this;
       }
@@ -6989,11 +6610,9 @@ public final class BitControl {
        */
       public Builder setOptionsJsonBytes(
           com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00001000;
+        if (value == null) { throw new NullPointerException(); }
         optionsJson_ = value;
+        bitField0_ |= 0x00001000;
         onChanged();
         return this;
       }
@@ -7028,11 +6647,11 @@ public final class BitControl {
             throw new NullPointerException();
           }
           context_ = value;
-          onChanged();
         } else {
           contextBuilder_.setMessage(value);
         }
         bitField0_ |= 0x00002000;
+        onChanged();
         return this;
       }
       /**
@@ -7042,11 +6661,11 @@ public final class BitControl {
           org.apache.drill.exec.proto.BitControl.QueryContextInformation.Builder builderForValue) {
         if (contextBuilder_ == null) {
           context_ = builderForValue.build();
-          onChanged();
         } else {
           contextBuilder_.setMessage(builderForValue.build());
         }
         bitField0_ |= 0x00002000;
+        onChanged();
         return this;
       }
       /**
@@ -7055,31 +6674,30 @@ public final class BitControl {
       public Builder mergeContext(org.apache.drill.exec.proto.BitControl.QueryContextInformation value) {
         if (contextBuilder_ == null) {
           if (((bitField0_ & 0x00002000) != 0) &&
-              context_ != null &&
-              context_ != org.apache.drill.exec.proto.BitControl.QueryContextInformation.getDefaultInstance()) {
-            context_ =
-              org.apache.drill.exec.proto.BitControl.QueryContextInformation.newBuilder(context_).mergeFrom(value).buildPartial();
+            context_ != null &&
+            context_ != org.apache.drill.exec.proto.BitControl.QueryContextInformation.getDefaultInstance()) {
+            getContextBuilder().mergeFrom(value);
           } else {
             context_ = value;
           }
-          onChanged();
         } else {
           contextBuilder_.mergeFrom(value);
         }
         bitField0_ |= 0x00002000;
+        onChanged();
         return this;
       }
       /**
        * <code>optional .exec.bit.control.QueryContextInformation context = 16;</code>
        */
       public Builder clearContext() {
-        if (contextBuilder_ == null) {
-          context_ = null;
-          onChanged();
-        } else {
-          contextBuilder_.clear();
-        }
         bitField0_ = (bitField0_ & ~0x00002000);
+        context_ = null;
+        if (contextBuilder_ != null) {
+          contextBuilder_.dispose();
+          contextBuilder_ = null;
+        }
+        onChanged();
         return this;
       }
       /**
@@ -7390,7 +7008,18 @@ public final class BitControl {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new PlanFragment(input, extensionRegistry);
+        Builder builder = newBuilder();
+        try {
+          builder.mergeFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(builder.buildPartial());
+        } catch (com.google.protobuf.UninitializedMessageException e) {
+          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(e)
+              .setUnfinishedMessage(builder.buildPartial());
+        }
+        return builder.buildPartial();
       }
     };
 
@@ -7498,93 +7127,6 @@ public final class BitControl {
       return new Collector();
     }
 
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-    getUnknownFields() {
-      return this.unknownFields;
-    }
-    private Collector(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            case 8: {
-              bitField0_ |= 0x00000001;
-              oppositeMajorFragmentId_ = input.readInt32();
-              break;
-            }
-            case 16: {
-              if (!((mutable_bitField0_ & 0x00000002) != 0)) {
-                incomingMinorFragment_ = newIntList();
-                mutable_bitField0_ |= 0x00000002;
-              }
-              incomingMinorFragment_.addInt(input.readInt32());
-              break;
-            }
-            case 18: {
-              int length = input.readRawVarint32();
-              int limit = input.pushLimit(length);
-              if (!((mutable_bitField0_ & 0x00000002) != 0) && input.getBytesUntilLimit() > 0) {
-                incomingMinorFragment_ = newIntList();
-                mutable_bitField0_ |= 0x00000002;
-              }
-              while (input.getBytesUntilLimit() > 0) {
-                incomingMinorFragment_.addInt(input.readInt32());
-              }
-              input.popLimit(limit);
-              break;
-            }
-            case 24: {
-              bitField0_ |= 0x00000002;
-              supportsOutOfOrder_ = input.readBool();
-              break;
-            }
-            case 32: {
-              bitField0_ |= 0x00000004;
-              isSpooling_ = input.readBool();
-              break;
-            }
-            case 40: {
-              bitField0_ |= 0x00000008;
-              enableDynamicFc_ = input.readBool();
-              break;
-            }
-            default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
-      } finally {
-        if (((mutable_bitField0_ & 0x00000002) != 0)) {
-          incomingMinorFragment_.makeImmutable(); // C
-        }
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.BitControl.internal_static_exec_bit_control_Collector_descriptor;
@@ -7600,7 +7142,7 @@ public final class BitControl {
 
     private int bitField0_;
     public static final int OPPOSITE_MAJOR_FRAGMENT_ID_FIELD_NUMBER = 1;
-    private int oppositeMajorFragmentId_;
+    private int oppositeMajorFragmentId_ = 0;
     /**
      * <code>optional int32 opposite_major_fragment_id = 1;</code>
      * @return Whether the oppositeMajorFragmentId field is set.
@@ -7619,6 +7161,7 @@ public final class BitControl {
     }
 
     public static final int INCOMING_MINOR_FRAGMENT_FIELD_NUMBER = 2;
+    @SuppressWarnings("serial")
     private com.google.protobuf.Internal.IntList incomingMinorFragment_;
     /**
      * <code>repeated int32 incoming_minor_fragment = 2 [packed = true];</code>
@@ -7647,7 +7190,7 @@ public final class BitControl {
     private int incomingMinorFragmentMemoizedSerializedSize = -1;
 
     public static final int SUPPORTS_OUT_OF_ORDER_FIELD_NUMBER = 3;
-    private boolean supportsOutOfOrder_;
+    private boolean supportsOutOfOrder_ = false;
     /**
      * <code>optional bool supports_out_of_order = 3;</code>
      * @return Whether the supportsOutOfOrder field is set.
@@ -7666,7 +7209,7 @@ public final class BitControl {
     }
 
     public static final int IS_SPOOLING_FIELD_NUMBER = 4;
-    private boolean isSpooling_;
+    private boolean isSpooling_ = false;
     /**
      * <code>optional bool is_spooling = 4;</code>
      * @return Whether the isSpooling field is set.
@@ -7685,7 +7228,7 @@ public final class BitControl {
     }
 
     public static final int ENABLE_DYNAMIC_FC_FIELD_NUMBER = 5;
-    private boolean enableDynamicFc_;
+    private boolean enableDynamicFc_ = false;
     /**
      * <code>optional bool enable_dynamic_fc = 5;</code>
      * @return Whether the enableDynamicFc field is set.
@@ -7737,7 +7280,7 @@ public final class BitControl {
       if (((bitField0_ & 0x00000008) != 0)) {
         output.writeBool(5, enableDynamicFc_);
       }
-      unknownFields.writeTo(output);
+      getUnknownFields().writeTo(output);
     }
 
     @java.lang.Override
@@ -7776,7 +7319,7 @@ public final class BitControl {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(5, enableDynamicFc_);
       }
-      size += unknownFields.getSerializedSize();
+      size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
       return size;
     }
@@ -7813,7 +7356,7 @@ public final class BitControl {
         if (getEnableDynamicFc()
             != other.getEnableDynamicFc()) return false;
       }
-      if (!unknownFields.equals(other.unknownFields)) return false;
+      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
     }
 
@@ -7847,7 +7390,7 @@ public final class BitControl {
         hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
             getEnableDynamicFc());
       }
-      hash = (29 * hash) + unknownFields.hashCode();
+      hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
     }
@@ -7964,32 +7507,23 @@ public final class BitControl {
 
       // Construct using org.apache.drill.exec.proto.BitControl.Collector.newBuilder()
       private Builder() {
-        maybeForceBuilderInitialization();
+
       }
 
       private Builder(
           com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-        }
+
       }
       @java.lang.Override
       public Builder clear() {
         super.clear();
+        bitField0_ = 0;
         oppositeMajorFragmentId_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000001);
         incomingMinorFragment_ = emptyIntList();
-        bitField0_ = (bitField0_ & ~0x00000002);
         supportsOutOfOrder_ = false;
-        bitField0_ = (bitField0_ & ~0x00000004);
         isSpooling_ = false;
-        bitField0_ = (bitField0_ & ~0x00000008);
         enableDynamicFc_ = false;
-        bitField0_ = (bitField0_ & ~0x00000010);
         return this;
       }
 
@@ -8016,17 +7550,27 @@ public final class BitControl {
       @java.lang.Override
       public org.apache.drill.exec.proto.BitControl.Collector buildPartial() {
         org.apache.drill.exec.proto.BitControl.Collector result = new org.apache.drill.exec.proto.BitControl.Collector(this);
+        buildPartialRepeatedFields(result);
+        if (bitField0_ != 0) { buildPartial0(result); }
+        onBuilt();
+        return result;
+      }
+
+      private void buildPartialRepeatedFields(org.apache.drill.exec.proto.BitControl.Collector result) {
+        if (((bitField0_ & 0x00000002) != 0)) {
+          incomingMinorFragment_.makeImmutable();
+          bitField0_ = (bitField0_ & ~0x00000002);
+        }
+        result.incomingMinorFragment_ = incomingMinorFragment_;
+      }
+
+      private void buildPartial0(org.apache.drill.exec.proto.BitControl.Collector result) {
         int from_bitField0_ = bitField0_;
         int to_bitField0_ = 0;
         if (((from_bitField0_ & 0x00000001) != 0)) {
           result.oppositeMajorFragmentId_ = oppositeMajorFragmentId_;
           to_bitField0_ |= 0x00000001;
         }
-        if (((bitField0_ & 0x00000002) != 0)) {
-          incomingMinorFragment_.makeImmutable();
-          bitField0_ = (bitField0_ & ~0x00000002);
-        }
-        result.incomingMinorFragment_ = incomingMinorFragment_;
         if (((from_bitField0_ & 0x00000004) != 0)) {
           result.supportsOutOfOrder_ = supportsOutOfOrder_;
           to_bitField0_ |= 0x00000002;
@@ -8039,43 +7583,9 @@ public final class BitControl {
           result.enableDynamicFc_ = enableDynamicFc_;
           to_bitField0_ |= 0x00000008;
         }
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
+        result.bitField0_ |= to_bitField0_;
       }
 
-      @java.lang.Override
-      public Builder clone() {
-        return super.clone();
-      }
-      @java.lang.Override
-      public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return super.setField(field, value);
-      }
-      @java.lang.Override
-      public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
-        return super.clearField(field);
-      }
-      @java.lang.Override
-      public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-        return super.clearOneof(oneof);
-      }
-      @java.lang.Override
-      public Builder setRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
-        return super.setRepeatedField(field, index, value);
-      }
-      @java.lang.Override
-      public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return super.addRepeatedField(field, value);
-      }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.BitControl.Collector) {
@@ -8110,7 +7620,7 @@ public final class BitControl {
         if (other.hasEnableDynamicFc()) {
           setEnableDynamicFc(other.getEnableDynamicFc());
         }
-        this.mergeUnknownFields(other.unknownFields);
+        this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
         return this;
       }
@@ -8125,17 +7635,66 @@ public final class BitControl {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        org.apache.drill.exec.proto.BitControl.Collector parsedMessage = null;
+        if (extensionRegistry == null) {
+          throw new java.lang.NullPointerException();
+        }
         try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              case 8: {
+                oppositeMajorFragmentId_ = input.readInt32();
+                bitField0_ |= 0x00000001;
+                break;
+              } // case 8
+              case 16: {
+                int v = input.readInt32();
+                ensureIncomingMinorFragmentIsMutable();
+                incomingMinorFragment_.addInt(v);
+                break;
+              } // case 16
+              case 18: {
+                int length = input.readRawVarint32();
+                int limit = input.pushLimit(length);
+                ensureIncomingMinorFragmentIsMutable();
+                while (input.getBytesUntilLimit() > 0) {
+                  incomingMinorFragment_.addInt(input.readInt32());
+                }
+                input.popLimit(limit);
+                break;
+              } // case 18
+              case 24: {
+                supportsOutOfOrder_ = input.readBool();
+                bitField0_ |= 0x00000004;
+                break;
+              } // case 24
+              case 32: {
+                isSpooling_ = input.readBool();
+                bitField0_ |= 0x00000008;
+                break;
+              } // case 32
+              case 40: {
+                enableDynamicFc_ = input.readBool();
+                bitField0_ |= 0x00000010;
+                break;
+              } // case 40
+              default: {
+                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                  done = true; // was an endgroup tag
+                }
+                break;
+              } // default:
+            } // switch (tag)
+          } // while (!done)
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (org.apache.drill.exec.proto.BitControl.Collector) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
+          onChanged();
+        } // finally
         return this;
       }
       private int bitField0_;
@@ -8163,8 +7722,9 @@ public final class BitControl {
        * @return This builder for chaining.
        */
       public Builder setOppositeMajorFragmentId(int value) {
-        bitField0_ |= 0x00000001;
+
         oppositeMajorFragmentId_ = value;
+        bitField0_ |= 0x00000001;
         onChanged();
         return this;
       }
@@ -8184,7 +7744,7 @@ public final class BitControl {
         if (!((bitField0_ & 0x00000002) != 0)) {
           incomingMinorFragment_ = mutableCopy(incomingMinorFragment_);
           bitField0_ |= 0x00000002;
-         }
+        }
       }
       /**
        * <code>repeated int32 incoming_minor_fragment = 2 [packed = true];</code>
@@ -8218,6 +7778,7 @@ public final class BitControl {
        */
       public Builder setIncomingMinorFragment(
           int index, int value) {
+
         ensureIncomingMinorFragmentIsMutable();
         incomingMinorFragment_.setInt(index, value);
         onChanged();
@@ -8229,6 +7790,7 @@ public final class BitControl {
        * @return This builder for chaining.
        */
       public Builder addIncomingMinorFragment(int value) {
+
         ensureIncomingMinorFragmentIsMutable();
         incomingMinorFragment_.addInt(value);
         onChanged();
@@ -8281,8 +7843,9 @@ public final class BitControl {
        * @return This builder for chaining.
        */
       public Builder setSupportsOutOfOrder(boolean value) {
-        bitField0_ |= 0x00000004;
+
         supportsOutOfOrder_ = value;
+        bitField0_ |= 0x00000004;
         onChanged();
         return this;
       }
@@ -8320,8 +7883,9 @@ public final class BitControl {
        * @return This builder for chaining.
        */
       public Builder setIsSpooling(boolean value) {
-        bitField0_ |= 0x00000008;
+
         isSpooling_ = value;
+        bitField0_ |= 0x00000008;
         onChanged();
         return this;
       }
@@ -8359,8 +7923,9 @@ public final class BitControl {
        * @return This builder for chaining.
        */
       public Builder setEnableDynamicFc(boolean value) {
-        bitField0_ |= 0x00000010;
+
         enableDynamicFc_ = value;
+        bitField0_ |= 0x00000010;
         onChanged();
         return this;
       }
@@ -8407,7 +7972,18 @@ public final class BitControl {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new Collector(input, extensionRegistry);
+        Builder builder = newBuilder();
+        try {
+          builder.mergeFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(builder.buildPartial());
+        } catch (com.google.protobuf.UninitializedMessageException e) {
+          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(e)
+              .setUnfinishedMessage(builder.buildPartial());
+        }
+        return builder.buildPartial();
       }
     };
 
@@ -8551,71 +8127,6 @@ public final class BitControl {
       return new QueryContextInformation();
     }
 
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-    getUnknownFields() {
-      return this.unknownFields;
-    }
-    private QueryContextInformation(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            case 8: {
-              bitField0_ |= 0x00000001;
-              queryStartTime_ = input.readInt64();
-              break;
-            }
-            case 16: {
-              bitField0_ |= 0x00000002;
-              timeZone_ = input.readInt32();
-              break;
-            }
-            case 26: {
-              com.google.protobuf.ByteString bs = input.readBytes();
-              bitField0_ |= 0x00000004;
-              defaultSchemaName_ = bs;
-              break;
-            }
-            case 34: {
-              com.google.protobuf.ByteString bs = input.readBytes();
-              bitField0_ |= 0x00000008;
-              sessionId_ = bs;
-              break;
-            }
-            default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
-      } finally {
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.BitControl.internal_static_exec_bit_control_QueryContextInformation_descriptor;
@@ -8631,7 +8142,7 @@ public final class BitControl {
 
     private int bitField0_;
     public static final int QUERY_START_TIME_FIELD_NUMBER = 1;
-    private long queryStartTime_;
+    private long queryStartTime_ = 0L;
     /**
      * <pre>
      * start time of query in milliseconds
@@ -8658,7 +8169,7 @@ public final class BitControl {
     }
 
     public static final int TIME_ZONE_FIELD_NUMBER = 2;
-    private int timeZone_;
+    private int timeZone_ = 0;
     /**
      * <pre>
      * timezone of the Drillbit where user is connected
@@ -8685,7 +8196,8 @@ public final class BitControl {
     }
 
     public static final int DEFAULT_SCHEMA_NAME_FIELD_NUMBER = 3;
-    private volatile java.lang.Object defaultSchemaName_;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object defaultSchemaName_ = "";
     /**
      * <pre>
      * default schema in current session when the query is submitted
@@ -8745,7 +8257,8 @@ public final class BitControl {
     }
 
     public static final int SESSION_ID_FIELD_NUMBER = 4;
-    private volatile java.lang.Object sessionId_;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object sessionId_ = "";
     /**
      * <pre>
      * current session id
@@ -8830,7 +8343,7 @@ public final class BitControl {
       if (((bitField0_ & 0x00000008) != 0)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 4, sessionId_);
       }
-      unknownFields.writeTo(output);
+      getUnknownFields().writeTo(output);
     }
 
     @java.lang.Override
@@ -8853,7 +8366,7 @@ public final class BitControl {
       if (((bitField0_ & 0x00000008) != 0)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, sessionId_);
       }
-      size += unknownFields.getSerializedSize();
+      size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
       return size;
     }
@@ -8888,7 +8401,7 @@ public final class BitControl {
         if (!getSessionId()
             .equals(other.getSessionId())) return false;
       }
-      if (!unknownFields.equals(other.unknownFields)) return false;
+      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
     }
 
@@ -8916,7 +8429,7 @@ public final class BitControl {
         hash = (37 * hash) + SESSION_ID_FIELD_NUMBER;
         hash = (53 * hash) + getSessionId().hashCode();
       }
-      hash = (29 * hash) + unknownFields.hashCode();
+      hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
     }
@@ -9033,30 +8546,22 @@ public final class BitControl {
 
       // Construct using org.apache.drill.exec.proto.BitControl.QueryContextInformation.newBuilder()
       private Builder() {
-        maybeForceBuilderInitialization();
+
       }
 
       private Builder(
           com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-        }
+
       }
       @java.lang.Override
       public Builder clear() {
         super.clear();
+        bitField0_ = 0;
         queryStartTime_ = 0L;
-        bitField0_ = (bitField0_ & ~0x00000001);
         timeZone_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000002);
         defaultSchemaName_ = "";
-        bitField0_ = (bitField0_ & ~0x00000004);
         sessionId_ = "";
-        bitField0_ = (bitField0_ & ~0x00000008);
         return this;
       }
 
@@ -9083,6 +8588,12 @@ public final class BitControl {
       @java.lang.Override
       public org.apache.drill.exec.proto.BitControl.QueryContextInformation buildPartial() {
         org.apache.drill.exec.proto.BitControl.QueryContextInformation result = new org.apache.drill.exec.proto.BitControl.QueryContextInformation(this);
+        if (bitField0_ != 0) { buildPartial0(result); }
+        onBuilt();
+        return result;
+      }
+
+      private void buildPartial0(org.apache.drill.exec.proto.BitControl.QueryContextInformation result) {
         int from_bitField0_ = bitField0_;
         int to_bitField0_ = 0;
         if (((from_bitField0_ & 0x00000001) != 0)) {
@@ -9094,50 +8605,16 @@ public final class BitControl {
           to_bitField0_ |= 0x00000002;
         }
         if (((from_bitField0_ & 0x00000004) != 0)) {
+          result.defaultSchemaName_ = defaultSchemaName_;
           to_bitField0_ |= 0x00000004;
         }
-        result.defaultSchemaName_ = defaultSchemaName_;
         if (((from_bitField0_ & 0x00000008) != 0)) {
+          result.sessionId_ = sessionId_;
           to_bitField0_ |= 0x00000008;
         }
-        result.sessionId_ = sessionId_;
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
+        result.bitField0_ |= to_bitField0_;
       }
 
-      @java.lang.Override
-      public Builder clone() {
-        return super.clone();
-      }
-      @java.lang.Override
-      public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return super.setField(field, value);
-      }
-      @java.lang.Override
-      public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
-        return super.clearField(field);
-      }
-      @java.lang.Override
-      public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-        return super.clearOneof(oneof);
-      }
-      @java.lang.Override
-      public Builder setRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
-        return super.setRepeatedField(field, index, value);
-      }
-      @java.lang.Override
-      public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return super.addRepeatedField(field, value);
-      }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.BitControl.QueryContextInformation) {
@@ -9157,16 +8634,16 @@ public final class BitControl {
           setTimeZone(other.getTimeZone());
         }
         if (other.hasDefaultSchemaName()) {
-          bitField0_ |= 0x00000004;
           defaultSchemaName_ = other.defaultSchemaName_;
+          bitField0_ |= 0x00000004;
           onChanged();
         }
         if (other.hasSessionId()) {
-          bitField0_ |= 0x00000008;
           sessionId_ = other.sessionId_;
+          bitField0_ |= 0x00000008;
           onChanged();
         }
-        this.mergeUnknownFields(other.unknownFields);
+        this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
         return this;
       }
@@ -9181,17 +8658,50 @@ public final class BitControl {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        org.apache.drill.exec.proto.BitControl.QueryContextInformation parsedMessage = null;
+        if (extensionRegistry == null) {
+          throw new java.lang.NullPointerException();
+        }
         try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              case 8: {
+                queryStartTime_ = input.readInt64();
+                bitField0_ |= 0x00000001;
+                break;
+              } // case 8
+              case 16: {
+                timeZone_ = input.readInt32();
+                bitField0_ |= 0x00000002;
+                break;
+              } // case 16
+              case 26: {
+                defaultSchemaName_ = input.readBytes();
+                bitField0_ |= 0x00000004;
+                break;
+              } // case 26
+              case 34: {
+                sessionId_ = input.readBytes();
+                bitField0_ |= 0x00000008;
+                break;
+              } // case 34
+              default: {
+                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                  done = true; // was an endgroup tag
+                }
+                break;
+              } // default:
+            } // switch (tag)
+          } // while (!done)
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (org.apache.drill.exec.proto.BitControl.QueryContextInformation) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
+          onChanged();
+        } // finally
         return this;
       }
       private int bitField0_;
@@ -9231,8 +8741,9 @@ public final class BitControl {
        * @return This builder for chaining.
        */
       public Builder setQueryStartTime(long value) {
-        bitField0_ |= 0x00000001;
+
         queryStartTime_ = value;
+        bitField0_ |= 0x00000001;
         onChanged();
         return this;
       }
@@ -9286,8 +8797,9 @@ public final class BitControl {
        * @return This builder for chaining.
        */
       public Builder setTimeZone(int value) {
-        bitField0_ |= 0x00000002;
+
         timeZone_ = value;
+        bitField0_ |= 0x00000002;
         onChanged();
         return this;
       }
@@ -9372,11 +8884,9 @@ public final class BitControl {
        */
       public Builder setDefaultSchemaName(
           java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000004;
+        if (value == null) { throw new NullPointerException(); }
         defaultSchemaName_ = value;
+        bitField0_ |= 0x00000004;
         onChanged();
         return this;
       }
@@ -9389,8 +8899,8 @@ public final class BitControl {
        * @return This builder for chaining.
        */
       public Builder clearDefaultSchemaName() {
-        bitField0_ = (bitField0_ & ~0x00000004);
         defaultSchemaName_ = getDefaultInstance().getDefaultSchemaName();
+        bitField0_ = (bitField0_ & ~0x00000004);
         onChanged();
         return this;
       }
@@ -9405,11 +8915,9 @@ public final class BitControl {
        */
       public Builder setDefaultSchemaNameBytes(
           com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000004;
+        if (value == null) { throw new NullPointerException(); }
         defaultSchemaName_ = value;
+        bitField0_ |= 0x00000004;
         onChanged();
         return this;
       }
@@ -9480,11 +8988,9 @@ public final class BitControl {
        */
       public Builder setSessionId(
           java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000008;
+        if (value == null) { throw new NullPointerException(); }
         sessionId_ = value;
+        bitField0_ |= 0x00000008;
         onChanged();
         return this;
       }
@@ -9497,8 +9003,8 @@ public final class BitControl {
        * @return This builder for chaining.
        */
       public Builder clearSessionId() {
-        bitField0_ = (bitField0_ & ~0x00000008);
         sessionId_ = getDefaultInstance().getSessionId();
+        bitField0_ = (bitField0_ & ~0x00000008);
         onChanged();
         return this;
       }
@@ -9513,11 +9019,9 @@ public final class BitControl {
        */
       public Builder setSessionIdBytes(
           com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000008;
+        if (value == null) { throw new NullPointerException(); }
         sessionId_ = value;
+        bitField0_ |= 0x00000008;
         onChanged();
         return this;
       }
@@ -9554,7 +9058,18 @@ public final class BitControl {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new QueryContextInformation(input, extensionRegistry);
+        Builder builder = newBuilder();
+        try {
+          builder.mergeFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(builder.buildPartial());
+        } catch (com.google.protobuf.UninitializedMessageException e) {
+          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(e)
+              .setUnfinishedMessage(builder.buildPartial());
+        }
+        return builder.buildPartial();
       }
     };
 
@@ -9637,72 +9152,6 @@ public final class BitControl {
       return new WorkQueueStatus();
     }
 
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-    getUnknownFields() {
-      return this.unknownFields;
-    }
-    private WorkQueueStatus(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            case 10: {
-              org.apache.drill.exec.proto.CoordinationProtos.DrillbitEndpoint.Builder subBuilder = null;
-              if (((bitField0_ & 0x00000001) != 0)) {
-                subBuilder = endpoint_.toBuilder();
-              }
-              endpoint_ = input.readMessage(org.apache.drill.exec.proto.CoordinationProtos.DrillbitEndpoint.PARSER, extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(endpoint_);
-                endpoint_ = subBuilder.buildPartial();
-              }
-              bitField0_ |= 0x00000001;
-              break;
-            }
-            case 16: {
-              bitField0_ |= 0x00000002;
-              queueLength_ = input.readInt32();
-              break;
-            }
-            case 24: {
-              bitField0_ |= 0x00000004;
-              reportTime_ = input.readInt64();
-              break;
-            }
-            default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
-      } finally {
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.BitControl.internal_static_exec_bit_control_WorkQueueStatus_descriptor;
@@ -9744,7 +9193,7 @@ public final class BitControl {
     }
 
     public static final int QUEUE_LENGTH_FIELD_NUMBER = 2;
-    private int queueLength_;
+    private int queueLength_ = 0;
     /**
      * <code>optional int32 queue_length = 2;</code>
      * @return Whether the queueLength field is set.
@@ -9763,7 +9212,7 @@ public final class BitControl {
     }
 
     public static final int REPORT_TIME_FIELD_NUMBER = 3;
-    private long reportTime_;
+    private long reportTime_ = 0L;
     /**
      * <code>optional int64 report_time = 3;</code>
      * @return Whether the reportTime field is set.
@@ -9804,7 +9253,7 @@ public final class BitControl {
       if (((bitField0_ & 0x00000004) != 0)) {
         output.writeInt64(3, reportTime_);
       }
-      unknownFields.writeTo(output);
+      getUnknownFields().writeTo(output);
     }
 
     @java.lang.Override
@@ -9825,7 +9274,7 @@ public final class BitControl {
         size += com.google.protobuf.CodedOutputStream
           .computeInt64Size(3, reportTime_);
       }
-      size += unknownFields.getSerializedSize();
+      size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
       return size;
     }
@@ -9855,7 +9304,7 @@ public final class BitControl {
         if (getReportTime()
             != other.getReportTime()) return false;
       }
-      if (!unknownFields.equals(other.unknownFields)) return false;
+      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
     }
 
@@ -9879,7 +9328,7 @@ public final class BitControl {
         hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
             getReportTime());
       }
-      hash = (29 * hash) + unknownFields.hashCode();
+      hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
     }
@@ -10013,16 +9462,14 @@ public final class BitControl {
       @java.lang.Override
       public Builder clear() {
         super.clear();
-        if (endpointBuilder_ == null) {
-          endpoint_ = null;
-        } else {
-          endpointBuilder_.clear();
+        bitField0_ = 0;
+        endpoint_ = null;
+        if (endpointBuilder_ != null) {
+          endpointBuilder_.dispose();
+          endpointBuilder_ = null;
         }
-        bitField0_ = (bitField0_ & ~0x00000001);
         queueLength_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000002);
         reportTime_ = 0L;
-        bitField0_ = (bitField0_ & ~0x00000004);
         return this;
       }
 
@@ -10049,14 +9496,18 @@ public final class BitControl {
       @java.lang.Override
       public org.apache.drill.exec.proto.BitControl.WorkQueueStatus buildPartial() {
         org.apache.drill.exec.proto.BitControl.WorkQueueStatus result = new org.apache.drill.exec.proto.BitControl.WorkQueueStatus(this);
+        if (bitField0_ != 0) { buildPartial0(result); }
+        onBuilt();
+        return result;
+      }
+
+      private void buildPartial0(org.apache.drill.exec.proto.BitControl.WorkQueueStatus result) {
         int from_bitField0_ = bitField0_;
         int to_bitField0_ = 0;
         if (((from_bitField0_ & 0x00000001) != 0)) {
-          if (endpointBuilder_ == null) {
-            result.endpoint_ = endpoint_;
-          } else {
-            result.endpoint_ = endpointBuilder_.build();
-          }
+          result.endpoint_ = endpointBuilder_ == null
+              ? endpoint_
+              : endpointBuilder_.build();
           to_bitField0_ |= 0x00000001;
         }
         if (((from_bitField0_ & 0x00000002) != 0)) {
@@ -10067,43 +9518,9 @@ public final class BitControl {
           result.reportTime_ = reportTime_;
           to_bitField0_ |= 0x00000004;
         }
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
+        result.bitField0_ |= to_bitField0_;
       }
 
-      @java.lang.Override
-      public Builder clone() {
-        return super.clone();
-      }
-      @java.lang.Override
-      public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return super.setField(field, value);
-      }
-      @java.lang.Override
-      public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
-        return super.clearField(field);
-      }
-      @java.lang.Override
-      public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-        return super.clearOneof(oneof);
-      }
-      @java.lang.Override
-      public Builder setRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
-        return super.setRepeatedField(field, index, value);
-      }
-      @java.lang.Override
-      public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return super.addRepeatedField(field, value);
-      }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.BitControl.WorkQueueStatus) {
@@ -10125,7 +9542,7 @@ public final class BitControl {
         if (other.hasReportTime()) {
           setReportTime(other.getReportTime());
         }
-        this.mergeUnknownFields(other.unknownFields);
+        this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
         return this;
       }
@@ -10140,17 +9557,47 @@ public final class BitControl {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        org.apache.drill.exec.proto.BitControl.WorkQueueStatus parsedMessage = null;
+        if (extensionRegistry == null) {
+          throw new java.lang.NullPointerException();
+        }
         try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              case 10: {
+                input.readMessage(
+                    getEndpointFieldBuilder().getBuilder(),
+                    extensionRegistry);
+                bitField0_ |= 0x00000001;
+                break;
+              } // case 10
+              case 16: {
+                queueLength_ = input.readInt32();
+                bitField0_ |= 0x00000002;
+                break;
+              } // case 16
+              case 24: {
+                reportTime_ = input.readInt64();
+                bitField0_ |= 0x00000004;
+                break;
+              } // case 24
+              default: {
+                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                  done = true; // was an endgroup tag
+                }
+                break;
+              } // default:
+            } // switch (tag)
+          } // while (!done)
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (org.apache.drill.exec.proto.BitControl.WorkQueueStatus) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
+          onChanged();
+        } // finally
         return this;
       }
       private int bitField0_;
@@ -10185,11 +9632,11 @@ public final class BitControl {
             throw new NullPointerException();
           }
           endpoint_ = value;
-          onChanged();
         } else {
           endpointBuilder_.setMessage(value);
         }
         bitField0_ |= 0x00000001;
+        onChanged();
         return this;
       }
       /**
@@ -10199,11 +9646,11 @@ public final class BitControl {
           org.apache.drill.exec.proto.CoordinationProtos.DrillbitEndpoint.Builder builderForValue) {
         if (endpointBuilder_ == null) {
           endpoint_ = builderForValue.build();
-          onChanged();
         } else {
           endpointBuilder_.setMessage(builderForValue.build());
         }
         bitField0_ |= 0x00000001;
+        onChanged();
         return this;
       }
       /**
@@ -10212,31 +9659,30 @@ public final class BitControl {
       public Builder mergeEndpoint(org.apache.drill.exec.proto.CoordinationProtos.DrillbitEndpoint value) {
         if (endpointBuilder_ == null) {
           if (((bitField0_ & 0x00000001) != 0) &&
-              endpoint_ != null &&
-              endpoint_ != org.apache.drill.exec.proto.CoordinationProtos.DrillbitEndpoint.getDefaultInstance()) {
-            endpoint_ =
-              org.apache.drill.exec.proto.CoordinationProtos.DrillbitEndpoint.newBuilder(endpoint_).mergeFrom(value).buildPartial();
+            endpoint_ != null &&
+            endpoint_ != org.apache.drill.exec.proto.CoordinationProtos.DrillbitEndpoint.getDefaultInstance()) {
+            getEndpointBuilder().mergeFrom(value);
           } else {
             endpoint_ = value;
           }
-          onChanged();
         } else {
           endpointBuilder_.mergeFrom(value);
         }
         bitField0_ |= 0x00000001;
+        onChanged();
         return this;
       }
       /**
        * <code>optional .exec.DrillbitEndpoint endpoint = 1;</code>
        */
       public Builder clearEndpoint() {
-        if (endpointBuilder_ == null) {
-          endpoint_ = null;
-          onChanged();
-        } else {
-          endpointBuilder_.clear();
-        }
         bitField0_ = (bitField0_ & ~0x00000001);
+        endpoint_ = null;
+        if (endpointBuilder_ != null) {
+          endpointBuilder_.dispose();
+          endpointBuilder_ = null;
+        }
+        onChanged();
         return this;
       }
       /**
@@ -10298,8 +9744,9 @@ public final class BitControl {
        * @return This builder for chaining.
        */
       public Builder setQueueLength(int value) {
-        bitField0_ |= 0x00000002;
+
         queueLength_ = value;
+        bitField0_ |= 0x00000002;
         onChanged();
         return this;
       }
@@ -10337,8 +9784,9 @@ public final class BitControl {
        * @return This builder for chaining.
        */
       public Builder setReportTime(long value) {
-        bitField0_ |= 0x00000004;
+
         reportTime_ = value;
+        bitField0_ |= 0x00000004;
         onChanged();
         return this;
       }
@@ -10385,7 +9833,18 @@ public final class BitControl {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new WorkQueueStatus(input, extensionRegistry);
+        Builder builder = newBuilder();
+        try {
+          builder.mergeFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(builder.buildPartial());
+        } catch (com.google.protobuf.UninitializedMessageException e) {
+          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(e)
+              .setUnfinishedMessage(builder.buildPartial());
+        }
+        return builder.buildPartial();
       }
     };
 
@@ -10461,75 +9920,6 @@ public final class BitControl {
       return new FinishedReceiver();
     }
 
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-    getUnknownFields() {
-      return this.unknownFields;
-    }
-    private FinishedReceiver(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            case 10: {
-              org.apache.drill.exec.proto.ExecProtos.FragmentHandle.Builder subBuilder = null;
-              if (((bitField0_ & 0x00000001) != 0)) {
-                subBuilder = receiver_.toBuilder();
-              }
-              receiver_ = input.readMessage(org.apache.drill.exec.proto.ExecProtos.FragmentHandle.PARSER, extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(receiver_);
-                receiver_ = subBuilder.buildPartial();
-              }
-              bitField0_ |= 0x00000001;
-              break;
-            }
-            case 18: {
-              org.apache.drill.exec.proto.ExecProtos.FragmentHandle.Builder subBuilder = null;
-              if (((bitField0_ & 0x00000002) != 0)) {
-                subBuilder = sender_.toBuilder();
-              }
-              sender_ = input.readMessage(org.apache.drill.exec.proto.ExecProtos.FragmentHandle.PARSER, extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(sender_);
-                sender_ = subBuilder.buildPartial();
-              }
-              bitField0_ |= 0x00000002;
-              break;
-            }
-            default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
-      } finally {
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.BitControl.internal_static_exec_bit_control_FinishedReceiver_descriptor;
@@ -10616,7 +10006,7 @@ public final class BitControl {
       if (((bitField0_ & 0x00000002) != 0)) {
         output.writeMessage(2, getSender());
       }
-      unknownFields.writeTo(output);
+      getUnknownFields().writeTo(output);
     }
 
     @java.lang.Override
@@ -10633,7 +10023,7 @@ public final class BitControl {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(2, getSender());
       }
-      size += unknownFields.getSerializedSize();
+      size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
       return size;
     }
@@ -10658,7 +10048,7 @@ public final class BitControl {
         if (!getSender()
             .equals(other.getSender())) return false;
       }
-      if (!unknownFields.equals(other.unknownFields)) return false;
+      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
     }
 
@@ -10677,7 +10067,7 @@ public final class BitControl {
         hash = (37 * hash) + SENDER_FIELD_NUMBER;
         hash = (53 * hash) + getSender().hashCode();
       }
-      hash = (29 * hash) + unknownFields.hashCode();
+      hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
     }
@@ -10812,18 +10202,17 @@ public final class BitControl {
       @java.lang.Override
       public Builder clear() {
         super.clear();
-        if (receiverBuilder_ == null) {
-          receiver_ = null;
-        } else {
-          receiverBuilder_.clear();
+        bitField0_ = 0;
+        receiver_ = null;
+        if (receiverBuilder_ != null) {
+          receiverBuilder_.dispose();
+          receiverBuilder_ = null;
         }
-        bitField0_ = (bitField0_ & ~0x00000001);
-        if (senderBuilder_ == null) {
-          sender_ = null;
-        } else {
-          senderBuilder_.clear();
+        sender_ = null;
+        if (senderBuilder_ != null) {
+          senderBuilder_.dispose();
+          senderBuilder_ = null;
         }
-        bitField0_ = (bitField0_ & ~0x00000002);
         return this;
       }
 
@@ -10850,61 +10239,29 @@ public final class BitControl {
       @java.lang.Override
       public org.apache.drill.exec.proto.BitControl.FinishedReceiver buildPartial() {
         org.apache.drill.exec.proto.BitControl.FinishedReceiver result = new org.apache.drill.exec.proto.BitControl.FinishedReceiver(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) != 0)) {
-          if (receiverBuilder_ == null) {
-            result.receiver_ = receiver_;
-          } else {
-            result.receiver_ = receiverBuilder_.build();
-          }
-          to_bitField0_ |= 0x00000001;
-        }
-        if (((from_bitField0_ & 0x00000002) != 0)) {
-          if (senderBuilder_ == null) {
-            result.sender_ = sender_;
-          } else {
-            result.sender_ = senderBuilder_.build();
-          }
-          to_bitField0_ |= 0x00000002;
-        }
-        result.bitField0_ = to_bitField0_;
+        if (bitField0_ != 0) { buildPartial0(result); }
         onBuilt();
         return result;
       }
 
-      @java.lang.Override
-      public Builder clone() {
-        return super.clone();
+      private void buildPartial0(org.apache.drill.exec.proto.BitControl.FinishedReceiver result) {
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) != 0)) {
+          result.receiver_ = receiverBuilder_ == null
+              ? receiver_
+              : receiverBuilder_.build();
+          to_bitField0_ |= 0x00000001;
+        }
+        if (((from_bitField0_ & 0x00000002) != 0)) {
+          result.sender_ = senderBuilder_ == null
+              ? sender_
+              : senderBuilder_.build();
+          to_bitField0_ |= 0x00000002;
+        }
+        result.bitField0_ |= to_bitField0_;
       }
-      @java.lang.Override
-      public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return super.setField(field, value);
-      }
-      @java.lang.Override
-      public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
-        return super.clearField(field);
-      }
-      @java.lang.Override
-      public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-        return super.clearOneof(oneof);
-      }
-      @java.lang.Override
-      public Builder setRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
-        return super.setRepeatedField(field, index, value);
-      }
-      @java.lang.Override
-      public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return super.addRepeatedField(field, value);
-      }
+
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.BitControl.FinishedReceiver) {
@@ -10923,7 +10280,7 @@ public final class BitControl {
         if (other.hasSender()) {
           mergeSender(other.getSender());
         }
-        this.mergeUnknownFields(other.unknownFields);
+        this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
         return this;
       }
@@ -10938,17 +10295,44 @@ public final class BitControl {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        org.apache.drill.exec.proto.BitControl.FinishedReceiver parsedMessage = null;
+        if (extensionRegistry == null) {
+          throw new java.lang.NullPointerException();
+        }
         try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              case 10: {
+                input.readMessage(
+                    getReceiverFieldBuilder().getBuilder(),
+                    extensionRegistry);
+                bitField0_ |= 0x00000001;
+                break;
+              } // case 10
+              case 18: {
+                input.readMessage(
+                    getSenderFieldBuilder().getBuilder(),
+                    extensionRegistry);
+                bitField0_ |= 0x00000002;
+                break;
+              } // case 18
+              default: {
+                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                  done = true; // was an endgroup tag
+                }
+                break;
+              } // default:
+            } // switch (tag)
+          } // while (!done)
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (org.apache.drill.exec.proto.BitControl.FinishedReceiver) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
+          onChanged();
+        } // finally
         return this;
       }
       private int bitField0_;
@@ -10983,11 +10367,11 @@ public final class BitControl {
             throw new NullPointerException();
           }
           receiver_ = value;
-          onChanged();
         } else {
           receiverBuilder_.setMessage(value);
         }
         bitField0_ |= 0x00000001;
+        onChanged();
         return this;
       }
       /**
@@ -10997,11 +10381,11 @@ public final class BitControl {
           org.apache.drill.exec.proto.ExecProtos.FragmentHandle.Builder builderForValue) {
         if (receiverBuilder_ == null) {
           receiver_ = builderForValue.build();
-          onChanged();
         } else {
           receiverBuilder_.setMessage(builderForValue.build());
         }
         bitField0_ |= 0x00000001;
+        onChanged();
         return this;
       }
       /**
@@ -11010,31 +10394,30 @@ public final class BitControl {
       public Builder mergeReceiver(org.apache.drill.exec.proto.ExecProtos.FragmentHandle value) {
         if (receiverBuilder_ == null) {
           if (((bitField0_ & 0x00000001) != 0) &&
-              receiver_ != null &&
-              receiver_ != org.apache.drill.exec.proto.ExecProtos.FragmentHandle.getDefaultInstance()) {
-            receiver_ =
-              org.apache.drill.exec.proto.ExecProtos.FragmentHandle.newBuilder(receiver_).mergeFrom(value).buildPartial();
+            receiver_ != null &&
+            receiver_ != org.apache.drill.exec.proto.ExecProtos.FragmentHandle.getDefaultInstance()) {
+            getReceiverBuilder().mergeFrom(value);
           } else {
             receiver_ = value;
           }
-          onChanged();
         } else {
           receiverBuilder_.mergeFrom(value);
         }
         bitField0_ |= 0x00000001;
+        onChanged();
         return this;
       }
       /**
        * <code>optional .exec.bit.FragmentHandle receiver = 1;</code>
        */
       public Builder clearReceiver() {
-        if (receiverBuilder_ == null) {
-          receiver_ = null;
-          onChanged();
-        } else {
-          receiverBuilder_.clear();
-        }
         bitField0_ = (bitField0_ & ~0x00000001);
+        receiver_ = null;
+        if (receiverBuilder_ != null) {
+          receiverBuilder_.dispose();
+          receiverBuilder_ = null;
+        }
+        onChanged();
         return this;
       }
       /**
@@ -11103,11 +10486,11 @@ public final class BitControl {
             throw new NullPointerException();
           }
           sender_ = value;
-          onChanged();
         } else {
           senderBuilder_.setMessage(value);
         }
         bitField0_ |= 0x00000002;
+        onChanged();
         return this;
       }
       /**
@@ -11117,11 +10500,11 @@ public final class BitControl {
           org.apache.drill.exec.proto.ExecProtos.FragmentHandle.Builder builderForValue) {
         if (senderBuilder_ == null) {
           sender_ = builderForValue.build();
-          onChanged();
         } else {
           senderBuilder_.setMessage(builderForValue.build());
         }
         bitField0_ |= 0x00000002;
+        onChanged();
         return this;
       }
       /**
@@ -11130,31 +10513,30 @@ public final class BitControl {
       public Builder mergeSender(org.apache.drill.exec.proto.ExecProtos.FragmentHandle value) {
         if (senderBuilder_ == null) {
           if (((bitField0_ & 0x00000002) != 0) &&
-              sender_ != null &&
-              sender_ != org.apache.drill.exec.proto.ExecProtos.FragmentHandle.getDefaultInstance()) {
-            sender_ =
-              org.apache.drill.exec.proto.ExecProtos.FragmentHandle.newBuilder(sender_).mergeFrom(value).buildPartial();
+            sender_ != null &&
+            sender_ != org.apache.drill.exec.proto.ExecProtos.FragmentHandle.getDefaultInstance()) {
+            getSenderBuilder().mergeFrom(value);
           } else {
             sender_ = value;
           }
-          onChanged();
         } else {
           senderBuilder_.mergeFrom(value);
         }
         bitField0_ |= 0x00000002;
+        onChanged();
         return this;
       }
       /**
        * <code>optional .exec.bit.FragmentHandle sender = 2;</code>
        */
       public Builder clearSender() {
-        if (senderBuilder_ == null) {
-          sender_ = null;
-          onChanged();
-        } else {
-          senderBuilder_.clear();
-        }
         bitField0_ = (bitField0_ & ~0x00000002);
+        sender_ = null;
+        if (senderBuilder_ != null) {
+          senderBuilder_.dispose();
+          senderBuilder_ = null;
+        }
+        onChanged();
         return this;
       }
       /**
@@ -11225,7 +10607,18 @@ public final class BitControl {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new FinishedReceiver(input, extensionRegistry);
+        Builder builder = newBuilder();
+        try {
+          builder.mergeFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(builder.buildPartial());
+        } catch (com.google.protobuf.UninitializedMessageException e) {
+          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(e)
+              .setUnfinishedMessage(builder.buildPartial());
+        }
+        return builder.buildPartial();
       }
     };
 

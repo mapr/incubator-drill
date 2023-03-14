@@ -1032,131 +1032,6 @@ public final class TypeProtos {
       return new MajorType();
     }
 
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-    getUnknownFields() {
-      return this.unknownFields;
-    }
-    private MajorType(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            case 8: {
-              int rawValue = input.readEnum();
-                @SuppressWarnings("deprecation")
-              org.apache.drill.common.types.TypeProtos.MinorType value = org.apache.drill.common.types.TypeProtos.MinorType.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(1, rawValue);
-              } else {
-                bitField0_ |= 0x00000001;
-                minorType_ = rawValue;
-              }
-              break;
-            }
-            case 16: {
-              int rawValue = input.readEnum();
-                @SuppressWarnings("deprecation")
-              org.apache.drill.common.types.TypeProtos.DataMode value = org.apache.drill.common.types.TypeProtos.DataMode.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(2, rawValue);
-              } else {
-                bitField0_ |= 0x00000002;
-                mode_ = rawValue;
-              }
-              break;
-            }
-            case 24: {
-              bitField0_ |= 0x00000004;
-              width_ = input.readInt32();
-              break;
-            }
-            case 32: {
-              bitField0_ |= 0x00000008;
-              precision_ = input.readInt32();
-              break;
-            }
-            case 40: {
-              bitField0_ |= 0x00000010;
-              scale_ = input.readInt32();
-              break;
-            }
-            case 48: {
-              bitField0_ |= 0x00000020;
-              timeZone_ = input.readInt32();
-              break;
-            }
-            case 56: {
-              int rawValue = input.readEnum();
-              @SuppressWarnings("deprecation")
-              org.apache.drill.common.types.TypeProtos.MinorType value = org.apache.drill.common.types.TypeProtos.MinorType.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(7, rawValue);
-              } else {
-                if (!((mutable_bitField0_ & 0x00000040) != 0)) {
-                  subType_ = new java.util.ArrayList<java.lang.Integer>();
-                  mutable_bitField0_ |= 0x00000040;
-                }
-                subType_.add(rawValue);
-              }
-              break;
-            }
-            case 58: {
-              int length = input.readRawVarint32();
-              int oldLimit = input.pushLimit(length);
-              while(input.getBytesUntilLimit() > 0) {
-                int rawValue = input.readEnum();
-                @SuppressWarnings("deprecation")
-                org.apache.drill.common.types.TypeProtos.MinorType value = org.apache.drill.common.types.TypeProtos.MinorType.valueOf(rawValue);
-                if (value == null) {
-                  unknownFields.mergeVarintField(7, rawValue);
-                } else {
-                  if (!((mutable_bitField0_ & 0x00000040) != 0)) {
-                    subType_ = new java.util.ArrayList<java.lang.Integer>();
-                    mutable_bitField0_ |= 0x00000040;
-                  }
-                  subType_.add(rawValue);
-                }
-              }
-              input.popLimit(oldLimit);
-              break;
-            }
-            default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
-      } finally {
-        if (((mutable_bitField0_ & 0x00000040) != 0)) {
-          subType_ = java.util.Collections.unmodifiableList(subType_);
-        }
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.common.types.TypeProtos.internal_static_common_MajorType_descriptor;
@@ -1172,7 +1047,7 @@ public final class TypeProtos {
 
     private int bitField0_;
     public static final int MINOR_TYPE_FIELD_NUMBER = 1;
-    private int minorType_;
+    private int minorType_ = 0;
     /**
      * <code>optional .common.MinorType minor_type = 1;</code>
      * @return Whether the minorType field is set.
@@ -1185,13 +1060,12 @@ public final class TypeProtos {
      * @return The minorType.
      */
     @java.lang.Override public org.apache.drill.common.types.TypeProtos.MinorType getMinorType() {
-      @SuppressWarnings("deprecation")
-      org.apache.drill.common.types.TypeProtos.MinorType result = org.apache.drill.common.types.TypeProtos.MinorType.valueOf(minorType_);
+      org.apache.drill.common.types.TypeProtos.MinorType result = org.apache.drill.common.types.TypeProtos.MinorType.forNumber(minorType_);
       return result == null ? org.apache.drill.common.types.TypeProtos.MinorType.LATE : result;
     }
 
     public static final int MODE_FIELD_NUMBER = 2;
-    private int mode_;
+    private int mode_ = 0;
     /**
      * <code>optional .common.DataMode mode = 2;</code>
      * @return Whether the mode field is set.
@@ -1204,13 +1078,12 @@ public final class TypeProtos {
      * @return The mode.
      */
     @java.lang.Override public org.apache.drill.common.types.TypeProtos.DataMode getMode() {
-      @SuppressWarnings("deprecation")
-      org.apache.drill.common.types.TypeProtos.DataMode result = org.apache.drill.common.types.TypeProtos.DataMode.valueOf(mode_);
+      org.apache.drill.common.types.TypeProtos.DataMode result = org.apache.drill.common.types.TypeProtos.DataMode.forNumber(mode_);
       return result == null ? org.apache.drill.common.types.TypeProtos.DataMode.OPTIONAL : result;
     }
 
     public static final int WIDTH_FIELD_NUMBER = 3;
-    private int width_;
+    private int width_ = 0;
     /**
      * <code>optional int32 width = 3;</code>
      * @return Whether the width field is set.
@@ -1229,7 +1102,7 @@ public final class TypeProtos {
     }
 
     public static final int PRECISION_FIELD_NUMBER = 4;
-    private int precision_;
+    private int precision_ = 0;
     /**
      * <pre>
      * used for decimal types or as optional length for fixed size value
@@ -1256,7 +1129,7 @@ public final class TypeProtos {
     }
 
     public static final int SCALE_FIELD_NUMBER = 5;
-    private int scale_;
+    private int scale_ = 0;
     /**
      * <pre>
      * used for decimal types
@@ -1283,7 +1156,7 @@ public final class TypeProtos {
     }
 
     public static final int TIMEZONE_FIELD_NUMBER = 6;
-    private int timeZone_;
+    private int timeZone_ = 0;
     /**
      * <pre>
      * used by TimeStamp type
@@ -1310,14 +1183,14 @@ public final class TypeProtos {
     }
 
     public static final int SUB_TYPE_FIELD_NUMBER = 7;
+    @SuppressWarnings("serial")
     private java.util.List<java.lang.Integer> subType_;
     private static final com.google.protobuf.Internal.ListAdapter.Converter<
         java.lang.Integer, org.apache.drill.common.types.TypeProtos.MinorType> subType_converter_ =
             new com.google.protobuf.Internal.ListAdapter.Converter<
                 java.lang.Integer, org.apache.drill.common.types.TypeProtos.MinorType>() {
               public org.apache.drill.common.types.TypeProtos.MinorType convert(java.lang.Integer from) {
-                @SuppressWarnings("deprecation")
-                org.apache.drill.common.types.TypeProtos.MinorType result = org.apache.drill.common.types.TypeProtos.MinorType.valueOf(from);
+                org.apache.drill.common.types.TypeProtos.MinorType result = org.apache.drill.common.types.TypeProtos.MinorType.forNumber(from);
                 return result == null ? org.apache.drill.common.types.TypeProtos.MinorType.LATE : result;
               }
             };
@@ -1395,7 +1268,7 @@ public final class TypeProtos {
       for (int i = 0; i < subType_.size(); i++) {
         output.writeEnum(7, subType_.get(i));
       }
-      unknownFields.writeTo(output);
+      getUnknownFields().writeTo(output);
     }
 
     @java.lang.Override
@@ -1437,7 +1310,7 @@ public final class TypeProtos {
         size += dataSize;
         size += 1 * subType_.size();
       }
-      size += unknownFields.getSerializedSize();
+      size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
       return size;
     }
@@ -1481,7 +1354,7 @@ public final class TypeProtos {
             != other.getTimeZone()) return false;
       }
       if (!subType_.equals(other.subType_)) return false;
-      if (!unknownFields.equals(other.unknownFields)) return false;
+      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
     }
 
@@ -1520,7 +1393,7 @@ public final class TypeProtos {
         hash = (37 * hash) + SUB_TYPE_FIELD_NUMBER;
         hash = (53 * hash) + subType_.hashCode();
       }
-      hash = (29 * hash) + unknownFields.hashCode();
+      hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
     }
@@ -1637,34 +1510,24 @@ public final class TypeProtos {
 
       // Construct using org.apache.drill.common.types.TypeProtos.MajorType.newBuilder()
       private Builder() {
-        maybeForceBuilderInitialization();
+
       }
 
       private Builder(
           com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-        }
+
       }
       @java.lang.Override
       public Builder clear() {
         super.clear();
+        bitField0_ = 0;
         minorType_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000001);
         mode_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000002);
         width_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000004);
         precision_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000008);
         scale_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000010);
         timeZone_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000020);
         subType_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000040);
         return this;
@@ -1693,16 +1556,31 @@ public final class TypeProtos {
       @java.lang.Override
       public org.apache.drill.common.types.TypeProtos.MajorType buildPartial() {
         org.apache.drill.common.types.TypeProtos.MajorType result = new org.apache.drill.common.types.TypeProtos.MajorType(this);
+        buildPartialRepeatedFields(result);
+        if (bitField0_ != 0) { buildPartial0(result); }
+        onBuilt();
+        return result;
+      }
+
+      private void buildPartialRepeatedFields(org.apache.drill.common.types.TypeProtos.MajorType result) {
+        if (((bitField0_ & 0x00000040) != 0)) {
+          subType_ = java.util.Collections.unmodifiableList(subType_);
+          bitField0_ = (bitField0_ & ~0x00000040);
+        }
+        result.subType_ = subType_;
+      }
+
+      private void buildPartial0(org.apache.drill.common.types.TypeProtos.MajorType result) {
         int from_bitField0_ = bitField0_;
         int to_bitField0_ = 0;
         if (((from_bitField0_ & 0x00000001) != 0)) {
+          result.minorType_ = minorType_;
           to_bitField0_ |= 0x00000001;
         }
-        result.minorType_ = minorType_;
         if (((from_bitField0_ & 0x00000002) != 0)) {
+          result.mode_ = mode_;
           to_bitField0_ |= 0x00000002;
         }
-        result.mode_ = mode_;
         if (((from_bitField0_ & 0x00000004) != 0)) {
           result.width_ = width_;
           to_bitField0_ |= 0x00000004;
@@ -1719,48 +1597,9 @@ public final class TypeProtos {
           result.timeZone_ = timeZone_;
           to_bitField0_ |= 0x00000020;
         }
-        if (((bitField0_ & 0x00000040) != 0)) {
-          subType_ = java.util.Collections.unmodifiableList(subType_);
-          bitField0_ = (bitField0_ & ~0x00000040);
-        }
-        result.subType_ = subType_;
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
+        result.bitField0_ |= to_bitField0_;
       }
 
-      @java.lang.Override
-      public Builder clone() {
-        return super.clone();
-      }
-      @java.lang.Override
-      public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return super.setField(field, value);
-      }
-      @java.lang.Override
-      public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
-        return super.clearField(field);
-      }
-      @java.lang.Override
-      public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-        return super.clearOneof(oneof);
-      }
-      @java.lang.Override
-      public Builder setRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
-        return super.setRepeatedField(field, index, value);
-      }
-      @java.lang.Override
-      public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return super.addRepeatedField(field, value);
-      }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.common.types.TypeProtos.MajorType) {
@@ -1801,7 +1640,7 @@ public final class TypeProtos {
           }
           onChanged();
         }
-        this.mergeUnknownFields(other.unknownFields);
+        this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
         return this;
       }
@@ -1816,17 +1655,103 @@ public final class TypeProtos {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        org.apache.drill.common.types.TypeProtos.MajorType parsedMessage = null;
+        if (extensionRegistry == null) {
+          throw new java.lang.NullPointerException();
+        }
         try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              case 8: {
+                int tmpRaw = input.readEnum();
+                org.apache.drill.common.types.TypeProtos.MinorType tmpValue =
+                    org.apache.drill.common.types.TypeProtos.MinorType.forNumber(tmpRaw);
+                if (tmpValue == null) {
+                  mergeUnknownVarintField(1, tmpRaw);
+                } else {
+                  minorType_ = tmpRaw;
+                  bitField0_ |= 0x00000001;
+                }
+                break;
+              } // case 8
+              case 16: {
+                int tmpRaw = input.readEnum();
+                org.apache.drill.common.types.TypeProtos.DataMode tmpValue =
+                    org.apache.drill.common.types.TypeProtos.DataMode.forNumber(tmpRaw);
+                if (tmpValue == null) {
+                  mergeUnknownVarintField(2, tmpRaw);
+                } else {
+                  mode_ = tmpRaw;
+                  bitField0_ |= 0x00000002;
+                }
+                break;
+              } // case 16
+              case 24: {
+                width_ = input.readInt32();
+                bitField0_ |= 0x00000004;
+                break;
+              } // case 24
+              case 32: {
+                precision_ = input.readInt32();
+                bitField0_ |= 0x00000008;
+                break;
+              } // case 32
+              case 40: {
+                scale_ = input.readInt32();
+                bitField0_ |= 0x00000010;
+                break;
+              } // case 40
+              case 48: {
+                timeZone_ = input.readInt32();
+                bitField0_ |= 0x00000020;
+                break;
+              } // case 48
+              case 56: {
+                int tmpRaw = input.readEnum();
+                org.apache.drill.common.types.TypeProtos.MinorType tmpValue =
+                    org.apache.drill.common.types.TypeProtos.MinorType.forNumber(tmpRaw);
+                if (tmpValue == null) {
+                  mergeUnknownVarintField(7, tmpRaw);
+                } else {
+                  ensureSubTypeIsMutable();
+                  subType_.add(tmpRaw);
+                }
+                break;
+              } // case 56
+              case 58: {
+                int length = input.readRawVarint32();
+                int oldLimit = input.pushLimit(length);
+                while(input.getBytesUntilLimit() > 0) {
+                  int tmpRaw = input.readEnum();
+                  org.apache.drill.common.types.TypeProtos.MinorType tmpValue =
+                      org.apache.drill.common.types.TypeProtos.MinorType.forNumber(tmpRaw);
+                  if (tmpValue == null) {
+                    mergeUnknownVarintField(7, tmpRaw);
+                  } else {
+                    ensureSubTypeIsMutable();
+                    subType_.add(tmpRaw);
+                  }
+                }
+                input.popLimit(oldLimit);
+                break;
+              } // case 58
+              default: {
+                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                  done = true; // was an endgroup tag
+                }
+                break;
+              } // default:
+            } // switch (tag)
+          } // while (!done)
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (org.apache.drill.common.types.TypeProtos.MajorType) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
+          onChanged();
+        } // finally
         return this;
       }
       private int bitField0_;
@@ -1845,8 +1770,7 @@ public final class TypeProtos {
        */
       @java.lang.Override
       public org.apache.drill.common.types.TypeProtos.MinorType getMinorType() {
-        @SuppressWarnings("deprecation")
-        org.apache.drill.common.types.TypeProtos.MinorType result = org.apache.drill.common.types.TypeProtos.MinorType.valueOf(minorType_);
+        org.apache.drill.common.types.TypeProtos.MinorType result = org.apache.drill.common.types.TypeProtos.MinorType.forNumber(minorType_);
         return result == null ? org.apache.drill.common.types.TypeProtos.MinorType.LATE : result;
       }
       /**
@@ -1888,8 +1812,7 @@ public final class TypeProtos {
        */
       @java.lang.Override
       public org.apache.drill.common.types.TypeProtos.DataMode getMode() {
-        @SuppressWarnings("deprecation")
-        org.apache.drill.common.types.TypeProtos.DataMode result = org.apache.drill.common.types.TypeProtos.DataMode.valueOf(mode_);
+        org.apache.drill.common.types.TypeProtos.DataMode result = org.apache.drill.common.types.TypeProtos.DataMode.forNumber(mode_);
         return result == null ? org.apache.drill.common.types.TypeProtos.DataMode.OPTIONAL : result;
       }
       /**
@@ -1940,8 +1863,9 @@ public final class TypeProtos {
        * @return This builder for chaining.
        */
       public Builder setWidth(int value) {
-        bitField0_ |= 0x00000004;
+
         width_ = value;
+        bitField0_ |= 0x00000004;
         onChanged();
         return this;
       }
@@ -1991,8 +1915,9 @@ public final class TypeProtos {
        * @return This builder for chaining.
        */
       public Builder setPrecision(int value) {
-        bitField0_ |= 0x00000008;
+
         precision_ = value;
+        bitField0_ |= 0x00000008;
         onChanged();
         return this;
       }
@@ -2046,8 +1971,9 @@ public final class TypeProtos {
        * @return This builder for chaining.
        */
       public Builder setScale(int value) {
-        bitField0_ |= 0x00000010;
+
         scale_ = value;
+        bitField0_ |= 0x00000010;
         onChanged();
         return this;
       }
@@ -2101,8 +2027,9 @@ public final class TypeProtos {
        * @return This builder for chaining.
        */
       public Builder setTimeZone(int value) {
-        bitField0_ |= 0x00000020;
+
         timeZone_ = value;
+        bitField0_ |= 0x00000020;
         onChanged();
         return this;
       }
@@ -2267,7 +2194,18 @@ public final class TypeProtos {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new MajorType(input, extensionRegistry);
+        Builder builder = newBuilder();
+        try {
+          builder.mergeFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(builder.buildPartial());
+        } catch (com.google.protobuf.UninitializedMessageException e) {
+          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(e)
+              .setUnfinishedMessage(builder.buildPartial());
+        }
+        return builder.buildPartial();
       }
     };
 

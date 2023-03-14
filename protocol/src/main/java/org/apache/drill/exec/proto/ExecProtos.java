@@ -109,85 +109,6 @@ public final class ExecProtos {
       return new FragmentHandle();
     }
 
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-    getUnknownFields() {
-      return this.unknownFields;
-    }
-    private FragmentHandle(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            case 10: {
-              org.apache.drill.exec.proto.UserBitShared.QueryId.Builder subBuilder = null;
-              if (((bitField0_ & 0x00000001) != 0)) {
-                subBuilder = queryId_.toBuilder();
-              }
-              queryId_ = input.readMessage(org.apache.drill.exec.proto.UserBitShared.QueryId.PARSER, extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(queryId_);
-                queryId_ = subBuilder.buildPartial();
-              }
-              bitField0_ |= 0x00000001;
-              break;
-            }
-            case 16: {
-              bitField0_ |= 0x00000002;
-              majorFragmentId_ = input.readInt32();
-              break;
-            }
-            case 24: {
-              bitField0_ |= 0x00000004;
-              minorFragmentId_ = input.readInt32();
-              break;
-            }
-            case 34: {
-              org.apache.drill.exec.proto.UserBitShared.QueryId.Builder subBuilder = null;
-              if (((bitField0_ & 0x00000008) != 0)) {
-                subBuilder = parentQueryId_.toBuilder();
-              }
-              parentQueryId_ = input.readMessage(org.apache.drill.exec.proto.UserBitShared.QueryId.PARSER, extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(parentQueryId_);
-                parentQueryId_ = subBuilder.buildPartial();
-              }
-              bitField0_ |= 0x00000008;
-              break;
-            }
-            default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
-      } finally {
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.ExecProtos.internal_static_exec_bit_FragmentHandle_descriptor;
@@ -229,7 +150,7 @@ public final class ExecProtos {
     }
 
     public static final int MAJOR_FRAGMENT_ID_FIELD_NUMBER = 2;
-    private int majorFragmentId_;
+    private int majorFragmentId_ = 0;
     /**
      * <code>optional int32 major_fragment_id = 2;</code>
      * @return Whether the majorFragmentId field is set.
@@ -248,7 +169,7 @@ public final class ExecProtos {
     }
 
     public static final int MINOR_FRAGMENT_ID_FIELD_NUMBER = 3;
-    private int minorFragmentId_;
+    private int minorFragmentId_ = 0;
     /**
      * <code>optional int32 minor_fragment_id = 3;</code>
      * @return Whether the minorFragmentId field is set.
@@ -318,7 +239,7 @@ public final class ExecProtos {
       if (((bitField0_ & 0x00000008) != 0)) {
         output.writeMessage(4, getParentQueryId());
       }
-      unknownFields.writeTo(output);
+      getUnknownFields().writeTo(output);
     }
 
     @java.lang.Override
@@ -343,7 +264,7 @@ public final class ExecProtos {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(4, getParentQueryId());
       }
-      size += unknownFields.getSerializedSize();
+      size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
       return size;
     }
@@ -378,7 +299,7 @@ public final class ExecProtos {
         if (!getParentQueryId()
             .equals(other.getParentQueryId())) return false;
       }
-      if (!unknownFields.equals(other.unknownFields)) return false;
+      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
     }
 
@@ -405,7 +326,7 @@ public final class ExecProtos {
         hash = (37 * hash) + PARENT_QUERY_ID_FIELD_NUMBER;
         hash = (53 * hash) + getParentQueryId().hashCode();
       }
-      hash = (29 * hash) + unknownFields.hashCode();
+      hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
     }
@@ -540,22 +461,19 @@ public final class ExecProtos {
       @java.lang.Override
       public Builder clear() {
         super.clear();
-        if (queryIdBuilder_ == null) {
-          queryId_ = null;
-        } else {
-          queryIdBuilder_.clear();
+        bitField0_ = 0;
+        queryId_ = null;
+        if (queryIdBuilder_ != null) {
+          queryIdBuilder_.dispose();
+          queryIdBuilder_ = null;
         }
-        bitField0_ = (bitField0_ & ~0x00000001);
         majorFragmentId_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000002);
         minorFragmentId_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000004);
-        if (parentQueryIdBuilder_ == null) {
-          parentQueryId_ = null;
-        } else {
-          parentQueryIdBuilder_.clear();
+        parentQueryId_ = null;
+        if (parentQueryIdBuilder_ != null) {
+          parentQueryIdBuilder_.dispose();
+          parentQueryIdBuilder_ = null;
         }
-        bitField0_ = (bitField0_ & ~0x00000008);
         return this;
       }
 
@@ -582,14 +500,18 @@ public final class ExecProtos {
       @java.lang.Override
       public org.apache.drill.exec.proto.ExecProtos.FragmentHandle buildPartial() {
         org.apache.drill.exec.proto.ExecProtos.FragmentHandle result = new org.apache.drill.exec.proto.ExecProtos.FragmentHandle(this);
+        if (bitField0_ != 0) { buildPartial0(result); }
+        onBuilt();
+        return result;
+      }
+
+      private void buildPartial0(org.apache.drill.exec.proto.ExecProtos.FragmentHandle result) {
         int from_bitField0_ = bitField0_;
         int to_bitField0_ = 0;
         if (((from_bitField0_ & 0x00000001) != 0)) {
-          if (queryIdBuilder_ == null) {
-            result.queryId_ = queryId_;
-          } else {
-            result.queryId_ = queryIdBuilder_.build();
-          }
+          result.queryId_ = queryIdBuilder_ == null
+              ? queryId_
+              : queryIdBuilder_.build();
           to_bitField0_ |= 0x00000001;
         }
         if (((from_bitField0_ & 0x00000002) != 0)) {
@@ -601,50 +523,14 @@ public final class ExecProtos {
           to_bitField0_ |= 0x00000004;
         }
         if (((from_bitField0_ & 0x00000008) != 0)) {
-          if (parentQueryIdBuilder_ == null) {
-            result.parentQueryId_ = parentQueryId_;
-          } else {
-            result.parentQueryId_ = parentQueryIdBuilder_.build();
-          }
+          result.parentQueryId_ = parentQueryIdBuilder_ == null
+              ? parentQueryId_
+              : parentQueryIdBuilder_.build();
           to_bitField0_ |= 0x00000008;
         }
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
+        result.bitField0_ |= to_bitField0_;
       }
 
-      @java.lang.Override
-      public Builder clone() {
-        return super.clone();
-      }
-      @java.lang.Override
-      public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return super.setField(field, value);
-      }
-      @java.lang.Override
-      public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
-        return super.clearField(field);
-      }
-      @java.lang.Override
-      public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-        return super.clearOneof(oneof);
-      }
-      @java.lang.Override
-      public Builder setRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
-        return super.setRepeatedField(field, index, value);
-      }
-      @java.lang.Override
-      public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return super.addRepeatedField(field, value);
-      }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.ExecProtos.FragmentHandle) {
@@ -669,7 +555,7 @@ public final class ExecProtos {
         if (other.hasParentQueryId()) {
           mergeParentQueryId(other.getParentQueryId());
         }
-        this.mergeUnknownFields(other.unknownFields);
+        this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
         return this;
       }
@@ -684,17 +570,54 @@ public final class ExecProtos {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        org.apache.drill.exec.proto.ExecProtos.FragmentHandle parsedMessage = null;
+        if (extensionRegistry == null) {
+          throw new java.lang.NullPointerException();
+        }
         try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              case 10: {
+                input.readMessage(
+                    getQueryIdFieldBuilder().getBuilder(),
+                    extensionRegistry);
+                bitField0_ |= 0x00000001;
+                break;
+              } // case 10
+              case 16: {
+                majorFragmentId_ = input.readInt32();
+                bitField0_ |= 0x00000002;
+                break;
+              } // case 16
+              case 24: {
+                minorFragmentId_ = input.readInt32();
+                bitField0_ |= 0x00000004;
+                break;
+              } // case 24
+              case 34: {
+                input.readMessage(
+                    getParentQueryIdFieldBuilder().getBuilder(),
+                    extensionRegistry);
+                bitField0_ |= 0x00000008;
+                break;
+              } // case 34
+              default: {
+                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                  done = true; // was an endgroup tag
+                }
+                break;
+              } // default:
+            } // switch (tag)
+          } // while (!done)
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (org.apache.drill.exec.proto.ExecProtos.FragmentHandle) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
+          onChanged();
+        } // finally
         return this;
       }
       private int bitField0_;
@@ -729,11 +652,11 @@ public final class ExecProtos {
             throw new NullPointerException();
           }
           queryId_ = value;
-          onChanged();
         } else {
           queryIdBuilder_.setMessage(value);
         }
         bitField0_ |= 0x00000001;
+        onChanged();
         return this;
       }
       /**
@@ -743,11 +666,11 @@ public final class ExecProtos {
           org.apache.drill.exec.proto.UserBitShared.QueryId.Builder builderForValue) {
         if (queryIdBuilder_ == null) {
           queryId_ = builderForValue.build();
-          onChanged();
         } else {
           queryIdBuilder_.setMessage(builderForValue.build());
         }
         bitField0_ |= 0x00000001;
+        onChanged();
         return this;
       }
       /**
@@ -756,31 +679,30 @@ public final class ExecProtos {
       public Builder mergeQueryId(org.apache.drill.exec.proto.UserBitShared.QueryId value) {
         if (queryIdBuilder_ == null) {
           if (((bitField0_ & 0x00000001) != 0) &&
-              queryId_ != null &&
-              queryId_ != org.apache.drill.exec.proto.UserBitShared.QueryId.getDefaultInstance()) {
-            queryId_ =
-              org.apache.drill.exec.proto.UserBitShared.QueryId.newBuilder(queryId_).mergeFrom(value).buildPartial();
+            queryId_ != null &&
+            queryId_ != org.apache.drill.exec.proto.UserBitShared.QueryId.getDefaultInstance()) {
+            getQueryIdBuilder().mergeFrom(value);
           } else {
             queryId_ = value;
           }
-          onChanged();
         } else {
           queryIdBuilder_.mergeFrom(value);
         }
         bitField0_ |= 0x00000001;
+        onChanged();
         return this;
       }
       /**
        * <code>optional .exec.shared.QueryId query_id = 1;</code>
        */
       public Builder clearQueryId() {
-        if (queryIdBuilder_ == null) {
-          queryId_ = null;
-          onChanged();
-        } else {
-          queryIdBuilder_.clear();
-        }
         bitField0_ = (bitField0_ & ~0x00000001);
+        queryId_ = null;
+        if (queryIdBuilder_ != null) {
+          queryIdBuilder_.dispose();
+          queryIdBuilder_ = null;
+        }
+        onChanged();
         return this;
       }
       /**
@@ -842,8 +764,9 @@ public final class ExecProtos {
        * @return This builder for chaining.
        */
       public Builder setMajorFragmentId(int value) {
-        bitField0_ |= 0x00000002;
+
         majorFragmentId_ = value;
+        bitField0_ |= 0x00000002;
         onChanged();
         return this;
       }
@@ -881,8 +804,9 @@ public final class ExecProtos {
        * @return This builder for chaining.
        */
       public Builder setMinorFragmentId(int value) {
-        bitField0_ |= 0x00000004;
+
         minorFragmentId_ = value;
+        bitField0_ |= 0x00000004;
         onChanged();
         return this;
       }
@@ -927,11 +851,11 @@ public final class ExecProtos {
             throw new NullPointerException();
           }
           parentQueryId_ = value;
-          onChanged();
         } else {
           parentQueryIdBuilder_.setMessage(value);
         }
         bitField0_ |= 0x00000008;
+        onChanged();
         return this;
       }
       /**
@@ -941,11 +865,11 @@ public final class ExecProtos {
           org.apache.drill.exec.proto.UserBitShared.QueryId.Builder builderForValue) {
         if (parentQueryIdBuilder_ == null) {
           parentQueryId_ = builderForValue.build();
-          onChanged();
         } else {
           parentQueryIdBuilder_.setMessage(builderForValue.build());
         }
         bitField0_ |= 0x00000008;
+        onChanged();
         return this;
       }
       /**
@@ -954,31 +878,30 @@ public final class ExecProtos {
       public Builder mergeParentQueryId(org.apache.drill.exec.proto.UserBitShared.QueryId value) {
         if (parentQueryIdBuilder_ == null) {
           if (((bitField0_ & 0x00000008) != 0) &&
-              parentQueryId_ != null &&
-              parentQueryId_ != org.apache.drill.exec.proto.UserBitShared.QueryId.getDefaultInstance()) {
-            parentQueryId_ =
-              org.apache.drill.exec.proto.UserBitShared.QueryId.newBuilder(parentQueryId_).mergeFrom(value).buildPartial();
+            parentQueryId_ != null &&
+            parentQueryId_ != org.apache.drill.exec.proto.UserBitShared.QueryId.getDefaultInstance()) {
+            getParentQueryIdBuilder().mergeFrom(value);
           } else {
             parentQueryId_ = value;
           }
-          onChanged();
         } else {
           parentQueryIdBuilder_.mergeFrom(value);
         }
         bitField0_ |= 0x00000008;
+        onChanged();
         return this;
       }
       /**
        * <code>optional .exec.shared.QueryId parent_query_id = 4;</code>
        */
       public Builder clearParentQueryId() {
-        if (parentQueryIdBuilder_ == null) {
-          parentQueryId_ = null;
-          onChanged();
-        } else {
-          parentQueryIdBuilder_.clear();
-        }
         bitField0_ = (bitField0_ & ~0x00000008);
+        parentQueryId_ = null;
+        if (parentQueryIdBuilder_ != null) {
+          parentQueryIdBuilder_.dispose();
+          parentQueryIdBuilder_ = null;
+        }
+        onChanged();
         return this;
       }
       /**
@@ -1049,7 +972,18 @@ public final class ExecProtos {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new FragmentHandle(input, extensionRegistry);
+        Builder builder = newBuilder();
+        try {
+          builder.mergeFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(builder.buildPartial());
+        } catch (com.google.protobuf.UninitializedMessageException e) {
+          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(e)
+              .setUnfinishedMessage(builder.buildPartial());
+        }
+        return builder.buildPartial();
       }
     };
 
@@ -1120,55 +1054,6 @@ public final class ExecProtos {
       return new ServerPreparedStatementState();
     }
 
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-    getUnknownFields() {
-      return this.unknownFields;
-    }
-    private ServerPreparedStatementState(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            case 10: {
-              com.google.protobuf.ByteString bs = input.readBytes();
-              bitField0_ |= 0x00000001;
-              sqlQuery_ = bs;
-              break;
-            }
-            default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
-      } finally {
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.ExecProtos.internal_static_exec_bit_ServerPreparedStatementState_descriptor;
@@ -1184,7 +1069,8 @@ public final class ExecProtos {
 
     private int bitField0_;
     public static final int SQL_QUERY_FIELD_NUMBER = 1;
-    private volatile java.lang.Object sqlQuery_;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object sqlQuery_ = "";
     /**
      * <code>optional string sql_query = 1;</code>
      * @return Whether the sqlQuery field is set.
@@ -1248,7 +1134,7 @@ public final class ExecProtos {
       if (((bitField0_ & 0x00000001) != 0)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 1, sqlQuery_);
       }
-      unknownFields.writeTo(output);
+      getUnknownFields().writeTo(output);
     }
 
     @java.lang.Override
@@ -1260,7 +1146,7 @@ public final class ExecProtos {
       if (((bitField0_ & 0x00000001) != 0)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, sqlQuery_);
       }
-      size += unknownFields.getSerializedSize();
+      size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
       return size;
     }
@@ -1280,7 +1166,7 @@ public final class ExecProtos {
         if (!getSqlQuery()
             .equals(other.getSqlQuery())) return false;
       }
-      if (!unknownFields.equals(other.unknownFields)) return false;
+      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
     }
 
@@ -1295,7 +1181,7 @@ public final class ExecProtos {
         hash = (37 * hash) + SQL_QUERY_FIELD_NUMBER;
         hash = (53 * hash) + getSqlQuery().hashCode();
       }
-      hash = (29 * hash) + unknownFields.hashCode();
+      hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
     }
@@ -1419,24 +1305,19 @@ public final class ExecProtos {
 
       // Construct using org.apache.drill.exec.proto.ExecProtos.ServerPreparedStatementState.newBuilder()
       private Builder() {
-        maybeForceBuilderInitialization();
+
       }
 
       private Builder(
           com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-        }
+
       }
       @java.lang.Override
       public Builder clear() {
         super.clear();
+        bitField0_ = 0;
         sqlQuery_ = "";
-        bitField0_ = (bitField0_ & ~0x00000001);
         return this;
       }
 
@@ -1463,49 +1344,21 @@ public final class ExecProtos {
       @java.lang.Override
       public org.apache.drill.exec.proto.ExecProtos.ServerPreparedStatementState buildPartial() {
         org.apache.drill.exec.proto.ExecProtos.ServerPreparedStatementState result = new org.apache.drill.exec.proto.ExecProtos.ServerPreparedStatementState(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) != 0)) {
-          to_bitField0_ |= 0x00000001;
-        }
-        result.sqlQuery_ = sqlQuery_;
-        result.bitField0_ = to_bitField0_;
+        if (bitField0_ != 0) { buildPartial0(result); }
         onBuilt();
         return result;
       }
 
-      @java.lang.Override
-      public Builder clone() {
-        return super.clone();
+      private void buildPartial0(org.apache.drill.exec.proto.ExecProtos.ServerPreparedStatementState result) {
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) != 0)) {
+          result.sqlQuery_ = sqlQuery_;
+          to_bitField0_ |= 0x00000001;
+        }
+        result.bitField0_ |= to_bitField0_;
       }
-      @java.lang.Override
-      public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return super.setField(field, value);
-      }
-      @java.lang.Override
-      public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
-        return super.clearField(field);
-      }
-      @java.lang.Override
-      public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-        return super.clearOneof(oneof);
-      }
-      @java.lang.Override
-      public Builder setRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
-        return super.setRepeatedField(field, index, value);
-      }
-      @java.lang.Override
-      public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return super.addRepeatedField(field, value);
-      }
+
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.ExecProtos.ServerPreparedStatementState) {
@@ -1519,11 +1372,11 @@ public final class ExecProtos {
       public Builder mergeFrom(org.apache.drill.exec.proto.ExecProtos.ServerPreparedStatementState other) {
         if (other == org.apache.drill.exec.proto.ExecProtos.ServerPreparedStatementState.getDefaultInstance()) return this;
         if (other.hasSqlQuery()) {
-          bitField0_ |= 0x00000001;
           sqlQuery_ = other.sqlQuery_;
+          bitField0_ |= 0x00000001;
           onChanged();
         }
-        this.mergeUnknownFields(other.unknownFields);
+        this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
         return this;
       }
@@ -1538,17 +1391,35 @@ public final class ExecProtos {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        org.apache.drill.exec.proto.ExecProtos.ServerPreparedStatementState parsedMessage = null;
+        if (extensionRegistry == null) {
+          throw new java.lang.NullPointerException();
+        }
         try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              case 10: {
+                sqlQuery_ = input.readBytes();
+                bitField0_ |= 0x00000001;
+                break;
+              } // case 10
+              default: {
+                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                  done = true; // was an endgroup tag
+                }
+                break;
+              } // default:
+            } // switch (tag)
+          } // while (!done)
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (org.apache.drill.exec.proto.ExecProtos.ServerPreparedStatementState) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
+          onChanged();
+        } // finally
         return this;
       }
       private int bitField0_;
@@ -1603,11 +1474,9 @@ public final class ExecProtos {
        */
       public Builder setSqlQuery(
           java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000001;
+        if (value == null) { throw new NullPointerException(); }
         sqlQuery_ = value;
+        bitField0_ |= 0x00000001;
         onChanged();
         return this;
       }
@@ -1616,8 +1485,8 @@ public final class ExecProtos {
        * @return This builder for chaining.
        */
       public Builder clearSqlQuery() {
-        bitField0_ = (bitField0_ & ~0x00000001);
         sqlQuery_ = getDefaultInstance().getSqlQuery();
+        bitField0_ = (bitField0_ & ~0x00000001);
         onChanged();
         return this;
       }
@@ -1628,11 +1497,9 @@ public final class ExecProtos {
        */
       public Builder setSqlQueryBytes(
           com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000001;
+        if (value == null) { throw new NullPointerException(); }
         sqlQuery_ = value;
+        bitField0_ |= 0x00000001;
         onChanged();
         return this;
       }
@@ -1669,7 +1536,18 @@ public final class ExecProtos {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new ServerPreparedStatementState(input, extensionRegistry);
+        Builder builder = newBuilder();
+        try {
+          builder.mergeFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(builder.buildPartial());
+        } catch (com.google.protobuf.UninitializedMessageException e) {
+          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(e)
+              .setUnfinishedMessage(builder.buildPartial());
+        }
+        return builder.buildPartial();
       }
     };
 
