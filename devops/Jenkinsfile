@@ -146,7 +146,7 @@ pipeline {
                     sh "cat ${env.mvn_settings} > settings.xml"
                   }
                   withCredentials([usernamePassword(credentialsId: 'artifactory_user_pass', passwordVariable: 'pass', usernameVariable: 'user')]) {
-                    centosImage = docker.image("dfdkr.mip.storage.hpecorp.net/centos8-java11-gcc8:drill_protobuf_22.2_zoo356")
+                    centosImage = docker.image("dfdkr.mip.storage.hpecorp.net/centos8-java11-gcc8:drill_test")
                     centosImage.inside (
                     "-e MAPR_MIRROR=${MAPR_MIRROR} \
                     -e MAPR_CENTRAL=${MAPR_CENTRAL} \
