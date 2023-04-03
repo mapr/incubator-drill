@@ -182,21 +182,6 @@
 
   <repositories>
     <repository>
-      <id>conjars</id>
-      <name>Conjars</name>
-      <url>https://conjars.org/repo</url>
-      <layout>default</layout>
-      <releases>
-        <enabled>true</enabled>
-        <updatePolicy>never</updatePolicy>
-        <checksumPolicy>fail</checksumPolicy>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
-
-    <repository>
       <id>mapr-releases</id>
       <url>https://repository.mapr.com/maven/</url>
       <releases>
@@ -223,11 +208,6 @@
     <repository>
       <id>jitpack.io</id>
       <url>https://jitpack.io</url>
-    </repository>
-    <repository>
-      <id>splunk-artifactory</id>
-      <name>Splunk Releases</name>
-      <url>https://splunk.jfrog.io/artifactory/ext-releases-local</url>
     </repository>
   </repositories>
 
