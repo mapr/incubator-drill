@@ -126,7 +126,7 @@
     <commons.configuration.version>1.10</commons.configuration.version>
     <commons.beanutils.version>1.9.4</commons.beanutils.version>
     <httpdlog-parser.version>5.8</httpdlog-parser.version>
-    <yauaa.version>7.9.0</yauaa.version>
+    <yauaa.version>7.19.2</yauaa.version>
     <log4j.version>2.19.0</log4j.version>
     <bcfips.version>1.0.2.1</bcfips.version>
     <bctlsfips.version>1.0.11.4</bctlsfips.version>
