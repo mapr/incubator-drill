@@ -29,6 +29,7 @@ import org.eclipse.jetty.security.DefaultIdentityService;
 import org.eclipse.jetty.security.IdentityService;
 import org.eclipse.jetty.security.LoginService;
 import org.eclipse.jetty.server.UserIdentity;
+import org.slf4j.MDC;
 
 import javax.security.auth.Subject;
 import javax.servlet.ServletRequest;
@@ -64,6 +65,7 @@ public class DrillRestLoginService implements LoginService {
 
   @Override
   public UserIdentity login(String username, Object credentials, ServletRequest request) {
+    MDC.put("drill.userName", username);
     if (!(credentials instanceof String)) {
       return null;
     }
@@ -127,6 +129,7 @@ public class DrillRestLoginService implements LoginService {
   @Override
   public void logout(UserIdentity user) {
     // no-op
+    MDC.clear();
     if (logger.isTraceEnabled()) {
       logger.trace("Web user {} logged out.", user.getUserPrincipal().getName());
     }

@@ -2,6 +2,25 @@
   {
     "search": "password",
     "replace": "hidden password",
+    "description": "Rule to hide password",
+    "excludeUser": "excludeUser"
+  },
+  {
+    "search": "password",
+    "replace": "hidden password",
+    "description": "Rule to hide password",
+    "includeUser": "testUser",
+    "excludeUser": "excludedUser"
+  },
+  {
+    "search": "password",
+    "replace": "hidden password",
+    "description": "Rule to hide password",
+    "includeUser": "testUser"
+  },
+  {
+    "search": "password",
+    "replace": "hidden password",
     "description": "Rule to hide password"
   },
   {
@@ -16,5 +35,11 @@
   },
   {
     "description": "Rule to hide password"
+  },
+  {
+    "includeUser": "testUser"
+  },
+  {
+    "excludeUser": "excludeUser"
   }
 ]

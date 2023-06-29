@@ -63,6 +63,7 @@ import org.apache.hadoop.security.HadoopKerberosName;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 
 import javax.net.ssl.SSLEngine;
 import javax.security.sasl.SaslException;
@@ -244,6 +245,7 @@ public class UserServer extends BasicServer<RpcType, BitToUserConnection> {
      * @param userName user name to set on the session
      */
     void finalizeSession(String userName) {
+      MDC.put("drill.userName", userName);
       // create a session
       session = UserSession.Builder.newBuilder()
           .withCredentials(UserCredentials.newBuilder()
@@ -306,6 +308,7 @@ public class UserServer extends BasicServer<RpcType, BitToUserConnection> {
     }
 
     private void cleanup() {
+      MDC.clear();
       if (session != null) {
         session.close();
       }

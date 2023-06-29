@@ -20,6 +20,7 @@ package org.apache.drill.logback;
 import ch.qos.logback.classic.PatternLayout;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import org.apache.drill.StringChanger;
+import org.slf4j.MDC;
 
 public class MaskingPatternLayout extends PatternLayout {
   private StringChanger stringChanger;
@@ -38,6 +39,7 @@ public class MaskingPatternLayout extends PatternLayout {
   }
 
   private String maskMessage(String message) {
-    return stringChanger != null ? stringChanger.changeString(message) : message;
+    String userName = MDC.get("drill.userName");
+    return stringChanger != null ? stringChanger.changeString(message, userName) : message;
   }
 }

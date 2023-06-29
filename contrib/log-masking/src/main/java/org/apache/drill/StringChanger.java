@@ -51,7 +51,7 @@ public class StringChanger {
       MaskingRule[] maskingRules = objectMapper.readValue(jsonFile, MaskingRule[].class);
 
       this.maskingRules = Stream.of(maskingRules)
-        .filter(maskingRule -> maskingRule.getSearch() != null)
+        .filter(maskingRule -> maskingRule.isActive())
         .collect(Collectors.toList());
 
     } catch (IOException exception) {
@@ -63,8 +63,12 @@ public class StringChanger {
   }
 
   public String changeString(String strToChange) {
+    return changeString(strToChange, null);
+  }
+
+  public String changeString(String strToChange, String stringOwner) {
     for (MaskingRule maskingRule : maskingRules) {
-      strToChange = maskingRule.apply(strToChange);
+      strToChange = maskingRule.apply(strToChange, stringOwner);
     }
     return strToChange;
   }

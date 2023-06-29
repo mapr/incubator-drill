@@ -66,6 +66,7 @@ import org.apache.drill.exec.work.foreman.rm.QueryQueue.QueryQueueException;
 import org.apache.drill.exec.work.foreman.rm.QueryResourceManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 
 import java.io.IOException;
 import java.util.Date;
@@ -239,6 +240,7 @@ public class Foreman implements Runnable {
     final Thread currentThread = Thread.currentThread();
     final String originalName = currentThread.getName();
     currentThread.setName(queryIdString + ":foreman");
+    MDC.put("drill.userName", queryContext.getQueryUserName());
     try {
       /*
        Check if the foreman is ONLINE. If not don't accept any new queries.
@@ -299,6 +301,7 @@ public class Foreman implements Runnable {
       queryStateProcessor.moveToState(QueryState.FAILED,
           new ForemanException("Unexpected exception during fragment initialization: " + ex.getMessage(), ex));
     } finally {
+      MDC.clear();
       // restore the thread's original name
       currentThread.setName(originalName);
     }

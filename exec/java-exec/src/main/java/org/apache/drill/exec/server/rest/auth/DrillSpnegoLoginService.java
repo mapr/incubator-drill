@@ -35,6 +35,7 @@ import org.ietf.jgss.GSSException;
 import org.ietf.jgss.GSSManager;
 import org.ietf.jgss.GSSName;
 import org.ietf.jgss.Oid;
+import org.slf4j.MDC;
 
 import javax.security.auth.Subject;
 import javax.servlet.ServletRequest;
@@ -119,6 +120,7 @@ public class DrillSpnegoLoginService extends SpnegoLoginService {
         if (gContext.isEstablished()) {
           final String clientName = gContext.getSrcName().toString();
           final String realm = clientName.substring(clientName.indexOf(64) + 1);
+          MDC.put("drill.userName", clientName);
 
           // Get the client user short name
           final String userShortName = new HadoopKerberosName(clientName).getShortName();
@@ -147,6 +149,12 @@ public class DrillSpnegoLoginService extends SpnegoLoginService {
       logger.warn("Caught IOException trying to get shortName of client user", ex);
     }
     return null;
+  }
+
+  @Override
+  public void logout(UserIdentity user) {
+    MDC.clear();
+    super.logout(user);
   }
 }
 

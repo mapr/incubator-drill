@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.junit.jupiter.api.function.Executable;
 import org.mockito.MockedConstruction;
+import org.mockito.Mockito;
 
 import java.io.File;
 
@@ -40,12 +41,14 @@ import static org.mockito.Mockito.when;
 
 
 public class StringChangerTest {
+  private static final ClassLoader classLoader = StringChangerTest.class.getClassLoader();
 
   @Test
-  public void doNothingIfAbsentConfig() {
+  public void shouldDoNothingIfAbsentConfig() {
     //given
+    final String missingConfigPath = "src/test/resources/missing-config.json";
     final Executable sut = () -> {
-      StringChanger stringChanger = new StringChanger("src/test/resources/missing-config.json");
+      StringChanger stringChanger = new StringChanger(missingConfigPath);
       String expected = "Expected string";
       String result = stringChanger.changeString(expected);
       assertEquals(expected, result);
@@ -56,9 +59,10 @@ public class StringChangerTest {
   }
 
   @Test
-  public void doNotFailOnEmptyFile() {
+  public void shouldNotFailOnEmptyFile() {
     //given
-    final Executable sut = () -> new StringChanger("src/test/resources/empty-config.json");
+    final String emptyConfigPath = classLoader.getResource("empty-config.json").getFile();
+    final Executable sut = () -> new StringChanger(emptyConfigPath);
 
     //test
     assertDoesNotThrow(sut);
@@ -67,7 +71,8 @@ public class StringChangerTest {
   @Test
   public void throwExceptionIfFileHasBadJsonFormat() {
     //given
-    final Executable sut = () -> new StringChanger("src/test/resources/broken-json-config.json");
+    final String brokenJsonConfigPath = classLoader.getResource("broken-json-config.json").getFile();
+    final Executable sut = () -> new StringChanger(brokenJsonConfigPath);
     final Class expectedException = RuntimeException.class;
     final Class expectedCause = JsonMappingException.class;
 
@@ -77,67 +82,92 @@ public class StringChangerTest {
   }
 
   @Test
-  public void applyAllRules() {
+  public void shouldApplyAllRules() {
     //given
-    MaskingRule[] ruleMocks = createRuleMocks(true);
+    final String noRulesConfigPath = classLoader.getResource("no-rules-config.json").getFile();
+    final MaskingRule[] ruleMocks = createRuleMocks(true);
 
     try (MockedConstruction<ObjectMapper> objectMapper = mockConstruction(ObjectMapper.class, (mock, context) -> {
       when(mock.readValue(any(File.class), eq(MaskingRule[].class)))
         .thenReturn(ruleMocks);
     })) {
-      StringChanger cut = new StringChanger("src/test/resources/no-rules-config.json");
+      StringChanger cut = new StringChanger(noRulesConfigPath);
 
       //test
       cut.changeString("Some string");
 
       for (MaskingRule rule : ruleMocks) {
-        verify(rule, times(1)).apply(anyString());
+        verify(rule, times(1)).apply(anyString(), eq(null));
       }
     }
   }
 
   @Test
-  public void doNotUseRulesWithNullSearchString() {
+  public void shouldNotUseRulesWithNullSearchString() {
     //given
-    MaskingRule[] ruleMocks = createRuleMocks(false);
+    final String noRulesConfigPath = classLoader.getResource("no-rules-config.json").getFile();
+    final MaskingRule[] ruleMocks = createRuleMocks(false);
 
     try (MockedConstruction<ObjectMapper> objectMapper = mockConstruction(ObjectMapper.class, (mock, context) -> {
       when(mock.readValue(any(File.class), eq(MaskingRule[].class)))
         .thenReturn(ruleMocks);
     })) {
-      StringChanger cut = new StringChanger("src/test/resources/no-rules-config.json");
+      StringChanger cut = new StringChanger(noRulesConfigPath);
 
       //test
       cut.changeString("Some string");
 
       for (MaskingRule rule : ruleMocks) {
-        verify(rule, never()).apply(anyString());
+        verify(rule, never()).apply(anyString(), anyString());
       }
     }
-  }
-
-  private MaskingRule[] createRuleMocks(boolean hasSearchString) {
-    MaskingRule[] ruleMocks = new MaskingRule[3];
-    for (int count = 0; count < ruleMocks.length; count++) {
-      MaskingRule ruleMock = mock(MaskingRule.class);
-      when(ruleMock.apply(anyString())).thenReturn("stub");
-      if (hasSearchString) {
-        when(ruleMock.getSearch()).thenReturn("stub");
-      }
-
-      ruleMocks[count] = ruleMock;
-    }
-    return ruleMocks;
   }
 
   @Test
-  public void doNothingIfNoRules() {
+  public void shouldDoNothingIfNoRules() {
     //given
-    final StringChanger cut = new StringChanger("src/test/resources/no-rules-config.json");
+    final String noRulesConfigPath = classLoader.getResource("no-rules-config.json").getFile();
+    final StringChanger cut = new StringChanger(noRulesConfigPath);
     final String stringToChange = "Some amazing message";
 
     //test
     String result = cut.changeString(stringToChange);
     assertEquals(stringToChange, result);
+  }
+
+  @Test
+  public void shouldApplyUserNameToRule() {
+    //given
+    final MaskingRule[] ruleMocks = createRuleMocks(true);
+    final String noRulesConfigPath = classLoader.getResource("no-rules-config.json").getFile();
+    final String userName = "expectedUserName";
+
+    try (MockedConstruction<ObjectMapper> objectMapper = mockConstruction(ObjectMapper.class, (mock, context) -> {
+      when(mock.readValue(any(File.class), eq(MaskingRule[].class)))
+        .thenReturn(ruleMocks);
+    })) {
+      StringChanger cut = new StringChanger(noRulesConfigPath);
+
+      //test
+      cut.changeString("Some string", userName);
+
+      for (MaskingRule rule : ruleMocks) {
+        verify(rule, times(1)).apply(anyString(), eq(userName));
+      }
+    }
+  }
+
+  private MaskingRule[] createRuleMocks(boolean activeRules) {
+    MaskingRule[] ruleMocks = new MaskingRule[3];
+    for (int count = 0; count < ruleMocks.length; count++) {
+      MaskingRule ruleMock = mock(MaskingRule.class);
+      when(ruleMock.apply(anyString(), Mockito.nullable(String.class))).thenReturn("stub");
+      if (activeRules) {
+        when(ruleMock.isActive()).thenReturn(true);
+      }
+
+      ruleMocks[count] = ruleMock;
+    }
+    return ruleMocks;
   }
 }

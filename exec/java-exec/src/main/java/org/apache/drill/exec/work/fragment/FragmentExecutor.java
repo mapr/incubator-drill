@@ -51,6 +51,7 @@ import org.apache.drill.exec.work.foreman.DrillbitStatusListener;
 import org.apache.hadoop.security.UserGroupInformation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 
 import static org.apache.drill.exec.server.FailureUtils.EXIT_CODE_HEAP_OOM;
 
@@ -242,6 +243,7 @@ public class FragmentExecutor implements Runnable {
     // send the final state of the fragment. only the main execution thread can send the final state and it can
     // only be sent once.
     sendFinalState();
+    MDC.clear();
   }
 
   /**
@@ -282,6 +284,7 @@ public class FragmentExecutor implements Runnable {
 
     try {
       myThread.setName(newThreadName);
+      MDC.put("drill.userName", fragmentContext.getQueryUserName());
 
       // if we didn't get the root operator when the executor was created, create it now.
       final FragmentRoot rootOperator = this.rootOperator != null ? this.rootOperator :
