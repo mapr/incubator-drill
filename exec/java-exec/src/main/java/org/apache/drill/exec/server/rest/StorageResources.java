@@ -63,6 +63,7 @@ import org.apache.drill.exec.oauth.PersistentTokenTable;
 import org.apache.drill.exec.oauth.TokenRegistry;
 import org.apache.drill.exec.server.DrillbitContext;
 import org.apache.drill.exec.server.rest.DrillRestServer.UserAuthEnabled;
+import org.apache.drill.exec.store.AbstractStoragePlugin;
 import org.apache.drill.exec.store.StoragePluginRegistry;
 import org.apache.drill.exec.store.StoragePluginRegistry.PluginEncodingException;
 import org.apache.drill.exec.store.StoragePluginRegistry.PluginException;
@@ -71,7 +72,6 @@ import org.apache.drill.exec.store.StoragePluginRegistry.PluginNotFoundException
 import org.apache.drill.exec.store.http.oauth.OAuthUtils;
 import org.apache.drill.exec.store.security.oauth.OAuthTokenCredentials;
 import org.eclipse.jetty.util.resource.Resource;
-import org.apache.drill.exec.work.WorkManager;
 import org.glassfish.jersey.server.mvc.Viewable;
 
 import org.slf4j.Logger;
@@ -91,9 +91,6 @@ public class StorageResources {
 
   @Inject
   StoragePluginRegistry storage;
-
-  @Inject
-  WorkManager workManager;
 
   @Inject
   SecurityContext sc;
@@ -322,7 +319,8 @@ public class StorageResources {
         Map<String, String> updatedTokens = OAuthUtils.getOAuthTokens(client, accessTokenRequest);
 
         // Add to token registry
-        TokenRegistry tokenRegistry = workManager.getContext()
+        TokenRegistry tokenRegistry = ((AbstractStoragePlugin) storage.getPlugin(name))
+          .getContext()
           .getoAuthTokenProvider()
           .getOauthTokenRegistry();
 
@@ -402,7 +400,8 @@ public class StorageResources {
   @Operation(externalDocs = @ExternalDocumentation(description = "Apache Drill REST API documentation:", url = "https://drill.apache.org/docs/rest-api-introduction/"))
   public Response deletePlugin(@PathParam("name") String name) {
     try {
-      TokenRegistry tokenRegistry = workManager.getContext()
+      TokenRegistry tokenRegistry = ((AbstractStoragePlugin) storage.getPlugin(name))
+        .getContext()
         .getoAuthTokenProvider()
         .getOauthTokenRegistry();
 
