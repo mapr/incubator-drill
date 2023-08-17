@@ -23,6 +23,7 @@ import org.apache.calcite.rel.type.RelDataTypeFactory;
 import org.apache.calcite.rel.type.RelDataTypeField;
 import org.apache.drill.common.expression.SchemaPath;
 import org.apache.drill.exec.ExecConstants;
+import org.apache.drill.exec.physical.impl.scan.v3.schema.SchemaUtils;
 import org.apache.drill.exec.planner.index.MapRDBStatistics;
 import org.apache.drill.exec.planner.logical.DrillScanRel;
 import org.apache.drill.exec.planner.logical.RelOptHelper;
@@ -136,7 +137,7 @@ public class ConvertHiveMapRDBJsonScanToDrillMapRDBJsonScan extends StoragePlugi
     TupleMetadata schema = new TupleSchema();
     hiveReadEntry.getTable().getColumnListsCache().getTableSchemaColumns()
         .forEach(column ->
-            schema.addColumn(HiveUtilities.getColumnMetadata(
+            schema.addColumn(SchemaUtils.getColumnMetadata(
                 replaceOverriddenColumnId(parameters, column.getName()),
                 dataTypeConverter.convertToNullableRelDataType(column))));
 
