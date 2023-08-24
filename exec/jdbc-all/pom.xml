@@ -34,7 +34,7 @@
        "package.namespace.prefix" equals to "oadd.". It can be overridden if necessary within any profile -->
   <properties>
     <package.namespace.prefix>oadd.</package.namespace.prefix>
-    <jdbc-all-jar.maxsize>48000000</jdbc-all-jar.maxsize>
+    <jdbc-all-jar.maxsize>46500000</jdbc-all-jar.maxsize>
   </properties>
 
   <dependencies>
@@ -177,7 +177,7 @@
         </exclusion>
         <exclusion>
           <artifactId>jetty-util</artifactId>
-          <groupId>org.mortbay.jetty</groupId>
+          <groupId>org.eclipse.jetty</groupId>
         </exclusion>
         <exclusion>
           <artifactId>freemarker</artifactId>
@@ -421,7 +421,7 @@
               <exclude>org.tukaani:*</exclude>
               <exclude>org.apache.velocity:*</exclude>
               <exclude>net.hydromatic:linq4j</exclude>
-              <exclude>org.mortbay.jetty:*</exclude>
+              <exclude>org.eclipse.jetty:*</exclude>
               <exclude>org.slf4j:jul-to-slf4j</exclude>
               <exclude>org.hamcrest:hamcrest-core</exclude>
               <exclude>org.mockito:mockito-core</exclude>
@@ -868,7 +868,7 @@
                   <exclude>org.apache.velocity:*</exclude>
                   <exclude>net.hydromatic:linq4j</exclude>
                   <exclude>org.codehaus.janino:*</exclude>
-                  <exclude>org.mortbay.jetty:*</exclude>
+                  <exclude>org.eclipse.jetty:*</exclude>
                   <exclude>org.slf4j:jul-to-slf4j</exclude>
                   <exclude>org.slf4j:log4j-over-slf4j</exclude>
                   <exclude>org.hamcrest:hamcrest-core</exclude>
