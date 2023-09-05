@@ -33,47 +33,36 @@ Install Prerequisites
 
 
 2) Install Protobuf compiler and Protobuf c++ runtime
+  2.1) Download protobuf 21.12 from:
+      https://github.com/protocolbuffers/protobuf/releases/download/v21.12/protobuf-all-21.12.zip
 
-  2.1) Download Abseil >= 20230125.1 from:
-      https://github.com/abseil/abseil-cpp/archive/refs/tags/20230125.1.zip
-
-  2.2) Download Abseil (Required starting from v22.0 https://protobuf.dev/support/migration/#abseil):
-      $> unzip 20230125.1.zip
-      # export path to abseil directory to use it during protobuf build
-      $> export ABSEIL_ROOT_PATH=`realpath abseil-cpp-20230125.1`
-
-  2.2) Download protobuf 22.2 from:
-      https://github.com/protocolbuffers/protobuf/releases/download/v22.2/protobuf-22.2.zip
-
-  2.3) Install Protobuf compiler and Protobuf c++ runtime.
-       Starting from v22.0 Protobuf requires abseil (https://github.com/protocolbuffers/protobuf/issues/12016#issuecomment-1440995538)
-      $> unzip protobuf-22.2.zip
-      $> cd protobuf-22.2
-      $> cmake . -Dprotobuf_BUILD_TESTS=OFF -DABSL_ROOT_DIR=$ABSEIL_ROOT_PATH -DABSL_PROPAGATE_CXX_STD=ON
+  2.2) Install Protobuf compiler and Protobuf c++ runtime.
+      $> unzip protobuf-all-21.12.zip
+      $> cd protobuf-21.12
+      $> cmake . -Dprotobuf_BUILD_TESTS=OFF
       $> sudo make install
 
-4)
-
-  4.1) Install Zookeeper prerequisites
+3)
+  3.1) Install Zookeeper prerequisites
       - autoconf 2.59 or greater (should be installed with dev tools)
       - cppunit 1.10.x or higher
 
-  4.2) install cppuint
+  3.2) install cppuint
       $> sudo yum install cppunit
       $> sudo yum install cppunit-devel
 
-  4.3) Download Zookeeper from :
+  3.3) Download Zookeeper from :
       - https://archive.apache.org/dist/zookeeper/zookeeper-3.4.6/
       - untar and then follow instructions in ZOOKEEPER_DIR/src/c/README to build and install the client libs
 
-  4.4) run autoreconf
+  3.4) run autoreconf
       $> autoreconf -if
 
-  4.5) Build Zookeeper libs
+  3.5) Build Zookeeper libs
       $> ./configure --enable-debug --with-syncapi --enable-static --enable-shared
       $> make && sudo make install
 
-5) Install boost. The minimum version required is 1.54, which will probably have to be built from source
+4) Install boost. The minimum version required is 1.54, which will probably have to be built from source
 
     # Build boost for Drill using instruction from readme.boost.
     # Uncomment set(Boost_NAMESPACE drill_boost) line in client/CMakeLists.txt
@@ -82,7 +71,7 @@ OR
     See this link for how to build: http://www.boost.org/doc/libs/1_54_0/more/getting_started/unix-variants.html#prepare-to-use-a-boost-library-binary 
     After building boost from the source, you will need to specify where to find it by adding -DBOOST_ROOT=<boost install directory> to your cmake command
 
-6) Install or  build Cyrus SASL
+5) Install or  build Cyrus SASL
    To Install 
        yum install cyrus-sasl-devel cyrus-sasl-gssapi
    libs are installed in /usr/lib64/sasl2
@@ -91,7 +80,7 @@ OR
    To build your own 
    See readme.sasl for instructions
 
-7) Install OpenSSL
+6) Install OpenSSL
    yum install openssl-devel openssl
 
 

@@ -3111,6 +3111,11 @@ public final class UserProtos {
       return new Property();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.UserProtos.internal_static_exec_user_Property_descriptor;
@@ -3487,6 +3492,38 @@ public final class UserProtos {
       }
 
       @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.UserProtos.Property) {
           return mergeFrom((org.apache.drill.exec.proto.UserProtos.Property)other);
@@ -3841,6 +3878,11 @@ public final class UserProtos {
       return new UserProperties();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.UserProtos.internal_static_exec_user_UserProperties_descriptor;
@@ -4147,6 +4189,38 @@ public final class UserProtos {
         int from_bitField0_ = bitField0_;
       }
 
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.UserProtos.UserProperties) {
@@ -4771,6 +4845,11 @@ public final class UserProtos {
       return new RpcEndpointInfos();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.UserProtos.internal_static_exec_user_RpcEndpointInfos_descriptor;
@@ -5517,6 +5596,38 @@ public final class UserProtos {
       }
 
       @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.UserProtos.RpcEndpointInfos) {
           return mergeFrom((org.apache.drill.exec.proto.UserProtos.RpcEndpointInfos)other);
@@ -5886,7 +5997,7 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder setMajorVersion(int value) {
-
+        
         majorVersion_ = value;
         bitField0_ |= 0x00000004;
         onChanged();
@@ -5942,7 +6053,7 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder setMinorVersion(int value) {
-
+        
         minorVersion_ = value;
         bitField0_ |= 0x00000008;
         onChanged();
@@ -5998,7 +6109,7 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder setPatchVersion(int value) {
-
+        
         patchVersion_ = value;
         bitField0_ |= 0x00000010;
         onChanged();
@@ -6158,7 +6269,7 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder setBuildNumber(int value) {
-
+        
         buildNumber_ = value;
         bitField0_ |= 0x00000040;
         onChanged();
@@ -6515,6 +6626,11 @@ public final class UserProtos {
       return new UserToBitHandshake();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.UserProtos.internal_static_exec_user_UserToBitHandshake_descriptor;
@@ -7246,6 +7362,38 @@ public final class UserProtos {
       }
 
       @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.UserProtos.UserToBitHandshake) {
           return mergeFrom((org.apache.drill.exec.proto.UserProtos.UserToBitHandshake)other);
@@ -7478,7 +7626,7 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder setSupportListening(boolean value) {
-
+        
         supportListening_ = value;
         bitField0_ |= 0x00000002;
         onChanged();
@@ -7518,7 +7666,7 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder setRpcVersion(int value) {
-
+        
         rpcVersion_ = value;
         bitField0_ |= 0x00000004;
         onChanged();
@@ -7796,7 +7944,7 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder setSupportComplexTypes(boolean value) {
-
+        
         supportComplexTypes_ = value;
         bitField0_ |= 0x00000020;
         onChanged();
@@ -7836,7 +7984,7 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder setSupportTimeout(boolean value) {
-
+        
         supportTimeout_ = value;
         bitField0_ |= 0x00000040;
         onChanged();
@@ -8037,7 +8185,7 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder setEnableMultiplex(boolean value) {
-
+        
         enableMultiplex_ = value;
         bitField0_ |= 0x00000200;
         onChanged();
@@ -8089,7 +8237,7 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder setCapabilitiesVersion(int value) {
-
+        
         capabilitiesVersion_ = value;
         bitField0_ |= 0x00000400;
         onChanged();
@@ -8225,6 +8373,11 @@ public final class UserProtos {
       return new RequestResults();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.UserProtos.internal_static_exec_user_RequestResults_descriptor;
@@ -8554,6 +8707,38 @@ public final class UserProtos {
       }
 
       @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.UserProtos.RequestResults) {
           return mergeFrom((org.apache.drill.exec.proto.UserProtos.RequestResults)other);
@@ -8768,7 +8953,7 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder setMaximumResponses(int value) {
-
+        
         maximumResponses_ = value;
         bitField0_ |= 0x00000002;
         onChanged();
@@ -8915,6 +9100,11 @@ public final class UserProtos {
       return new GetQueryPlanFragments();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.UserProtos.internal_static_exec_user_GetQueryPlanFragments_descriptor;
@@ -9297,6 +9487,38 @@ public final class UserProtos {
       }
 
       @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.UserProtos.GetQueryPlanFragments) {
           return mergeFrom((org.apache.drill.exec.proto.UserProtos.GetQueryPlanFragments)other);
@@ -9532,7 +9754,7 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder setSplitPlan(boolean value) {
-
+        
         splitPlan_ = value;
         bitField0_ |= 0x00000004;
         onChanged();
@@ -9705,6 +9927,11 @@ public final class UserProtos {
       return new QueryPlanFragments();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.UserProtos.internal_static_exec_user_QueryPlanFragments_descriptor;
@@ -10164,6 +10391,38 @@ public final class UserProtos {
         result.bitField0_ |= to_bitField0_;
       }
 
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.UserProtos.QueryPlanFragments) {
@@ -11034,8 +11293,7 @@ public final class UserProtos {
       status_ = 1;
       errorId_ = "";
       errorMessage_ = "";
-      authenticationMechanisms_ =
-          com.google.protobuf.LazyStringArrayList.emptyList();
+      authenticationMechanisms_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       supportedMethods_ = java.util.Collections.emptyList();
     }
 
@@ -11046,6 +11304,11 @@ public final class UserProtos {
       return new BitToUserHandshake();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.UserProtos.internal_static_exec_user_BitToUserHandshake_descriptor;
@@ -11223,8 +11486,7 @@ public final class UserProtos {
 
     public static final int AUTHENTICATIONMECHANISMS_FIELD_NUMBER = 7;
     @SuppressWarnings("serial")
-    private com.google.protobuf.LazyStringArrayList authenticationMechanisms_ =
-        com.google.protobuf.LazyStringArrayList.emptyList();
+    private com.google.protobuf.LazyStringList authenticationMechanisms_;
     /**
      * <code>repeated string authenticationMechanisms = 7;</code>
      * @return A list containing the authenticationMechanisms.
@@ -11672,8 +11934,8 @@ public final class UserProtos {
           serverInfosBuilder_.dispose();
           serverInfosBuilder_ = null;
         }
-        authenticationMechanisms_ =
-            com.google.protobuf.LazyStringArrayList.emptyList();
+        authenticationMechanisms_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000020);
         supportedMethods_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000040);
         encrypted_ = false;
@@ -11711,6 +11973,11 @@ public final class UserProtos {
       }
 
       private void buildPartialRepeatedFields(org.apache.drill.exec.proto.UserProtos.BitToUserHandshake result) {
+        if (((bitField0_ & 0x00000020) != 0)) {
+          authenticationMechanisms_ = authenticationMechanisms_.getUnmodifiableView();
+          bitField0_ = (bitField0_ & ~0x00000020);
+        }
+        result.authenticationMechanisms_ = authenticationMechanisms_;
         if (((bitField0_ & 0x00000040) != 0)) {
           supportedMethods_ = java.util.Collections.unmodifiableList(supportedMethods_);
           bitField0_ = (bitField0_ & ~0x00000040);
@@ -11743,10 +12010,6 @@ public final class UserProtos {
               : serverInfosBuilder_.build();
           to_bitField0_ |= 0x00000010;
         }
-        if (((from_bitField0_ & 0x00000020) != 0)) {
-          authenticationMechanisms_.makeImmutable();
-          result.authenticationMechanisms_ = authenticationMechanisms_;
-        }
         if (((from_bitField0_ & 0x00000080) != 0)) {
           result.encrypted_ = encrypted_;
           to_bitField0_ |= 0x00000020;
@@ -11758,6 +12021,38 @@ public final class UserProtos {
         result.bitField0_ |= to_bitField0_;
       }
 
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.UserProtos.BitToUserHandshake) {
@@ -11792,7 +12087,7 @@ public final class UserProtos {
         if (!other.authenticationMechanisms_.isEmpty()) {
           if (authenticationMechanisms_.isEmpty()) {
             authenticationMechanisms_ = other.authenticationMechanisms_;
-            bitField0_ |= 0x00000020;
+            bitField0_ = (bitField0_ & ~0x00000020);
           } else {
             ensureAuthenticationMechanismsIsMutable();
             authenticationMechanisms_.addAll(other.authenticationMechanisms_);
@@ -11960,7 +12255,7 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder setRpcVersion(int value) {
-
+        
         rpcVersion_ = value;
         bitField0_ |= 0x00000001;
         onChanged();
@@ -12298,13 +12593,12 @@ public final class UserProtos {
         return serverInfosBuilder_;
       }
 
-      private com.google.protobuf.LazyStringArrayList authenticationMechanisms_ =
-          com.google.protobuf.LazyStringArrayList.emptyList();
+      private com.google.protobuf.LazyStringList authenticationMechanisms_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       private void ensureAuthenticationMechanismsIsMutable() {
-        if (!authenticationMechanisms_.isModifiable()) {
+        if (!((bitField0_ & 0x00000020) != 0)) {
           authenticationMechanisms_ = new com.google.protobuf.LazyStringArrayList(authenticationMechanisms_);
-        }
-        bitField0_ |= 0x00000020;
+          bitField0_ |= 0x00000020;
+         }
       }
       /**
        * <code>repeated string authenticationMechanisms = 7;</code>
@@ -12312,8 +12606,7 @@ public final class UserProtos {
        */
       public com.google.protobuf.ProtocolStringList
           getAuthenticationMechanismsList() {
-        authenticationMechanisms_.makeImmutable();
-        return authenticationMechanisms_;
+        return authenticationMechanisms_.getUnmodifiableView();
       }
       /**
        * <code>repeated string authenticationMechanisms = 7;</code>
@@ -12350,7 +12643,6 @@ public final class UserProtos {
         if (value == null) { throw new NullPointerException(); }
         ensureAuthenticationMechanismsIsMutable();
         authenticationMechanisms_.set(index, value);
-        bitField0_ |= 0x00000020;
         onChanged();
         return this;
       }
@@ -12364,7 +12656,6 @@ public final class UserProtos {
         if (value == null) { throw new NullPointerException(); }
         ensureAuthenticationMechanismsIsMutable();
         authenticationMechanisms_.add(value);
-        bitField0_ |= 0x00000020;
         onChanged();
         return this;
       }
@@ -12378,7 +12669,6 @@ public final class UserProtos {
         ensureAuthenticationMechanismsIsMutable();
         com.google.protobuf.AbstractMessageLite.Builder.addAll(
             values, authenticationMechanisms_);
-        bitField0_ |= 0x00000020;
         onChanged();
         return this;
       }
@@ -12387,9 +12677,8 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder clearAuthenticationMechanisms() {
-        authenticationMechanisms_ =
-          com.google.protobuf.LazyStringArrayList.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000020);;
+        authenticationMechanisms_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000020);
         onChanged();
         return this;
       }
@@ -12403,7 +12692,6 @@ public final class UserProtos {
         if (value == null) { throw new NullPointerException(); }
         ensureAuthenticationMechanismsIsMutable();
         authenticationMechanisms_.add(value);
-        bitField0_ |= 0x00000020;
         onChanged();
         return this;
       }
@@ -12517,7 +12805,7 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder setEncrypted(boolean value) {
-
+        
         encrypted_ = value;
         bitField0_ |= 0x00000080;
         onChanged();
@@ -12557,7 +12845,7 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder setMaxWrappedSize(int value) {
-
+        
         maxWrappedSize_ = value;
         bitField0_ |= 0x00000100;
         onChanged();
@@ -12728,6 +13016,11 @@ public final class UserProtos {
       return new LikeFilter();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.UserProtos.internal_static_exec_user_LikeFilter_descriptor;
@@ -13125,6 +13418,38 @@ public final class UserProtos {
       }
 
       @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.UserProtos.LikeFilter) {
           return mergeFrom((org.apache.drill.exec.proto.UserProtos.LikeFilter)other);
@@ -13516,6 +13841,11 @@ public final class UserProtos {
       return new GetCatalogsReq();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.UserProtos.internal_static_exec_user_GetCatalogsReq_descriptor;
@@ -13809,6 +14139,38 @@ public final class UserProtos {
         result.bitField0_ |= to_bitField0_;
       }
 
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.UserProtos.GetCatalogsReq) {
@@ -14141,6 +14503,11 @@ public final class UserProtos {
       return new CatalogMetadata();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.UserProtos.internal_static_exec_user_CatalogMetadata_descriptor;
@@ -14582,6 +14949,38 @@ public final class UserProtos {
         result.bitField0_ |= to_bitField0_;
       }
 
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.UserProtos.CatalogMetadata) {
@@ -15053,6 +15452,11 @@ public final class UserProtos {
       return new GetCatalogsResp();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.UserProtos.internal_static_exec_user_GetCatalogsResp_descriptor;
@@ -15459,6 +15863,38 @@ public final class UserProtos {
         result.bitField0_ |= to_bitField0_;
       }
 
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.UserProtos.GetCatalogsResp) {
@@ -16103,6 +16539,11 @@ public final class UserProtos {
       return new GetSchemasReq();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.UserProtos.internal_static_exec_user_GetSchemasReq_descriptor;
@@ -16450,6 +16891,38 @@ public final class UserProtos {
         result.bitField0_ |= to_bitField0_;
       }
 
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.UserProtos.GetSchemasReq) {
@@ -16959,6 +17432,11 @@ public final class UserProtos {
       return new SchemaMetadata();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.UserProtos.internal_static_exec_user_SchemaMetadata_descriptor;
@@ -17550,6 +18028,38 @@ public final class UserProtos {
         result.bitField0_ |= to_bitField0_;
       }
 
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.UserProtos.SchemaMetadata) {
@@ -18225,6 +18735,11 @@ public final class UserProtos {
       return new GetSchemasResp();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.UserProtos.internal_static_exec_user_GetSchemasResp_descriptor;
@@ -18631,6 +19146,38 @@ public final class UserProtos {
         result.bitField0_ |= to_bitField0_;
       }
 
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.UserProtos.GetSchemasResp) {
@@ -19306,8 +19853,7 @@ public final class UserProtos {
       super(builder);
     }
     private GetTablesReq() {
-      tableTypeFilter_ =
-          com.google.protobuf.LazyStringArrayList.emptyList();
+      tableTypeFilter_ = com.google.protobuf.LazyStringArrayList.EMPTY;
     }
 
     @java.lang.Override
@@ -19317,6 +19863,11 @@ public final class UserProtos {
       return new GetTablesReq();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.UserProtos.internal_static_exec_user_GetTablesReq_descriptor;
@@ -19411,8 +19962,7 @@ public final class UserProtos {
 
     public static final int TABLE_TYPE_FILTER_FIELD_NUMBER = 4;
     @SuppressWarnings("serial")
-    private com.google.protobuf.LazyStringArrayList tableTypeFilter_ =
-        com.google.protobuf.LazyStringArrayList.emptyList();
+    private com.google.protobuf.LazyStringList tableTypeFilter_;
     /**
      * <code>repeated string table_type_filter = 4;</code>
      * @return A list containing the tableTypeFilter.
@@ -19717,8 +20267,8 @@ public final class UserProtos {
           tableNameFilterBuilder_.dispose();
           tableNameFilterBuilder_ = null;
         }
-        tableTypeFilter_ =
-            com.google.protobuf.LazyStringArrayList.emptyList();
+        tableTypeFilter_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000008);
         return this;
       }
 
@@ -19745,9 +20295,18 @@ public final class UserProtos {
       @java.lang.Override
       public org.apache.drill.exec.proto.UserProtos.GetTablesReq buildPartial() {
         org.apache.drill.exec.proto.UserProtos.GetTablesReq result = new org.apache.drill.exec.proto.UserProtos.GetTablesReq(this);
+        buildPartialRepeatedFields(result);
         if (bitField0_ != 0) { buildPartial0(result); }
         onBuilt();
         return result;
+      }
+
+      private void buildPartialRepeatedFields(org.apache.drill.exec.proto.UserProtos.GetTablesReq result) {
+        if (((bitField0_ & 0x00000008) != 0)) {
+          tableTypeFilter_ = tableTypeFilter_.getUnmodifiableView();
+          bitField0_ = (bitField0_ & ~0x00000008);
+        }
+        result.tableTypeFilter_ = tableTypeFilter_;
       }
 
       private void buildPartial0(org.apache.drill.exec.proto.UserProtos.GetTablesReq result) {
@@ -19771,13 +20330,41 @@ public final class UserProtos {
               : tableNameFilterBuilder_.build();
           to_bitField0_ |= 0x00000004;
         }
-        if (((from_bitField0_ & 0x00000008) != 0)) {
-          tableTypeFilter_.makeImmutable();
-          result.tableTypeFilter_ = tableTypeFilter_;
-        }
         result.bitField0_ |= to_bitField0_;
       }
 
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.UserProtos.GetTablesReq) {
@@ -19802,7 +20389,7 @@ public final class UserProtos {
         if (!other.tableTypeFilter_.isEmpty()) {
           if (tableTypeFilter_.isEmpty()) {
             tableTypeFilter_ = other.tableTypeFilter_;
-            bitField0_ |= 0x00000008;
+            bitField0_ = (bitField0_ & ~0x00000008);
           } else {
             ensureTableTypeFilterIsMutable();
             tableTypeFilter_.addAll(other.tableTypeFilter_);
@@ -20236,13 +20823,12 @@ public final class UserProtos {
         return tableNameFilterBuilder_;
       }
 
-      private com.google.protobuf.LazyStringArrayList tableTypeFilter_ =
-          com.google.protobuf.LazyStringArrayList.emptyList();
+      private com.google.protobuf.LazyStringList tableTypeFilter_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       private void ensureTableTypeFilterIsMutable() {
-        if (!tableTypeFilter_.isModifiable()) {
+        if (!((bitField0_ & 0x00000008) != 0)) {
           tableTypeFilter_ = new com.google.protobuf.LazyStringArrayList(tableTypeFilter_);
-        }
-        bitField0_ |= 0x00000008;
+          bitField0_ |= 0x00000008;
+         }
       }
       /**
        * <code>repeated string table_type_filter = 4;</code>
@@ -20250,8 +20836,7 @@ public final class UserProtos {
        */
       public com.google.protobuf.ProtocolStringList
           getTableTypeFilterList() {
-        tableTypeFilter_.makeImmutable();
-        return tableTypeFilter_;
+        return tableTypeFilter_.getUnmodifiableView();
       }
       /**
        * <code>repeated string table_type_filter = 4;</code>
@@ -20288,7 +20873,6 @@ public final class UserProtos {
         if (value == null) { throw new NullPointerException(); }
         ensureTableTypeFilterIsMutable();
         tableTypeFilter_.set(index, value);
-        bitField0_ |= 0x00000008;
         onChanged();
         return this;
       }
@@ -20302,7 +20886,6 @@ public final class UserProtos {
         if (value == null) { throw new NullPointerException(); }
         ensureTableTypeFilterIsMutable();
         tableTypeFilter_.add(value);
-        bitField0_ |= 0x00000008;
         onChanged();
         return this;
       }
@@ -20316,7 +20899,6 @@ public final class UserProtos {
         ensureTableTypeFilterIsMutable();
         com.google.protobuf.AbstractMessageLite.Builder.addAll(
             values, tableTypeFilter_);
-        bitField0_ |= 0x00000008;
         onChanged();
         return this;
       }
@@ -20325,9 +20907,8 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder clearTableTypeFilter() {
-        tableTypeFilter_ =
-          com.google.protobuf.LazyStringArrayList.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000008);;
+        tableTypeFilter_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000008);
         onChanged();
         return this;
       }
@@ -20341,7 +20922,6 @@ public final class UserProtos {
         if (value == null) { throw new NullPointerException(); }
         ensureTableTypeFilterIsMutable();
         tableTypeFilter_.add(value);
-        bitField0_ |= 0x00000008;
         onChanged();
         return this;
       }
@@ -20524,6 +21104,11 @@ public final class UserProtos {
       return new TableMetadata();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.UserProtos.internal_static_exec_user_TableMetadata_descriptor;
@@ -21046,6 +21631,38 @@ public final class UserProtos {
         result.bitField0_ |= to_bitField0_;
       }
 
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.UserProtos.TableMetadata) {
@@ -21631,6 +22248,11 @@ public final class UserProtos {
       return new GetTablesResp();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.UserProtos.internal_static_exec_user_GetTablesResp_descriptor;
@@ -22037,6 +22659,38 @@ public final class UserProtos {
         result.bitField0_ |= to_bitField0_;
       }
 
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.UserProtos.GetTablesResp) {
@@ -22711,6 +23365,11 @@ public final class UserProtos {
       return new GetColumnsReq();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.UserProtos.internal_static_exec_user_GetColumnsReq_descriptor;
@@ -23166,6 +23825,38 @@ public final class UserProtos {
         result.bitField0_ |= to_bitField0_;
       }
 
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.UserProtos.GetColumnsReq) {
@@ -24067,6 +24758,11 @@ public final class UserProtos {
       return new ColumnMetadata();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.UserProtos.internal_static_exec_user_ColumnMetadata_descriptor;
@@ -25186,6 +25882,38 @@ public final class UserProtos {
       }
 
       @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.UserProtos.ColumnMetadata) {
           return mergeFrom((org.apache.drill.exec.proto.UserProtos.ColumnMetadata)other);
@@ -25733,7 +26461,7 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder setOrdinalPosition(int value) {
-
+        
         ordinalPosition_ = value;
         bitField0_ |= 0x00000010;
         onChanged();
@@ -25853,7 +26581,7 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder setIsNullable(boolean value) {
-
+        
         isNullable_ = value;
         bitField0_ |= 0x00000040;
         onChanged();
@@ -25973,7 +26701,7 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder setCharMaxLength(int value) {
-
+        
         charMaxLength_ = value;
         bitField0_ |= 0x00000100;
         onChanged();
@@ -26013,7 +26741,7 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder setCharOctetLength(int value) {
-
+        
         charOctetLength_ = value;
         bitField0_ |= 0x00000200;
         onChanged();
@@ -26053,7 +26781,7 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder setNumericPrecision(int value) {
-
+        
         numericPrecision_ = value;
         bitField0_ |= 0x00000400;
         onChanged();
@@ -26093,7 +26821,7 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder setNumericPrecisionRadix(int value) {
-
+        
         numericPrecisionRadix_ = value;
         bitField0_ |= 0x00000800;
         onChanged();
@@ -26133,7 +26861,7 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder setNumericScale(int value) {
-
+        
         numericScale_ = value;
         bitField0_ |= 0x00001000;
         onChanged();
@@ -26173,7 +26901,7 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder setDateTimePrecision(int value) {
-
+        
         dateTimePrecision_ = value;
         bitField0_ |= 0x00002000;
         onChanged();
@@ -26293,7 +27021,7 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder setIntervalPrecision(int value) {
-
+        
         intervalPrecision_ = value;
         bitField0_ |= 0x00008000;
         onChanged();
@@ -26333,7 +27061,7 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder setColumnSize(int value) {
-
+        
         columnSize_ = value;
         bitField0_ |= 0x00010000;
         onChanged();
@@ -26496,6 +27224,11 @@ public final class UserProtos {
       return new GetColumnsResp();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.UserProtos.internal_static_exec_user_GetColumnsResp_descriptor;
@@ -26902,6 +27635,38 @@ public final class UserProtos {
         result.bitField0_ |= to_bitField0_;
       }
 
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.UserProtos.GetColumnsResp) {
@@ -27536,6 +28301,11 @@ public final class UserProtos {
       return new CreatePreparedStatementReq();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.UserProtos.internal_static_exec_user_CreatePreparedStatementReq_descriptor;
@@ -27841,6 +28611,38 @@ public final class UserProtos {
         result.bitField0_ |= to_bitField0_;
       }
 
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.UserProtos.CreatePreparedStatementReq) {
@@ -28580,6 +29382,11 @@ public final class UserProtos {
       return new ResultColumnMetadata();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.UserProtos.internal_static_exec_user_ResultColumnMetadata_descriptor;
@@ -30021,6 +30828,38 @@ public final class UserProtos {
       }
 
       @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.UserProtos.ResultColumnMetadata) {
           return mergeFrom((org.apache.drill.exec.proto.UserProtos.ResultColumnMetadata)other);
@@ -30968,7 +31807,7 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder setIsNullable(boolean value) {
-
+        
         isNullable_ = value;
         bitField0_ |= 0x00000040;
         onChanged();
@@ -31038,7 +31877,7 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder setPrecision(int value) {
-
+        
         precision_ = value;
         bitField0_ |= 0x00000080;
         onChanged();
@@ -31106,7 +31945,7 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder setScale(int value) {
-
+        
         scale_ = value;
         bitField0_ |= 0x00000100;
         onChanged();
@@ -31167,7 +32006,7 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder setSigned(boolean value) {
-
+        
         signed_ = value;
         bitField0_ |= 0x00000200;
         onChanged();
@@ -31227,7 +32066,7 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder setDisplaySize(int value) {
-
+        
         displaySize_ = value;
         bitField0_ |= 0x00000400;
         onChanged();
@@ -31290,7 +32129,7 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder setIsAliased(boolean value) {
-
+        
         isAliased_ = value;
         bitField0_ |= 0x00000800;
         onChanged();
@@ -31455,7 +32294,7 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder setAutoIncrement(boolean value) {
-
+        
         autoIncrement_ = value;
         bitField0_ |= 0x00004000;
         onChanged();
@@ -31515,7 +32354,7 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder setCaseSensitivity(boolean value) {
-
+        
         caseSensitivity_ = value;
         bitField0_ |= 0x00008000;
         onChanged();
@@ -31575,7 +32414,7 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder setSortable(boolean value) {
-
+        
         sortable_ = value;
         bitField0_ |= 0x00010000;
         onChanged();
@@ -31757,7 +32596,7 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder setIsCurrency(boolean value) {
-
+        
         isCurrency_ = value;
         bitField0_ |= 0x00040000;
         onChanged();
@@ -31887,6 +32726,11 @@ public final class UserProtos {
       return new PreparedStatementHandle();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.UserProtos.internal_static_exec_user_PreparedStatementHandle_descriptor;
@@ -32164,6 +33008,38 @@ public final class UserProtos {
       }
 
       @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.UserProtos.PreparedStatementHandle) {
           return mergeFrom((org.apache.drill.exec.proto.UserProtos.PreparedStatementHandle)other);
@@ -32419,6 +33295,11 @@ public final class UserProtos {
       return new PreparedStatement();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.UserProtos.internal_static_exec_user_PreparedStatement_descriptor;
@@ -32806,6 +33687,38 @@ public final class UserProtos {
         result.bitField0_ |= to_bitField0_;
       }
 
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.UserProtos.PreparedStatement) {
@@ -33459,6 +34372,11 @@ public final class UserProtos {
       return new CreatePreparedStatementResp();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.UserProtos.internal_static_exec_user_CreatePreparedStatementResp_descriptor;
@@ -33844,6 +34762,38 @@ public final class UserProtos {
         result.bitField0_ |= to_bitField0_;
       }
 
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.UserProtos.CreatePreparedStatementResp) {
@@ -34308,6 +35258,11 @@ public final class UserProtos {
       return new GetServerMetaReq();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.UserProtos.internal_static_exec_user_GetServerMetaReq_descriptor;
@@ -34534,6 +35489,38 @@ public final class UserProtos {
       }
 
       @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.UserProtos.GetServerMetaReq) {
           return mergeFrom((org.apache.drill.exec.proto.UserProtos.GetServerMetaReq)other);
@@ -34700,6 +35687,11 @@ public final class UserProtos {
       return new ConvertSupport();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.UserProtos.internal_static_exec_user_ConvertSupport_descriptor;
@@ -35014,6 +36006,38 @@ public final class UserProtos {
       }
 
       @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.UserProtos.ConvertSupport) {
           return mergeFrom((org.apache.drill.exec.proto.UserProtos.ConvertSupport)other);
@@ -35324,6 +36348,11 @@ public final class UserProtos {
       return new GetServerMetaResp();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.UserProtos.internal_static_exec_user_GetServerMetaResp_descriptor;
@@ -35715,6 +36744,38 @@ public final class UserProtos {
         result.bitField0_ |= to_bitField0_;
       }
 
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.UserProtos.GetServerMetaResp) {
@@ -37400,28 +38461,23 @@ public final class UserProtos {
       collateSupport_ = java.util.Collections.emptyList();
       convertSupport_ = java.util.Collections.emptyList();
       correlationNamesSupport_ = 1;
-      dateTimeFunctions_ =
-          com.google.protobuf.LazyStringArrayList.emptyList();
+      dateTimeFunctions_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       dateTimeLiteralsSupport_ = java.util.Collections.emptyList();
       groupBySupport_ = 1;
       identifierCasing_ = 0;
       identifierQuoteString_ = "";
       nullCollation_ = 0;
-      numericFunctions_ =
-          com.google.protobuf.LazyStringArrayList.emptyList();
+      numericFunctions_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       orderBySupport_ = java.util.Collections.emptyList();
       outerJoinSupport_ = java.util.Collections.emptyList();
       quotedIdentifierCasing_ = 0;
       schemaTerm_ = "";
       searchEscapeString_ = "";
       specialCharacters_ = "";
-      sqlKeywords_ =
-          com.google.protobuf.LazyStringArrayList.emptyList();
-      stringFunctions_ =
-          com.google.protobuf.LazyStringArrayList.emptyList();
+      sqlKeywords_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      stringFunctions_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       subquerySupport_ = java.util.Collections.emptyList();
-      systemFunctions_ =
-          com.google.protobuf.LazyStringArrayList.emptyList();
+      systemFunctions_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       tableTerm_ = "";
       unionSupport_ = java.util.Collections.emptyList();
       currentSchema_ = "";
@@ -37434,6 +38490,11 @@ public final class UserProtos {
       return new ServerMeta();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.UserProtos.internal_static_exec_user_ServerMeta_descriptor;
@@ -37819,8 +38880,7 @@ public final class UserProtos {
 
     public static final int DATE_TIME_FUNCTIONS_FIELD_NUMBER = 10;
     @SuppressWarnings("serial")
-    private com.google.protobuf.LazyStringArrayList dateTimeFunctions_ =
-        com.google.protobuf.LazyStringArrayList.emptyList();
+    private com.google.protobuf.LazyStringList dateTimeFunctions_;
     /**
      * <pre>
      * Supported ODBC/JDBC Date Time scalar functions
@@ -38548,8 +39608,7 @@ public final class UserProtos {
 
     public static final int NUMERIC_FUNCTIONS_FIELD_NUMBER = 34;
     @SuppressWarnings("serial")
-    private com.google.protobuf.LazyStringArrayList numericFunctions_ =
-        com.google.protobuf.LazyStringArrayList.emptyList();
+    private com.google.protobuf.LazyStringList numericFunctions_;
     /**
      * <pre>
      * Supported ODBC/JDBC numeric scalar functions
@@ -38966,8 +40025,7 @@ public final class UserProtos {
 
     public static final int SQL_KEYWORDS_FIELD_NUMBER = 43;
     @SuppressWarnings("serial")
-    private com.google.protobuf.LazyStringArrayList sqlKeywords_ =
-        com.google.protobuf.LazyStringArrayList.emptyList();
+    private com.google.protobuf.LazyStringList sqlKeywords_;
     /**
      * <pre>
      * list of SQL keywords
@@ -39019,8 +40077,7 @@ public final class UserProtos {
 
     public static final int STRING_FUNCTIONS_FIELD_NUMBER = 44;
     @SuppressWarnings("serial")
-    private com.google.protobuf.LazyStringArrayList stringFunctions_ =
-        com.google.protobuf.LazyStringArrayList.emptyList();
+    private com.google.protobuf.LazyStringList stringFunctions_;
     /**
      * <pre>
      * Supported ODBC/JDBC string scalar functions
@@ -39123,8 +40180,7 @@ public final class UserProtos {
 
     public static final int SYSTEM_FUNCTIONS_FIELD_NUMBER = 46;
     @SuppressWarnings("serial")
-    private com.google.protobuf.LazyStringArrayList systemFunctions_ =
-        com.google.protobuf.LazyStringArrayList.emptyList();
+    private com.google.protobuf.LazyStringList systemFunctions_;
     /**
      * <pre>
      * Supported ODBC/JDBC systen scalar functions
@@ -40379,8 +41435,8 @@ public final class UserProtos {
         }
         bitField0_ = (bitField0_ & ~0x00000080);
         correlationNamesSupport_ = 1;
-        dateTimeFunctions_ =
-            com.google.protobuf.LazyStringArrayList.emptyList();
+        dateTimeFunctions_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000200);
         dateTimeLiteralsSupport_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000400);
         groupBySupport_ = 1;
@@ -40405,8 +41461,8 @@ public final class UserProtos {
         maxUserNameLength_ = 0;
         nullCollation_ = 0;
         nullPlusNonNullEqualsNull_ = false;
-        numericFunctions_ =
-            com.google.protobuf.LazyStringArrayList.emptyList();
+        numericFunctions_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField1_ = (bitField1_ & ~0x00000002);
         orderBySupport_ = java.util.Collections.emptyList();
         bitField1_ = (bitField1_ & ~0x00000004);
         outerJoinSupport_ = java.util.Collections.emptyList();
@@ -40417,14 +41473,14 @@ public final class UserProtos {
         searchEscapeString_ = "";
         selectForUpdateSupported_ = false;
         specialCharacters_ = "";
-        sqlKeywords_ =
-            com.google.protobuf.LazyStringArrayList.emptyList();
-        stringFunctions_ =
-            com.google.protobuf.LazyStringArrayList.emptyList();
+        sqlKeywords_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField1_ = (bitField1_ & ~0x00000400);
+        stringFunctions_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField1_ = (bitField1_ & ~0x00000800);
         subquerySupport_ = java.util.Collections.emptyList();
         bitField1_ = (bitField1_ & ~0x00001000);
-        systemFunctions_ =
-            com.google.protobuf.LazyStringArrayList.emptyList();
+        systemFunctions_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField1_ = (bitField1_ & ~0x00002000);
         tableTerm_ = "";
         transactionSupported_ = false;
         unionSupport_ = java.util.Collections.emptyList();
@@ -40478,11 +41534,21 @@ public final class UserProtos {
         } else {
           result.convertSupport_ = convertSupportBuilder_.build();
         }
+        if (((bitField0_ & 0x00000200) != 0)) {
+          dateTimeFunctions_ = dateTimeFunctions_.getUnmodifiableView();
+          bitField0_ = (bitField0_ & ~0x00000200);
+        }
+        result.dateTimeFunctions_ = dateTimeFunctions_;
         if (((bitField0_ & 0x00000400) != 0)) {
           dateTimeLiteralsSupport_ = java.util.Collections.unmodifiableList(dateTimeLiteralsSupport_);
           bitField0_ = (bitField0_ & ~0x00000400);
         }
         result.dateTimeLiteralsSupport_ = dateTimeLiteralsSupport_;
+        if (((bitField1_ & 0x00000002) != 0)) {
+          numericFunctions_ = numericFunctions_.getUnmodifiableView();
+          bitField1_ = (bitField1_ & ~0x00000002);
+        }
+        result.numericFunctions_ = numericFunctions_;
         if (((bitField1_ & 0x00000004) != 0)) {
           orderBySupport_ = java.util.Collections.unmodifiableList(orderBySupport_);
           bitField1_ = (bitField1_ & ~0x00000004);
@@ -40493,11 +41559,26 @@ public final class UserProtos {
           bitField1_ = (bitField1_ & ~0x00000008);
         }
         result.outerJoinSupport_ = outerJoinSupport_;
+        if (((bitField1_ & 0x00000400) != 0)) {
+          sqlKeywords_ = sqlKeywords_.getUnmodifiableView();
+          bitField1_ = (bitField1_ & ~0x00000400);
+        }
+        result.sqlKeywords_ = sqlKeywords_;
+        if (((bitField1_ & 0x00000800) != 0)) {
+          stringFunctions_ = stringFunctions_.getUnmodifiableView();
+          bitField1_ = (bitField1_ & ~0x00000800);
+        }
+        result.stringFunctions_ = stringFunctions_;
         if (((bitField1_ & 0x00001000) != 0)) {
           subquerySupport_ = java.util.Collections.unmodifiableList(subquerySupport_);
           bitField1_ = (bitField1_ & ~0x00001000);
         }
         result.subquerySupport_ = subquerySupport_;
+        if (((bitField1_ & 0x00002000) != 0)) {
+          systemFunctions_ = systemFunctions_.getUnmodifiableView();
+          bitField1_ = (bitField1_ & ~0x00002000);
+        }
+        result.systemFunctions_ = systemFunctions_;
         if (((bitField1_ & 0x00010000) != 0)) {
           unionSupport_ = java.util.Collections.unmodifiableList(unionSupport_);
           bitField1_ = (bitField1_ & ~0x00010000);
@@ -40535,10 +41616,6 @@ public final class UserProtos {
         if (((from_bitField0_ & 0x00000100) != 0)) {
           result.correlationNamesSupport_ = correlationNamesSupport_;
           to_bitField0_ |= 0x00000040;
-        }
-        if (((from_bitField0_ & 0x00000200) != 0)) {
-          dateTimeFunctions_.makeImmutable();
-          result.dateTimeFunctions_ = dateTimeFunctions_;
         }
         if (((from_bitField0_ & 0x00000800) != 0)) {
           result.groupBySupport_ = groupBySupport_;
@@ -40634,10 +41711,6 @@ public final class UserProtos {
           result.nullPlusNonNullEqualsNull_ = nullPlusNonNullEqualsNull_;
           to_bitField0_ |= 0x10000000;
         }
-        if (((from_bitField1_ & 0x00000002) != 0)) {
-          numericFunctions_.makeImmutable();
-          result.numericFunctions_ = numericFunctions_;
-        }
         if (((from_bitField1_ & 0x00000010) != 0)) {
           result.quotedIdentifierCasing_ = quotedIdentifierCasing_;
           to_bitField0_ |= 0x20000000;
@@ -40663,18 +41736,6 @@ public final class UserProtos {
           result.specialCharacters_ = specialCharacters_;
           to_bitField1_ |= 0x00000004;
         }
-        if (((from_bitField1_ & 0x00000400) != 0)) {
-          sqlKeywords_.makeImmutable();
-          result.sqlKeywords_ = sqlKeywords_;
-        }
-        if (((from_bitField1_ & 0x00000800) != 0)) {
-          stringFunctions_.makeImmutable();
-          result.stringFunctions_ = stringFunctions_;
-        }
-        if (((from_bitField1_ & 0x00002000) != 0)) {
-          systemFunctions_.makeImmutable();
-          result.systemFunctions_ = systemFunctions_;
-        }
         if (((from_bitField1_ & 0x00004000) != 0)) {
           result.tableTerm_ = tableTerm_;
           to_bitField1_ |= 0x00000008;
@@ -40691,6 +41752,38 @@ public final class UserProtos {
         result.bitField1_ |= to_bitField1_;
       }
 
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.UserProtos.ServerMeta) {
@@ -40767,7 +41860,7 @@ public final class UserProtos {
         if (!other.dateTimeFunctions_.isEmpty()) {
           if (dateTimeFunctions_.isEmpty()) {
             dateTimeFunctions_ = other.dateTimeFunctions_;
-            bitField0_ |= 0x00000200;
+            bitField0_ = (bitField0_ & ~0x00000200);
           } else {
             ensureDateTimeFunctionsIsMutable();
             dateTimeFunctions_.addAll(other.dateTimeFunctions_);
@@ -40855,7 +41948,7 @@ public final class UserProtos {
         if (!other.numericFunctions_.isEmpty()) {
           if (numericFunctions_.isEmpty()) {
             numericFunctions_ = other.numericFunctions_;
-            bitField1_ |= 0x00000002;
+            bitField1_ = (bitField1_ & ~0x00000002);
           } else {
             ensureNumericFunctionsIsMutable();
             numericFunctions_.addAll(other.numericFunctions_);
@@ -40909,7 +42002,7 @@ public final class UserProtos {
         if (!other.sqlKeywords_.isEmpty()) {
           if (sqlKeywords_.isEmpty()) {
             sqlKeywords_ = other.sqlKeywords_;
-            bitField1_ |= 0x00000400;
+            bitField1_ = (bitField1_ & ~0x00000400);
           } else {
             ensureSqlKeywordsIsMutable();
             sqlKeywords_.addAll(other.sqlKeywords_);
@@ -40919,7 +42012,7 @@ public final class UserProtos {
         if (!other.stringFunctions_.isEmpty()) {
           if (stringFunctions_.isEmpty()) {
             stringFunctions_ = other.stringFunctions_;
-            bitField1_ |= 0x00000800;
+            bitField1_ = (bitField1_ & ~0x00000800);
           } else {
             ensureStringFunctionsIsMutable();
             stringFunctions_.addAll(other.stringFunctions_);
@@ -40939,7 +42032,7 @@ public final class UserProtos {
         if (!other.systemFunctions_.isEmpty()) {
           if (systemFunctions_.isEmpty()) {
             systemFunctions_ = other.systemFunctions_;
-            bitField1_ |= 0x00002000;
+            bitField1_ = (bitField1_ & ~0x00002000);
           } else {
             ensureSystemFunctionsIsMutable();
             systemFunctions_.addAll(other.systemFunctions_);
@@ -41495,7 +42588,7 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder setAllTablesSelectable(boolean value) {
-
+        
         allTablesSelectable_ = value;
         bitField0_ |= 0x00000001;
         onChanged();
@@ -41551,7 +42644,7 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder setBlobIncludedInMaxRowSize(boolean value) {
-
+        
         blobIncludedInMaxRowSize_ = value;
         bitField0_ |= 0x00000002;
         onChanged();
@@ -41607,7 +42700,7 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder setCatalogAtStart(boolean value) {
-
+        
         catalogAtStart_ = value;
         bitField0_ |= 0x00000004;
         onChanged();
@@ -41985,7 +43078,7 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder setColumnAliasingSupported(boolean value) {
-
+        
         columnAliasingSupported_ = value;
         bitField0_ |= 0x00000040;
         onChanged();
@@ -42376,13 +43469,12 @@ public final class UserProtos {
         return this;
       }
 
-      private com.google.protobuf.LazyStringArrayList dateTimeFunctions_ =
-          com.google.protobuf.LazyStringArrayList.emptyList();
+      private com.google.protobuf.LazyStringList dateTimeFunctions_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       private void ensureDateTimeFunctionsIsMutable() {
-        if (!dateTimeFunctions_.isModifiable()) {
+        if (!((bitField0_ & 0x00000200) != 0)) {
           dateTimeFunctions_ = new com.google.protobuf.LazyStringArrayList(dateTimeFunctions_);
-        }
-        bitField0_ |= 0x00000200;
+          bitField0_ |= 0x00000200;
+         }
       }
       /**
        * <pre>
@@ -42394,8 +43486,7 @@ public final class UserProtos {
        */
       public com.google.protobuf.ProtocolStringList
           getDateTimeFunctionsList() {
-        dateTimeFunctions_.makeImmutable();
-        return dateTimeFunctions_;
+        return dateTimeFunctions_.getUnmodifiableView();
       }
       /**
        * <pre>
@@ -42448,7 +43539,6 @@ public final class UserProtos {
         if (value == null) { throw new NullPointerException(); }
         ensureDateTimeFunctionsIsMutable();
         dateTimeFunctions_.set(index, value);
-        bitField0_ |= 0x00000200;
         onChanged();
         return this;
       }
@@ -42466,7 +43556,6 @@ public final class UserProtos {
         if (value == null) { throw new NullPointerException(); }
         ensureDateTimeFunctionsIsMutable();
         dateTimeFunctions_.add(value);
-        bitField0_ |= 0x00000200;
         onChanged();
         return this;
       }
@@ -42484,7 +43573,6 @@ public final class UserProtos {
         ensureDateTimeFunctionsIsMutable();
         com.google.protobuf.AbstractMessageLite.Builder.addAll(
             values, dateTimeFunctions_);
-        bitField0_ |= 0x00000200;
         onChanged();
         return this;
       }
@@ -42497,9 +43585,8 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder clearDateTimeFunctions() {
-        dateTimeFunctions_ =
-          com.google.protobuf.LazyStringArrayList.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000200);;
+        dateTimeFunctions_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000200);
         onChanged();
         return this;
       }
@@ -42517,7 +43604,6 @@ public final class UserProtos {
         if (value == null) { throw new NullPointerException(); }
         ensureDateTimeFunctionsIsMutable();
         dateTimeFunctions_.add(value);
-        bitField0_ |= 0x00000200;
         onChanged();
         return this;
       }
@@ -42891,7 +43977,7 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder setLikeEscapeClauseSupported(boolean value) {
-
+        
         likeEscapeClauseSupported_ = value;
         bitField0_ |= 0x00004000;
         onChanged();
@@ -42947,7 +44033,7 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder setMaxBinaryLiteralLength(int value) {
-
+        
         maxBinaryLiteralLength_ = value;
         bitField0_ |= 0x00008000;
         onChanged();
@@ -43003,7 +44089,7 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder setMaxCatalogNameLength(int value) {
-
+        
         maxCatalogNameLength_ = value;
         bitField0_ |= 0x00010000;
         onChanged();
@@ -43059,7 +44145,7 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder setMaxCharLiteralLength(int value) {
-
+        
         maxCharLiteralLength_ = value;
         bitField0_ |= 0x00020000;
         onChanged();
@@ -43115,7 +44201,7 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder setMaxColumnNameLength(int value) {
-
+        
         maxColumnNameLength_ = value;
         bitField0_ |= 0x00040000;
         onChanged();
@@ -43171,7 +44257,7 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder setMaxColumnsInGroupBy(int value) {
-
+        
         maxColumnsInGroupBy_ = value;
         bitField0_ |= 0x00080000;
         onChanged();
@@ -43227,7 +44313,7 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder setMaxColumnsInOrderBy(int value) {
-
+        
         maxColumnsInOrderBy_ = value;
         bitField0_ |= 0x00100000;
         onChanged();
@@ -43283,7 +44369,7 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder setMaxColumnsInSelect(int value) {
-
+        
         maxColumnsInSelect_ = value;
         bitField0_ |= 0x00200000;
         onChanged();
@@ -43339,7 +44425,7 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder setMaxCursorNameLength(int value) {
-
+        
         maxCursorNameLength_ = value;
         bitField0_ |= 0x00400000;
         onChanged();
@@ -43395,7 +44481,7 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder setMaxLogicalLobSize(int value) {
-
+        
         maxLogicalLobSize_ = value;
         bitField0_ |= 0x00800000;
         onChanged();
@@ -43451,7 +44537,7 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder setMaxRowSize(int value) {
-
+        
         maxRowSize_ = value;
         bitField0_ |= 0x01000000;
         onChanged();
@@ -43507,7 +44593,7 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder setMaxSchemaNameLength(int value) {
-
+        
         maxSchemaNameLength_ = value;
         bitField0_ |= 0x02000000;
         onChanged();
@@ -43563,7 +44649,7 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder setMaxStatementLength(int value) {
-
+        
         maxStatementLength_ = value;
         bitField0_ |= 0x04000000;
         onChanged();
@@ -43619,7 +44705,7 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder setMaxStatements(int value) {
-
+        
         maxStatements_ = value;
         bitField0_ |= 0x08000000;
         onChanged();
@@ -43675,7 +44761,7 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder setMaxTableNameLength(int value) {
-
+        
         maxTableNameLength_ = value;
         bitField0_ |= 0x10000000;
         onChanged();
@@ -43731,7 +44817,7 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder setMaxTablesInSelect(int value) {
-
+        
         maxTablesInSelect_ = value;
         bitField0_ |= 0x20000000;
         onChanged();
@@ -43787,7 +44873,7 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder setMaxUserNameLength(int value) {
-
+        
         maxUserNameLength_ = value;
         bitField0_ |= 0x40000000;
         onChanged();
@@ -43901,7 +44987,7 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder setNullPlusNonNullEqualsNull(boolean value) {
-
+        
         nullPlusNonNullEqualsNull_ = value;
         bitField1_ |= 0x00000001;
         onChanged();
@@ -43922,13 +45008,12 @@ public final class UserProtos {
         return this;
       }
 
-      private com.google.protobuf.LazyStringArrayList numericFunctions_ =
-          com.google.protobuf.LazyStringArrayList.emptyList();
+      private com.google.protobuf.LazyStringList numericFunctions_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       private void ensureNumericFunctionsIsMutable() {
-        if (!numericFunctions_.isModifiable()) {
+        if (!((bitField1_ & 0x00000002) != 0)) {
           numericFunctions_ = new com.google.protobuf.LazyStringArrayList(numericFunctions_);
-        }
-        bitField1_ |= 0x00000002;
+          bitField1_ |= 0x00000002;
+         }
       }
       /**
        * <pre>
@@ -43940,8 +45025,7 @@ public final class UserProtos {
        */
       public com.google.protobuf.ProtocolStringList
           getNumericFunctionsList() {
-        numericFunctions_.makeImmutable();
-        return numericFunctions_;
+        return numericFunctions_.getUnmodifiableView();
       }
       /**
        * <pre>
@@ -43994,7 +45078,6 @@ public final class UserProtos {
         if (value == null) { throw new NullPointerException(); }
         ensureNumericFunctionsIsMutable();
         numericFunctions_.set(index, value);
-        bitField1_ |= 0x00000002;
         onChanged();
         return this;
       }
@@ -44012,7 +45095,6 @@ public final class UserProtos {
         if (value == null) { throw new NullPointerException(); }
         ensureNumericFunctionsIsMutable();
         numericFunctions_.add(value);
-        bitField1_ |= 0x00000002;
         onChanged();
         return this;
       }
@@ -44030,7 +45112,6 @@ public final class UserProtos {
         ensureNumericFunctionsIsMutable();
         com.google.protobuf.AbstractMessageLite.Builder.addAll(
             values, numericFunctions_);
-        bitField1_ |= 0x00000002;
         onChanged();
         return this;
       }
@@ -44043,9 +45124,8 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder clearNumericFunctions() {
-        numericFunctions_ =
-          com.google.protobuf.LazyStringArrayList.emptyList();
-        bitField1_ = (bitField1_ & ~0x00000002);;
+        numericFunctions_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField1_ = (bitField1_ & ~0x00000002);
         onChanged();
         return this;
       }
@@ -44063,7 +45143,6 @@ public final class UserProtos {
         if (value == null) { throw new NullPointerException(); }
         ensureNumericFunctionsIsMutable();
         numericFunctions_.add(value);
-        bitField1_ |= 0x00000002;
         onChanged();
         return this;
       }
@@ -44389,7 +45468,7 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder setReadOnly(boolean value) {
-
+        
         readOnly_ = value;
         bitField1_ |= 0x00000020;
         onChanged();
@@ -44653,7 +45732,7 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder setSelectForUpdateSupported(boolean value) {
-
+        
         selectForUpdateSupported_ = value;
         bitField1_ |= 0x00000100;
         onChanged();
@@ -44778,13 +45857,12 @@ public final class UserProtos {
         return this;
       }
 
-      private com.google.protobuf.LazyStringArrayList sqlKeywords_ =
-          com.google.protobuf.LazyStringArrayList.emptyList();
+      private com.google.protobuf.LazyStringList sqlKeywords_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       private void ensureSqlKeywordsIsMutable() {
-        if (!sqlKeywords_.isModifiable()) {
+        if (!((bitField1_ & 0x00000400) != 0)) {
           sqlKeywords_ = new com.google.protobuf.LazyStringArrayList(sqlKeywords_);
-        }
-        bitField1_ |= 0x00000400;
+          bitField1_ |= 0x00000400;
+         }
       }
       /**
        * <pre>
@@ -44796,8 +45874,7 @@ public final class UserProtos {
        */
       public com.google.protobuf.ProtocolStringList
           getSqlKeywordsList() {
-        sqlKeywords_.makeImmutable();
-        return sqlKeywords_;
+        return sqlKeywords_.getUnmodifiableView();
       }
       /**
        * <pre>
@@ -44850,7 +45927,6 @@ public final class UserProtos {
         if (value == null) { throw new NullPointerException(); }
         ensureSqlKeywordsIsMutable();
         sqlKeywords_.set(index, value);
-        bitField1_ |= 0x00000400;
         onChanged();
         return this;
       }
@@ -44868,7 +45944,6 @@ public final class UserProtos {
         if (value == null) { throw new NullPointerException(); }
         ensureSqlKeywordsIsMutable();
         sqlKeywords_.add(value);
-        bitField1_ |= 0x00000400;
         onChanged();
         return this;
       }
@@ -44886,7 +45961,6 @@ public final class UserProtos {
         ensureSqlKeywordsIsMutable();
         com.google.protobuf.AbstractMessageLite.Builder.addAll(
             values, sqlKeywords_);
-        bitField1_ |= 0x00000400;
         onChanged();
         return this;
       }
@@ -44899,9 +45973,8 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder clearSqlKeywords() {
-        sqlKeywords_ =
-          com.google.protobuf.LazyStringArrayList.emptyList();
-        bitField1_ = (bitField1_ & ~0x00000400);;
+        sqlKeywords_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField1_ = (bitField1_ & ~0x00000400);
         onChanged();
         return this;
       }
@@ -44919,18 +45992,16 @@ public final class UserProtos {
         if (value == null) { throw new NullPointerException(); }
         ensureSqlKeywordsIsMutable();
         sqlKeywords_.add(value);
-        bitField1_ |= 0x00000400;
         onChanged();
         return this;
       }
 
-      private com.google.protobuf.LazyStringArrayList stringFunctions_ =
-          com.google.protobuf.LazyStringArrayList.emptyList();
+      private com.google.protobuf.LazyStringList stringFunctions_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       private void ensureStringFunctionsIsMutable() {
-        if (!stringFunctions_.isModifiable()) {
+        if (!((bitField1_ & 0x00000800) != 0)) {
           stringFunctions_ = new com.google.protobuf.LazyStringArrayList(stringFunctions_);
-        }
-        bitField1_ |= 0x00000800;
+          bitField1_ |= 0x00000800;
+         }
       }
       /**
        * <pre>
@@ -44942,8 +46013,7 @@ public final class UserProtos {
        */
       public com.google.protobuf.ProtocolStringList
           getStringFunctionsList() {
-        stringFunctions_.makeImmutable();
-        return stringFunctions_;
+        return stringFunctions_.getUnmodifiableView();
       }
       /**
        * <pre>
@@ -44996,7 +46066,6 @@ public final class UserProtos {
         if (value == null) { throw new NullPointerException(); }
         ensureStringFunctionsIsMutable();
         stringFunctions_.set(index, value);
-        bitField1_ |= 0x00000800;
         onChanged();
         return this;
       }
@@ -45014,7 +46083,6 @@ public final class UserProtos {
         if (value == null) { throw new NullPointerException(); }
         ensureStringFunctionsIsMutable();
         stringFunctions_.add(value);
-        bitField1_ |= 0x00000800;
         onChanged();
         return this;
       }
@@ -45032,7 +46100,6 @@ public final class UserProtos {
         ensureStringFunctionsIsMutable();
         com.google.protobuf.AbstractMessageLite.Builder.addAll(
             values, stringFunctions_);
-        bitField1_ |= 0x00000800;
         onChanged();
         return this;
       }
@@ -45045,9 +46112,8 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder clearStringFunctions() {
-        stringFunctions_ =
-          com.google.protobuf.LazyStringArrayList.emptyList();
-        bitField1_ = (bitField1_ & ~0x00000800);;
+        stringFunctions_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField1_ = (bitField1_ & ~0x00000800);
         onChanged();
         return this;
       }
@@ -45065,7 +46131,6 @@ public final class UserProtos {
         if (value == null) { throw new NullPointerException(); }
         ensureStringFunctionsIsMutable();
         stringFunctions_.add(value);
-        bitField1_ |= 0x00000800;
         onChanged();
         return this;
       }
@@ -45184,13 +46249,12 @@ public final class UserProtos {
         return this;
       }
 
-      private com.google.protobuf.LazyStringArrayList systemFunctions_ =
-          com.google.protobuf.LazyStringArrayList.emptyList();
+      private com.google.protobuf.LazyStringList systemFunctions_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       private void ensureSystemFunctionsIsMutable() {
-        if (!systemFunctions_.isModifiable()) {
+        if (!((bitField1_ & 0x00002000) != 0)) {
           systemFunctions_ = new com.google.protobuf.LazyStringArrayList(systemFunctions_);
-        }
-        bitField1_ |= 0x00002000;
+          bitField1_ |= 0x00002000;
+         }
       }
       /**
        * <pre>
@@ -45202,8 +46266,7 @@ public final class UserProtos {
        */
       public com.google.protobuf.ProtocolStringList
           getSystemFunctionsList() {
-        systemFunctions_.makeImmutable();
-        return systemFunctions_;
+        return systemFunctions_.getUnmodifiableView();
       }
       /**
        * <pre>
@@ -45256,7 +46319,6 @@ public final class UserProtos {
         if (value == null) { throw new NullPointerException(); }
         ensureSystemFunctionsIsMutable();
         systemFunctions_.set(index, value);
-        bitField1_ |= 0x00002000;
         onChanged();
         return this;
       }
@@ -45274,7 +46336,6 @@ public final class UserProtos {
         if (value == null) { throw new NullPointerException(); }
         ensureSystemFunctionsIsMutable();
         systemFunctions_.add(value);
-        bitField1_ |= 0x00002000;
         onChanged();
         return this;
       }
@@ -45292,7 +46353,6 @@ public final class UserProtos {
         ensureSystemFunctionsIsMutable();
         com.google.protobuf.AbstractMessageLite.Builder.addAll(
             values, systemFunctions_);
-        bitField1_ |= 0x00002000;
         onChanged();
         return this;
       }
@@ -45305,9 +46365,8 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder clearSystemFunctions() {
-        systemFunctions_ =
-          com.google.protobuf.LazyStringArrayList.emptyList();
-        bitField1_ = (bitField1_ & ~0x00002000);;
+        systemFunctions_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField1_ = (bitField1_ & ~0x00002000);
         onChanged();
         return this;
       }
@@ -45325,7 +46384,6 @@ public final class UserProtos {
         if (value == null) { throw new NullPointerException(); }
         ensureSystemFunctionsIsMutable();
         systemFunctions_.add(value);
-        bitField1_ |= 0x00002000;
         onChanged();
         return this;
       }
@@ -45469,7 +46527,7 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder setTransactionSupported(boolean value) {
-
+        
         transactionSupported_ = value;
         bitField1_ |= 0x00008000;
         onChanged();
@@ -45963,6 +47021,11 @@ public final class UserProtos {
       return new RunQuery();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.UserProtos.internal_static_exec_user_RunQuery_descriptor;
@@ -46584,6 +47647,38 @@ public final class UserProtos {
         result.bitField0_ |= to_bitField0_;
       }
 
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.UserProtos.RunQuery) {
@@ -47471,7 +48566,7 @@ public final class UserProtos {
        * @return This builder for chaining.
        */
       public Builder setAutolimitRowcount(int value) {
-
+        
         autolimitRowcount_ = value;
         bitField0_ |= 0x00000020;
         onChanged();
@@ -47597,6 +48692,11 @@ public final class UserProtos {
       return new NewSessionRequest();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.UserProtos.internal_static_exec_user_NewSessionRequest_descriptor;
@@ -47891,6 +48991,38 @@ public final class UserProtos {
         result.bitField0_ |= to_bitField0_;
       }
 
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.UserProtos.NewSessionRequest) {
@@ -48187,6 +49319,11 @@ public final class UserProtos {
       return new SessionHandle();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.UserProtos.internal_static_exec_user_SessionHandle_descriptor;
@@ -48486,6 +49623,38 @@ public final class UserProtos {
       }
 
       @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.UserProtos.SessionHandle) {
           return mergeFrom((org.apache.drill.exec.proto.UserProtos.SessionHandle)other);
@@ -48749,6 +49918,11 @@ public final class UserProtos {
       return new RunQueryWithSessionHandle();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.UserProtos.internal_static_exec_user_RunQueryWithSessionHandle_descriptor;
@@ -49091,6 +50265,38 @@ public final class UserProtos {
         result.bitField0_ |= to_bitField0_;
       }
 
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.UserProtos.RunQueryWithSessionHandle) {
@@ -49523,6 +50729,11 @@ public final class UserProtos {
       return new CancelQueryWithSessionHandle();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.UserProtos.internal_static_exec_user_CancelQueryWithSessionHandle_descriptor;
@@ -49865,6 +51076,38 @@ public final class UserProtos {
         result.bitField0_ |= to_bitField0_;
       }
 
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.UserProtos.CancelQueryWithSessionHandle) {

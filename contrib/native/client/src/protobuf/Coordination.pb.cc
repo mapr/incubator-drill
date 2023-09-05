@@ -4,230 +4,180 @@
 #include "Coordination.pb.h"
 
 #include <algorithm>
-#include "google/protobuf/io/coded_stream.h"
-#include "google/protobuf/extension_set.h"
-#include "google/protobuf/wire_format_lite.h"
-#include "google/protobuf/descriptor.h"
-#include "google/protobuf/generated_message_reflection.h"
-#include "google/protobuf/reflection_ops.h"
-#include "google/protobuf/wire_format.h"
-// @@protoc_insertion_point(includes)
 
-// Must be included last.
-#include "google/protobuf/port_def.inc"
+#include <google/protobuf/io/coded_stream.h>
+#include <google/protobuf/extension_set.h>
+#include <google/protobuf/wire_format_lite.h>
+#include <google/protobuf/descriptor.h>
+#include <google/protobuf/generated_message_reflection.h>
+#include <google/protobuf/reflection_ops.h>
+#include <google/protobuf/wire_format.h>
+// @@protoc_insertion_point(includes)
+#include <google/protobuf/port_def.inc>
+
 PROTOBUF_PRAGMA_INIT_SEG
+
 namespace _pb = ::PROTOBUF_NAMESPACE_ID;
-namespace _pbi = ::PROTOBUF_NAMESPACE_ID::internal;
+namespace _pbi = _pb::internal;
+
 namespace exec {
 PROTOBUF_CONSTEXPR DrillbitEndpoint::DrillbitEndpoint(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_._has_bits_)*/{}
   , /*decltype(_impl_._cached_size_)*/{}
-  , /*decltype(_impl_.address_)*/ {
-    &::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized {}
-  }
-
-  , /*decltype(_impl_.version_)*/ {
-    &::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized {}
-  }
-
+  , /*decltype(_impl_.address_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.version_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.roles_)*/nullptr
-  , /*decltype(_impl_.user_port_)*/ 0
-
-  , /*decltype(_impl_.control_port_)*/ 0
-
-  , /*decltype(_impl_.data_port_)*/ 0
-
-  , /*decltype(_impl_.state_)*/ 0
-
-  , /*decltype(_impl_.http_port_)*/ 0
-} {}
+  , /*decltype(_impl_.user_port_)*/0
+  , /*decltype(_impl_.control_port_)*/0
+  , /*decltype(_impl_.data_port_)*/0
+  , /*decltype(_impl_.state_)*/0
+  , /*decltype(_impl_.http_port_)*/0} {}
 struct DrillbitEndpointDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR DrillbitEndpointDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  PROTOBUF_CONSTEXPR DrillbitEndpointDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
   ~DrillbitEndpointDefaultTypeInternal() {}
   union {
     DrillbitEndpoint _instance;
   };
 };
-
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
-    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 DrillbitEndpointDefaultTypeInternal _DrillbitEndpoint_default_instance_;
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 DrillbitEndpointDefaultTypeInternal _DrillbitEndpoint_default_instance_;
 PROTOBUF_CONSTEXPR DrillServiceInstance::DrillServiceInstance(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_._has_bits_)*/{}
   , /*decltype(_impl_._cached_size_)*/{}
-  , /*decltype(_impl_.id_)*/ {
-    &::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized {}
-  }
-
+  , /*decltype(_impl_.id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.endpoint_)*/nullptr
-  , /*decltype(_impl_.registrationtimeutc_)*/ ::int64_t{0}
-} {}
+  , /*decltype(_impl_.registrationtimeutc_)*/int64_t{0}} {}
 struct DrillServiceInstanceDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR DrillServiceInstanceDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  PROTOBUF_CONSTEXPR DrillServiceInstanceDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
   ~DrillServiceInstanceDefaultTypeInternal() {}
   union {
     DrillServiceInstance _instance;
   };
 };
-
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
-    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 DrillServiceInstanceDefaultTypeInternal _DrillServiceInstance_default_instance_;
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 DrillServiceInstanceDefaultTypeInternal _DrillServiceInstance_default_instance_;
 PROTOBUF_CONSTEXPR Roles::Roles(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_._has_bits_)*/{}
   , /*decltype(_impl_._cached_size_)*/{}
-  , /*decltype(_impl_.sql_query_)*/ true
-
-  , /*decltype(_impl_.logical_plan_)*/ true
-
-  , /*decltype(_impl_.physical_plan_)*/ true
-
-  , /*decltype(_impl_.java_executor_)*/ true
-
-  , /*decltype(_impl_.distributed_cache_)*/ true
-} {}
+  , /*decltype(_impl_.sql_query_)*/true
+  , /*decltype(_impl_.logical_plan_)*/true
+  , /*decltype(_impl_.physical_plan_)*/true
+  , /*decltype(_impl_.java_executor_)*/true
+  , /*decltype(_impl_.distributed_cache_)*/true} {}
 struct RolesDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR RolesDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  PROTOBUF_CONSTEXPR RolesDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
   ~RolesDefaultTypeInternal() {}
   union {
     Roles _instance;
   };
 };
-
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
-    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 RolesDefaultTypeInternal _Roles_default_instance_;
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 RolesDefaultTypeInternal _Roles_default_instance_;
 }  // namespace exec
 static ::_pb::Metadata file_level_metadata_Coordination_2eproto[3];
 static const ::_pb::EnumDescriptor* file_level_enum_descriptors_Coordination_2eproto[1];
-static constexpr const ::_pb::ServiceDescriptor**
-    file_level_service_descriptors_Coordination_2eproto = nullptr;
-const ::uint32_t TableStruct_Coordination_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(
-    protodesc_cold) = {
-    PROTOBUF_FIELD_OFFSET(::exec::DrillbitEndpoint, _impl_._has_bits_),
-    PROTOBUF_FIELD_OFFSET(::exec::DrillbitEndpoint, _internal_metadata_),
-    ~0u,  // no _extensions_
-    ~0u,  // no _oneof_case_
-    ~0u,  // no _weak_field_map_
-    ~0u,  // no _inlined_string_donated_
-    ~0u,  // no _split_
-    ~0u,  // no sizeof(Split)
-    PROTOBUF_FIELD_OFFSET(::exec::DrillbitEndpoint, _impl_.address_),
-    PROTOBUF_FIELD_OFFSET(::exec::DrillbitEndpoint, _impl_.user_port_),
-    PROTOBUF_FIELD_OFFSET(::exec::DrillbitEndpoint, _impl_.control_port_),
-    PROTOBUF_FIELD_OFFSET(::exec::DrillbitEndpoint, _impl_.data_port_),
-    PROTOBUF_FIELD_OFFSET(::exec::DrillbitEndpoint, _impl_.roles_),
-    PROTOBUF_FIELD_OFFSET(::exec::DrillbitEndpoint, _impl_.version_),
-    PROTOBUF_FIELD_OFFSET(::exec::DrillbitEndpoint, _impl_.state_),
-    PROTOBUF_FIELD_OFFSET(::exec::DrillbitEndpoint, _impl_.http_port_),
-    0,
-    3,
-    4,
-    5,
-    2,
-    1,
-    6,
-    7,
-    PROTOBUF_FIELD_OFFSET(::exec::DrillServiceInstance, _impl_._has_bits_),
-    PROTOBUF_FIELD_OFFSET(::exec::DrillServiceInstance, _internal_metadata_),
-    ~0u,  // no _extensions_
-    ~0u,  // no _oneof_case_
-    ~0u,  // no _weak_field_map_
-    ~0u,  // no _inlined_string_donated_
-    ~0u,  // no _split_
-    ~0u,  // no sizeof(Split)
-    PROTOBUF_FIELD_OFFSET(::exec::DrillServiceInstance, _impl_.id_),
-    PROTOBUF_FIELD_OFFSET(::exec::DrillServiceInstance, _impl_.registrationtimeutc_),
-    PROTOBUF_FIELD_OFFSET(::exec::DrillServiceInstance, _impl_.endpoint_),
-    0,
-    2,
-    1,
-    PROTOBUF_FIELD_OFFSET(::exec::Roles, _impl_._has_bits_),
-    PROTOBUF_FIELD_OFFSET(::exec::Roles, _internal_metadata_),
-    ~0u,  // no _extensions_
-    ~0u,  // no _oneof_case_
-    ~0u,  // no _weak_field_map_
-    ~0u,  // no _inlined_string_donated_
-    ~0u,  // no _split_
-    ~0u,  // no sizeof(Split)
-    PROTOBUF_FIELD_OFFSET(::exec::Roles, _impl_.sql_query_),
-    PROTOBUF_FIELD_OFFSET(::exec::Roles, _impl_.logical_plan_),
-    PROTOBUF_FIELD_OFFSET(::exec::Roles, _impl_.physical_plan_),
-    PROTOBUF_FIELD_OFFSET(::exec::Roles, _impl_.java_executor_),
-    PROTOBUF_FIELD_OFFSET(::exec::Roles, _impl_.distributed_cache_),
-    0,
-    1,
-    2,
-    3,
-    4,
-};
+static constexpr ::_pb::ServiceDescriptor const** file_level_service_descriptors_Coordination_2eproto = nullptr;
 
-static const ::_pbi::MigrationSchema
-    schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
-        { 0, 16, -1, sizeof(::exec::DrillbitEndpoint)},
-        { 24, 35, -1, sizeof(::exec::DrillServiceInstance)},
-        { 38, 51, -1, sizeof(::exec::Roles)},
+const uint32_t TableStruct_Coordination_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
+  PROTOBUF_FIELD_OFFSET(::exec::DrillbitEndpoint, _impl_._has_bits_),
+  PROTOBUF_FIELD_OFFSET(::exec::DrillbitEndpoint, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::exec::DrillbitEndpoint, _impl_.address_),
+  PROTOBUF_FIELD_OFFSET(::exec::DrillbitEndpoint, _impl_.user_port_),
+  PROTOBUF_FIELD_OFFSET(::exec::DrillbitEndpoint, _impl_.control_port_),
+  PROTOBUF_FIELD_OFFSET(::exec::DrillbitEndpoint, _impl_.data_port_),
+  PROTOBUF_FIELD_OFFSET(::exec::DrillbitEndpoint, _impl_.roles_),
+  PROTOBUF_FIELD_OFFSET(::exec::DrillbitEndpoint, _impl_.version_),
+  PROTOBUF_FIELD_OFFSET(::exec::DrillbitEndpoint, _impl_.state_),
+  PROTOBUF_FIELD_OFFSET(::exec::DrillbitEndpoint, _impl_.http_port_),
+  0,
+  3,
+  4,
+  5,
+  2,
+  1,
+  6,
+  7,
+  PROTOBUF_FIELD_OFFSET(::exec::DrillServiceInstance, _impl_._has_bits_),
+  PROTOBUF_FIELD_OFFSET(::exec::DrillServiceInstance, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::exec::DrillServiceInstance, _impl_.id_),
+  PROTOBUF_FIELD_OFFSET(::exec::DrillServiceInstance, _impl_.registrationtimeutc_),
+  PROTOBUF_FIELD_OFFSET(::exec::DrillServiceInstance, _impl_.endpoint_),
+  0,
+  2,
+  1,
+  PROTOBUF_FIELD_OFFSET(::exec::Roles, _impl_._has_bits_),
+  PROTOBUF_FIELD_OFFSET(::exec::Roles, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::exec::Roles, _impl_.sql_query_),
+  PROTOBUF_FIELD_OFFSET(::exec::Roles, _impl_.logical_plan_),
+  PROTOBUF_FIELD_OFFSET(::exec::Roles, _impl_.physical_plan_),
+  PROTOBUF_FIELD_OFFSET(::exec::Roles, _impl_.java_executor_),
+  PROTOBUF_FIELD_OFFSET(::exec::Roles, _impl_.distributed_cache_),
+  0,
+  1,
+  2,
+  3,
+  4,
+};
+static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
+  { 0, 14, -1, sizeof(::exec::DrillbitEndpoint)},
+  { 22, 31, -1, sizeof(::exec::DrillServiceInstance)},
+  { 34, 45, -1, sizeof(::exec::Roles)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
-    &::exec::_DrillbitEndpoint_default_instance_._instance,
-    &::exec::_DrillServiceInstance_default_instance_._instance,
-    &::exec::_Roles_default_instance_._instance,
-};
-const char descriptor_table_protodef_Coordination_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
-    "\n\022Coordination.proto\022\004exec\"\212\002\n\020DrillbitE"
-    "ndpoint\022\017\n\007address\030\001 \001(\t\022\021\n\tuser_port\030\002 "
-    "\001(\005\022\024\n\014control_port\030\003 \001(\005\022\021\n\tdata_port\030\004"
-    " \001(\005\022\032\n\005roles\030\005 \001(\0132\013.exec.Roles\022\017\n\007vers"
-    "ion\030\006 \001(\t\022+\n\005state\030\007 \001(\0162\034.exec.Drillbit"
-    "Endpoint.State\022\021\n\thttp_port\030\010 \001(\005\"<\n\005Sta"
-    "te\022\013\n\007STARTUP\020\000\022\n\n\006ONLINE\020\001\022\r\n\tQUIESCENT"
-    "\020\002\022\013\n\007OFFLINE\020\003\"i\n\024DrillServiceInstance\022"
-    "\n\n\002id\030\001 \001(\t\022\033\n\023registrationTimeUTC\030\002 \001(\003"
-    "\022(\n\010endpoint\030\003 \001(\0132\026.exec.DrillbitEndpoi"
-    "nt\"\227\001\n\005Roles\022\027\n\tsql_query\030\001 \001(\010:\004true\022\032\n"
-    "\014logical_plan\030\002 \001(\010:\004true\022\033\n\rphysical_pl"
-    "an\030\003 \001(\010:\004true\022\033\n\rjava_executor\030\004 \001(\010:\004t"
-    "rue\022\037\n\021distributed_cache\030\005 \001(\010:\004trueB3\n\033"
-    "org.apache.drill.exec.protoB\022Coordinatio"
-    "nProtosH\001"
-};
-static ::absl::once_flag descriptor_table_Coordination_2eproto_once;
-const ::_pbi::DescriptorTable descriptor_table_Coordination_2eproto = {
-    false,
-    false,
-    609,
-    descriptor_table_protodef_Coordination_2eproto,
-    "Coordination.proto",
-    &descriptor_table_Coordination_2eproto_once,
-    nullptr,
-    0,
-    3,
-    schemas,
-    file_default_instances,
-    TableStruct_Coordination_2eproto::offsets,
-    file_level_metadata_Coordination_2eproto,
-    file_level_enum_descriptors_Coordination_2eproto,
-    file_level_service_descriptors_Coordination_2eproto,
+  &::exec::_DrillbitEndpoint_default_instance_._instance,
+  &::exec::_DrillServiceInstance_default_instance_._instance,
+  &::exec::_Roles_default_instance_._instance,
 };
 
-// This function exists to be marked as weak.
-// It can significantly speed up compilation by breaking up LLVM's SCC
-// in the .pb.cc translation units. Large translation units see a
-// reduction of more than 35% of walltime for optimized builds. Without
-// the weak attribute all the messages in the file, including all the
-// vtables and everything they use become part of the same SCC through
-// a cycle like:
-// GetMetadata -> descriptor table -> default instances ->
-//   vtables -> GetMetadata
-// By adding a weak function here we break the connection from the
-// individual vtables back into the descriptor table.
+const char descriptor_table_protodef_Coordination_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
+  "\n\022Coordination.proto\022\004exec\"\212\002\n\020DrillbitE"
+  "ndpoint\022\017\n\007address\030\001 \001(\t\022\021\n\tuser_port\030\002 "
+  "\001(\005\022\024\n\014control_port\030\003 \001(\005\022\021\n\tdata_port\030\004"
+  " \001(\005\022\032\n\005roles\030\005 \001(\0132\013.exec.Roles\022\017\n\007vers"
+  "ion\030\006 \001(\t\022+\n\005state\030\007 \001(\0162\034.exec.Drillbit"
+  "Endpoint.State\022\021\n\thttp_port\030\010 \001(\005\"<\n\005Sta"
+  "te\022\013\n\007STARTUP\020\000\022\n\n\006ONLINE\020\001\022\r\n\tQUIESCENT"
+  "\020\002\022\013\n\007OFFLINE\020\003\"i\n\024DrillServiceInstance\022"
+  "\n\n\002id\030\001 \001(\t\022\033\n\023registrationTimeUTC\030\002 \001(\003"
+  "\022(\n\010endpoint\030\003 \001(\0132\026.exec.DrillbitEndpoi"
+  "nt\"\227\001\n\005Roles\022\027\n\tsql_query\030\001 \001(\010:\004true\022\032\n"
+  "\014logical_plan\030\002 \001(\010:\004true\022\033\n\rphysical_pl"
+  "an\030\003 \001(\010:\004true\022\033\n\rjava_executor\030\004 \001(\010:\004t"
+  "rue\022\037\n\021distributed_cache\030\005 \001(\010:\004trueB3\n\033"
+  "org.apache.drill.exec.protoB\022Coordinatio"
+  "nProtosH\001"
+  ;
+static ::_pbi::once_flag descriptor_table_Coordination_2eproto_once;
+const ::_pbi::DescriptorTable descriptor_table_Coordination_2eproto = {
+    false, false, 609, descriptor_table_protodef_Coordination_2eproto,
+    "Coordination.proto",
+    &descriptor_table_Coordination_2eproto_once, nullptr, 0, 3,
+    schemas, file_default_instances, TableStruct_Coordination_2eproto::offsets,
+    file_level_metadata_Coordination_2eproto, file_level_enum_descriptors_Coordination_2eproto,
+    file_level_service_descriptors_Coordination_2eproto,
+};
 PROTOBUF_ATTRIBUTE_WEAK const ::_pbi::DescriptorTable* descriptor_table_Coordination_2eproto_getter() {
   return &descriptor_table_Coordination_2eproto;
 }
+
 // Force running AddDescriptors() at dynamic initialization time.
-PROTOBUF_ATTRIBUTE_INIT_PRIORITY2
-static ::_pbi::AddDescriptorsRunner dynamic_init_dummy_Coordination_2eproto(&descriptor_table_Coordination_2eproto);
+PROTOBUF_ATTRIBUTE_INIT_PRIORITY2 static ::_pbi::AddDescriptorsRunner dynamic_init_dummy_Coordination_2eproto(&descriptor_table_Coordination_2eproto);
 namespace exec {
 const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* DrillbitEndpoint_State_descriptor() {
   ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_Coordination_2eproto);
@@ -244,9 +194,8 @@ bool DrillbitEndpoint_State_IsValid(int value) {
       return false;
   }
 }
-#if (__cplusplus < 201703) && \
-  (!defined(_MSC_VER) || (_MSC_VER >= 1900 && _MSC_VER < 1912))
 
+#if (__cplusplus < 201703) && (!defined(_MSC_VER) || (_MSC_VER >= 1900 && _MSC_VER < 1912))
 constexpr DrillbitEndpoint_State DrillbitEndpoint::STARTUP;
 constexpr DrillbitEndpoint_State DrillbitEndpoint::ONLINE;
 constexpr DrillbitEndpoint_State DrillbitEndpoint::QUIESCENT;
@@ -254,16 +203,13 @@ constexpr DrillbitEndpoint_State DrillbitEndpoint::OFFLINE;
 constexpr DrillbitEndpoint_State DrillbitEndpoint::State_MIN;
 constexpr DrillbitEndpoint_State DrillbitEndpoint::State_MAX;
 constexpr int DrillbitEndpoint::State_ARRAYSIZE;
+#endif  // (__cplusplus < 201703) && (!defined(_MSC_VER) || (_MSC_VER >= 1900 && _MSC_VER < 1912))
 
-#endif  // (__cplusplus < 201703) &&
-        // (!defined(_MSC_VER) || (_MSC_VER >= 1900 && _MSC_VER < 1912))
 // ===================================================================
 
 class DrillbitEndpoint::_Internal {
  public:
   using HasBits = decltype(std::declval<DrillbitEndpoint>()._impl_._has_bits_);
-  static constexpr ::int32_t kHasBitsOffset =
-    8 * PROTOBUF_FIELD_OFFSET(DrillbitEndpoint, _impl_._has_bits_);
   static void set_has_address(HasBits* has_bits) {
     (*has_bits)[0] |= 1u;
   }
@@ -295,9 +241,10 @@ const ::exec::Roles&
 DrillbitEndpoint::_Internal::roles(const DrillbitEndpoint* msg) {
   return *msg->_impl_.roles_;
 }
-DrillbitEndpoint::DrillbitEndpoint(::PROTOBUF_NAMESPACE_ID::Arena* arena)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
-  SharedCtor(arena);
+DrillbitEndpoint::DrillbitEndpoint(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
   // @@protoc_insertion_point(arena_constructor:exec.DrillbitEndpoint)
 }
 DrillbitEndpoint::DrillbitEndpoint(const DrillbitEndpoint& from)
@@ -306,75 +253,65 @@ DrillbitEndpoint::DrillbitEndpoint(const DrillbitEndpoint& from)
   new (&_impl_) Impl_{
       decltype(_impl_._has_bits_){from._impl_._has_bits_}
     , /*decltype(_impl_._cached_size_)*/{}
-    , decltype(_impl_.address_) {}
-
-    , decltype(_impl_.version_) {}
-
+    , decltype(_impl_.address_){}
+    , decltype(_impl_.version_){}
     , decltype(_impl_.roles_){nullptr}
-    , decltype(_impl_.user_port_) {}
-
-    , decltype(_impl_.control_port_) {}
-
-    , decltype(_impl_.data_port_) {}
-
-    , decltype(_impl_.state_) {}
-
-    , decltype(_impl_.http_port_) {}
-  };
+    , decltype(_impl_.user_port_){}
+    , decltype(_impl_.control_port_){}
+    , decltype(_impl_.data_port_){}
+    , decltype(_impl_.state_){}
+    , decltype(_impl_.http_port_){}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   _impl_.address_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-        _impl_.address_.Set("", GetArenaForAllocation());
-  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if ((from._impl_._has_bits_[0] & 0x00000001u) != 0) {
-    _this->_impl_.address_.Set(from._internal_address(), _this->GetArenaForAllocation());
+    _impl_.address_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (from._internal_has_address()) {
+    _this->_impl_.address_.Set(from._internal_address(), 
+      _this->GetArenaForAllocation());
   }
   _impl_.version_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-        _impl_.version_.Set("", GetArenaForAllocation());
-  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if ((from._impl_._has_bits_[0] & 0x00000002u) != 0) {
-    _this->_impl_.version_.Set(from._internal_version(), _this->GetArenaForAllocation());
+    _impl_.version_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (from._internal_has_version()) {
+    _this->_impl_.version_.Set(from._internal_version(), 
+      _this->GetArenaForAllocation());
   }
-  if ((from._impl_._has_bits_[0] & 0x00000004u) != 0) {
+  if (from._internal_has_roles()) {
     _this->_impl_.roles_ = new ::exec::Roles(*from._impl_.roles_);
   }
   ::memcpy(&_impl_.user_port_, &from._impl_.user_port_,
-    static_cast<::size_t>(reinterpret_cast<char*>(&_impl_.http_port_) -
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.http_port_) -
     reinterpret_cast<char*>(&_impl_.user_port_)) + sizeof(_impl_.http_port_));
   // @@protoc_insertion_point(copy_constructor:exec.DrillbitEndpoint)
 }
 
-inline void DrillbitEndpoint::SharedCtor(::_pb::Arena* arena) {
+inline void DrillbitEndpoint::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
   (void)arena;
+  (void)is_message_owned;
   new (&_impl_) Impl_{
       decltype(_impl_._has_bits_){}
     , /*decltype(_impl_._cached_size_)*/{}
-    , decltype(_impl_.address_) {}
-
-    , decltype(_impl_.version_) {}
-
+    , decltype(_impl_.address_){}
+    , decltype(_impl_.version_){}
     , decltype(_impl_.roles_){nullptr}
-    , decltype(_impl_.user_port_) { 0 }
-
-    , decltype(_impl_.control_port_) { 0 }
-
-    , decltype(_impl_.data_port_) { 0 }
-
-    , decltype(_impl_.state_) { 0 }
-
-    , decltype(_impl_.http_port_) { 0 }
-
+    , decltype(_impl_.user_port_){0}
+    , decltype(_impl_.control_port_){0}
+    , decltype(_impl_.data_port_){0}
+    , decltype(_impl_.state_){0}
+    , decltype(_impl_.http_port_){0}
   };
   _impl_.address_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-        _impl_.address_.Set("", GetArenaForAllocation());
-  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.address_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   _impl_.version_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-        _impl_.version_.Set("", GetArenaForAllocation());
-  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.version_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
 }
 
 DrillbitEndpoint::~DrillbitEndpoint() {
@@ -387,7 +324,7 @@ DrillbitEndpoint::~DrillbitEndpoint() {
 }
 
 inline void DrillbitEndpoint::SharedDtor() {
-  ABSL_DCHECK(GetArenaForAllocation() == nullptr);
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
   _impl_.address_.Destroy();
   _impl_.version_.Destroy();
   if (this != internal_default_instance()) delete _impl_.roles_;
@@ -399,7 +336,7 @@ void DrillbitEndpoint::SetCachedSize(int size) const {
 
 void DrillbitEndpoint::Clear() {
 // @@protoc_insertion_point(message_clear_start:exec.DrillbitEndpoint)
-  ::uint32_t cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
@@ -412,12 +349,12 @@ void DrillbitEndpoint::Clear() {
       _impl_.version_.ClearNonDefaultToEmpty();
     }
     if (cached_has_bits & 0x00000004u) {
-      ABSL_DCHECK(_impl_.roles_ != nullptr);
+      GOOGLE_DCHECK(_impl_.roles_ != nullptr);
       _impl_.roles_->Clear();
     }
   }
   if (cached_has_bits & 0x000000f8u) {
-    ::memset(&_impl_.user_port_, 0, static_cast<::size_t>(
+    ::memset(&_impl_.user_port_, 0, static_cast<size_t>(
         reinterpret_cast<char*>(&_impl_.http_port_) -
         reinterpret_cast<char*>(&_impl_.user_port_)) + sizeof(_impl_.http_port_));
   }
@@ -429,97 +366,89 @@ const char* DrillbitEndpoint::_InternalParse(const char* ptr, ::_pbi::ParseConte
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   _Internal::HasBits has_bits{};
   while (!ctx->Done(&ptr)) {
-    ::uint32_t tag;
+    uint32_t tag;
     ptr = ::_pbi::ReadTag(ptr, &tag);
     switch (tag >> 3) {
       // optional string address = 1;
       case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 10)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
           auto str = _internal_mutable_address();
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
           #ifndef NDEBUG
           ::_pbi::VerifyUTF8(str, "exec.DrillbitEndpoint.address");
           #endif  // !NDEBUG
-        } else {
+        } else
           goto handle_unusual;
-        }
         continue;
       // optional int32 user_port = 2;
       case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 16)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
           _Internal::set_has_user_port(&has_bits);
           _impl_.user_port_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
-        } else {
+        } else
           goto handle_unusual;
-        }
         continue;
       // optional int32 control_port = 3;
       case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 24)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
           _Internal::set_has_control_port(&has_bits);
           _impl_.control_port_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
-        } else {
+        } else
           goto handle_unusual;
-        }
         continue;
       // optional int32 data_port = 4;
       case 4:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 32)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 32)) {
           _Internal::set_has_data_port(&has_bits);
           _impl_.data_port_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
-        } else {
+        } else
           goto handle_unusual;
-        }
         continue;
       // optional .exec.Roles roles = 5;
       case 5:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 42)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 42)) {
           ptr = ctx->ParseMessage(_internal_mutable_roles(), ptr);
           CHK_(ptr);
-        } else {
+        } else
           goto handle_unusual;
-        }
         continue;
       // optional string version = 6;
       case 6:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 50)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 50)) {
           auto str = _internal_mutable_version();
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
           #ifndef NDEBUG
           ::_pbi::VerifyUTF8(str, "exec.DrillbitEndpoint.version");
           #endif  // !NDEBUG
-        } else {
+        } else
           goto handle_unusual;
-        }
         continue;
       // optional .exec.DrillbitEndpoint.State state = 7;
       case 7:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 56)) {
-          ::uint32_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 56)) {
+          uint64_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
-          if (PROTOBUF_PREDICT_TRUE(::exec::DrillbitEndpoint_State_IsValid(static_cast<int>(val)))) {
+          if (PROTOBUF_PREDICT_TRUE(::exec::DrillbitEndpoint_State_IsValid(val))) {
             _internal_set_state(static_cast<::exec::DrillbitEndpoint_State>(val));
           } else {
             ::PROTOBUF_NAMESPACE_ID::internal::WriteVarint(7, val, mutable_unknown_fields());
           }
-        } else {
+        } else
           goto handle_unusual;
-        }
         continue;
       // optional int32 http_port = 8;
       case 8:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 64)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 64)) {
           _Internal::set_has_http_port(&has_bits);
           _impl_.http_port_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
-        } else {
+        } else
           goto handle_unusual;
-        }
         continue;
       default:
         goto handle_unusual;
@@ -545,40 +474,39 @@ failure:
 #undef CHK_
 }
 
-::uint8_t* DrillbitEndpoint::_InternalSerialize(
-    ::uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+uint8_t* DrillbitEndpoint::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
   // @@protoc_insertion_point(serialize_to_array_start:exec.DrillbitEndpoint)
-  ::uint32_t cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
   cached_has_bits = _impl_._has_bits_[0];
   // optional string address = 1;
   if (cached_has_bits & 0x00000001u) {
-    const std::string& _s = this->_internal_address();
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::VerifyUTF8StringNamedField(_s.data(), static_cast<int>(_s.length()), ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SERIALIZE,
-                                "exec.DrillbitEndpoint.address");
-    target = stream->WriteStringMaybeAliased(1, _s, target);
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->_internal_address().data(), static_cast<int>(this->_internal_address().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SERIALIZE,
+      "exec.DrillbitEndpoint.address");
+    target = stream->WriteStringMaybeAliased(
+        1, this->_internal_address(), target);
   }
 
   // optional int32 user_port = 2;
   if (cached_has_bits & 0x00000008u) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteInt32ToArray(
-        2, this->_internal_user_port(), target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(2, this->_internal_user_port(), target);
   }
 
   // optional int32 control_port = 3;
   if (cached_has_bits & 0x00000010u) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteInt32ToArray(
-        3, this->_internal_control_port(), target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(3, this->_internal_control_port(), target);
   }
 
   // optional int32 data_port = 4;
   if (cached_has_bits & 0x00000020u) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteInt32ToArray(
-        4, this->_internal_data_port(), target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(4, this->_internal_data_port(), target);
   }
 
   // optional .exec.Roles roles = 5;
@@ -590,24 +518,25 @@ failure:
 
   // optional string version = 6;
   if (cached_has_bits & 0x00000002u) {
-    const std::string& _s = this->_internal_version();
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::VerifyUTF8StringNamedField(_s.data(), static_cast<int>(_s.length()), ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SERIALIZE,
-                                "exec.DrillbitEndpoint.version");
-    target = stream->WriteStringMaybeAliased(6, _s, target);
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->_internal_version().data(), static_cast<int>(this->_internal_version().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SERIALIZE,
+      "exec.DrillbitEndpoint.version");
+    target = stream->WriteStringMaybeAliased(
+        6, this->_internal_version(), target);
   }
 
   // optional .exec.DrillbitEndpoint.State state = 7;
   if (cached_has_bits & 0x00000040u) {
     target = stream->EnsureSpace(target);
     target = ::_pbi::WireFormatLite::WriteEnumToArray(
-        7, this->_internal_state(), target);
+      7, this->_internal_state(), target);
   }
 
   // optional int32 http_port = 8;
   if (cached_has_bits & 0x00000080u) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteInt32ToArray(
-        8, this->_internal_http_port(), target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(8, this->_internal_http_port(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -618,11 +547,11 @@ failure:
   return target;
 }
 
-::size_t DrillbitEndpoint::ByteSizeLong() const {
+size_t DrillbitEndpoint::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:exec.DrillbitEndpoint)
-  ::size_t total_size = 0;
+  size_t total_size = 0;
 
-  ::uint32_t cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
@@ -630,14 +559,16 @@ failure:
   if (cached_has_bits & 0x000000ffu) {
     // optional string address = 1;
     if (cached_has_bits & 0x00000001u) {
-      total_size += 1 + ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-                                      this->_internal_address());
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+          this->_internal_address());
     }
 
     // optional string version = 6;
     if (cached_has_bits & 0x00000002u) {
-      total_size += 1 + ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-                                      this->_internal_version());
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+          this->_internal_version());
     }
 
     // optional .exec.Roles roles = 5;
@@ -649,32 +580,28 @@ failure:
 
     // optional int32 user_port = 2;
     if (cached_has_bits & 0x00000008u) {
-      total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(
-          this->_internal_user_port());
+      total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_user_port());
     }
 
     // optional int32 control_port = 3;
     if (cached_has_bits & 0x00000010u) {
-      total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(
-          this->_internal_control_port());
+      total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_control_port());
     }
 
     // optional int32 data_port = 4;
     if (cached_has_bits & 0x00000020u) {
-      total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(
-          this->_internal_data_port());
+      total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_data_port());
     }
 
     // optional .exec.DrillbitEndpoint.State state = 7;
     if (cached_has_bits & 0x00000040u) {
       total_size += 1 +
-                    ::_pbi::WireFormatLite::EnumSize(this->_internal_state());
+        ::_pbi::WireFormatLite::EnumSize(this->_internal_state());
     }
 
     // optional int32 http_port = 8;
     if (cached_has_bits & 0x00000080u) {
-      total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(
-          this->_internal_http_port());
+      total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_http_port());
     }
 
   }
@@ -692,8 +619,8 @@ void DrillbitEndpoint::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const
   auto* const _this = static_cast<DrillbitEndpoint*>(&to_msg);
   auto& from = static_cast<const DrillbitEndpoint&>(from_msg);
   // @@protoc_insertion_point(class_specific_merge_from_start:exec.DrillbitEndpoint)
-  ABSL_DCHECK_NE(&from, _this);
-  ::uint32_t cached_has_bits = 0;
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
   cached_has_bits = from._impl_._has_bits_[0];
@@ -745,10 +672,14 @@ void DrillbitEndpoint::InternalSwap(DrillbitEndpoint* other) {
   auto* rhs_arena = other->GetArenaForAllocation();
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
-  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.address_, lhs_arena,
-                                       &other->_impl_.address_, rhs_arena);
-  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.version_, lhs_arena,
-                                       &other->_impl_.version_, rhs_arena);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.address_, lhs_arena,
+      &other->_impl_.address_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.version_, lhs_arena,
+      &other->_impl_.version_, rhs_arena
+  );
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
       PROTOBUF_FIELD_OFFSET(DrillbitEndpoint, _impl_.http_port_)
       + sizeof(DrillbitEndpoint::_impl_.http_port_)
@@ -762,13 +693,12 @@ void DrillbitEndpoint::InternalSwap(DrillbitEndpoint* other) {
       &descriptor_table_Coordination_2eproto_getter, &descriptor_table_Coordination_2eproto_once,
       file_level_metadata_Coordination_2eproto[0]);
 }
+
 // ===================================================================
 
 class DrillServiceInstance::_Internal {
  public:
   using HasBits = decltype(std::declval<DrillServiceInstance>()._impl_._has_bits_);
-  static constexpr ::int32_t kHasBitsOffset =
-    8 * PROTOBUF_FIELD_OFFSET(DrillServiceInstance, _impl_._has_bits_);
   static void set_has_id(HasBits* has_bits) {
     (*has_bits)[0] |= 1u;
   }
@@ -785,9 +715,10 @@ const ::exec::DrillbitEndpoint&
 DrillServiceInstance::_Internal::endpoint(const DrillServiceInstance* msg) {
   return *msg->_impl_.endpoint_;
 }
-DrillServiceInstance::DrillServiceInstance(::PROTOBUF_NAMESPACE_ID::Arena* arena)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
-  SharedCtor(arena);
+DrillServiceInstance::DrillServiceInstance(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
   // @@protoc_insertion_point(arena_constructor:exec.DrillServiceInstance)
 }
 DrillServiceInstance::DrillServiceInstance(const DrillServiceInstance& from)
@@ -796,42 +727,41 @@ DrillServiceInstance::DrillServiceInstance(const DrillServiceInstance& from)
   new (&_impl_) Impl_{
       decltype(_impl_._has_bits_){from._impl_._has_bits_}
     , /*decltype(_impl_._cached_size_)*/{}
-    , decltype(_impl_.id_) {}
-
+    , decltype(_impl_.id_){}
     , decltype(_impl_.endpoint_){nullptr}
-    , decltype(_impl_.registrationtimeutc_) {}
-  };
+    , decltype(_impl_.registrationtimeutc_){}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   _impl_.id_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-        _impl_.id_.Set("", GetArenaForAllocation());
-  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if ((from._impl_._has_bits_[0] & 0x00000001u) != 0) {
-    _this->_impl_.id_.Set(from._internal_id(), _this->GetArenaForAllocation());
+    _impl_.id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (from._internal_has_id()) {
+    _this->_impl_.id_.Set(from._internal_id(), 
+      _this->GetArenaForAllocation());
   }
-  if ((from._impl_._has_bits_[0] & 0x00000002u) != 0) {
+  if (from._internal_has_endpoint()) {
     _this->_impl_.endpoint_ = new ::exec::DrillbitEndpoint(*from._impl_.endpoint_);
   }
   _this->_impl_.registrationtimeutc_ = from._impl_.registrationtimeutc_;
   // @@protoc_insertion_point(copy_constructor:exec.DrillServiceInstance)
 }
 
-inline void DrillServiceInstance::SharedCtor(::_pb::Arena* arena) {
+inline void DrillServiceInstance::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
   (void)arena;
+  (void)is_message_owned;
   new (&_impl_) Impl_{
       decltype(_impl_._has_bits_){}
     , /*decltype(_impl_._cached_size_)*/{}
-    , decltype(_impl_.id_) {}
-
+    , decltype(_impl_.id_){}
     , decltype(_impl_.endpoint_){nullptr}
-    , decltype(_impl_.registrationtimeutc_) { ::int64_t{0} }
-
+    , decltype(_impl_.registrationtimeutc_){int64_t{0}}
   };
   _impl_.id_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-        _impl_.id_.Set("", GetArenaForAllocation());
-  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
 }
 
 DrillServiceInstance::~DrillServiceInstance() {
@@ -844,7 +774,7 @@ DrillServiceInstance::~DrillServiceInstance() {
 }
 
 inline void DrillServiceInstance::SharedDtor() {
-  ABSL_DCHECK(GetArenaForAllocation() == nullptr);
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
   _impl_.id_.Destroy();
   if (this != internal_default_instance()) delete _impl_.endpoint_;
 }
@@ -855,7 +785,7 @@ void DrillServiceInstance::SetCachedSize(int size) const {
 
 void DrillServiceInstance::Clear() {
 // @@protoc_insertion_point(message_clear_start:exec.DrillServiceInstance)
-  ::uint32_t cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
@@ -865,11 +795,11 @@ void DrillServiceInstance::Clear() {
       _impl_.id_.ClearNonDefaultToEmpty();
     }
     if (cached_has_bits & 0x00000002u) {
-      ABSL_DCHECK(_impl_.endpoint_ != nullptr);
+      GOOGLE_DCHECK(_impl_.endpoint_ != nullptr);
       _impl_.endpoint_->Clear();
     }
   }
-  _impl_.registrationtimeutc_ = ::int64_t{0};
+  _impl_.registrationtimeutc_ = int64_t{0};
   _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
@@ -878,40 +808,37 @@ const char* DrillServiceInstance::_InternalParse(const char* ptr, ::_pbi::ParseC
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   _Internal::HasBits has_bits{};
   while (!ctx->Done(&ptr)) {
-    ::uint32_t tag;
+    uint32_t tag;
     ptr = ::_pbi::ReadTag(ptr, &tag);
     switch (tag >> 3) {
       // optional string id = 1;
       case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 10)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
           auto str = _internal_mutable_id();
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
           #ifndef NDEBUG
           ::_pbi::VerifyUTF8(str, "exec.DrillServiceInstance.id");
           #endif  // !NDEBUG
-        } else {
+        } else
           goto handle_unusual;
-        }
         continue;
       // optional int64 registrationTimeUTC = 2;
       case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 16)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
           _Internal::set_has_registrationtimeutc(&has_bits);
           _impl_.registrationtimeutc_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
-        } else {
+        } else
           goto handle_unusual;
-        }
         continue;
       // optional .exec.DrillbitEndpoint endpoint = 3;
       case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 26)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 26)) {
           ptr = ctx->ParseMessage(_internal_mutable_endpoint(), ptr);
           CHK_(ptr);
-        } else {
+        } else
           goto handle_unusual;
-        }
         continue;
       default:
         goto handle_unusual;
@@ -937,26 +864,27 @@ failure:
 #undef CHK_
 }
 
-::uint8_t* DrillServiceInstance::_InternalSerialize(
-    ::uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+uint8_t* DrillServiceInstance::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
   // @@protoc_insertion_point(serialize_to_array_start:exec.DrillServiceInstance)
-  ::uint32_t cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
   cached_has_bits = _impl_._has_bits_[0];
   // optional string id = 1;
   if (cached_has_bits & 0x00000001u) {
-    const std::string& _s = this->_internal_id();
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::VerifyUTF8StringNamedField(_s.data(), static_cast<int>(_s.length()), ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SERIALIZE,
-                                "exec.DrillServiceInstance.id");
-    target = stream->WriteStringMaybeAliased(1, _s, target);
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->_internal_id().data(), static_cast<int>(this->_internal_id().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SERIALIZE,
+      "exec.DrillServiceInstance.id");
+    target = stream->WriteStringMaybeAliased(
+        1, this->_internal_id(), target);
   }
 
   // optional int64 registrationTimeUTC = 2;
   if (cached_has_bits & 0x00000004u) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteInt64ToArray(
-        2, this->_internal_registrationtimeutc(), target);
+    target = ::_pbi::WireFormatLite::WriteInt64ToArray(2, this->_internal_registrationtimeutc(), target);
   }
 
   // optional .exec.DrillbitEndpoint endpoint = 3;
@@ -974,11 +902,11 @@ failure:
   return target;
 }
 
-::size_t DrillServiceInstance::ByteSizeLong() const {
+size_t DrillServiceInstance::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:exec.DrillServiceInstance)
-  ::size_t total_size = 0;
+  size_t total_size = 0;
 
-  ::uint32_t cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
@@ -986,8 +914,9 @@ failure:
   if (cached_has_bits & 0x00000007u) {
     // optional string id = 1;
     if (cached_has_bits & 0x00000001u) {
-      total_size += 1 + ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-                                      this->_internal_id());
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+          this->_internal_id());
     }
 
     // optional .exec.DrillbitEndpoint endpoint = 3;
@@ -999,8 +928,7 @@ failure:
 
     // optional int64 registrationTimeUTC = 2;
     if (cached_has_bits & 0x00000004u) {
-      total_size += ::_pbi::WireFormatLite::Int64SizePlusOne(
-          this->_internal_registrationtimeutc());
+      total_size += ::_pbi::WireFormatLite::Int64SizePlusOne(this->_internal_registrationtimeutc());
     }
 
   }
@@ -1018,8 +946,8 @@ void DrillServiceInstance::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, c
   auto* const _this = static_cast<DrillServiceInstance*>(&to_msg);
   auto& from = static_cast<const DrillServiceInstance&>(from_msg);
   // @@protoc_insertion_point(class_specific_merge_from_start:exec.DrillServiceInstance)
-  ABSL_DCHECK_NE(&from, _this);
-  ::uint32_t cached_has_bits = 0;
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
   cached_has_bits = from._impl_._has_bits_[0];
@@ -1056,8 +984,10 @@ void DrillServiceInstance::InternalSwap(DrillServiceInstance* other) {
   auto* rhs_arena = other->GetArenaForAllocation();
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
-  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.id_, lhs_arena,
-                                       &other->_impl_.id_, rhs_arena);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.id_, lhs_arena,
+      &other->_impl_.id_, rhs_arena
+  );
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
       PROTOBUF_FIELD_OFFSET(DrillServiceInstance, _impl_.registrationtimeutc_)
       + sizeof(DrillServiceInstance::_impl_.registrationtimeutc_)
@@ -1071,13 +1001,12 @@ void DrillServiceInstance::InternalSwap(DrillServiceInstance* other) {
       &descriptor_table_Coordination_2eproto_getter, &descriptor_table_Coordination_2eproto_once,
       file_level_metadata_Coordination_2eproto[1]);
 }
+
 // ===================================================================
 
 class Roles::_Internal {
  public:
   using HasBits = decltype(std::declval<Roles>()._impl_._has_bits_);
-  static constexpr ::int32_t kHasBitsOffset =
-    8 * PROTOBUF_FIELD_OFFSET(Roles, _impl_._has_bits_);
   static void set_has_sql_query(HasBits* has_bits) {
     (*has_bits)[0] |= 1u;
   }
@@ -1095,33 +1024,43 @@ class Roles::_Internal {
   }
 };
 
-Roles::Roles(::PROTOBUF_NAMESPACE_ID::Arena* arena)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
-  SharedCtor(arena);
+Roles::Roles(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
   // @@protoc_insertion_point(arena_constructor:exec.Roles)
 }
 Roles::Roles(const Roles& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message(), _impl_(from._impl_) {
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(
-      from._internal_metadata_);
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  Roles* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_._has_bits_){from._impl_._has_bits_}
+    , /*decltype(_impl_._cached_size_)*/{}
+    , decltype(_impl_.sql_query_){}
+    , decltype(_impl_.logical_plan_){}
+    , decltype(_impl_.physical_plan_){}
+    , decltype(_impl_.java_executor_){}
+    , decltype(_impl_.distributed_cache_){}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  ::memcpy(&_impl_.sql_query_, &from._impl_.sql_query_,
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.distributed_cache_) -
+    reinterpret_cast<char*>(&_impl_.sql_query_)) + sizeof(_impl_.distributed_cache_));
   // @@protoc_insertion_point(copy_constructor:exec.Roles)
 }
 
-inline void Roles::SharedCtor(::_pb::Arena* arena) {
+inline void Roles::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
   (void)arena;
+  (void)is_message_owned;
   new (&_impl_) Impl_{
       decltype(_impl_._has_bits_){}
     , /*decltype(_impl_._cached_size_)*/{}
-    , decltype(_impl_.sql_query_) { true }
-
-    , decltype(_impl_.logical_plan_) { true }
-
-    , decltype(_impl_.physical_plan_) { true }
-
-    , decltype(_impl_.java_executor_) { true }
-
-    , decltype(_impl_.distributed_cache_) { true }
-
+    , decltype(_impl_.sql_query_){true}
+    , decltype(_impl_.logical_plan_){true}
+    , decltype(_impl_.physical_plan_){true}
+    , decltype(_impl_.java_executor_){true}
+    , decltype(_impl_.distributed_cache_){true}
   };
 }
 
@@ -1135,7 +1074,7 @@ Roles::~Roles() {
 }
 
 inline void Roles::SharedDtor() {
-  ABSL_DCHECK(GetArenaForAllocation() == nullptr);
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
 }
 
 void Roles::SetCachedSize(int size) const {
@@ -1144,7 +1083,7 @@ void Roles::SetCachedSize(int size) const {
 
 void Roles::Clear() {
 // @@protoc_insertion_point(message_clear_start:exec.Roles)
-  ::uint32_t cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
@@ -1164,58 +1103,53 @@ const char* Roles::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   _Internal::HasBits has_bits{};
   while (!ctx->Done(&ptr)) {
-    ::uint32_t tag;
+    uint32_t tag;
     ptr = ::_pbi::ReadTag(ptr, &tag);
     switch (tag >> 3) {
       // optional bool sql_query = 1 [default = true];
       case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 8)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
           _Internal::set_has_sql_query(&has_bits);
           _impl_.sql_query_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
-        } else {
+        } else
           goto handle_unusual;
-        }
         continue;
       // optional bool logical_plan = 2 [default = true];
       case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 16)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
           _Internal::set_has_logical_plan(&has_bits);
           _impl_.logical_plan_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
-        } else {
+        } else
           goto handle_unusual;
-        }
         continue;
       // optional bool physical_plan = 3 [default = true];
       case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 24)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
           _Internal::set_has_physical_plan(&has_bits);
           _impl_.physical_plan_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
-        } else {
+        } else
           goto handle_unusual;
-        }
         continue;
       // optional bool java_executor = 4 [default = true];
       case 4:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 32)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 32)) {
           _Internal::set_has_java_executor(&has_bits);
           _impl_.java_executor_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
-        } else {
+        } else
           goto handle_unusual;
-        }
         continue;
       // optional bool distributed_cache = 5 [default = true];
       case 5:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 40)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 40)) {
           _Internal::set_has_distributed_cache(&has_bits);
           _impl_.distributed_cache_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
-        } else {
+        } else
           goto handle_unusual;
-        }
         continue;
       default:
         goto handle_unusual;
@@ -1241,46 +1175,41 @@ failure:
 #undef CHK_
 }
 
-::uint8_t* Roles::_InternalSerialize(
-    ::uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+uint8_t* Roles::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
   // @@protoc_insertion_point(serialize_to_array_start:exec.Roles)
-  ::uint32_t cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
   cached_has_bits = _impl_._has_bits_[0];
   // optional bool sql_query = 1 [default = true];
   if (cached_has_bits & 0x00000001u) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteBoolToArray(
-        1, this->_internal_sql_query(), target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(1, this->_internal_sql_query(), target);
   }
 
   // optional bool logical_plan = 2 [default = true];
   if (cached_has_bits & 0x00000002u) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteBoolToArray(
-        2, this->_internal_logical_plan(), target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(2, this->_internal_logical_plan(), target);
   }
 
   // optional bool physical_plan = 3 [default = true];
   if (cached_has_bits & 0x00000004u) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteBoolToArray(
-        3, this->_internal_physical_plan(), target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(3, this->_internal_physical_plan(), target);
   }
 
   // optional bool java_executor = 4 [default = true];
   if (cached_has_bits & 0x00000008u) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteBoolToArray(
-        4, this->_internal_java_executor(), target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(4, this->_internal_java_executor(), target);
   }
 
   // optional bool distributed_cache = 5 [default = true];
   if (cached_has_bits & 0x00000010u) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteBoolToArray(
-        5, this->_internal_distributed_cache(), target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(5, this->_internal_distributed_cache(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -1291,11 +1220,11 @@ failure:
   return target;
 }
 
-::size_t Roles::ByteSizeLong() const {
+size_t Roles::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:exec.Roles)
-  ::size_t total_size = 0;
+  size_t total_size = 0;
 
-  ::uint32_t cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
@@ -1303,27 +1232,27 @@ failure:
   if (cached_has_bits & 0x0000001fu) {
     // optional bool sql_query = 1 [default = true];
     if (cached_has_bits & 0x00000001u) {
-      total_size += 2;
+      total_size += 1 + 1;
     }
 
     // optional bool logical_plan = 2 [default = true];
     if (cached_has_bits & 0x00000002u) {
-      total_size += 2;
+      total_size += 1 + 1;
     }
 
     // optional bool physical_plan = 3 [default = true];
     if (cached_has_bits & 0x00000004u) {
-      total_size += 2;
+      total_size += 1 + 1;
     }
 
     // optional bool java_executor = 4 [default = true];
     if (cached_has_bits & 0x00000008u) {
-      total_size += 2;
+      total_size += 1 + 1;
     }
 
     // optional bool distributed_cache = 5 [default = true];
     if (cached_has_bits & 0x00000010u) {
-      total_size += 2;
+      total_size += 1 + 1;
     }
 
   }
@@ -1341,8 +1270,8 @@ void Roles::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF
   auto* const _this = static_cast<Roles*>(&to_msg);
   auto& from = static_cast<const Roles&>(from_msg);
   // @@protoc_insertion_point(class_specific_merge_from_start:exec.Roles)
-  ABSL_DCHECK_NE(&from, _this);
-  ::uint32_t cached_has_bits = 0;
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
   cached_has_bits = from._impl_._has_bits_[0];
@@ -1382,12 +1311,11 @@ void Roles::InternalSwap(Roles* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
-  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(Roles, _impl_.distributed_cache_)
-      + sizeof(Roles::_impl_.distributed_cache_)
-      - PROTOBUF_FIELD_OFFSET(Roles, _impl_.sql_query_)>(
-          reinterpret_cast<char*>(&_impl_.sql_query_),
-          reinterpret_cast<char*>(&other->_impl_.sql_query_));
+  swap(_impl_.sql_query_, other->_impl_.sql_query_);
+  swap(_impl_.logical_plan_, other->_impl_.logical_plan_);
+  swap(_impl_.physical_plan_, other->_impl_.physical_plan_);
+  swap(_impl_.java_executor_, other->_impl_.java_executor_);
+  swap(_impl_.distributed_cache_, other->_impl_.distributed_cache_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata Roles::GetMetadata() const {
@@ -1395,6 +1323,7 @@ void Roles::InternalSwap(Roles* other) {
       &descriptor_table_Coordination_2eproto_getter, &descriptor_table_Coordination_2eproto_once,
       file_level_metadata_Coordination_2eproto[2]);
 }
+
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace exec
 PROTOBUF_NAMESPACE_OPEN
@@ -1411,5 +1340,6 @@ Arena::CreateMaybeMessage< ::exec::Roles >(Arena* arena) {
   return Arena::CreateMessageInternal< ::exec::Roles >(arena);
 }
 PROTOBUF_NAMESPACE_CLOSE
+
 // @@protoc_insertion_point(global_scope)
-#include "google/protobuf/port_undef.inc"
+#include <google/protobuf/port_undef.inc>

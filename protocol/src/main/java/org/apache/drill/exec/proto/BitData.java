@@ -253,6 +253,11 @@ public final class BitData {
       return new BitClientHandshake();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.BitData.internal_static_exec_bit_data_BitClientHandshake_descriptor;
@@ -561,6 +566,38 @@ public final class BitData {
       }
 
       @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.BitData.BitClientHandshake) {
           return mergeFrom((org.apache.drill.exec.proto.BitData.BitClientHandshake)other);
@@ -661,7 +698,7 @@ public final class BitData {
        * @return This builder for chaining.
        */
       public Builder setRpcVersion(int value) {
-
+        
         rpcVersion_ = value;
         bitField0_ |= 0x00000001;
         onChanged();
@@ -836,8 +873,7 @@ public final class BitData {
       super(builder);
     }
     private BitServerHandshake() {
-      authenticationMechanisms_ =
-          com.google.protobuf.LazyStringArrayList.emptyList();
+      authenticationMechanisms_ = com.google.protobuf.LazyStringArrayList.EMPTY;
     }
 
     @java.lang.Override
@@ -847,6 +883,11 @@ public final class BitData {
       return new BitServerHandshake();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.BitData.internal_static_exec_bit_data_BitServerHandshake_descriptor;
@@ -882,8 +923,7 @@ public final class BitData {
 
     public static final int AUTHENTICATIONMECHANISMS_FIELD_NUMBER = 2;
     @SuppressWarnings("serial")
-    private com.google.protobuf.LazyStringArrayList authenticationMechanisms_ =
-        com.google.protobuf.LazyStringArrayList.emptyList();
+    private com.google.protobuf.LazyStringList authenticationMechanisms_;
     /**
      * <code>repeated string authenticationMechanisms = 2;</code>
      * @return A list containing the authenticationMechanisms.
@@ -1129,8 +1169,8 @@ public final class BitData {
         super.clear();
         bitField0_ = 0;
         rpcVersion_ = 0;
-        authenticationMechanisms_ =
-            com.google.protobuf.LazyStringArrayList.emptyList();
+        authenticationMechanisms_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000002);
         return this;
       }
 
@@ -1157,9 +1197,18 @@ public final class BitData {
       @java.lang.Override
       public org.apache.drill.exec.proto.BitData.BitServerHandshake buildPartial() {
         org.apache.drill.exec.proto.BitData.BitServerHandshake result = new org.apache.drill.exec.proto.BitData.BitServerHandshake(this);
+        buildPartialRepeatedFields(result);
         if (bitField0_ != 0) { buildPartial0(result); }
         onBuilt();
         return result;
+      }
+
+      private void buildPartialRepeatedFields(org.apache.drill.exec.proto.BitData.BitServerHandshake result) {
+        if (((bitField0_ & 0x00000002) != 0)) {
+          authenticationMechanisms_ = authenticationMechanisms_.getUnmodifiableView();
+          bitField0_ = (bitField0_ & ~0x00000002);
+        }
+        result.authenticationMechanisms_ = authenticationMechanisms_;
       }
 
       private void buildPartial0(org.apache.drill.exec.proto.BitData.BitServerHandshake result) {
@@ -1169,13 +1218,41 @@ public final class BitData {
           result.rpcVersion_ = rpcVersion_;
           to_bitField0_ |= 0x00000001;
         }
-        if (((from_bitField0_ & 0x00000002) != 0)) {
-          authenticationMechanisms_.makeImmutable();
-          result.authenticationMechanisms_ = authenticationMechanisms_;
-        }
         result.bitField0_ |= to_bitField0_;
       }
 
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.BitData.BitServerHandshake) {
@@ -1194,7 +1271,7 @@ public final class BitData {
         if (!other.authenticationMechanisms_.isEmpty()) {
           if (authenticationMechanisms_.isEmpty()) {
             authenticationMechanisms_ = other.authenticationMechanisms_;
-            bitField0_ |= 0x00000002;
+            bitField0_ = (bitField0_ & ~0x00000002);
           } else {
             ensureAuthenticationMechanismsIsMutable();
             authenticationMechanisms_.addAll(other.authenticationMechanisms_);
@@ -1278,7 +1355,7 @@ public final class BitData {
        * @return This builder for chaining.
        */
       public Builder setRpcVersion(int value) {
-
+        
         rpcVersion_ = value;
         bitField0_ |= 0x00000001;
         onChanged();
@@ -1295,13 +1372,12 @@ public final class BitData {
         return this;
       }
 
-      private com.google.protobuf.LazyStringArrayList authenticationMechanisms_ =
-          com.google.protobuf.LazyStringArrayList.emptyList();
+      private com.google.protobuf.LazyStringList authenticationMechanisms_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       private void ensureAuthenticationMechanismsIsMutable() {
-        if (!authenticationMechanisms_.isModifiable()) {
+        if (!((bitField0_ & 0x00000002) != 0)) {
           authenticationMechanisms_ = new com.google.protobuf.LazyStringArrayList(authenticationMechanisms_);
-        }
-        bitField0_ |= 0x00000002;
+          bitField0_ |= 0x00000002;
+         }
       }
       /**
        * <code>repeated string authenticationMechanisms = 2;</code>
@@ -1309,8 +1385,7 @@ public final class BitData {
        */
       public com.google.protobuf.ProtocolStringList
           getAuthenticationMechanismsList() {
-        authenticationMechanisms_.makeImmutable();
-        return authenticationMechanisms_;
+        return authenticationMechanisms_.getUnmodifiableView();
       }
       /**
        * <code>repeated string authenticationMechanisms = 2;</code>
@@ -1347,7 +1422,6 @@ public final class BitData {
         if (value == null) { throw new NullPointerException(); }
         ensureAuthenticationMechanismsIsMutable();
         authenticationMechanisms_.set(index, value);
-        bitField0_ |= 0x00000002;
         onChanged();
         return this;
       }
@@ -1361,7 +1435,6 @@ public final class BitData {
         if (value == null) { throw new NullPointerException(); }
         ensureAuthenticationMechanismsIsMutable();
         authenticationMechanisms_.add(value);
-        bitField0_ |= 0x00000002;
         onChanged();
         return this;
       }
@@ -1375,7 +1448,6 @@ public final class BitData {
         ensureAuthenticationMechanismsIsMutable();
         com.google.protobuf.AbstractMessageLite.Builder.addAll(
             values, authenticationMechanisms_);
-        bitField0_ |= 0x00000002;
         onChanged();
         return this;
       }
@@ -1384,9 +1456,8 @@ public final class BitData {
        * @return This builder for chaining.
        */
       public Builder clearAuthenticationMechanisms() {
-        authenticationMechanisms_ =
-          com.google.protobuf.LazyStringArrayList.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000002);;
+        authenticationMechanisms_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000002);
         onChanged();
         return this;
       }
@@ -1400,7 +1471,6 @@ public final class BitData {
         if (value == null) { throw new NullPointerException(); }
         ensureAuthenticationMechanismsIsMutable();
         authenticationMechanisms_.add(value);
-        bitField0_ |= 0x00000002;
         onChanged();
         return this;
       }
@@ -1586,6 +1656,11 @@ public final class BitData {
       return new FragmentRecordBatch();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.BitData.internal_static_exec_bit_data_FragmentRecordBatch_descriptor;
@@ -2146,6 +2221,38 @@ public final class BitData {
       }
 
       @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.BitData.FragmentRecordBatch) {
           return mergeFrom((org.apache.drill.exec.proto.BitData.FragmentRecordBatch)other);
@@ -2420,7 +2527,7 @@ public final class BitData {
        * @return This builder for chaining.
        */
       public Builder setReceivingMajorFragmentId(int value) {
-
+        
         receivingMajorFragmentId_ = value;
         bitField0_ |= 0x00000002;
         onChanged();
@@ -2476,7 +2583,7 @@ public final class BitData {
        */
       public Builder setReceivingMinorFragmentId(
           int index, int value) {
-
+        
         ensureReceivingMinorFragmentIdIsMutable();
         receivingMinorFragmentId_.setInt(index, value);
         onChanged();
@@ -2488,7 +2595,7 @@ public final class BitData {
        * @return This builder for chaining.
        */
       public Builder addReceivingMinorFragmentId(int value) {
-
+        
         ensureReceivingMinorFragmentIdIsMutable();
         receivingMinorFragmentId_.addInt(value);
         onChanged();
@@ -2541,7 +2648,7 @@ public final class BitData {
        * @return This builder for chaining.
        */
       public Builder setSendingMajorFragmentId(int value) {
-
+        
         sendingMajorFragmentId_ = value;
         bitField0_ |= 0x00000008;
         onChanged();
@@ -2581,7 +2688,7 @@ public final class BitData {
        * @return This builder for chaining.
        */
       public Builder setSendingMinorFragmentId(int value) {
-
+        
         sendingMinorFragmentId_ = value;
         bitField0_ |= 0x00000010;
         onChanged();
@@ -2740,7 +2847,7 @@ public final class BitData {
        * @return This builder for chaining.
        */
       public Builder setIsLastBatch(boolean value) {
-
+        
         isLastBatch_ = value;
         bitField0_ |= 0x00000040;
         onChanged();
@@ -2990,8 +3097,7 @@ public final class BitData {
     }
     private RuntimeFilterBDef() {
       bloomFilterSizeInBytes_ = emptyIntList();
-      probeFields_ =
-          com.google.protobuf.LazyStringArrayList.emptyList();
+      probeFields_ = com.google.protobuf.LazyStringArrayList.EMPTY;
     }
 
     @java.lang.Override
@@ -3001,6 +3107,11 @@ public final class BitData {
       return new RuntimeFilterBDef();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.BitData.internal_static_exec_bit_data_RuntimeFilterBDef_descriptor;
@@ -3136,8 +3247,7 @@ public final class BitData {
 
     public static final int PROBE_FIELDS_FIELD_NUMBER = 6;
     @SuppressWarnings("serial")
-    private com.google.protobuf.LazyStringArrayList probeFields_ =
-        com.google.protobuf.LazyStringArrayList.emptyList();
+    private com.google.protobuf.LazyStringList probeFields_;
     /**
      * <pre>
      * probe fields with corresponding BloomFilters
@@ -3567,8 +3677,8 @@ public final class BitData {
         minorFragmentId_ = 0;
         toForeman_ = false;
         bloomFilterSizeInBytes_ = emptyIntList();
-        probeFields_ =
-            com.google.protobuf.LazyStringArrayList.emptyList();
+        probeFields_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000020);
         hjOpId_ = 0;
         rfIdentifier_ = 0L;
         return this;
@@ -3609,6 +3719,11 @@ public final class BitData {
           bitField0_ = (bitField0_ & ~0x00000010);
         }
         result.bloomFilterSizeInBytes_ = bloomFilterSizeInBytes_;
+        if (((bitField0_ & 0x00000020) != 0)) {
+          probeFields_ = probeFields_.getUnmodifiableView();
+          bitField0_ = (bitField0_ & ~0x00000020);
+        }
+        result.probeFields_ = probeFields_;
       }
 
       private void buildPartial0(org.apache.drill.exec.proto.BitData.RuntimeFilterBDef result) {
@@ -3632,10 +3747,6 @@ public final class BitData {
           result.toForeman_ = toForeman_;
           to_bitField0_ |= 0x00000008;
         }
-        if (((from_bitField0_ & 0x00000020) != 0)) {
-          probeFields_.makeImmutable();
-          result.probeFields_ = probeFields_;
-        }
         if (((from_bitField0_ & 0x00000040) != 0)) {
           result.hjOpId_ = hjOpId_;
           to_bitField0_ |= 0x00000010;
@@ -3647,6 +3758,38 @@ public final class BitData {
         result.bitField0_ |= to_bitField0_;
       }
 
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.BitData.RuntimeFilterBDef) {
@@ -3684,7 +3827,7 @@ public final class BitData {
         if (!other.probeFields_.isEmpty()) {
           if (probeFields_.isEmpty()) {
             probeFields_ = other.probeFields_;
-            bitField0_ |= 0x00000020;
+            bitField0_ = (bitField0_ & ~0x00000020);
           } else {
             ensureProbeFieldsIsMutable();
             probeFields_.addAll(other.probeFields_);
@@ -3936,7 +4079,7 @@ public final class BitData {
        * @return This builder for chaining.
        */
       public Builder setMajorFragmentId(int value) {
-
+        
         majorFragmentId_ = value;
         bitField0_ |= 0x00000002;
         onChanged();
@@ -3976,7 +4119,7 @@ public final class BitData {
        * @return This builder for chaining.
        */
       public Builder setMinorFragmentId(int value) {
-
+        
         minorFragmentId_ = value;
         bitField0_ |= 0x00000004;
         onChanged();
@@ -4028,7 +4171,7 @@ public final class BitData {
        * @return This builder for chaining.
        */
       public Builder setToForeman(boolean value) {
-
+        
         toForeman_ = value;
         bitField0_ |= 0x00000008;
         onChanged();
@@ -4088,7 +4231,7 @@ public final class BitData {
        */
       public Builder setBloomFilterSizeInBytes(
           int index, int value) {
-
+        
         ensureBloomFilterSizeInBytesIsMutable();
         bloomFilterSizeInBytes_.setInt(index, value);
         onChanged();
@@ -4100,7 +4243,7 @@ public final class BitData {
        * @return This builder for chaining.
        */
       public Builder addBloomFilterSizeInBytes(int value) {
-
+        
         ensureBloomFilterSizeInBytesIsMutable();
         bloomFilterSizeInBytes_.addInt(value);
         onChanged();
@@ -4130,13 +4273,12 @@ public final class BitData {
         return this;
       }
 
-      private com.google.protobuf.LazyStringArrayList probeFields_ =
-          com.google.protobuf.LazyStringArrayList.emptyList();
+      private com.google.protobuf.LazyStringList probeFields_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       private void ensureProbeFieldsIsMutable() {
-        if (!probeFields_.isModifiable()) {
+        if (!((bitField0_ & 0x00000020) != 0)) {
           probeFields_ = new com.google.protobuf.LazyStringArrayList(probeFields_);
-        }
-        bitField0_ |= 0x00000020;
+          bitField0_ |= 0x00000020;
+         }
       }
       /**
        * <pre>
@@ -4148,8 +4290,7 @@ public final class BitData {
        */
       public com.google.protobuf.ProtocolStringList
           getProbeFieldsList() {
-        probeFields_.makeImmutable();
-        return probeFields_;
+        return probeFields_.getUnmodifiableView();
       }
       /**
        * <pre>
@@ -4202,7 +4343,6 @@ public final class BitData {
         if (value == null) { throw new NullPointerException(); }
         ensureProbeFieldsIsMutable();
         probeFields_.set(index, value);
-        bitField0_ |= 0x00000020;
         onChanged();
         return this;
       }
@@ -4220,7 +4360,6 @@ public final class BitData {
         if (value == null) { throw new NullPointerException(); }
         ensureProbeFieldsIsMutable();
         probeFields_.add(value);
-        bitField0_ |= 0x00000020;
         onChanged();
         return this;
       }
@@ -4238,7 +4377,6 @@ public final class BitData {
         ensureProbeFieldsIsMutable();
         com.google.protobuf.AbstractMessageLite.Builder.addAll(
             values, probeFields_);
-        bitField0_ |= 0x00000020;
         onChanged();
         return this;
       }
@@ -4251,9 +4389,8 @@ public final class BitData {
        * @return This builder for chaining.
        */
       public Builder clearProbeFields() {
-        probeFields_ =
-          com.google.protobuf.LazyStringArrayList.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000020);;
+        probeFields_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000020);
         onChanged();
         return this;
       }
@@ -4271,7 +4408,6 @@ public final class BitData {
         if (value == null) { throw new NullPointerException(); }
         ensureProbeFieldsIsMutable();
         probeFields_.add(value);
-        bitField0_ |= 0x00000020;
         onChanged();
         return this;
       }
@@ -4311,7 +4447,7 @@ public final class BitData {
        * @return This builder for chaining.
        */
       public Builder setHjOpId(int value) {
-
+        
         hjOpId_ = value;
         bitField0_ |= 0x00000040;
         onChanged();
@@ -4367,7 +4503,7 @@ public final class BitData {
        * @return This builder for chaining.
        */
       public Builder setRfIdentifier(long value) {
-
+        
         rfIdentifier_ = value;
         bitField0_ |= 0x00000080;
         onChanged();
@@ -4496,6 +4632,11 @@ public final class BitData {
       return new AckWithCredit();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.BitData.internal_static_exec_bit_data_AckWithCredit_descriptor;
@@ -4774,6 +4915,38 @@ public final class BitData {
       }
 
       @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.BitData.AckWithCredit) {
           return mergeFrom((org.apache.drill.exec.proto.BitData.AckWithCredit)other);
@@ -4871,7 +5044,7 @@ public final class BitData {
        * @return This builder for chaining.
        */
       public Builder setAllowedCredit(int value) {
-
+        
         allowedCredit_ = value;
         bitField0_ |= 0x00000001;
         onChanged();

@@ -1032,6 +1032,11 @@ public final class TypeProtos {
       return new MajorType();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.common.types.TypeProtos.internal_static_common_MajorType_descriptor;
@@ -1601,6 +1606,38 @@ public final class TypeProtos {
       }
 
       @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.common.types.TypeProtos.MajorType) {
           return mergeFrom((org.apache.drill.common.types.TypeProtos.MajorType)other);
@@ -1863,7 +1900,7 @@ public final class TypeProtos {
        * @return This builder for chaining.
        */
       public Builder setWidth(int value) {
-
+        
         width_ = value;
         bitField0_ |= 0x00000004;
         onChanged();
@@ -1915,7 +1952,7 @@ public final class TypeProtos {
        * @return This builder for chaining.
        */
       public Builder setPrecision(int value) {
-
+        
         precision_ = value;
         bitField0_ |= 0x00000008;
         onChanged();
@@ -1971,7 +2008,7 @@ public final class TypeProtos {
        * @return This builder for chaining.
        */
       public Builder setScale(int value) {
-
+        
         scale_ = value;
         bitField0_ |= 0x00000010;
         onChanged();
@@ -2027,7 +2064,7 @@ public final class TypeProtos {
        * @return This builder for chaining.
        */
       public Builder setTimeZone(int value) {
-
+        
         timeZone_ = value;
         bitField0_ |= 0x00000020;
         onChanged();
