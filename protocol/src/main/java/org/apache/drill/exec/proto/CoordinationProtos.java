@@ -164,6 +164,11 @@ public final class CoordinationProtos {
       return new DrillbitEndpoint();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.CoordinationProtos.internal_static_exec_DrillbitEndpoint_descriptor;
@@ -903,6 +908,38 @@ public final class CoordinationProtos {
       }
 
       @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.CoordinationProtos.DrillbitEndpoint) {
           return mergeFrom((org.apache.drill.exec.proto.CoordinationProtos.DrillbitEndpoint)other);
@@ -1137,7 +1174,7 @@ public final class CoordinationProtos {
        * @return This builder for chaining.
        */
       public Builder setUserPort(int value) {
-
+        
         userPort_ = value;
         bitField0_ |= 0x00000002;
         onChanged();
@@ -1177,7 +1214,7 @@ public final class CoordinationProtos {
        * @return This builder for chaining.
        */
       public Builder setControlPort(int value) {
-
+        
         controlPort_ = value;
         bitField0_ |= 0x00000004;
         onChanged();
@@ -1217,7 +1254,7 @@ public final class CoordinationProtos {
        * @return This builder for chaining.
        */
       public Builder setDataPort(int value) {
-
+        
         dataPort_ = value;
         bitField0_ |= 0x00000008;
         onChanged();
@@ -1498,7 +1535,7 @@ public final class CoordinationProtos {
        * @return This builder for chaining.
        */
       public Builder setHttpPort(int value) {
-
+        
         httpPort_ = value;
         bitField0_ |= 0x00000080;
         onChanged();
@@ -1648,6 +1685,11 @@ public final class CoordinationProtos {
       return new DrillServiceInstance();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.CoordinationProtos.internal_static_exec_DrillServiceInstance_descriptor;
@@ -2047,6 +2089,38 @@ public final class CoordinationProtos {
       }
 
       @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.CoordinationProtos.DrillServiceInstance) {
           return mergeFrom((org.apache.drill.exec.proto.CoordinationProtos.DrillServiceInstance)other);
@@ -2232,7 +2306,7 @@ public final class CoordinationProtos {
        * @return This builder for chaining.
        */
       public Builder setRegistrationTimeUTC(long value) {
-
+        
         registrationTimeUTC_ = value;
         bitField0_ |= 0x00000002;
         onChanged();
@@ -2517,6 +2591,11 @@ public final class CoordinationProtos {
       return new Roles();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.CoordinationProtos.internal_static_exec_Roles_descriptor;
@@ -2952,6 +3031,38 @@ public final class CoordinationProtos {
       }
 
       @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.CoordinationProtos.Roles) {
           return mergeFrom((org.apache.drill.exec.proto.CoordinationProtos.Roles)other);
@@ -3069,7 +3180,7 @@ public final class CoordinationProtos {
        * @return This builder for chaining.
        */
       public Builder setSqlQuery(boolean value) {
-
+        
         sqlQuery_ = value;
         bitField0_ |= 0x00000001;
         onChanged();
@@ -3109,7 +3220,7 @@ public final class CoordinationProtos {
        * @return This builder for chaining.
        */
       public Builder setLogicalPlan(boolean value) {
-
+        
         logicalPlan_ = value;
         bitField0_ |= 0x00000002;
         onChanged();
@@ -3149,7 +3260,7 @@ public final class CoordinationProtos {
        * @return This builder for chaining.
        */
       public Builder setPhysicalPlan(boolean value) {
-
+        
         physicalPlan_ = value;
         bitField0_ |= 0x00000004;
         onChanged();
@@ -3189,7 +3300,7 @@ public final class CoordinationProtos {
        * @return This builder for chaining.
        */
       public Builder setJavaExecutor(boolean value) {
-
+        
         javaExecutor_ = value;
         bitField0_ |= 0x00000008;
         onChanged();
@@ -3229,7 +3340,7 @@ public final class CoordinationProtos {
        * @return This builder for chaining.
        */
       public Builder setDistributedCache(boolean value) {
-
+        
         distributedCache_ = value;
         bitField0_ |= 0x00000010;
         onChanged();

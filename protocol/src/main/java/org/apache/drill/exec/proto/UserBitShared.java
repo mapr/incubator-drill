@@ -575,6 +575,11 @@ public final class UserBitShared {
       return new UserCredentials();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.UserBitShared.internal_static_exec_shared_UserCredentials_descriptor;
@@ -874,6 +879,38 @@ public final class UserBitShared {
       }
 
       @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.UserBitShared.UserCredentials) {
           return mergeFrom((org.apache.drill.exec.proto.UserBitShared.UserCredentials)other);
@@ -1129,6 +1166,11 @@ public final class UserBitShared {
       return new QueryId();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.UserBitShared.internal_static_exec_shared_QueryId_descriptor;
@@ -1441,6 +1483,38 @@ public final class UserBitShared {
       }
 
       @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.UserBitShared.QueryId) {
           return mergeFrom((org.apache.drill.exec.proto.UserBitShared.QueryId)other);
@@ -1534,7 +1608,7 @@ public final class UserBitShared {
        * @return This builder for chaining.
        */
       public Builder setPart1(long value) {
-
+        
         part1_ = value;
         bitField0_ |= 0x00000001;
         onChanged();
@@ -1574,7 +1648,7 @@ public final class UserBitShared {
        * @return This builder for chaining.
        */
       public Builder setPart2(long value) {
-
+        
         part2_ = value;
         bitField0_ |= 0x00000002;
         onChanged();
@@ -1815,6 +1889,11 @@ public final class UserBitShared {
       return new DrillPBError();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.UserBitShared.internal_static_exec_shared_DrillPBError_descriptor;
@@ -2812,6 +2891,38 @@ public final class UserBitShared {
         result.bitField0_ |= to_bitField0_;
       }
 
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.UserBitShared.DrillPBError) {
@@ -3902,6 +4013,11 @@ public final class UserBitShared {
       return new ExceptionWrapper();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.UserBitShared.internal_static_exec_shared_ExceptionWrapper_descriptor;
@@ -4403,6 +4519,38 @@ public final class UserBitShared {
         result.bitField0_ |= to_bitField0_;
       }
 
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.UserBitShared.ExceptionWrapper) {
@@ -5211,6 +5359,11 @@ public final class UserBitShared {
       return new StackTraceElementWrapper();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.UserBitShared.internal_static_exec_shared_StackTraceElementWrapper_descriptor;
@@ -5729,6 +5882,38 @@ public final class UserBitShared {
       }
 
       @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.UserBitShared.StackTraceElementWrapper) {
           return mergeFrom((org.apache.drill.exec.proto.UserBitShared.StackTraceElementWrapper)other);
@@ -6012,7 +6197,7 @@ public final class UserBitShared {
        * @return This builder for chaining.
        */
       public Builder setLineNumber(int value) {
-
+        
         lineNumber_ = value;
         bitField0_ |= 0x00000004;
         onChanged();
@@ -6132,7 +6317,7 @@ public final class UserBitShared {
        * @return This builder for chaining.
        */
       public Builder setIsNativeMethod(boolean value) {
-
+        
         isNativeMethod_ = value;
         bitField0_ |= 0x00000010;
         onChanged();
@@ -6282,6 +6467,11 @@ public final class UserBitShared {
       return new ParsingError();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.UserBitShared.internal_static_exec_shared_ParsingError_descriptor;
@@ -6672,6 +6862,38 @@ public final class UserBitShared {
       }
 
       @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.UserBitShared.ParsingError) {
           return mergeFrom((org.apache.drill.exec.proto.UserBitShared.ParsingError)other);
@@ -6781,7 +7003,7 @@ public final class UserBitShared {
        * @return This builder for chaining.
        */
       public Builder setStartColumn(int value) {
-
+        
         startColumn_ = value;
         bitField0_ |= 0x00000001;
         onChanged();
@@ -6821,7 +7043,7 @@ public final class UserBitShared {
        * @return This builder for chaining.
        */
       public Builder setStartRow(int value) {
-
+        
         startRow_ = value;
         bitField0_ |= 0x00000002;
         onChanged();
@@ -6861,7 +7083,7 @@ public final class UserBitShared {
        * @return This builder for chaining.
        */
       public Builder setEndColumn(int value) {
-
+        
         endColumn_ = value;
         bitField0_ |= 0x00000004;
         onChanged();
@@ -6901,7 +7123,7 @@ public final class UserBitShared {
        * @return This builder for chaining.
        */
       public Builder setEndRow(int value) {
-
+        
         endRow_ = value;
         bitField0_ |= 0x00000008;
         onChanged();
@@ -7075,6 +7297,11 @@ public final class UserBitShared {
       return new RecordBatchDef();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.UserBitShared.internal_static_exec_shared_RecordBatchDef_descriptor;
@@ -7510,6 +7737,38 @@ public final class UserBitShared {
       }
 
       @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.UserBitShared.RecordBatchDef) {
           return mergeFrom((org.apache.drill.exec.proto.UserBitShared.RecordBatchDef)other);
@@ -7650,7 +7909,7 @@ public final class UserBitShared {
        * @return This builder for chaining.
        */
       public Builder setRecordCount(int value) {
-
+        
         recordCount_ = value;
         bitField0_ |= 0x00000001;
         onChanged();
@@ -7930,7 +8189,7 @@ public final class UserBitShared {
        * @return This builder for chaining.
        */
       public Builder setCarriesTwoByteSelectionVector(boolean value) {
-
+        
         carriesTwoByteSelectionVector_ = value;
         bitField0_ |= 0x00000004;
         onChanged();
@@ -7985,7 +8244,7 @@ public final class UserBitShared {
        * @return This builder for chaining.
        */
       public Builder setAffectedRowsCount(int value) {
-
+        
         affectedRowsCount_ = value;
         bitField0_ |= 0x00000008;
         onChanged();
@@ -8141,6 +8400,11 @@ public final class UserBitShared {
       return new NamePart();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.UserBitShared.internal_static_exec_shared_NamePart_descriptor;
@@ -8632,6 +8896,38 @@ public final class UserBitShared {
         result.bitField0_ |= to_bitField0_;
       }
 
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.UserBitShared.NamePart) {
@@ -9172,6 +9468,11 @@ public final class UserBitShared {
       return new SerializedField();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.UserBitShared.internal_static_exec_shared_SerializedField_descriptor;
@@ -9741,6 +10042,38 @@ public final class UserBitShared {
         result.bitField0_ |= to_bitField0_;
       }
 
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.UserBitShared.SerializedField) {
@@ -10488,7 +10821,7 @@ public final class UserBitShared {
        * @return This builder for chaining.
        */
       public Builder setValueCount(int value) {
-
+        
         valueCount_ = value;
         bitField0_ |= 0x00000008;
         onChanged();
@@ -10528,7 +10861,7 @@ public final class UserBitShared {
        * @return This builder for chaining.
        */
       public Builder setVarByteLength(int value) {
-
+        
         varByteLength_ = value;
         bitField0_ |= 0x00000010;
         onChanged();
@@ -10568,7 +10901,7 @@ public final class UserBitShared {
        * @return This builder for chaining.
        */
       public Builder setBufferLength(int value) {
-
+        
         bufferLength_ = value;
         bitField0_ |= 0x00000020;
         onChanged();
@@ -10696,6 +11029,11 @@ public final class UserBitShared {
       return new NodeStatus();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.UserBitShared.internal_static_exec_shared_NodeStatus_descriptor;
@@ -11007,6 +11345,38 @@ public final class UserBitShared {
       }
 
       @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.UserBitShared.NodeStatus) {
           return mergeFrom((org.apache.drill.exec.proto.UserBitShared.NodeStatus)other);
@@ -11100,7 +11470,7 @@ public final class UserBitShared {
        * @return This builder for chaining.
        */
       public Builder setNodeId(int value) {
-
+        
         nodeId_ = value;
         bitField0_ |= 0x00000001;
         onChanged();
@@ -11140,7 +11510,7 @@ public final class UserBitShared {
        * @return This builder for chaining.
        */
       public Builder setMemoryFootprint(long value) {
-
+        
         memoryFootprint_ = value;
         bitField0_ |= 0x00000002;
         onChanged();
@@ -11303,6 +11673,11 @@ public final class UserBitShared {
       return new QueryResult();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.UserBitShared.internal_static_exec_shared_QueryResult_descriptor;
@@ -11924,6 +12299,38 @@ public final class UserBitShared {
         result.bitField0_ |= to_bitField0_;
       }
 
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.UserBitShared.QueryResult) {
@@ -12590,6 +12997,11 @@ public final class UserBitShared {
       return new QueryData();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.UserBitShared.internal_static_exec_shared_QueryData_descriptor;
@@ -13018,6 +13430,38 @@ public final class UserBitShared {
       }
 
       @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.UserBitShared.QueryData) {
           return mergeFrom((org.apache.drill.exec.proto.UserBitShared.QueryData)other);
@@ -13250,7 +13694,7 @@ public final class UserBitShared {
        * @return This builder for chaining.
        */
       public Builder setRowCount(int value) {
-
+        
         rowCount_ = value;
         bitField0_ |= 0x00000002;
         onChanged();
@@ -13409,7 +13853,7 @@ public final class UserBitShared {
        * @return This builder for chaining.
        */
       public Builder setAffectedRowsCount(int value) {
-
+        
         affectedRowsCount_ = value;
         bitField0_ |= 0x00000008;
         onChanged();
@@ -13636,6 +14080,11 @@ public final class UserBitShared {
       return new QueryInfo();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.UserBitShared.internal_static_exec_shared_QueryInfo_descriptor;
@@ -14322,6 +14771,38 @@ public final class UserBitShared {
       }
 
       @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.UserBitShared.QueryInfo) {
           return mergeFrom((org.apache.drill.exec.proto.UserBitShared.QueryInfo)other);
@@ -14560,7 +15041,7 @@ public final class UserBitShared {
        * @return This builder for chaining.
        */
       public Builder setStart(long value) {
-
+        
         start_ = value;
         bitField0_ |= 0x00000002;
         onChanged();
@@ -14921,7 +15402,7 @@ public final class UserBitShared {
        * @return This builder for chaining.
        */
       public Builder setTotalCost(double value) {
-
+        
         totalCost_ = value;
         bitField0_ |= 0x00000040;
         onChanged();
@@ -15454,6 +15935,11 @@ public final class UserBitShared {
       return new QueryProfile();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.UserBitShared.internal_static_exec_shared_QueryProfile_descriptor;
@@ -16964,6 +17450,38 @@ public final class UserBitShared {
       }
 
       @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.UserBitShared.QueryProfile) {
           return mergeFrom((org.apache.drill.exec.proto.UserBitShared.QueryProfile)other);
@@ -17455,7 +17973,7 @@ public final class UserBitShared {
        * @return This builder for chaining.
        */
       public Builder setStart(long value) {
-
+        
         start_ = value;
         bitField0_ |= 0x00000004;
         onChanged();
@@ -17495,7 +18013,7 @@ public final class UserBitShared {
        * @return This builder for chaining.
        */
       public Builder setEnd(long value) {
-
+        
         end_ = value;
         bitField0_ |= 0x00000008;
         onChanged();
@@ -17856,7 +18374,7 @@ public final class UserBitShared {
        * @return This builder for chaining.
        */
       public Builder setTotalFragments(int value) {
-
+        
         totalFragments_ = value;
         bitField0_ |= 0x00000100;
         onChanged();
@@ -17896,7 +18414,7 @@ public final class UserBitShared {
        * @return This builder for chaining.
        */
       public Builder setFinishedFragments(int value) {
-
+        
         finishedFragments_ = value;
         bitField0_ |= 0x00000200;
         onChanged();
@@ -18656,7 +19174,7 @@ public final class UserBitShared {
        * @return This builder for chaining.
        */
       public Builder setPlanEnd(long value) {
-
+        
         planEnd_ = value;
         bitField0_ |= 0x00020000;
         onChanged();
@@ -18696,7 +19214,7 @@ public final class UserBitShared {
        * @return This builder for chaining.
        */
       public Builder setQueueWaitEnd(long value) {
-
+        
         queueWaitEnd_ = value;
         bitField0_ |= 0x00040000;
         onChanged();
@@ -18736,7 +19254,7 @@ public final class UserBitShared {
        * @return This builder for chaining.
        */
       public Builder setTotalCost(double value) {
-
+        
         totalCost_ = value;
         bitField0_ |= 0x00080000;
         onChanged();
@@ -18936,7 +19454,7 @@ public final class UserBitShared {
        * @return This builder for chaining.
        */
       public Builder setAutoLimit(int value) {
-
+        
         autoLimit_ = value;
         bitField0_ |= 0x00400000;
         onChanged();
@@ -19078,6 +19596,11 @@ public final class UserBitShared {
       return new MajorFragmentProfile();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.UserBitShared.internal_static_exec_shared_MajorFragmentProfile_descriptor;
@@ -19422,6 +19945,38 @@ public final class UserBitShared {
       }
 
       @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.UserBitShared.MajorFragmentProfile) {
           return mergeFrom((org.apache.drill.exec.proto.UserBitShared.MajorFragmentProfile)other);
@@ -19546,7 +20101,7 @@ public final class UserBitShared {
        * @return This builder for chaining.
        */
       public Builder setMajorFragmentId(int value) {
-
+        
         majorFragmentId_ = value;
         bitField0_ |= 0x00000001;
         onChanged();
@@ -20036,6 +20591,11 @@ public final class UserBitShared {
       return new MinorFragmentProfile();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.UserBitShared.internal_static_exec_shared_MinorFragmentProfile_descriptor;
@@ -20778,6 +21338,38 @@ public final class UserBitShared {
       }
 
       @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.UserBitShared.MinorFragmentProfile) {
           return mergeFrom((org.apache.drill.exec.proto.UserBitShared.MinorFragmentProfile)other);
@@ -21146,7 +21738,7 @@ public final class UserBitShared {
        * @return This builder for chaining.
        */
       public Builder setMinorFragmentId(int value) {
-
+        
         minorFragmentId_ = value;
         bitField0_ |= 0x00000004;
         onChanged();
@@ -21426,7 +22018,7 @@ public final class UserBitShared {
        * @return This builder for chaining.
        */
       public Builder setStartTime(long value) {
-
+        
         startTime_ = value;
         bitField0_ |= 0x00000010;
         onChanged();
@@ -21466,7 +22058,7 @@ public final class UserBitShared {
        * @return This builder for chaining.
        */
       public Builder setEndTime(long value) {
-
+        
         endTime_ = value;
         bitField0_ |= 0x00000020;
         onChanged();
@@ -21506,7 +22098,7 @@ public final class UserBitShared {
        * @return This builder for chaining.
        */
       public Builder setMemoryUsed(long value) {
-
+        
         memoryUsed_ = value;
         bitField0_ |= 0x00000040;
         onChanged();
@@ -21546,7 +22138,7 @@ public final class UserBitShared {
        * @return This builder for chaining.
        */
       public Builder setMaxMemoryUsed(long value) {
-
+        
         maxMemoryUsed_ = value;
         bitField0_ |= 0x00000080;
         onChanged();
@@ -21705,7 +22297,7 @@ public final class UserBitShared {
        * @return This builder for chaining.
        */
       public Builder setLastUpdate(long value) {
-
+        
         lastUpdate_ = value;
         bitField0_ |= 0x00000200;
         onChanged();
@@ -21745,7 +22337,7 @@ public final class UserBitShared {
        * @return This builder for chaining.
        */
       public Builder setLastProgress(long value) {
-
+        
         lastProgress_ = value;
         bitField0_ |= 0x00000400;
         onChanged();
@@ -21989,6 +22581,11 @@ public final class UserBitShared {
       return new OperatorProfile();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.UserBitShared.internal_static_exec_shared_OperatorProfile_descriptor;
@@ -22680,6 +23277,38 @@ public final class UserBitShared {
       }
 
       @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.UserBitShared.OperatorProfile) {
           return mergeFrom((org.apache.drill.exec.proto.UserBitShared.OperatorProfile)other);
@@ -23133,7 +23762,7 @@ public final class UserBitShared {
        * @return This builder for chaining.
        */
       public Builder setOperatorId(int value) {
-
+        
         operatorId_ = value;
         bitField0_ |= 0x00000002;
         onChanged();
@@ -23179,7 +23808,7 @@ public final class UserBitShared {
        * @return This builder for chaining.
        */
       @java.lang.Deprecated public Builder setOperatorType(int value) {
-
+        
         operatorType_ = value;
         bitField0_ |= 0x00000004;
         onChanged();
@@ -23221,7 +23850,7 @@ public final class UserBitShared {
        * @return This builder for chaining.
        */
       public Builder setSetupNanos(long value) {
-
+        
         setupNanos_ = value;
         bitField0_ |= 0x00000008;
         onChanged();
@@ -23261,7 +23890,7 @@ public final class UserBitShared {
        * @return This builder for chaining.
        */
       public Builder setProcessNanos(long value) {
-
+        
         processNanos_ = value;
         bitField0_ |= 0x00000010;
         onChanged();
@@ -23301,7 +23930,7 @@ public final class UserBitShared {
        * @return This builder for chaining.
        */
       public Builder setPeakLocalMemoryAllocated(long value) {
-
+        
         peakLocalMemoryAllocated_ = value;
         bitField0_ |= 0x00000020;
         onChanged();
@@ -23581,7 +24210,7 @@ public final class UserBitShared {
        * @return This builder for chaining.
        */
       public Builder setWaitNanos(long value) {
-
+        
         waitNanos_ = value;
         bitField0_ |= 0x00000080;
         onChanged();
@@ -23800,6 +24429,11 @@ public final class UserBitShared {
       return new StreamProfile();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.UserBitShared.internal_static_exec_shared_StreamProfile_descriptor;
@@ -24153,6 +24787,38 @@ public final class UserBitShared {
       }
 
       @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.UserBitShared.StreamProfile) {
           return mergeFrom((org.apache.drill.exec.proto.UserBitShared.StreamProfile)other);
@@ -24254,7 +24920,7 @@ public final class UserBitShared {
        * @return This builder for chaining.
        */
       public Builder setRecords(long value) {
-
+        
         records_ = value;
         bitField0_ |= 0x00000001;
         onChanged();
@@ -24294,7 +24960,7 @@ public final class UserBitShared {
        * @return This builder for chaining.
        */
       public Builder setBatches(long value) {
-
+        
         batches_ = value;
         bitField0_ |= 0x00000002;
         onChanged();
@@ -24334,7 +25000,7 @@ public final class UserBitShared {
        * @return This builder for chaining.
        */
       public Builder setSchemas(long value) {
-
+        
         schemas_ = value;
         bitField0_ |= 0x00000004;
         onChanged();
@@ -24473,6 +25139,11 @@ public final class UserBitShared {
       return new MetricValue();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.UserBitShared.internal_static_exec_shared_MetricValue_descriptor;
@@ -24826,6 +25497,38 @@ public final class UserBitShared {
       }
 
       @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.UserBitShared.MetricValue) {
           return mergeFrom((org.apache.drill.exec.proto.UserBitShared.MetricValue)other);
@@ -24927,7 +25630,7 @@ public final class UserBitShared {
        * @return This builder for chaining.
        */
       public Builder setMetricId(int value) {
-
+        
         metricId_ = value;
         bitField0_ |= 0x00000001;
         onChanged();
@@ -24967,7 +25670,7 @@ public final class UserBitShared {
        * @return This builder for chaining.
        */
       public Builder setLongValue(long value) {
-
+        
         longValue_ = value;
         bitField0_ |= 0x00000002;
         onChanged();
@@ -25007,7 +25710,7 @@ public final class UserBitShared {
        * @return This builder for chaining.
        */
       public Builder setDoubleValue(double value) {
-
+        
         doubleValue_ = value;
         bitField0_ |= 0x00000004;
         onChanged();
@@ -25121,7 +25824,6 @@ public final class UserBitShared {
    *Structure example:
    *REGISTRY    -&gt; Jar1.jar   -&gt; upper(VARCHAR-REQUIRED)
    *-&gt; upper(VARCHAR-OPTIONAL)
-   *
    *-&gt; Jar2.jar   -&gt; lower(VARCHAR-REQUIRED)
    *-&gt; lower(VARCHAR-OPTIONAL)
    * </pre>
@@ -25148,6 +25850,11 @@ public final class UserBitShared {
       return new Registry();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.UserBitShared.internal_static_exec_shared_Registry_descriptor;
@@ -25365,7 +26072,6 @@ public final class UserBitShared {
      *Structure example:
      *REGISTRY    -&gt; Jar1.jar   -&gt; upper(VARCHAR-REQUIRED)
      *-&gt; upper(VARCHAR-OPTIONAL)
-     *
      *-&gt; Jar2.jar   -&gt; lower(VARCHAR-REQUIRED)
      *-&gt; lower(VARCHAR-OPTIONAL)
      * </pre>
@@ -25458,6 +26164,38 @@ public final class UserBitShared {
         int from_bitField0_ = bitField0_;
       }
 
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.UserBitShared.Registry) {
@@ -25920,8 +26658,7 @@ public final class UserBitShared {
     }
     private Jar() {
       name_ = "";
-      functionSignature_ =
-          com.google.protobuf.LazyStringArrayList.emptyList();
+      functionSignature_ = com.google.protobuf.LazyStringArrayList.EMPTY;
     }
 
     @java.lang.Override
@@ -25931,6 +26668,11 @@ public final class UserBitShared {
       return new Jar();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.UserBitShared.internal_static_exec_shared_Jar_descriptor;
@@ -25996,8 +26738,7 @@ public final class UserBitShared {
 
     public static final int FUNCTION_SIGNATURE_FIELD_NUMBER = 2;
     @SuppressWarnings("serial")
-    private com.google.protobuf.LazyStringArrayList functionSignature_ =
-        com.google.protobuf.LazyStringArrayList.emptyList();
+    private com.google.protobuf.LazyStringList functionSignature_;
     /**
      * <code>repeated string function_signature = 2;</code>
      * @return A list containing the functionSignature.
@@ -26247,8 +26988,8 @@ public final class UserBitShared {
         super.clear();
         bitField0_ = 0;
         name_ = "";
-        functionSignature_ =
-            com.google.protobuf.LazyStringArrayList.emptyList();
+        functionSignature_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000002);
         return this;
       }
 
@@ -26275,9 +27016,18 @@ public final class UserBitShared {
       @java.lang.Override
       public org.apache.drill.exec.proto.UserBitShared.Jar buildPartial() {
         org.apache.drill.exec.proto.UserBitShared.Jar result = new org.apache.drill.exec.proto.UserBitShared.Jar(this);
+        buildPartialRepeatedFields(result);
         if (bitField0_ != 0) { buildPartial0(result); }
         onBuilt();
         return result;
+      }
+
+      private void buildPartialRepeatedFields(org.apache.drill.exec.proto.UserBitShared.Jar result) {
+        if (((bitField0_ & 0x00000002) != 0)) {
+          functionSignature_ = functionSignature_.getUnmodifiableView();
+          bitField0_ = (bitField0_ & ~0x00000002);
+        }
+        result.functionSignature_ = functionSignature_;
       }
 
       private void buildPartial0(org.apache.drill.exec.proto.UserBitShared.Jar result) {
@@ -26287,13 +27037,41 @@ public final class UserBitShared {
           result.name_ = name_;
           to_bitField0_ |= 0x00000001;
         }
-        if (((from_bitField0_ & 0x00000002) != 0)) {
-          functionSignature_.makeImmutable();
-          result.functionSignature_ = functionSignature_;
-        }
         result.bitField0_ |= to_bitField0_;
       }
 
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.UserBitShared.Jar) {
@@ -26314,7 +27092,7 @@ public final class UserBitShared {
         if (!other.functionSignature_.isEmpty()) {
           if (functionSignature_.isEmpty()) {
             functionSignature_ = other.functionSignature_;
-            bitField0_ |= 0x00000002;
+            bitField0_ = (bitField0_ & ~0x00000002);
           } else {
             ensureFunctionSignatureIsMutable();
             functionSignature_.addAll(other.functionSignature_);
@@ -26455,13 +27233,12 @@ public final class UserBitShared {
         return this;
       }
 
-      private com.google.protobuf.LazyStringArrayList functionSignature_ =
-          com.google.protobuf.LazyStringArrayList.emptyList();
+      private com.google.protobuf.LazyStringList functionSignature_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       private void ensureFunctionSignatureIsMutable() {
-        if (!functionSignature_.isModifiable()) {
+        if (!((bitField0_ & 0x00000002) != 0)) {
           functionSignature_ = new com.google.protobuf.LazyStringArrayList(functionSignature_);
-        }
-        bitField0_ |= 0x00000002;
+          bitField0_ |= 0x00000002;
+         }
       }
       /**
        * <code>repeated string function_signature = 2;</code>
@@ -26469,8 +27246,7 @@ public final class UserBitShared {
        */
       public com.google.protobuf.ProtocolStringList
           getFunctionSignatureList() {
-        functionSignature_.makeImmutable();
-        return functionSignature_;
+        return functionSignature_.getUnmodifiableView();
       }
       /**
        * <code>repeated string function_signature = 2;</code>
@@ -26507,7 +27283,6 @@ public final class UserBitShared {
         if (value == null) { throw new NullPointerException(); }
         ensureFunctionSignatureIsMutable();
         functionSignature_.set(index, value);
-        bitField0_ |= 0x00000002;
         onChanged();
         return this;
       }
@@ -26521,7 +27296,6 @@ public final class UserBitShared {
         if (value == null) { throw new NullPointerException(); }
         ensureFunctionSignatureIsMutable();
         functionSignature_.add(value);
-        bitField0_ |= 0x00000002;
         onChanged();
         return this;
       }
@@ -26535,7 +27309,6 @@ public final class UserBitShared {
         ensureFunctionSignatureIsMutable();
         com.google.protobuf.AbstractMessageLite.Builder.addAll(
             values, functionSignature_);
-        bitField0_ |= 0x00000002;
         onChanged();
         return this;
       }
@@ -26544,9 +27317,8 @@ public final class UserBitShared {
        * @return This builder for chaining.
        */
       public Builder clearFunctionSignature() {
-        functionSignature_ =
-          com.google.protobuf.LazyStringArrayList.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000002);;
+        functionSignature_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000002);
         onChanged();
         return this;
       }
@@ -26560,7 +27332,6 @@ public final class UserBitShared {
         if (value == null) { throw new NullPointerException(); }
         ensureFunctionSignatureIsMutable();
         functionSignature_.add(value);
-        bitField0_ |= 0x00000002;
         onChanged();
         return this;
       }
@@ -26696,6 +27467,11 @@ public final class UserBitShared {
       return new SaslMessage();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.apache.drill.exec.proto.UserBitShared.internal_static_exec_shared_SaslMessage_descriptor;
@@ -27072,6 +27848,38 @@ public final class UserBitShared {
         result.bitField0_ |= to_bitField0_;
       }
 
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.apache.drill.exec.proto.UserBitShared.SaslMessage) {
