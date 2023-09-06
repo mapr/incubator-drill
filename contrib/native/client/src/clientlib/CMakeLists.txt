@@ -43,45 +43,6 @@ set (CLIENTLIB_SRC_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/saslAuthenticatorImpl.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/zookeeperClient.cpp)
 
-find_package(utf8_range REQUIRED)
-
-find_package(absl REQUIRED)
-set(protobuf_ABSL_USED_TARGETS
-    absl::absl_check
-    absl::absl_log
-    absl::algorithm
-    absl::base
-    absl::bind_front
-    absl::bits
-    absl::btree
-    absl::cleanup
-    absl::cord
-    absl::core_headers
-    absl::debugging
-    absl::die_if_null
-    absl::dynamic_annotations
-    absl::flags
-    absl::flat_hash_map
-    absl::flat_hash_set
-    absl::function_ref
-    absl::hash
-    absl::layout
-    absl::log_initialize
-    absl::log_severity
-    absl::memory
-    absl::node_hash_map
-    absl::node_hash_set
-    absl::optional
-    absl::span
-    absl::status
-    absl::statusor
-    absl::strings
-    absl::synchronization
-    absl::time
-    absl::type_traits
-    absl::utility
-    absl::variant)
-
 include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/../include )
 include_directories(${PROTOBUF_INCLUDE_DIR})
 include_directories(${Zookeeper_INCLUDE_DIRS})
@@ -102,4 +63,4 @@ else()
     add_library(drillClient SHARED ${CLIENTLIB_SRC_FILES})
 endif()
 
-target_link_libraries(drillClient ${Boost_LIBRARIES} protobuf::libprotobuf utf8_validity ${protobuf_ABSL_USED_TARGETS} ${Zookeeper_LIBRARIES} ${SASL_LIBRARIES} ${OPENSSL_LIBRARIES} protomsgs y2038)
+target_link_libraries(drillClient ${Boost_LIBRARIES} ${PROTOBUF_LIBRARY} ${Zookeeper_LIBRARIES} ${SASL_LIBRARIES} ${OPENSSL_LIBRARIES} protomsgs y2038)
