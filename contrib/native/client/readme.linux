@@ -39,7 +39,7 @@ Install Prerequisites
   2.2) Install Protobuf compiler and Protobuf c++ runtime.
       $> unzip protobuf-all-21.12.zip
       $> cd protobuf-21.12
-      $> cmake . -Dprotobuf_BUILD_TESTS=OFF
+      $> cmake . -Dprotobuf_BUILD_TESTS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON
       $> sudo make install
 
 3)
