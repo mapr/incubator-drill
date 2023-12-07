@@ -37,11 +37,11 @@ import org.apache.drill.exec.store.mapr.PluginConstants;
 import org.apache.drill.exec.util.EncodedSchemaPathSet;
 import org.apache.drill.common.expression.LogicalExpression;
 
-import org.apache.drill.shaded.guava.com.google.common.base.Preconditions;
-import org.apache.drill.shaded.guava.com.google.common.collect.ImmutableSet;
-import org.apache.drill.shaded.guava.com.google.common.collect.ImmutableList;
-import org.apache.drill.shaded.guava.com.google.common.collect.Lists;
-import org.apache.drill.shaded.guava.com.google.common.collect.Sets;
+import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 public class MapRDBIndexDescriptor extends DrillIndexDescriptor {
 

@@ -17,7 +17,7 @@
  */
 package org.apache.drill.exec.store.mapr.db.json;
 
-import org.apache.drill.shaded.guava.com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableList;
 import java.nio.ByteBuffer;
 import java.util.List;
 

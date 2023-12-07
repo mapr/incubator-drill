@@ -56,7 +56,7 @@ import org.apache.drill.exec.store.hive.schema.HiveSchemaFactory;
 import org.apache.drill.exec.store.mapr.db.MapRDBPushFilterIntoScan;
 import org.apache.drill.exec.store.mapr.db.MapRDBPushLimitIntoScan;
 import org.apache.drill.exec.store.mapr.db.MapRDBPushProjectIntoScan;
-import org.apache.drill.shaded.guava.com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableSet;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hive.conf.HiveConf;
