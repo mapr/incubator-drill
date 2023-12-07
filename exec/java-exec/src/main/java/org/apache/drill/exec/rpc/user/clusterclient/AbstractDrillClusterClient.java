@@ -17,8 +17,8 @@
  */
 package org.apache.drill.exec.rpc.user.clusterclient;
 
-import org.apache.drill.shaded.guava.com.google.common.base.Strings;
-import org.apache.drill.shaded.guava.com.google.common.util.concurrent.MoreExecutors;
+import com.google.common.base.Strings;
+import com.google.common.util.concurrent.MoreExecutors;
 import io.netty.channel.EventLoopGroup;
 import org.apache.drill.common.AutoCloseables;
 import org.apache.drill.common.config.DrillConfig;

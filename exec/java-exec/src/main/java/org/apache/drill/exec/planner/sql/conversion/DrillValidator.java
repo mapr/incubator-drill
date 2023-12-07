@@ -40,7 +40,7 @@ import org.apache.calcite.util.Static;
 import org.apache.drill.common.expression.PathSegment;
 import org.apache.drill.common.expression.SchemaPath;
 import org.apache.drill.exec.util.ImpersonationUtil;
-import org.apache.drill.shaded.guava.com.google.common.collect.Lists;
+import com.google.common.collect.Lists;
 
 class DrillValidator extends SqlValidatorImpl {
 

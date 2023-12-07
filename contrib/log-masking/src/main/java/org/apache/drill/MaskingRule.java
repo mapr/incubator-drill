@@ -19,7 +19,7 @@ package org.apache.drill;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.apache.drill.shaded.guava.com.google.common.base.Strings;
+import com.google.common.base.Strings;
 
 import java.util.Objects;
 import java.util.function.BiFunction;

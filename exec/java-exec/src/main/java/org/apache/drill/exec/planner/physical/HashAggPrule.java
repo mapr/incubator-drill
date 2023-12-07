@@ -27,7 +27,7 @@ import org.apache.calcite.plan.RelOptRuleCall;
 import org.apache.calcite.plan.RelTraitSet;
 import org.apache.calcite.util.trace.CalciteTrace;
 
-import org.apache.drill.shaded.guava.com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableList;
 import org.slf4j.Logger;
 
 public class HashAggPrule extends AggPruleBase {

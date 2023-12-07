@@ -60,7 +60,7 @@ import org.apache.drill.exec.store.jdbc.utils.JdbcDDLQueryUtils;
 import org.apache.drill.exec.store.jdbc.utils.CreateTableStmtBuilder;
 import org.apache.drill.exec.util.DecimalUtility;
 import org.apache.drill.exec.vector.complex.reader.FieldReader;
-import org.apache.drill.shaded.guava.com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableMap;
 import org.apache.parquet.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

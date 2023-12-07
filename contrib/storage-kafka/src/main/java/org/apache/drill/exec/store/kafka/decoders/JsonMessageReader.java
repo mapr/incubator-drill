@@ -36,7 +36,7 @@ import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.ByteArrayDeserializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.drill.shaded.guava.com.google.common.base.Charsets;
+import com.google.common.base.Charsets;
 
 import java.io.ByteArrayInputStream;
 import java.util.Arrays;

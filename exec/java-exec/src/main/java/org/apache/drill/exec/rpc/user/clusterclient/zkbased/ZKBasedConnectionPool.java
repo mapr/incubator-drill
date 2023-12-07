@@ -17,10 +17,10 @@
  */
 package org.apache.drill.exec.rpc.user.clusterclient.zkbased;
 
-import org.apache.drill.shaded.guava.com.google.common.cache.Cache;
-import org.apache.drill.shaded.guava.com.google.common.cache.CacheBuilder;
-import org.apache.drill.shaded.guava.com.google.common.cache.RemovalListener;
-import org.apache.drill.shaded.guava.com.google.common.cache.RemovalNotification;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.RemovalListener;
+import com.google.common.cache.RemovalNotification;
 import org.apache.drill.common.config.DrillProperties;
 import org.apache.drill.common.exceptions.DrillIOException;
 import org.apache.drill.exec.memory.BufferAllocator;

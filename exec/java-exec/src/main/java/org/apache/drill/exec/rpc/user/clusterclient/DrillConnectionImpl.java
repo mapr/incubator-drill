@@ -17,7 +17,7 @@
  */
 package org.apache.drill.exec.rpc.user.clusterclient;
 
-import org.apache.drill.shaded.guava.com.google.common.collect.Maps;
+import com.google.common.collect.Maps;
 import org.apache.drill.common.config.DrillProperties;
 import org.apache.drill.common.exceptions.DrillIOException;
 import org.apache.drill.exec.memory.BufferAllocator;

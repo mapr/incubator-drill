@@ -17,8 +17,8 @@
  */
 package org.apache.drill.exec.store.jdbc.clickhouse;
 
-import org.apache.drill.shaded.guava.com.google.common.base.Preconditions;
-import org.apache.drill.shaded.guava.com.google.common.collect.ImmutableList;
+import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
 import org.apache.calcite.adapter.java.JavaTypeFactory;
 import org.apache.calcite.adapter.jdbc.JdbcImplementor;
 import org.apache.calcite.adapter.jdbc.JdbcTableScan;

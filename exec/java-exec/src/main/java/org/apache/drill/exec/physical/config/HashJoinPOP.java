@@ -19,12 +19,12 @@ package org.apache.drill.exec.physical.config;
 
 import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.apache.drill.shaded.guava.com.google.common.annotations.VisibleForTesting;
+import com.google.common.annotations.VisibleForTesting;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import org.apache.drill.shaded.guava.com.google.common.base.Preconditions;
-import org.apache.drill.shaded.guava.com.google.common.collect.Lists;
+import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import org.apache.calcite.rel.core.JoinRelType;
 import org.apache.drill.common.logical.data.JoinCondition;
 import org.apache.drill.exec.ExecConstants;

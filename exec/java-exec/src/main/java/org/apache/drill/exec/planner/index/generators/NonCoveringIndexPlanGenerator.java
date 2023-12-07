@@ -56,9 +56,9 @@ import org.apache.drill.exec.planner.physical.Prule;
 import org.apache.drill.exec.planner.physical.RowKeyJoinPrel;
 import org.apache.drill.exec.planner.physical.ScanPrel;
 
-import org.apache.drill.shaded.guava.com.google.common.base.Preconditions;
-import org.apache.drill.shaded.guava.com.google.common.collect.ImmutableList;
-import org.apache.drill.shaded.guava.com.google.common.collect.Lists;
+import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 
 /**
  * Generate a non-covering index plan that is equivalent to the original plan. The non-covering plan consists

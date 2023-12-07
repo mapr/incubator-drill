@@ -22,7 +22,7 @@ import com.typesafe.config.ConfigFactory;
 import com.typesafe.config.ConfigValueFactory;
 import org.apache.drill.common.scanner.ClassPathScanner;
 import org.apache.drill.common.util.DrillVersionInfo;
-import org.apache.drill.shaded.guava.com.google.common.annotations.VisibleForTesting;
+import com.google.common.annotations.VisibleForTesting;
 import org.jline.reader.impl.completer.StringsCompleter;
 import sqlline.Application;
 import sqlline.CommandHandler;
