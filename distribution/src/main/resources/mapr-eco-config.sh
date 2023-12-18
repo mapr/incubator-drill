@@ -35,7 +35,6 @@ DRILL_CORE_JARS=$(get_files_in_folder ${DRILL_HOME}/jars\
     "drill-memory-base-*.jar"\
     "drill-protocol-*.jar"\
     "drill-rpc-*.jar"\
-    "drill-shaded-guava-*.jar"\
     "vector-*.jar")
 DRILL_3P_JARS=$(get_files_in_folder ${DRILL_HOME}/jars/3rdparty\
     "antlr4-runtime-4*.jar"\
