@@ -393,6 +393,11 @@ public class NestedLoopJoinBatch extends AbstractBinaryRecordBatch<NestedLoopJoi
 
     nljWorker = setupWorker();
 
+    // if left batch is empty, fetch next
+    if (leftUpstream != IterOutcome.NONE && left.getRecordCount() == 0) {
+      leftUpstream = next(LEFT_INPUT, left);
+    }
+
     batchMemoryManager.update(LEFT_INDEX, 0);
     RecordBatchStats.logRecordBatchStats(RecordBatchIOType.INPUT_LEFT,
       batchMemoryManager.getRecordBatchSizer(LEFT_INDEX), getRecordBatchStatsContext());
