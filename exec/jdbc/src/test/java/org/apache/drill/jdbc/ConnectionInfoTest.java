@@ -28,13 +28,16 @@ import org.junit.rules.ExpectedException;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 /**
  * Test for Drill's Properties in the JDBC URL connection string
@@ -69,6 +72,46 @@ public class ConnectionInfoTest extends JdbcTestBase {
     thrown.expectMessage(containsString("Option planner.parser.quoting_identifiers must be one of: [`, \", []"));
 
     connect("jdbc:drill:zk=local;quoting_identifiers=&");
+  }
+
+  @Test
+  public void testIncorrectValueForSystemOption() throws Exception {
+    thrown.expect(SQLException.class);
+    thrown.expectMessage(containsString("VALIDATION ERROR: '1' is not a valid value for option 'planner.enable_nljoin" +
+      "_for_scalar_only' of type BOOLEAN"));
+
+    connect("jdbc:drill:zk=local;planner.enable_nljoin_for_scalar_only=1");
+  }
+
+  @Test
+  public void testSessionPropertySet() throws SQLException {
+    Connection connection = connect("jdbc:drill:zk=local;planner.enable_nljoin_for_scalar_only=false");
+    Statement statement = connection.createStatement();
+    ResultSet resultSet = statement.executeQuery("select * from sys.options where name = 'planner.enable_nljoin_for_scalar_only' and optionScope = 'SESSION' and val = 'false'");
+    int resultSize = 0;
+    while (resultSet.next()) {
+      resultSize++;
+    }
+    assertEquals("planner.enable_nljoin_for_scalar_only should been set to 'false' at SESSION level ", 1, resultSize);
+  }
+
+  @Test
+  public void testDontFailOnUnknownProperty() {
+    assertDoesNotThrow(() -> {
+      connect("jdbc:drill:zk=local;ababagalamaga=true");
+    });
+  }
+
+  @Test
+  public void testOverrideDeprecatedServerPropertyIfSystemPresent() throws SQLException {
+    Connection connection = connect("jdbc:drill:zk=local;quoting_identifiers=[;planner.parser.quoting_identifiers='\"';");
+    Statement statement = connection.createStatement();
+    ResultSet resultSet = statement.executeQuery("select * from sys.options where name = 'planner.parser.quoting_identifiers' and optionScope = 'SESSION' and val = '\"'");
+    int resultSize = 0;
+    while (resultSet.next()) {
+      resultSize++;
+    }
+    assertEquals("planner.enable_nljoin_for_scalar_only should been set to '\"' at SESSION level ", 1, resultSize);
   }
 
   @Test

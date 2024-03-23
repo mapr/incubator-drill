@@ -17,23 +17,16 @@
  */
 package org.apache.drill.exec.rpc.user;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import org.apache.drill.exec.ExecConstants;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
-
+import com.google.common.collect.Maps;
 import org.apache.calcite.schema.Schema;
 import org.apache.calcite.schema.SchemaPlus;
 import org.apache.calcite.schema.Table;
 import org.apache.calcite.tools.ValidationException;
 import org.apache.drill.common.config.DrillConfig;
 import org.apache.drill.common.config.DrillProperties;
+import org.apache.drill.exec.ExecConstants;
 import org.apache.drill.exec.planner.physical.PlannerSettings;
 import org.apache.drill.exec.planner.sql.SchemaUtilities;
 import org.apache.drill.exec.planner.sql.handlers.SqlHandlerUtil;
@@ -42,8 +35,6 @@ import org.apache.drill.exec.proto.UserProtos.UserProperties;
 import org.apache.drill.exec.server.options.OptionManager;
 import org.apache.drill.exec.server.options.OptionValue;
 import org.apache.drill.exec.server.options.SessionOptionManager;
-
-import com.google.common.collect.Maps;
 import org.apache.drill.exec.store.AbstractSchema;
 import org.apache.drill.exec.store.StorageStrategy;
 import org.apache.drill.exec.store.dfs.DrillFileSystem;
@@ -52,6 +43,14 @@ import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class UserSession implements AutoCloseable {
   private static final Logger logger = LoggerFactory.getLogger(UserSession.class);
@@ -129,18 +128,13 @@ public class UserSession implements AutoCloseable {
     }
 
     private boolean canApplyUserProperty() {
-      final StringBuilder sb = new StringBuilder();
-      if (userSession.properties.containsKey(DrillProperties.QUOTING_IDENTIFIERS)) {
-        sb.append(DrillProperties.QUOTING_IDENTIFIERS).append(",");
-      }
-
-      if (userSession.properties.containsKey(DrillProperties.QUERY_TAGS)) {
-        sb.append(DrillProperties.QUERY_TAGS);
-      }
-
-      if (userSession.sessionOptions == null && sb.length() > 0) {
-        logger.warn("User property {} can't be installed as a server option without the session option manager",
-          sb.toString());
+      if (userSession.sessionOptions == null) {
+        Map<String, String> systemProperties = getSystemProperties();
+        if (!systemProperties.isEmpty()) {
+          String properties = String.join(",", systemProperties.keySet());
+          logger.warn("User property {} can't be installed as a server option without the session option manager",
+            properties);
+        }
         return false;
       }
       return true;
@@ -148,19 +142,50 @@ public class UserSession implements AutoCloseable {
 
     public UserSession build() {
       if (canApplyUserProperty()) {
-        if (userSession.properties.containsKey(DrillProperties.QUOTING_IDENTIFIERS)) {
-          userSession.setSessionOption(PlannerSettings.QUOTING_IDENTIFIERS_KEY,
-            userSession.properties.getProperty(DrillProperties.QUOTING_IDENTIFIERS));
-        }
-
-        if (userSession.properties.containsKey(DrillProperties.QUERY_TAGS)) {
-          userSession.setSessionOption(ExecConstants.RM_QUERY_TAGS_KEY,
-            userSession.properties.getProperty(DrillProperties.QUERY_TAGS));
-        }
+        removeDeprecatedDuplicateProperties();
+        getSystemProperties().forEach((propertyName, value) -> {
+          userSession.setSessionOption(propertyName, value);
+        });
       }
       UserSession session = userSession;
       userSession = null;
       return session;
+    }
+
+    private Map<String, String> getSystemProperties() {
+      Map<String, String> systemProperties = new HashMap<>();
+
+      userSession.properties.forEach((property, value) -> {
+        String propertyName = property.toString();
+        String stringValue = value.toString();
+
+        if (propertyName.equals(DrillProperties.QUOTING_IDENTIFIERS)) {
+          propertyName = PlannerSettings.QUOTING_IDENTIFIERS_KEY;
+        }
+        if (propertyName.equals(DrillProperties.QUERY_TAGS)) {
+          propertyName = ExecConstants.RM_QUERY_TAGS_KEY;
+        }
+
+        boolean isNotServerOrClientProperty = !DrillProperties.ACCEPTED_BY_SERVER.contains(propertyName)
+          && !DrillProperties.ALLOWED_BY_CLIENT.contains(propertyName);
+        if (isNotServerOrClientProperty) {
+          OptionValue sesionOptionValue = userSession.getOptions().getOption(propertyName);
+          if (sesionOptionValue != null) {
+            systemProperties.put(propertyName, stringValue);
+          }
+        }
+      });
+
+      return systemProperties;
+    }
+
+    private void removeDeprecatedDuplicateProperties() {
+      if (userSession.properties.containsKey(PlannerSettings.QUOTING_IDENTIFIERS_KEY)) {
+        userSession.properties.remove(DrillProperties.QUOTING_IDENTIFIERS);
+      }
+      if (userSession.properties.containsKey(ExecConstants.RM_QUERY_TAGS_KEY)) {
+        userSession.properties.remove(DrillProperties.QUERY_TAGS);
+      }
     }
 
     Builder() {
