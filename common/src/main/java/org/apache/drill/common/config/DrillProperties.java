@@ -75,6 +75,11 @@ public final class DrillProperties extends Properties {
   // Subject's credentials set
   public static final String KERBEROS_FROM_SUBJECT = "from_subject";
 
+  /**
+   * @deprecated Included for backward compatibility. Use {@link org.apache.drill.exec.ExecConstants.QUOTING_IDENTIFIERS_KEY}
+   * directly instead.
+   */
+  @Deprecated
   public static final String QUOTING_IDENTIFIERS = "quoting_identifiers";
 
   public static final String ENABLE_TLS = "enableTLS";
@@ -89,28 +94,33 @@ public final class DrillProperties extends Properties {
   public static final String USE_SYSTEM_TRUSTSTORE = "useSystemTrustStore";
   public static final String USE_MAPR_SSL_CONFIG = "useMapRSSLConfig";
 
+  /**
+   * @deprecated Included for backward compatibility. Use {@link org.apache.drill.exec.ExecConstants.RM_QUERY_TAGS_KEY}
+   * directly instead.
+   */
+  @Deprecated
   public static final String QUERY_TAGS = "queryTags";
 
   // Although all properties from the application are sent to the server (from the client), the following
   // sets of properties are used by the client and server respectively. These are reserved words.
 
   public static final ImmutableSet<String> ALLOWED_BY_CLIENT =
-      ImmutableSet.of(
-          ZOOKEEPER_CONNECTION, DRILLBIT_CONNECTION, TRIES,
-          SCHEMA,
-          USER, PASSWORD, IMPERSONATION_TARGET, AUTH_MECHANISM,
-          SERVICE_PRINCIPAL, SERVICE_NAME, SERVICE_HOST, REALM, KEYTAB, KERBEROS_FROM_SUBJECT,
-          ENABLE_TLS, TLS_PROTOCOL, TRUSTSTORE_TYPE, TRUSTSTORE_PATH, TRUSTSTORE_PASSWORD,
-          DISABLE_HOST_VERIFICATION, DISABLE_CERT_VERIFICATION, TLS_HANDSHAKE_TIMEOUT, TLS_PROVIDER,
-          USE_SYSTEM_TRUSTSTORE, QUERY_TAGS
-      );
+    ImmutableSet.of(
+      ZOOKEEPER_CONNECTION, DRILLBIT_CONNECTION, TRIES,
+      SCHEMA,
+      USER, PASSWORD, IMPERSONATION_TARGET, AUTH_MECHANISM,
+      SERVICE_PRINCIPAL, SERVICE_NAME, SERVICE_HOST, REALM, KEYTAB, KERBEROS_FROM_SUBJECT,
+      ENABLE_TLS, TLS_PROTOCOL, TRUSTSTORE_TYPE, TRUSTSTORE_PATH, TRUSTSTORE_PASSWORD,
+      DISABLE_HOST_VERIFICATION, DISABLE_CERT_VERIFICATION, TLS_HANDSHAKE_TIMEOUT, TLS_PROVIDER,
+      USE_SYSTEM_TRUSTSTORE, QUERY_TAGS
+    );
 
   public static final ImmutableSet<String> ACCEPTED_BY_SERVER = ImmutableSet.of(
-      USER /** deprecated */, PASSWORD /** deprecated */,
-      SCHEMA,
-      IMPERSONATION_TARGET,
-      QUOTING_IDENTIFIERS,
-      QUERY_TAGS
+    USER /* deprecated */, PASSWORD, /* deprecated */
+    SCHEMA,
+    IMPERSONATION_TARGET,
+    QUOTING_IDENTIFIERS, /* deprecated */
+    QUERY_TAGS /* deprecated */
   );
 
   private DrillProperties() {
@@ -157,8 +167,8 @@ public final class DrillProperties extends Properties {
    * The returned map is not backed by the <tt>Properties</tt> object. Changes to this <tt>Properties</tt> are not
    * reflected in the map, or vice versa.
    *
-   * @return  a map of keys and values in this property list where the key and its corresponding value are strings,
-   *          including the keys in the default property list.
+   * @return a map of keys and values in this property list where the key and its corresponding value are strings,
+   * including the keys in the default property list.
    */
   public Map<String, String> stringPropertiesAsMap() {
     final Map<String, String> map = new HashMap<>();
@@ -177,9 +187,9 @@ public final class DrillProperties extends Properties {
     final UserProperties.Builder propsBuilder = UserProperties.newBuilder();
     for (final String key : stringPropertyNames()) {
       propsBuilder.addProperties(Property.newBuilder()
-          .setKey(key)
-          .setValue(getProperty(key))
-          .build());
+        .setKey(key)
+        .setValue(getProperty(key))
+        .build());
     }
     return propsBuilder.build();
   }
@@ -187,7 +197,7 @@ public final class DrillProperties extends Properties {
   /**
    * Deserializes the given properties into DrillProperties.
    *
-   * @param userProperties serialized user properties
+   * @param userProperties               serialized user properties
    * @param addOnlyKnownServerProperties add only properties known by server
    * @return params
    */
