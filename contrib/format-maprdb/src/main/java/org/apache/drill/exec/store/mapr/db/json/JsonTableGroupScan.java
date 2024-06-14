@@ -195,7 +195,7 @@ public class JsonTableGroupScan extends MapRDBGroupScan implements IndexGroupSca
           PluginCost pluginCostModel = formatPlugin.getPluginCostModel();
           final int avgColumnSize = pluginCostModel.getAverageColumnSize(this);
           final int numColumns = (columns == null || columns.isEmpty() || Utilities.isStarQuery(columns)) ? STAR_COLS : columns.size();
-          MapRDBTableStats tableStats = new MapRDBTableStats(storagePlugin.getConf(), scanSpec.getTableName());
+          MapRDBTableStats tableStats = new MapRDBTableStats(formatPlugin.getFsConf(), scanSpec.getTableName());
           fullTableRowCount = tableStats.getNumRows();
           fullTableEstimatedSize = fullTableRowCount * numColumns * avgColumnSize;
         }

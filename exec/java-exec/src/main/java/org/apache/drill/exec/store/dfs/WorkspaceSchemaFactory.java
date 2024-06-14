@@ -120,7 +120,7 @@ public class WorkspaceSchemaFactory {
       ObjectMapper mapper,
       ScanResult scanResult) throws ExecutionSetupException {
     this.mapper = mapper;
-    this.fsConf = plugin.getConf();
+    this.fsConf = plugin.getFsConf();
     this.plugin = plugin;
     this.config = config;
     this.fileMatchers = new ArrayList<>();

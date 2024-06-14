@@ -235,11 +235,6 @@ public class HiveStoragePlugin extends AbstractStoragePlugin {
   }
 
   @Override
-  public Configuration getConf() {
-    return hiveConf;
-  }
-
-  @Override
   public FormatPlugin getFormatPlugin(FormatPluginConfig formatConfig) {
     //  TODO: implement formatCreator similar to FileSystemPlugin formatCreator. DRILL-6621
     try {

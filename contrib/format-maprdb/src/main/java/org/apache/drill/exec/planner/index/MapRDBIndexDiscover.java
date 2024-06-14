@@ -39,9 +39,9 @@ import org.apache.drill.exec.physical.base.GroupScan;
 import org.apache.drill.exec.planner.common.DrillScanRelBase;
 import org.apache.drill.exec.planner.logical.DrillTable;
 import org.apache.drill.exec.planner.physical.ScanPrel;
-import org.apache.drill.exec.store.AbstractStoragePlugin;
 import org.apache.drill.exec.store.dfs.DrillFileSystem;
 import org.apache.drill.exec.store.dfs.FileSelection;
+import org.apache.drill.exec.store.dfs.FileSystemPlugin;
 import org.apache.drill.exec.store.mapr.db.MapRDBFormatMatcher;
 import org.apache.drill.exec.store.mapr.db.MapRDBFormatPlugin;
 import org.apache.drill.exec.store.mapr.db.MapRDBGroupScan;
@@ -133,9 +133,9 @@ public class MapRDBIndexDiscover extends IndexDiscoverBase implements IndexDisco
         return null;
       }
       MapRDBFormatPlugin maprFormatPlugin = ((MapRDBGroupScan) origScan).getFormatPlugin();
-      AbstractStoragePlugin fsPlugin = ((MapRDBGroupScan) origScan).getStoragePlugin();
+      FileSystemPlugin fsPlugin = (FileSystemPlugin) origScan.getStoragePlugin();
 
-      DrillFileSystem fs = ImpersonationUtil.createFileSystem(origScan.getUserName(), fsPlugin.getConf());
+      DrillFileSystem fs = ImpersonationUtil.createFileSystem(origScan.getUserName(), fsPlugin.getFsConf());
       MapRDBFormatMatcher matcher = (MapRDBFormatMatcher) (maprFormatPlugin.getMatcher());
       FileSelection fsSelection = deriveFSSelection(fs, idxDescriptor);
       return matcher.isReadableIndex(fs, fsSelection, fsPlugin, fsPlugin.getName(),

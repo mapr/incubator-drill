@@ -319,7 +319,7 @@ public class FileSystemPlugin extends AbstractStoragePlugin {
       .collect(Collectors.toSet());
   }
 
-  public Configuration getConf() {
+  public Configuration getFsConf() {
     return new Configuration(fsConf);
   }
 

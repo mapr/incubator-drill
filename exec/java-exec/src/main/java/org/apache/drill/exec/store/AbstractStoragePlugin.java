@@ -28,7 +28,6 @@ import org.apache.drill.exec.metastore.MetadataProviderManager;
 
 import org.apache.drill.exec.server.DrillbitContext;
 import org.apache.drill.exec.server.options.SessionOptionManager;
-import org.apache.hadoop.conf.Configuration;
 import org.apache.drill.exec.store.dfs.FormatPlugin;
 
 /**
@@ -104,13 +103,6 @@ public abstract class AbstractStoragePlugin implements StoragePlugin {
   @Override
   public String getName() {
     return name;
-  }
-
-  /**
-   * @return Plugin configuration, null if it doesn't exist
-   */
-  public Configuration getConf() {
-    return null;
   }
 
   public DrillbitContext getContext() {

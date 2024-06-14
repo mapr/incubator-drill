@@ -82,7 +82,7 @@ public class FileSystemSchemaFactory extends AbstractSchemaFactory {
 
     public FileSystemSchema(String name, SchemaConfig schemaConfig) throws IOException {
       super(Collections.emptyList(), name);
-      final DrillFileSystem fs = ImpersonationUtil.createFileSystem(schemaConfig.getUserName(), plugin.getConf());
+      final DrillFileSystem fs = ImpersonationUtil.createFileSystem(schemaConfig.getUserName(), plugin.getFsConf());
       // Set OAuth Information
       OAuthConfig oAuthConfig = plugin.getConfig().oAuthConfig();
       if (oAuthConfig != null) {
