@@ -24,12 +24,12 @@
   <parent>
     <artifactId>drill-contrib-parent</artifactId>
     <groupId>org.apache.drill.contrib</groupId>
-    <version>1.21.1.0-eep-SNAPSHOT</version>
+    <version>1.21.1.0-eep-930-SNAPSHOT</version>
   </parent>
 
   <artifactId>drill-format-hdf5</artifactId>
   <name>Drill : Contrib : Format : HDF5</name>
-  
+
   <dependencies>
     <dependency>
       <groupId>org.apache.drill.exec</groupId>

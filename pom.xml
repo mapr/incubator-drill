@@ -31,7 +31,7 @@
 
   <groupId>org.apache.drill</groupId>
   <artifactId>drill-root</artifactId>
-  <version>1.21.1.0-eep-SNAPSHOT</version>
+  <version>1.21.1.0-eep-930-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>Drill :</name>
