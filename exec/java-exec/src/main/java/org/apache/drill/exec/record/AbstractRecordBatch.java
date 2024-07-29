@@ -147,6 +147,7 @@ public abstract class AbstractRecordBatch<T extends PhysicalOperator> implements
               break;
             default:
               state = BatchState.FIRST;
+            case NOT_FIRST:
               lastOutcome = IterOutcome.OK_NEW_SCHEMA;
               break;
           }
