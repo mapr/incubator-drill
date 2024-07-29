@@ -1507,7 +1507,10 @@ public class HashJoinBatch extends AbstractBinaryRecordBatch<HashJoinPOP>
       if (pp != null) {
         VectorWrapper<?> vw = Iterables.get(pp.getLeft(), 0);
         ValueVector vv = vw.getValueVector();
+        this.rkJoinState = RowKeyJoinState.PROCESSING;
         return Pair.of(vv, pp.getRight());
+      } else {
+        this.rkJoinState = RowKeyJoinState.DONE;
       }
     } else if (partitions == null && firstOutputBatch) { // if there is data
                                                          // coming to
@@ -1518,6 +1521,7 @@ public class HashJoinBatch extends AbstractBinaryRecordBatch<HashJoinPOP>
       if (right.getRecordCount() > 0) {
         VectorWrapper<?> vw = Iterables.get(right, 0);
         ValueVector vv = vw.getValueVector();
+        this.rkJoinState = RowKeyJoinState.PROCESSING;
         return Pair.of(vv, right.getRecordCount() - 1);
       }
     }

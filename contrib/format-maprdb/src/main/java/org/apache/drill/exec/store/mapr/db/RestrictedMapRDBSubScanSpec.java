@@ -17,14 +17,13 @@
  */
 package org.apache.drill.exec.store.mapr.db;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mapr.db.impl.IdCodec;
-
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.drill.common.exceptions.DrillRuntimeException;
 import org.apache.drill.exec.physical.impl.join.RowKeyJoin;
 import org.apache.drill.exec.record.AbstractRecordBatch.BatchState;
 import org.apache.drill.exec.vector.ValueVector;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.nio.ByteBuffer;
 
@@ -65,19 +64,24 @@ public class RestrictedMapRDBSubScanSpec extends MapRDBSubScanSpec {
     return rjbatch;
   }
 
-  @JsonIgnore
-  private void init(Pair<ValueVector, Integer> b) {
-    this.maxOccupiedIndex = b.getRight();
-    this.rowKeyVector = b.getLeft();
-    this.currentIndex = 0;
-  }
-
   /**
-   * Return {@code true} if a valid rowkey batch is available, {@code false} otherwise
+   * Initializes the row key vector with a row key batch from the {@link RowKeyJoin}
+   *
+   * @return {@code true} if {@link RowKeyJoin} had the batch to use for the initialization
    */
   @JsonIgnore
-  public boolean readyToGetRowKey() {
-    return rjbatch != null && rjbatch.hasRowKeyBatch();
+  private boolean init() {
+    if (rjbatch != null) {
+      Pair<ValueVector, Integer> currentRowKeyBatch = rjbatch.nextRowKeyBatch();
+
+      if (currentRowKeyBatch != null) {
+        this.rowKeyVector = currentRowKeyBatch.getLeft();
+        this.maxOccupiedIndex = currentRowKeyBatch.getRight();
+        this.currentIndex = 0;
+        return true;
+      }
+    }
+    return false;
   }
 
   /**
@@ -89,71 +93,14 @@ public class RestrictedMapRDBSubScanSpec extends MapRDBSubScanSpec {
   }
 
   /**
-   * Returns {@code true} if the iteration has more row keys.
-   * (In other words, returns {@code true} if {@link #nextRowKey} would
-   * return a non-null row key)
-   * @return {@code true} if the iteration has more row keys
+   * @return {@code true} if the iteration has row keys to process
    */
   @JsonIgnore
-  public boolean hasRowKey() {
-    if (rowKeyVector != null && currentIndex <= maxOccupiedIndex) {
+  public boolean hasRowKeys() {
+    if (rowKeyVector != null) {
       return true;
     }
-
-    if (rjbatch != null) {
-      Pair<ValueVector, Integer> currentBatch = rjbatch.nextRowKeyBatch();
-
-      // note that the hash table could be null initially during the BUILD_SCHEMA phase
-      if (currentBatch != null) {
-        init(currentBatch);
-        return true;
-      }
-    }
-
-    return false;
-  }
-
-  @JsonIgnore
-  public int getMaxRowKeysToBeRead() {
-    if (rjbatch != null) {
-      Pair<ValueVector, Integer> currentBatch = rjbatch.nextRowKeyBatch();
-
-      // note that the currentBatch could be null initially during the BUILD_SCHEMA phase
-      if (currentBatch != null) {
-        init(currentBatch);
-      }
-    }
-    return maxOccupiedIndex + 1;
-  }
-
-  /**
-   * Returns number of rowKeys that can be read.
-   * Number of rowKeys returned will be numRowKeysToRead at the most i.e. it
-   * will be less than numRowKeysToRead if only that many exist in the currentBatch.
-   */
-  @JsonIgnore
-  public int hasRowKeys(int numRowKeysToRead) {
-    int numKeys = 0;
-
-    // if there is pending rows from the current batch, read them first
-    // in chunks of numRowsToRead rows
-    if (rowKeyVector != null && currentIndex <= maxOccupiedIndex) {
-        numKeys = Math.min(numRowKeysToRead, maxOccupiedIndex - currentIndex + 1);
-        return numKeys;
-    }
-
-    // otherwise, get the next batch of rowkeys
-    if (rjbatch != null) {
-      Pair<ValueVector, Integer> currentBatch = rjbatch.nextRowKeyBatch();
-
-      // note that the currentBatch could be null initially during the BUILD_SCHEMA phase
-      if (currentBatch != null) {
-        init(currentBatch);
-        numKeys = Math.min(numRowKeysToRead, maxOccupiedIndex - currentIndex + 1);
-      }
-    }
-
-    return numKeys;
+    return init();
   }
 
   /**
@@ -163,30 +110,53 @@ public class RestrictedMapRDBSubScanSpec extends MapRDBSubScanSpec {
    */
   @JsonIgnore
   public ByteBuffer[] getRowKeyIdsToRead(int numRowKeysToRead) {
+    if (hasRowKeys()) {
+      int numKeys = Math.min(numRowKeysToRead, getLeftRowKeys());
+      if (numKeys > 0) {
+        int index = 0;
+        final ByteBuffer[] rowKeyIds = new ByteBuffer[numKeys];
 
-    int numKeys = hasRowKeys(numRowKeysToRead);
-    if (numKeys == 0) {
-      return null;
+        while (index < numKeys) {
+          Object o = rowKeyVector.getAccessor().getObject(currentIndex + index);
+          rowKeyIds[index++] = IdCodec.encode(o.toString());
+        }
+
+        updateRowKeysRead(numKeys);
+        return rowKeyIds;
+      }
     }
-
-    int index = 0;
-    final ByteBuffer[] rowKeyIds = new ByteBuffer[numKeys];
-
-    while (index < numKeys) {
-      Object o = rowKeyVector.getAccessor().getObject(currentIndex + index);
-      rowKeyIds[index++] = IdCodec.encode(o.toString());
-    }
-
-    updateRowKeysRead(numKeys);
-    return rowKeyIds;
+    return null;
   }
 
   /**
-   * updates the index to reflect number of keys read.
+   * Updates the index to reflect number of keys read
+   *
+   * @param numKeys keys was read
    */
   @JsonIgnore
-  public void updateRowKeysRead(int numKeys) {
-    currentIndex += numKeys;
+  private void updateRowKeysRead(int numKeys) {
+    if (maxOccupiedIndex != -1) {
+      currentIndex += numKeys;
+      if (currentIndex > maxOccupiedIndex + 1) {
+        throw new DrillRuntimeException("Vector index out of bounds exception");
+      }
+      if (currentIndex == maxOccupiedIndex + 1) {
+        resetRowKeyVector();
+      }
+    }
   }
 
+  private void resetRowKeyVector() {
+    rowKeyVector = null;
+    currentIndex = 0;
+    maxOccupiedIndex = -1;
+  }
+
+  /**
+   * @return number of row keys left in the current vector
+   */
+  @JsonIgnore
+  private int getLeftRowKeys() {
+    return maxOccupiedIndex - currentIndex + 1;
+  }
 }

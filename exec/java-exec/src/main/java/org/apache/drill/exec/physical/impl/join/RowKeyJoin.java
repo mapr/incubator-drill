@@ -29,10 +29,10 @@ public interface RowKeyJoin {
   /**
    * Enum for RowKeyJoin internal state.
    * Possible states are {INITIAL, PROCESSING, DONE}
-   *
+   * <p>
    * Initially RowKeyJoin will be at INITIAL state. Then the state will be transitioned
-   * by the RestrictedJsonRecordReader to PROCESSING as soon as it processes the rows
-   * related to RowKeys. Then RowKeyJoin algorithm sets to INITIAL state when leftStream has no data.
+   * by the RowKeyJoin to PROCESSING as soon as RestrictedJsonRecordReader begin processing a batch of rows
+   * related to RowKeys. Then RestrictedJsonRecordReader algorithm sets to INITIAL state when leftStream has processed the batch.
    * Basically RowKeyJoin calls leftStream multiple times depending upon the rightStream, hence
    * this transition from PROCESSING to INITIAL. If there is no data from rightStream or OutOfMemory
    * condition then the state is transitioned to DONE.
@@ -43,14 +43,16 @@ public interface RowKeyJoin {
 
   /**
    * Is the next batch of row keys ready to be returned
+   *
    * @return True if ready, false if not
    */
   public boolean hasRowKeyBatch();
 
   /**
    * Get the next batch of row keys
+   *
    * @return a Pair whose left element is the ValueVector containing the row keys, right
-   *    element is the number of row keys in this batch
+   * element is the number of row keys in this batch
    */
   public Pair<ValueVector, Integer> nextRowKeyBatch();
 
@@ -62,12 +64,14 @@ public interface RowKeyJoin {
 
   /**
    * Set the BatchState (this is useful when performing row key join)
+   *
    * @param newState
    */
   public void setBatchState(BatchState newState);
 
   /**
    * Set the RowKeyJoinState (this is useful for maintaining state for row key join algorithm)
+   *
    * @param newState
    */
   public void setRowKeyJoinState(RowKeyJoinState newState);

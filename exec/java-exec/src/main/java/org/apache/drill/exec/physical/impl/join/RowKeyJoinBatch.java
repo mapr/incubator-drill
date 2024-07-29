@@ -56,7 +56,7 @@ public class RowKeyJoinBatch extends AbstractRecordBatch<RowKeyJoinPOP> implemen
   private RowKeyJoinState rkJoinState = RowKeyJoinState.INITIAL;
 
   public RowKeyJoinBatch(RowKeyJoinPOP config, FragmentContext context, RecordBatch left, RecordBatch right)
-      throws OutOfMemoryException {
+    throws OutOfMemoryException {
     super(config, context, true /* need to build schema */);
     this.left = left;
     this.right = right;
@@ -85,135 +85,105 @@ public class RowKeyJoinBatch extends AbstractRecordBatch<RowKeyJoinPOP> implemen
   protected void buildSchema() {
     container.clear();
 
-    rightUpstream = next(right);
+    rightUpstream = next(1, right);
 
     if (right.getRecordCount() > 0) {
-      // set the hasRowKeyBatch flag such that calling next() on the left input
-      // would see the correct status
       hasRowKeyBatch = true;
     }
 
     leftUpstream = next(left);
 
-    for (final VectorWrapper<?> v : left) {
-      final TransferPair pair = v.getValueVector().makeTransferPair(
+    if (left.getRecordCount() > 0) {
+      outputCurrentLeftBatch();
+      callBack.getSchemaChangedAndReset();
+    } else {
+      for (final VectorWrapper<?> v : left) {
+        final TransferPair pair = v.getValueVector().makeTransferPair(
           container.addOrGet(v.getField(), callBack));
-      transfers.add(pair);
-    }
+        transfers.add(pair);
+      }
 
-    container.buildSchema(left.getSchema().getSelectionVectorMode());
+      container.buildSchema(left.getSchema().getSelectionVectorMode());
+    }
+    state = BatchState.NOT_FIRST;
   }
 
   @Override
   public IterOutcome innerNext() {
-    if (state == BatchState.DONE) {
-      return IterOutcome.NONE;
-    }
-    try {
-      if (state == BatchState.FIRST && left.getRecordCount() > 0) {
-        logger.debug("First batch, outputting the batch with {} records.", left.getRecordCount());
-        // there is already a pending batch from left, output it
-        outputCurrentLeftBatch();
-        // Check if schema has changed (this is just to guard against potential changes to the
-        // output schema by outputCurrentLeftBatch.
-        if (callBack.getSchemaChangedAndReset()) {
-          return IterOutcome.OK_NEW_SCHEMA;
+    switch (rkJoinState) {
+      case INITIAL:
+        if (!hasRowKeyBatch) {
+          processRight();
+          return innerNext();
         }
-        return IterOutcome.OK;
-      }
+      case DONE:
+      case PROCESSING:
+        return processLeft();
+      default:
+        throw new IllegalStateException("Unexpected value: " + rkJoinState);
+    }
+  }
 
-      if (rightUpstream == IterOutcome.NONE) {
-        rkJoinState = RowKeyJoinState.DONE;
-        state = BatchState.DONE;
-        return rightUpstream;
-      }
-      rightUpstream = next(right);
-
-      logger.debug("right input IterOutcome: {}", rightUpstream);
-
-      switch(rightUpstream) {
+  private IterOutcome processLeft() {
+    leftUpstream = next(left);
+    switch (leftUpstream) {
       case NONE:
-        rkJoinState = RowKeyJoinState.DONE;
-        state = BatchState.DONE;
-        return rightUpstream;
+        container.setRecordCount(0);
+        this.recordCount = 0;
+        return IterOutcome.NONE;
+      case EMIT:
       case OK_NEW_SCHEMA:
       case OK:
-        // we got a new batch from the right input, set this flag
-        // such that subsequent check by a scan would indicate availability
-        // of the row keys.
-        while ((rightUpstream == IterOutcome.OK || rightUpstream == IterOutcome.OK_NEW_SCHEMA) &&
-            right.getRecordCount() == 0) {
-          rightUpstream = next(right);
-          logger.trace("rowkeyjoin loop when recordCount == 0. rightUpstream {}", rightUpstream);
-        }
-
-        if (!hasRowKeyBatch && right.getRecordCount() > 0) {
-          hasRowKeyBatch = true;
-        }
-
-        logger.debug("right input num records = {}", right.getRecordCount());
-
-        if (hasRowKeyBatch) {
-          // get the next batch from left input
-          leftUpstream = next(left);
-
-          logger.debug("left input IterOutcome: {}", leftUpstream);
-
-          if (leftUpstream == IterOutcome.OK || leftUpstream == IterOutcome.OK_NEW_SCHEMA) {
-            logger.debug("left input num records = {}", left.getRecordCount());
-            if (left.getRecordCount() > 0) {
-              logger.debug("Outputting the left batch with {} records.", left.getRecordCount());
-              outputCurrentLeftBatch();
-              // Check if schema has changed (this is just to guard against potential changes to the
-              // output schema by outputCurrentLeftBatch, but in general the leftUpstream status should
-              // be sufficient)
-              if (callBack.getSchemaChangedAndReset()) {
-                return IterOutcome.OK_NEW_SCHEMA;
-              }
-            }
+        if (left.getRecordCount() > 0) {
+          outputCurrentLeftBatch();
+          // Check if schema has changed (this is just to guard against potential changes to the
+          // output schema by outputCurrentLeftBatch, but in general the leftUpstream status should
+          // be sufficient)
+          if (callBack.getSchemaChangedAndReset()) {
+            return IterOutcome.OK_NEW_SCHEMA;
           }
-        }
-
-        if (leftUpstream == IterOutcome.NONE) {
+        } else {
           container.setRecordCount(0);
           this.recordCount = 0;
-          return rightUpstream;
-        } else {
-          return leftUpstream;
         }
-
+        return leftUpstream;
       default:
         throw new IllegalStateException(String.format("Unknown state %s.", rightUpstream));
-      }
-    } finally {
-      if (state == BatchState.FIRST) {
-        state = BatchState.NOT_FIRST;
-      }
-      if (leftUpstream == IterOutcome.NONE && rkJoinState == RowKeyJoinState.PROCESSING) {
-        rkJoinState = RowKeyJoinState.INITIAL;
-      }
+    }
+  }
+
+  private void processRight() {
+    rightUpstream = next(1, right);
+    switch (rightUpstream) {
+      case NONE:
+        rkJoinState = RowKeyJoinState.DONE;
+        break;
+      case EMIT:
+      case OK_NEW_SCHEMA:
+      case OK:
+        if (right.getRecordCount() == 0) {
+          logger.trace("rowkeyjoin loop when recordCount == 0. rightUpstream {}", rightUpstream);
+          processRight();
+        }
+        hasRowKeyBatch = true;
+        break;
+      default:
+        throw new IllegalStateException(String.format("Unknown state %s.", rightUpstream));
     }
   }
 
   private void outputCurrentLeftBatch() {
-    // Schema change when state is FIRST shouldn't happen as buildSchema should
-    // take care of building the schema for the first batch. This check is introduced
-    // to guard against any schema change after buildSchema phase and reading
-    // the first batch of rows.
-    if (leftUpstream == IterOutcome.OK_NEW_SCHEMA && state == BatchState.FIRST ||
-        state == BatchState.NOT_FIRST) {
-      container.zeroVectors();
-      transfers.clear();
+    container.zeroVectors();
+    transfers.clear();
 
-      for (final VectorWrapper<?> v : left) {
-        final TransferPair pair = v.getValueVector().makeTransferPair(
-            container.addOrGet(v.getField(), callBack));
-        transfers.add(pair);
-      }
+    for (final VectorWrapper<?> v : left) {
+      final TransferPair pair = v.getValueVector().makeTransferPair(
+        container.addOrGet(v.getField(), callBack));
+      transfers.add(pair);
+    }
 
-      if (container.isSchemaChanged()) {
-        container.buildSchema(left.getSchema().getSelectionVectorMode());
-      }
+    if (container.isSchemaChanged()) {
+      container.buildSchema(left.getSchema().getSelectionVectorMode());
     }
 
     for (TransferPair t : transfers) {
@@ -231,13 +201,14 @@ public class RowKeyJoinBatch extends AbstractRecordBatch<RowKeyJoinPOP> implemen
 
   @Override  // implement RowKeyJoin interface
   public Pair<ValueVector, Integer> nextRowKeyBatch() {
-    if (hasRowKeyBatch && right.getRecordCount() > 0 ) {
+    if (hasRowKeyBatch) {
       // since entire right row key batch will be returned to the caller, reset
       // the hasRowKeyBatch to false
       hasRowKeyBatch = false;
       VectorWrapper<?> vw = Iterables.get(right, 0);
       ValueVector vv = vw.getValueVector();
-      return Pair.of(vv, right.getRecordCount()-1);
+      this.rkJoinState = RowKeyJoinState.PROCESSING;
+      return Pair.of(vv, right.getRecordCount() - 1);
     }
     return null;
   }
@@ -277,6 +248,6 @@ public class RowKeyJoinBatch extends AbstractRecordBatch<RowKeyJoinPOP> implemen
   @Override
   public void dump() {
     logger.error("RowKeyJoinBatch[container={}, left={}, right={}, hasRowKeyBatch={}, rkJoinState={}]",
-        container, left, right, hasRowKeyBatch, rkJoinState);
+      container, left, right, hasRowKeyBatch, rkJoinState);
   }
 }

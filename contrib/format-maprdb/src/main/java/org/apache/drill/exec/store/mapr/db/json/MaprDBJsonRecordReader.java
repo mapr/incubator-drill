@@ -130,7 +130,7 @@ public class MaprDBJsonRecordReader extends AbstractRecordReader {
 
   protected OjaiValueWriter valueWriter;
   protected DocumentReaderVectorWriter documentWriter;
-  protected int maxRecordsToRead = -1;
+  private int maxRecordsToRead = -1;
   protected DBDocumentReaderBase lastDocumentReader;
   protected Document lastDocument;
 
@@ -144,7 +144,7 @@ public class MaprDBJsonRecordReader extends AbstractRecordReader {
   }
 
   protected MaprDBJsonRecordReader(MapRDBSubScanSpec subScanSpec, MapRDBFormatPlugin formatPlugin,
-                                List<SchemaPath> projectedColumns, FragmentContext context, TupleMetadata schema) {
+                                   List<SchemaPath> projectedColumns, FragmentContext context, TupleMetadata schema) {
     buffer = context.getManagedBuffer();
     final Path tablePath = new Path(Preconditions.checkNotNull(subScanSpec,
       "MapRDB reader needs a sub-scan spec").getTableName());
@@ -225,7 +225,7 @@ public class MaprDBJsonRecordReader extends AbstractRecordReader {
           // we do not want to project the fields from the encoded field path list
           // hence make a copy of the scannedFieldsSet here for projection.
           projectedFieldsSet = new ImmutableSet.Builder<FieldPath>()
-              .addAll(scannedFieldsSet).build();
+            .addAll(scannedFieldsSet).build();
         }
 
         if (encodedSchemaPathSet.size() > 0) {
@@ -260,6 +260,60 @@ public class MaprDBJsonRecordReader extends AbstractRecordReader {
       }
     }
     return transformed;
+  }
+
+  /**
+   * @param maxRecordsToRead may be {@code -1} and bigger. {@code -1} means the reader has no limit.
+   */
+  protected void setRecordsLimit(int maxRecordsToRead) {
+    Preconditions.checkArgument(maxRecordsToRead >= -1, "Records reader limit can't be set to value lower than -1");
+    this.maxRecordsToRead = maxRecordsToRead;
+  }
+
+  protected int getRecordsLimit() {
+    return maxRecordsToRead;
+  }
+
+  /**
+   * @return {@code true} if the reader has a pushed down limit
+   */
+  public boolean hasRecordsLimit() {
+    return maxRecordsToRead != -1;
+  }
+
+  /**
+   * Decrements limit of record to be read to not lower than 0. If the limit is absent then does nothing.
+   * @return {@code >0} number of max records to read after decrement <br>
+   * {@code -1} if the reader has not records limit
+   */
+  protected int decrementRecordsLimit() {
+    if (maxRecordsToRead > 0) {
+      maxRecordsToRead--;
+    }
+    return maxRecordsToRead;
+  }
+
+  /** Reduces limit of record to be read to not lower than 0. If the limit is absent then does nothing.
+   * @param number the number of records by which the limit should be reduced
+   * @return {@code >0} number of max records to read after decrement <br>
+   * {@code -1} if the reader has not records limit
+   */
+  protected int reduceRecordsLimit(int number) {
+    if (maxRecordsToRead > 0) {
+      if (maxRecordsToRead - number >= 0) {
+        maxRecordsToRead -= number;
+      } else {
+        maxRecordsToRead = 0;
+      }
+    }
+    return maxRecordsToRead;
+  }
+
+  /**
+   * @return {@code true} if limit of records to be read is not reached 0, or if the limit is absent at all.
+   */
+  protected boolean recordsLimitIsNotReached() {
+    return hasRecordsLimit() ? maxRecordsToRead > 0 : true;
   }
 
   protected FieldPath[] getScannedFields() {
@@ -311,7 +365,7 @@ public class MaprDBJsonRecordReader extends AbstractRecordReader {
           @Override
           protected void writeTimeStamp(MapOrListWriterImpl writer, String fieldName, DocumentReader reader) {
             String formattedTimestamp = Instant.ofEpochMilli(reader.getTimestampLong())
-                .atZone(ZoneId.systemDefault()).format(DateUtility.UTC_FORMATTER);
+              .atZone(ZoneId.systemDefault()).format(DateUtility.UTC_FORMATTER);
             writeString(writer, fieldName, formattedTimestamp);
           }
         };
@@ -380,8 +434,8 @@ public class MaprDBJsonRecordReader extends AbstractRecordReader {
     reader = null;
     document = null;
 
-    int maxRecordsForThisBatch = this.maxRecordsToRead >= 0?
-        Math.min(BaseValueVector.INITIAL_VALUE_ALLOCATION, this.maxRecordsToRead) : BaseValueVector.INITIAL_VALUE_ALLOCATION;
+    int maxRecordsForThisBatch = hasRecordsLimit() ?
+      Math.min(BaseValueVector.INITIAL_VALUE_ALLOCATION, maxRecordsToRead) : BaseValueVector.INITIAL_VALUE_ALLOCATION;
 
     try {
       // If the last document caused a SchemaChange create a new output schema for this scan batch
@@ -407,14 +461,14 @@ public class MaprDBJsonRecordReader extends AbstractRecordReader {
         logger.warn("{}. Dropping row '{}' from result.", e.getMessage(), err_row);
         logger.debug("Stack trace:", e);
       } else {
-          /* We should not encounter a SchemaChangeException here since this is the first document for this
-           * new schema. Something is very wrong - cannot handle any further!
-           */
+        /* We should not encounter a SchemaChangeException here since this is the first document for this
+         * new schema. Something is very wrong - cannot handle any further!
+         */
         throw dataReadError(logger, e, "SchemaChangeException for row '%s'.", err_row);
       }
     }
     schemaState = SchemaState.SCHEMA_INIT;
-    while(recordCount < maxRecordsForThisBatch) {
+    while (recordCount < maxRecordsForThisBatch) {
       vectorWriter.setPosition(recordCount);
       try {
         document = nextDocument();
@@ -426,13 +480,13 @@ public class MaprDBJsonRecordReader extends AbstractRecordReader {
         recordCount++;
       } catch (UserException e) {
         throw UserException.unsupportedError(e)
-            .addContext(String.format("Table: %s, document id: '%s'",
-                table.getPath(),
-                    document.asReader() == null ? null :
-                        IdCodec.asString(((DBDocumentReaderBase)document.asReader()).getId())))
-            .build(logger);
+          .addContext(String.format("Table: %s, document id: '%s'",
+            table.getPath(),
+            document.asReader() == null ? null :
+              IdCodec.asString(((DBDocumentReaderBase) document.asReader()).getId())))
+          .build(logger);
       } catch (SchemaChangeException e) {
-        String err_row = ((DBDocumentReaderBase)document.asReader()).getId().asJsonString();
+        String err_row = ((DBDocumentReaderBase) document.asReader()).getId().asJsonString();
         if (ignoreSchemaChange) {
           logger.warn("{}. Dropping row '{}' from result.", e.getMessage(), err_row);
           logger.debug("Stack trace:", e);
@@ -455,9 +509,7 @@ public class MaprDBJsonRecordReader extends AbstractRecordReader {
       }
     }
     vectorWriter.setValueCount(recordCount);
-    if (maxRecordsToRead > 0) {
-      maxRecordsToRead -= recordCount;
-    }
+    decrementRecordsLimit();
     logger.debug("Took {} ms to get {} records", watch.elapsed(TimeUnit.MILLISECONDS), recordCount);
     return recordCount;
   }
@@ -505,6 +557,7 @@ public class MaprDBJsonRecordReader extends AbstractRecordReader {
       throw dataReadError(logger, e);
     }
   }
+
   /*
    * Extracts contiguous named segments from the SchemaPath, starting from the
    * root segment and build the FieldPath from it for projection.
@@ -544,14 +597,14 @@ public class MaprDBJsonRecordReader extends AbstractRecordReader {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder("MaprDBJsonRecordReader[Table=")
-        .append(table != null ? table.getPath() : null);
+      .append(table != null ? table.getPath() : null);
     if (reader != null) {
       sb.append(", Document ID=")
-          .append(IdCodec.asString(reader.getId()));
+        .append(IdCodec.asString(reader.getId()));
     }
     sb.append(", reader=")
-        .append(reader)
-        .append(']');
+      .append(reader)
+      .append(']');
     return sb.toString();
   }
 }
