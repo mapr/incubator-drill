@@ -316,6 +316,7 @@
           <failOnMissing>true</failOnMissing>
           <acceptPomPackaging>true</acceptPomPackaging>
           <force>true</force>
+          <excludedGroups>^com.mapr</excludedGroups>
         </configuration>
         <executions>
           <execution>
