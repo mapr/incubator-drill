@@ -21,6 +21,8 @@ package org.apache.drill.exec.planner.index.rules;
 import org.apache.calcite.plan.RelOptRuleOperand;
 import org.apache.calcite.rex.RexBuilder;
 import org.apache.calcite.rex.RexNode;
+import org.apache.drill.common.expression.LogicalExpression;
+import org.apache.drill.common.expression.SchemaPath;
 import org.apache.drill.exec.physical.base.DbGroupScan;
 import org.apache.drill.exec.planner.index.FunctionalIndexInfo;
 import org.apache.drill.exec.planner.index.IndexCollection;
@@ -36,11 +38,23 @@ import org.apache.drill.exec.planner.physical.PlannerSettings;
 import org.apache.drill.exec.planner.physical.Prule;
 import org.slf4j.Logger;
 
+import java.util.Map;
+
 
 public abstract class AbstractIndexPrule extends Prule {
 
   public AbstractIndexPrule(RelOptRuleOperand operand, String description) {
     super(operand, description);
+  }
+
+  protected boolean hasConditionOnPrimaryIndex(IndexLogicalPlanCallContext indexContext) {
+    IndexableExprMarker marker = new IndexableExprMarker(indexContext.scan);
+    indexContext.filter.getCondition().accept(marker);
+    final Map<RexNode, LogicalExpression> relevantRexMap = marker.getIndexableExpression();
+
+    DbGroupScan groupScan = (DbGroupScan) indexContext.scan.getGroupScan();
+    final SchemaPath rowKeyPath = groupScan.getRowKeyPath();
+    return relevantRexMap.values().stream().anyMatch(conditionExpression -> conditionExpression.equals(rowKeyPath));
   }
 
   /**

@@ -55,10 +55,11 @@ import com.google.common.base.Stopwatch;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import org.ojai.DocumentConstants;
 
 public abstract class MapRDBGroupScan extends AbstractDbGroupScan {
   private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(MapRDBGroupScan.class);
-
+  private static final SchemaPath ROW_KEY_PATH = SchemaPath.getSimplePath(DocumentConstants.ID_KEY);
   private static final Comparator<List<MapRDBSubScanSpec>> LIST_SIZE_COMPARATOR = Comparator.comparingInt(List::size);
   private static final Comparator<List<MapRDBSubScanSpec>> LIST_SIZE_COMPARATOR_REV = Collections.reverseOrder(LIST_SIZE_COMPARATOR);
 
@@ -369,4 +370,13 @@ public abstract class MapRDBGroupScan extends AbstractDbGroupScan {
     return tableMetadata;
   }
 
+  @Override
+  public String getRowKeyName() {
+    return DocumentConstants.ID_KEY;
+  }
+
+  @Override
+  public SchemaPath getRowKeyPath() {
+    return ROW_KEY_PATH;
+  }
 }

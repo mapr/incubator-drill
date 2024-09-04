@@ -255,6 +255,14 @@ public class DbScanToIndexScanPrule extends AbstractIndexPrule {
   protected void doOnMatch(IndexLogicalPlanCallContext indexContext) {
 
     Stopwatch indexPlanTimer = Stopwatch.createStarted();
+    if (hasConditionOnPrimaryIndex(indexContext)) {
+      if (logger.isDebugEnabled()) {
+        logger.debug("Skipping index planning since the query has conditions suitable to use the " +
+            "primary index. Expected the datasource will use the primary index once it sees a " +
+            "filter by the row key");
+      }
+      return;
+    }
     final PlannerSettings settings = PrelUtil.getPlannerSettings(indexContext.call.getPlanner());
     final IndexCollection indexCollection = getIndexCollection(settings, indexContext.scan);
     if( indexCollection == null ) {
