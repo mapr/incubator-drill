@@ -54,7 +54,7 @@
     <antlr.version>4.9.3</antlr.version>
     <asm.version>9.5</asm.version>
     <avatica.version>1.23.0</avatica.version>
-    <avro.version>1.11.3</avro.version>
+    <avro.version>1.11.4</avro.version>
     <bcfips.version>1.0.2.1</bcfips.version>
     <bctlsfips.version>1.0.11.4</bctlsfips.version>
     <calcite.groupId>org.apache.calcite</calcite.groupId>
