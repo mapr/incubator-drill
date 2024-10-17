@@ -36,7 +36,6 @@ import org.apache.drill.exec.server.rest.auth.DrillHttpSecurityHandlerProvider;
 import org.apache.drill.exec.server.rest.auth.DrillSpnegoLoginService;
 import org.apache.drill.exec.server.rest.auth.SpnegoConfig;
 import org.apache.drill.test.BaseDirTestWatcher;
-import org.apache.drill.test.BaseTest;
 import org.apache.hadoop.security.authentication.util.KerberosName;
 import org.apache.hadoop.security.authentication.util.KerberosUtil;
 import org.apache.kerby.kerberos.kerb.client.JaasKrbUtil;
@@ -65,7 +64,7 @@ import static org.junit.Assert.assertTrue;
  * Test for validating {@link DrillSpnegoLoginService}
  */
 @Category(SecurityTest.class)
-public class TestSpnegoAuthentication extends BaseTest {
+public class TestSpnegoAuthentication {
 
   private static KerberosHelper spnegoHelper;
 

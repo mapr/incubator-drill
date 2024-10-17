@@ -17,7 +17,6 @@
  */
 package org.apache.drill.common.map;
 
-import org.apache.drill.test.BaseTest;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -29,7 +28,7 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-public class TestCaseInsensitiveMap extends BaseTest {
+public class TestCaseInsensitiveMap {
 
   @Test
   public void putAndGet() {

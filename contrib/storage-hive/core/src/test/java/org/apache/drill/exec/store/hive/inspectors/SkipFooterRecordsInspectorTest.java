@@ -18,7 +18,6 @@
 package org.apache.drill.exec.store.hive.inspectors;
 
 import org.apache.drill.exec.store.hive.readers.inspectors.SkipFooterRecordsInspector;
-import org.apache.drill.test.BaseTest;
 import org.apache.hadoop.mapred.RecordReader;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -28,7 +27,7 @@ import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class SkipFooterRecordsInspectorTest extends BaseTest {
+public class SkipFooterRecordsInspectorTest {
 
   private static RecordReader<Object, Object> recordReader;
 

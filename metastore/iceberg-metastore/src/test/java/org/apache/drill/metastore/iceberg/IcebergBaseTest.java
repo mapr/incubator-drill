@@ -22,7 +22,6 @@ import com.typesafe.config.ConfigValueFactory;
 import org.apache.drill.categories.MetastoreTest;
 import org.apache.drill.common.config.DrillConfig;
 import org.apache.drill.metastore.iceberg.config.IcebergConfigConstants;
-import org.apache.drill.test.BaseTest;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
@@ -35,7 +34,7 @@ import org.junit.rules.TemporaryFolder;
 import java.io.File;
 
 @Category(MetastoreTest.class)
-public abstract class IcebergBaseTest extends BaseTest {
+public abstract class IcebergBaseTest {
 
   @ClassRule
   public static TemporaryFolder defaultFolder = new TemporaryFolder();

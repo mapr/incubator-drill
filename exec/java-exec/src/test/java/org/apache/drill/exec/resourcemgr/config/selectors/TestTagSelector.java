@@ -25,7 +25,6 @@ import org.apache.drill.exec.ExecConstants;
 import org.apache.drill.exec.ops.QueryContext;
 import org.apache.drill.exec.resourcemgr.config.exception.RMConfigException;
 import org.apache.drill.exec.server.options.OptionValue;
-import org.apache.drill.test.BaseTest;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
@@ -36,7 +35,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @Category(ResourceManagerTest.class)
-public final class TestTagSelector extends BaseTest {
+public final class TestTagSelector {
 
   private ResourcePoolSelector testCommonHelper(Object tagValue) throws RMConfigException {
     Config testConfig = ConfigFactory.empty()

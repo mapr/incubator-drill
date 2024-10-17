@@ -20,7 +20,6 @@ package org.apache.drill.exec.physical.resultSet.project;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import org.apache.drill.test.BaseTest;
 import org.apache.drill.common.types.TypeProtos.MinorType;
 import org.apache.drill.common.types.Types;
 import org.apache.drill.exec.physical.rowSet.RowSetTestUtils;
@@ -35,7 +34,7 @@ import org.junit.Test;
  * to see if the projection path is consistent with the type. Tests here
  * verify the consistency checks.
  */
-public class TestProjectedPath extends BaseTest{
+public class TestProjectedPath {
 
   // INT is a proxy for all scalar columns.
   private static final ColumnMetadata INT_COLUMN = intSchema().metadata("a");

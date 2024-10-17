@@ -18,13 +18,12 @@
 package org.apache.drill.metastore.rdbms;
 
 import org.apache.drill.categories.MetastoreTest;
-import org.apache.drill.test.BaseTest;
 import org.junit.ClassRule;
 import org.junit.experimental.categories.Category;
 import org.junit.rules.TemporaryFolder;
 
 @Category(MetastoreTest.class)
-public class RdbmsBaseTest extends BaseTest {
+public class RdbmsBaseTest {
 
   @ClassRule
   public static TemporaryFolder defaultFolder = new TemporaryFolder();

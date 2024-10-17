@@ -20,7 +20,6 @@ package org.apache.drill.exec.store.dfs;
 import org.apache.drill.exec.ops.OpProfileDef;
 import org.apache.drill.exec.ops.OperatorStats;
 import org.apache.drill.exec.proto.UserBitShared.OperatorProfile;
-import org.apache.drill.test.BaseTest;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
@@ -34,7 +33,7 @@ import java.io.PrintWriter;
 
 import static org.junit.Assert.assertTrue;
 
-public class TestDrillFileSystem extends BaseTest {
+public class TestDrillFileSystem {
 
   private static String tempFilePath;
 

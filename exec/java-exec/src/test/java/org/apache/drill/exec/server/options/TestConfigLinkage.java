@@ -22,7 +22,6 @@ import org.apache.drill.categories.SlowTest;
 import org.apache.drill.exec.ExecConstants;
 import org.apache.drill.exec.store.sys.SystemTable;
 import org.apache.drill.test.BaseDirTestWatcher;
-import org.apache.drill.test.BaseTest;
 import org.apache.drill.test.ClientFixture;
 import org.apache.drill.test.ClusterFixture;
 import org.apache.drill.test.ClusterFixtureBuilder;
@@ -42,7 +41,7 @@ import static org.junit.Assert.assertEquals;
  * */
 
 @Category({OptionsTest.class, SlowTest.class})
-public class TestConfigLinkage extends BaseTest {
+public class TestConfigLinkage {
   public static final String MOCK_PROPERTY = "mock.prop";
 
   @Rule

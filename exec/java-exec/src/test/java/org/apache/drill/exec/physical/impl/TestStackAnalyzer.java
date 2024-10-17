@@ -20,7 +20,6 @@ package org.apache.drill.exec.physical.impl;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 
-import org.apache.drill.test.BaseTest;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -32,7 +31,7 @@ import org.junit.Test;
  * an exception call stack. Does the tests using dummy classes
  * (which is why the stack analyzer function is parameterized.)
  */
-public class TestStackAnalyzer extends BaseTest{
+public class TestStackAnalyzer {
 
   private static class OperA {
     public void throwNow() {

@@ -21,11 +21,10 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.fail;
 
-import org.apache.drill.test.BaseTest;
 import org.junit.Test;
 
 
-public class Drill2130JavaExecHamcrestConfigurationTest extends BaseTest {
+public class Drill2130JavaExecHamcrestConfigurationTest {
 
   private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory
       .getLogger(Drill2130JavaExecHamcrestConfigurationTest.class);

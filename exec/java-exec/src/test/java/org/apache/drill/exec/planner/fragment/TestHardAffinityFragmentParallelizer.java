@@ -23,7 +23,6 @@ import org.apache.drill.categories.PlannerTest;
 import org.apache.drill.exec.physical.EndpointAffinity;
 import org.apache.drill.exec.physical.base.PhysicalOperator;
 import org.apache.drill.exec.proto.CoordinationProtos.DrillbitEndpoint;
-import org.apache.drill.test.BaseTest;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
@@ -40,7 +39,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @Category(PlannerTest.class)
-public class TestHardAffinityFragmentParallelizer extends BaseTest {
+public class TestHardAffinityFragmentParallelizer {
 
   // Create a set of test endpoints
   private static final DrillbitEndpoint N1_EP1 = newDrillbitEndpoint("node1", 30010);

@@ -17,7 +17,6 @@
  */
 package org.apache.drill.common.util.function;
 
-import org.apache.drill.test.BaseTest;
 import org.hamcrest.MatcherAssert;
 import org.junit.Assert;
 import org.junit.Test;
@@ -27,7 +26,7 @@ import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.containsString;
 
-public class TestCheckedFunction extends BaseTest {
+public class TestCheckedFunction {
 
   @Test
   public void testComputeIfAbsentWithCheckedFunction() {

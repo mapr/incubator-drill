@@ -21,7 +21,6 @@ import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.drill.categories.SlowTest;
-import org.apache.drill.test.BaseTest;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.experimental.categories.Category;
@@ -38,7 +37,7 @@ import org.slf4j.LoggerFactory;
    PhoenixCommandTest.class
 })
 @Category({ SlowTest.class })
-public class PhoenixTestSuite extends BaseTest {
+public class PhoenixTestSuite {
 
   private static final org.slf4j.Logger logger = LoggerFactory.getLogger(PhoenixTestSuite.class);
 

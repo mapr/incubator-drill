@@ -36,7 +36,7 @@ import org.slf4j.Logger;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class DrillTest extends BaseTest {
+public class DrillTest {
 
   private static final ObjectMapper objectMapper = JacksonUtils.createObjectMapper();
 

@@ -17,11 +17,10 @@
  */
 package org.apache.drill.exec.coord.zk;
 
-import org.apache.drill.test.BaseTest;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class TestPathUtils extends BaseTest {
+public class TestPathUtils {
 
   @Test(expected = NullPointerException.class)
   public void testNullSegmentThrowsNPE() {

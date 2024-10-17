@@ -23,8 +23,6 @@ import java.sql.DriverPropertyInfo;
 import java.sql.SQLException;
 import java.util.Properties;
 
-import org.apache.drill.common.util.GuavaPatcher;
-import org.apache.drill.common.util.ProtobufPatcher;
 import org.apache.drill.jdbc.impl.DriverImpl;
 
 
@@ -43,8 +41,6 @@ public class Driver implements java.sql.Driver {
   // DriverManager access it:
 
   static {
-    ProtobufPatcher.patch();
-    GuavaPatcher.patch();
     // Upon loading of class, register an instance with DriverManager.
     try {
       DriverManager.registerDriver(new Driver());

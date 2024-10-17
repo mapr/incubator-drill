@@ -21,7 +21,6 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import org.apache.drill.categories.SqlFunctionTest;
 import org.apache.drill.exec.expr.fn.DrillFuncHolder;
-import org.apache.drill.test.BaseTest;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -34,7 +33,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -46,7 +44,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 
 @Category(SqlFunctionTest.class)
-public class FunctionRegistryHolderTest extends BaseTest {
+public class FunctionRegistryHolderTest {
 
   private static final String built_in = "built-in";
   private static final String udf_jar = "DrillUDF-1.0.jar";

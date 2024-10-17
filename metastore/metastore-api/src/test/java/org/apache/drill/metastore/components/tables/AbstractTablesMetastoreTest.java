@@ -30,7 +30,6 @@ import org.apache.drill.metastore.metadata.MetadataType;
 import org.apache.drill.metastore.metadata.TableInfo;
 import org.apache.drill.metastore.operate.Delete;
 import com.google.common.collect.Sets;
-import org.apache.drill.test.BaseTest;
 import org.junit.After;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -46,7 +45,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 @Category(MetastoreTest.class)
-public abstract class AbstractTablesMetastoreTest extends BaseTest {
+public abstract class AbstractTablesMetastoreTest {
 
   @ClassRule
   public static TemporaryFolder defaultFolder = new TemporaryFolder();

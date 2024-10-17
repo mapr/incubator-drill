@@ -34,7 +34,6 @@ import org.apache.drill.exec.vector.complex.writer.BaseWriter.ListWriter;
 import org.apache.drill.exec.vector.complex.writer.BaseWriter.MapWriter;
 import org.apache.drill.exec.vector.complex.writer.FieldWriter;
 import org.apache.drill.exec.vector.complex.writer.IntWriter;
-import org.apache.drill.test.BaseTest;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -43,7 +42,7 @@ import io.netty.buffer.DrillBuf;
 
 import java.nio.charset.StandardCharsets;
 
-public class VectorTest extends BaseTest {
+public class VectorTest {
 
   private static RootAllocator allocator;
 

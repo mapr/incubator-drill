@@ -31,14 +31,13 @@ import org.apache.curator.test.TestingServer;
 import org.apache.drill.exec.ZookeeperTestUtil;
 import org.apache.drill.exec.coord.store.TransientStoreConfig;
 import org.apache.drill.exec.serialization.InstanceSerializer;
-import org.apache.drill.test.BaseTest;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-public class TestEphemeralStore extends BaseTest {
+public class TestEphemeralStore {
   private final static String root = "/test";
   private final static String path = "test-key";
   private final static String value = "testing";

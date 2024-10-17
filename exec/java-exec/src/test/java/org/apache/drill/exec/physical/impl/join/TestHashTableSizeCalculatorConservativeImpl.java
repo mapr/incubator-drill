@@ -20,7 +20,6 @@ package org.apache.drill.exec.physical.impl.join;
 import com.google.common.collect.Maps;
 import org.apache.drill.exec.record.RecordBatchSizer;
 import org.apache.drill.exec.vector.UInt4Vector;
-import org.apache.drill.test.BaseTest;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -29,7 +28,7 @@ import java.util.Map;
 /**
  * This is a test for the more conservative hash table memory calculator {@link HashTableSizeCalculatorConservativeImpl}.
  */
-public class TestHashTableSizeCalculatorConservativeImpl extends BaseTest {
+public class TestHashTableSizeCalculatorConservativeImpl {
   @Test
   public void testCalculateHashTableSize() {
     final int maxNumRecords = 40;

@@ -32,7 +32,6 @@ import org.apache.drill.common.expression.SchemaPath;
 import org.apache.drill.exec.physical.impl.scan.v3.schema.ScanProjectionParser.ProjectionParseResult;
 import org.apache.drill.exec.physical.rowSet.RowSetTestUtils;
 import org.apache.drill.exec.record.metadata.TupleMetadata;
-import org.apache.drill.test.BaseTest;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
@@ -47,7 +46,7 @@ import org.junit.experimental.categories.Category;
  * inherently specific to some use case.
  */
 @Category(EvfTest.class)
-public class TestProjectionParser extends BaseTest {
+public class TestProjectionParser {
 
   /**
    * Null map means everything is projected

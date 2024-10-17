@@ -26,7 +26,6 @@ import org.apache.drill.exec.store.schedule.AssignmentCreator;
 import org.apache.drill.exec.store.schedule.CompleteFileWork;
 import org.apache.drill.exec.store.schedule.EndpointByteMap;
 import org.apache.drill.exec.store.schedule.EndpointByteMapImpl;
-import org.apache.drill.test.BaseTest;
 import org.apache.hadoop.fs.Path;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -37,7 +36,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class TestAssignment extends BaseTest {
+public class TestAssignment {
 
   private static final long FILE_SIZE = 1000;
   private static List<DrillbitEndpoint> endpoints;

@@ -22,7 +22,6 @@ import org.apache.drill.exec.ops.QueryContext;
 import org.apache.drill.exec.proto.UserBitShared;
 import org.apache.drill.exec.resourcemgr.config.ResourcePool;
 import org.apache.drill.exec.resourcemgr.config.exception.QueueSelectionException;
-import org.apache.drill.test.BaseTest;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -35,7 +34,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @Category(ResourceManagerTest.class)
-public final class TestDefaultSelectionPolicy extends BaseTest {
+public final class TestDefaultSelectionPolicy {
 
   private static QueueSelectionPolicy selectionPolicy;
 

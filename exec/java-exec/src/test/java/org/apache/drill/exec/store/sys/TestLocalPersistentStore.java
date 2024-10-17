@@ -22,7 +22,6 @@ import org.apache.drill.common.exceptions.DrillRuntimeException;
 import org.apache.drill.exec.store.dfs.DrillFileSystem;
 import org.apache.drill.exec.store.sys.store.LocalPersistentStore;
 import com.google.common.collect.Lists;
-import org.apache.drill.test.BaseTest;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
@@ -44,7 +43,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 @Category({UnlikelyTest.class})
-public class TestLocalPersistentStore extends BaseTest {
+public class TestLocalPersistentStore {
 
   @Rule
   public TemporaryFolder root = new TemporaryFolder();

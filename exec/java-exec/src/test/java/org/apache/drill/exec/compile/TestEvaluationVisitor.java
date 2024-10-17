@@ -27,10 +27,9 @@ import org.apache.drill.exec.expr.ValueVectorReadExpression;
 import org.apache.drill.exec.expr.ValueVectorWriteExpression;
 import org.apache.drill.exec.physical.impl.project.Projector;
 import org.apache.drill.exec.record.TypedFieldId;
-import org.apache.drill.test.BaseTest;
 import org.junit.Test;
 
-public class TestEvaluationVisitor extends BaseTest {
+public class TestEvaluationVisitor {
 
   @Test
   public void testEvaluation() {

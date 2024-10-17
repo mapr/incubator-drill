@@ -47,8 +47,6 @@ import org.apache.drill.exec.store.sys.PersistentStoreRegistry;
 import org.apache.drill.exec.store.sys.store.provider.CachingPersistentStoreProvider;
 import org.apache.drill.exec.store.sys.store.provider.InMemoryStoreProvider;
 import org.apache.drill.exec.store.sys.store.provider.LocalPersistentStoreProvider;
-import org.apache.drill.common.util.GuavaPatcher;
-import org.apache.drill.common.util.ProtobufPatcher;
 import org.apache.drill.exec.work.WorkManager;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Stopwatch;
@@ -79,17 +77,6 @@ public class Drillbit implements AutoCloseable {
   private static final Logger logger = LoggerFactory.getLogger(Drillbit.class);
 
   static {
-    /*
-     * HBase and MapR-DB clients use older version of protobuf,
-     * and override some methods that became final in recent versions.
-     * This code removes these final modifiers.
-     */
-    ProtobufPatcher.patch();
-    /*
-     * Some libraries, such as Hadoop or HBase, depend on incompatible versions of Guava.
-     * This code adds back some methods to so that the libraries can work with single Guava version.
-     */
-    GuavaPatcher.patch();
     Environment.logEnv("Drillbit environment: ", logger);
     // Jersey uses java.util.logging - create bridge: jul to slf4j
     SLF4JBridgeHandler.removeHandlersForRootLogger();

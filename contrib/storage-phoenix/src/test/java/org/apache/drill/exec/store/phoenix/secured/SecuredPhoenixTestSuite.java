@@ -20,7 +20,6 @@ package org.apache.drill.exec.store.phoenix.secured;
 import org.apache.drill.categories.RowSetTest;
 import org.apache.drill.categories.SlowTest;
 import org.apache.drill.exec.store.phoenix.PhoenixBasicsIT;
-import org.apache.drill.test.BaseTest;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.experimental.categories.Category;
@@ -39,7 +38,7 @@ import java.util.concurrent.atomic.AtomicInteger;
   SecuredPhoenixCommandTest.class
 })
 @Category({ SlowTest.class, RowSetTest.class })
-public class SecuredPhoenixTestSuite extends BaseTest {
+public class SecuredPhoenixTestSuite {
 
   private static final org.slf4j.Logger logger = LoggerFactory.getLogger(SecuredPhoenixTestSuite.class);
 

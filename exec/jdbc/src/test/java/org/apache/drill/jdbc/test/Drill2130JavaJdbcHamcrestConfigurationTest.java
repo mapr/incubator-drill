@@ -18,7 +18,6 @@
 package org.apache.drill.jdbc.test;
 
 import org.apache.drill.categories.JdbcTest;
-import org.apache.drill.test.BaseTest;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
@@ -27,7 +26,7 @@ import static org.junit.Assert.fail;
 import static org.hamcrest.CoreMatchers.equalTo;
 
 @Category(JdbcTest.class)
-public class Drill2130JavaJdbcHamcrestConfigurationTest extends BaseTest {
+public class Drill2130JavaJdbcHamcrestConfigurationTest {
   private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(Drill2130JavaJdbcHamcrestConfigurationTest.class);
 
   @SuppressWarnings("unused")

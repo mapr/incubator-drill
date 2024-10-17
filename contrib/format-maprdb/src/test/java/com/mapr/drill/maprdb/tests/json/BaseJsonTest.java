@@ -44,9 +44,6 @@ public class BaseJsonTest extends BaseTestQuery {
 
   @BeforeClass
   public static void setupDefaultTestCluster() throws Exception {
-    // GuavaPatcher.patch is invoked in ExecTest ExecTest-->BaseTestQuery
-    // GuavaPatcher.patch();
-
     // Since we override the class initializer of parent class,
     // invoke it explicitly. This will setup a Drill cluster.
     BaseTestQuery.setupDefaultTestCluster();

@@ -36,7 +36,6 @@ import org.apache.drill.common.scanner.persistence.ScanResult;
 import org.apache.drill.exec.planner.logical.StoragePlugins;
 import org.apache.drill.exec.server.DrillbitContext;
 import org.apache.drill.test.BaseDirTestWatcher;
-import org.apache.drill.test.BaseTest;
 import org.apache.drill.test.OperatorFixture;
 import org.junit.ClassRule;
 
@@ -44,7 +43,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class BasePluginRegistryTest extends BaseTest {
+public class BasePluginRegistryTest {
 
   @ClassRule
   public static final BaseDirTestWatcher dirTestWatcher = new BaseDirTestWatcher();

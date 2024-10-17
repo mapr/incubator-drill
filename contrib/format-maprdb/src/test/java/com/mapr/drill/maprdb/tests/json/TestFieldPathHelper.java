@@ -21,11 +21,10 @@ import static org.junit.Assert.assertEquals;
 
 import org.apache.drill.common.expression.SchemaPath;
 import org.apache.drill.exec.store.mapr.db.json.FieldPathHelper;
-import org.apache.drill.test.BaseTest;
 import org.junit.Test;
 import org.ojai.FieldPath;
 
-public class TestFieldPathHelper extends BaseTest {
+public class TestFieldPathHelper {
 
   @Test
   public void simeTests() {

@@ -28,7 +28,6 @@ import org.apache.drill.categories.MongoStorageTest;
 import org.apache.drill.categories.SlowTest;
 import com.google.common.io.Files;
 import com.google.common.io.Resources;
-import org.apache.drill.test.BaseTest;
 import org.apache.hadoop.conf.Configuration;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -67,7 +66,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 })
 
 @Category({SlowTest.class, MongoStorageTest.class})
-public class MongoTestSuite extends BaseTest implements MongoTestConstants {
+public class MongoTestSuite implements MongoTestConstants {
 
   private static final Logger logger = LoggerFactory.getLogger(MongoTestSuite.class);
   protected static MongoClient mongoClient;

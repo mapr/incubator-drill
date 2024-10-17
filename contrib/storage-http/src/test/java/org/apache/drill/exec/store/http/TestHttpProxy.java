@@ -23,14 +23,13 @@ import static org.junit.Assert.assertNull;
 import org.apache.drill.exec.ExecConstants;
 import org.apache.drill.exec.store.http.util.HttpProxyConfig;
 import org.apache.drill.exec.store.http.util.HttpProxyConfig.ProxyType;
-import org.apache.drill.test.BaseTest;
 import org.apache.drill.test.ConfigBuilder;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import com.typesafe.config.Config;
 
-public class TestHttpProxy extends BaseTest {
+public class TestHttpProxy {
 
   @Test
   public void testBasics() {

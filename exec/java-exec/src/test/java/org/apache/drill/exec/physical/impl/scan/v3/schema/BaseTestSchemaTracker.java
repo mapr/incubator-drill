@@ -26,9 +26,8 @@ import org.apache.drill.common.types.TypeProtos.MinorType;
 import org.apache.drill.exec.physical.impl.scan.v3.schema.ScanProjectionParser.ProjectionParseResult;
 import org.apache.drill.exec.record.metadata.SchemaBuilder;
 import org.apache.drill.exec.record.metadata.TupleMetadata;
-import org.apache.drill.test.BaseTest;
 
-public class BaseTestSchemaTracker extends BaseTest {
+public class BaseTestSchemaTracker {
 
   protected static final CustomErrorContext ERROR_CONTEXT = EmptyErrorContext.INSTANCE;
   protected static final String MOCK_PROP = "my.prop";

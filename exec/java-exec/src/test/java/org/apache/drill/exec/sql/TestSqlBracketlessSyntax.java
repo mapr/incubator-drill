@@ -28,7 +28,6 @@ import org.apache.drill.exec.planner.physical.PlannerSettings;
 import org.apache.drill.exec.planner.sql.DrillConvertletTable;
 import org.apache.drill.exec.planner.sql.parser.CompoundIdentifierConverter;
 import org.apache.drill.exec.planner.sql.parser.impl.DrillParserImpl;
-import org.apache.drill.test.BaseTest;
 import org.apache.drill.test.DrillAssert;
 import org.apache.calcite.sql.SqlNode;
 import org.apache.calcite.sql.parser.SqlParser;
@@ -36,7 +35,7 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 @Category(SqlTest.class)
-public class TestSqlBracketlessSyntax extends BaseTest {
+public class TestSqlBracketlessSyntax {
   static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(TestSqlBracketlessSyntax.class);
 
   @Test

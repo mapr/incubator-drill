@@ -17,7 +17,6 @@
  */
 package org.apache.drill.exec.memory;
 
-import org.apache.drill.test.BaseTest;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -32,7 +31,7 @@ import org.slf4j.LoggerFactory;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-public class BoundsCheckingTest extends BaseTest {
+public class BoundsCheckingTest {
   private static final Logger logger = LoggerFactory.getLogger(BoundsCheckingTest.class);
 
   private static boolean old;

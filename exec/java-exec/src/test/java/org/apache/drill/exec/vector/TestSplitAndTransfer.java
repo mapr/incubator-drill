@@ -25,7 +25,6 @@ import org.apache.drill.exec.memory.RootAllocatorFactory;
 import org.apache.drill.exec.record.MaterializedField;
 import org.apache.drill.exec.record.TransferPair;
 import org.apache.drill.exec.vector.NullableVarCharVector.Accessor;
-import org.apache.drill.test.BaseTest;
 import org.junit.Test;
 
 import java.nio.charset.StandardCharsets;
@@ -36,7 +35,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertArrayEquals;
 
 
-public class TestSplitAndTransfer extends BaseTest {
+public class TestSplitAndTransfer {
   @Test
   public void test() throws Exception {
     final DrillConfig drillConfig = DrillConfig.create();

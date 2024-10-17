@@ -18,11 +18,10 @@
 package org.apache.drill.exec.vector.accessor;
 
 import org.apache.drill.exec.vector.accessor.sql.TimePrintMillis;
-import org.apache.drill.test.BaseTest;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class TestTimePrintMillis extends BaseTest {
+public class TestTimePrintMillis {
 
   @Test
   public void testPrintingMillis() {

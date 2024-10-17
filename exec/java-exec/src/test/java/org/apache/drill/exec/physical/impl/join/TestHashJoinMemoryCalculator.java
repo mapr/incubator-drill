@@ -17,10 +17,9 @@
  */
 package org.apache.drill.exec.physical.impl.join;
 
-import org.apache.drill.test.BaseTest;
 import org.junit.Test;
 
-public class TestHashJoinMemoryCalculator extends BaseTest {
+public class TestHashJoinMemoryCalculator {
   @Test // Make sure no exception is thrown
   public void testMakeDebugString()
   {

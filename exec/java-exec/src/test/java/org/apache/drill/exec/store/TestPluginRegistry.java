@@ -45,7 +45,6 @@ import org.apache.drill.exec.store.dfs.FileSystemPlugin;
 import org.apache.drill.exec.store.easy.text.TextFormatConfig;
 import org.apache.drill.common.logical.security.PlainCredentialsProvider;
 import org.apache.drill.test.BaseDirTestWatcher;
-import org.apache.drill.test.BaseTest;
 import org.apache.drill.test.ClusterFixture;
 import org.apache.drill.test.ClusterFixtureBuilder;
 import org.junit.After;
@@ -63,7 +62,7 @@ import org.junit.Test;
  * This is several big tests because of the setup cost of
  * starting the Drillbits in the needed config.
  */
-public class TestPluginRegistry extends BaseTest {
+public class TestPluginRegistry {
 
   @ClassRule
   public static final BaseDirTestWatcher dirTestWatcher = new BaseDirTestWatcher();

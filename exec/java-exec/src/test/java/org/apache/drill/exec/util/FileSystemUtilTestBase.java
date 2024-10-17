@@ -21,7 +21,6 @@ import com.google.common.base.Strings;
 import org.apache.commons.io.FileUtils;
 import org.apache.drill.common.util.DrillFileUtils;
 import org.apache.drill.exec.ExecTest;
-import org.apache.drill.test.BaseTest;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.junit.BeforeClass;
@@ -34,7 +33,7 @@ import java.util.Arrays;
  * Base test class for file system util classes that will during test initialization
  * setup file system connection and create directories and files needed for unit tests.
  */
-public class FileSystemUtilTestBase extends BaseTest {
+public class FileSystemUtilTestBase {
 
   /*
     Directory and file structure created during test initialization:

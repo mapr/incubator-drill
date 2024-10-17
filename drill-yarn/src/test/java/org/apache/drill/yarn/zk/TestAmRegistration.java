@@ -21,11 +21,10 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import org.apache.curator.test.TestingServer;
-import org.apache.drill.test.BaseTest;
 import org.apache.drill.yarn.appMaster.AMRegistrar.AMRegistrationException;
 import org.junit.Test;
 
-public class TestAmRegistration extends BaseTest {
+public class TestAmRegistration {
   private static final String TEST_CLUSTER_ID = "drillbits";
   private static final String TEST_ZK_ROOT = "drill";
   private static final String TEST_AM_HOST = "localhost";

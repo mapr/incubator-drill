@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import org.junit.jupiter.api.Test;
 
-class Drill2130CommonHamcrestConfigurationTest extends BaseTest {
+class Drill2130CommonHamcrestConfigurationTest {
   private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(Drill2130CommonHamcrestConfigurationTest.class);
 
   @SuppressWarnings("unused")

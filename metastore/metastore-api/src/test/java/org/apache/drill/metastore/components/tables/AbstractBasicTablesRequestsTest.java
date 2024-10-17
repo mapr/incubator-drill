@@ -34,7 +34,6 @@ import org.apache.drill.metastore.metadata.PartitionMetadata;
 import org.apache.drill.metastore.metadata.RowGroupMetadata;
 import org.apache.drill.metastore.metadata.SegmentMetadata;
 import org.apache.drill.metastore.metadata.TableInfo;
-import org.apache.drill.test.BaseTest;
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -53,7 +52,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 @Category(MetastoreTest.class)
-public abstract class AbstractBasicTablesRequestsTest extends BaseTest {
+public abstract class AbstractBasicTablesRequestsTest {
 
   @ClassRule
   public static TemporaryFolder defaultFolder = new TemporaryFolder();

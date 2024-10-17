@@ -21,7 +21,6 @@ import org.apache.drill.categories.MetastoreTest;
 import org.apache.drill.metastore.exceptions.MetastoreException;
 import org.apache.drill.metastore.metadata.MetadataType;
 import com.google.common.collect.Sets;
-import org.apache.drill.test.BaseTest;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
@@ -32,7 +31,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.fail;
 
 @Category(MetastoreTest.class)
-public class TestTablesMetadataTypeValidator extends BaseTest {
+public class TestTablesMetadataTypeValidator {
 
   @Test
   public void testValidType() {

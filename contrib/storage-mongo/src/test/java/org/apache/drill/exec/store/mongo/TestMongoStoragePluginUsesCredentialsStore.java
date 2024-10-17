@@ -22,7 +22,6 @@ import com.mongodb.client.internal.MongoClientImpl;
 import org.apache.drill.categories.MongoStorageTest;
 import org.apache.drill.common.exceptions.ExecutionSetupException;
 import org.apache.drill.common.logical.security.PlainCredentialsProvider;
-import org.apache.drill.test.BaseTest;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
@@ -31,7 +30,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 @Category({MongoStorageTest.class})
-public class TestMongoStoragePluginUsesCredentialsStore extends BaseTest {
+public class TestMongoStoragePluginUsesCredentialsStore {
 
   private void test(String expectedUserName, String expectedPassword, String connection, String name) throws ExecutionSetupException {
     MongoStoragePlugin plugin = new MongoStoragePlugin(

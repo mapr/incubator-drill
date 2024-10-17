@@ -34,7 +34,6 @@ import org.apache.drill.exec.record.metadata.ColumnMetadata;
 import org.apache.drill.exec.record.metadata.MetadataUtils;
 import org.apache.drill.exec.record.metadata.SchemaBuilder;
 import org.apache.drill.exec.record.metadata.TupleMetadata;
-import org.apache.drill.test.BaseTest;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
@@ -45,7 +44,7 @@ import org.junit.experimental.categories.Category;
  * must all be trees, and must all be kept in sync.
  */
 @Category(EvfTest.class)
-public class TestScanSchemaTrackerMaps extends BaseTest {
+public class TestScanSchemaTrackerMaps {
   private static final CustomErrorContext ERROR_CONTEXT = EmptyErrorContext.INSTANCE;
 
   private boolean isProjected(ProjectionFilter filter, ColumnMetadata col) {

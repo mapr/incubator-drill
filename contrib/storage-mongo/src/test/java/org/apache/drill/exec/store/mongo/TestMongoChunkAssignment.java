@@ -34,7 +34,6 @@ import org.apache.drill.exec.store.mongo.common.ChunkInfo;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import org.apache.drill.test.BaseTest;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -42,7 +41,7 @@ import org.junit.experimental.categories.Category;
 import com.mongodb.ServerAddress;
 
 @Category({SlowTest.class, MongoStorageTest.class})
-public class TestMongoChunkAssignment extends BaseTest {
+public class TestMongoChunkAssignment {
   static final String HOST_A = "A";
   static final String HOST_B = "B";
   static final String HOST_C = "C";

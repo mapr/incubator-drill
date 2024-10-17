@@ -36,7 +36,6 @@ import org.apache.drill.categories.RowSetTest;
 import org.apache.drill.common.types.Types;
 import org.apache.drill.exec.record.MaterializedField;
 import org.apache.drill.exec.record.metadata.ColumnMetadata.StructureType;
-import org.apache.drill.test.BaseTest;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
@@ -44,7 +43,7 @@ import org.junit.experimental.categories.Category;
  * Test the tuple and column metadata, including extended attributes.
  */
 @Category(RowSetTest.class)
-public class TestTupleSchema extends BaseTest {
+public class TestTupleSchema {
 
   /**
    * Test a fixed-width, primitive, required column. Includes basic

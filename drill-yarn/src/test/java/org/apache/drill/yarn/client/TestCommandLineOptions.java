@@ -17,13 +17,12 @@
  */
 package org.apache.drill.yarn.client;
 
-import org.apache.drill.test.BaseTest;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-public class TestCommandLineOptions extends BaseTest {
+public class TestCommandLineOptions {
   @Test
   public void testOptions() {
     CommandLineOptions opts = new CommandLineOptions();

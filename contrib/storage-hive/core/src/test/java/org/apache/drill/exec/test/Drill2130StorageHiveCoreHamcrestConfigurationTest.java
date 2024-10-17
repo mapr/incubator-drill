@@ -17,14 +17,13 @@
  */
 package org.apache.drill.exec.test;
 
-import org.apache.drill.test.BaseTest;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.fail;
 import static org.hamcrest.CoreMatchers.equalTo;
 
-public class Drill2130StorageHiveCoreHamcrestConfigurationTest extends BaseTest {
+public class Drill2130StorageHiveCoreHamcrestConfigurationTest {
   private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(Drill2130StorageHiveCoreHamcrestConfigurationTest.class);
 
   @SuppressWarnings("unused")

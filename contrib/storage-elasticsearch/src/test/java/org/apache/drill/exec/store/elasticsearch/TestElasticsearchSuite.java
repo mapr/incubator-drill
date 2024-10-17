@@ -23,7 +23,6 @@ import co.elastic.clients.transport.ElasticsearchTransport;
 import co.elastic.clients.transport.rest_client.RestClientTransport;
 import org.apache.commons.io.IOUtils;
 import org.apache.drill.categories.SlowTest;
-import org.apache.drill.test.BaseTest;
 
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
@@ -63,7 +62,7 @@ import java.util.concurrent.atomic.AtomicInteger;
     ElasticSearchPlanTest.class,
     ElasticSearchQueryTest.class,
     ElasticSearchUserTranslationTest.class})
-public class TestElasticsearchSuite extends BaseTest {
+public class TestElasticsearchSuite {
 
   protected static ElasticsearchContainer elasticsearch;
   public static final String ELASTICSEARCH_USERNAME = "elastic";

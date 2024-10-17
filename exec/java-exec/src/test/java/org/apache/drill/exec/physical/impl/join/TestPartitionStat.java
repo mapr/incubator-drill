@@ -17,11 +17,10 @@
  */
 package org.apache.drill.exec.physical.impl.join;
 
-import org.apache.drill.test.BaseTest;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class TestPartitionStat extends BaseTest {
+public class TestPartitionStat {
 
   @Test
   public void simpleAddBatchTest() {

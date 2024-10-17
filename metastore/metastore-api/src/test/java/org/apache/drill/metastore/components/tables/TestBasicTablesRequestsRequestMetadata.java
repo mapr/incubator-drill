@@ -21,7 +21,6 @@ import org.apache.drill.categories.MetastoreTest;
 import org.apache.drill.metastore.MetastoreColumn;
 import org.apache.drill.metastore.expressions.FilterExpression;
 import org.apache.drill.metastore.metadata.MetadataType;
-import org.apache.drill.test.BaseTest;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
@@ -34,7 +33,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 @Category(MetastoreTest.class)
-public class TestBasicTablesRequestsRequestMetadata extends BaseTest {
+public class TestBasicTablesRequestsRequestMetadata {
 
   @Test
   public void testRequestMetadataWithoutRequestColumns() {

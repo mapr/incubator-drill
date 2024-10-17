@@ -23,13 +23,12 @@ import org.apache.drill.common.types.Types;
 
 import static org.junit.Assert.assertTrue;
 
-import org.apache.drill.test.BaseTest;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 @Category(VectorTest.class)
-public class TestMaterializedField extends BaseTest {
+public class TestMaterializedField {
 
   private static final String PARENT_NAME = "parent";
   private static final String PARENT_SECOND_NAME = "parent2";

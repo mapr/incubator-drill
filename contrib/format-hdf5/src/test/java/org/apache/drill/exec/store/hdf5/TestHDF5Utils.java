@@ -18,12 +18,11 @@
 
 package org.apache.drill.exec.store.hdf5;
 
-import org.apache.drill.test.BaseTest;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-public class TestHDF5Utils extends BaseTest {
+public class TestHDF5Utils {
 
   @Test
   public void testGetNameFromPath() {

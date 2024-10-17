@@ -34,7 +34,6 @@ import org.apache.curator.x.discovery.ServiceInstance;
 import org.apache.drill.exec.coord.DrillServiceInstanceHelper;
 import org.apache.drill.exec.proto.CoordinationProtos.DrillbitEndpoint;
 import org.apache.drill.exec.work.foreman.DrillbitStatusListener;
-import org.apache.drill.test.BaseTest;
 import org.apache.drill.yarn.appMaster.EventContext;
 import org.apache.drill.yarn.appMaster.RegistryHandler;
 import org.apache.drill.yarn.appMaster.Task;
@@ -48,7 +47,7 @@ import org.junit.Test;
  * test in isolation using the Curator-provided test server.
  */
 
-public class TestZkRegistry extends BaseTest {
+public class TestZkRegistry {
   private static final String BARNEY_HOST = "barney";
   private static final String WILMA_HOST = "wilma";
   private static final String TEST_HOST = "host";

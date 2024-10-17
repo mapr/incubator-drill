@@ -20,7 +20,6 @@ package org.apache.drill.exec.server.rest;
 import org.apache.drill.exec.ExecConstants;
 import org.apache.drill.exec.server.options.OptionDefinition;
 import org.apache.drill.test.BaseDirTestWatcher;
-import org.apache.drill.test.BaseTest;
 import org.apache.drill.test.ClientFixture;
 import org.apache.drill.test.ClusterFixture;
 import org.apache.drill.test.ClusterFixtureBuilder;
@@ -32,7 +31,7 @@ import org.junit.Test;
 import static org.apache.drill.exec.server.options.TestConfigLinkage.MOCK_PROPERTY;
 import static org.apache.drill.exec.server.options.TestConfigLinkage.createMockPropOptionDefinition;
 
-public class StatusResourcesTest extends BaseTest {
+public class StatusResourcesTest {
   @Rule
   public final BaseDirTestWatcher dirTestWatcher = new BaseDirTestWatcher();
 

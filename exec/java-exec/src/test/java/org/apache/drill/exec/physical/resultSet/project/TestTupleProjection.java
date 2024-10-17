@@ -36,7 +36,6 @@ import org.apache.drill.exec.physical.resultSet.project.RequestedTuple.TupleProj
 import org.apache.drill.exec.physical.rowSet.RowSetTestUtils;
 import org.apache.drill.exec.record.metadata.ColumnMetadata;
 import org.apache.drill.exec.record.metadata.MetadataUtils;
-import org.apache.drill.test.BaseTest;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
@@ -51,7 +50,7 @@ import org.junit.experimental.categories.Category;
  * inherently specific to some use case.
  */
 @Category(RowSetTest.class)
-public class TestTupleProjection extends BaseTest {
+public class TestTupleProjection {
 
   private static final ColumnMetadata NORMAL_COLUMN =
       MetadataUtils.newScalar("a", Types.required(MinorType.INT));

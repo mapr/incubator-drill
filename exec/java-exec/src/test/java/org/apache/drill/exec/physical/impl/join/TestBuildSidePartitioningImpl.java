@@ -20,11 +20,10 @@ package org.apache.drill.exec.physical.impl.join;
 import com.google.common.base.Preconditions;
 import org.apache.drill.common.map.CaseInsensitiveMap;
 import org.apache.drill.exec.record.RecordBatch;
-import org.apache.drill.test.BaseTest;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class TestBuildSidePartitioningImpl extends BaseTest {
+public class TestBuildSidePartitioningImpl {
   @Test
   public void testSimpleReserveMemoryCalculationNoHashFirstCycle() {
     testSimpleReserveMemoryCalculationNoHashHelper(true);

@@ -17,12 +17,11 @@
  */
 package org.apache.drill.common.expression;
 
-import org.apache.drill.test.BaseTest;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class SchemaPathTest extends BaseTest {
+class SchemaPathTest {
 
   @Test
   void testUnIndexedWithOutArray() {

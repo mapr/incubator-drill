@@ -19,7 +19,6 @@ package org.apache.drill.exec.physical.impl.join;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
-import org.apache.drill.test.BaseTest;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -27,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class TestPostBuildCalculationsImpl extends BaseTest {
+public class TestPostBuildCalculationsImpl {
   @Test
   public void testProbeTooBig() {
     final int minProbeRecordsPerBatch = 10;

@@ -21,14 +21,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
-import org.apache.drill.test.BaseTest;
 import org.junit.Test;
 
 /**
  * Test class for {@code Version}
  *
  */
-public class TestVersion extends BaseTest {
+public class TestVersion {
 
   @Test
   public void testSnapshotVersion() {

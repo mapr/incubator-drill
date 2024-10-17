@@ -27,7 +27,6 @@ import org.apache.drill.exec.rpc.security.KerberosHelper;
 import org.apache.drill.exec.rpc.user.security.testing.UserAuthenticatorTestImpl;
 import org.apache.drill.exec.server.rest.auth.SpnegoConfig;
 import org.apache.drill.test.BaseDirTestWatcher;
-import org.apache.drill.test.BaseTest;
 import org.apache.hadoop.security.UserGroupInformation;
 import org.apache.hadoop.security.authentication.util.KerberosName;
 import org.apache.hadoop.security.authentication.util.KerberosUtil;
@@ -46,7 +45,7 @@ import static org.junit.Assert.assertTrue;
  * Test for validating {@link SpnegoConfig}
  */
 @Category(SecurityTest.class)
-public class TestSpnegoConfig extends BaseTest {
+public class TestSpnegoConfig {
   private static KerberosHelper spnegoHelper;
 
   private static final String primaryName = "HTTP";

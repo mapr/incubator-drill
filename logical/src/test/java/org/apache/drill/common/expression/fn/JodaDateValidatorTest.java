@@ -18,7 +18,6 @@
 package org.apache.drill.common.expression.fn;
 
 import com.google.common.collect.Maps;
-import org.apache.drill.test.BaseTest;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormatter;
@@ -31,7 +30,7 @@ import static org.apache.drill.common.expression.fn.JodaDateValidator.toJodaForm
 import static org.joda.time.DateTime.parse;
 import static org.joda.time.format.DateTimeFormat.forPattern;
 
-public class JodaDateValidatorTest extends BaseTest {
+public class JodaDateValidatorTest {
 
   private static final Map<String, String> TEST_CASES = Maps.newHashMap();
 

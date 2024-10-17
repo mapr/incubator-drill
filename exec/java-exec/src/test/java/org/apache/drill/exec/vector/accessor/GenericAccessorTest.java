@@ -20,7 +20,6 @@ package org.apache.drill.exec.vector.accessor;
 import org.apache.drill.categories.VectorTest;
 import org.apache.drill.exec.proto.UserBitShared;
 import org.apache.drill.exec.vector.ValueVector;
-import org.apache.drill.test.BaseTest;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -36,7 +35,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @Category(VectorTest.class)
-public class GenericAccessorTest extends BaseTest {
+public class GenericAccessorTest {
 
   public static final Object NON_NULL_VALUE = "Non-null value";
 

@@ -22,7 +22,6 @@ import org.apache.drill.exec.record.metadata.ColumnMetadata;
 import org.apache.drill.exec.record.metadata.DictColumnMetadata;
 import org.apache.drill.exec.record.metadata.SchemaBuilder;
 import org.apache.drill.exec.record.metadata.TupleMetadata;
-import org.apache.drill.test.BaseTest;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -37,7 +36,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class TestSchemaParser extends BaseTest {
+public class TestSchemaParser {
 
   @Test
   public void checkQuotedIdWithEscapes() throws Exception {

@@ -21,7 +21,6 @@ import java.time.Duration;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.drill.categories.SlowTest;
-import org.apache.drill.test.BaseTest;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.experimental.categories.Category;
@@ -32,7 +31,7 @@ import org.testcontainers.containers.CassandraContainer;
 @Category(SlowTest.class)
 @RunWith(Suite.class)
 @Suite.SuiteClasses({CassandraComplexTypesTest.class, CassandraPlanTest.class, CassandraQueryTest.class, CassandraUserTranslationTest.class})
-public class TestCassandraSuite extends BaseTest {
+public class TestCassandraSuite {
 
   protected static CassandraContainer<?> cassandra;
 

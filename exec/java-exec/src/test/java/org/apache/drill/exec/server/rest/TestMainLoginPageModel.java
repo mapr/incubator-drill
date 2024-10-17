@@ -24,7 +24,6 @@ import org.apache.drill.exec.ExecConstants;
 import org.apache.drill.exec.server.DrillbitContext;
 import org.apache.drill.exec.server.rest.LogInLogOutResources.MainLoginPageModel;
 import org.apache.drill.exec.work.WorkManager;
-import org.apache.drill.test.BaseTest;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -37,7 +36,7 @@ import static org.mockito.Mockito.when;
 /**
  * Test for {@link LogInLogOutResources.MainLoginPageModel} with various configurations done in DrillConfig
  */
-public class TestMainLoginPageModel extends BaseTest {
+public class TestMainLoginPageModel {
 
   @Mock
   WorkManager workManager;

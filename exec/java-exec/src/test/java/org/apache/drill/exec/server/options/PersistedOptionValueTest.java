@@ -21,14 +21,13 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.drill.common.util.DrillFileUtils;
 import org.apache.drill.exec.serialization.JacksonSerializer;
-import org.apache.drill.test.BaseTest;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
-public class PersistedOptionValueTest extends BaseTest {
+public class PersistedOptionValueTest {
   /**
    * DRILL-5809
    * Note: If this test breaks you are probably breaking backward and forward compatibility. Verify with the community

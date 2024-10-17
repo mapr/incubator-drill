@@ -34,7 +34,6 @@ import org.apache.drill.exec.physical.impl.scan.v3.schema.ScanProjectionParser.P
 import org.apache.drill.exec.physical.resultSet.impl.ProjectionFilter;
 import org.apache.drill.exec.physical.rowSet.RowSetTestUtils;
 import org.apache.drill.exec.record.metadata.TupleMetadata;
-import org.apache.drill.test.BaseTest;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
@@ -43,7 +42,7 @@ import org.junit.experimental.categories.Category;
  * projection parser to a dynamic schema ready for resolution.
  */
 @Category(EvfTest.class)
-public class TestSchemaTrackerProjection extends BaseTest {
+public class TestSchemaTrackerProjection {
   private static final CustomErrorContext ERROR_CONTEXT = EmptyErrorContext.INSTANCE;
 
   private ProjectionSchemaTracker schemaTracker(Collection<SchemaPath> projList) {

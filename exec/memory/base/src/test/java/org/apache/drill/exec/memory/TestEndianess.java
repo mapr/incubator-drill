@@ -23,12 +23,11 @@ import io.netty.buffer.ByteBuf;
 import org.apache.drill.categories.MemoryTest;
 import org.apache.drill.common.DrillAutoCloseables;
 import org.apache.drill.common.config.DrillConfig;
-import org.apache.drill.test.BaseTest;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 @Category(MemoryTest.class)
-public class TestEndianess extends BaseTest {
+public class TestEndianess {
 
   @Test
   public void testLittleEndian() {

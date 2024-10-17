@@ -24,7 +24,6 @@ import org.apache.avro.SchemaBuilder;
 import org.apache.drill.common.exceptions.UserException;
 import org.apache.drill.common.types.TypeProtos;
 import org.apache.drill.exec.record.metadata.TupleMetadata;
-import org.apache.drill.test.BaseTest;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -32,7 +31,7 @@ import org.junit.rules.ExpectedException;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class AvroSchemaUtilTest extends BaseTest {
+public class AvroSchemaUtilTest {
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();

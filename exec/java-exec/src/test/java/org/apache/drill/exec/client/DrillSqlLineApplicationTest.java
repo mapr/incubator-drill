@@ -18,7 +18,6 @@
 package org.apache.drill.exec.client;
 
 import org.apache.drill.common.util.DrillVersionInfo;
-import org.apache.drill.test.BaseTest;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import sqlline.Application;
@@ -39,7 +38,7 @@ import static org.junit.Assert.assertFalse;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-public class DrillSqlLineApplicationTest extends BaseTest {
+public class DrillSqlLineApplicationTest {
 
   private static Application application;
 

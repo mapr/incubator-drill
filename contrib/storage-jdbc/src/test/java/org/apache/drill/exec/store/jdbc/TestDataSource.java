@@ -23,7 +23,6 @@ import org.apache.drill.common.logical.StoragePluginConfig.AuthMode;
 import org.apache.drill.exec.proto.UserBitShared;
 import org.apache.drill.exec.store.security.UsernamePasswordCredentials;
 import org.apache.drill.test.BaseDirTestWatcher;
-import org.apache.drill.test.BaseTest;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -35,7 +34,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 
-public class TestDataSource extends BaseTest {
+public class TestDataSource {
 
   @Rule
   public BaseDirTestWatcher dirTestWatcher = new BaseDirTestWatcher();

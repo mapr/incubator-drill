@@ -17,7 +17,6 @@
  */
 package org.apache.drill.exec.util;
 
-import org.apache.drill.test.BaseTest;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -25,7 +24,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-public class TestApproximateStringMatcher extends BaseTest {
+public class TestApproximateStringMatcher {
     @Test
     public void testStringMatcher() {
         List<String> names = new ArrayList<>();

@@ -21,10 +21,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import org.apache.drill.common.exceptions.UserException;
-import org.apache.drill.test.BaseTest;
 import org.junit.Test;
 
-public class OptionValueTest extends BaseTest {
+public class OptionValueTest {
 
   @Test
   public void createBooleanKindTest() {

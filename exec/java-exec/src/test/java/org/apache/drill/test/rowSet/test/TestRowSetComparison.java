@@ -25,7 +25,6 @@ import org.apache.drill.exec.record.metadata.SchemaBuilder;
 import org.apache.drill.exec.record.metadata.TupleMetadata;
 import org.apache.drill.exec.physical.rowSet.RowSet;
 import org.apache.drill.exec.physical.rowSet.RowSetBuilder;
-import org.apache.drill.test.BaseTest;
 import org.apache.drill.test.rowSet.RowSetComparison;
 import org.junit.After;
 import org.junit.Before;
@@ -33,7 +32,7 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 @Category(RowSetTest.class)
-public class TestRowSetComparison extends BaseTest {
+public class TestRowSetComparison {
   private BufferAllocator allocator;
 
   @Before

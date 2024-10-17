@@ -33,7 +33,6 @@ import org.apache.drill.exec.server.Drillbit;
 
 import org.apache.drill.exec.server.RemoteServiceSet;
 
-import org.apache.drill.test.BaseTest;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -41,7 +40,7 @@ import org.junit.Test;
 import static junit.framework.TestCase.assertTrue;
 import static junit.framework.TestCase.fail;
 
-public class ConnectTriesPropertyTestClusterBits extends BaseTest {
+public class ConnectTriesPropertyTestClusterBits {
 
   public static StringBuilder bitInfo;
   public static final String fakeBitsInfo = "127.0.0.1:5000,127.0.0.1:5001";

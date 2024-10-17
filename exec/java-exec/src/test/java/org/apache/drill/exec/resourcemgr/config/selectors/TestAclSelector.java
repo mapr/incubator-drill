@@ -22,7 +22,6 @@ import com.typesafe.config.ConfigFactory;
 import com.typesafe.config.ConfigValueFactory;
 import org.apache.drill.categories.ResourceManagerTest;
 import org.apache.drill.exec.resourcemgr.config.exception.RMConfigException;
-import org.apache.drill.test.BaseTest;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -39,7 +38,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 @Category(ResourceManagerTest.class)
-public final class TestAclSelector extends BaseTest {
+public final class TestAclSelector {
 
   private static final List<String> groupsValue = new ArrayList<>();
 

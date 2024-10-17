@@ -34,7 +34,6 @@ import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 
 import org.apache.drill.categories.JdbcTest;
-import org.apache.drill.test.BaseTest;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -46,7 +45,7 @@ import org.junit.experimental.categories.Category;
  * {@link DatabaseMetaDataGetColumnsTest})).
  */
 @Category(JdbcTest.class)
-public class DatabaseMetaDataTest extends BaseTest {
+public class DatabaseMetaDataTest {
 
   protected static Connection connection;
   protected static DatabaseMetaData dbmd;

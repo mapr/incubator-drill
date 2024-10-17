@@ -25,7 +25,6 @@ import io.netty.util.concurrent.GenericFutureListener;
 import org.apache.drill.exec.memory.BufferAllocator;
 import org.apache.drill.exec.rpc.TransportCheck;
 import org.apache.drill.exec.rpc.user.UserSession;
-import org.apache.drill.test.BaseTest;
 import org.junit.Test;
 
 import java.net.SocketAddress;
@@ -40,7 +39,7 @@ import static org.mockito.Mockito.verify;
  * Validates {@link WebSessionResources} close works as expected w.r.t {@link io.netty.channel.AbstractChannel.CloseFuture}
  * associated with it.
  */
-public class WebSessionResourcesTest extends BaseTest {
+public class WebSessionResourcesTest {
 
   private WebSessionResources webSessionResources;
   private boolean listenerComplete;

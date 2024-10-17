@@ -22,7 +22,6 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import org.apache.drill.test.BaseTest;
 import org.apache.drill.common.exceptions.EmptyErrorContext;
 import org.apache.drill.common.exceptions.UserException;
 import org.apache.drill.common.types.TypeProtos.MinorType;
@@ -42,7 +41,7 @@ import org.apache.drill.exec.record.metadata.TupleMetadata;
 import org.apache.drill.exec.record.metadata.TupleSchema;
 import org.junit.Test;
 
-public class TestProjectionFilter extends BaseTest{
+public class TestProjectionFilter {
   private static final ColumnMetadata A_COL = MetadataUtils.newScalar("a", Types.required(MinorType.INT));
   private static final ColumnMetadata B_COL = MetadataUtils.newScalar("b", Types.optional(MinorType.VARCHAR));
   private static final ColumnMetadata MAP_COL = MetadataUtils.newMap("m", new TupleSchema());

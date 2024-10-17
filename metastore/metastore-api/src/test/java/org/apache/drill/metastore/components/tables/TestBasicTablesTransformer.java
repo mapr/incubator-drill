@@ -25,7 +25,6 @@ import org.apache.drill.metastore.metadata.MetadataType;
 import org.apache.drill.metastore.metadata.PartitionMetadata;
 import org.apache.drill.metastore.metadata.RowGroupMetadata;
 import org.apache.drill.metastore.metadata.SegmentMetadata;
-import org.apache.drill.test.BaseTest;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
@@ -37,7 +36,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 @Category(MetastoreTest.class)
-public class TestBasicTablesTransformer extends BaseTest {
+public class TestBasicTablesTransformer {
 
   @Test
   public void testTables() {

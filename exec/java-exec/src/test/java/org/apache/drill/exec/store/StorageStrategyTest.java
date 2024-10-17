@@ -20,7 +20,6 @@ package org.apache.drill.exec.store;
 import com.google.common.collect.Lists;
 import org.apache.drill.common.util.DrillFileUtils;
 import org.apache.drill.exec.ExecTest;
-import org.apache.drill.test.BaseTest;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.fs.permission.FsPermission;
@@ -34,7 +33,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-public class StorageStrategyTest extends BaseTest {
+public class StorageStrategyTest {
   private static final FsPermission FULL_PERMISSION = FsPermission.getDirDefault();
   private static final StorageStrategy PERSISTENT_STRATEGY = new StorageStrategy("002", false);
   private static final StorageStrategy TEMPORARY_STRATEGY = new StorageStrategy("077", true);

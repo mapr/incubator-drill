@@ -30,7 +30,6 @@ import org.apache.drill.exec.resourcemgr.config.ResourcePoolTree;
 import org.apache.drill.exec.resourcemgr.config.ResourcePoolTreeImpl;
 import org.apache.drill.exec.resourcemgr.config.exception.RMConfigException;
 import org.apache.drill.exec.server.options.OptionValue;
-import org.apache.drill.test.BaseTest;
 import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -51,7 +50,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @Category(ResourceManagerTest.class)
-public final class TestResourcePoolTree extends BaseTest {
+public final class TestResourcePoolTree {
 
   private static final Map<String, Object> poolTreeConfig = new HashMap<>();
 

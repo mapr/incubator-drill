@@ -17,7 +17,6 @@
  */
 package org.apache.drill.jdbc;
 
-import org.apache.drill.test.BaseTest;
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.rules.TestWatcher;
@@ -45,7 +44,7 @@ import java.util.stream.Collectors;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-public class ITTestShadedJar extends BaseTest {
+public class ITTestShadedJar {
   private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(ITTestShadedJar.class);
 
   private static DrillbitClassLoader drillbitLoader;

@@ -25,7 +25,6 @@ import org.apache.drill.common.util.JacksonUtils;
 import org.apache.drill.exec.ExecConstants;
 import org.apache.drill.exec.server.options.SessionOptionManager;
 import org.apache.drill.exec.server.options.SystemOptionManager;
-import org.apache.drill.test.BaseTest;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.parquet.ParquetReadOptions;
 import org.junit.Test;
@@ -37,7 +36,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 @Category({ParquetTest.class, UnlikelyTest.class})
-public class TestParquetReaderConfig extends BaseTest {
+public class TestParquetReaderConfig {
 
   @Test
   public void testDefaultsDeserialization() throws Exception {

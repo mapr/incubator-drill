@@ -27,13 +27,12 @@ import io.netty.buffer.DrillBuf.TransferResult;
 
 import org.apache.drill.categories.MemoryTest;
 import org.apache.drill.exec.exception.OutOfMemoryException;
-import org.apache.drill.test.BaseTest;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 @Category(MemoryTest.class)
-public class TestBaseAllocator extends BaseTest {
+public class TestBaseAllocator {
   // private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(TestBaseAllocator.class);
 
   private final static int MAX_ALLOCATION = 8 * 1024;

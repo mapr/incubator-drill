@@ -27,7 +27,6 @@ import org.apache.drill.exec.rpc.Acks;
 import org.apache.drill.exec.rpc.RpcException;
 import org.apache.drill.exec.rpc.RpcOutcomeListener;
 import org.apache.drill.exec.work.batch.ControlMessageHandler;
-import org.apache.drill.test.BaseTest;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 import org.junit.Before;
@@ -43,7 +42,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class TestLocalControlConnectionManager extends BaseTest {
+public class TestLocalControlConnectionManager {
 
   private static final DrillbitEndpoint localEndpoint = DrillbitEndpoint.newBuilder()
     .setAddress("10.0.0.1")

@@ -23,7 +23,6 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import org.apache.drill.test.BaseTest;
 import org.apache.drill.categories.EvfTest;
 import org.apache.drill.common.exceptions.CustomErrorContext;
 import org.apache.drill.common.exceptions.EmptyErrorContext;
@@ -40,7 +39,7 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 @Category(EvfTest.class)
-public class TestSchemaTrackerDefined extends BaseTest{
+public class TestSchemaTrackerDefined {
   private static final CustomErrorContext ERROR_CONTEXT = EmptyErrorContext.INSTANCE;
 
   private boolean isProjected(ProjectionFilter filter, ColumnMetadata col) {
