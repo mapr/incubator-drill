@@ -24,7 +24,7 @@
   <parent>
     <artifactId>drill-root</artifactId>
     <groupId>org.apache.drill</groupId>
-    <version>1.21.2.0-eep-931-SNAPSHOT</version>
+    <version>1.21.2.100-eep-932-SNAPSHOT</version>
   </parent>
 
   <artifactId>drill-logical</artifactId>

@@ -37,7 +37,7 @@ pipeline {
   parameters {
     choice(name: 'BUILD_TYPE', choices: ['Dev','EBF','Release'], description: 'default - Dev. EBF and Release args you can use only in release branches')
     string(name: 'MAKEFILE_ENV_VARS', defaultValue: '', description: 'Variables you can pass to makefile (command will be: make {THIS VAR} {project-name}). Please DO NOT put component_branch_name')
-    string(name: 'PRIVATE_PKG_BRANCH', defaultValue: 'MEP-9.3.1', description: 'default - MEP-9.3.1. You can set any branch for private-pkg')
+    string(name: 'PRIVATE_PKG_BRANCH', defaultValue: 'MEP-9.3.2', description: 'default - MEP-9.3.2. You can set any branch for private-pkg')
     string(name: 'PRIVATE_CONF_BRANCH', defaultValue: 'master', description: 'default - master. You can set any branch for private-configuration')
   }
   stages {
