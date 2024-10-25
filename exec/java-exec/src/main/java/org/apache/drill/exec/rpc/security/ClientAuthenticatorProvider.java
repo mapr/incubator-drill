@@ -24,6 +24,8 @@ import org.apache.drill.exec.rpc.security.plain.PlainFactory;
 
 import javax.security.sasl.SaslException;
 import java.util.Map;
+import java.util.ServiceConfigurationError;
+import java.util.ServiceLoader;
 import java.util.Set;
 
 public class ClientAuthenticatorProvider implements AuthenticatorProvider {
@@ -32,22 +34,49 @@ public class ClientAuthenticatorProvider implements AuthenticatorProvider {
 
   private static final String customFactories = System.getProperty("drill.customAuthFactories");
 
-  private static final class Holder {
-    static final ClientAuthenticatorProvider INSTANCE = new ClientAuthenticatorProvider();
+  private final Map<String, AuthenticatorFactory> authFactories =
+      CaseInsensitiveMap.newHashMapWithExpectedSize(5);
+  static final ClientAuthenticatorProvider INSTANCE = new ClientAuthenticatorProvider();
 
-    // prevent instantiation
-    private Holder() {
+  public static ClientAuthenticatorProvider getInstance() {
+    return INSTANCE;
+  }
+
+  private ClientAuthenticatorProvider() {
+    if (customFactories == null) {
+      loadAuthFactoriesOverSPI();
+    } else {
+      loadAuthFactoriesByClassName();
+    }
+    if (logger.isDebugEnabled()) {
+      logger.debug("Configured mechanisms: {}", authFactories.keySet());
     }
   }
 
-  public static ClientAuthenticatorProvider getInstance() {
-    return Holder.INSTANCE;
+  /**
+   * Load all auth factories over SPI, including default Drill factories.
+   *
+   * @return found and loaded auth factories
+   */
+  private void loadAuthFactoriesOverSPI() {
+    ServiceLoader<AuthenticatorFactory> authFactoryLoader =
+        ServiceLoader.load(AuthenticatorFactory.class);
+    try {
+      for (AuthenticatorFactory authFactory : authFactoryLoader) {
+        authFactories.put(authFactory.getSimpleName(), authFactory);
+      }
+    } catch (ServiceConfigurationError error) {
+      logger.error("Failed to load auth factories", error);
+    }
   }
 
-  // Mapping: simple name -> authenticator factory
-  private final Map<String, AuthenticatorFactory> authFactories = CaseInsensitiveMap.newHashMapWithExpectedSize(5);
-
-  private ClientAuthenticatorProvider() {
+  /**
+   * Loads default auth factories provided by Drill and factories provided by system property
+   * drill.customAuthFactories and loaded by class name.
+   *
+   * @return found and loaded auth factories
+   */
+  private void loadAuthFactoriesByClassName() {
     // factories provided by Drill
     final KerberosFactory kerberosFactory = new KerberosFactory();
     authFactories.put(kerberosFactory.getSimpleName(), kerberosFactory);
@@ -68,10 +97,6 @@ public class ClientAuthenticatorProvider implements AuthenticatorProvider {
           logger.error("Failed to create auth factory {}", factory, e);
         }
       }
-    }
-
-    if (logger.isDebugEnabled()) {
-      logger.debug("Configured mechanisms: {}", authFactories.keySet());
     }
   }
 

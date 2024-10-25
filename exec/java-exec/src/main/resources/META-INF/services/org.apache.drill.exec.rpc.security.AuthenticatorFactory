@@ -1,0 +1,2 @@
+org.apache.drill.exec.rpc.security.plain.PlainFactory
+org.apache.drill.exec.rpc.security.kerberos.KerberosFactory

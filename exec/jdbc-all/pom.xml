@@ -697,6 +697,7 @@
             <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
               <resource>drill-module.conf</resource>
             </transformer>
+            <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
           </transformers>
 
           <!-- Remove the particular directory or class level dependency from final jar -->
@@ -840,6 +841,14 @@
         <package.namespace.prefix/>
       </properties>
 
+      <dependencies>
+        <dependency>
+          <groupId>org.apache.drill.contrib</groupId>
+          <artifactId>drill-auth-mechanism-maprsasl</artifactId>
+          <version>${project.version}</version>
+        </dependency>
+      </dependencies>
+
       <build>
         <plugins>
           <plugin>
@@ -862,7 +871,6 @@
                   <include>*:*</include>
                 </includes>
                 <excludes>
-                  <exclude>org.slf4j:jcl-over-slf4j</exclude>
                   <exclude>io.protostuff:*</exclude>
                   <exclude>${calcite.groupId}:calcite-core</exclude>
                   <exclude>${calcite.groupId}:calcite-linq4j</exclude>
@@ -896,7 +904,6 @@
                   <exclude>org.mockito:mockito-core</exclude>
                   <exclude>org.objenesis:objenesis</exclude>
                   <exclude>org.eclipse.jetty:*</exclude>
-                  <exclude>org.apache.hadoop:*</exclude>
                   <exclude>org.jboss.netty:netty</exclude>
                   <exclude>javax.xml.bind:jaxb-api</exclude>
                   <exclude>javax.xml.stream:stax-api</exclude>
@@ -1142,6 +1149,7 @@
                 <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
                   <resource>drill-module.conf</resource>
                 </transformer>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
               </transformers>
 
               <!-- Remove the particular directory or class level dependency from final jar -->
@@ -1199,12 +1207,10 @@
                     <exclude>org/apache/drill/exec/rpc/control/**</exclude>
                     <exclude>org/apache/drill/exec/work/**</exclude>
                     <exclude>org/apache/drill/metastore/**</exclude>
-                    <exclude>org/apache/hadoop/**</exclude>
                     <exclude>org/apache/commons/pool2/**</exclude>
                     <exclude>org/apache/http/**</exclude>
                     <exclude>org/apache/directory/**</exclude>
                     <exclude>com/jcraft/**</exclude>
-                    <exclude>**/mapr/**</exclude>
                     <exclude>org/yaml/**</exclude>
                     <exclude>hello/**</exclude>
                     <exclude>webapps/**</exclude>

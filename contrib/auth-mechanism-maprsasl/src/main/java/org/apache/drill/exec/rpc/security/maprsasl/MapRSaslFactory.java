@@ -17,11 +17,12 @@
  */
 package org.apache.drill.exec.rpc.security.maprsasl;
 
+import com.mapr.baseutils.JVMProperties;
 import com.mapr.security.callback.MaprSaslCallbackHandler;
 import com.mapr.security.maprsasl.MaprSaslProvider;
 import org.apache.drill.exec.rpc.security.AuthenticatorFactory;
-import org.apache.drill.exec.rpc.security.FastSaslServerFactory;
 import org.apache.drill.exec.rpc.security.FastSaslClientFactory;
+import org.apache.drill.exec.rpc.security.FastSaslServerFactory;
 import org.apache.drill.exec.rpc.security.SecurityConfiguration;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.CommonConfigurationKeys;
@@ -44,7 +45,18 @@ import java.security.Security;
 import java.util.Map;
 
 public class MapRSaslFactory implements AuthenticatorFactory {
-  private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(MapRSaslFactory.class);
+
+  /**
+   * The following block initializes crucial java properties to default values if they weren't set.
+   * These properties are necessary for maprsasl security work for either Drill users authentication
+   * and Zookeeper connection (zookeeper.saslprovider)
+   */
+  {
+    JVMProperties.init();
+  }
+
+  private static final org.slf4j.Logger logger =
+      org.slf4j.LoggerFactory.getLogger(MapRSaslFactory.class);
 
   public static final String SIMPLE_NAME = "MAPRSASL";
 
@@ -80,7 +92,8 @@ public class MapRSaslFactory implements AuthenticatorFactory {
   }
 
   @Override
-  public SaslServer createSaslServer(final UserGroupInformation ugi, final Map<String, ?> properties)
+  public SaslServer createSaslServer(final UserGroupInformation ugi,
+      final Map<String, ?> properties)
       throws SaslException {
     try {
       final String primaryName = ugi.getShortUserName();
@@ -98,7 +111,8 @@ public class MapRSaslFactory implements AuthenticatorFactory {
       logger.trace("MapRSasl SaslServer created.");
       return saslServer;
     } catch (final UndeclaredThrowableException e) {
-      throw new SaslException("Unexpected failure trying to authenticate using MapRSasl", e.getCause());
+      throw new SaslException("Unexpected failure trying to authenticate using MapRSasl",
+          e.getCause());
     } catch (final IOException | InterruptedException e) {
       if (e instanceof SaslException) {
         throw (SaslException) e;
@@ -109,7 +123,8 @@ public class MapRSaslFactory implements AuthenticatorFactory {
   }
 
   @Override
-  public SaslClient createSaslClient(final UserGroupInformation ugi, final Map<String, ?> properties)
+  public SaslClient createSaslClient(final UserGroupInformation ugi,
+      final Map<String, ?> properties)
       throws SaslException {
     try {
       final SaslClient saslClient = ugi.doAs(new PrivilegedExceptionAction<SaslClient>() {
@@ -118,7 +133,8 @@ public class MapRSaslFactory implements AuthenticatorFactory {
           return FastSaslClientFactory.getInstance().createSaslClient(new String[]{MECHANISM_NAME},
               null /** authorization ID */, null, null, properties, new CallbackHandler() {
                 @Override
-                public void handle(final Callback[] callbacks) throws IOException, UnsupportedCallbackException {
+                public void handle(final Callback[] callbacks) throws IOException,
+                    UnsupportedCallbackException {
                   throw new UnsupportedCallbackException(callbacks[0]);
                 }
               });
@@ -127,7 +143,8 @@ public class MapRSaslFactory implements AuthenticatorFactory {
       logger.trace("MapRSasl SaslClient created.");
       return saslClient;
     } catch (final UndeclaredThrowableException e) {
-      throw new SaslException("Unexpected failure trying to authenticate using MapRSasl", e.getCause());
+      throw new SaslException("Unexpected failure trying to authenticate using MapRSasl",
+          e.getCause());
     } catch (final IOException | InterruptedException e) {
       if (e instanceof SaslException) {
         throw (SaslException) e;
