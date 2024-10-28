@@ -32,7 +32,8 @@ public class ClientAuthenticatorProvider implements AuthenticatorProvider {
   private static final org.slf4j.Logger logger =
       org.slf4j.LoggerFactory.getLogger(ClientAuthenticatorProvider.class);
 
-  private static final String customFactories = System.getProperty("drill.customAuthFactories");
+  public static final String CUSTOM_FACTORIES_PROPERTY_NAME = "drill.customAuthFactories";
+  private static final String customFactories = System.getProperty(CUSTOM_FACTORIES_PROPERTY_NAME);
 
   private final Map<String, AuthenticatorFactory> authFactories =
       CaseInsensitiveMap.newHashMapWithExpectedSize(5);
@@ -54,34 +55,34 @@ public class ClientAuthenticatorProvider implements AuthenticatorProvider {
   }
 
   /**
-   * Load all auth factories over SPI, including default Drill factories.
+   * Load all auth factories over SPI, including the default Drill.
    *
    * @return found and loaded auth factories
    */
   private void loadAuthFactoriesOverSPI() {
-    ServiceLoader<AuthenticatorFactory> authFactoryLoader =
-        ServiceLoader.load(AuthenticatorFactory.class);
     try {
-      for (AuthenticatorFactory authFactory : authFactoryLoader) {
-        authFactories.put(authFactory.getSimpleName(), authFactory);
-      }
+      ServiceLoader
+          .load(AuthenticatorFactory.class)
+          .forEach(authFactory -> addAuthFactory(authFactory));
     } catch (ServiceConfigurationError error) {
       logger.error("Failed to load auth factories", error);
     }
   }
 
   /**
-   * Loads default auth factories provided by Drill and factories provided by system property
-   * drill.customAuthFactories and loaded by class name.
+   * Load auth factories by class name.
+   * <p>
+   * Load the default auth factories bundled with Drill and factories provided in the system
+   * property {@link #CUSTOM_FACTORIES_PROPERTY_NAME}.
    *
    * @return found and loaded auth factories
    */
   private void loadAuthFactoriesByClassName() {
     // factories provided by Drill
     final KerberosFactory kerberosFactory = new KerberosFactory();
-    authFactories.put(kerberosFactory.getSimpleName(), kerberosFactory);
+    addAuthFactory(kerberosFactory);
     final PlainFactory plainFactory = new PlainFactory();
-    authFactories.put(plainFactory.getSimpleName(), plainFactory);
+    addAuthFactory(plainFactory);
 
     // then, custom factories
     if (customFactories != null) {
@@ -91,12 +92,32 @@ public class ClientAuthenticatorProvider implements AuthenticatorProvider {
           final Class<?> clazz = Class.forName(factory);
           if (AuthenticatorFactory.class.isAssignableFrom(clazz)) {
             final AuthenticatorFactory instance = (AuthenticatorFactory) clazz.newInstance();
-            authFactories.put(instance.getSimpleName(), instance);
+            addAuthFactory(instance);
           }
         } catch (final ReflectiveOperationException e) {
           logger.error("Failed to create auth factory {}", factory, e);
         }
       }
+    }
+  }
+
+  /**
+   * Add {@link AuthenticatorFactory} implementation to this {@link ClientAuthenticatorProvider}.
+   * Overrides previously added implementations with the same mechanism name.
+   *
+   * @param authFactory - implementation to add to this provider.
+   */
+  private void addAuthFactory(AuthenticatorFactory authFactory) {
+    AuthenticatorFactory previousAuthFactory =
+        authFactories.put(authFactory.getSimpleName(), authFactory);
+    if (previousAuthFactory != null) {
+      logger.warn("Found multiple implementations of {} authentication mechanism: {}, {}",
+          authFactory.getSimpleName(),
+          authFactory.getClass().getName(),
+          previousAuthFactory.getClass().getName());
+      logger.warn("Preserved {} implementation for {} mechanism",
+          authFactory.getSimpleName(),
+          authFactory.getClass().getName());
     }
   }
 
