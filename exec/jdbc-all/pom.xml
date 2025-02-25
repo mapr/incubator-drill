@@ -833,11 +833,12 @@
     <profile>
       <id>mapr</id>
       <activation>
-          <property>
-            <name>!skipMapr</name>
-          </property>
-        </activation>
-        <properties>
+        <property>
+          <name>!skipMapr</name>
+        </property>
+      </activation>
+      <properties>
+        <jdbc-all-jar.maxsize>280000000</jdbc-all-jar.maxsize>
         <package.namespace.prefix/>
       </properties>
 
