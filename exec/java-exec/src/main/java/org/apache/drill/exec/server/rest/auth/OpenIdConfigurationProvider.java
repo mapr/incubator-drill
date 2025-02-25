@@ -3,9 +3,22 @@ package org.apache.drill.exec.server.rest.auth;
 import org.apache.drill.common.config.DrillConfig;
 import org.apache.drill.exec.ExecConstants;
 import org.eclipse.jetty.security.openid.OpenIdConfiguration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class OpenIdConfigurationProvider {
+  private static final Logger logger = LoggerFactory.getLogger(OpenIdConfigurationProvider.class);
+  private static final String MAPR_PROVIDER = "org.apache.drill.exec.server.rest.auth.MaprOpenIdConfigurationProvider";
+
   public static OpenIdConfigurationProvider getProvider(DrillConfig config) {
+    boolean userMaprConfiguration = config.getBoolean(ExecConstants.OIDC_USE_MAPR_CONFIGURATION);
+    if (userMaprConfiguration) {
+      try {
+        return (OpenIdConfigurationProvider) Class.forName(MAPR_PROVIDER).newInstance();
+      } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+        logger.warn("Trying to use MapR OIDC configuration provider on a non-MapR platform", e);
+      }
+    }
     return new DrillProperties(config);
   }
 
@@ -28,6 +41,7 @@ public abstract class OpenIdConfigurationProvider {
 
   static class DrillProperties extends OpenIdConfigurationProvider {
     private DrillConfig config;
+
     private DrillProperties(DrillConfig config) {
       this.config = config;
     }
