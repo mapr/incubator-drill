@@ -19,21 +19,42 @@
 -->
 <#include "*/generic.ftl">
 <#macro page_head>
+  <script type="text/javascript" src="/static/js/mainLogin.js"></script>
 </#macro>
 
 <#macro page_body>
-  <div class="container container-table">
-    <div align="center" class="table-responsive">
-      <#if model?? && model.isFormEnabled()>
-        <a href ="/login" class="btn btn-primary"> Login using FORM AUTHENTICATION </a>
-      </#if>
-      <#if model?? && model.isSpnegoEnabled()>
-        <a href = "/spnegoLogin" class="btn btn-primary"> Login using SPNEGO </a>
-      </#if>
-      <#if model?? && model.getError()??>
-        <p style="color:red">${model.getError()}</p></br>
-      </#if>
-    </div>
+  <div class="container">
+    <#if model?? && model.isFormEnabled()>
+      <div class="row justify-content-center ">
+        <div class="col-md-4">
+          <a href="/login" class="btn btn-primary btn-block"> Login using FORM AUTHENTICATION </a>
+        </div>
+      </div>
+    </#if>
+    <#if model?? && model.isSpnegoEnabled()>
+      <div class="row justify-content-center mt-2">
+        <div class="col-md-4">
+          <a href="/spnegoLogin" class="btn btn-primary btn-block"> Login using SPNEGO </a>
+        </div>
+      </div>
+    </#if>
+    <#if model?? && model.isOpenIdEnabled()>
+      <div class="row justify-content-center mt-2">
+        <div class="col-md-4">
+          <a id="openid-button" href="/openid" class="btn btn-primary btn-block"> Login using SSO </a>
+        </div>
+      </div>
+    <#else>
+      <div class="row justify-content-center mt-2">
+        <div class="col-md-4">
+          <a id="openid-button" href="/openid" class="btn btn-primary btn-block disabled"> Login using
+            SSO </a>
+        </div>
+      </div>
+    </#if>
+    <#if model?? && model.getError()??>
+      <p style="color:red">${model.getError()}</p></br>
+    </#if>
   </div>
 </#macro>
 <@page_html/>

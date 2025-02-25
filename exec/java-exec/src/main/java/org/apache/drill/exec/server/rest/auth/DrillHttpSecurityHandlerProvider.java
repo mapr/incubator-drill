@@ -17,7 +17,6 @@
  */
 package org.apache.drill.exec.server.rest.auth;
 
-import org.apache.drill.exec.server.rest.header.ResponseHeadersSettingFilter;
 import com.google.common.base.Preconditions;
 import org.apache.drill.common.config.DrillConfig;
 import org.apache.drill.common.exceptions.DrillException;
@@ -28,6 +27,7 @@ import org.apache.drill.exec.exception.DrillbitStartupException;
 import org.apache.drill.exec.rpc.security.AuthStringUtil;
 import org.apache.drill.exec.server.DrillbitContext;
 import org.apache.drill.exec.server.rest.WebServerConstants;
+import org.apache.drill.exec.server.rest.header.ResponseHeadersSettingFilter;
 import org.eclipse.jetty.http.HttpHeader;
 import org.eclipse.jetty.security.ConstraintSecurityHandler;
 import org.eclipse.jetty.security.authentication.SessionAuthentication;
@@ -53,7 +53,7 @@ public class DrillHttpSecurityHandlerProvider extends ConstraintSecurityHandler 
   private static final Logger logger = LoggerFactory.getLogger(DrillHttpSecurityHandlerProvider.class);
 
   private final Map<String, DrillHttpConstraintSecurityHandler> securityHandlers =
-      CaseInsensitiveMap.newHashMapWithExpectedSize(2);
+      CaseInsensitiveMap.newHashMapWithExpectedSize(3);
 
   private final Map<String, String> responseHeaders;
 
@@ -140,11 +140,15 @@ public class DrillHttpSecurityHandlerProvider extends ConstraintSecurityHandler 
     // If this authentication is null, user hasn't logged in yet
     if (authentication == null) {
 
-      // 1) If only SPNEGOSecurity handler then use SPNEGOSecurity
-      // 2) If both but uri equals spnegoLogin then use SPNEGOSecurity
-      // 3) If both but uri doesn't equals spnegoLogin then use FORMSecurity
-      // 4) If only FORMSecurity handler then use FORMSecurity
-      if (isSpnegoEnabled() && (!isFormEnabled() || uri.equals(WebServerConstants.SPENGO_LOGIN_RESOURCE_PATH))) {
+      // 1) If OpenIdSecurity handler present and uri equals openid then use OPENIDSecurity
+      // 2) If only SPNEGOSecurity handler then use SPNEGOSecurity
+      // 3) If both but uri equals spnegoLogin then use SPNEGOSecurity
+      // 4) If both but uri doesn't equals spnegoLogin then use FORMSecurity
+      // 5) If only FORMSecurity handler then use FORMSecurity
+      if (isOpenIdEnabled() && uri.startsWith(WebServerConstants.OPEN_ID_LOGIN_RESOURCE_PATH)) {
+        securityHandler = securityHandlers.get(Constraint.__OPENID_AUTH);
+        securityHandler.handle(target, baseRequest, request, response);
+      } else if (isSpnegoEnabled() && (!isFormEnabled() || uri.equals(WebServerConstants.SPENGO_LOGIN_RESOURCE_PATH))) {
         securityHandler = securityHandlers.get(Constraint.__SPNEGO_AUTH);
         securityHandler.handle(target, baseRequest, request, response);
       } else if(isBasicEnabled() && request.getHeader(HttpHeader.AUTHORIZATION.asString()) != null) {
@@ -190,6 +194,10 @@ public class DrillHttpSecurityHandlerProvider extends ConstraintSecurityHandler 
 
   public boolean isBasicEnabled() {
     return securityHandlers.containsKey(Constraint.__BASIC_AUTH);
+  }
+
+  public boolean isOpenIdEnabled() {
+    return securityHandlers.containsKey(Constraint.__OPENID_AUTH);
   }
 
   /**

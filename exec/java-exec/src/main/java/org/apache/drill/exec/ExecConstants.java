@@ -279,6 +279,10 @@ public final class ExecConstants {
   public static final String HTTP_AUTHENTICATION_MECHANISMS = "drill.exec.http.auth.mechanisms";
   public static final String HTTP_SPNEGO_PRINCIPAL = "drill.exec.http.auth.spnego.principal";
   public static final String HTTP_SPNEGO_KEYTAB = "drill.exec.http.auth.spnego.keytab";
+  public static final String OIDC_PROVIDER_ENDPOINT = "drill.exec.http.auth.oidc.provider.endpoint";
+  public static final String OIDC_CLIENT_ID = "drill.exec.http.auth.oidc.client.id";
+  public static final String OIDC_CLIENT_SECRET = "drill.exec.http.auth.oidc.client.secret";
+  public static final String OIDC_USER_CLAIM = "drill.exec.http.auth.oidc.claim.identifying.user";
   //Control Web UI Resultset
   public static final String HTTP_WEB_CLIENT_RESULTSET_AUTOLIMIT_CHECKED = "drill.exec.http.web.client.resultset.autolimit.checked";
   public static final String HTTP_WEB_CLIENT_RESULTSET_AUTOLIMIT_ROWS = "drill.exec.http.web.client.resultset.autolimit.rows";

@@ -39,6 +39,10 @@ public final class WebServerConstants {
   public static final String SPENGO_LOGIN_RESOURCE_NAME = "spnegoLogin";
   public static final String SPENGO_LOGIN_RESOURCE_PATH = WEBSERVER_ROOT_PATH + SPENGO_LOGIN_RESOURCE_NAME;
 
+  // URI for Open ID authentication
+  public static final String OPEN_ID_LOGIN_NAME = "openid";
+  public static final String OPEN_ID_LOGIN_RESOURCE_PATH = WEBSERVER_ROOT_PATH + OPEN_ID_LOGIN_NAME;
+
   // Logout page
   public static final String LOGOUT_RESOURCE_NAME = "logout";
   public static final String LOGOUT_RESOURCE_PATH = WEBSERVER_ROOT_PATH + LOGOUT_RESOURCE_NAME;

@@ -133,6 +133,7 @@ public class LogInLogOutResources {
       }
       session.invalidate();
     }
+    req.logout();
 
     req.getRequestDispatcher(WebServerConstants.WEBSERVER_ROOT_PATH).forward(req, resp);
   }
@@ -145,6 +146,20 @@ public class LogInLogOutResources {
                                    @QueryParam(WebServerConstants.REDIRECT_QUERY_PARM) String redirect) throws Exception {
     updateSessionRedirectInfo(redirect, request);
     final MainLoginPageModel model = new MainLoginPageModel(null);
+    return ViewableWithPermissions.createMainLoginPage(model);
+  }
+
+  @GET
+  @Path(WebServerConstants.OPEN_ID_LOGIN_RESOURCE_PATH)
+  @Produces(MediaType.TEXT_HTML)
+  public Viewable getOpenIdPage(@Context HttpServletRequest request, @Context HttpServletResponse response,
+      @Context SecurityContext sc) throws Exception {
+    if (AuthDynamicFeature.isUserLoggedIn(sc)) {
+      request.getRequestDispatcher(WebServerConstants.WEBSERVER_ROOT_PATH).forward(request, response);
+      return null;
+    }
+    final String errorString = "OpenID is not configured";
+    final MainLoginPageModel model = new MainLoginPageModel(errorString);
     return ViewableWithPermissions.createMainLoginPage(model);
   }
 
@@ -173,6 +188,10 @@ public class LogInLogOutResources {
 
     public boolean isFormEnabled() {
       return authEnabled && configuredMechs.contains(Constraint.__FORM_AUTH);
+    }
+
+    public boolean isOpenIdEnabled() {
+      return authEnabled && configuredMechs.contains(Constraint.__OPENID_AUTH);
     }
 
     public String getError() {
