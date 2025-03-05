@@ -32,7 +32,7 @@
 
   <properties>
     <mapr-format-plugin.hadoop.version>3.4.1.0-eep-940-SNAPSHOT</mapr-format-plugin.hadoop.version>
-    <mapr-format-plugin.hbase.version>1.4.14.700-eep-922</mapr-format-plugin.hbase.version>
+    <mapr-format-plugin.hbase.version>1.4.14.750-eep-940-SNAPSHOT</mapr-format-plugin.hbase.version>
     <mapr.TestSuite>**/MaprDBTestsSuite.class</mapr.TestSuite>
     <mapr.skip.tests>true</mapr.skip.tests>
   </properties>
