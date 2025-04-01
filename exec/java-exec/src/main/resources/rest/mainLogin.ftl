@@ -53,7 +53,11 @@
       </div>
     </#if>
     <#if model?? && model.getError()??>
-      <p style="color:red">${model.getError()}</p></br>
+      <div class="row justify-content-center mt-3">
+        <div class="col-md-4 text-center">
+          <span id="error-message" class="text-danger">${model.getError()}</span>
+        </div>
+      </div>
     </#if>
   </div>
 </#macro>
