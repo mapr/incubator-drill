@@ -133,19 +133,10 @@ public class DrillHttpSecurityHandlerProvider extends ConstraintSecurityHandler 
     String uri = request.getRequestURI();
     final DrillHttpConstraintSecurityHandler securityHandler;
 
-    // Before authentication, all requests go through the FormAuthenticator if configured except for /spnegoLogin
-    // request. For SPNEGO authentication all requests will be forced going via /spnegoLogin before authentication is
-    // done, this is to ensure that we don't have to authenticate same client session multiple times for each resource.
-    //
+
     // If this authentication is null, user hasn't logged in yet
     if (authentication == null) {
-
-      // 1) If OpenIdSecurity handler present and uri equals openid then use OPENIDSecurity
-      // 2) If only SPNEGOSecurity handler then use SPNEGOSecurity
-      // 3) If both but uri equals spnegoLogin then use SPNEGOSecurity
-      // 4) If both but uri doesn't equals spnegoLogin then use FORMSecurity
-      // 5) If only FORMSecurity handler then use FORMSecurity
-      if (isOpenIdEnabled() && uri.startsWith(WebServerConstants.OPEN_ID_LOGIN_RESOURCE_PATH)) {
+      if (isOpenIdOnly() || isOpenIdEnabled() && uri.startsWith(WebServerConstants.OPEN_ID_LOGIN_RESOURCE_PATH)) {
         securityHandler = securityHandlers.get(Constraint.__OPENID_AUTH);
         securityHandler.handle(target, baseRequest, request, response);
       } else if (isSpnegoEnabled() && (!isFormEnabled() || uri.equals(WebServerConstants.SPENGO_LOGIN_RESOURCE_PATH))) {
@@ -158,7 +149,6 @@ public class DrillHttpSecurityHandlerProvider extends ConstraintSecurityHandler 
         securityHandler = securityHandlers.get(Constraint.__FORM_AUTH);
         securityHandler.handle(target, baseRequest, request, response);
       }
-
     }
     // If user has logged in, use the corresponding handler to handle the request
     else {
@@ -198,6 +188,10 @@ public class DrillHttpSecurityHandlerProvider extends ConstraintSecurityHandler 
 
   public boolean isOpenIdEnabled() {
     return securityHandlers.containsKey(Constraint.__OPENID_AUTH);
+  }
+
+  public boolean isOpenIdOnly() {
+    return securityHandlers.size() == 1 && isOpenIdEnabled();
   }
 
   /**

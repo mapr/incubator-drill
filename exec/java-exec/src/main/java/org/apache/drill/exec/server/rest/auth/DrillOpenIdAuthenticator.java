@@ -169,7 +169,8 @@ public class DrillOpenIdAuthenticator extends LoginAuthenticator {
       uri = URIUtil.SLASH;
     }
 
-    if (isErrorPage(URIUtil.addPaths(request.getServletPath(), request.getPathInfo())) && !DeferredAuthentication.isDeferred(response)) {
+    if (!mandatory && !isOpenIdRequest(uri) ||
+        isErrorPage(URIUtil.addPaths(request.getServletPath(), request.getPathInfo())) && !DeferredAuthentication.isDeferred(response)) {
       return new DeferredAuthentication(this);
     }
 
