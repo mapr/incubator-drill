@@ -31,6 +31,7 @@ import org.apache.drill.exec.server.rest.header.ResponseHeadersSettingFilter;
 import org.eclipse.jetty.http.HttpHeader;
 import org.eclipse.jetty.security.ConstraintSecurityHandler;
 import org.eclipse.jetty.security.authentication.SessionAuthentication;
+import org.eclipse.jetty.server.Authentication;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.util.security.Constraint;
@@ -171,6 +172,15 @@ public class DrillHttpSecurityHandlerProvider extends ConstraintSecurityHandler 
     super.doStop();
     for (DrillHttpConstraintSecurityHandler securityHandler : securityHandlers.values()) {
       securityHandler.doStop();
+    }
+  }
+
+  @Override
+  public void logout(Authentication.User user) {
+    if (user != null) {
+      String authMethod = user.getAuthMethod();
+      DrillHttpConstraintSecurityHandler securityHandler = securityHandlers.get(authMethod);
+      securityHandler.logout(user);
     }
   }
 

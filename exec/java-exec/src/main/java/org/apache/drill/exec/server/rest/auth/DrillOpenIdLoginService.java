@@ -7,7 +7,6 @@ import org.apache.drill.exec.util.ImpersonationUtil;
 import org.eclipse.jetty.security.DefaultIdentityService;
 import org.eclipse.jetty.security.IdentityService;
 import org.eclipse.jetty.security.LoginService;
-import org.eclipse.jetty.security.openid.OpenIdConfiguration;
 import org.eclipse.jetty.security.openid.OpenIdCredentials;
 import org.eclipse.jetty.security.openid.OpenIdUserPrincipal;
 import org.eclipse.jetty.server.UserIdentity;
@@ -24,12 +23,13 @@ import java.util.Set;
 
 public class DrillOpenIdLoginService extends ContainerLifeCycle implements LoginService {
   private static final Logger logger = LoggerFactory.getLogger(DrillOpenIdLoginService.class);
-  private final OpenIdConfiguration configuration;
+  private final DrillOpenIdConfiguration configuration;
   private final DrillbitContext drillContext;
   private final String userAttributeName;
   private IdentityService identityService = new DefaultIdentityService();
 
-  public DrillOpenIdLoginService(OpenIdConfiguration configuration, DrillbitContext context, String userAttributeName) {
+  public DrillOpenIdLoginService(DrillOpenIdConfiguration configuration, DrillbitContext context,
+      String userAttributeName) {
     this.drillContext = context;
     this.configuration = configuration;
     this.userAttributeName = userAttributeName;
@@ -82,18 +82,22 @@ public class DrillOpenIdLoginService extends ContainerLifeCycle implements Login
     subject.getPrivateCredentials().add(credentials);
     subject.setReadOnly();
 
-    logger.info("WebUser {} logged in from {}:{}", username, req.getRemoteHost(), req.getRemotePort());
+    logger.info("WebUser {} logged in from {}:{}", username, req.getRemoteHost(),
+        req.getRemotePort());
     if (isAdmin) {
-      return identityService.newUserIdentity(subject, drillUser, DrillUserPrincipal.ADMIN_USER_ROLES);
+      return identityService.newUserIdentity(subject, drillUser,
+          DrillUserPrincipal.ADMIN_USER_ROLES);
     } else {
-      return identityService.newUserIdentity(subject, drillUser, DrillUserPrincipal.NON_ADMIN_USER_ROLES);
+      return identityService.newUserIdentity(subject, drillUser,
+          DrillUserPrincipal.NON_ADMIN_USER_ROLES);
     }
   }
 
   private String getUsername(OpenIdCredentials openIdCredentials) {
     Map<String, Object> claims = openIdCredentials.getClaims();
     Object username = claims.get(userAttributeName);
-    logger.debug("UserId {} has username claim {}={}.", openIdCredentials.getUserId(), userAttributeName, username);
+    logger.debug("UserId {} has username claim {}={}.", openIdCredentials.getUserId(),
+        userAttributeName, username);
     return (String) username;
   }
 
@@ -110,5 +114,9 @@ public class DrillOpenIdLoginService extends ContainerLifeCycle implements Login
     if (logger.isTraceEnabled()) {
       logger.trace("Web user {} logged out.", user.getUserPrincipal().getName());
     }
+  }
+
+  public DrillOpenIdConfiguration getConfiguration() {
+    return configuration;
   }
 }

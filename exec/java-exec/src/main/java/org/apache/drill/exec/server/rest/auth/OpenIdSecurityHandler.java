@@ -4,7 +4,6 @@ import com.google.common.base.Strings;
 import org.apache.drill.common.exceptions.DrillException;
 import org.apache.drill.exec.server.DrillbitContext;
 import org.apache.drill.exec.server.rest.WebServerConstants;
-import org.eclipse.jetty.security.openid.OpenIdConfiguration;
 import org.eclipse.jetty.util.security.Constraint;
 
 public class OpenIdSecurityHandler extends DrillHttpConstraintSecurityHandler {
@@ -14,15 +13,16 @@ public class OpenIdSecurityHandler extends DrillHttpConstraintSecurityHandler {
         OpenIdConfigurationProvider.getProvider(dbContext.getConfig());
     validateOpenIdConfiguration(openIdConfigurationProvider);
 
-    OpenIdConfiguration oidcConfig = openIdConfigurationProvider.getConfiguration();
+    DrillOpenIdConfiguration oidcConfig = openIdConfigurationProvider.getConfiguration();
     String errorPage = WebServerConstants.MAIN_LOGIN_RESOURCE_PATH;
     String authenticationUri = WebServerConstants.OPEN_ID_LOGIN_RESOURCE_PATH;
     String redirectUri = authenticationUri + "/callback";
+    String logoutRedirectPath = WebServerConstants.LOGOUT_RESOURCE_PATH;
 
     DrillOpenIdLoginService oidcLoginService = new DrillOpenIdLoginService(oidcConfig, dbContext,
         openIdConfigurationProvider.getUserAttrName());
     DrillOpenIdAuthenticator oidcAuthenticator = new DrillOpenIdAuthenticator(oidcConfig,
-        authenticationUri, redirectUri, errorPage);
+        authenticationUri, redirectUri, errorPage, logoutRedirectPath);
 
     setup(oidcAuthenticator, oidcLoginService);
   }

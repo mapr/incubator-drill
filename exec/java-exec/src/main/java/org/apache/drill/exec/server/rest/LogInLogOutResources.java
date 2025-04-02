@@ -123,6 +123,7 @@ public class LogInLogOutResources {
   @GET
   @Path(WebServerConstants.LOGOUT_RESOURCE_PATH)
   public void logout(@Context HttpServletRequest req, @Context HttpServletResponse resp) throws Exception {
+    req.logout();
     final HttpSession session = req.getSession();
     if (session != null) {
       final Object authCreds = session.getAttribute(SessionAuthentication.__J_AUTHENTICATED);
@@ -133,7 +134,6 @@ public class LogInLogOutResources {
       }
       session.invalidate();
     }
-    req.logout();
 
     req.getRequestDispatcher(WebServerConstants.WEBSERVER_ROOT_PATH).forward(req, resp);
   }

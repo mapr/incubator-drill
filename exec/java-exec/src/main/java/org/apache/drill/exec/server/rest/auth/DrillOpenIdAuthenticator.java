@@ -7,9 +7,7 @@ import org.eclipse.jetty.security.authentication.DeferredAuthentication;
 import org.eclipse.jetty.security.authentication.LoginAuthenticator;
 import org.eclipse.jetty.security.authentication.SessionAuthentication;
 import org.eclipse.jetty.security.openid.OpenIdAuthenticator;
-import org.eclipse.jetty.security.openid.OpenIdConfiguration;
 import org.eclipse.jetty.security.openid.OpenIdCredentials;
-import org.eclipse.jetty.security.openid.OpenIdLoginService;
 import org.eclipse.jetty.server.Authentication;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.Response;
@@ -48,24 +46,24 @@ public class DrillOpenIdAuthenticator extends LoginAuthenticator {
   public static final String REDIRECT_URI = AUTH_URI + "/callback";
 
   private final SecureRandom _secureRandom = new SecureRandom();
-  private OpenIdConfiguration _configuration;
+  private DrillOpenIdConfiguration _configuration;
+  private String _logoutRedirectPath;
   private String _errorPage;
   private String _errorPath;
   private String _errorQuery;
   private String _redirectPath;
   private String _authPath;
 
-  public DrillOpenIdAuthenticator(OpenIdConfiguration configuration, String errorPage) {
-    this(configuration, AUTH_URI, REDIRECT_URI, errorPage);
-  }
-
-  public DrillOpenIdAuthenticator(OpenIdConfiguration configuration, String authenticationUri,
-      String redirectUri, String errorPage) {
+  public DrillOpenIdAuthenticator(DrillOpenIdConfiguration configuration, String authenticationUri,
+      String redirectUri, String errorPage, String logoutRedirectPath) {
     this._configuration = configuration;
     setRedirectPath(redirectUri);
     setAuthPath(authenticationUri);
     if (errorPage != null) {
       setErrorPage(errorPage);
+    }
+    if (logoutRedirectPath != null) {
+      setLogoutRedirectPath(logoutRedirectPath);
     }
   }
 
@@ -83,10 +81,10 @@ public class DrillOpenIdAuthenticator extends LoginAuthenticator {
     }
 
     LoginService loginService = configuration.getLoginService();
-    if (!(loginService instanceof OpenIdLoginService)) {
+    if (!(loginService instanceof DrillOpenIdLoginService)) {
       throw new IllegalArgumentException("invalid LoginService");
     }
-    this._configuration = ((OpenIdLoginService) loginService).getConfiguration();
+    this._configuration = ((DrillOpenIdLoginService) loginService).getConfiguration();
   }
 
   @Override
@@ -115,6 +113,18 @@ public class DrillOpenIdAuthenticator extends LoginAuthenticator {
     }
   }
 
+  public void setLogoutRedirectPath(String logoutRedirectPath) {
+    if (logoutRedirectPath == null) {
+      logger.warn("redirect path must not be null, defaulting to /");
+      logoutRedirectPath = "/";
+    } else if (!logoutRedirectPath.startsWith("/")) {
+      logger.warn("redirect path must start with /");
+      logoutRedirectPath = "/" + logoutRedirectPath;
+    }
+
+    _logoutRedirectPath = logoutRedirectPath;
+  }
+
   @Override
   public UserIdentity login(String username, Object credentials, ServletRequest request) {
     if (logger.isDebugEnabled()) {
@@ -137,6 +147,11 @@ public class DrillOpenIdAuthenticator extends LoginAuthenticator {
 
   @Override
   public void logout(ServletRequest request) {
+    attemptLogoutRedirect(request);
+    logoutWithoutRedirect(request);
+  }
+
+  private void logoutWithoutRedirect(ServletRequest request) {
     super.logout(request);
     HttpServletRequest httpRequest = (HttpServletRequest) request;
     HttpSession session = httpRequest.getSession(false);
@@ -149,6 +164,49 @@ public class DrillOpenIdAuthenticator extends LoginAuthenticator {
       session.removeAttribute(SessionAuthentication.__J_AUTHENTICATED);
       session.removeAttribute(OpenIdAuthenticator.CLAIMS);
       session.removeAttribute(RESPONSE);
+    }
+  }
+
+  private void attemptLogoutRedirect(ServletRequest request) {
+    try {
+      Request baseRequest = Objects.requireNonNull(Request.getBaseRequest(request));
+      Response baseResponse = baseRequest.getResponse();
+      String endSessionEndpoint = _configuration.getEndSessionEndpoint();
+      String redirectUri = null;
+      if (_logoutRedirectPath != null) {
+        StringBuilder sb = URIUtil.newURIBuilder(request.getScheme(), request.getServerName(),
+            request.getServerPort());
+        sb.append(baseRequest.getContextPath());
+        sb.append(_logoutRedirectPath);
+        redirectUri = sb.toString();
+      }
+
+      HttpSession session = baseRequest.getSession(false);
+      if (endSessionEndpoint == null || session == null) {
+        if (redirectUri != null) {
+          baseResponse.sendRedirect(redirectUri, true);
+        }
+        return;
+      }
+
+      Object openIdResponse = session.getAttribute(OpenIdAuthenticator.RESPONSE);
+      if (!(openIdResponse instanceof Map)) {
+        if (redirectUri != null) {
+          baseResponse.sendRedirect(redirectUri, true);
+        }
+        return;
+      }
+
+      @SuppressWarnings("rawtypes")
+      String idToken = (String) ((Map) openIdResponse).get("id_token");
+      baseResponse.sendRedirect(endSessionEndpoint +
+              "?id_token_hint=" + UrlEncoded.encodeString(idToken, StandardCharsets.UTF_8) +
+              ((redirectUri == null) ? "" :
+                  "&post_logout_redirect_uri=" + UrlEncoded.encodeString(redirectUri,
+                      StandardCharsets.UTF_8)),
+          true);
+    } catch (Throwable t) {
+      logger.warn("failed to redirect to end_session_endpoint", t);
     }
   }
 

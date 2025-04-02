@@ -2,13 +2,13 @@ package org.apache.drill.exec.server.rest.auth;
 
 import org.apache.drill.common.config.DrillConfig;
 import org.apache.drill.exec.ExecConstants;
-import org.eclipse.jetty.security.openid.OpenIdConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public abstract class OpenIdConfigurationProvider {
   private static final Logger logger = LoggerFactory.getLogger(OpenIdConfigurationProvider.class);
-  private static final String MAPR_PROVIDER = "org.apache.drill.exec.server.rest.auth.MaprOpenIdConfigurationProvider";
+  private static final String MAPR_PROVIDER = "org.apache.drill.exec.server.rest.auth" +
+      ".MaprOpenIdConfigurationProvider";
 
   public static OpenIdConfigurationProvider getProvider(DrillConfig config) {
     boolean userMaprConfiguration = config.getBoolean(ExecConstants.OIDC_USE_MAPR_CONFIGURATION);
@@ -22,8 +22,8 @@ public abstract class OpenIdConfigurationProvider {
     return new DrillProperties(config);
   }
 
-  public OpenIdConfiguration getConfiguration() {
-    return new OpenIdConfiguration(getClientIssuer(), getClientId(), getClientSecret());
+  public DrillOpenIdConfiguration getConfiguration() {
+    return new DrillOpenIdConfiguration(getClientIssuer(), getClientId(), getClientSecret());
   }
 
   @Override
