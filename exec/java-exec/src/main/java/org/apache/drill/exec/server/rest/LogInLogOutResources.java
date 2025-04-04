@@ -135,7 +135,7 @@ public class LogInLogOutResources {
       session.invalidate();
     }
 
-    req.getRequestDispatcher(WebServerConstants.WEBSERVER_ROOT_PATH).forward(req, resp);
+    resp.sendRedirect(WebServerConstants.WEBSERVER_ROOT_PATH);
   }
 
   @GET
