@@ -5,12 +5,16 @@ import org.apache.drill.common.exceptions.DrillException;
 import org.apache.drill.exec.server.DrillbitContext;
 import org.apache.drill.exec.server.rest.WebServerConstants;
 import org.eclipse.jetty.util.security.Constraint;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class OpenIdSecurityHandler extends DrillHttpConstraintSecurityHandler {
+  private static final Logger logger = LoggerFactory.getLogger(OpenIdSecurityHandler.class);
   @Override
   public void doSetup(DrillbitContext dbContext) throws DrillException {
     OpenIdConfigurationProvider openIdConfigurationProvider =
         OpenIdConfigurationProvider.getProvider(dbContext.getConfig());
+    logLoadedConfiguration(openIdConfigurationProvider);
     validateOpenIdConfiguration(openIdConfigurationProvider);
 
     DrillOpenIdConfiguration oidcConfig = openIdConfigurationProvider.getConfiguration();
@@ -48,5 +52,35 @@ public class OpenIdSecurityHandler extends DrillHttpConstraintSecurityHandler {
       return;
     }
     throw new IllegalArgumentException(errorMessage.toString());
+  }
+
+  private void logLoadedConfiguration(OpenIdConfigurationProvider configurationProvider) {
+    if (logger.isDebugEnabled()) {
+      String authEndpoint = configurationProvider.getClientIssuer();
+      String clientId = configurationProvider.getClientId();
+      String clientSecret = configurationProvider.getClientSecret();
+      clientSecret = maskString(clientSecret, 2);
+      String userAttrName = configurationProvider.getUserAttrName();
+
+      logger.debug("Loaded OpenId configuration: AuthEndpoint: {}, ClientId: {}, ClientSecret: {}, UserAttrName: {}",
+          authEndpoint, clientId, clientSecret, userAttrName);
+    }
+  }
+
+  private String maskString(String stringToMask, int maxVisibleLength) {
+    if (maxVisibleLength < 0) {
+      maxVisibleLength = 0;
+    }
+    if (stringToMask == null) {
+      return null;
+    }
+    String maskedString;
+    if ((double) stringToMask.length() / maxVisibleLength > 0.12) {
+      String visiblePart = stringToMask.substring(0, maxVisibleLength);
+      maskedString = visiblePart + Strings.repeat("*", stringToMask.length() - maxVisibleLength);
+    } else {
+      maskedString = Strings.repeat("*", stringToMask.length());
+    }
+    return maskedString;
   }
 }
