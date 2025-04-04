@@ -44,6 +44,8 @@ public class DrillOpenIdAuthenticator extends LoginAuthenticator {
   public static final String CSRF_TOKEN = "org.eclipse.jetty.security.openid.csrf_token";
   public static final String AUTH_URI = "/openid";
   public static final String REDIRECT_URI = AUTH_URI + "/callback";
+  public static final String ERROR_PARAMETER = "error";
+
 
   private final SecureRandom _secureRandom = new SecureRandom();
   private DrillOpenIdConfiguration _configuration;
@@ -358,13 +360,12 @@ public class DrillOpenIdAuthenticator extends LoginAuthenticator {
         logger.debug("auth failed {}", _errorPage);
       }
 
-      String redirectUri = URIUtil.addPaths(request.getContextPath(), _errorPage);
-      if (message != null) {
-        String query =
-            URIUtil.addQueries(OpenIdAuthenticator.ERROR_PARAMETER + "=" + UrlEncoded.encodeString(message), _errorQuery);
-        redirectUri = URIUtil.addPathQuery(URIUtil.addPaths(request.getContextPath(), _errorPath), query);
+      if (message == null) {
+        message = "OpenID authentication failed";
       }
-
+      String query =
+          URIUtil.addQueries(DrillOpenIdAuthenticator.ERROR_PARAMETER + "=" + UrlEncoded.encodeString(message), _errorQuery);
+      String redirectUri = URIUtil.addPathQuery(URIUtil.addPaths(request.getContextPath(), _errorPath), query);
       baseResponse.sendRedirect(redirectUri, true);
     }
   }

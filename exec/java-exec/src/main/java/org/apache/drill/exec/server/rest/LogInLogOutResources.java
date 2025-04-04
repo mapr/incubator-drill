@@ -17,6 +17,7 @@
  */
 package org.apache.drill.exec.server.rest;
 
+import com.google.common.base.Strings;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.drill.common.config.DrillConfig;
 import org.apache.drill.exec.ExecConstants;
@@ -143,9 +144,15 @@ public class LogInLogOutResources {
   @Produces(MediaType.TEXT_HTML)
   public Viewable getMainLoginPage(@Context HttpServletRequest request, @Context HttpServletResponse response,
                                    @Context SecurityContext sc, @Context UriInfo uriInfo,
-                                   @QueryParam(WebServerConstants.REDIRECT_QUERY_PARM) String redirect) throws Exception {
+                                   @QueryParam(WebServerConstants.REDIRECT_QUERY_PARM) String redirect,
+                                   @QueryParam("error") String error) throws Exception {
     updateSessionRedirectInfo(redirect, request);
-    final MainLoginPageModel model = new MainLoginPageModel(null);
+    MainLoginPageModel model;
+    if (Strings.isNullOrEmpty(error)) {
+      model = new MainLoginPageModel(null);
+    } else {
+      model = new MainLoginPageModel(error);
+    }
     return ViewableWithPermissions.createMainLoginPage(model);
   }
 
