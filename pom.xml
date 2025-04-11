@@ -137,6 +137,7 @@
     <snakeyaml.version>2.1</snakeyaml.version>
     <sourceReleaseAssemblyDescriptor>source-release-zip-tar</sourceReleaseAssemblyDescriptor>
     <sqlline.version>1.12.0</sqlline.version>
+    <jline.version>3.26.3</jline.version>
     <surefire.version>3.1.2</surefire.version>
     <swagger.version>2.1.12</swagger.version>
     <target.gen.source.path>${project.basedir}/target/generated-sources</target.gen.source.path>
@@ -1298,6 +1299,10 @@
             <groupId>io.netty</groupId>
             <artifactId>netty</artifactId>
           </exclusion>
+          <exclusion>
+            <groupId>jline</groupId>
+            <artifactId>jline</artifactId>
+          </exclusion>
         </exclusions>
       </dependency>
       <dependency>
@@ -1743,7 +1748,48 @@
         <groupId>sqlline</groupId>
         <artifactId>sqlline</artifactId>
         <version>${sqlline.version}</version>
+        <exclusions>
+          <!-- This provider has been deprecated in 3.26 in favor of the JNI provider -->
+          <exclusion>
+            <groupId>org.jline</groupId>
+            <artifactId>jline-terminal-jansi</artifactId>
+          </exclusion>
+        </exclusions>
       </dependency>
+
+      <!-- Declare our own jline-* dependencies to override version taken from sqlline. This is to avoid https://github.com/jline/jline3/issues/751 -->
+      <dependency>
+        <groupId>org.jline</groupId>
+        <artifactId>jline-terminal</artifactId>
+        <version>${jline.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jline</groupId>
+        <artifactId>jline-reader</artifactId>
+        <version>${jline.version}</version>
+      </dependency>
+      <!-- replaces jline-terminal-jansi since it was deprecated in 3.26 -->
+      <dependency>
+        <groupId>org.jline</groupId>
+        <artifactId>jline-terminal-jni</artifactId>
+        <version>3.26.3</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jline</groupId>
+        <artifactId>jline-terminal-jna</artifactId>
+        <version>${jline.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jline</groupId>
+        <artifactId>jline-builtins</artifactId>
+        <version>${jline.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jline</groupId>
+        <artifactId>jline-console</artifactId>
+        <version>${jline.version}</version>
+      </dependency>
+
       <dependency>
         <groupId>commons-net</groupId>
         <artifactId>commons-net</artifactId>
@@ -3145,6 +3191,10 @@
               <exclusion>
                 <groupId>org.apache.zookeeper</groupId>
                 <artifactId>zookeeper</artifactId>
+              </exclusion>
+              <exclusion>
+                <groupId>jline</groupId>
+                <artifactId>jline</artifactId>
               </exclusion>
             </exclusions>
           </dependency>
