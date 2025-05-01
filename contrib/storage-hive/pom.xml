@@ -23,7 +23,7 @@
   <parent>
     <groupId>org.apache.drill.contrib</groupId>
     <artifactId>drill-contrib-parent</artifactId>
-    <version>1.21.2.100-eep-940-SNAPSHOT</version>
+    <version>1.21.2.200-eep-941-SNAPSHOT</version>
   </parent>
 
   <groupId>org.apache.drill.contrib.storage-hive</groupId>
