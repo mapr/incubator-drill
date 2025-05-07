@@ -191,7 +191,9 @@
                 <!-- removed because calcite in drill is older then calcite in hive and it causes problems -->
                 <exclude>org/apache/calcite/**</exclude>
                 <!-- removed according to MD-6077 -->
-                <exclude>**/Log4j2Plugins.dat</exclude>
+		<exclude>**/Log4j2Plugins.dat</exclude>
+                <exclude>META-INF/versions/21/**</exclude>
+                <exclude>META-INF/versions/22/**</exclude>
               </excludes>
             </filter>
             <filter>
