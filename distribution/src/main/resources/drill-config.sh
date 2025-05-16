@@ -311,6 +311,7 @@ REF_ACC_OPTS=""
 if [ $? -gt 0 ]; then
   # Allow reflective access on Java 9+
   REF_ACC_OPTS="$REF_ACC_OPTS --add-opens java.base/java.lang=ALL-UNNAMED"
+  REF_ACC_OPTS="$REF_ACC_OPTS --add-opens java.base/java.net=ALL-UNNAMED"
   REF_ACC_OPTS="$REF_ACC_OPTS --add-opens java.base/sun.nio.ch=ALL-UNNAMED"
   REF_ACC_OPTS="$REF_ACC_OPTS --add-opens java.base/java.nio=ALL-UNNAMED"
   REF_ACC_OPTS="$REF_ACC_OPTS --add-opens java.security.jgss/sun.security.krb5=ALL-UNNAMED"
