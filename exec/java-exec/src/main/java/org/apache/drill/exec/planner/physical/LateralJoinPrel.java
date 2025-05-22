@@ -31,7 +31,7 @@ import org.apache.calcite.rel.type.RelDataTypeField;
 import org.apache.calcite.rex.RexNode;
 import org.apache.calcite.rex.RexUtil;
 import org.apache.calcite.util.ImmutableBitSet;
-import org.apache.commons.collections.ListUtils;
+import org.apache.commons.collections4.ListUtils;
 import org.apache.drill.common.expression.SchemaPath;
 import org.apache.drill.exec.physical.base.PhysicalOperator;
 import org.apache.drill.exec.physical.config.LateralJoinPOP;
@@ -94,7 +94,7 @@ public class LateralJoinPrel extends DrillLateralJoinRelBase implements Prel {
     final List<String> fields = getRowType().getFieldNames();
     final List<String> inputFields = input.getRowType().getFieldNames();
     final List<String> outputFields = fields.subList(offset, offset + getInputSize(ordinal));
-    if (ListUtils.subtract(outputFields, inputFields).size() != 0) {
+    if (!ListUtils.subtract(outputFields, inputFields).isEmpty()) {
       // Ensure that input field names are the same as output field names.
       // If there are duplicate field names on left and right, fields will get
       // lost.
