@@ -632,6 +632,11 @@
       <groupId>sqlline</groupId>
       <artifactId>sqlline</artifactId>
     </dependency>
+    <!-- Replace sqline's deprecated jline-terminal-jansi dependency -->
+    <dependency>
+      <groupId>org.jline</groupId>
+      <artifactId>jline-terminal-jni</artifactId>
+    </dependency>
     <dependency>
       <groupId>org.apache.drill.metastore</groupId>
       <artifactId>drill-iceberg-metastore</artifactId>

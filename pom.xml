@@ -1768,11 +1768,11 @@
         <artifactId>jline-reader</artifactId>
         <version>${jline.version}</version>
       </dependency>
-      <!-- replaces jline-terminal-jansi since it was deprecated in 3.26 -->
+      <!-- Replace sqline's jline-terminal-jansi dependency, which was deprecated in version 3.26. -->
       <dependency>
         <groupId>org.jline</groupId>
         <artifactId>jline-terminal-jni</artifactId>
-        <version>3.26.3</version>
+        <version>${jline.version}</version>
       </dependency>
       <dependency>
         <groupId>org.jline</groupId>
