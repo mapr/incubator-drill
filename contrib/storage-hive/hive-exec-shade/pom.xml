@@ -192,6 +192,7 @@
                 <exclude>org/apache/calcite/**</exclude>
                 <!-- removed according to MD-6077 -->
                 <exclude>**/Log4j2Plugins.dat</exclude>
+                <exclude>META-INF/versions/22/**</exclude>
               </excludes>
             </filter>
             <filter>
