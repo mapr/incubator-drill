@@ -81,7 +81,7 @@ public abstract class MapRDBGroupScan extends AbstractDbGroupScan {
 
   private Stopwatch watch = Stopwatch.createUnstarted();
 
-  private TableMetadataProvider metadataProvider;
+  protected TableMetadataProvider metadataProvider;
 
   private TableMetadata tableMetadata;
 

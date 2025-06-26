@@ -17,12 +17,15 @@
  */
 package org.apache.drill.exec.vector.complex.fn;
 
+import org.apache.drill.common.exceptions.UserException;
 import org.apache.drill.exec.record.metadata.ColumnMetadata;
 import org.apache.drill.exec.record.metadata.TupleMetadata;
 import org.apache.drill.exec.vector.complex.impl.ComplexCopier;
 import org.apache.drill.common.expression.PathSegment;
 import org.apache.drill.common.expression.SchemaPath;
 import org.apache.drill.exec.vector.complex.writer.BaseWriter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.BitSet;
@@ -30,6 +33,7 @@ import java.util.Collection;
 import java.util.List;
 
 public class JsonReaderUtils {
+  private static final Logger logger = LoggerFactory.getLogger(JsonReaderUtils.class);
 
   public static void ensureAtLeastOneField(BaseWriter.ComplexWriter writer,
                                     Collection<SchemaPath> columns,
@@ -95,6 +99,87 @@ public class JsonReaderUtils {
     }
   }
 
+  public static void writeNullColumns(BaseWriter.ComplexWriter writer, Collection<SchemaPath> columns,
+      boolean allTextMode, TupleMetadata schema) {
+    boolean hasSchema = schema != null && !schema.isEmpty();
+    List<ColumnInfo> emptyColumns = new ArrayList<>();
+
+    for (SchemaPath columnPath : columns) {
+      PathSegment segment = columnPath.getRootSegment();
+      BaseWriter.MapWriter mapWriter = writer.rootAsMap();
+      ColumnMetadata columnMetadata = hasSchema ? schema.metadata(columnPath.getRootSegmentPath()) : null;
+
+      while (segment.getChild() != null && !segment.getChild().isArray()) {
+        mapWriter = mapWriter.map(segment.getNameSegment().getPath());
+        segment = segment.getChild();
+        columnMetadata = getColumnMetadata(columnMetadata, columnPath, segment);
+      }
+      if (columnMetadata != null) {
+        writeSingleOrArrayColumn(columnMetadata, mapWriter, allTextMode);
+      } else if (allTextMode) {
+        mapWriter.varChar(segment.getNameSegment().getPath());
+      } else if (mapWriter.isEmptyMap()) {
+        emptyColumns.add(new ColumnInfo(segment, mapWriter));
+      }
+    }
+    writeDummyColumn(emptyColumns);
+  }
+
+  private static class ColumnInfo {
+    BaseWriter.MapWriter writer;
+    PathSegment path;
+
+    ColumnInfo(PathSegment path, BaseWriter.MapWriter writer) {
+      this.path = path;
+      this.writer = writer;
+    }
+  }
+
+  /**
+   * Get column segment metadata. Throws
+   * {@link org.apache.drill.exec.proto.UserBitShared.DrillPBError.ErrorType#VALIDATION} when the
+   * column definition has MAP but the metaData has array or primitive.
+   *
+   * @param columnMetadata
+   * @param columnPath
+   * @param segment
+   *
+   * @return {@code null} either columnMetadata is {@code null} or if the columnMedata has no metadata
+   * for the segment.
+   */
+  private static ColumnMetadata getColumnMetadata(ColumnMetadata columnMetadata,
+      SchemaPath columnPath, PathSegment segment) {
+    if (columnMetadata == null) {
+      return null;
+    }
+    String segmentPath = segment.getNameSegment().getPath();
+    if (columnMetadata.tupleSchema() == null) {
+      throw UserException.validationError()
+          .message("Provided segment type is not compatible with projection specification")
+          .addContext("Projected column", columnPath.getAsUnescapedPath())
+          .addContext("Segment name", segmentPath)
+          .addContext("Provided segment type", columnMetadata.type().toString())
+          .build(logger);
+    }
+    return columnMetadata.tupleSchema().metadata(segmentPath);
+  }
+
+  /**
+   * Produce just 1 empty column with a default type Integer, if all the columns are empty. The reason
+   * is that the type of the fields is unknown, so if we produce multiple Integer fields by default,
+   * a subsequent batch that contains non-integer fields will error out in any case.
+   *
+   * @param emptyColumnsList - list of potentially empty columns
+   */
+  private static void writeDummyColumn(List<ColumnInfo> emptyColumnsList) {
+    boolean allWritersAreEmpty = !emptyColumnsList.isEmpty()
+        && emptyColumnsList.stream().allMatch(field -> field.writer.isEmptyMap());
+    if (allWritersAreEmpty) {
+      ColumnInfo field = emptyColumnsList.get(0);
+      field.writer.integer(field.path.getNameSegment().getPath());
+    }
+  }
+
   /**
    * Creates writers which correspond to the specified schema for specified root writer.
    *
@@ -132,7 +217,8 @@ public class JsonReaderUtils {
     PathSegment child = column.getChild();
     if (child != null && child.isNamed()) {
       String name = column.getNameSegment().getPath();
-      ColumnMetadata childMetadata = columnMetadata.tupleSchema().metadata(name);
+      String childName = child.getNameSegment().getPath();
+      ColumnMetadata childMetadata = columnMetadata.tupleSchema().metadata(childName);
       writeColumnToMapWriter(writer.map(name), child, childMetadata, allTextMode);
     } else {
       writeSingleOrArrayColumn(columnMetadata, writer, allTextMode);

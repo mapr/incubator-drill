@@ -34,6 +34,7 @@ import org.apache.drill.common.expression.SchemaPath;
 import org.apache.drill.common.types.TypeProtos;
 import org.apache.drill.common.types.Types;
 import org.apache.drill.common.util.DrillFileUtils;
+import org.apache.drill.exec.metastore.store.FileSystemMetadataProviderManager;
 import org.apache.drill.exec.physical.base.AbstractDbGroupScan;
 import org.apache.drill.exec.physical.base.GroupScan;
 import org.apache.drill.exec.planner.common.DrillScanRelBase;
@@ -138,8 +139,10 @@ public class MapRDBIndexDiscover extends IndexDiscoverBase implements IndexDisco
       DrillFileSystem fs = ImpersonationUtil.createFileSystem(origScan.getUserName(), fsPlugin.getFsConf());
       MapRDBFormatMatcher matcher = (MapRDBFormatMatcher) (maprFormatPlugin.getMatcher());
       FileSelection fsSelection = deriveFSSelection(fs, idxDescriptor);
+      FileSystemMetadataProviderManager metadataProviderManager = new FileSystemMetadataProviderManager();
+      metadataProviderManager.setTableMetadataProvider(origScan.getMetadataProvider());
       return matcher.isReadableIndex(fs, fsSelection, fsPlugin, fsPlugin.getName(),
-          origScan.getUserName(), idxDescriptor);
+          origScan.getUserName(), idxDescriptor, metadataProviderManager);
 
     } catch (Exception e) {
       logger.error("Failed to get native DrillTable.", e);

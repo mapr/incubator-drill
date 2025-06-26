@@ -38,6 +38,7 @@ import org.apache.drill.common.exceptions.ExecutionSetupException;
 import org.apache.drill.common.expression.FieldReference;
 import org.apache.drill.common.expression.LogicalExpression;
 import org.apache.drill.common.expression.SchemaPath;
+import org.apache.drill.exec.metastore.store.SimpleFileTableMetadataProvider;
 import org.apache.drill.exec.physical.base.GroupScan;
 import org.apache.drill.exec.physical.base.IndexGroupScan;
 import org.apache.drill.exec.physical.base.PhysicalOperator;
@@ -132,8 +133,17 @@ public class JsonTableGroupScan extends MapRDBGroupScan implements IndexGroupSca
   public JsonTableGroupScan(String userName, AbstractStoragePlugin storagePlugin,
                             MapRDBFormatPlugin formatPlugin, JsonScanSpec scanSpec, List<SchemaPath> columns,
                             MetadataProviderManager metadataProviderManager) {
-    this(userName, storagePlugin, formatPlugin, scanSpec, columns,
-        new MapRDBStatistics(), FileSystemMetadataProviderManager.getMetadataProvider(metadataProviderManager));
+    super(storagePlugin, formatPlugin, columns, userName, null);
+    this.scanSpec = scanSpec;
+    this.stats = new MapRDBStatistics();
+    this.forcedRowCountMap = new HashMap<>();
+    if (metadataProviderManager == null) {
+      // use file system metadata provider without specified schema and statistics
+      metadataProviderManager = new FileSystemMetadataProviderManager();
+    }
+    this.metadataProvider = new SimpleFileTableMetadataProvider.Builder(metadataProviderManager)
+        .build();
+    init();
   }
 
   public JsonTableGroupScan(String userName, AbstractStoragePlugin storagePlugin,

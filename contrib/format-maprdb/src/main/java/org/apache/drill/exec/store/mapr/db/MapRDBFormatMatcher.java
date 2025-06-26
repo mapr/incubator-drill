@@ -22,6 +22,7 @@ import java.io.IOException;
 import com.mapr.db.index.IndexDesc;
 import com.mapr.fs.MapRFileStatus;
 import com.mapr.fs.tables.TableProperties;
+import org.apache.drill.exec.metastore.MetadataProviderManager;
 import org.apache.drill.exec.planner.index.IndexDescriptor;
 import org.apache.drill.exec.planner.index.MapRDBIndexDescriptor;
 import org.apache.drill.exec.planner.logical.DrillTable;
@@ -63,13 +64,14 @@ public class MapRDBFormatMatcher extends TableFormatMatcher {
    * @param storageEngineName
    * @param userName
    * @param secondaryIndexDesc
+   * @param metadataProviderManager
    * @return
    * @throws IOException
    */
   public DrillTable isReadableIndex(DrillFileSystem fs,
                                     FileSelection selection, AbstractStoragePlugin fsPlugin,
                                     String storageEngineName, String userName,
-                                    IndexDescriptor secondaryIndexDesc) throws IOException {
+                                    IndexDescriptor secondaryIndexDesc, MetadataProviderManager metadataProviderManager) throws IOException {
     FileStatus status = selection.getFirstPath(fs);
 
     if (!isFileReadable(fs, status)) {
@@ -88,7 +90,7 @@ public class MapRDBFormatMatcher extends TableFormatMatcher {
         selection,
         null /* columns */,
         (IndexDesc) ((MapRDBIndexDescriptor) secondaryIndexDesc).getOriginalDesc(),
-        null /* metadataProviderManager */));
+        metadataProviderManager));
 
     return dt;
   }

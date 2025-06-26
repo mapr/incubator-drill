@@ -133,6 +133,11 @@ public class MapRDBFormatPlugin extends TableFormatPlugin {
   }
 
   @Override
+  public AbstractGroupScan getGroupScan(String userName, FileSelection selection, List<SchemaPath> columns, MetadataProviderManager metadataProviderManager) throws IOException {
+    return getGroupScan(userName, selection, columns, (IndexDesc) null, metadataProviderManager);
+  }
+
+  @Override
   public AbstractGroupScan getGroupScan(String userName, FileSelection selection,
       List<SchemaPath> columns) throws IOException {
     return getGroupScan(userName, selection, columns, (IndexDesc) null /* indexDesc */, null /* metadataProviderManager */);

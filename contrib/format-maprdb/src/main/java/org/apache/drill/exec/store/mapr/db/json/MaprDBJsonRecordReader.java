@@ -68,7 +68,6 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -502,11 +501,7 @@ public class MaprDBJsonRecordReader extends AbstractRecordReader {
     }
 
     if (nonExistentColumnsProjection && recordCount > 0) {
-      if (schema == null || schema.isEmpty()) {
-        JsonReaderUtils.ensureAtLeastOneField(vectorWriter, getColumns(), allTextMode, Collections.emptyList());
-      } else {
-        JsonReaderUtils.writeColumnsUsingSchema(vectorWriter, getColumns(), schema, allTextMode);
-      }
+      JsonReaderUtils.writeNullColumns(vectorWriter, getColumns(), allTextMode, schema);
     }
     vectorWriter.setValueCount(recordCount);
     decrementRecordsLimit();
