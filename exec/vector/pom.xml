@@ -23,7 +23,7 @@
   <parent>
     <artifactId>exec-parent</artifactId>
     <groupId>org.apache.drill.exec</groupId>
-    <version>1.21.2.200-eep-941-SNAPSHOT</version>
+    <version>1.21.2.300-eep-1000-SNAPSHOT</version>
   </parent>
   <artifactId>vector</artifactId>
   <name>Drill : Exec : Vectors</name>
