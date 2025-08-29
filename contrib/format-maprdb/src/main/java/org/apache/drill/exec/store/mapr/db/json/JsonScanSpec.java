@@ -103,6 +103,7 @@ public class JsonScanSpec {
     return this.condition;
   }
 
+  @JsonIgnore
   public boolean isSecondaryIndex() {
     return (this.indexDesc != null);
   }

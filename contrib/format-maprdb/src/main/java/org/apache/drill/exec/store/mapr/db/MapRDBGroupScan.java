@@ -17,6 +17,30 @@
  */
 package org.apache.drill.exec.store.mapr.db;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.common.base.Preconditions;
+import com.google.common.base.Stopwatch;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+import org.apache.calcite.rel.RelNode;
+import org.apache.drill.common.expression.SchemaPath;
+import org.apache.drill.common.logical.StoragePluginConfig;
+import org.apache.drill.exec.physical.EndpointAffinity;
+import org.apache.drill.exec.physical.base.AbstractDbGroupScan;
+import org.apache.drill.exec.planner.cost.PluginCost;
+import org.apache.drill.exec.planner.index.IndexCollection;
+import org.apache.drill.exec.planner.index.IndexDiscover;
+import org.apache.drill.exec.planner.index.IndexDiscoverFactory;
+import org.apache.drill.exec.planner.index.MapRDBIndexDiscover;
+import org.apache.drill.exec.proto.CoordinationProtos.DrillbitEndpoint;
+import org.apache.drill.exec.record.metadata.TupleMetadata;
+import org.apache.drill.exec.store.AbstractStoragePlugin;
+import org.apache.drill.metastore.metadata.TableMetadata;
+import org.apache.drill.metastore.metadata.TableMetadataProvider;
+import org.ojai.DocumentConstants;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -30,32 +54,6 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-
-import org.apache.drill.common.expression.SchemaPath;
-import org.apache.drill.common.logical.StoragePluginConfig;
-import org.apache.drill.exec.physical.EndpointAffinity;
-import org.apache.drill.exec.physical.base.AbstractDbGroupScan;
-import org.apache.calcite.rel.RelNode;
-import org.apache.drill.exec.planner.index.IndexCollection;
-
-import org.apache.drill.exec.planner.cost.PluginCost;
-import org.apache.drill.exec.planner.index.IndexDiscover;
-import org.apache.drill.exec.planner.index.IndexDiscoverFactory;
-import org.apache.drill.exec.planner.index.MapRDBIndexDiscover;
-import org.apache.drill.exec.proto.CoordinationProtos.DrillbitEndpoint;
-import org.apache.drill.exec.record.metadata.TupleMetadata;
-import org.apache.drill.exec.store.AbstractStoragePlugin;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import org.apache.drill.metastore.metadata.TableMetadata;
-import org.apache.drill.metastore.metadata.TableMetadataProvider;
-import com.google.common.base.Preconditions;
-import com.google.common.base.Stopwatch;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
-import org.ojai.DocumentConstants;
 
 public abstract class MapRDBGroupScan extends AbstractDbGroupScan {
   private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(MapRDBGroupScan.class);
@@ -284,6 +282,11 @@ public abstract class MapRDBGroupScan extends AbstractDbGroupScan {
     return storagePlugin;
   }
 
+  @JsonProperty
+  public void setColumns(List<SchemaPath> columns) {
+    this.columns = columns;
+  }
+
   @Override
   @JsonProperty
   public List<SchemaPath> getColumns() {
@@ -378,5 +381,10 @@ public abstract class MapRDBGroupScan extends AbstractDbGroupScan {
   @Override
   public SchemaPath getRowKeyPath() {
     return ROW_KEY_PATH;
+  }
+
+  @JsonProperty("format")
+  public MapRDBFormatPluginConfig getFormatPluginConfig() {
+    return formatPluginConfig;
   }
 }

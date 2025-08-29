@@ -217,6 +217,7 @@ public class JsonTableGroupScan extends MapRDBGroupScan implements IndexGroupSca
   }
 
   @Override
+  @JsonIgnore
   protected NavigableMap<TabletFragmentInfo, String> getRegionsToScan() {
     return getRegionsToScan(formatPlugin.getScanRangeSizeMB());
   }
@@ -443,10 +444,12 @@ public class JsonTableGroupScan extends MapRDBGroupScan implements IndexGroupSca
     return scanSpec.getTableName();
   }
 
+  @JsonIgnore
   public IndexDesc getIndexDesc() {
     return scanSpec.getIndexDesc();
   }
 
+  @JsonIgnore
   public boolean isDisablePushdown() {
     return !formatPluginConfig.isEnablePushdown();
   }
@@ -715,18 +718,6 @@ public class JsonTableGroupScan extends MapRDBGroupScan implements IndexGroupSca
   @Override
   public MapRDBStatistics getStatistics() {
     return stats;
-  }
-
-  @Override
-  @JsonIgnore
-  public void setColumns(List<SchemaPath> columns) {
-    this.columns = columns;
-  }
-
-  @Override
-  @JsonIgnore
-  public List<SchemaPath> getColumns() {
-    return columns;
   }
 
   @Override
