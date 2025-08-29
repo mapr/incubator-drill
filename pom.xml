@@ -63,7 +63,7 @@
     <avatica.version>1.17.0</avatica.version>
     <janino.version>3.0.11</janino.version>
     <sqlline.version>1.12.0</sqlline.version>
-    <jackson.version>2.15.3</jackson.version>
+    <jackson.version>2.16.1</jackson.version>
     <zookeeper.version>3.5.7</zookeeper.version>
     <mapr.release.version>7.5.0.0-mapr-SNAPSHOT</mapr.release.version>
     <ojai.version>3.0-mapr-1808</ojai.version>
@@ -96,7 +96,7 @@
     <jetty.version>9.4.53.v20231009</jetty.version>
     <jersey.version>2.34</jersey.version>
     <javax.validation.api>2.0.1.Final</javax.validation.api>
-    <asm.version>9.4</asm.version>
+    <asm.version>9.5</asm.version>
     <excludedGroups />
     <memoryMb>2500</memoryMb>
     <directMemoryMb>4500</directMemoryMb>
@@ -995,7 +995,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-shade-plugin</artifactId>
-          <version>3.5.1</version>
+          <version>3.5.3</version>
           <executions>
             <execution>
               <phase>package</phase>
