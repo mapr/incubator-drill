@@ -21,6 +21,7 @@ import com.google.common.collect.ImmutableList;
 import java.nio.ByteBuffer;
 import java.util.List;
 
+import com.mapr.db.util.ByteBufs;
 import org.apache.drill.common.FunctionNames;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.hbase.HConstants;
@@ -44,7 +45,23 @@ public class JsonScanSpec {
   @JsonCreator
   public JsonScanSpec(@JsonProperty("tableName") String tableName,
                       @JsonProperty("indexDesc") IndexDesc indexDesc,
-                      @JsonProperty("condition") QueryCondition condition) {
+                      @JsonProperty("serializedFilter") byte[] serializedFilter) {
+    this.tableName = tableName;
+    this.indexDesc = indexDesc;
+    if (serializedFilter != null) {
+      condition = ConditionImpl.parseFrom(ByteBufs.wrap(serializedFilter));
+      List<RowkeyRange> rkRanges = ((ConditionImpl)this.condition).getRowkeyRanges();
+      if (rkRanges.size() > 0) {
+        startRow = rkRanges.get(0).getStartRow();
+        stopRow  = rkRanges.get(rkRanges.size() - 1).getStopRow();
+      } else {
+        startRow = HConstants.EMPTY_START_ROW;
+        stopRow  = HConstants.EMPTY_END_ROW;
+      }
+    }
+  }
+
+  public JsonScanSpec(String tableName, IndexDesc indexDesc, QueryCondition condition) {
     this.tableName = tableName;
     this.indexDesc = indexDesc;
     this.condition = condition;
@@ -58,6 +75,10 @@ public class JsonScanSpec {
         stopRow  = HConstants.EMPTY_END_ROW;
       }
     }
+  }
+
+  public JsonScanSpec(String tableName, IndexDesc indexDesc) {
+    this(tableName, indexDesc, (QueryCondition) null);
   }
 
   public String getTableName() {

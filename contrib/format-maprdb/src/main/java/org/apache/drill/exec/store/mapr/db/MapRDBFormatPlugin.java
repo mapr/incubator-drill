@@ -124,7 +124,7 @@ public class MapRDBFormatPlugin extends TableFormatPlugin {
     TableProperties props = getMaprFS().getTableProperties(new Path(tableName));
 
     if (props.getAttr().getJson()) {
-      JsonScanSpec scanSpec = new JsonScanSpec(tableName, indexDesc, null/*condition*/);
+      JsonScanSpec scanSpec = new JsonScanSpec(tableName, indexDesc);
       return new JsonTableGroupScan(userName, getStoragePlugin(), this, scanSpec, columns, metadataProviderManager);
     } else {
       HBaseScanSpec scanSpec = new HBaseScanSpec(tableName);
