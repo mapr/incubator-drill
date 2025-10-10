@@ -28,6 +28,7 @@ import org.apache.calcite.rex.RexNode;
 import org.apache.drill.common.exceptions.DrillRuntimeException;
 import org.apache.drill.common.exceptions.ExecutionSetupException;
 import org.apache.drill.common.expression.SchemaPath;
+import org.apache.drill.exec.metastore.store.SimpleFileTableMetadataProvider;
 import org.apache.drill.exec.physical.base.GroupScan;
 import org.apache.drill.exec.physical.base.PhysicalOperator;
 import org.apache.drill.exec.physical.base.ScanStats;
@@ -94,8 +95,16 @@ public class BinaryTableGroupScan extends MapRDBGroupScan implements DrillHBaseC
   public BinaryTableGroupScan(String userName, AbstractStoragePlugin storagePlugin,
       MapRDBFormatPlugin formatPlugin, HBaseScanSpec scanSpec, List<SchemaPath> columns,
       MetadataProviderManager metadataProviderManager) {
-    this(userName, storagePlugin, formatPlugin, scanSpec,
-        columns, null /* tableStats */, FileSystemMetadataProviderManager.getMetadataProvider(metadataProviderManager));
+    super(storagePlugin, formatPlugin, columns, userName, null);
+    this.hbaseScanSpec = scanSpec;
+    this.tableStats = null;
+    if (metadataProviderManager == null) {
+      // use file system metadata provider without specified schema and statistics
+      metadataProviderManager = new FileSystemMetadataProviderManager();
+    }
+    this.metadataProvider = new SimpleFileTableMetadataProvider.Builder(metadataProviderManager)
+        .build();
+    init();
   }
 
   public BinaryTableGroupScan(String userName, AbstractStoragePlugin storagePlugin,
