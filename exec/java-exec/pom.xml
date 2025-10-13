@@ -74,6 +74,10 @@
           <artifactId>slf4j-reload4j</artifactId>
           <groupId>org.slf4j</groupId>
         </exclusion>
+        <exclusion>
+          <groupId>org.bouncycastle</groupId>
+          <artifactId>bcprov-jdk15on</artifactId>
+        </exclusion>
       </exclusions>
     </dependency>
     <dependency>
@@ -107,6 +111,16 @@
       <groupId>com.box</groupId>
       <artifactId>box-java-sdk</artifactId>
       <version>3.7.1</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.bouncycastle</groupId>
+          <artifactId>bcpkix-jdk15on</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.bouncycastle</groupId>
+          <artifactId>bcprov-jdk15on</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.apache.drill.contrib.data</groupId>
