@@ -3196,7 +3196,11 @@
               <exclusion>
                 <groupId>jline</groupId>
                 <artifactId>jline</artifactId>
-              </exclusion>
+	      </exclusion>
+              <exclusion>
+                <groupId>org.apache.orc</groupId>
+                <artifactId>orc-core</artifactId>
+	      </exclusion>
             </exclusions>
           </dependency>
           <dependency>

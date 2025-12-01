@@ -183,6 +183,10 @@
               <pattern>io.airlift.</pattern>
               <shadedPattern>hive.io.airlift.</shadedPattern>
             </relocation>
+            <relocation>
+              <pattern>org.apache.orc.</pattern>
+              <shadedPattern>hive.org.apache.orc.</shadedPattern>
+            </relocation>
           </relocations>
           <filters>
             <filter>
