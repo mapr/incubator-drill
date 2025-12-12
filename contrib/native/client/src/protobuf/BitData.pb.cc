@@ -4,280 +4,330 @@
 #include "BitData.pb.h"
 
 #include <algorithm>
-
-#include <google/protobuf/io/coded_stream.h>
-#include <google/protobuf/extension_set.h>
-#include <google/protobuf/wire_format_lite.h>
-#include <google/protobuf/descriptor.h>
-#include <google/protobuf/generated_message_reflection.h>
-#include <google/protobuf/reflection_ops.h>
-#include <google/protobuf/wire_format.h>
+#include "google/protobuf/io/coded_stream.h"
+#include "google/protobuf/extension_set.h"
+#include "google/protobuf/wire_format_lite.h"
+#include "google/protobuf/descriptor.h"
+#include "google/protobuf/generated_message_reflection.h"
+#include "google/protobuf/reflection_ops.h"
+#include "google/protobuf/wire_format.h"
+#include "google/protobuf/generated_message_tctable_impl.h"
 // @@protoc_insertion_point(includes)
-#include <google/protobuf/port_def.inc>
 
+// Must be included last.
+#include "google/protobuf/port_def.inc"
 PROTOBUF_PRAGMA_INIT_SEG
-
-namespace _pb = ::PROTOBUF_NAMESPACE_ID;
-namespace _pbi = _pb::internal;
-
+namespace _pb = ::google::protobuf;
+namespace _pbi = ::google::protobuf::internal;
+namespace _fl = ::google::protobuf::internal::field_layout;
 namespace exec {
 namespace bit {
 namespace data {
-PROTOBUF_CONSTEXPR BitClientHandshake::BitClientHandshake(
-    ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_._has_bits_)*/{}
-  , /*decltype(_impl_._cached_size_)*/{}
-  , /*decltype(_impl_.rpc_version_)*/0
-  , /*decltype(_impl_.channel_)*/1} {}
-struct BitClientHandshakeDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR BitClientHandshakeDefaultTypeInternal()
-      : _instance(::_pbi::ConstantInitialized{}) {}
-  ~BitClientHandshakeDefaultTypeInternal() {}
-  union {
-    BitClientHandshake _instance;
-  };
-};
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 BitClientHandshakeDefaultTypeInternal _BitClientHandshake_default_instance_;
-PROTOBUF_CONSTEXPR BitServerHandshake::BitServerHandshake(
-    ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_._has_bits_)*/{}
-  , /*decltype(_impl_._cached_size_)*/{}
-  , /*decltype(_impl_.authenticationmechanisms_)*/{}
-  , /*decltype(_impl_.rpc_version_)*/0} {}
+
+inline constexpr BitServerHandshake::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : _cached_size_{0},
+        authenticationmechanisms_{},
+        rpc_version_{0} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR BitServerHandshake::BitServerHandshake(::_pbi::ConstantInitialized)
+    : _impl_(::_pbi::ConstantInitialized()) {}
 struct BitServerHandshakeDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR BitServerHandshakeDefaultTypeInternal()
-      : _instance(::_pbi::ConstantInitialized{}) {}
+  PROTOBUF_CONSTEXPR BitServerHandshakeDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
   ~BitServerHandshakeDefaultTypeInternal() {}
   union {
     BitServerHandshake _instance;
   };
 };
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 BitServerHandshakeDefaultTypeInternal _BitServerHandshake_default_instance_;
-PROTOBUF_CONSTEXPR FragmentRecordBatch::FragmentRecordBatch(
-    ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_._has_bits_)*/{}
-  , /*decltype(_impl_._cached_size_)*/{}
-  , /*decltype(_impl_.receiving_minor_fragment_id_)*/{}
-  , /*decltype(_impl_.query_id_)*/nullptr
-  , /*decltype(_impl_.def_)*/nullptr
-  , /*decltype(_impl_.receiving_major_fragment_id_)*/0
-  , /*decltype(_impl_.sending_major_fragment_id_)*/0
-  , /*decltype(_impl_.sending_minor_fragment_id_)*/0
-  , /*decltype(_impl_.islastbatch_)*/false} {}
-struct FragmentRecordBatchDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR FragmentRecordBatchDefaultTypeInternal()
-      : _instance(::_pbi::ConstantInitialized{}) {}
-  ~FragmentRecordBatchDefaultTypeInternal() {}
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 BitServerHandshakeDefaultTypeInternal _BitServerHandshake_default_instance_;
+
+inline constexpr BitClientHandshake::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : _cached_size_{0},
+        rpc_version_{0},
+        channel_{static_cast< ::exec::shared::RpcChannel >(1)} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR BitClientHandshake::BitClientHandshake(::_pbi::ConstantInitialized)
+    : _impl_(::_pbi::ConstantInitialized()) {}
+struct BitClientHandshakeDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR BitClientHandshakeDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~BitClientHandshakeDefaultTypeInternal() {}
   union {
-    FragmentRecordBatch _instance;
+    BitClientHandshake _instance;
   };
 };
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 FragmentRecordBatchDefaultTypeInternal _FragmentRecordBatch_default_instance_;
-PROTOBUF_CONSTEXPR RuntimeFilterBDef::RuntimeFilterBDef(
-    ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_._has_bits_)*/{}
-  , /*decltype(_impl_._cached_size_)*/{}
-  , /*decltype(_impl_.bloom_filter_size_in_bytes_)*/{}
-  , /*decltype(_impl_.probe_fields_)*/{}
-  , /*decltype(_impl_.query_id_)*/nullptr
-  , /*decltype(_impl_.major_fragment_id_)*/0
-  , /*decltype(_impl_.minor_fragment_id_)*/0
-  , /*decltype(_impl_.to_foreman_)*/false
-  , /*decltype(_impl_.hj_op_id_)*/0
-  , /*decltype(_impl_.rf_identifier_)*/int64_t{0}} {}
-struct RuntimeFilterBDefDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR RuntimeFilterBDefDefaultTypeInternal()
-      : _instance(::_pbi::ConstantInitialized{}) {}
-  ~RuntimeFilterBDefDefaultTypeInternal() {}
-  union {
-    RuntimeFilterBDef _instance;
-  };
-};
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 RuntimeFilterBDefDefaultTypeInternal _RuntimeFilterBDef_default_instance_;
-PROTOBUF_CONSTEXPR AckWithCredit::AckWithCredit(
-    ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_._has_bits_)*/{}
-  , /*decltype(_impl_._cached_size_)*/{}
-  , /*decltype(_impl_.allowed_credit_)*/0} {}
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 BitClientHandshakeDefaultTypeInternal _BitClientHandshake_default_instance_;
+
+inline constexpr AckWithCredit::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : _cached_size_{0},
+        allowed_credit_{0} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR AckWithCredit::AckWithCredit(::_pbi::ConstantInitialized)
+    : _impl_(::_pbi::ConstantInitialized()) {}
 struct AckWithCreditDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR AckWithCreditDefaultTypeInternal()
-      : _instance(::_pbi::ConstantInitialized{}) {}
+  PROTOBUF_CONSTEXPR AckWithCreditDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
   ~AckWithCreditDefaultTypeInternal() {}
   union {
     AckWithCredit _instance;
   };
 };
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 AckWithCreditDefaultTypeInternal _AckWithCredit_default_instance_;
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 AckWithCreditDefaultTypeInternal _AckWithCredit_default_instance_;
+
+inline constexpr RuntimeFilterBDef::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : _cached_size_{0},
+        bloom_filter_size_in_bytes_{},
+        probe_fields_{},
+        query_id_{nullptr},
+        major_fragment_id_{0},
+        minor_fragment_id_{0},
+        to_foreman_{false},
+        hj_op_id_{0},
+        rf_identifier_{::int64_t{0}} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR RuntimeFilterBDef::RuntimeFilterBDef(::_pbi::ConstantInitialized)
+    : _impl_(::_pbi::ConstantInitialized()) {}
+struct RuntimeFilterBDefDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR RuntimeFilterBDefDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~RuntimeFilterBDefDefaultTypeInternal() {}
+  union {
+    RuntimeFilterBDef _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 RuntimeFilterBDefDefaultTypeInternal _RuntimeFilterBDef_default_instance_;
+
+inline constexpr FragmentRecordBatch::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : _cached_size_{0},
+        receiving_minor_fragment_id_{},
+        query_id_{nullptr},
+        def_{nullptr},
+        receiving_major_fragment_id_{0},
+        sending_major_fragment_id_{0},
+        sending_minor_fragment_id_{0},
+        islastbatch_{false} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR FragmentRecordBatch::FragmentRecordBatch(::_pbi::ConstantInitialized)
+    : _impl_(::_pbi::ConstantInitialized()) {}
+struct FragmentRecordBatchDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR FragmentRecordBatchDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~FragmentRecordBatchDefaultTypeInternal() {}
+  union {
+    FragmentRecordBatch _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 FragmentRecordBatchDefaultTypeInternal _FragmentRecordBatch_default_instance_;
 }  // namespace data
 }  // namespace bit
 }  // namespace exec
 static ::_pb::Metadata file_level_metadata_BitData_2eproto[5];
 static const ::_pb::EnumDescriptor* file_level_enum_descriptors_BitData_2eproto[1];
-static constexpr ::_pb::ServiceDescriptor const** file_level_service_descriptors_BitData_2eproto = nullptr;
-
-const uint32_t TableStruct_BitData_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
-  PROTOBUF_FIELD_OFFSET(::exec::bit::data::BitClientHandshake, _impl_._has_bits_),
-  PROTOBUF_FIELD_OFFSET(::exec::bit::data::BitClientHandshake, _internal_metadata_),
-  ~0u,  // no _extensions_
-  ~0u,  // no _oneof_case_
-  ~0u,  // no _weak_field_map_
-  ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::exec::bit::data::BitClientHandshake, _impl_.rpc_version_),
-  PROTOBUF_FIELD_OFFSET(::exec::bit::data::BitClientHandshake, _impl_.channel_),
-  0,
-  1,
-  PROTOBUF_FIELD_OFFSET(::exec::bit::data::BitServerHandshake, _impl_._has_bits_),
-  PROTOBUF_FIELD_OFFSET(::exec::bit::data::BitServerHandshake, _internal_metadata_),
-  ~0u,  // no _extensions_
-  ~0u,  // no _oneof_case_
-  ~0u,  // no _weak_field_map_
-  ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::exec::bit::data::BitServerHandshake, _impl_.rpc_version_),
-  PROTOBUF_FIELD_OFFSET(::exec::bit::data::BitServerHandshake, _impl_.authenticationmechanisms_),
-  0,
-  ~0u,
-  PROTOBUF_FIELD_OFFSET(::exec::bit::data::FragmentRecordBatch, _impl_._has_bits_),
-  PROTOBUF_FIELD_OFFSET(::exec::bit::data::FragmentRecordBatch, _internal_metadata_),
-  ~0u,  // no _extensions_
-  ~0u,  // no _oneof_case_
-  ~0u,  // no _weak_field_map_
-  ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::exec::bit::data::FragmentRecordBatch, _impl_.query_id_),
-  PROTOBUF_FIELD_OFFSET(::exec::bit::data::FragmentRecordBatch, _impl_.receiving_major_fragment_id_),
-  PROTOBUF_FIELD_OFFSET(::exec::bit::data::FragmentRecordBatch, _impl_.receiving_minor_fragment_id_),
-  PROTOBUF_FIELD_OFFSET(::exec::bit::data::FragmentRecordBatch, _impl_.sending_major_fragment_id_),
-  PROTOBUF_FIELD_OFFSET(::exec::bit::data::FragmentRecordBatch, _impl_.sending_minor_fragment_id_),
-  PROTOBUF_FIELD_OFFSET(::exec::bit::data::FragmentRecordBatch, _impl_.def_),
-  PROTOBUF_FIELD_OFFSET(::exec::bit::data::FragmentRecordBatch, _impl_.islastbatch_),
-  0,
-  2,
-  ~0u,
-  3,
-  4,
-  1,
-  5,
-  PROTOBUF_FIELD_OFFSET(::exec::bit::data::RuntimeFilterBDef, _impl_._has_bits_),
-  PROTOBUF_FIELD_OFFSET(::exec::bit::data::RuntimeFilterBDef, _internal_metadata_),
-  ~0u,  // no _extensions_
-  ~0u,  // no _oneof_case_
-  ~0u,  // no _weak_field_map_
-  ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::exec::bit::data::RuntimeFilterBDef, _impl_.query_id_),
-  PROTOBUF_FIELD_OFFSET(::exec::bit::data::RuntimeFilterBDef, _impl_.major_fragment_id_),
-  PROTOBUF_FIELD_OFFSET(::exec::bit::data::RuntimeFilterBDef, _impl_.minor_fragment_id_),
-  PROTOBUF_FIELD_OFFSET(::exec::bit::data::RuntimeFilterBDef, _impl_.to_foreman_),
-  PROTOBUF_FIELD_OFFSET(::exec::bit::data::RuntimeFilterBDef, _impl_.bloom_filter_size_in_bytes_),
-  PROTOBUF_FIELD_OFFSET(::exec::bit::data::RuntimeFilterBDef, _impl_.probe_fields_),
-  PROTOBUF_FIELD_OFFSET(::exec::bit::data::RuntimeFilterBDef, _impl_.hj_op_id_),
-  PROTOBUF_FIELD_OFFSET(::exec::bit::data::RuntimeFilterBDef, _impl_.rf_identifier_),
-  0,
-  1,
-  2,
-  3,
-  ~0u,
-  ~0u,
-  4,
-  5,
-  PROTOBUF_FIELD_OFFSET(::exec::bit::data::AckWithCredit, _impl_._has_bits_),
-  PROTOBUF_FIELD_OFFSET(::exec::bit::data::AckWithCredit, _internal_metadata_),
-  ~0u,  // no _extensions_
-  ~0u,  // no _oneof_case_
-  ~0u,  // no _weak_field_map_
-  ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::exec::bit::data::AckWithCredit, _impl_.allowed_credit_),
-  0,
+static constexpr const ::_pb::ServiceDescriptor**
+    file_level_service_descriptors_BitData_2eproto = nullptr;
+const ::uint32_t TableStruct_BitData_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(
+    protodesc_cold) = {
+    PROTOBUF_FIELD_OFFSET(::exec::bit::data::BitClientHandshake, _impl_._has_bits_),
+    PROTOBUF_FIELD_OFFSET(::exec::bit::data::BitClientHandshake, _internal_metadata_),
+    ~0u,  // no _extensions_
+    ~0u,  // no _oneof_case_
+    ~0u,  // no _weak_field_map_
+    ~0u,  // no _inlined_string_donated_
+    ~0u,  // no _split_
+    ~0u,  // no sizeof(Split)
+    PROTOBUF_FIELD_OFFSET(::exec::bit::data::BitClientHandshake, _impl_.rpc_version_),
+    PROTOBUF_FIELD_OFFSET(::exec::bit::data::BitClientHandshake, _impl_.channel_),
+    0,
+    1,
+    PROTOBUF_FIELD_OFFSET(::exec::bit::data::BitServerHandshake, _impl_._has_bits_),
+    PROTOBUF_FIELD_OFFSET(::exec::bit::data::BitServerHandshake, _internal_metadata_),
+    ~0u,  // no _extensions_
+    ~0u,  // no _oneof_case_
+    ~0u,  // no _weak_field_map_
+    ~0u,  // no _inlined_string_donated_
+    ~0u,  // no _split_
+    ~0u,  // no sizeof(Split)
+    PROTOBUF_FIELD_OFFSET(::exec::bit::data::BitServerHandshake, _impl_.rpc_version_),
+    PROTOBUF_FIELD_OFFSET(::exec::bit::data::BitServerHandshake, _impl_.authenticationmechanisms_),
+    0,
+    ~0u,
+    PROTOBUF_FIELD_OFFSET(::exec::bit::data::FragmentRecordBatch, _impl_._has_bits_),
+    PROTOBUF_FIELD_OFFSET(::exec::bit::data::FragmentRecordBatch, _internal_metadata_),
+    ~0u,  // no _extensions_
+    ~0u,  // no _oneof_case_
+    ~0u,  // no _weak_field_map_
+    ~0u,  // no _inlined_string_donated_
+    ~0u,  // no _split_
+    ~0u,  // no sizeof(Split)
+    PROTOBUF_FIELD_OFFSET(::exec::bit::data::FragmentRecordBatch, _impl_.query_id_),
+    PROTOBUF_FIELD_OFFSET(::exec::bit::data::FragmentRecordBatch, _impl_.receiving_major_fragment_id_),
+    PROTOBUF_FIELD_OFFSET(::exec::bit::data::FragmentRecordBatch, _impl_.receiving_minor_fragment_id_),
+    PROTOBUF_FIELD_OFFSET(::exec::bit::data::FragmentRecordBatch, _impl_.sending_major_fragment_id_),
+    PROTOBUF_FIELD_OFFSET(::exec::bit::data::FragmentRecordBatch, _impl_.sending_minor_fragment_id_),
+    PROTOBUF_FIELD_OFFSET(::exec::bit::data::FragmentRecordBatch, _impl_.def_),
+    PROTOBUF_FIELD_OFFSET(::exec::bit::data::FragmentRecordBatch, _impl_.islastbatch_),
+    0,
+    2,
+    ~0u,
+    3,
+    4,
+    1,
+    5,
+    PROTOBUF_FIELD_OFFSET(::exec::bit::data::RuntimeFilterBDef, _impl_._has_bits_),
+    PROTOBUF_FIELD_OFFSET(::exec::bit::data::RuntimeFilterBDef, _internal_metadata_),
+    ~0u,  // no _extensions_
+    ~0u,  // no _oneof_case_
+    ~0u,  // no _weak_field_map_
+    ~0u,  // no _inlined_string_donated_
+    ~0u,  // no _split_
+    ~0u,  // no sizeof(Split)
+    PROTOBUF_FIELD_OFFSET(::exec::bit::data::RuntimeFilterBDef, _impl_.query_id_),
+    PROTOBUF_FIELD_OFFSET(::exec::bit::data::RuntimeFilterBDef, _impl_.major_fragment_id_),
+    PROTOBUF_FIELD_OFFSET(::exec::bit::data::RuntimeFilterBDef, _impl_.minor_fragment_id_),
+    PROTOBUF_FIELD_OFFSET(::exec::bit::data::RuntimeFilterBDef, _impl_.to_foreman_),
+    PROTOBUF_FIELD_OFFSET(::exec::bit::data::RuntimeFilterBDef, _impl_.bloom_filter_size_in_bytes_),
+    PROTOBUF_FIELD_OFFSET(::exec::bit::data::RuntimeFilterBDef, _impl_.probe_fields_),
+    PROTOBUF_FIELD_OFFSET(::exec::bit::data::RuntimeFilterBDef, _impl_.hj_op_id_),
+    PROTOBUF_FIELD_OFFSET(::exec::bit::data::RuntimeFilterBDef, _impl_.rf_identifier_),
+    0,
+    1,
+    2,
+    3,
+    ~0u,
+    ~0u,
+    4,
+    5,
+    PROTOBUF_FIELD_OFFSET(::exec::bit::data::AckWithCredit, _impl_._has_bits_),
+    PROTOBUF_FIELD_OFFSET(::exec::bit::data::AckWithCredit, _internal_metadata_),
+    ~0u,  // no _extensions_
+    ~0u,  // no _oneof_case_
+    ~0u,  // no _weak_field_map_
+    ~0u,  // no _inlined_string_donated_
+    ~0u,  // no _split_
+    ~0u,  // no sizeof(Split)
+    PROTOBUF_FIELD_OFFSET(::exec::bit::data::AckWithCredit, _impl_.allowed_credit_),
+    0,
 };
-static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
-  { 0, 8, -1, sizeof(::exec::bit::data::BitClientHandshake)},
-  { 10, 18, -1, sizeof(::exec::bit::data::BitServerHandshake)},
-  { 20, 33, -1, sizeof(::exec::bit::data::FragmentRecordBatch)},
-  { 40, 54, -1, sizeof(::exec::bit::data::RuntimeFilterBDef)},
-  { 62, 69, -1, sizeof(::exec::bit::data::AckWithCredit)},
+
+static const ::_pbi::MigrationSchema
+    schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
+        {0, 10, -1, sizeof(::exec::bit::data::BitClientHandshake)},
+        {12, 22, -1, sizeof(::exec::bit::data::BitServerHandshake)},
+        {24, 39, -1, sizeof(::exec::bit::data::FragmentRecordBatch)},
+        {46, 62, -1, sizeof(::exec::bit::data::RuntimeFilterBDef)},
+        {70, 79, -1, sizeof(::exec::bit::data::AckWithCredit)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
-  &::exec::bit::data::_BitClientHandshake_default_instance_._instance,
-  &::exec::bit::data::_BitServerHandshake_default_instance_._instance,
-  &::exec::bit::data::_FragmentRecordBatch_default_instance_._instance,
-  &::exec::bit::data::_RuntimeFilterBDef_default_instance_._instance,
-  &::exec::bit::data::_AckWithCredit_default_instance_._instance,
+    &::exec::bit::data::_BitClientHandshake_default_instance_._instance,
+    &::exec::bit::data::_BitServerHandshake_default_instance_._instance,
+    &::exec::bit::data::_FragmentRecordBatch_default_instance_._instance,
+    &::exec::bit::data::_RuntimeFilterBDef_default_instance_._instance,
+    &::exec::bit::data::_AckWithCredit_default_instance_._instance,
 };
-
-const char descriptor_table_protodef_BitData_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
-  "\n\rBitData.proto\022\rexec.bit.data\032\025Executio"
-  "nProtos.proto\032\022Coordination.proto\032\023UserB"
-  "itShared.proto\"]\n\022BitClientHandshake\022\023\n\013"
-  "rpc_version\030\001 \001(\005\0222\n\007channel\030\002 \001(\0162\027.exe"
-  "c.shared.RpcChannel:\010BIT_DATA\"K\n\022BitServ"
-  "erHandshake\022\023\n\013rpc_version\030\001 \001(\005\022 \n\030auth"
-  "enticationMechanisms\030\002 \003(\t\"\214\002\n\023FragmentR"
-  "ecordBatch\022&\n\010query_id\030\001 \001(\0132\024.exec.shar"
-  "ed.QueryId\022#\n\033receiving_major_fragment_i"
-  "d\030\002 \001(\005\022#\n\033receiving_minor_fragment_id\030\003"
-  " \003(\005\022!\n\031sending_major_fragment_id\030\004 \001(\005\022"
-  "!\n\031sending_minor_fragment_id\030\005 \001(\005\022(\n\003de"
-  "f\030\006 \001(\0132\033.exec.shared.RecordBatchDef\022\023\n\013"
-  "isLastBatch\030\007 \001(\010\"\350\001\n\021RuntimeFilterBDef\022"
-  "&\n\010query_id\030\001 \001(\0132\024.exec.shared.QueryId\022"
-  "\031\n\021major_fragment_id\030\002 \001(\005\022\031\n\021minor_frag"
-  "ment_id\030\003 \001(\005\022\022\n\nto_foreman\030\004 \001(\010\022\"\n\032blo"
-  "om_filter_size_in_bytes\030\005 \003(\005\022\024\n\014probe_f"
-  "ields\030\006 \003(\t\022\020\n\010hj_op_id\030\007 \001(\005\022\025\n\rrf_iden"
-  "tifier\030\010 \001(\003\"\'\n\rAckWithCredit\022\026\n\016allowed"
-  "_credit\030\001 \001(\005*\210\001\n\007RpcType\022\r\n\tHANDSHAKE\020\000"
-  "\022\007\n\003ACK\020\001\022\013\n\007GOODBYE\020\002\022\024\n\020REQ_RECORD_BAT"
-  "CH\020\003\022\020\n\014SASL_MESSAGE\020\004\022\026\n\022REQ_RUNTIME_FI"
-  "LTER\020\005\022\030\n\024DATA_ACK_WITH_CREDIT\020\006B(\n\033org."
-  "apache.drill.exec.protoB\007BitDataH\001"
-  ;
-static const ::_pbi::DescriptorTable* const descriptor_table_BitData_2eproto_deps[3] = {
-  &::descriptor_table_Coordination_2eproto,
-  &::descriptor_table_ExecutionProtos_2eproto,
-  &::descriptor_table_UserBitShared_2eproto,
+const char descriptor_table_protodef_BitData_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
+    "\n\rBitData.proto\022\rexec.bit.data\032\025Executio"
+    "nProtos.proto\032\022Coordination.proto\032\023UserB"
+    "itShared.proto\"]\n\022BitClientHandshake\022\023\n\013"
+    "rpc_version\030\001 \001(\005\0222\n\007channel\030\002 \001(\0162\027.exe"
+    "c.shared.RpcChannel:\010BIT_DATA\"K\n\022BitServ"
+    "erHandshake\022\023\n\013rpc_version\030\001 \001(\005\022 \n\030auth"
+    "enticationMechanisms\030\002 \003(\t\"\214\002\n\023FragmentR"
+    "ecordBatch\022&\n\010query_id\030\001 \001(\0132\024.exec.shar"
+    "ed.QueryId\022#\n\033receiving_major_fragment_i"
+    "d\030\002 \001(\005\022#\n\033receiving_minor_fragment_id\030\003"
+    " \003(\005\022!\n\031sending_major_fragment_id\030\004 \001(\005\022"
+    "!\n\031sending_minor_fragment_id\030\005 \001(\005\022(\n\003de"
+    "f\030\006 \001(\0132\033.exec.shared.RecordBatchDef\022\023\n\013"
+    "isLastBatch\030\007 \001(\010\"\350\001\n\021RuntimeFilterBDef\022"
+    "&\n\010query_id\030\001 \001(\0132\024.exec.shared.QueryId\022"
+    "\031\n\021major_fragment_id\030\002 \001(\005\022\031\n\021minor_frag"
+    "ment_id\030\003 \001(\005\022\022\n\nto_foreman\030\004 \001(\010\022\"\n\032blo"
+    "om_filter_size_in_bytes\030\005 \003(\005\022\024\n\014probe_f"
+    "ields\030\006 \003(\t\022\020\n\010hj_op_id\030\007 \001(\005\022\025\n\rrf_iden"
+    "tifier\030\010 \001(\003\"\'\n\rAckWithCredit\022\026\n\016allowed"
+    "_credit\030\001 \001(\005*\210\001\n\007RpcType\022\r\n\tHANDSHAKE\020\000"
+    "\022\007\n\003ACK\020\001\022\013\n\007GOODBYE\020\002\022\024\n\020REQ_RECORD_BAT"
+    "CH\020\003\022\020\n\014SASL_MESSAGE\020\004\022\026\n\022REQ_RUNTIME_FI"
+    "LTER\020\005\022\030\n\024DATA_ACK_WITH_CREDIT\020\006B(\n\033org."
+    "apache.drill.exec.protoB\007BitDataH\001"
 };
-static ::_pbi::once_flag descriptor_table_BitData_2eproto_once;
+static const ::_pbi::DescriptorTable* const descriptor_table_BitData_2eproto_deps[3] =
+    {
+        &::descriptor_table_Coordination_2eproto,
+        &::descriptor_table_ExecutionProtos_2eproto,
+        &::descriptor_table_UserBitShared_2eproto,
+};
+static ::absl::once_flag descriptor_table_BitData_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_BitData_2eproto = {
-    false, false, 994, descriptor_table_protodef_BitData_2eproto,
+    false,
+    false,
+    994,
+    descriptor_table_protodef_BitData_2eproto,
     "BitData.proto",
-    &descriptor_table_BitData_2eproto_once, descriptor_table_BitData_2eproto_deps, 3, 5,
-    schemas, file_default_instances, TableStruct_BitData_2eproto::offsets,
-    file_level_metadata_BitData_2eproto, file_level_enum_descriptors_BitData_2eproto,
+    &descriptor_table_BitData_2eproto_once,
+    descriptor_table_BitData_2eproto_deps,
+    3,
+    5,
+    schemas,
+    file_default_instances,
+    TableStruct_BitData_2eproto::offsets,
+    file_level_metadata_BitData_2eproto,
+    file_level_enum_descriptors_BitData_2eproto,
     file_level_service_descriptors_BitData_2eproto,
 };
+
+// This function exists to be marked as weak.
+// It can significantly speed up compilation by breaking up LLVM's SCC
+// in the .pb.cc translation units. Large translation units see a
+// reduction of more than 35% of walltime for optimized builds. Without
+// the weak attribute all the messages in the file, including all the
+// vtables and everything they use become part of the same SCC through
+// a cycle like:
+// GetMetadata -> descriptor table -> default instances ->
+//   vtables -> GetMetadata
+// By adding a weak function here we break the connection from the
+// individual vtables back into the descriptor table.
 PROTOBUF_ATTRIBUTE_WEAK const ::_pbi::DescriptorTable* descriptor_table_BitData_2eproto_getter() {
   return &descriptor_table_BitData_2eproto;
 }
-
 // Force running AddDescriptors() at dynamic initialization time.
-PROTOBUF_ATTRIBUTE_INIT_PRIORITY2 static ::_pbi::AddDescriptorsRunner dynamic_init_dummy_BitData_2eproto(&descriptor_table_BitData_2eproto);
+PROTOBUF_ATTRIBUTE_INIT_PRIORITY2
+static ::_pbi::AddDescriptorsRunner dynamic_init_dummy_BitData_2eproto(&descriptor_table_BitData_2eproto);
 namespace exec {
 namespace bit {
 namespace data {
-const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* RpcType_descriptor() {
-  ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_BitData_2eproto);
+const ::google::protobuf::EnumDescriptor* RpcType_descriptor() {
+  ::google::protobuf::internal::AssignDescriptors(&descriptor_table_BitData_2eproto);
   return file_level_enum_descriptors_BitData_2eproto[0];
 }
+PROTOBUF_CONSTINIT const uint32_t RpcType_internal_data_[] = {
+    458752u, 0u, };
 bool RpcType_IsValid(int value) {
-  switch (value) {
-    case 0:
-    case 1:
-    case 2:
-    case 3:
-    case 4:
-    case 5:
-    case 6:
-      return true;
-    default:
-      return false;
-  }
+  return 0 <= value && value <= 6;
 }
-
-
 // ===================================================================
 
 class BitClientHandshake::_Internal {
  public:
   using HasBits = decltype(std::declval<BitClientHandshake>()._impl_._has_bits_);
+  static constexpr ::int32_t kHasBitsOffset =
+    8 * PROTOBUF_FIELD_OFFSET(BitClientHandshake, _impl_._has_bits_);
   static void set_has_rpc_version(HasBits* has_bits) {
     (*has_bits)[0] |= 1u;
   }
@@ -286,60 +336,40 @@ class BitClientHandshake::_Internal {
   }
 };
 
-BitClientHandshake::BitClientHandshake(::PROTOBUF_NAMESPACE_ID::Arena* arena,
-                         bool is_message_owned)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
-  SharedCtor(arena, is_message_owned);
+BitClientHandshake::BitClientHandshake(::google::protobuf::Arena* arena)
+    : ::google::protobuf::Message(arena) {
+  SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:exec.bit.data.BitClientHandshake)
 }
-BitClientHandshake::BitClientHandshake(const BitClientHandshake& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message() {
-  BitClientHandshake* const _this = this; (void)_this;
-  new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){from._impl_._has_bits_}
-    , /*decltype(_impl_._cached_size_)*/{}
-    , decltype(_impl_.rpc_version_){}
-    , decltype(_impl_.channel_){}};
-
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  ::memcpy(&_impl_.rpc_version_, &from._impl_.rpc_version_,
-    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.channel_) -
-    reinterpret_cast<char*>(&_impl_.rpc_version_)) + sizeof(_impl_.channel_));
-  // @@protoc_insertion_point(copy_constructor:exec.bit.data.BitClientHandshake)
+BitClientHandshake::BitClientHandshake(
+    ::google::protobuf::Arena* arena, const BitClientHandshake& from)
+    : BitClientHandshake(arena) {
+  MergeFrom(from);
 }
+inline PROTOBUF_NDEBUG_INLINE BitClientHandshake::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility,
+    ::google::protobuf::Arena* arena)
+      : _cached_size_{0},
+        channel_{static_cast< ::exec::shared::RpcChannel >(1)} {}
 
-inline void BitClientHandshake::SharedCtor(
-    ::_pb::Arena* arena, bool is_message_owned) {
-  (void)arena;
-  (void)is_message_owned;
-  new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){}
-    , /*decltype(_impl_._cached_size_)*/{}
-    , decltype(_impl_.rpc_version_){0}
-    , decltype(_impl_.channel_){1}
-  };
+inline void BitClientHandshake::SharedCtor(::_pb::Arena* arena) {
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  _impl_.rpc_version_ = {};
 }
-
 BitClientHandshake::~BitClientHandshake() {
   // @@protoc_insertion_point(destructor:exec.bit.data.BitClientHandshake)
-  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
-  (void)arena;
-    return;
-  }
+  _internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
   SharedDtor();
 }
-
 inline void BitClientHandshake::SharedDtor() {
-  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  ABSL_DCHECK(GetArena() == nullptr);
+  _impl_.~Impl_();
 }
 
-void BitClientHandshake::SetCachedSize(int size) const {
-  _impl_._cached_size_.Set(size);
-}
-
-void BitClientHandshake::Clear() {
+PROTOBUF_NOINLINE void BitClientHandshake::Clear() {
 // @@protoc_insertion_point(message_clear_start:exec.bit.data.BitClientHandshake)
-  uint32_t cached_has_bits = 0;
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
@@ -349,95 +379,88 @@ void BitClientHandshake::Clear() {
     _impl_.channel_ = 1;
   }
   _impl_._has_bits_.Clear();
-  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+  _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
 
-const char* BitClientHandshake::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
-#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  _Internal::HasBits has_bits{};
-  while (!ctx->Done(&ptr)) {
-    uint32_t tag;
-    ptr = ::_pbi::ReadTag(ptr, &tag);
-    switch (tag >> 3) {
-      // optional int32 rpc_version = 1;
-      case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
-          _Internal::set_has_rpc_version(&has_bits);
-          _impl_.rpc_version_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // optional .exec.shared.RpcChannel channel = 2 [default = BIT_DATA];
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
-          uint64_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
-          CHK_(ptr);
-          if (PROTOBUF_PREDICT_TRUE(::exec::shared::RpcChannel_IsValid(val))) {
-            _internal_set_channel(static_cast<::exec::shared::RpcChannel>(val));
-          } else {
-            ::PROTOBUF_NAMESPACE_ID::internal::WriteVarint(2, val, mutable_unknown_fields());
-          }
-        } else
-          goto handle_unusual;
-        continue;
-      default:
-        goto handle_unusual;
-    }  // switch
-  handle_unusual:
-    if ((tag == 0) || ((tag & 7) == 4)) {
-      CHK_(ptr);
-      ctx->SetLastTag(tag);
-      goto message_done;
-    }
-    ptr = UnknownFieldParse(
-        tag,
-        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
-        ptr, ctx);
-    CHK_(ptr != nullptr);
-  }  // while
-message_done:
-  _impl_._has_bits_.Or(has_bits);
+const char* BitClientHandshake::_InternalParse(
+    const char* ptr, ::_pbi::ParseContext* ctx) {
+  ptr = ::_pbi::TcParser::ParseLoop(this, ptr, ctx, &_table_.header);
   return ptr;
-failure:
-  ptr = nullptr;
-  goto message_done;
-#undef CHK_
 }
 
-uint8_t* BitClientHandshake::_InternalSerialize(
-    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<1, 2, 1, 0, 2> BitClientHandshake::_table_ = {
+  {
+    PROTOBUF_FIELD_OFFSET(BitClientHandshake, _impl_._has_bits_),
+    0, // no _extensions_
+    2, 8,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967292,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    2,  // num_field_entries
+    1,  // num_aux_entries
+    offsetof(decltype(_table_), aux_entries),
+    &_BitClientHandshake_default_instance_._instance,
+    ::_pbi::TcParser::GenericFallback,  // fallback
+  }, {{
+    // optional .exec.shared.RpcChannel channel = 2 [default = BIT_DATA];
+    {::_pbi::TcParser::FastEr0S1,
+     {16, 1, 2, PROTOBUF_FIELD_OFFSET(BitClientHandshake, _impl_.channel_)}},
+    // optional int32 rpc_version = 1;
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(BitClientHandshake, _impl_.rpc_version_), 0>(),
+     {8, 0, 0, PROTOBUF_FIELD_OFFSET(BitClientHandshake, _impl_.rpc_version_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // optional int32 rpc_version = 1;
+    {PROTOBUF_FIELD_OFFSET(BitClientHandshake, _impl_.rpc_version_), _Internal::kHasBitsOffset + 0, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kInt32)},
+    // optional .exec.shared.RpcChannel channel = 2 [default = BIT_DATA];
+    {PROTOBUF_FIELD_OFFSET(BitClientHandshake, _impl_.channel_), _Internal::kHasBitsOffset + 1, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kEnumRange)},
+  }}, {{
+    {0, 3},
+  }}, {{
+  }},
+};
+
+::uint8_t* BitClientHandshake::_InternalSerialize(
+    ::uint8_t* target,
+    ::google::protobuf::io::EpsCopyOutputStream* stream) const {
   // @@protoc_insertion_point(serialize_to_array_start:exec.bit.data.BitClientHandshake)
-  uint32_t cached_has_bits = 0;
-  (void) cached_has_bits;
+  ::uint32_t cached_has_bits = 0;
+  (void)cached_has_bits;
 
   cached_has_bits = _impl_._has_bits_[0];
   // optional int32 rpc_version = 1;
   if (cached_has_bits & 0x00000001u) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteInt32ToArray(1, this->_internal_rpc_version(), target);
+    target = ::google::protobuf::internal::WireFormatLite::
+        WriteInt32ToArrayWithField<1>(
+            stream, this->_internal_rpc_version(), target);
   }
 
   // optional .exec.shared.RpcChannel channel = 2 [default = BIT_DATA];
   if (cached_has_bits & 0x00000002u) {
     target = stream->EnsureSpace(target);
     target = ::_pbi::WireFormatLite::WriteEnumToArray(
-      2, this->_internal_channel(), target);
+        2, this->_internal_channel(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
-        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:exec.bit.data.BitClientHandshake)
   return target;
 }
 
-size_t BitClientHandshake::ByteSizeLong() const {
+::size_t BitClientHandshake::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:exec.bit.data.BitClientHandshake)
-  size_t total_size = 0;
+  ::size_t total_size = 0;
 
-  uint32_t cached_has_bits = 0;
+  ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
@@ -445,32 +468,34 @@ size_t BitClientHandshake::ByteSizeLong() const {
   if (cached_has_bits & 0x00000003u) {
     // optional int32 rpc_version = 1;
     if (cached_has_bits & 0x00000001u) {
-      total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_rpc_version());
+      total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(
+          this->_internal_rpc_version());
     }
 
     // optional .exec.shared.RpcChannel channel = 2 [default = BIT_DATA];
     if (cached_has_bits & 0x00000002u) {
       total_size += 1 +
-        ::_pbi::WireFormatLite::EnumSize(this->_internal_channel());
+                    ::_pbi::WireFormatLite::EnumSize(this->_internal_channel());
     }
 
   }
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData BitClientHandshake::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
-    BitClientHandshake::MergeImpl
+const ::google::protobuf::Message::ClassData BitClientHandshake::_class_data_ = {
+    BitClientHandshake::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
 };
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*BitClientHandshake::GetClassData() const { return &_class_data_; }
+const ::google::protobuf::Message::ClassData* BitClientHandshake::GetClassData() const {
+  return &_class_data_;
+}
 
-
-void BitClientHandshake::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+void BitClientHandshake::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<BitClientHandshake*>(&to_msg);
   auto& from = static_cast<const BitClientHandshake&>(from_msg);
   // @@protoc_insertion_point(class_specific_merge_from_start:exec.bit.data.BitClientHandshake)
-  GOOGLE_DCHECK_NE(&from, _this);
-  uint32_t cached_has_bits = 0;
+  ABSL_DCHECK_NE(&from, _this);
+  ::uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
   cached_has_bits = from._impl_._has_bits_[0];
@@ -483,7 +508,7 @@ void BitClientHandshake::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, con
     }
     _this->_impl_._has_bits_[0] |= cached_has_bits;
   }
-  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
 }
 
 void BitClientHandshake::CopyFrom(const BitClientHandshake& from) {
@@ -493,229 +518,223 @@ void BitClientHandshake::CopyFrom(const BitClientHandshake& from) {
   MergeFrom(from);
 }
 
-bool BitClientHandshake::IsInitialized() const {
+PROTOBUF_NOINLINE bool BitClientHandshake::IsInitialized() const {
   return true;
 }
 
-void BitClientHandshake::InternalSwap(BitClientHandshake* other) {
+::_pbi::CachedSize* BitClientHandshake::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void BitClientHandshake::InternalSwap(BitClientHandshake* PROTOBUF_RESTRICT other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
-  swap(_impl_.rpc_version_, other->_impl_.rpc_version_);
-  swap(_impl_.channel_, other->_impl_.channel_);
+  ::google::protobuf::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(BitClientHandshake, _impl_.channel_)
+      + sizeof(BitClientHandshake::_impl_.channel_)
+      - PROTOBUF_FIELD_OFFSET(BitClientHandshake, _impl_.rpc_version_)>(
+          reinterpret_cast<char*>(&_impl_.rpc_version_),
+          reinterpret_cast<char*>(&other->_impl_.rpc_version_));
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata BitClientHandshake::GetMetadata() const {
+::google::protobuf::Metadata BitClientHandshake::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_BitData_2eproto_getter, &descriptor_table_BitData_2eproto_once,
       file_level_metadata_BitData_2eproto[0]);
 }
-
 // ===================================================================
 
 class BitServerHandshake::_Internal {
  public:
   using HasBits = decltype(std::declval<BitServerHandshake>()._impl_._has_bits_);
+  static constexpr ::int32_t kHasBitsOffset =
+    8 * PROTOBUF_FIELD_OFFSET(BitServerHandshake, _impl_._has_bits_);
   static void set_has_rpc_version(HasBits* has_bits) {
     (*has_bits)[0] |= 1u;
   }
 };
 
-BitServerHandshake::BitServerHandshake(::PROTOBUF_NAMESPACE_ID::Arena* arena,
-                         bool is_message_owned)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
-  SharedCtor(arena, is_message_owned);
+BitServerHandshake::BitServerHandshake(::google::protobuf::Arena* arena)
+    : ::google::protobuf::Message(arena) {
+  SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:exec.bit.data.BitServerHandshake)
 }
-BitServerHandshake::BitServerHandshake(const BitServerHandshake& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message() {
-  BitServerHandshake* const _this = this; (void)_this;
-  new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){from._impl_._has_bits_}
-    , /*decltype(_impl_._cached_size_)*/{}
-    , decltype(_impl_.authenticationmechanisms_){from._impl_.authenticationmechanisms_}
-    , decltype(_impl_.rpc_version_){}};
+inline PROTOBUF_NDEBUG_INLINE BitServerHandshake::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
+    const Impl_& from)
+      : _has_bits_{from._has_bits_},
+        _cached_size_{0},
+        authenticationmechanisms_{visibility, arena, from.authenticationmechanisms_} {}
 
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  _this->_impl_.rpc_version_ = from._impl_.rpc_version_;
+BitServerHandshake::BitServerHandshake(
+    ::google::protobuf::Arena* arena,
+    const BitServerHandshake& from)
+    : ::google::protobuf::Message(arena) {
+  BitServerHandshake* const _this = this;
+  (void)_this;
+  _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
+      from._internal_metadata_);
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
+  _impl_.rpc_version_ = from._impl_.rpc_version_;
+
   // @@protoc_insertion_point(copy_constructor:exec.bit.data.BitServerHandshake)
 }
+inline PROTOBUF_NDEBUG_INLINE BitServerHandshake::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility,
+    ::google::protobuf::Arena* arena)
+      : _cached_size_{0},
+        authenticationmechanisms_{visibility, arena} {}
 
-inline void BitServerHandshake::SharedCtor(
-    ::_pb::Arena* arena, bool is_message_owned) {
-  (void)arena;
-  (void)is_message_owned;
-  new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){}
-    , /*decltype(_impl_._cached_size_)*/{}
-    , decltype(_impl_.authenticationmechanisms_){arena}
-    , decltype(_impl_.rpc_version_){0}
-  };
+inline void BitServerHandshake::SharedCtor(::_pb::Arena* arena) {
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  _impl_.rpc_version_ = {};
 }
-
 BitServerHandshake::~BitServerHandshake() {
   // @@protoc_insertion_point(destructor:exec.bit.data.BitServerHandshake)
-  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
-  (void)arena;
-    return;
-  }
+  _internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
   SharedDtor();
 }
-
 inline void BitServerHandshake::SharedDtor() {
-  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
-  _impl_.authenticationmechanisms_.~RepeatedPtrField();
+  ABSL_DCHECK(GetArena() == nullptr);
+  _impl_.~Impl_();
 }
 
-void BitServerHandshake::SetCachedSize(int size) const {
-  _impl_._cached_size_.Set(size);
-}
-
-void BitServerHandshake::Clear() {
+PROTOBUF_NOINLINE void BitServerHandshake::Clear() {
 // @@protoc_insertion_point(message_clear_start:exec.bit.data.BitServerHandshake)
-  uint32_t cached_has_bits = 0;
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
   _impl_.authenticationmechanisms_.Clear();
   _impl_.rpc_version_ = 0;
   _impl_._has_bits_.Clear();
-  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+  _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
 
-const char* BitServerHandshake::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
-#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  _Internal::HasBits has_bits{};
-  while (!ctx->Done(&ptr)) {
-    uint32_t tag;
-    ptr = ::_pbi::ReadTag(ptr, &tag);
-    switch (tag >> 3) {
-      // optional int32 rpc_version = 1;
-      case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
-          _Internal::set_has_rpc_version(&has_bits);
-          _impl_.rpc_version_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // repeated string authenticationMechanisms = 2;
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
-          ptr -= 1;
-          do {
-            ptr += 1;
-            auto str = _internal_add_authenticationmechanisms();
-            ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
-            CHK_(ptr);
-            #ifndef NDEBUG
-            ::_pbi::VerifyUTF8(str, "exec.bit.data.BitServerHandshake.authenticationMechanisms");
-            #endif  // !NDEBUG
-            if (!ctx->DataAvailable(ptr)) break;
-          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<18>(ptr));
-        } else
-          goto handle_unusual;
-        continue;
-      default:
-        goto handle_unusual;
-    }  // switch
-  handle_unusual:
-    if ((tag == 0) || ((tag & 7) == 4)) {
-      CHK_(ptr);
-      ctx->SetLastTag(tag);
-      goto message_done;
-    }
-    ptr = UnknownFieldParse(
-        tag,
-        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
-        ptr, ctx);
-    CHK_(ptr != nullptr);
-  }  // while
-message_done:
-  _impl_._has_bits_.Or(has_bits);
+const char* BitServerHandshake::_InternalParse(
+    const char* ptr, ::_pbi::ParseContext* ctx) {
+  ptr = ::_pbi::TcParser::ParseLoop(this, ptr, ctx, &_table_.header);
   return ptr;
-failure:
-  ptr = nullptr;
-  goto message_done;
-#undef CHK_
 }
 
-uint8_t* BitServerHandshake::_InternalSerialize(
-    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<1, 2, 0, 65, 2> BitServerHandshake::_table_ = {
+  {
+    PROTOBUF_FIELD_OFFSET(BitServerHandshake, _impl_._has_bits_),
+    0, // no _extensions_
+    2, 8,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967292,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    2,  // num_field_entries
+    0,  // num_aux_entries
+    offsetof(decltype(_table_), field_names),  // no aux_entries
+    &_BitServerHandshake_default_instance_._instance,
+    ::_pbi::TcParser::GenericFallback,  // fallback
+  }, {{
+    // repeated string authenticationMechanisms = 2;
+    {::_pbi::TcParser::FastSR1,
+     {18, 63, 0, PROTOBUF_FIELD_OFFSET(BitServerHandshake, _impl_.authenticationmechanisms_)}},
+    // optional int32 rpc_version = 1;
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(BitServerHandshake, _impl_.rpc_version_), 0>(),
+     {8, 0, 0, PROTOBUF_FIELD_OFFSET(BitServerHandshake, _impl_.rpc_version_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // optional int32 rpc_version = 1;
+    {PROTOBUF_FIELD_OFFSET(BitServerHandshake, _impl_.rpc_version_), _Internal::kHasBitsOffset + 0, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kInt32)},
+    // repeated string authenticationMechanisms = 2;
+    {PROTOBUF_FIELD_OFFSET(BitServerHandshake, _impl_.authenticationmechanisms_), -1, 0,
+    (0 | ::_fl::kFcRepeated | ::_fl::kRawString | ::_fl::kRepSString)},
+  }},
+  // no aux_entries
+  {{
+    "\40\0\30\0\0\0\0\0"
+    "exec.bit.data.BitServerHandshake"
+    "authenticationMechanisms"
+  }},
+};
+
+::uint8_t* BitServerHandshake::_InternalSerialize(
+    ::uint8_t* target,
+    ::google::protobuf::io::EpsCopyOutputStream* stream) const {
   // @@protoc_insertion_point(serialize_to_array_start:exec.bit.data.BitServerHandshake)
-  uint32_t cached_has_bits = 0;
-  (void) cached_has_bits;
+  ::uint32_t cached_has_bits = 0;
+  (void)cached_has_bits;
 
   cached_has_bits = _impl_._has_bits_[0];
   // optional int32 rpc_version = 1;
   if (cached_has_bits & 0x00000001u) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteInt32ToArray(1, this->_internal_rpc_version(), target);
+    target = ::google::protobuf::internal::WireFormatLite::
+        WriteInt32ToArrayWithField<1>(
+            stream, this->_internal_rpc_version(), target);
   }
 
   // repeated string authenticationMechanisms = 2;
-  for (int i = 0, n = this->_internal_authenticationmechanisms_size(); i < n; i++) {
-    const auto& s = this->_internal_authenticationmechanisms(i);
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::VerifyUTF8StringNamedField(
-      s.data(), static_cast<int>(s.length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SERIALIZE,
-      "exec.bit.data.BitServerHandshake.authenticationMechanisms");
+  for (int i = 0, n = this->_internal_authenticationmechanisms_size(); i < n; ++i) {
+    const auto& s = this->_internal_authenticationmechanisms().Get(i);
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(s.data(), static_cast<int>(s.length()), ::google::protobuf::internal::WireFormat::SERIALIZE,
+                                "exec.bit.data.BitServerHandshake.authenticationMechanisms");
     target = stream->WriteString(2, s, target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
-        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:exec.bit.data.BitServerHandshake)
   return target;
 }
 
-size_t BitServerHandshake::ByteSizeLong() const {
+::size_t BitServerHandshake::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:exec.bit.data.BitServerHandshake)
-  size_t total_size = 0;
+  ::size_t total_size = 0;
 
-  uint32_t cached_has_bits = 0;
+  ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
   // repeated string authenticationMechanisms = 2;
-  total_size += 1 *
-      ::PROTOBUF_NAMESPACE_ID::internal::FromIntSize(_impl_.authenticationmechanisms_.size());
-  for (int i = 0, n = _impl_.authenticationmechanisms_.size(); i < n; i++) {
-    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-      _impl_.authenticationmechanisms_.Get(i));
+  total_size += 1 * ::google::protobuf::internal::FromIntSize(_internal_authenticationmechanisms().size());
+  for (int i = 0, n = _internal_authenticationmechanisms().size(); i < n; ++i) {
+    total_size += ::google::protobuf::internal::WireFormatLite::StringSize(
+        _internal_authenticationmechanisms().Get(i));
   }
-
   // optional int32 rpc_version = 1;
   cached_has_bits = _impl_._has_bits_[0];
   if (cached_has_bits & 0x00000001u) {
-    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_rpc_version());
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(
+        this->_internal_rpc_version());
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData BitServerHandshake::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
-    BitServerHandshake::MergeImpl
+const ::google::protobuf::Message::ClassData BitServerHandshake::_class_data_ = {
+    BitServerHandshake::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
 };
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*BitServerHandshake::GetClassData() const { return &_class_data_; }
+const ::google::protobuf::Message::ClassData* BitServerHandshake::GetClassData() const {
+  return &_class_data_;
+}
 
-
-void BitServerHandshake::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+void BitServerHandshake::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<BitServerHandshake*>(&to_msg);
   auto& from = static_cast<const BitServerHandshake&>(from_msg);
   // @@protoc_insertion_point(class_specific_merge_from_start:exec.bit.data.BitServerHandshake)
-  GOOGLE_DCHECK_NE(&from, _this);
-  uint32_t cached_has_bits = 0;
+  ABSL_DCHECK_NE(&from, _this);
+  ::uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  _this->_impl_.authenticationmechanisms_.MergeFrom(from._impl_.authenticationmechanisms_);
-  if (from._internal_has_rpc_version()) {
+  _this->_internal_mutable_authenticationmechanisms()->MergeFrom(from._internal_authenticationmechanisms());
+  if ((from._impl_._has_bits_[0] & 0x00000001u) != 0) {
     _this->_internal_set_rpc_version(from._internal_rpc_version());
   }
-  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
 }
 
 void BitServerHandshake::CopyFrom(const BitServerHandshake& from) {
@@ -725,29 +744,33 @@ void BitServerHandshake::CopyFrom(const BitServerHandshake& from) {
   MergeFrom(from);
 }
 
-bool BitServerHandshake::IsInitialized() const {
+PROTOBUF_NOINLINE bool BitServerHandshake::IsInitialized() const {
   return true;
 }
 
-void BitServerHandshake::InternalSwap(BitServerHandshake* other) {
+::_pbi::CachedSize* BitServerHandshake::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void BitServerHandshake::InternalSwap(BitServerHandshake* PROTOBUF_RESTRICT other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
   _impl_.authenticationmechanisms_.InternalSwap(&other->_impl_.authenticationmechanisms_);
-  swap(_impl_.rpc_version_, other->_impl_.rpc_version_);
+        swap(_impl_.rpc_version_, other->_impl_.rpc_version_);
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata BitServerHandshake::GetMetadata() const {
+::google::protobuf::Metadata BitServerHandshake::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_BitData_2eproto_getter, &descriptor_table_BitData_2eproto_once,
       file_level_metadata_BitData_2eproto[1]);
 }
-
 // ===================================================================
 
 class FragmentRecordBatch::_Internal {
  public:
   using HasBits = decltype(std::declval<FragmentRecordBatch>()._impl_._has_bits_);
+  static constexpr ::int32_t kHasBitsOffset =
+    8 * PROTOBUF_FIELD_OFFSET(FragmentRecordBatch, _impl_._has_bits_);
   static const ::exec::shared::QueryId& query_id(const FragmentRecordBatch* msg);
   static void set_has_query_id(HasBits* has_bits) {
     (*has_bits)[0] |= 1u;
@@ -770,95 +793,91 @@ class FragmentRecordBatch::_Internal {
   }
 };
 
-const ::exec::shared::QueryId&
-FragmentRecordBatch::_Internal::query_id(const FragmentRecordBatch* msg) {
+const ::exec::shared::QueryId& FragmentRecordBatch::_Internal::query_id(const FragmentRecordBatch* msg) {
   return *msg->_impl_.query_id_;
 }
-const ::exec::shared::RecordBatchDef&
-FragmentRecordBatch::_Internal::def(const FragmentRecordBatch* msg) {
+const ::exec::shared::RecordBatchDef& FragmentRecordBatch::_Internal::def(const FragmentRecordBatch* msg) {
   return *msg->_impl_.def_;
 }
 void FragmentRecordBatch::clear_query_id() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   if (_impl_.query_id_ != nullptr) _impl_.query_id_->Clear();
   _impl_._has_bits_[0] &= ~0x00000001u;
 }
 void FragmentRecordBatch::clear_def() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   if (_impl_.def_ != nullptr) _impl_.def_->Clear();
   _impl_._has_bits_[0] &= ~0x00000002u;
 }
-FragmentRecordBatch::FragmentRecordBatch(::PROTOBUF_NAMESPACE_ID::Arena* arena,
-                         bool is_message_owned)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
-  SharedCtor(arena, is_message_owned);
+FragmentRecordBatch::FragmentRecordBatch(::google::protobuf::Arena* arena)
+    : ::google::protobuf::Message(arena) {
+  SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:exec.bit.data.FragmentRecordBatch)
 }
-FragmentRecordBatch::FragmentRecordBatch(const FragmentRecordBatch& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message() {
-  FragmentRecordBatch* const _this = this; (void)_this;
-  new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){from._impl_._has_bits_}
-    , /*decltype(_impl_._cached_size_)*/{}
-    , decltype(_impl_.receiving_minor_fragment_id_){from._impl_.receiving_minor_fragment_id_}
-    , decltype(_impl_.query_id_){nullptr}
-    , decltype(_impl_.def_){nullptr}
-    , decltype(_impl_.receiving_major_fragment_id_){}
-    , decltype(_impl_.sending_major_fragment_id_){}
-    , decltype(_impl_.sending_minor_fragment_id_){}
-    , decltype(_impl_.islastbatch_){}};
+inline PROTOBUF_NDEBUG_INLINE FragmentRecordBatch::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
+    const Impl_& from)
+      : _has_bits_{from._has_bits_},
+        _cached_size_{0},
+        receiving_minor_fragment_id_{visibility, arena, from.receiving_minor_fragment_id_} {}
 
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  if (from._internal_has_query_id()) {
-    _this->_impl_.query_id_ = new ::exec::shared::QueryId(*from._impl_.query_id_);
-  }
-  if (from._internal_has_def()) {
-    _this->_impl_.def_ = new ::exec::shared::RecordBatchDef(*from._impl_.def_);
-  }
-  ::memcpy(&_impl_.receiving_major_fragment_id_, &from._impl_.receiving_major_fragment_id_,
-    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.islastbatch_) -
-    reinterpret_cast<char*>(&_impl_.receiving_major_fragment_id_)) + sizeof(_impl_.islastbatch_));
+FragmentRecordBatch::FragmentRecordBatch(
+    ::google::protobuf::Arena* arena,
+    const FragmentRecordBatch& from)
+    : ::google::protobuf::Message(arena) {
+  FragmentRecordBatch* const _this = this;
+  (void)_this;
+  _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
+      from._internal_metadata_);
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
+  ::uint32_t cached_has_bits = _impl_._has_bits_[0];
+  _impl_.query_id_ = (cached_has_bits & 0x00000001u)
+                ? CreateMaybeMessage<::exec::shared::QueryId>(arena, *from._impl_.query_id_)
+                : nullptr;
+  _impl_.def_ = (cached_has_bits & 0x00000002u)
+                ? CreateMaybeMessage<::exec::shared::RecordBatchDef>(arena, *from._impl_.def_)
+                : nullptr;
+  ::memcpy(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, receiving_major_fragment_id_),
+           reinterpret_cast<const char *>(&from._impl_) +
+               offsetof(Impl_, receiving_major_fragment_id_),
+           offsetof(Impl_, islastbatch_) -
+               offsetof(Impl_, receiving_major_fragment_id_) +
+               sizeof(Impl_::islastbatch_));
+
   // @@protoc_insertion_point(copy_constructor:exec.bit.data.FragmentRecordBatch)
 }
+inline PROTOBUF_NDEBUG_INLINE FragmentRecordBatch::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility,
+    ::google::protobuf::Arena* arena)
+      : _cached_size_{0},
+        receiving_minor_fragment_id_{visibility, arena} {}
 
-inline void FragmentRecordBatch::SharedCtor(
-    ::_pb::Arena* arena, bool is_message_owned) {
-  (void)arena;
-  (void)is_message_owned;
-  new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){}
-    , /*decltype(_impl_._cached_size_)*/{}
-    , decltype(_impl_.receiving_minor_fragment_id_){arena}
-    , decltype(_impl_.query_id_){nullptr}
-    , decltype(_impl_.def_){nullptr}
-    , decltype(_impl_.receiving_major_fragment_id_){0}
-    , decltype(_impl_.sending_major_fragment_id_){0}
-    , decltype(_impl_.sending_minor_fragment_id_){0}
-    , decltype(_impl_.islastbatch_){false}
-  };
+inline void FragmentRecordBatch::SharedCtor(::_pb::Arena* arena) {
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  ::memset(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, query_id_),
+           0,
+           offsetof(Impl_, islastbatch_) -
+               offsetof(Impl_, query_id_) +
+               sizeof(Impl_::islastbatch_));
 }
-
 FragmentRecordBatch::~FragmentRecordBatch() {
   // @@protoc_insertion_point(destructor:exec.bit.data.FragmentRecordBatch)
-  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
-  (void)arena;
-    return;
-  }
+  _internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
   SharedDtor();
 }
-
 inline void FragmentRecordBatch::SharedDtor() {
-  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
-  _impl_.receiving_minor_fragment_id_.~RepeatedField();
-  if (this != internal_default_instance()) delete _impl_.query_id_;
-  if (this != internal_default_instance()) delete _impl_.def_;
+  ABSL_DCHECK(GetArena() == nullptr);
+  delete _impl_.query_id_;
+  delete _impl_.def_;
+  _impl_.~Impl_();
 }
 
-void FragmentRecordBatch::SetCachedSize(int size) const {
-  _impl_._cached_size_.Set(size);
-}
-
-void FragmentRecordBatch::Clear() {
+PROTOBUF_NOINLINE void FragmentRecordBatch::Clear() {
 // @@protoc_insertion_point(message_clear_start:exec.bit.data.FragmentRecordBatch)
-  uint32_t cached_has_bits = 0;
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
@@ -866,254 +885,240 @@ void FragmentRecordBatch::Clear() {
   cached_has_bits = _impl_._has_bits_[0];
   if (cached_has_bits & 0x00000003u) {
     if (cached_has_bits & 0x00000001u) {
-      GOOGLE_DCHECK(_impl_.query_id_ != nullptr);
+      ABSL_DCHECK(_impl_.query_id_ != nullptr);
       _impl_.query_id_->Clear();
     }
     if (cached_has_bits & 0x00000002u) {
-      GOOGLE_DCHECK(_impl_.def_ != nullptr);
+      ABSL_DCHECK(_impl_.def_ != nullptr);
       _impl_.def_->Clear();
     }
   }
   if (cached_has_bits & 0x0000003cu) {
-    ::memset(&_impl_.receiving_major_fragment_id_, 0, static_cast<size_t>(
+    ::memset(&_impl_.receiving_major_fragment_id_, 0, static_cast<::size_t>(
         reinterpret_cast<char*>(&_impl_.islastbatch_) -
         reinterpret_cast<char*>(&_impl_.receiving_major_fragment_id_)) + sizeof(_impl_.islastbatch_));
   }
   _impl_._has_bits_.Clear();
-  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+  _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
 
-const char* FragmentRecordBatch::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
-#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  _Internal::HasBits has_bits{};
-  while (!ctx->Done(&ptr)) {
-    uint32_t tag;
-    ptr = ::_pbi::ReadTag(ptr, &tag);
-    switch (tag >> 3) {
-      // optional .exec.shared.QueryId query_id = 1;
-      case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
-          ptr = ctx->ParseMessage(_internal_mutable_query_id(), ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // optional int32 receiving_major_fragment_id = 2;
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
-          _Internal::set_has_receiving_major_fragment_id(&has_bits);
-          _impl_.receiving_major_fragment_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // repeated int32 receiving_minor_fragment_id = 3;
-      case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
-          ptr -= 1;
-          do {
-            ptr += 1;
-            _internal_add_receiving_minor_fragment_id(::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr));
-            CHK_(ptr);
-            if (!ctx->DataAvailable(ptr)) break;
-          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<24>(ptr));
-        } else if (static_cast<uint8_t>(tag) == 26) {
-          ptr = ::PROTOBUF_NAMESPACE_ID::internal::PackedInt32Parser(_internal_mutable_receiving_minor_fragment_id(), ptr, ctx);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // optional int32 sending_major_fragment_id = 4;
-      case 4:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 32)) {
-          _Internal::set_has_sending_major_fragment_id(&has_bits);
-          _impl_.sending_major_fragment_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // optional int32 sending_minor_fragment_id = 5;
-      case 5:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 40)) {
-          _Internal::set_has_sending_minor_fragment_id(&has_bits);
-          _impl_.sending_minor_fragment_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // optional .exec.shared.RecordBatchDef def = 6;
-      case 6:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 50)) {
-          ptr = ctx->ParseMessage(_internal_mutable_def(), ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // optional bool isLastBatch = 7;
-      case 7:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 56)) {
-          _Internal::set_has_islastbatch(&has_bits);
-          _impl_.islastbatch_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      default:
-        goto handle_unusual;
-    }  // switch
-  handle_unusual:
-    if ((tag == 0) || ((tag & 7) == 4)) {
-      CHK_(ptr);
-      ctx->SetLastTag(tag);
-      goto message_done;
-    }
-    ptr = UnknownFieldParse(
-        tag,
-        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
-        ptr, ctx);
-    CHK_(ptr != nullptr);
-  }  // while
-message_done:
-  _impl_._has_bits_.Or(has_bits);
+const char* FragmentRecordBatch::_InternalParse(
+    const char* ptr, ::_pbi::ParseContext* ctx) {
+  ptr = ::_pbi::TcParser::ParseLoop(this, ptr, ctx, &_table_.header);
   return ptr;
-failure:
-  ptr = nullptr;
-  goto message_done;
-#undef CHK_
 }
 
-uint8_t* FragmentRecordBatch::_InternalSerialize(
-    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<3, 7, 2, 0, 2> FragmentRecordBatch::_table_ = {
+  {
+    PROTOBUF_FIELD_OFFSET(FragmentRecordBatch, _impl_._has_bits_),
+    0, // no _extensions_
+    7, 56,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967168,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    7,  // num_field_entries
+    2,  // num_aux_entries
+    offsetof(decltype(_table_), aux_entries),
+    &_FragmentRecordBatch_default_instance_._instance,
+    ::_pbi::TcParser::GenericFallback,  // fallback
+  }, {{
+    {::_pbi::TcParser::MiniParse, {}},
+    // optional .exec.shared.QueryId query_id = 1;
+    {::_pbi::TcParser::FastMtS1,
+     {10, 0, 0, PROTOBUF_FIELD_OFFSET(FragmentRecordBatch, _impl_.query_id_)}},
+    // optional int32 receiving_major_fragment_id = 2;
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(FragmentRecordBatch, _impl_.receiving_major_fragment_id_), 2>(),
+     {16, 2, 0, PROTOBUF_FIELD_OFFSET(FragmentRecordBatch, _impl_.receiving_major_fragment_id_)}},
+    // repeated int32 receiving_minor_fragment_id = 3;
+    {::_pbi::TcParser::FastV32R1,
+     {24, 63, 0, PROTOBUF_FIELD_OFFSET(FragmentRecordBatch, _impl_.receiving_minor_fragment_id_)}},
+    // optional int32 sending_major_fragment_id = 4;
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(FragmentRecordBatch, _impl_.sending_major_fragment_id_), 3>(),
+     {32, 3, 0, PROTOBUF_FIELD_OFFSET(FragmentRecordBatch, _impl_.sending_major_fragment_id_)}},
+    // optional int32 sending_minor_fragment_id = 5;
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(FragmentRecordBatch, _impl_.sending_minor_fragment_id_), 4>(),
+     {40, 4, 0, PROTOBUF_FIELD_OFFSET(FragmentRecordBatch, _impl_.sending_minor_fragment_id_)}},
+    // optional .exec.shared.RecordBatchDef def = 6;
+    {::_pbi::TcParser::FastMtS1,
+     {50, 1, 1, PROTOBUF_FIELD_OFFSET(FragmentRecordBatch, _impl_.def_)}},
+    // optional bool isLastBatch = 7;
+    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(FragmentRecordBatch, _impl_.islastbatch_), 5>(),
+     {56, 5, 0, PROTOBUF_FIELD_OFFSET(FragmentRecordBatch, _impl_.islastbatch_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // optional .exec.shared.QueryId query_id = 1;
+    {PROTOBUF_FIELD_OFFSET(FragmentRecordBatch, _impl_.query_id_), _Internal::kHasBitsOffset + 0, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    // optional int32 receiving_major_fragment_id = 2;
+    {PROTOBUF_FIELD_OFFSET(FragmentRecordBatch, _impl_.receiving_major_fragment_id_), _Internal::kHasBitsOffset + 2, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kInt32)},
+    // repeated int32 receiving_minor_fragment_id = 3;
+    {PROTOBUF_FIELD_OFFSET(FragmentRecordBatch, _impl_.receiving_minor_fragment_id_), -1, 0,
+    (0 | ::_fl::kFcRepeated | ::_fl::kInt32)},
+    // optional int32 sending_major_fragment_id = 4;
+    {PROTOBUF_FIELD_OFFSET(FragmentRecordBatch, _impl_.sending_major_fragment_id_), _Internal::kHasBitsOffset + 3, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kInt32)},
+    // optional int32 sending_minor_fragment_id = 5;
+    {PROTOBUF_FIELD_OFFSET(FragmentRecordBatch, _impl_.sending_minor_fragment_id_), _Internal::kHasBitsOffset + 4, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kInt32)},
+    // optional .exec.shared.RecordBatchDef def = 6;
+    {PROTOBUF_FIELD_OFFSET(FragmentRecordBatch, _impl_.def_), _Internal::kHasBitsOffset + 1, 1,
+    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    // optional bool isLastBatch = 7;
+    {PROTOBUF_FIELD_OFFSET(FragmentRecordBatch, _impl_.islastbatch_), _Internal::kHasBitsOffset + 5, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kBool)},
+  }}, {{
+    {::_pbi::TcParser::GetTable<::exec::shared::QueryId>()},
+    {::_pbi::TcParser::GetTable<::exec::shared::RecordBatchDef>()},
+  }}, {{
+  }},
+};
+
+::uint8_t* FragmentRecordBatch::_InternalSerialize(
+    ::uint8_t* target,
+    ::google::protobuf::io::EpsCopyOutputStream* stream) const {
   // @@protoc_insertion_point(serialize_to_array_start:exec.bit.data.FragmentRecordBatch)
-  uint32_t cached_has_bits = 0;
-  (void) cached_has_bits;
+  ::uint32_t cached_has_bits = 0;
+  (void)cached_has_bits;
 
   cached_has_bits = _impl_._has_bits_[0];
   // optional .exec.shared.QueryId query_id = 1;
   if (cached_has_bits & 0x00000001u) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(1, _Internal::query_id(this),
+    target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+        1, _Internal::query_id(this),
         _Internal::query_id(this).GetCachedSize(), target, stream);
   }
 
   // optional int32 receiving_major_fragment_id = 2;
   if (cached_has_bits & 0x00000004u) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteInt32ToArray(2, this->_internal_receiving_major_fragment_id(), target);
+    target = ::google::protobuf::internal::WireFormatLite::
+        WriteInt32ToArrayWithField<2>(
+            stream, this->_internal_receiving_major_fragment_id(), target);
   }
 
   // repeated int32 receiving_minor_fragment_id = 3;
-  for (int i = 0, n = this->_internal_receiving_minor_fragment_id_size(); i < n; i++) {
+  for (int i = 0, n = this->_internal_receiving_minor_fragment_id_size(); i < n; ++i) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteInt32ToArray(3, this->_internal_receiving_minor_fragment_id(i), target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(
+        3, this->_internal_receiving_minor_fragment_id().Get(i), target);
   }
 
   // optional int32 sending_major_fragment_id = 4;
   if (cached_has_bits & 0x00000008u) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteInt32ToArray(4, this->_internal_sending_major_fragment_id(), target);
+    target = ::google::protobuf::internal::WireFormatLite::
+        WriteInt32ToArrayWithField<4>(
+            stream, this->_internal_sending_major_fragment_id(), target);
   }
 
   // optional int32 sending_minor_fragment_id = 5;
   if (cached_has_bits & 0x00000010u) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteInt32ToArray(5, this->_internal_sending_minor_fragment_id(), target);
+    target = ::google::protobuf::internal::WireFormatLite::
+        WriteInt32ToArrayWithField<5>(
+            stream, this->_internal_sending_minor_fragment_id(), target);
   }
 
   // optional .exec.shared.RecordBatchDef def = 6;
   if (cached_has_bits & 0x00000002u) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(6, _Internal::def(this),
+    target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+        6, _Internal::def(this),
         _Internal::def(this).GetCachedSize(), target, stream);
   }
 
   // optional bool isLastBatch = 7;
   if (cached_has_bits & 0x00000020u) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteBoolToArray(7, this->_internal_islastbatch(), target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(
+        7, this->_internal_islastbatch(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
-        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:exec.bit.data.FragmentRecordBatch)
   return target;
 }
 
-size_t FragmentRecordBatch::ByteSizeLong() const {
+::size_t FragmentRecordBatch::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:exec.bit.data.FragmentRecordBatch)
-  size_t total_size = 0;
+  ::size_t total_size = 0;
 
-  uint32_t cached_has_bits = 0;
+  ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
   // repeated int32 receiving_minor_fragment_id = 3;
   {
-    size_t data_size = ::_pbi::WireFormatLite::
-      Int32Size(this->_impl_.receiving_minor_fragment_id_);
-    total_size += 1 *
-                  ::_pbi::FromIntSize(this->_internal_receiving_minor_fragment_id_size());
-    total_size += data_size;
+    std::size_t data_size = ::_pbi::WireFormatLite::Int32Size(
+        this->_internal_receiving_minor_fragment_id())
+    ;
+    std::size_t tag_size = std::size_t{1} *
+        ::_pbi::FromIntSize(this->_internal_receiving_minor_fragment_id_size());
+    ;
+    total_size += tag_size + data_size;
   }
-
   cached_has_bits = _impl_._has_bits_[0];
   if (cached_has_bits & 0x0000003fu) {
     // optional .exec.shared.QueryId query_id = 1;
     if (cached_has_bits & 0x00000001u) {
-      total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-          *_impl_.query_id_);
+      total_size +=
+          1 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.query_id_);
     }
 
     // optional .exec.shared.RecordBatchDef def = 6;
     if (cached_has_bits & 0x00000002u) {
-      total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-          *_impl_.def_);
+      total_size +=
+          1 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.def_);
     }
 
     // optional int32 receiving_major_fragment_id = 2;
     if (cached_has_bits & 0x00000004u) {
-      total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_receiving_major_fragment_id());
+      total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(
+          this->_internal_receiving_major_fragment_id());
     }
 
     // optional int32 sending_major_fragment_id = 4;
     if (cached_has_bits & 0x00000008u) {
-      total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_sending_major_fragment_id());
+      total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(
+          this->_internal_sending_major_fragment_id());
     }
 
     // optional int32 sending_minor_fragment_id = 5;
     if (cached_has_bits & 0x00000010u) {
-      total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_sending_minor_fragment_id());
+      total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(
+          this->_internal_sending_minor_fragment_id());
     }
 
     // optional bool isLastBatch = 7;
     if (cached_has_bits & 0x00000020u) {
-      total_size += 1 + 1;
+      total_size += 2;
     }
 
   }
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData FragmentRecordBatch::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
-    FragmentRecordBatch::MergeImpl
+const ::google::protobuf::Message::ClassData FragmentRecordBatch::_class_data_ = {
+    FragmentRecordBatch::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
 };
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*FragmentRecordBatch::GetClassData() const { return &_class_data_; }
+const ::google::protobuf::Message::ClassData* FragmentRecordBatch::GetClassData() const {
+  return &_class_data_;
+}
 
-
-void FragmentRecordBatch::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+void FragmentRecordBatch::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<FragmentRecordBatch*>(&to_msg);
   auto& from = static_cast<const FragmentRecordBatch&>(from_msg);
   // @@protoc_insertion_point(class_specific_merge_from_start:exec.bit.data.FragmentRecordBatch)
-  GOOGLE_DCHECK_NE(&from, _this);
-  uint32_t cached_has_bits = 0;
+  ABSL_DCHECK_NE(&from, _this);
+  ::uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  _this->_impl_.receiving_minor_fragment_id_.MergeFrom(from._impl_.receiving_minor_fragment_id_);
+  _this->_internal_mutable_receiving_minor_fragment_id()->MergeFrom(from._internal_receiving_minor_fragment_id());
   cached_has_bits = from._impl_._has_bits_[0];
   if (cached_has_bits & 0x0000003fu) {
     if (cached_has_bits & 0x00000001u) {
@@ -1138,7 +1143,7 @@ void FragmentRecordBatch::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, co
     }
     _this->_impl_._has_bits_[0] |= cached_has_bits;
   }
-  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
 }
 
 void FragmentRecordBatch::CopyFrom(const FragmentRecordBatch& from) {
@@ -1148,16 +1153,19 @@ void FragmentRecordBatch::CopyFrom(const FragmentRecordBatch& from) {
   MergeFrom(from);
 }
 
-bool FragmentRecordBatch::IsInitialized() const {
+PROTOBUF_NOINLINE bool FragmentRecordBatch::IsInitialized() const {
   return true;
 }
 
-void FragmentRecordBatch::InternalSwap(FragmentRecordBatch* other) {
+::_pbi::CachedSize* FragmentRecordBatch::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void FragmentRecordBatch::InternalSwap(FragmentRecordBatch* PROTOBUF_RESTRICT other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
   _impl_.receiving_minor_fragment_id_.InternalSwap(&other->_impl_.receiving_minor_fragment_id_);
-  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+  ::google::protobuf::internal::memswap<
       PROTOBUF_FIELD_OFFSET(FragmentRecordBatch, _impl_.islastbatch_)
       + sizeof(FragmentRecordBatch::_impl_.islastbatch_)
       - PROTOBUF_FIELD_OFFSET(FragmentRecordBatch, _impl_.query_id_)>(
@@ -1165,17 +1173,18 @@ void FragmentRecordBatch::InternalSwap(FragmentRecordBatch* other) {
           reinterpret_cast<char*>(&other->_impl_.query_id_));
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata FragmentRecordBatch::GetMetadata() const {
+::google::protobuf::Metadata FragmentRecordBatch::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_BitData_2eproto_getter, &descriptor_table_BitData_2eproto_once,
       file_level_metadata_BitData_2eproto[2]);
 }
-
 // ===================================================================
 
 class RuntimeFilterBDef::_Internal {
  public:
   using HasBits = decltype(std::declval<RuntimeFilterBDef>()._impl_._has_bits_);
+  static constexpr ::int32_t kHasBitsOffset =
+    8 * PROTOBUF_FIELD_OFFSET(RuntimeFilterBDef, _impl_._has_bits_);
   static const ::exec::shared::QueryId& query_id(const RuntimeFilterBDef* msg);
   static void set_has_query_id(HasBits* has_bits) {
     (*has_bits)[0] |= 1u;
@@ -1197,86 +1206,81 @@ class RuntimeFilterBDef::_Internal {
   }
 };
 
-const ::exec::shared::QueryId&
-RuntimeFilterBDef::_Internal::query_id(const RuntimeFilterBDef* msg) {
+const ::exec::shared::QueryId& RuntimeFilterBDef::_Internal::query_id(const RuntimeFilterBDef* msg) {
   return *msg->_impl_.query_id_;
 }
 void RuntimeFilterBDef::clear_query_id() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   if (_impl_.query_id_ != nullptr) _impl_.query_id_->Clear();
   _impl_._has_bits_[0] &= ~0x00000001u;
 }
-RuntimeFilterBDef::RuntimeFilterBDef(::PROTOBUF_NAMESPACE_ID::Arena* arena,
-                         bool is_message_owned)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
-  SharedCtor(arena, is_message_owned);
+RuntimeFilterBDef::RuntimeFilterBDef(::google::protobuf::Arena* arena)
+    : ::google::protobuf::Message(arena) {
+  SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:exec.bit.data.RuntimeFilterBDef)
 }
-RuntimeFilterBDef::RuntimeFilterBDef(const RuntimeFilterBDef& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message() {
-  RuntimeFilterBDef* const _this = this; (void)_this;
-  new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){from._impl_._has_bits_}
-    , /*decltype(_impl_._cached_size_)*/{}
-    , decltype(_impl_.bloom_filter_size_in_bytes_){from._impl_.bloom_filter_size_in_bytes_}
-    , decltype(_impl_.probe_fields_){from._impl_.probe_fields_}
-    , decltype(_impl_.query_id_){nullptr}
-    , decltype(_impl_.major_fragment_id_){}
-    , decltype(_impl_.minor_fragment_id_){}
-    , decltype(_impl_.to_foreman_){}
-    , decltype(_impl_.hj_op_id_){}
-    , decltype(_impl_.rf_identifier_){}};
+inline PROTOBUF_NDEBUG_INLINE RuntimeFilterBDef::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
+    const Impl_& from)
+      : _has_bits_{from._has_bits_},
+        _cached_size_{0},
+        bloom_filter_size_in_bytes_{visibility, arena, from.bloom_filter_size_in_bytes_},
+        probe_fields_{visibility, arena, from.probe_fields_} {}
 
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  if (from._internal_has_query_id()) {
-    _this->_impl_.query_id_ = new ::exec::shared::QueryId(*from._impl_.query_id_);
-  }
-  ::memcpy(&_impl_.major_fragment_id_, &from._impl_.major_fragment_id_,
-    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.rf_identifier_) -
-    reinterpret_cast<char*>(&_impl_.major_fragment_id_)) + sizeof(_impl_.rf_identifier_));
+RuntimeFilterBDef::RuntimeFilterBDef(
+    ::google::protobuf::Arena* arena,
+    const RuntimeFilterBDef& from)
+    : ::google::protobuf::Message(arena) {
+  RuntimeFilterBDef* const _this = this;
+  (void)_this;
+  _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
+      from._internal_metadata_);
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
+  ::uint32_t cached_has_bits = _impl_._has_bits_[0];
+  _impl_.query_id_ = (cached_has_bits & 0x00000001u)
+                ? CreateMaybeMessage<::exec::shared::QueryId>(arena, *from._impl_.query_id_)
+                : nullptr;
+  ::memcpy(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, major_fragment_id_),
+           reinterpret_cast<const char *>(&from._impl_) +
+               offsetof(Impl_, major_fragment_id_),
+           offsetof(Impl_, rf_identifier_) -
+               offsetof(Impl_, major_fragment_id_) +
+               sizeof(Impl_::rf_identifier_));
+
   // @@protoc_insertion_point(copy_constructor:exec.bit.data.RuntimeFilterBDef)
 }
+inline PROTOBUF_NDEBUG_INLINE RuntimeFilterBDef::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility,
+    ::google::protobuf::Arena* arena)
+      : _cached_size_{0},
+        bloom_filter_size_in_bytes_{visibility, arena},
+        probe_fields_{visibility, arena} {}
 
-inline void RuntimeFilterBDef::SharedCtor(
-    ::_pb::Arena* arena, bool is_message_owned) {
-  (void)arena;
-  (void)is_message_owned;
-  new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){}
-    , /*decltype(_impl_._cached_size_)*/{}
-    , decltype(_impl_.bloom_filter_size_in_bytes_){arena}
-    , decltype(_impl_.probe_fields_){arena}
-    , decltype(_impl_.query_id_){nullptr}
-    , decltype(_impl_.major_fragment_id_){0}
-    , decltype(_impl_.minor_fragment_id_){0}
-    , decltype(_impl_.to_foreman_){false}
-    , decltype(_impl_.hj_op_id_){0}
-    , decltype(_impl_.rf_identifier_){int64_t{0}}
-  };
+inline void RuntimeFilterBDef::SharedCtor(::_pb::Arena* arena) {
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  ::memset(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, query_id_),
+           0,
+           offsetof(Impl_, rf_identifier_) -
+               offsetof(Impl_, query_id_) +
+               sizeof(Impl_::rf_identifier_));
 }
-
 RuntimeFilterBDef::~RuntimeFilterBDef() {
   // @@protoc_insertion_point(destructor:exec.bit.data.RuntimeFilterBDef)
-  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
-  (void)arena;
-    return;
-  }
+  _internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
   SharedDtor();
 }
-
 inline void RuntimeFilterBDef::SharedDtor() {
-  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
-  _impl_.bloom_filter_size_in_bytes_.~RepeatedField();
-  _impl_.probe_fields_.~RepeatedPtrField();
-  if (this != internal_default_instance()) delete _impl_.query_id_;
+  ABSL_DCHECK(GetArena() == nullptr);
+  delete _impl_.query_id_;
+  _impl_.~Impl_();
 }
 
-void RuntimeFilterBDef::SetCachedSize(int size) const {
-  _impl_._cached_size_.Set(size);
-}
-
-void RuntimeFilterBDef::Clear() {
+PROTOBUF_NOINLINE void RuntimeFilterBDef::Clear() {
 // @@protoc_insertion_point(message_clear_start:exec.bit.data.RuntimeFilterBDef)
-  uint32_t cached_has_bits = 0;
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
@@ -1284,283 +1288,257 @@ void RuntimeFilterBDef::Clear() {
   _impl_.probe_fields_.Clear();
   cached_has_bits = _impl_._has_bits_[0];
   if (cached_has_bits & 0x00000001u) {
-    GOOGLE_DCHECK(_impl_.query_id_ != nullptr);
+    ABSL_DCHECK(_impl_.query_id_ != nullptr);
     _impl_.query_id_->Clear();
   }
   if (cached_has_bits & 0x0000003eu) {
-    ::memset(&_impl_.major_fragment_id_, 0, static_cast<size_t>(
+    ::memset(&_impl_.major_fragment_id_, 0, static_cast<::size_t>(
         reinterpret_cast<char*>(&_impl_.rf_identifier_) -
         reinterpret_cast<char*>(&_impl_.major_fragment_id_)) + sizeof(_impl_.rf_identifier_));
   }
   _impl_._has_bits_.Clear();
-  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+  _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
 
-const char* RuntimeFilterBDef::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
-#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  _Internal::HasBits has_bits{};
-  while (!ctx->Done(&ptr)) {
-    uint32_t tag;
-    ptr = ::_pbi::ReadTag(ptr, &tag);
-    switch (tag >> 3) {
-      // optional .exec.shared.QueryId query_id = 1;
-      case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
-          ptr = ctx->ParseMessage(_internal_mutable_query_id(), ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // optional int32 major_fragment_id = 2;
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
-          _Internal::set_has_major_fragment_id(&has_bits);
-          _impl_.major_fragment_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // optional int32 minor_fragment_id = 3;
-      case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
-          _Internal::set_has_minor_fragment_id(&has_bits);
-          _impl_.minor_fragment_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // optional bool to_foreman = 4;
-      case 4:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 32)) {
-          _Internal::set_has_to_foreman(&has_bits);
-          _impl_.to_foreman_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // repeated int32 bloom_filter_size_in_bytes = 5;
-      case 5:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 40)) {
-          ptr -= 1;
-          do {
-            ptr += 1;
-            _internal_add_bloom_filter_size_in_bytes(::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr));
-            CHK_(ptr);
-            if (!ctx->DataAvailable(ptr)) break;
-          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<40>(ptr));
-        } else if (static_cast<uint8_t>(tag) == 42) {
-          ptr = ::PROTOBUF_NAMESPACE_ID::internal::PackedInt32Parser(_internal_mutable_bloom_filter_size_in_bytes(), ptr, ctx);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // repeated string probe_fields = 6;
-      case 6:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 50)) {
-          ptr -= 1;
-          do {
-            ptr += 1;
-            auto str = _internal_add_probe_fields();
-            ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
-            CHK_(ptr);
-            #ifndef NDEBUG
-            ::_pbi::VerifyUTF8(str, "exec.bit.data.RuntimeFilterBDef.probe_fields");
-            #endif  // !NDEBUG
-            if (!ctx->DataAvailable(ptr)) break;
-          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<50>(ptr));
-        } else
-          goto handle_unusual;
-        continue;
-      // optional int32 hj_op_id = 7;
-      case 7:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 56)) {
-          _Internal::set_has_hj_op_id(&has_bits);
-          _impl_.hj_op_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // optional int64 rf_identifier = 8;
-      case 8:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 64)) {
-          _Internal::set_has_rf_identifier(&has_bits);
-          _impl_.rf_identifier_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      default:
-        goto handle_unusual;
-    }  // switch
-  handle_unusual:
-    if ((tag == 0) || ((tag & 7) == 4)) {
-      CHK_(ptr);
-      ctx->SetLastTag(tag);
-      goto message_done;
-    }
-    ptr = UnknownFieldParse(
-        tag,
-        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
-        ptr, ctx);
-    CHK_(ptr != nullptr);
-  }  // while
-message_done:
-  _impl_._has_bits_.Or(has_bits);
+const char* RuntimeFilterBDef::_InternalParse(
+    const char* ptr, ::_pbi::ParseContext* ctx) {
+  ptr = ::_pbi::TcParser::ParseLoop(this, ptr, ctx, &_table_.header);
   return ptr;
-failure:
-  ptr = nullptr;
-  goto message_done;
-#undef CHK_
 }
 
-uint8_t* RuntimeFilterBDef::_InternalSerialize(
-    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<3, 8, 1, 60, 2> RuntimeFilterBDef::_table_ = {
+  {
+    PROTOBUF_FIELD_OFFSET(RuntimeFilterBDef, _impl_._has_bits_),
+    0, // no _extensions_
+    8, 56,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967040,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    8,  // num_field_entries
+    1,  // num_aux_entries
+    offsetof(decltype(_table_), aux_entries),
+    &_RuntimeFilterBDef_default_instance_._instance,
+    ::_pbi::TcParser::GenericFallback,  // fallback
+  }, {{
+    // optional int64 rf_identifier = 8;
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint64_t, offsetof(RuntimeFilterBDef, _impl_.rf_identifier_), 5>(),
+     {64, 5, 0, PROTOBUF_FIELD_OFFSET(RuntimeFilterBDef, _impl_.rf_identifier_)}},
+    // optional .exec.shared.QueryId query_id = 1;
+    {::_pbi::TcParser::FastMtS1,
+     {10, 0, 0, PROTOBUF_FIELD_OFFSET(RuntimeFilterBDef, _impl_.query_id_)}},
+    // optional int32 major_fragment_id = 2;
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(RuntimeFilterBDef, _impl_.major_fragment_id_), 1>(),
+     {16, 1, 0, PROTOBUF_FIELD_OFFSET(RuntimeFilterBDef, _impl_.major_fragment_id_)}},
+    // optional int32 minor_fragment_id = 3;
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(RuntimeFilterBDef, _impl_.minor_fragment_id_), 2>(),
+     {24, 2, 0, PROTOBUF_FIELD_OFFSET(RuntimeFilterBDef, _impl_.minor_fragment_id_)}},
+    // optional bool to_foreman = 4;
+    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(RuntimeFilterBDef, _impl_.to_foreman_), 3>(),
+     {32, 3, 0, PROTOBUF_FIELD_OFFSET(RuntimeFilterBDef, _impl_.to_foreman_)}},
+    // repeated int32 bloom_filter_size_in_bytes = 5;
+    {::_pbi::TcParser::FastV32R1,
+     {40, 63, 0, PROTOBUF_FIELD_OFFSET(RuntimeFilterBDef, _impl_.bloom_filter_size_in_bytes_)}},
+    // repeated string probe_fields = 6;
+    {::_pbi::TcParser::FastSR1,
+     {50, 63, 0, PROTOBUF_FIELD_OFFSET(RuntimeFilterBDef, _impl_.probe_fields_)}},
+    // optional int32 hj_op_id = 7;
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(RuntimeFilterBDef, _impl_.hj_op_id_), 4>(),
+     {56, 4, 0, PROTOBUF_FIELD_OFFSET(RuntimeFilterBDef, _impl_.hj_op_id_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // optional .exec.shared.QueryId query_id = 1;
+    {PROTOBUF_FIELD_OFFSET(RuntimeFilterBDef, _impl_.query_id_), _Internal::kHasBitsOffset + 0, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    // optional int32 major_fragment_id = 2;
+    {PROTOBUF_FIELD_OFFSET(RuntimeFilterBDef, _impl_.major_fragment_id_), _Internal::kHasBitsOffset + 1, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kInt32)},
+    // optional int32 minor_fragment_id = 3;
+    {PROTOBUF_FIELD_OFFSET(RuntimeFilterBDef, _impl_.minor_fragment_id_), _Internal::kHasBitsOffset + 2, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kInt32)},
+    // optional bool to_foreman = 4;
+    {PROTOBUF_FIELD_OFFSET(RuntimeFilterBDef, _impl_.to_foreman_), _Internal::kHasBitsOffset + 3, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kBool)},
+    // repeated int32 bloom_filter_size_in_bytes = 5;
+    {PROTOBUF_FIELD_OFFSET(RuntimeFilterBDef, _impl_.bloom_filter_size_in_bytes_), -1, 0,
+    (0 | ::_fl::kFcRepeated | ::_fl::kInt32)},
+    // repeated string probe_fields = 6;
+    {PROTOBUF_FIELD_OFFSET(RuntimeFilterBDef, _impl_.probe_fields_), -1, 0,
+    (0 | ::_fl::kFcRepeated | ::_fl::kRawString | ::_fl::kRepSString)},
+    // optional int32 hj_op_id = 7;
+    {PROTOBUF_FIELD_OFFSET(RuntimeFilterBDef, _impl_.hj_op_id_), _Internal::kHasBitsOffset + 4, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kInt32)},
+    // optional int64 rf_identifier = 8;
+    {PROTOBUF_FIELD_OFFSET(RuntimeFilterBDef, _impl_.rf_identifier_), _Internal::kHasBitsOffset + 5, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kInt64)},
+  }}, {{
+    {::_pbi::TcParser::GetTable<::exec::shared::QueryId>()},
+  }}, {{
+    "\37\0\0\0\0\0\14\0\0\0\0\0\0\0\0\0"
+    "exec.bit.data.RuntimeFilterBDef"
+    "probe_fields"
+  }},
+};
+
+::uint8_t* RuntimeFilterBDef::_InternalSerialize(
+    ::uint8_t* target,
+    ::google::protobuf::io::EpsCopyOutputStream* stream) const {
   // @@protoc_insertion_point(serialize_to_array_start:exec.bit.data.RuntimeFilterBDef)
-  uint32_t cached_has_bits = 0;
-  (void) cached_has_bits;
+  ::uint32_t cached_has_bits = 0;
+  (void)cached_has_bits;
 
   cached_has_bits = _impl_._has_bits_[0];
   // optional .exec.shared.QueryId query_id = 1;
   if (cached_has_bits & 0x00000001u) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(1, _Internal::query_id(this),
+    target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+        1, _Internal::query_id(this),
         _Internal::query_id(this).GetCachedSize(), target, stream);
   }
 
   // optional int32 major_fragment_id = 2;
   if (cached_has_bits & 0x00000002u) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteInt32ToArray(2, this->_internal_major_fragment_id(), target);
+    target = ::google::protobuf::internal::WireFormatLite::
+        WriteInt32ToArrayWithField<2>(
+            stream, this->_internal_major_fragment_id(), target);
   }
 
   // optional int32 minor_fragment_id = 3;
   if (cached_has_bits & 0x00000004u) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteInt32ToArray(3, this->_internal_minor_fragment_id(), target);
+    target = ::google::protobuf::internal::WireFormatLite::
+        WriteInt32ToArrayWithField<3>(
+            stream, this->_internal_minor_fragment_id(), target);
   }
 
   // optional bool to_foreman = 4;
   if (cached_has_bits & 0x00000008u) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteBoolToArray(4, this->_internal_to_foreman(), target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(
+        4, this->_internal_to_foreman(), target);
   }
 
   // repeated int32 bloom_filter_size_in_bytes = 5;
-  for (int i = 0, n = this->_internal_bloom_filter_size_in_bytes_size(); i < n; i++) {
+  for (int i = 0, n = this->_internal_bloom_filter_size_in_bytes_size(); i < n; ++i) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteInt32ToArray(5, this->_internal_bloom_filter_size_in_bytes(i), target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(
+        5, this->_internal_bloom_filter_size_in_bytes().Get(i), target);
   }
 
   // repeated string probe_fields = 6;
-  for (int i = 0, n = this->_internal_probe_fields_size(); i < n; i++) {
-    const auto& s = this->_internal_probe_fields(i);
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::VerifyUTF8StringNamedField(
-      s.data(), static_cast<int>(s.length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SERIALIZE,
-      "exec.bit.data.RuntimeFilterBDef.probe_fields");
+  for (int i = 0, n = this->_internal_probe_fields_size(); i < n; ++i) {
+    const auto& s = this->_internal_probe_fields().Get(i);
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(s.data(), static_cast<int>(s.length()), ::google::protobuf::internal::WireFormat::SERIALIZE,
+                                "exec.bit.data.RuntimeFilterBDef.probe_fields");
     target = stream->WriteString(6, s, target);
   }
 
   // optional int32 hj_op_id = 7;
   if (cached_has_bits & 0x00000010u) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteInt32ToArray(7, this->_internal_hj_op_id(), target);
+    target = ::google::protobuf::internal::WireFormatLite::
+        WriteInt32ToArrayWithField<7>(
+            stream, this->_internal_hj_op_id(), target);
   }
 
   // optional int64 rf_identifier = 8;
   if (cached_has_bits & 0x00000020u) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteInt64ToArray(8, this->_internal_rf_identifier(), target);
+    target = ::google::protobuf::internal::WireFormatLite::
+        WriteInt64ToArrayWithField<8>(
+            stream, this->_internal_rf_identifier(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
-        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:exec.bit.data.RuntimeFilterBDef)
   return target;
 }
 
-size_t RuntimeFilterBDef::ByteSizeLong() const {
+::size_t RuntimeFilterBDef::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:exec.bit.data.RuntimeFilterBDef)
-  size_t total_size = 0;
+  ::size_t total_size = 0;
 
-  uint32_t cached_has_bits = 0;
+  ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
   // repeated int32 bloom_filter_size_in_bytes = 5;
   {
-    size_t data_size = ::_pbi::WireFormatLite::
-      Int32Size(this->_impl_.bloom_filter_size_in_bytes_);
-    total_size += 1 *
-                  ::_pbi::FromIntSize(this->_internal_bloom_filter_size_in_bytes_size());
-    total_size += data_size;
+    std::size_t data_size = ::_pbi::WireFormatLite::Int32Size(
+        this->_internal_bloom_filter_size_in_bytes())
+    ;
+    std::size_t tag_size = std::size_t{1} *
+        ::_pbi::FromIntSize(this->_internal_bloom_filter_size_in_bytes_size());
+    ;
+    total_size += tag_size + data_size;
   }
-
   // repeated string probe_fields = 6;
-  total_size += 1 *
-      ::PROTOBUF_NAMESPACE_ID::internal::FromIntSize(_impl_.probe_fields_.size());
-  for (int i = 0, n = _impl_.probe_fields_.size(); i < n; i++) {
-    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-      _impl_.probe_fields_.Get(i));
+  total_size += 1 * ::google::protobuf::internal::FromIntSize(_internal_probe_fields().size());
+  for (int i = 0, n = _internal_probe_fields().size(); i < n; ++i) {
+    total_size += ::google::protobuf::internal::WireFormatLite::StringSize(
+        _internal_probe_fields().Get(i));
   }
-
   cached_has_bits = _impl_._has_bits_[0];
   if (cached_has_bits & 0x0000003fu) {
     // optional .exec.shared.QueryId query_id = 1;
     if (cached_has_bits & 0x00000001u) {
-      total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-          *_impl_.query_id_);
+      total_size +=
+          1 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.query_id_);
     }
 
     // optional int32 major_fragment_id = 2;
     if (cached_has_bits & 0x00000002u) {
-      total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_major_fragment_id());
+      total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(
+          this->_internal_major_fragment_id());
     }
 
     // optional int32 minor_fragment_id = 3;
     if (cached_has_bits & 0x00000004u) {
-      total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_minor_fragment_id());
+      total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(
+          this->_internal_minor_fragment_id());
     }
 
     // optional bool to_foreman = 4;
     if (cached_has_bits & 0x00000008u) {
-      total_size += 1 + 1;
+      total_size += 2;
     }
 
     // optional int32 hj_op_id = 7;
     if (cached_has_bits & 0x00000010u) {
-      total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_hj_op_id());
+      total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(
+          this->_internal_hj_op_id());
     }
 
     // optional int64 rf_identifier = 8;
     if (cached_has_bits & 0x00000020u) {
-      total_size += ::_pbi::WireFormatLite::Int64SizePlusOne(this->_internal_rf_identifier());
+      total_size += ::_pbi::WireFormatLite::Int64SizePlusOne(
+          this->_internal_rf_identifier());
     }
 
   }
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData RuntimeFilterBDef::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
-    RuntimeFilterBDef::MergeImpl
+const ::google::protobuf::Message::ClassData RuntimeFilterBDef::_class_data_ = {
+    RuntimeFilterBDef::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
 };
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*RuntimeFilterBDef::GetClassData() const { return &_class_data_; }
+const ::google::protobuf::Message::ClassData* RuntimeFilterBDef::GetClassData() const {
+  return &_class_data_;
+}
 
-
-void RuntimeFilterBDef::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+void RuntimeFilterBDef::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<RuntimeFilterBDef*>(&to_msg);
   auto& from = static_cast<const RuntimeFilterBDef&>(from_msg);
   // @@protoc_insertion_point(class_specific_merge_from_start:exec.bit.data.RuntimeFilterBDef)
-  GOOGLE_DCHECK_NE(&from, _this);
-  uint32_t cached_has_bits = 0;
+  ABSL_DCHECK_NE(&from, _this);
+  ::uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  _this->_impl_.bloom_filter_size_in_bytes_.MergeFrom(from._impl_.bloom_filter_size_in_bytes_);
-  _this->_impl_.probe_fields_.MergeFrom(from._impl_.probe_fields_);
+  _this->_internal_mutable_bloom_filter_size_in_bytes()->MergeFrom(from._internal_bloom_filter_size_in_bytes());
+  _this->_internal_mutable_probe_fields()->MergeFrom(from._internal_probe_fields());
   cached_has_bits = from._impl_._has_bits_[0];
   if (cached_has_bits & 0x0000003fu) {
     if (cached_has_bits & 0x00000001u) {
@@ -1584,7 +1562,7 @@ void RuntimeFilterBDef::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, cons
     }
     _this->_impl_._has_bits_[0] |= cached_has_bits;
   }
-  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
 }
 
 void RuntimeFilterBDef::CopyFrom(const RuntimeFilterBDef& from) {
@@ -1594,17 +1572,20 @@ void RuntimeFilterBDef::CopyFrom(const RuntimeFilterBDef& from) {
   MergeFrom(from);
 }
 
-bool RuntimeFilterBDef::IsInitialized() const {
+PROTOBUF_NOINLINE bool RuntimeFilterBDef::IsInitialized() const {
   return true;
 }
 
-void RuntimeFilterBDef::InternalSwap(RuntimeFilterBDef* other) {
+::_pbi::CachedSize* RuntimeFilterBDef::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void RuntimeFilterBDef::InternalSwap(RuntimeFilterBDef* PROTOBUF_RESTRICT other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
   _impl_.bloom_filter_size_in_bytes_.InternalSwap(&other->_impl_.bloom_filter_size_in_bytes_);
   _impl_.probe_fields_.InternalSwap(&other->_impl_.probe_fields_);
-  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+  ::google::protobuf::internal::memswap<
       PROTOBUF_FIELD_OFFSET(RuntimeFilterBDef, _impl_.rf_identifier_)
       + sizeof(RuntimeFilterBDef::_impl_.rf_identifier_)
       - PROTOBUF_FIELD_OFFSET(RuntimeFilterBDef, _impl_.query_id_)>(
@@ -1612,177 +1593,163 @@ void RuntimeFilterBDef::InternalSwap(RuntimeFilterBDef* other) {
           reinterpret_cast<char*>(&other->_impl_.query_id_));
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata RuntimeFilterBDef::GetMetadata() const {
+::google::protobuf::Metadata RuntimeFilterBDef::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_BitData_2eproto_getter, &descriptor_table_BitData_2eproto_once,
       file_level_metadata_BitData_2eproto[3]);
 }
-
 // ===================================================================
 
 class AckWithCredit::_Internal {
  public:
   using HasBits = decltype(std::declval<AckWithCredit>()._impl_._has_bits_);
+  static constexpr ::int32_t kHasBitsOffset =
+    8 * PROTOBUF_FIELD_OFFSET(AckWithCredit, _impl_._has_bits_);
   static void set_has_allowed_credit(HasBits* has_bits) {
     (*has_bits)[0] |= 1u;
   }
 };
 
-AckWithCredit::AckWithCredit(::PROTOBUF_NAMESPACE_ID::Arena* arena,
-                         bool is_message_owned)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
-  SharedCtor(arena, is_message_owned);
+AckWithCredit::AckWithCredit(::google::protobuf::Arena* arena)
+    : ::google::protobuf::Message(arena) {
+  SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:exec.bit.data.AckWithCredit)
 }
-AckWithCredit::AckWithCredit(const AckWithCredit& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message() {
-  AckWithCredit* const _this = this; (void)_this;
-  new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){from._impl_._has_bits_}
-    , /*decltype(_impl_._cached_size_)*/{}
-    , decltype(_impl_.allowed_credit_){}};
-
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  _this->_impl_.allowed_credit_ = from._impl_.allowed_credit_;
-  // @@protoc_insertion_point(copy_constructor:exec.bit.data.AckWithCredit)
+AckWithCredit::AckWithCredit(
+    ::google::protobuf::Arena* arena, const AckWithCredit& from)
+    : AckWithCredit(arena) {
+  MergeFrom(from);
 }
+inline PROTOBUF_NDEBUG_INLINE AckWithCredit::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility,
+    ::google::protobuf::Arena* arena)
+      : _cached_size_{0} {}
 
-inline void AckWithCredit::SharedCtor(
-    ::_pb::Arena* arena, bool is_message_owned) {
-  (void)arena;
-  (void)is_message_owned;
-  new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){}
-    , /*decltype(_impl_._cached_size_)*/{}
-    , decltype(_impl_.allowed_credit_){0}
-  };
+inline void AckWithCredit::SharedCtor(::_pb::Arena* arena) {
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  _impl_.allowed_credit_ = {};
 }
-
 AckWithCredit::~AckWithCredit() {
   // @@protoc_insertion_point(destructor:exec.bit.data.AckWithCredit)
-  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
-  (void)arena;
-    return;
-  }
+  _internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
   SharedDtor();
 }
-
 inline void AckWithCredit::SharedDtor() {
-  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  ABSL_DCHECK(GetArena() == nullptr);
+  _impl_.~Impl_();
 }
 
-void AckWithCredit::SetCachedSize(int size) const {
-  _impl_._cached_size_.Set(size);
-}
-
-void AckWithCredit::Clear() {
+PROTOBUF_NOINLINE void AckWithCredit::Clear() {
 // @@protoc_insertion_point(message_clear_start:exec.bit.data.AckWithCredit)
-  uint32_t cached_has_bits = 0;
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
   _impl_.allowed_credit_ = 0;
   _impl_._has_bits_.Clear();
-  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+  _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
 
-const char* AckWithCredit::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
-#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  _Internal::HasBits has_bits{};
-  while (!ctx->Done(&ptr)) {
-    uint32_t tag;
-    ptr = ::_pbi::ReadTag(ptr, &tag);
-    switch (tag >> 3) {
-      // optional int32 allowed_credit = 1;
-      case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
-          _Internal::set_has_allowed_credit(&has_bits);
-          _impl_.allowed_credit_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      default:
-        goto handle_unusual;
-    }  // switch
-  handle_unusual:
-    if ((tag == 0) || ((tag & 7) == 4)) {
-      CHK_(ptr);
-      ctx->SetLastTag(tag);
-      goto message_done;
-    }
-    ptr = UnknownFieldParse(
-        tag,
-        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
-        ptr, ctx);
-    CHK_(ptr != nullptr);
-  }  // while
-message_done:
-  _impl_._has_bits_.Or(has_bits);
+const char* AckWithCredit::_InternalParse(
+    const char* ptr, ::_pbi::ParseContext* ctx) {
+  ptr = ::_pbi::TcParser::ParseLoop(this, ptr, ctx, &_table_.header);
   return ptr;
-failure:
-  ptr = nullptr;
-  goto message_done;
-#undef CHK_
 }
 
-uint8_t* AckWithCredit::_InternalSerialize(
-    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<0, 1, 0, 0, 2> AckWithCredit::_table_ = {
+  {
+    PROTOBUF_FIELD_OFFSET(AckWithCredit, _impl_._has_bits_),
+    0, // no _extensions_
+    1, 0,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967294,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    1,  // num_field_entries
+    0,  // num_aux_entries
+    offsetof(decltype(_table_), field_names),  // no aux_entries
+    &_AckWithCredit_default_instance_._instance,
+    ::_pbi::TcParser::GenericFallback,  // fallback
+  }, {{
+    // optional int32 allowed_credit = 1;
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(AckWithCredit, _impl_.allowed_credit_), 0>(),
+     {8, 0, 0, PROTOBUF_FIELD_OFFSET(AckWithCredit, _impl_.allowed_credit_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // optional int32 allowed_credit = 1;
+    {PROTOBUF_FIELD_OFFSET(AckWithCredit, _impl_.allowed_credit_), _Internal::kHasBitsOffset + 0, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kInt32)},
+  }},
+  // no aux_entries
+  {{
+  }},
+};
+
+::uint8_t* AckWithCredit::_InternalSerialize(
+    ::uint8_t* target,
+    ::google::protobuf::io::EpsCopyOutputStream* stream) const {
   // @@protoc_insertion_point(serialize_to_array_start:exec.bit.data.AckWithCredit)
-  uint32_t cached_has_bits = 0;
-  (void) cached_has_bits;
+  ::uint32_t cached_has_bits = 0;
+  (void)cached_has_bits;
 
   cached_has_bits = _impl_._has_bits_[0];
   // optional int32 allowed_credit = 1;
   if (cached_has_bits & 0x00000001u) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteInt32ToArray(1, this->_internal_allowed_credit(), target);
+    target = ::google::protobuf::internal::WireFormatLite::
+        WriteInt32ToArrayWithField<1>(
+            stream, this->_internal_allowed_credit(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
-        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:exec.bit.data.AckWithCredit)
   return target;
 }
 
-size_t AckWithCredit::ByteSizeLong() const {
+::size_t AckWithCredit::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:exec.bit.data.AckWithCredit)
-  size_t total_size = 0;
+  ::size_t total_size = 0;
 
-  uint32_t cached_has_bits = 0;
+  ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
   // optional int32 allowed_credit = 1;
   cached_has_bits = _impl_._has_bits_[0];
   if (cached_has_bits & 0x00000001u) {
-    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_allowed_credit());
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(
+        this->_internal_allowed_credit());
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData AckWithCredit::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
-    AckWithCredit::MergeImpl
+const ::google::protobuf::Message::ClassData AckWithCredit::_class_data_ = {
+    AckWithCredit::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
 };
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*AckWithCredit::GetClassData() const { return &_class_data_; }
+const ::google::protobuf::Message::ClassData* AckWithCredit::GetClassData() const {
+  return &_class_data_;
+}
 
-
-void AckWithCredit::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+void AckWithCredit::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<AckWithCredit*>(&to_msg);
   auto& from = static_cast<const AckWithCredit&>(from_msg);
   // @@protoc_insertion_point(class_specific_merge_from_start:exec.bit.data.AckWithCredit)
-  GOOGLE_DCHECK_NE(&from, _this);
-  uint32_t cached_has_bits = 0;
+  ABSL_DCHECK_NE(&from, _this);
+  ::uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (from._internal_has_allowed_credit()) {
+  if ((from._impl_._has_bits_[0] & 0x00000001u) != 0) {
     _this->_internal_set_allowed_credit(from._internal_allowed_credit());
   }
-  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
 }
 
 void AckWithCredit::CopyFrom(const AckWithCredit& from) {
@@ -1792,49 +1759,32 @@ void AckWithCredit::CopyFrom(const AckWithCredit& from) {
   MergeFrom(from);
 }
 
-bool AckWithCredit::IsInitialized() const {
+PROTOBUF_NOINLINE bool AckWithCredit::IsInitialized() const {
   return true;
 }
 
-void AckWithCredit::InternalSwap(AckWithCredit* other) {
+::_pbi::CachedSize* AckWithCredit::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void AckWithCredit::InternalSwap(AckWithCredit* PROTOBUF_RESTRICT other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
-  swap(_impl_.allowed_credit_, other->_impl_.allowed_credit_);
+        swap(_impl_.allowed_credit_, other->_impl_.allowed_credit_);
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata AckWithCredit::GetMetadata() const {
+::google::protobuf::Metadata AckWithCredit::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_BitData_2eproto_getter, &descriptor_table_BitData_2eproto_once,
       file_level_metadata_BitData_2eproto[4]);
 }
-
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace data
 }  // namespace bit
 }  // namespace exec
-PROTOBUF_NAMESPACE_OPEN
-template<> PROTOBUF_NOINLINE ::exec::bit::data::BitClientHandshake*
-Arena::CreateMaybeMessage< ::exec::bit::data::BitClientHandshake >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::exec::bit::data::BitClientHandshake >(arena);
-}
-template<> PROTOBUF_NOINLINE ::exec::bit::data::BitServerHandshake*
-Arena::CreateMaybeMessage< ::exec::bit::data::BitServerHandshake >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::exec::bit::data::BitServerHandshake >(arena);
-}
-template<> PROTOBUF_NOINLINE ::exec::bit::data::FragmentRecordBatch*
-Arena::CreateMaybeMessage< ::exec::bit::data::FragmentRecordBatch >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::exec::bit::data::FragmentRecordBatch >(arena);
-}
-template<> PROTOBUF_NOINLINE ::exec::bit::data::RuntimeFilterBDef*
-Arena::CreateMaybeMessage< ::exec::bit::data::RuntimeFilterBDef >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::exec::bit::data::RuntimeFilterBDef >(arena);
-}
-template<> PROTOBUF_NOINLINE ::exec::bit::data::AckWithCredit*
-Arena::CreateMaybeMessage< ::exec::bit::data::AckWithCredit >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::exec::bit::data::AckWithCredit >(arena);
-}
-PROTOBUF_NAMESPACE_CLOSE
-
+namespace google {
+namespace protobuf {
+}  // namespace protobuf
+}  // namespace google
 // @@protoc_insertion_point(global_scope)
-#include <google/protobuf/port_undef.inc>
+#include "google/protobuf/port_undef.inc"

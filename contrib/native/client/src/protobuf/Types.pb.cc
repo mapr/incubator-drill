@@ -4,192 +4,174 @@
 #include "Types.pb.h"
 
 #include <algorithm>
-
-#include <google/protobuf/io/coded_stream.h>
-#include <google/protobuf/extension_set.h>
-#include <google/protobuf/wire_format_lite.h>
-#include <google/protobuf/descriptor.h>
-#include <google/protobuf/generated_message_reflection.h>
-#include <google/protobuf/reflection_ops.h>
-#include <google/protobuf/wire_format.h>
+#include "google/protobuf/io/coded_stream.h"
+#include "google/protobuf/extension_set.h"
+#include "google/protobuf/wire_format_lite.h"
+#include "google/protobuf/descriptor.h"
+#include "google/protobuf/generated_message_reflection.h"
+#include "google/protobuf/reflection_ops.h"
+#include "google/protobuf/wire_format.h"
+#include "google/protobuf/generated_message_tctable_impl.h"
 // @@protoc_insertion_point(includes)
-#include <google/protobuf/port_def.inc>
 
+// Must be included last.
+#include "google/protobuf/port_def.inc"
 PROTOBUF_PRAGMA_INIT_SEG
-
-namespace _pb = ::PROTOBUF_NAMESPACE_ID;
-namespace _pbi = _pb::internal;
-
+namespace _pb = ::google::protobuf;
+namespace _pbi = ::google::protobuf::internal;
+namespace _fl = ::google::protobuf::internal::field_layout;
 namespace common {
-PROTOBUF_CONSTEXPR MajorType::MajorType(
-    ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_._has_bits_)*/{}
-  , /*decltype(_impl_._cached_size_)*/{}
-  , /*decltype(_impl_.sub_type_)*/{}
-  , /*decltype(_impl_.minor_type_)*/0
-  , /*decltype(_impl_.mode_)*/0
-  , /*decltype(_impl_.width_)*/0
-  , /*decltype(_impl_.precision_)*/0
-  , /*decltype(_impl_.scale_)*/0
-  , /*decltype(_impl_.timezone_)*/0} {}
+
+inline constexpr MajorType::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : _cached_size_{0},
+        sub_type_{},
+        minor_type_{static_cast< ::common::MinorType >(0)},
+        mode_{static_cast< ::common::DataMode >(0)},
+        width_{0},
+        precision_{0},
+        scale_{0},
+        timezone_{0} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR MajorType::MajorType(::_pbi::ConstantInitialized)
+    : _impl_(::_pbi::ConstantInitialized()) {}
 struct MajorTypeDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR MajorTypeDefaultTypeInternal()
-      : _instance(::_pbi::ConstantInitialized{}) {}
+  PROTOBUF_CONSTEXPR MajorTypeDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
   ~MajorTypeDefaultTypeInternal() {}
   union {
     MajorType _instance;
   };
 };
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 MajorTypeDefaultTypeInternal _MajorType_default_instance_;
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 MajorTypeDefaultTypeInternal _MajorType_default_instance_;
 }  // namespace common
 static ::_pb::Metadata file_level_metadata_Types_2eproto[1];
 static const ::_pb::EnumDescriptor* file_level_enum_descriptors_Types_2eproto[2];
-static constexpr ::_pb::ServiceDescriptor const** file_level_service_descriptors_Types_2eproto = nullptr;
-
-const uint32_t TableStruct_Types_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
-  PROTOBUF_FIELD_OFFSET(::common::MajorType, _impl_._has_bits_),
-  PROTOBUF_FIELD_OFFSET(::common::MajorType, _internal_metadata_),
-  ~0u,  // no _extensions_
-  ~0u,  // no _oneof_case_
-  ~0u,  // no _weak_field_map_
-  ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::common::MajorType, _impl_.minor_type_),
-  PROTOBUF_FIELD_OFFSET(::common::MajorType, _impl_.mode_),
-  PROTOBUF_FIELD_OFFSET(::common::MajorType, _impl_.width_),
-  PROTOBUF_FIELD_OFFSET(::common::MajorType, _impl_.precision_),
-  PROTOBUF_FIELD_OFFSET(::common::MajorType, _impl_.scale_),
-  PROTOBUF_FIELD_OFFSET(::common::MajorType, _impl_.timezone_),
-  PROTOBUF_FIELD_OFFSET(::common::MajorType, _impl_.sub_type_),
-  0,
-  1,
-  2,
-  3,
-  4,
-  5,
-  ~0u,
+static constexpr const ::_pb::ServiceDescriptor**
+    file_level_service_descriptors_Types_2eproto = nullptr;
+const ::uint32_t TableStruct_Types_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(
+    protodesc_cold) = {
+    PROTOBUF_FIELD_OFFSET(::common::MajorType, _impl_._has_bits_),
+    PROTOBUF_FIELD_OFFSET(::common::MajorType, _internal_metadata_),
+    ~0u,  // no _extensions_
+    ~0u,  // no _oneof_case_
+    ~0u,  // no _weak_field_map_
+    ~0u,  // no _inlined_string_donated_
+    ~0u,  // no _split_
+    ~0u,  // no sizeof(Split)
+    PROTOBUF_FIELD_OFFSET(::common::MajorType, _impl_.minor_type_),
+    PROTOBUF_FIELD_OFFSET(::common::MajorType, _impl_.mode_),
+    PROTOBUF_FIELD_OFFSET(::common::MajorType, _impl_.width_),
+    PROTOBUF_FIELD_OFFSET(::common::MajorType, _impl_.precision_),
+    PROTOBUF_FIELD_OFFSET(::common::MajorType, _impl_.scale_),
+    PROTOBUF_FIELD_OFFSET(::common::MajorType, _impl_.timezone_),
+    PROTOBUF_FIELD_OFFSET(::common::MajorType, _impl_.sub_type_),
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    ~0u,
 };
-static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
-  { 0, 13, -1, sizeof(::common::MajorType)},
+
+static const ::_pbi::MigrationSchema
+    schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
+        {0, 15, -1, sizeof(::common::MajorType)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
-  &::common::_MajorType_default_instance_._instance,
+    &::common::_MajorType_default_instance_._instance,
 };
-
-const char descriptor_table_protodef_Types_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
-  "\n\013Types.proto\022\006common\"\272\001\n\tMajorType\022%\n\nm"
-  "inor_type\030\001 \001(\0162\021.common.MinorType\022\036\n\004mo"
-  "de\030\002 \001(\0162\020.common.DataMode\022\r\n\005width\030\003 \001("
-  "\005\022\021\n\tprecision\030\004 \001(\005\022\r\n\005scale\030\005 \001(\005\022\020\n\010t"
-  "imeZone\030\006 \001(\005\022#\n\010sub_type\030\007 \003(\0162\021.common"
-  ".MinorType*\265\004\n\tMinorType\022\010\n\004LATE\020\000\022\007\n\003MA"
-  "P\020\001\022\013\n\007TINYINT\020\003\022\014\n\010SMALLINT\020\004\022\007\n\003INT\020\005\022"
-  "\n\n\006BIGINT\020\006\022\014\n\010DECIMAL9\020\007\022\r\n\tDECIMAL18\020\010"
-  "\022\023\n\017DECIMAL28SPARSE\020\t\022\023\n\017DECIMAL38SPARSE"
-  "\020\n\022\t\n\005MONEY\020\013\022\010\n\004DATE\020\014\022\010\n\004TIME\020\r\022\n\n\006TIM"
-  "ETZ\020\016\022\017\n\013TIMESTAMPTZ\020\017\022\r\n\tTIMESTAMP\020\020\022\014\n"
-  "\010INTERVAL\020\021\022\n\n\006FLOAT4\020\022\022\n\n\006FLOAT8\020\023\022\007\n\003B"
-  "IT\020\024\022\r\n\tFIXEDCHAR\020\025\022\017\n\013FIXED16CHAR\020\026\022\017\n\013"
-  "FIXEDBINARY\020\027\022\013\n\007VARCHAR\020\030\022\r\n\tVAR16CHAR\020"
-  "\031\022\r\n\tVARBINARY\020\032\022\t\n\005UINT1\020\035\022\t\n\005UINT2\020\036\022\t"
-  "\n\005UINT4\020\037\022\t\n\005UINT8\020 \022\022\n\016DECIMAL28DENSE\020!"
-  "\022\022\n\016DECIMAL38DENSE\020\"\022\016\n\nDM_UNKNOWN\020%\022\020\n\014"
-  "INTERVALYEAR\020&\022\017\n\013INTERVALDAY\020\'\022\010\n\004LIST\020"
-  "(\022\022\n\016GENERIC_OBJECT\020)\022\t\n\005UNION\020*\022\016\n\nVARD"
-  "ECIMAL\020+\022\010\n\004DICT\020,*=\n\010DataMode\022\017\n\013DM_OPT"
-  "IONAL\020\000\022\017\n\013DM_REQUIRED\020\001\022\017\n\013DM_REPEATED\020"
-  "\002B-\n\035org.apache.drill.common.typesB\nType"
-  "ProtosH\001"
-  ;
-static ::_pbi::once_flag descriptor_table_Types_2eproto_once;
+const char descriptor_table_protodef_Types_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
+    "\n\013Types.proto\022\006common\"\272\001\n\tMajorType\022%\n\nm"
+    "inor_type\030\001 \001(\0162\021.common.MinorType\022\036\n\004mo"
+    "de\030\002 \001(\0162\020.common.DataMode\022\r\n\005width\030\003 \001("
+    "\005\022\021\n\tprecision\030\004 \001(\005\022\r\n\005scale\030\005 \001(\005\022\020\n\010t"
+    "imeZone\030\006 \001(\005\022#\n\010sub_type\030\007 \003(\0162\021.common"
+    ".MinorType*\265\004\n\tMinorType\022\010\n\004LATE\020\000\022\007\n\003MA"
+    "P\020\001\022\013\n\007TINYINT\020\003\022\014\n\010SMALLINT\020\004\022\007\n\003INT\020\005\022"
+    "\n\n\006BIGINT\020\006\022\014\n\010DECIMAL9\020\007\022\r\n\tDECIMAL18\020\010"
+    "\022\023\n\017DECIMAL28SPARSE\020\t\022\023\n\017DECIMAL38SPARSE"
+    "\020\n\022\t\n\005MONEY\020\013\022\010\n\004DATE\020\014\022\010\n\004TIME\020\r\022\n\n\006TIM"
+    "ETZ\020\016\022\017\n\013TIMESTAMPTZ\020\017\022\r\n\tTIMESTAMP\020\020\022\014\n"
+    "\010INTERVAL\020\021\022\n\n\006FLOAT4\020\022\022\n\n\006FLOAT8\020\023\022\007\n\003B"
+    "IT\020\024\022\r\n\tFIXEDCHAR\020\025\022\017\n\013FIXED16CHAR\020\026\022\017\n\013"
+    "FIXEDBINARY\020\027\022\013\n\007VARCHAR\020\030\022\r\n\tVAR16CHAR\020"
+    "\031\022\r\n\tVARBINARY\020\032\022\t\n\005UINT1\020\035\022\t\n\005UINT2\020\036\022\t"
+    "\n\005UINT4\020\037\022\t\n\005UINT8\020 \022\022\n\016DECIMAL28DENSE\020!"
+    "\022\022\n\016DECIMAL38DENSE\020\"\022\016\n\nDM_UNKNOWN\020%\022\020\n\014"
+    "INTERVALYEAR\020&\022\017\n\013INTERVALDAY\020\'\022\010\n\004LIST\020"
+    "(\022\022\n\016GENERIC_OBJECT\020)\022\t\n\005UNION\020*\022\016\n\nVARD"
+    "ECIMAL\020+\022\010\n\004DICT\020,*=\n\010DataMode\022\017\n\013DM_OPT"
+    "IONAL\020\000\022\017\n\013DM_REQUIRED\020\001\022\017\n\013DM_REPEATED\020"
+    "\002B-\n\035org.apache.drill.common.typesB\nType"
+    "ProtosH\001"
+};
+static ::absl::once_flag descriptor_table_Types_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_Types_2eproto = {
-    false, false, 888, descriptor_table_protodef_Types_2eproto,
+    false,
+    false,
+    888,
+    descriptor_table_protodef_Types_2eproto,
     "Types.proto",
-    &descriptor_table_Types_2eproto_once, nullptr, 0, 1,
-    schemas, file_default_instances, TableStruct_Types_2eproto::offsets,
-    file_level_metadata_Types_2eproto, file_level_enum_descriptors_Types_2eproto,
+    &descriptor_table_Types_2eproto_once,
+    nullptr,
+    0,
+    1,
+    schemas,
+    file_default_instances,
+    TableStruct_Types_2eproto::offsets,
+    file_level_metadata_Types_2eproto,
+    file_level_enum_descriptors_Types_2eproto,
     file_level_service_descriptors_Types_2eproto,
 };
+
+// This function exists to be marked as weak.
+// It can significantly speed up compilation by breaking up LLVM's SCC
+// in the .pb.cc translation units. Large translation units see a
+// reduction of more than 35% of walltime for optimized builds. Without
+// the weak attribute all the messages in the file, including all the
+// vtables and everything they use become part of the same SCC through
+// a cycle like:
+// GetMetadata -> descriptor table -> default instances ->
+//   vtables -> GetMetadata
+// By adding a weak function here we break the connection from the
+// individual vtables back into the descriptor table.
 PROTOBUF_ATTRIBUTE_WEAK const ::_pbi::DescriptorTable* descriptor_table_Types_2eproto_getter() {
   return &descriptor_table_Types_2eproto;
 }
-
 // Force running AddDescriptors() at dynamic initialization time.
-PROTOBUF_ATTRIBUTE_INIT_PRIORITY2 static ::_pbi::AddDescriptorsRunner dynamic_init_dummy_Types_2eproto(&descriptor_table_Types_2eproto);
+PROTOBUF_ATTRIBUTE_INIT_PRIORITY2
+static ::_pbi::AddDescriptorsRunner dynamic_init_dummy_Types_2eproto(&descriptor_table_Types_2eproto);
 namespace common {
-const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* MinorType_descriptor() {
-  ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_Types_2eproto);
+const ::google::protobuf::EnumDescriptor* MinorType_descriptor() {
+  ::google::protobuf::internal::AssignDescriptors(&descriptor_table_Types_2eproto);
   return file_level_enum_descriptors_Types_2eproto[0];
 }
+PROTOBUF_CONSTINIT const uint32_t MinorType_internal_data_[] = {
+    131072u, 64u, 4194303998u, 2041u, };
 bool MinorType_IsValid(int value) {
-  switch (value) {
-    case 0:
-    case 1:
-    case 3:
-    case 4:
-    case 5:
-    case 6:
-    case 7:
-    case 8:
-    case 9:
-    case 10:
-    case 11:
-    case 12:
-    case 13:
-    case 14:
-    case 15:
-    case 16:
-    case 17:
-    case 18:
-    case 19:
-    case 20:
-    case 21:
-    case 22:
-    case 23:
-    case 24:
-    case 25:
-    case 26:
-    case 29:
-    case 30:
-    case 31:
-    case 32:
-    case 33:
-    case 34:
-    case 37:
-    case 38:
-    case 39:
-    case 40:
-    case 41:
-    case 42:
-    case 43:
-    case 44:
-      return true;
-    default:
-      return false;
-  }
+  return 0 <= value && value <= 44 && ((35080890220539u >> value) & 1) != 0;
 }
-
-const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* DataMode_descriptor() {
-  ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_Types_2eproto);
+const ::google::protobuf::EnumDescriptor* DataMode_descriptor() {
+  ::google::protobuf::internal::AssignDescriptors(&descriptor_table_Types_2eproto);
   return file_level_enum_descriptors_Types_2eproto[1];
 }
+PROTOBUF_CONSTINIT const uint32_t DataMode_internal_data_[] = {
+    196608u, 0u, };
 bool DataMode_IsValid(int value) {
-  switch (value) {
-    case 0:
-    case 1:
-    case 2:
-      return true;
-    default:
-      return false;
-  }
+  return 0 <= value && value <= 2;
 }
-
-
 // ===================================================================
 
 class MajorType::_Internal {
  public:
   using HasBits = decltype(std::declval<MajorType>()._impl_._has_bits_);
+  static constexpr ::int32_t kHasBitsOffset =
+    8 * PROTOBUF_FIELD_OFFSET(MajorType, _impl_._has_bits_);
   static void set_has_minor_type(HasBits* has_bits) {
     (*has_bits)[0] |= 1u;
   }
@@ -210,331 +192,302 @@ class MajorType::_Internal {
   }
 };
 
-MajorType::MajorType(::PROTOBUF_NAMESPACE_ID::Arena* arena,
-                         bool is_message_owned)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
-  SharedCtor(arena, is_message_owned);
+MajorType::MajorType(::google::protobuf::Arena* arena)
+    : ::google::protobuf::Message(arena) {
+  SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:common.MajorType)
 }
-MajorType::MajorType(const MajorType& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message() {
-  MajorType* const _this = this; (void)_this;
-  new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){from._impl_._has_bits_}
-    , /*decltype(_impl_._cached_size_)*/{}
-    , decltype(_impl_.sub_type_){from._impl_.sub_type_}
-    , decltype(_impl_.minor_type_){}
-    , decltype(_impl_.mode_){}
-    , decltype(_impl_.width_){}
-    , decltype(_impl_.precision_){}
-    , decltype(_impl_.scale_){}
-    , decltype(_impl_.timezone_){}};
+inline PROTOBUF_NDEBUG_INLINE MajorType::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
+    const Impl_& from)
+      : _has_bits_{from._has_bits_},
+        _cached_size_{0},
+        sub_type_{visibility, arena, from.sub_type_} {}
 
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  ::memcpy(&_impl_.minor_type_, &from._impl_.minor_type_,
-    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.timezone_) -
-    reinterpret_cast<char*>(&_impl_.minor_type_)) + sizeof(_impl_.timezone_));
+MajorType::MajorType(
+    ::google::protobuf::Arena* arena,
+    const MajorType& from)
+    : ::google::protobuf::Message(arena) {
+  MajorType* const _this = this;
+  (void)_this;
+  _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
+      from._internal_metadata_);
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
+  ::memcpy(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, minor_type_),
+           reinterpret_cast<const char *>(&from._impl_) +
+               offsetof(Impl_, minor_type_),
+           offsetof(Impl_, timezone_) -
+               offsetof(Impl_, minor_type_) +
+               sizeof(Impl_::timezone_));
+
   // @@protoc_insertion_point(copy_constructor:common.MajorType)
 }
+inline PROTOBUF_NDEBUG_INLINE MajorType::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility,
+    ::google::protobuf::Arena* arena)
+      : _cached_size_{0},
+        sub_type_{visibility, arena} {}
 
-inline void MajorType::SharedCtor(
-    ::_pb::Arena* arena, bool is_message_owned) {
-  (void)arena;
-  (void)is_message_owned;
-  new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){}
-    , /*decltype(_impl_._cached_size_)*/{}
-    , decltype(_impl_.sub_type_){arena}
-    , decltype(_impl_.minor_type_){0}
-    , decltype(_impl_.mode_){0}
-    , decltype(_impl_.width_){0}
-    , decltype(_impl_.precision_){0}
-    , decltype(_impl_.scale_){0}
-    , decltype(_impl_.timezone_){0}
-  };
+inline void MajorType::SharedCtor(::_pb::Arena* arena) {
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  ::memset(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, minor_type_),
+           0,
+           offsetof(Impl_, timezone_) -
+               offsetof(Impl_, minor_type_) +
+               sizeof(Impl_::timezone_));
 }
-
 MajorType::~MajorType() {
   // @@protoc_insertion_point(destructor:common.MajorType)
-  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
-  (void)arena;
-    return;
-  }
+  _internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
   SharedDtor();
 }
-
 inline void MajorType::SharedDtor() {
-  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
-  _impl_.sub_type_.~RepeatedField();
+  ABSL_DCHECK(GetArena() == nullptr);
+  _impl_.~Impl_();
 }
 
-void MajorType::SetCachedSize(int size) const {
-  _impl_._cached_size_.Set(size);
-}
-
-void MajorType::Clear() {
+PROTOBUF_NOINLINE void MajorType::Clear() {
 // @@protoc_insertion_point(message_clear_start:common.MajorType)
-  uint32_t cached_has_bits = 0;
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
   _impl_.sub_type_.Clear();
   cached_has_bits = _impl_._has_bits_[0];
   if (cached_has_bits & 0x0000003fu) {
-    ::memset(&_impl_.minor_type_, 0, static_cast<size_t>(
+    ::memset(&_impl_.minor_type_, 0, static_cast<::size_t>(
         reinterpret_cast<char*>(&_impl_.timezone_) -
         reinterpret_cast<char*>(&_impl_.minor_type_)) + sizeof(_impl_.timezone_));
   }
   _impl_._has_bits_.Clear();
-  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+  _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
 
-const char* MajorType::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
-#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  _Internal::HasBits has_bits{};
-  while (!ctx->Done(&ptr)) {
-    uint32_t tag;
-    ptr = ::_pbi::ReadTag(ptr, &tag);
-    switch (tag >> 3) {
-      // optional .common.MinorType minor_type = 1;
-      case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
-          uint64_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
-          CHK_(ptr);
-          if (PROTOBUF_PREDICT_TRUE(::common::MinorType_IsValid(val))) {
-            _internal_set_minor_type(static_cast<::common::MinorType>(val));
-          } else {
-            ::PROTOBUF_NAMESPACE_ID::internal::WriteVarint(1, val, mutable_unknown_fields());
-          }
-        } else
-          goto handle_unusual;
-        continue;
-      // optional .common.DataMode mode = 2;
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
-          uint64_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
-          CHK_(ptr);
-          if (PROTOBUF_PREDICT_TRUE(::common::DataMode_IsValid(val))) {
-            _internal_set_mode(static_cast<::common::DataMode>(val));
-          } else {
-            ::PROTOBUF_NAMESPACE_ID::internal::WriteVarint(2, val, mutable_unknown_fields());
-          }
-        } else
-          goto handle_unusual;
-        continue;
-      // optional int32 width = 3;
-      case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
-          _Internal::set_has_width(&has_bits);
-          _impl_.width_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // optional int32 precision = 4;
-      case 4:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 32)) {
-          _Internal::set_has_precision(&has_bits);
-          _impl_.precision_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // optional int32 scale = 5;
-      case 5:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 40)) {
-          _Internal::set_has_scale(&has_bits);
-          _impl_.scale_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // optional int32 timeZone = 6;
-      case 6:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 48)) {
-          _Internal::set_has_timezone(&has_bits);
-          _impl_.timezone_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // repeated .common.MinorType sub_type = 7;
-      case 7:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 56)) {
-          ptr -= 1;
-          do {
-            ptr += 1;
-            uint64_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
-            CHK_(ptr);
-            if (PROTOBUF_PREDICT_TRUE(::common::MinorType_IsValid(val))) {
-              _internal_add_sub_type(static_cast<::common::MinorType>(val));
-            } else {
-              ::PROTOBUF_NAMESPACE_ID::internal::WriteVarint(7, val, mutable_unknown_fields());
-            }
-            if (!ctx->DataAvailable(ptr)) break;
-          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<56>(ptr));
-        } else if (static_cast<uint8_t>(tag) == 58) {
-          ptr = ::PROTOBUF_NAMESPACE_ID::internal::PackedEnumParser<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(_internal_mutable_sub_type(), ptr, ctx, ::common::MinorType_IsValid, &_internal_metadata_, 7);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      default:
-        goto handle_unusual;
-    }  // switch
-  handle_unusual:
-    if ((tag == 0) || ((tag & 7) == 4)) {
-      CHK_(ptr);
-      ctx->SetLastTag(tag);
-      goto message_done;
-    }
-    ptr = UnknownFieldParse(
-        tag,
-        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
-        ptr, ctx);
-    CHK_(ptr != nullptr);
-  }  // while
-message_done:
-  _impl_._has_bits_.Or(has_bits);
+const char* MajorType::_InternalParse(
+    const char* ptr, ::_pbi::ParseContext* ctx) {
+  ptr = ::_pbi::TcParser::ParseLoop(this, ptr, ctx, &_table_.header);
   return ptr;
-failure:
-  ptr = nullptr;
-  goto message_done;
-#undef CHK_
 }
 
-uint8_t* MajorType::_InternalSerialize(
-    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<3, 7, 3, 0, 2> MajorType::_table_ = {
+  {
+    PROTOBUF_FIELD_OFFSET(MajorType, _impl_._has_bits_),
+    0, // no _extensions_
+    7, 56,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967168,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    7,  // num_field_entries
+    3,  // num_aux_entries
+    offsetof(decltype(_table_), aux_entries),
+    &_MajorType_default_instance_._instance,
+    ::_pbi::TcParser::GenericFallback,  // fallback
+  }, {{
+    {::_pbi::TcParser::MiniParse, {}},
+    // optional .common.MinorType minor_type = 1;
+    {::_pbi::TcParser::FastEvS1,
+     {8, 0, 0, PROTOBUF_FIELD_OFFSET(MajorType, _impl_.minor_type_)}},
+    // optional .common.DataMode mode = 2;
+    {::_pbi::TcParser::FastEr0S1,
+     {16, 1, 2, PROTOBUF_FIELD_OFFSET(MajorType, _impl_.mode_)}},
+    // optional int32 width = 3;
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(MajorType, _impl_.width_), 2>(),
+     {24, 2, 0, PROTOBUF_FIELD_OFFSET(MajorType, _impl_.width_)}},
+    // optional int32 precision = 4;
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(MajorType, _impl_.precision_), 3>(),
+     {32, 3, 0, PROTOBUF_FIELD_OFFSET(MajorType, _impl_.precision_)}},
+    // optional int32 scale = 5;
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(MajorType, _impl_.scale_), 4>(),
+     {40, 4, 0, PROTOBUF_FIELD_OFFSET(MajorType, _impl_.scale_)}},
+    // optional int32 timeZone = 6;
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(MajorType, _impl_.timezone_), 5>(),
+     {48, 5, 0, PROTOBUF_FIELD_OFFSET(MajorType, _impl_.timezone_)}},
+    // repeated .common.MinorType sub_type = 7;
+    {::_pbi::TcParser::FastEvR1,
+     {56, 63, 2, PROTOBUF_FIELD_OFFSET(MajorType, _impl_.sub_type_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // optional .common.MinorType minor_type = 1;
+    {PROTOBUF_FIELD_OFFSET(MajorType, _impl_.minor_type_), _Internal::kHasBitsOffset + 0, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kEnum)},
+    // optional .common.DataMode mode = 2;
+    {PROTOBUF_FIELD_OFFSET(MajorType, _impl_.mode_), _Internal::kHasBitsOffset + 1, 1,
+    (0 | ::_fl::kFcOptional | ::_fl::kEnumRange)},
+    // optional int32 width = 3;
+    {PROTOBUF_FIELD_OFFSET(MajorType, _impl_.width_), _Internal::kHasBitsOffset + 2, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kInt32)},
+    // optional int32 precision = 4;
+    {PROTOBUF_FIELD_OFFSET(MajorType, _impl_.precision_), _Internal::kHasBitsOffset + 3, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kInt32)},
+    // optional int32 scale = 5;
+    {PROTOBUF_FIELD_OFFSET(MajorType, _impl_.scale_), _Internal::kHasBitsOffset + 4, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kInt32)},
+    // optional int32 timeZone = 6;
+    {PROTOBUF_FIELD_OFFSET(MajorType, _impl_.timezone_), _Internal::kHasBitsOffset + 5, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kInt32)},
+    // repeated .common.MinorType sub_type = 7;
+    {PROTOBUF_FIELD_OFFSET(MajorType, _impl_.sub_type_), -1, 2,
+    (0 | ::_fl::kFcRepeated | ::_fl::kEnum)},
+  }}, {{
+    {::_pbi::FieldAuxEnumData{}, ::common::MinorType_internal_data_},
+    {0, 3},
+    {::_pbi::FieldAuxEnumData{}, ::common::MinorType_internal_data_},
+  }}, {{
+  }},
+};
+
+::uint8_t* MajorType::_InternalSerialize(
+    ::uint8_t* target,
+    ::google::protobuf::io::EpsCopyOutputStream* stream) const {
   // @@protoc_insertion_point(serialize_to_array_start:common.MajorType)
-  uint32_t cached_has_bits = 0;
-  (void) cached_has_bits;
+  ::uint32_t cached_has_bits = 0;
+  (void)cached_has_bits;
 
   cached_has_bits = _impl_._has_bits_[0];
   // optional .common.MinorType minor_type = 1;
   if (cached_has_bits & 0x00000001u) {
     target = stream->EnsureSpace(target);
     target = ::_pbi::WireFormatLite::WriteEnumToArray(
-      1, this->_internal_minor_type(), target);
+        1, this->_internal_minor_type(), target);
   }
 
   // optional .common.DataMode mode = 2;
   if (cached_has_bits & 0x00000002u) {
     target = stream->EnsureSpace(target);
     target = ::_pbi::WireFormatLite::WriteEnumToArray(
-      2, this->_internal_mode(), target);
+        2, this->_internal_mode(), target);
   }
 
   // optional int32 width = 3;
   if (cached_has_bits & 0x00000004u) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteInt32ToArray(3, this->_internal_width(), target);
+    target = ::google::protobuf::internal::WireFormatLite::
+        WriteInt32ToArrayWithField<3>(
+            stream, this->_internal_width(), target);
   }
 
   // optional int32 precision = 4;
   if (cached_has_bits & 0x00000008u) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteInt32ToArray(4, this->_internal_precision(), target);
+    target = ::google::protobuf::internal::WireFormatLite::
+        WriteInt32ToArrayWithField<4>(
+            stream, this->_internal_precision(), target);
   }
 
   // optional int32 scale = 5;
   if (cached_has_bits & 0x00000010u) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteInt32ToArray(5, this->_internal_scale(), target);
+    target = ::google::protobuf::internal::WireFormatLite::
+        WriteInt32ToArrayWithField<5>(
+            stream, this->_internal_scale(), target);
   }
 
   // optional int32 timeZone = 6;
   if (cached_has_bits & 0x00000020u) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteInt32ToArray(6, this->_internal_timezone(), target);
+    target = ::google::protobuf::internal::WireFormatLite::
+        WriteInt32ToArrayWithField<6>(
+            stream, this->_internal_timezone(), target);
   }
 
   // repeated .common.MinorType sub_type = 7;
-  for (int i = 0, n = this->_internal_sub_type_size(); i < n; i++) {
+  for (int i = 0, n = this->_internal_sub_type_size(); i < n; ++i) {
     target = stream->EnsureSpace(target);
     target = ::_pbi::WireFormatLite::WriteEnumToArray(
-        7, this->_internal_sub_type(i), target);
+        7, static_cast<::common::MinorType>(this->_internal_sub_type().Get(i)),
+        target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
-        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:common.MajorType)
   return target;
 }
 
-size_t MajorType::ByteSizeLong() const {
+::size_t MajorType::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:common.MajorType)
-  size_t total_size = 0;
+  ::size_t total_size = 0;
 
-  uint32_t cached_has_bits = 0;
+  ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
   // repeated .common.MinorType sub_type = 7;
   {
-    size_t data_size = 0;
-    unsigned int count = static_cast<unsigned int>(this->_internal_sub_type_size());for (unsigned int i = 0; i < count; i++) {
-      data_size += ::_pbi::WireFormatLite::EnumSize(
-        this->_internal_sub_type(static_cast<int>(i)));
-    }
-    total_size += (1UL * count) + data_size;
-  }
+    std::size_t data_size = 0;
+    auto count = static_cast<std::size_t>(this->_internal_sub_type_size());
 
+    for (std::size_t i = 0; i < count; ++i) {
+      data_size += ::_pbi::WireFormatLite::EnumSize(
+          this->_internal_sub_type().Get(static_cast<int>(i)));
+    }
+    total_size += data_size;
+    total_size += std::size_t{1} * count;
+  }
   cached_has_bits = _impl_._has_bits_[0];
   if (cached_has_bits & 0x0000003fu) {
     // optional .common.MinorType minor_type = 1;
     if (cached_has_bits & 0x00000001u) {
       total_size += 1 +
-        ::_pbi::WireFormatLite::EnumSize(this->_internal_minor_type());
+                    ::_pbi::WireFormatLite::EnumSize(this->_internal_minor_type());
     }
 
     // optional .common.DataMode mode = 2;
     if (cached_has_bits & 0x00000002u) {
       total_size += 1 +
-        ::_pbi::WireFormatLite::EnumSize(this->_internal_mode());
+                    ::_pbi::WireFormatLite::EnumSize(this->_internal_mode());
     }
 
     // optional int32 width = 3;
     if (cached_has_bits & 0x00000004u) {
-      total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_width());
+      total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(
+          this->_internal_width());
     }
 
     // optional int32 precision = 4;
     if (cached_has_bits & 0x00000008u) {
-      total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_precision());
+      total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(
+          this->_internal_precision());
     }
 
     // optional int32 scale = 5;
     if (cached_has_bits & 0x00000010u) {
-      total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_scale());
+      total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(
+          this->_internal_scale());
     }
 
     // optional int32 timeZone = 6;
     if (cached_has_bits & 0x00000020u) {
-      total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_timezone());
+      total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(
+          this->_internal_timezone());
     }
 
   }
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData MajorType::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
-    MajorType::MergeImpl
+const ::google::protobuf::Message::ClassData MajorType::_class_data_ = {
+    MajorType::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
 };
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*MajorType::GetClassData() const { return &_class_data_; }
+const ::google::protobuf::Message::ClassData* MajorType::GetClassData() const {
+  return &_class_data_;
+}
 
-
-void MajorType::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+void MajorType::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<MajorType*>(&to_msg);
   auto& from = static_cast<const MajorType&>(from_msg);
   // @@protoc_insertion_point(class_specific_merge_from_start:common.MajorType)
-  GOOGLE_DCHECK_NE(&from, _this);
-  uint32_t cached_has_bits = 0;
+  ABSL_DCHECK_NE(&from, _this);
+  ::uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  _this->_impl_.sub_type_.MergeFrom(from._impl_.sub_type_);
+  _this->_internal_mutable_sub_type()->MergeFrom(from._internal_sub_type());
   cached_has_bits = from._impl_._has_bits_[0];
   if (cached_has_bits & 0x0000003fu) {
     if (cached_has_bits & 0x00000001u) {
@@ -557,7 +510,7 @@ void MajorType::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROT
     }
     _this->_impl_._has_bits_[0] |= cached_has_bits;
   }
-  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
 }
 
 void MajorType::CopyFrom(const MajorType& from) {
@@ -567,16 +520,19 @@ void MajorType::CopyFrom(const MajorType& from) {
   MergeFrom(from);
 }
 
-bool MajorType::IsInitialized() const {
+PROTOBUF_NOINLINE bool MajorType::IsInitialized() const {
   return true;
 }
 
-void MajorType::InternalSwap(MajorType* other) {
+::_pbi::CachedSize* MajorType::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void MajorType::InternalSwap(MajorType* PROTOBUF_RESTRICT other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
   _impl_.sub_type_.InternalSwap(&other->_impl_.sub_type_);
-  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+  ::google::protobuf::internal::memswap<
       PROTOBUF_FIELD_OFFSET(MajorType, _impl_.timezone_)
       + sizeof(MajorType::_impl_.timezone_)
       - PROTOBUF_FIELD_OFFSET(MajorType, _impl_.minor_type_)>(
@@ -584,20 +540,16 @@ void MajorType::InternalSwap(MajorType* other) {
           reinterpret_cast<char*>(&other->_impl_.minor_type_));
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata MajorType::GetMetadata() const {
+::google::protobuf::Metadata MajorType::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_Types_2eproto_getter, &descriptor_table_Types_2eproto_once,
       file_level_metadata_Types_2eproto[0]);
 }
-
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace common
-PROTOBUF_NAMESPACE_OPEN
-template<> PROTOBUF_NOINLINE ::common::MajorType*
-Arena::CreateMaybeMessage< ::common::MajorType >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::common::MajorType >(arena);
-}
-PROTOBUF_NAMESPACE_CLOSE
-
+namespace google {
+namespace protobuf {
+}  // namespace protobuf
+}  // namespace google
 // @@protoc_insertion_point(global_scope)
-#include <google/protobuf/port_undef.inc>
+#include "google/protobuf/port_undef.inc"
