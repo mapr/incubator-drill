@@ -75,7 +75,7 @@ pipeline {
             stage("Build") {
               steps {
                 script {
-                  configFileProvider([configFile(fileId: 'maven_settings', variable: 'mvn_settings')]) {
+                  configFileProvider([configFile(fileId: 'maven_settings_mvn381_above', variable: 'mvn_settings')]) {
                     sh "cat ${env.mvn_settings} > settings.xml"
                   }
                   withCredentials([usernamePassword(credentialsId: 'artifactory_user_pass', passwordVariable: 'pass', usernameVariable: 'user')]) {
@@ -142,7 +142,7 @@ pipeline {
             stage("Build") {
               steps {
                 script {
-                  configFileProvider([configFile(fileId: 'maven_settings', variable: 'mvn_settings')]) {
+                  configFileProvider([configFile(fileId: 'maven_settings_mvn381_above', variable: 'mvn_settings')]) {
                     sh "cat ${env.mvn_settings} > settings.xml"
                   }
                   withCredentials([usernamePassword(credentialsId: 'artifactory_user_pass', passwordVariable: 'pass', usernameVariable: 'user')]) {
