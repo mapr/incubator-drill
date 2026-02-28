@@ -106,8 +106,7 @@ pipeline {
                         git checkout ${params.PRIVATE_PKG_BRANCH} ; \
                         make mapr-drill-internal-${COMPONENT_VERSION} ${MAKEFILE_ARGS} TIMESTAMP=${ID} DRILL_COMMIT_ID=${GIT_SHORT_COMMIT_SHA} PRIVATE_CONFIG_BRANCH_NAME=${params.PRIVATE_CONF_BRANCH} ; \
                         make ${PROJECT} ${MAKEFILE_ARGS} TIMESTAMP=${ID} DRILL_COMMIT_ID=${GIT_SHORT_COMMIT_SHA} PRIVATE_CONFIG_BRANCH_NAME=${params.PRIVATE_CONF_BRANCH}; \
-                        make mapr-drill-yarn-${COMPONENT_VERSION} ${MAKEFILE_ARGS} TIMESTAMP=${ID} DRILL_COMMIT_ID=${GIT_SHORT_COMMIT_SHA} PRIVATE_CONFIG_BRANCH_NAME=${params.PRIVATE_CONF_BRANCH} ; \
-                        make mapr-drill-internal-${COMPONENT_VERSION}-deploy ${MAKEFILE_ARGS} TIMESTAMP=${ID} DRILL_COMMIT_ID=${GIT_SHORT_COMMIT_SHA} PRIVATE_CONFIG_BRANCH_NAME=${params.PRIVATE_CONF_BRANCH} ; \
+                        make mapr-drill-yarn-${COMPONENT_VERSION} ${MAKEFILE_ARGS} TIMESTAMP=${ID} DRILL_COMMIT_ID=${GIT_SHORT_COMMIT_SHA} PRIVATE_CONFIG_BRANCH_NAME=${params.PRIVATE_CONF_BRANCH}
                       """
                     }
                   }
@@ -148,7 +147,8 @@ pipeline {
                   withCredentials([usernamePassword(credentialsId: 'artifactory_user_pass', passwordVariable: 'pass', usernameVariable: 'user')]) {
                     centosImage = docker.image("dfdkr.mip.storage.hpecorp.net/centos8-java11-gcc8:drill-1.20-protobuf-3.21.12")
                     centosImage.inside (
-                    "-e MAPR_MIRROR=${MAPR_MIRROR} \
+                    "--network host \
+                    -e MAPR_MIRROR=${MAPR_MIRROR} \
                     -e MAPR_CENTRAL=${MAPR_CENTRAL} \
                     -e MAVEN_CENTRAL=${MAVEN_CENTRAL} \
                     -e MAPR_MAVEN_REPO=${MAPR_MAVEN_REPO} \
@@ -157,7 +157,6 @@ pipeline {
                     -e MAPR_SNAPSHOTS_REPO=${MAPR_SNAPSHOTS_REPO} \
                     -e REPOSITORY_ID=${REPOSITORY_ID} \
                     -e ANT_OPTS=\"-Dhttp.proxyHost=${HPE_PROXY_HOST} -Dhttp.proxyPort=${HPE_PROXY_PORT} -Dhttps.proxyHost=${HPE_PROXY_HOST} -Dhttps.proxyPort=${HPE_PROXY_PORT} -Dhttp.nonProxyHosts='${HPE_PROXY_EXCEPTIONS}'\" \
-                    -e MAVEN_OPTS=\"-Dhttp.proxyHost=${HPE_PROXY_HOST} -Dhttp.proxyPort=${HPE_PROXY_PORT} -Dhttps.proxyHost=${HPE_PROXY_HOST} -Dhttps.proxyPort=${HPE_PROXY_PORT} -Dhttp.nonProxyHosts='${HPE_PROXY_EXCEPTIONS}'\" \
                     -v /root/.m2:/root/.m2:rw \
                     -v /root/yum-proxy.conf:/etc/yum.conf:ro \
                     -v /etc/hosts:/etc/hosts:ro \
