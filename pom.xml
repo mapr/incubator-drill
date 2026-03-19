@@ -124,7 +124,7 @@
     <msgpack.version>0.6.6</msgpack.version>
     <netty.tcnative.classifier/>
     <netty.tcnative.version>2.0.74.Final</netty.tcnative.version>
-    <netty.version>4.1.127.Final</netty.version>
+    <netty.version>4.1.131.Final</netty.version>
     <ojai.version>3.0-mapr-1808</ojai.version>
     <parquet.format.version>2.11.0</parquet.format.version>
     <parquet.version>1.15.2</parquet.version>
