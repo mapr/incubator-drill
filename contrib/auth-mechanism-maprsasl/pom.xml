@@ -24,7 +24,7 @@
     <parent>
         <artifactId>drill-contrib-parent</artifactId>
         <groupId>org.apache.drill.contrib</groupId>
-        <version>1.21.2.10-eep-933-SNAPSHOT</version>
+        <version>1.21.2.10-eep-933</version>
     </parent>
 
     <artifactId>drill-auth-mechanism-maprsasl</artifactId>

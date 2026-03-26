@@ -23,7 +23,7 @@
   <parent>
     <groupId>org.apache.drill.exec</groupId>
     <artifactId>exec-parent</artifactId>
-    <version>1.21.2.10-eep-933-SNAPSHOT</version>
+    <version>1.21.2.10-eep-933</version>
   </parent>
   <artifactId>drill-jdbc</artifactId>
   <name>Drill : Exec : JDBC Driver using dependencies</name>
