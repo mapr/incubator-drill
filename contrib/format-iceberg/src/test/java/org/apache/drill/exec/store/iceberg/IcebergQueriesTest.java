@@ -60,7 +60,9 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.OffsetDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -123,6 +125,7 @@ public class IcebergQueriesTest extends ClusterTest {
       Types.NestedField.optional(6, "boolean_field", Types.BooleanType.get()),
       Types.NestedField.optional(26, "time_field", Types.TimeType.get()),
       Types.NestedField.optional(27, "timestamp_field", Types.TimestampType.withoutZone()),
+      Types.NestedField.optional(33, "timestamp_field_with_zone", Types.TimestampType.withZone()),
       Types.NestedField.optional(28, "date_field", Types.DateType.get()),
       Types.NestedField.optional(29, "decimal_field", Types.DecimalType.of(4, 2)),
       Types.NestedField.optional(30, "uuid_field", Types.UUIDType.get()),
@@ -167,6 +170,7 @@ public class IcebergQueriesTest extends ClusterTest {
     record.setField("boolean_field", true);
     record.setField("time_field", LocalTime.of(2, 42, 42));
     record.setField("timestamp_field", LocalDateTime.of(1994, 4, 18, 11, 0, 0));
+    record.setField("timestamp_field_with_zone", OffsetDateTime.of(LocalDateTime.of(1994,4, 18, 13, 0), ZoneOffset.of("+2")));
     record.setField("date_field", LocalDate.of(1994, 4, 18));
     record.setField("decimal_field", new BigDecimal("12.34"));
     record.setField("uuid_field", new byte[16]);
@@ -188,6 +192,7 @@ public class IcebergQueriesTest extends ClusterTest {
     nullsRecord.setField("boolean_field", null);
     nullsRecord.setField("time_field", null);
     nullsRecord.setField("timestamp_field", null);
+    nullsRecord.setField("timestamp_field_with_zone", null);
     nullsRecord.setField("date_field", null);
     nullsRecord.setField("decimal_field", null);
     nullsRecord.setField("uuid_field", null);
@@ -209,6 +214,7 @@ public class IcebergQueriesTest extends ClusterTest {
     secondRecord.setField("boolean_field", false);
     secondRecord.setField("time_field", LocalTime.of(3, 41, 53));
     secondRecord.setField("timestamp_field", LocalDateTime.of(1995, 9, 10, 9, 0, 0));
+    secondRecord.setField("timestamp_field_with_zone", OffsetDateTime.of(LocalDateTime.of(1995,9, 10, 11, 0), ZoneOffset.of("+2")));
     secondRecord.setField("date_field", LocalDate.of(1995, 9, 10));
     secondRecord.setField("decimal_field", new BigDecimal("99.99"));
     secondRecord.setField("uuid_field", new byte[16]);
@@ -346,10 +352,11 @@ public class IcebergQueriesTest extends ClusterTest {
       .sqlQuery("select * from dfs.tmp.testAllTypes")
       .unOrdered()
       .baselineColumns("int_field", "long_field", "float_field", "double_field", "string_field",
-        "boolean_field", "time_field", "timestamp_field", "date_field", "decimal_field", "uuid_field",
+        "boolean_field", "time_field", "timestamp_field", "timestamp_field_with_zone", "date_field", "decimal_field", "uuid_field",
         "fixed_field", "binary_field", "list_field", "map_field", "struct_field", "repeated_struct_field",
         "repeated_list_field", "repeated_map_field")
       .baselineValues(1, 100L, 0.5F, 1.5D, "abc", true, LocalTime.of(2, 42, 42),
+        LocalDateTime.of(1994, 4, 18, 11, 0, 0),
         LocalDateTime.of(1994, 4, 18, 11, 0, 0), LocalDate.of(1994, 4, 18),
         new BigDecimal("12.34"), new byte[16], new byte[10], "hello".getBytes(StandardCharsets.UTF_8),
         listOf("a", "b", "c"),
@@ -375,9 +382,10 @@ public class IcebergQueriesTest extends ClusterTest {
             new Text("a"), 0.1F,
             new Text("b"), 0.2F))
         )
-      .baselineValues(null, null, null, null, null, null, null, null, null, null, null, null, null,
+      .baselineValues(null, null, null, null, null, null, null, null, null, null, null, null, null, null,
         listOf(), mapOfObject(), mapOf(), listOf(), listOf(), listOf())
       .baselineValues(988, 543L, Float.NaN, Double.MAX_VALUE, "def", false, LocalTime.of(3, 41, 53),
+        LocalDateTime.of(1995, 9, 10, 9, 0, 0),
         LocalDateTime.of(1995, 9, 10, 9, 0, 0), LocalDate.of(1995, 9, 10),
         new BigDecimal("99.99"), new byte[16], new byte[10], "world".getBytes(StandardCharsets.UTF_8),
         listOf("y", "n"),
@@ -435,9 +443,9 @@ public class IcebergQueriesTest extends ClusterTest {
       .sql(query)
       .planMatcher()
       .include("projection\\=struct<" +
-        "14: list_field: optional list<string>, " +
-        "16: struct_field: required struct<23: struct_int_field: optional int>, " +
-        "17: repeated_struct_field: required list<struct<27: struct_string_field: optional string>>")
+        "15: list_field: optional list<string>, " +
+        "17: struct_field: required struct<24: struct_int_field: optional int>, " +
+        "18: repeated_struct_field: required list<struct<28: struct_string_field: optional string>>")
       .match();
 
     testBuilder()
