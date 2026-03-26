@@ -37,6 +37,7 @@ import java.math.BigDecimal;
 import java.nio.ByteBuffer;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -71,6 +72,9 @@ public class IcebergColumnConverterFactory extends ColumnConverterFactory {
           if (value instanceof LocalDateTime) {
             LocalDateTime dateTime = (LocalDateTime) value;
             instant = dateTime.toInstant(ZoneOffset.UTC);
+          } else if (value instanceof OffsetDateTime) {
+            OffsetDateTime dateTime = (OffsetDateTime) value;
+            instant = dateTime.toInstant();
           } else {
             instant = Instant.ofEpochMilli((Long) value / 1000);
           }
@@ -190,7 +194,8 @@ public class IcebergColumnConverterFactory extends ColumnConverterFactory {
         return TypeProtos.MinorType.VARBINARY;
       case DECIMAL:
         return TypeProtos.MinorType.VARDECIMAL;
+      default:
+        return null;
     }
-    return null;
   }
 }
