@@ -22,6 +22,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import org.apache.calcite.rel.RelNode;
+import org.apache.calcite.rex.RexBuilder;
 import org.apache.calcite.rex.RexCall;
 import org.apache.calcite.rex.RexCorrelVariable;
 import org.apache.calcite.rex.RexDynamicParam;
@@ -32,6 +33,7 @@ import org.apache.calcite.rex.RexLocalRef;
 import org.apache.calcite.rex.RexNode;
 import org.apache.calcite.rex.RexOver;
 import org.apache.calcite.rex.RexRangeRef;
+import org.apache.calcite.rex.RexUtil;
 import org.apache.calcite.rex.RexVisitorImpl;
 import org.apache.calcite.sql.SqlKind;
 import org.apache.calcite.sql.type.SqlTypeName;
@@ -40,6 +42,7 @@ import org.apache.drill.exec.planner.logical.DrillOptiq;
 import org.apache.drill.exec.planner.logical.DrillParseContext;
 import org.apache.drill.exec.planner.physical.PrelUtil;
 
+import java.util.EnumSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.List;
@@ -60,6 +63,9 @@ import java.util.ArrayList;
  * 4, (LIMIT to CAST), the function call is a CAST
  */
 public class IndexableExprMarker extends RexVisitorImpl<Boolean> {
+
+  private static final Set<SqlKind> EXCLUSION_OPERATORS =
+      EnumSet.of(SqlKind.NOT, SqlKind.NOT_EQUALS, SqlKind.NOT_IN);
 
   //map of rexNode->converted LogicalExpression
   final Map<RexNode, LogicalExpression> desiredExpressions = Maps.newHashMap();
@@ -176,9 +182,19 @@ public class IndexableExprMarker extends RexVisitorImpl<Boolean> {
     return true;
   }
 
+  private boolean handleSearch(RexCall call) {
+    RexBuilder rexBuilder = inputRel.getCluster().getRexBuilder();
+    // We expand the search so the visitor can treat it as standard =, <, >, OR, etc.
+    RexNode expandedSearch = RexUtil.expandSearch(rexBuilder, null, call);
+    return expandedSearch.accept(this);
+  }
+
   @Override
   public Boolean visitCall(RexCall call) {
-    if (call.getKind() == SqlKind.NOT || call.getKind() == SqlKind.NOT_EQUALS || call.getKind() == SqlKind.NOT_IN) {
+    if (call.isA(SqlKind.SEARCH)) {
+      return handleSearch(call);
+    }
+    if (call.isA(EXCLUSION_OPERATORS)) {
       // Conditions under NOT are not indexable
       return false;
     }
@@ -231,8 +247,9 @@ public class IndexableExprMarker extends RexVisitorImpl<Boolean> {
       }
     }
 
+    // Fallback: standard recursive visit
     for (RexNode operand : call.operands) {
-      boolean bret = operand.accept(this);
+      operand.accept(this);
     }
     return false;
   }
