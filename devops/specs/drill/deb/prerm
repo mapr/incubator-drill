@@ -1,0 +1,37 @@
+#!/bin/bash
+
+MY_DRILL_HOME="__INSTALL_3DIGIT__"
+MAPR_HOME="__PREFIX__"
+[ -n "$VERBOSE" ] && echo "prerm called with argument \`$1'" >&2
+[ -n "$VERBOSE" ] && set -x
+if [ \( "$1" = "remove" \) ]; then
+    echo PRERM
+fi
+
+MY_DRILL_HOSTNAME="$( hostname -f )"
+if [ -z "$MY_DRILL_HOSTNAME" ]; then
+    MY_DRILL_HOSTNAME="$( hostname )"
+fi
+if $MAPR_HOME/initscripts/mapr-warden status > /dev/null 2>&1 ; then
+    if $MY_DRILL_HOME/bin/drillbit.sh status > /dev/null 2>&1 ; then
+        isSecure="false"
+        if [ -f "${MAPR_HOME}/conf/mapr-clusters.conf" ]; then
+            isSecure=$(head -1 ${MAPR_HOME}/conf/mapr-clusters.conf | grep -o 'secure=\w*' | cut -d= -f2)
+        fi
+        if [ "$isSecure" = "true" ] && [ -f "${MAPR_HOME}/conf/mapruserticket" ]; then
+           export MAPR_TICKETFILE_LOCATION="${MAPR_HOME}/conf/mapruserticket"
+        fi
+        OUTPUT=$(maprcli node services -name drill-bits -action stop -nodes $MY_DRILL_HOSTNAME 2>&1)
+        if [ $? -ne 0 ] ; then
+            echo $OUTPUT
+        fi
+
+        # make sure the process goes away - maprcli above is async, so the files are often
+        # gone by the time warden tries.
+        if ! $MY_DRILL_HOME/bin/drillbit.sh stop > /dev/null 2>&1 ; then
+            true
+        fi
+    fi
+fi
+true
+

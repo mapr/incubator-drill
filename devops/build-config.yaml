@@ -1,0 +1,14 @@
+---
+slackChannel: "eco-build"
+initialReleaseTag: '' # Use only for release build
+whitesourceScan: true
+build:
+  - name: Ubuntu
+    image: _defaultregistry_/ubuntu18-java17-mvn3.9.6:drill_zoo_protobuf
+    basicBuildCommands: "_BUILD_SCRIPT_ARGS_ devops/scripts/build.sh"
+    hostmachine_jenkins_label: "ubuntu16"
+  - name: Centos
+    image: _defaultregistry_/centos8-java17-mvn3.9.6:drill_zoo_protobuf
+    basicBuildCommands: "_BUILD_SCRIPT_ARGS_ devops/scripts/build.sh deploy"
+    hostmachine_jenkins_label: "redhat8"
+    rpmSign: true

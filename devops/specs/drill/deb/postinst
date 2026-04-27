@@ -1,0 +1,40 @@
+#!/bin/bash
+
+MY_DRILL_VERSION="__VERSION__"
+MY_DRILL_HOME="__INSTALL_3DIGIT__"
+MAPR_HOME="__PREFIX__"
+[ -n "$VERBOSE" ] && echo "postinst called with argument \`$1'" >&2
+[ -n "$VERBOSE" ] && set -x
+#
+# summary of how this script can be called:
+#        * <postinst> `configure' <most-recently-configured-version>
+#        * <old-postinst> `abort-upgrade' <new version>
+#        * <conflictor's-postinst> `abort-remove' `in-favour' <package>
+#          <new-version>
+#        * <postinst> `abort-remove'
+#        * <deconfigured's-postinst> `abort-deconfigure' `in-favour'
+#          <failed-install-package> <version> `removing'
+#          <conflicting-package> <version>
+#
+if [ "$1" = "configure" ]; then
+    echo Post Configuration
+    if [ -n "$2" ]; then
+        # Version can be in the format of 0.12.22 or 0.12.26.201605311309
+        MY_OLD_DRILL_VERSION=$2
+        MY_OLD_DRILL_RVER="$( echo $MY_OLD_DRILL_VERSION| cut -d'.' -f1-3 )"
+        MY_UPGRADE_STAGING_DIR="/tmp/upgrade_drill-$MY_DRILL_VERSION"
+        if [ -d $MY_UPGRADE_STAGING_DIR ]; then
+            echo Saving staged old Configuration files
+            if [ -f $MY_UPGRADE_STAGING_DIR/warden.drill-bits-$MY_OLD_DRILL_RVER ]; then
+                cp $MY_UPGRADE_STAGING_DIR/warden.drill-bits-$MY_OLD_DRILL_RVER $MY_DRILL_HOME/conf
+            fi
+            rm -rf $MY_UPGRADE_STAGING_DIR
+        fi
+    fi
+fi
+
+if [ -z "$2" ]; then
+    touch "__INSTALL_3DIGIT__/conf/.not_configured_yet"
+fi
+
+exit 0

@@ -1,0 +1,22 @@
+#!/bin/bash
+
+MY_DRILL_HOME="__INSTALL_3DIGIT__"
+MY_DRILL_VER="__VERSION__"
+MAPR_HOME="__PREFIX__"
+[ -n "$VERBOSE" ] && echo "postrm called with argument \`$1'" >&2
+[ -n "$VERBOSE" ] && set -x
+
+if [ \( "$1" = "purge" \) ]; then
+    echo POSTRM
+fi
+
+if [ -f __PREFIX__/conf/conf.d/warden.drill-bits.conf ]; then
+  rm -Rf __PREFIX__/conf/conf.d/warden.drill-bits.conf
+fi
+if [ -f __PREFIX__/roles/drill-qs ]; then
+  rm -Rf __PREFIX__/roles/drill-qs
+fi
+
+rm -Rf /usr/bin/sqlline
+rm -Rf /usr/bin/drill-config.sh
+

@@ -1,0 +1,14 @@
+Package: mapr-drill-yarn
+Version: __RELEASE_VERSION__
+Section: base
+Priority: optional
+Architecture: all
+Depends: mapr-client
+#Breaks:
+#Provides:
+Conflicts: mapr-drill, mapr-drill-internal
+#Recommends: 
+Maintainer: Hewlett Packard Enterprise
+Description: HPE DataFabric Ecosystem Pack: Apache Drill on Yarn Package
+  Tag: __RELEASE_BRANCH__
+  Commit: __GIT_COMMIT__

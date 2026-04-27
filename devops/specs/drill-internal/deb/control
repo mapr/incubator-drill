@@ -1,0 +1,10 @@
+Package: mapr-drill-internal
+Version: __RELEASE_VERSION__
+Section: base
+Priority: optional
+Architecture: all
+Depends: mapr-client
+Maintainer: Hewlett Packard Enterprise
+Description: HPE DataFabric Ecosystem Pack: Apache Drill Package 
+  Tag: __RELEASE_BRANCH__
+  Commit: __GIT_COMMIT__

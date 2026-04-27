@@ -1,0 +1,63 @@
+#!/bin/bash
+
+MY_DRILL_VERSION="__VERSION__"
+MY_DRILL_HOME="__INSTALL_3DIGIT__"
+MAPR_HOME="__PREFIX__"
+[ -n "$VERBOSE" ] && echo "preinst called with argument \`$1'" >&2
+[ -n "$VERBOSE" ] && set -x
+
+#
+# summary of how this script can be called:
+#        * <new-preinst> `install'
+#        * <new-preinst> `install' <old-version>
+#        * <new-preinst> `upgrade' <old-version>
+#
+case "$1" in
+    install)
+    ;;
+
+    upgrade)
+        if [ -n "$2" ]; then
+            echo "Saving old config files"
+            # Version can be in the format of 0.12.22 or 0.12.26.201605311309
+            MY_OLD_DRILL_VERSION=$2
+            MY_OLD_DRILL_RVER="$( echo $MY_OLD_DRILL_VERSION| cut -d'.' -f1-3 )"
+            MY_OLD_DRILL_HOME="$( dirname $MY_DRILL_HOME )"
+            MY_OLD_DRILL_HOME="$MY_OLD_DRILL_HOME/drill-$MY_OLD_DRILL_RVER"
+            MY_UPGRADE_STAGING_DIR="/tmp/upgrade_drill-$MY_DRILL_VERSION"
+            MY_DRILL_HOSTNAME="$( hostname -f )"
+            if [ -z "$MY_DRILL_HOSTNAME" ]; then
+                MY_DRILL_HOSTNAME="$( hostname )"
+            fi
+            mkdir -p $MY_UPGRADE_STAGING_DIR
+            if [ -f $MAPR_HOME/conf/conf.d/warden.drill-bits.conf ]; then
+                cp $MAPR_HOME/conf/conf.d/warden.drill-bits.conf $MY_UPGRADE_STAGING_DIR/warden.drill-bits.conf-$MY_OLD_DRILL_RVER
+            fi
+            if /opt/mapr/initscripts/mapr-warden status > /dev/null 2>&1 ; then
+                if $MY_OLD_DRILL_HOME/bin/drillbit.sh status > /dev/null 2>&1 ; then
+                    echo "stopping drill service"
+                    OUTPUT=$(maprcli node services -name drill-bits -action stop -nodes $MY_DRILL_HOSTNAME 2>&1)
+                    if [ $? -ne 0 ]; then
+                        echo "$OUTPUT"
+                    fi
+                    if ! $MY_OLD_DRILL_HOME/bin/drillbit.sh stop > /dev/null 2>&1 ; then
+                        true
+                    fi
+                fi
+            fi
+        fi
+        touch __PREFIX__/drill/upgrade 2>&1 || :
+    ;;
+
+    abort-upgrade)
+    ;;
+
+    *)
+        echo "preinst called with unknown argument \`$1'" >&2
+        exit 1
+    ;;
+esac
+
+
+
+

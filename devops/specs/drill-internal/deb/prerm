@@ -1,0 +1,49 @@
+#!/bin/bash
+
+[ -n "$VERBOSE" ] && echo "prerm called with argument \`$1'" >&2
+[ -n "$VERBOSE" ] && set -x
+
+
+#
+# summary of how this script can be called:
+#        * <prerm> `remove'
+#        * <old-prerm> `upgrade' <new-version>
+#        * <new-prerm> `failed-upgrade' <old-version>
+#        * <conflictor's-prerm> `remove' `in-favour' <package> <new-version>
+#        * <deconfigured's-prerm> `deconfigure' `in-favour'
+#          <package-being-installed> <version> `removing'
+#          <conflicting-package> <version>
+#
+case "$1" in
+    remove|deconfigure)
+      OLD_DRILL_VERSION=$(dpkg-query '--showformat=${Version}' --show mapr-drill-internal)
+      OLD_DRILL_3DIGIT_VERSION="$(echo "${OLD_DRILL_VERSION}" | cut -d'.' -f1-3)"
+
+      OLD_DIR="__PREFIX__/drill/drill-${OLD_DRILL_3DIGIT_VERSION}"
+      BACKUP_TARGET="__PREFIX__/drill/drill-${OLD_DRILL_VERSION}"
+      mkdir -p "${BACKUP_TARGET}"
+      chown --reference="${OLD_DIR}" "${BACKUP_TARGET}"
+
+      if [ -d "${OLD_DIR}/conf" ]; then
+        cp -rfa "${OLD_DIR}"/conf "${BACKUP_TARGET}"
+      fi
+      if [ -d "${OLD_DIR}/logs" ]; then
+        cp -rfa "${OLD_DIR}"/logs "${BACKUP_TARGET}"
+      fi
+      if [ -d "${OLD_DIR}/jars/3rdparty" ]; then
+        cp -rfaT "${OLD_DIR}"/jars/3rdparty "${BACKUP_TARGET}"/jars
+      fi
+    ;;
+
+    upgrade)
+    ;;
+
+    failed-upgrade)
+    ;;
+
+    *)
+        echo "prerm called with unknown argument \`$1'" >&2
+        exit 1
+    ;;
+esac
+

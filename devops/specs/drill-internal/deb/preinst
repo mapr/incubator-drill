@@ -1,0 +1,58 @@
+#!/bin/bash
+
+[ -n "$VERBOSE" ] && echo "preinst called with argument \`$1'" >&2
+[ -n "$VERBOSE" ] && set -x
+
+#
+# summary of how this script can be called:
+#        * <new-preinst> `install'
+#        * <new-preinst> `install' <old-version>
+#        * <new-preinst> `upgrade' <old-version>
+#
+case "$1" in
+    install)
+    ;;
+    upgrade)
+      OLD_DRILL_VERSION="$2"
+      OLD_DRILL_3DIGIT_VERSION=$(echo $OLD_DRILL_VERSION | cut -d "." -f1-3)
+
+      deprecated_drill_backup_dir="__PREFIX__/drill/OLD_DRILL_VERSIONS"
+      if [ -d "$deprecated_drill_backup_dir" ]; then
+        num_entries=$(ls -A "$deprecated_drill_backup_dir" | wc -l)
+
+        if [ "$num_entries" -eq 1 ]; then
+          rm -rf "$deprecated_drill_backup_dir"
+        fi
+      fi
+
+      # preserve Drill configs, custom jars and logs
+      OLD_DIR="__PREFIX__/drill/drill-${OLD_DRILL_3DIGIT_VERSION}"
+      BACKUP_TARGET="__PREFIX__/drill/drill-${OLD_DRILL_VERSION}"
+
+      mkdir -p "${BACKUP_TARGET}"
+      chown --reference="${OLD_DIR}" "${BACKUP_TARGET}"
+
+      if [ -d "${OLD_DIR}/conf" ]; then
+        cp -rfa "${OLD_DIR}"/conf "${BACKUP_TARGET}"
+      fi
+      if [ -d "${OLD_DIR}/logs" ]; then
+        mv "${OLD_DIR}"/logs "${BACKUP_TARGET}"
+      fi
+      if [ -d "${OLD_DIR}/jars/3rdparty" ]; then
+        cp -rfaT "${OLD_DIR}"/jars/3rdparty "${BACKUP_TARGET}"/jars
+      fi
+      rm -rf "${OLD_DIR}"/jars/*
+    ;;
+
+    abort-upgrade)
+    ;;
+
+    *)
+        echo "preinst called with unknown argument \`$1'" >&2
+        exit 1
+    ;;
+esac
+
+
+
+

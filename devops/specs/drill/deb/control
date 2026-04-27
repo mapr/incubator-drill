@@ -1,0 +1,11 @@
+Package: mapr-drill
+Version: __RELEASE_VERSION__
+Section: base
+Priority: optional
+Architecture: all
+Depends: mapr-core, mapr-drill-internal (>= __RELEASE_VERSION__)
+Conflicts: mapr-drill-yarn
+Maintainer: Hewlett Packard Enterprise
+Description: HPE DataFabric Software Ecosystem Pack: Apache Drill Role Package
+  Tag: __RELEASE_BRANCH__
+  Commit: __GIT_COMMIT__

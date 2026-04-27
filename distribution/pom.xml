@@ -258,6 +258,7 @@
               <goal>single</goal>
             </goals>
             <configuration>
+              <skipAssembly>${skip.tar.assembly}</skipAssembly>
               <descriptors>
                 <descriptor>src/assemble/bin-assembly.xml</descriptor>
               </descriptors>
