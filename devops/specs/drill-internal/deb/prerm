@@ -19,8 +19,8 @@ case "$1" in
       OLD_DRILL_VERSION=$(dpkg-query '--showformat=${Version}' --show mapr-drill-internal)
       OLD_DRILL_3DIGIT_VERSION="$(echo "${OLD_DRILL_VERSION}" | cut -d'.' -f1-3)"
 
-      OLD_DIR="__PREFIX__/drill/drill-${OLD_DRILL_3DIGIT_VERSION}"
-      BACKUP_TARGET="__PREFIX__/drill/drill-${OLD_DRILL_VERSION}"
+      OLD_DIR="__HPE_HOME__/drill/drill-${OLD_DRILL_3DIGIT_VERSION}"
+      BACKUP_TARGET="__HPE_HOME__/drill/drill-${OLD_DRILL_VERSION}"
       mkdir -p "${BACKUP_TARGET}"
       chown --reference="${OLD_DIR}" "${BACKUP_TARGET}"
 

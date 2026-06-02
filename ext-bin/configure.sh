@@ -2,7 +2,7 @@
 #set -x
 
 # Installation location
-maprHome="${MAPR_HOME:-__PREFIX__}"
+maprHome="${MAPR_HOME:-__HPE_HOME__}"
 drillBase="${maprHome}/drill"
 hadoopVer=`cat ${maprHome}/hadoop/hadoopversion`
 hadoopHome="${maprHome}/hadoop/hadoop-$hadoopVer"

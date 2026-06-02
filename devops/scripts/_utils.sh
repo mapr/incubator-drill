@@ -1,5 +1,8 @@
 #!/bin/bash
 
+echo "Build environment variables..."
+printenv | sort
+
 SCRIPT_DIR=$(dirname "${BASH_SOURCE[0]}")
 . "${SCRIPT_DIR}/_initialize_package_variables.sh"
 
@@ -95,19 +98,19 @@ replace_build_variables() {
 
   # Using + instead of \; groups files together and runs sed faster
   find "$target_path" -type f -exec sed -i \
-      -e "s|__PREFIX__|${HPE_HOME_DIRECTORY}|g" \
+      -e "s|__HPE_HOME__|${HPE_HOME_DIRECTORY}|g" \
       -e "s|__VERSION__|${PKG_VERSION}|g" \
       -e "s|__VERSION_3DIGIT__|${PKG_3DIGIT_VERSION}|g" \
-      -e "s|__RELEASE_BRANCH__|${PACKAGE_INFO_BRANCH}|g" \
+      -e "s|__RELEASE_BRANCH__|${BRANCH_NAME}|g" \
       -e "s|__RELEASE_VERSION__|${PKG_VERSION}.${TIMESTAMP}|g" \
-      -e "s|__INSTALL_3DIGIT__|${PKG_INSTALL_ROOT}|g" \
+      -e "s|__DRILL_HOME__|${DRILL_HOME_DIRECTORY}|g" \
       -e "s|__GIT_COMMIT__|${GIT_COMMIT}|g" \
     {} +
 }
 
 setup_drill_internal_package() {
   local role_name="drill-internal"
-  local package_path="${BUILD_ROOT}/root/${role_name}${DRILL_ROOT_DIR}"
+  local package_path="${BUILD_ROOT}/root/${role_name}${DRILL_HOME_DIRECTORY}"
 
   rm -rf "${package_path}"
   mkdir -pv "${package_path}"
@@ -127,7 +130,7 @@ setup_drill_internal_package() {
 
 setup_drill_yarn_package() {
   local role_name="drill-yarn"
-  local package_path="${BUILD_ROOT}/root/${role_name}${DRILL_ROOT_DIR}"
+  local package_path="${BUILD_ROOT}/root/${role_name}${DRILL_HOME_DIRECTORY}"
 
 	rm -fv "${package_path}"/conf/warden*
 	rm -fv "${package_path}"/conf/distrib-env.sh

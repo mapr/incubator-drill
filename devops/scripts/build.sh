@@ -65,7 +65,7 @@ build_internal_package() {
 
   echo "Preparing drill-internal package..."
   setup_drill_internal_package
-  setup_role "drill-internal" "${DRILL_ROOT_DIR}"
+  setup_role "drill-internal" "${DRILL_HOME_DIRECTORY}"
 
   echo "Building package..."
   build_package "drill-internal" "$os" "$keep_sources"
@@ -74,7 +74,7 @@ build_internal_package() {
 build_role_package() {
   local os="$1"
   echo "Preparing drill package..."
-  setup_role "drill-bits" "${DRILL_ROOT_DIR}" "${DRILL_ROOT_DIR}/bin/configure.sh" "drill"
+  setup_role "drill-bits" "${DRILL_HOME_DIRECTORY}" "${DRILL_HOME_DIRECTORY}/bin/configure.sh" "drill"
 
   echo "Building package..."
   build_package "drill" "$os"
@@ -83,11 +83,11 @@ build_role_package() {
 build_drill_yarn_package() {
     local os="$1"
     echo "Preparing drill-yarn package..."
-    mkdir -p "${BUILD_ROOT}/root/drill-yarn${DRILL_ROOT_DIR}"
-    cp -rPp "${BUILD_ROOT}/root/drill-internal${DRILL_ROOT_DIR}"/* "${BUILD_ROOT}/root/drill-yarn${DRILL_ROOT_DIR}"
+    mkdir -p "${BUILD_ROOT}/root/drill-yarn${DRILL_HOME_DIRECTORY}"
+    cp -rPp "${BUILD_ROOT}/root/drill-internal${DRILL_HOME_DIRECTORY}"/* "${BUILD_ROOT}/root/drill-yarn${DRILL_HOME_DIRECTORY}"
 
     echo "Building package..."
-    setup_role "drill-on-yarn" "${DRILL_ROOT_DIR}"
+    setup_role "drill-on-yarn" "${DRILL_HOME_DIRECTORY}"
     build_package "drill-yarn" "$os"
 }
 
@@ -104,9 +104,9 @@ local mode="${1:-local}"
 
     docker run --rm \
       --user "$(id -u):$(id -g)" \
-      -v "${target_dir}:/workspace" \
-      -w /workspace \
-      "dfdkr.ftc.storage.hpecorp.net/${docker_image}" \
+      -v "${START_DIR}:${START_DIR}" \
+      -w "${target_dir}" \
+      "dfdkr.ftc.hcocto.hpecorp.net:80/${docker_image}" \
       bash -c '
         set -e
         sed -i -e "s|#    set(Boost_NAMESPACE drill_boost)|set(Boost_NAMESPACE drill_boost)|g" CMakeLists.txt
@@ -168,7 +168,7 @@ print_results() {
 main() {
 
   # Set default values
-  local action="all"
+  local action=""
   local os="${OS}"       # Defaults to global OS variable if not provided
   local deploy_flag=""
   local execution_mode="local"
@@ -223,6 +223,7 @@ main() {
       build_internal_package "$os" || exit 1
       build_role_package "$os"
       print_results
+      clean_resources
       ;;
 
     "all")

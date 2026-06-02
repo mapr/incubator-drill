@@ -37,7 +37,7 @@ if (NOT DEFINED DRILL_VERSION)
     message("Detecting Drill version:")
     if (WIN32)
         find_program(POWERSHELL Powershell)
-        file(TO_NATIVE_PATH "${DRILL_ROOT}/pom.xml" DRILL_POM_FILE)    
+        file(TO_NATIVE_PATH "${DRILL_ROOT}/pom.xml" DRILL_POM_FILE)
         execute_process(
             COMMAND ${POWERSHELL} "Select-Xml -Namespace @{'m'='http://maven.apache.org/POM/4.0.0'} -XPath '//m:project/m:version/text()' -Path ${DRILL_POM_FILE} | foreach {$_.Node.Value}"
             WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}

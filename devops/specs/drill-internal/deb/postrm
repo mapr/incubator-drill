@@ -21,8 +21,8 @@ case "$1" in
 
     remove|purge|disappear)
       VERSION_SHORT=$(echo __VERSION__ | cut -d. -f1-3)
-      rm -f __PREFIX__/drill/current
-      rm -Rf __PREFIX__/drill/drill-${VERSION_SHORT}
+      rm -f __HPE_HOME__/drill/current
+      rm -Rf __DRILL_HOME__
     ;;
 
     abort-install|abort-upgrade|failed-upgrade)

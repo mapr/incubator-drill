@@ -1,7 +1,7 @@
 #!/bin/bash
 
-MY_DRILL_HOME="__INSTALL_3DIGIT__"
-MAPR_HOME="__PREFIX__"
+MY_DRILL_HOME="__DRILL_HOME__"
+MAPR_HOME="__HPE_HOME__"
 [ -n "$VERBOSE" ] && echo "prerm called with argument \`$1'" >&2
 [ -n "$VERBOSE" ] && set -x
 if [ \( "$1" = "remove" \) ]; then

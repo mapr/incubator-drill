@@ -1,8 +1,8 @@
 #!/bin/bash
 
 MY_DRILL_VERSION="__VERSION__"
-MY_DRILL_HOME="__INSTALL_3DIGIT__"
-MAPR_HOME="__PREFIX__"
+MY_DRILL_HOME="__DRILL_HOME__"
+MAPR_HOME="__HPE_HOME__"
 [ -n "$VERBOSE" ] && echo "postinst called with argument \`$1'" >&2
 [ -n "$VERBOSE" ] && set -x
 #
@@ -34,7 +34,7 @@ if [ "$1" = "configure" ]; then
 fi
 
 if [ -z "$2" ]; then
-    touch "__INSTALL_3DIGIT__/conf/.not_configured_yet"
+    touch "__DRILL_HOME__/conf/.not_configured_yet"
 fi
 
 exit 0

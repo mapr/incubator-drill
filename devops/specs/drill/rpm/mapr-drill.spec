@@ -25,11 +25,11 @@ echo "NOOP"
 
 
 %files
-__PREFIX__
+__HPE_HOME__
 
 %pre
-MY_DRILL_HOME="__INSTALL_3DIGIT__"
-MAPR_HOME="__PREFIX__"
+MY_DRILL_HOME="__DRILL_HOME__"
+MAPR_HOME="__HPE_HOME__"
 MY_DRILL_VERSION="__VERSION__"
 MY_DRILL_BASE="$( dirname $MY_DRILL_HOME )"
 MY_DRILL_OLD_VERSION_FILE="%{_localstatedir}/lib/rpm-state/drill-old-version"
@@ -66,8 +66,8 @@ fi
 
 %post
 
-MY_DRILL_HOME="__INSTALL_3DIGIT__"
-MAPR_HOME="__PREFIX__"
+MY_DRILL_HOME="__DRILL_HOME__"
+MAPR_HOME="__HPE_HOME__"
 MY_DRILL_VERSION="__VERSION__"
 MY_DRILL_BASE="$( dirname $MY_DRILL_HOME )"
 MY_DRILL_OLD_VERSION_FILE="%{_localstatedir}/lib/rpm-state/drill-old-version"
@@ -89,7 +89,7 @@ fi
 
 
 %preun
-MAPR_HOME="__PREFIX__"
+MAPR_HOME="__HPE_HOME__"
 # N/A     install
 # $1 -eq 1 upgrade
 # $1 -eq 0 uninstall
@@ -117,12 +117,12 @@ fi
 # If this is an uninstall, last version is removed
 # if package is getting purged remove entire directory
 if [ "$1" = "0" ]; then
-    if [ -f __PREFIX__/conf/conf.d/warden.drill-bits.conf ]; then
-        rm -Rf __PREFIX__/conf/conf.d/warden.drill-bits.conf
+    if [ -f __HPE_HOME__/conf/conf.d/warden.drill-bits.conf ]; then
+        rm -Rf __HPE_HOME__/conf/conf.d/warden.drill-bits.conf
     fi
 
-    if [ -f __PREFIX__/roles/drill-qs ]; then
-        rm -Rf  __PREFIX__/roles/drill-qs
+    if [ -f __HPE_HOME__/roles/drill-qs ]; then
+        rm -Rf  __HPE_HOME__/roles/drill-qs
     fi
     rm -Rf /usr/bin/sqlline
     rm -Rf /usr/bin/drill-config.sh
@@ -136,16 +136,16 @@ fi
 #
 maprCoreMajorVer=""
 installWardenFile=0
-if [ -e __PREFIX__/MapRBuildVersion ]; then
-    maprCoreMajorVer=$(cat __PREFIX__/MapRBuildVersion | cut -d'.' -f1)
+if [ -e __HPE_HOME__/MapRBuildVersion ]; then
+    maprCoreMajorVer=$(cat __HPE_HOME__/MapRBuildVersion | cut -d'.' -f1)
 fi
-if [ -f __INSTALL_3DIGIT__/conf/warden.drill-bits.conf ]; then
+if [ -f __DRILL_HOME__/conf/warden.drill-bits.conf ]; then
     if [ -z "$maprCoreMajorVer" ]; then
         installWardenFile=1
     elif [ "$maprCoreMajorVer" -lt 6 ]; then
         installWardenFile=1
     fi
     if [ "$installWardenFile" -eq 1 ]; then
-        cp -fp __INSTALL_3DIGIT__/conf/warden.drill-bits.conf __PREFIX__/conf/conf.d/.
+        cp -fp __DRILL_HOME__/conf/warden.drill-bits.conf __HPE_HOME__/conf/conf.d/.
     fi
 fi

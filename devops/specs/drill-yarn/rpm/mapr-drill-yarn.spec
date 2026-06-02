@@ -26,7 +26,7 @@ echo "NOOP"
 
 
 %files
-__PREFIX__/
+__HPE_HOME__/
 
 %pre
 # $1 -eq 1 install
@@ -35,14 +35,14 @@ __PREFIX__/
 [ -n "$VERBOSE" ] && echo "pre install called with argument \`$1'" >&2
 [ -n "$VERBOSE" ] && set -x ; :
 
-OLD_DRILL_DIRS=`find __PREFIX__/drill -type d -name "drill-*" -maxdepth 1 2> /dev/null`
+OLD_DRILL_DIRS=`find __HPE_HOME__/drill -type d -name "drill-*" -maxdepth 1 2> /dev/null`
 if [ ! -z "${OLD_DRILL_DIRS}" ]; then
-  mkdir -p __PREFIX__/drill/OLD_DRILL_VERSIONS
+  mkdir -p __HPE_HOME__/drill/OLD_DRILL_VERSIONS
   for OLD_DRILL_DIR in ${OLD_DRILL_DIRS} ; do
     if [ -d "${OLD_DRILL_DIR}/conf" ]; then
       OLD_DRILL_DIRNAME=`basename ${OLD_DRILL_DIR}`
-      mkdir -p __PREFIX__/drill/OLD_DRILL_VERSIONS/${OLD_DRILL_DIRNAME}
-      cp -rf ${OLD_DRILL_DIR}/conf __PREFIX__/drill/OLD_DRILL_VERSIONS/${OLD_DRILL_DIRNAME}/.
+      mkdir -p __HPE_HOME__/drill/OLD_DRILL_VERSIONS/${OLD_DRILL_DIRNAME}
+      cp -rf ${OLD_DRILL_DIR}/conf __HPE_HOME__/drill/OLD_DRILL_VERSIONS/${OLD_DRILL_DIRNAME}/.
     fi
   done
 fi
@@ -55,40 +55,40 @@ fi
 [ -n "$VERBOSE" ] && set -x ; :
 
 VERSION_SHORT="$(echo __VERSION__ | cut -d'.' -f1-3)"
-echo "$VERSION_SHORT" > __PREFIX__/drill/drillversion
+echo "$VERSION_SHORT" > __HPE_HOME__/drill/drillversion
 
 #
 # change ownership
 #
-DAEMON_CONF="__PREFIX__/conf/daemon.conf"
+DAEMON_CONF="__HPE_HOME__/conf/daemon.conf"
 
 if [ -f "$DAEMON_CONF" ]; then
     MAPR_USER=$( awk -F = '$1 == "mapr.daemon.user" { print $2 }' $DAEMON_CONF)
 
     if [ ! -z "$MAPR_USER" ]; then
-        chown -R $MAPR_USER __PREFIX__/drill/drill-${VERSION_SHORT}
+        chown -R $MAPR_USER __DRILL_HOME__
     fi
 fi
 
-chmod 1777 -R __PREFIX__/drill/drill-${VERSION_SHORT}/logs
-touch __PREFIX__/drill/drill-${VERSION_SHORT}/logs/sqlline.log
-chmod 666 __PREFIX__/drill/drill-${VERSION_SHORT}/logs/sqlline.log
+chmod 1777 -R __DRILL_HOME__/logs
+touch __DRILL_HOME__/logs/sqlline.log
+chmod 666 __DRILL_HOME__/logs/sqlline.log
 
 # distrib-env.sh is replaced at build time - no longer a need to generate its contents at install time
 
 if [ ! -f /opt/mapr/conf/mapr.login.conf ]; then
-    cp -f __PREFIX__/drill/drill-${VERSION_SHORT}/conf/mapr.login.conf /opt/mapr/conf/.
+    cp -f __DRILL_HOME__/conf/mapr.login.conf /opt/mapr/conf/.
 fi
-if [ -f __INSTALL_3DIGIT__/conf/mapr.login.conf ]; then
-  rm -f __INSTALL_3DIGIT__/conf/mapr.login.conf
+if [ -f __DRILL_HOME__/conf/mapr.login.conf ]; then
+  rm -f __DRILL_HOME__/conf/mapr.login.conf
 fi
 
-ln -sf __PREFIX__/drill/drill-${VERSION_SHORT}/bin/sqlline /usr/bin/sqlline
+ln -sf __DRILL_HOME__/bin/sqlline /usr/bin/sqlline
 
 #
 # get ZK list and cluster ID for drill-override.conf
 #
-drillOverrideConf="__PREFIX__/drill/drill-${VERSION_SHORT}/conf/drill-override.conf"
+drillOverrideConf="__DRILL_HOME__/conf/drill-override.conf"
 oldClusterId="drillbits1"
 oldZkConnect="localhost:2181"
 
@@ -136,8 +136,8 @@ sed -i -e "s/$oldClusterId/$newClusterId/g" $drillOverrideConf
 [ -n "$VERBOSE" ] && set -x ; :
 
 if [ $1 -eq 0 ]; then
-  rm -rf __PREFIX__/drill/drill-${VERSION_SHORT}
-  rm -f __PREFIX__/drill/drillversion
+  rm -rf __DRILL_HOME__
+  rm -f __HPE_HOME__/drill/drillversion
 
   rm -Rf /usr/bin/sqlline
   rm -Rf /usr/bin/drill-config.sh

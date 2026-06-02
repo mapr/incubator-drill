@@ -18,40 +18,40 @@ VERSION_SHORT=$(echo __VERSION__ | cut -d. -f1-3)
 #
 case "$1" in
     configure)
-      echo "$VERSION_SHORT" > __PREFIX__/drill/drillversion
+      echo "$VERSION_SHORT" > __HPE_HOME__/drill/drillversion
 
       #
       # change ownership
       #
-      DAEMON_CONF="__PREFIX__/conf/daemon.conf"
+      DAEMON_CONF="__HPE_HOME__/conf/daemon.conf"
 
       if [ -f "$DAEMON_CONF" ]; then
           MAPR_USER=$( awk -F = '$1 == "mapr.daemon.user" { print $2 }' $DAEMON_CONF)
 
           if [ ! -z "$MAPR_USER" ]; then
-              chown -R $MAPR_USER __PREFIX__/drill/drill-${VERSION_SHORT}
+              chown -R $MAPR_USER __DRILL_HOME__
           fi
       fi
 
-      chmod 1777 -R __PREFIX__/drill/drill-${VERSION_SHORT}/logs
-      touch __PREFIX__/drill/drill-${VERSION_SHORT}/logs/sqlline.log
-      chmod 666 __PREFIX__/drill/drill-${VERSION_SHORT}/logs/sqlline.log
+      chmod 1777 -R __DRILL_HOME__/logs
+      touch __DRILL_HOME__/logs/sqlline.log
+      chmod 666 __DRILL_HOME__/logs/sqlline.log
 
       # distrib-env.sh is replaced at build time - no longer a need to generate its contents at install time
 
       if [ ! -f /opt/mapr/conf/mapr.login.conf ]; then
-          cp -f __PREFIX__/drill/drill-${VERSION_SHORT}/conf/mapr.login.conf /opt/mapr/conf/.
+          cp -f __DRILL_HOME__/conf/mapr.login.conf /opt/mapr/conf/.
       fi
-      if [ -f __INSTALL_3DIGIT__/conf/mapr.login.conf ]; then
-        rm -f __INSTALL_3DIGIT__/conf/mapr.login.conf
+      if [ -f __DRILL_HOME__/conf/mapr.login.conf ]; then
+        rm -f __DRILL_HOME__/conf/mapr.login.conf
       fi
 
-      ln -sf __PREFIX__/drill/drill-${VERSION_SHORT}/bin/sqlline /usr/bin/sqlline
+      ln -sf __DRILL_HOME__/bin/sqlline /usr/bin/sqlline
 
       #
       # get ZK list and cluster ID for drill-override.conf
       #
-      drillOverrideConf="__PREFIX__/drill/drill-${VERSION_SHORT}/conf/drill-override.conf"
+      drillOverrideConf="__DRILL_HOME__/conf/drill-override.conf"
       oldClusterId="drillbits1"
       oldZkConnect="localhost:2181"
 
@@ -70,8 +70,8 @@ case "$1" in
         echo "Once you configure this MapR node to connect to Zookeeper, then you need to edit ${drillOverrideConf}"
       fi
 
-      if [ -f __PREFIX__/conf/mapr-clusters.conf ]; then
-        clusters=`cat __PREFIX__/conf/mapr-clusters.conf`
+      if [ -f __HPE_HOME__/conf/mapr-clusters.conf ]; then
+        clusters=`cat __HPE_HOME__/conf/mapr-clusters.conf`
         clusterName=`echo ${clusters} | awk '{print $1;}'`
         clusterName=`echo ${clusterName//./_}`
         clusterName=`echo ${clusterName// /_}`

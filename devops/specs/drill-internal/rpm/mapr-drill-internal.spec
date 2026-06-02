@@ -25,7 +25,7 @@ echo "NOOP"
 
 
 %files
-__PREFIX__/
+__HPE_HOME__/
 
 %pre
 # $1 -eq 1 install
@@ -38,8 +38,8 @@ __PREFIX__/
 if [ "$1" = "2" ]; then
   OLD_DRILL_VERSION=$(rpm -qi mapr-drill-internal | awk -F': ' '/Version/ {print $2}')
   OLD_DRILL_3DIGIT_VERSION=$(echo $OLD_DRILL_VERSION | cut -d "." -f1-3)
-  OLD_DIR="__PREFIX__/drill/drill-${OLD_DRILL_3DIGIT_VERSION}"
-  BACKUP_TARGET="__PREFIX__/drill/drill-${OLD_DRILL_VERSION}"
+  OLD_DIR="__HPE_HOME__/drill/drill-${OLD_DRILL_3DIGIT_VERSION}"
+  BACKUP_TARGET="__HPE_HOME__/drill/drill-${OLD_DRILL_VERSION}"
 
   mkdir -p "${BACKUP_TARGET}"
   chown --reference="${OLD_DIR}" "${BACKUP_TARGET}"
@@ -79,12 +79,12 @@ fi
 [ -n "$VERBOSE" ] && set -x ; :
 
 VERSION_SHORT="$(echo __VERSION__ | cut -d'.' -f1-3)"
-ln -sfn __PREFIX__/drill/drill-${VERSION_SHORT} __PREFIX__/drill/current
+ln -sfn __DRILL_HOME__ __HPE_HOME__/drill/current
 
-if [ -f __PREFIX__/drill/drillversion ]; then
-  rm -f __PREFIX__/drill/drillversion
+if [ -f __HPE_HOME__/drill/drillversion ]; then
+  rm -f __HPE_HOME__/drill/drillversion
 fi
-echo "$VERSION_SHORT" > __PREFIX__/drill/drillversion
+echo "$VERSION_SHORT" > __HPE_HOME__/drill/drillversion
 
 %preun
 # N/A     install
@@ -96,8 +96,8 @@ echo "$VERSION_SHORT" > __PREFIX__/drill/drillversion
 if [ "$1" -eq 0 ]; then
   OLD_DRILL_VERSION=$(rpm -qi mapr-drill-internal | awk -F': ' '/Version/ {print $2}')
   OLD_DRILL_3DIGIT_VERSION=$(echo $OLD_DRILL_VERSION | cut -d "." -f1-3)
-  OLD_DIR="__PREFIX__/drill/drill-${OLD_DRILL_3DIGIT_VERSION}"
-  BACKUP_TARGET="__PREFIX__/drill/drill-${OLD_DRILL_VERSION}"
+  OLD_DIR="__HPE_HOME__/drill/drill-${OLD_DRILL_3DIGIT_VERSION}"
+  BACKUP_TARGET="__HPE_HOME__/drill/drill-${OLD_DRILL_VERSION}"
 
   mkdir -p "${BACKUP_TARGET}"
   chown --reference="${OLD_DIR}" "${BACKUP_TARGET}"
@@ -137,14 +137,14 @@ fi
 
 VERSION_SHORT="$(echo __VERSION__ | cut -d'.' -f1-3)"
 if [ "$1" = "0" ]; then
-  rm -Rf __PREFIX__/drill/drill-${VERSION_SHORT}
-  rm -f __PREFIX__/drill/current
+  rm -Rf __DRILL_HOME__
+  rm -f __HPE_HOME__/drill/current
 fi
 # RPM format - post-uninstall happens after new package's install, so we know the drillversion file exists
 if [ "$1" = "1" ]; then
-  NEW_DRILL_VERSION=`cat __PREFIX__/drill/drillversion`
+  NEW_DRILL_VERSION=`cat __HPE_HOME__/drill/drillversion`
   if [ "${VERSION_SHORT}" != "${NEW_DRILL_VERSION}" ]; then
-    rm -Rf __PREFIX__/drill/drill-${VERSION_SHORT}
+    rm -Rf __DRILL_HOME__
   fi
 fi
 :
@@ -157,7 +157,7 @@ fi
 [ -n "$VERBOSE" ] && set -x ; :
 
 if [ "$1" = "1" ]; then
-  deprecated_drill_backup_dir="__PREFIX__/drill/OLD_DRILL_VERSIONS"
+  deprecated_drill_backup_dir="__HPE_HOME__/drill/OLD_DRILL_VERSIONS"
   if [ -d "$deprecated_drill_backup_dir" ]; then
     num_entries=$(ls -A "$deprecated_drill_backup_dir" | wc -l)
 
@@ -166,7 +166,7 @@ if [ "$1" = "1" ]; then
     fi
   fi
 
-  OLD_DRILL_DIRS=`find "__PREFIX__/drill/" -maxdepth 1 -regex '.*drill-[0-9]*\.[0-9]*\.[0-9]*$' ! -name "*$VERSION_SHORT"`
+  OLD_DRILL_DIRS=`find "__HPE_HOME__/drill/" -maxdepth 1 -regex '.*drill-[0-9]*\.[0-9]*\.[0-9]*$' ! -name "*$VERSION_SHORT"`
   rm -rf ${OLD_DRILL_DIRS}
 fi
 :

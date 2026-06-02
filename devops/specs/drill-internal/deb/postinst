@@ -18,14 +18,14 @@ VERSION_SHORT=$(echo __VERSION__ | cut -d. -f1-3)
 #
 case "$1" in
     configure)
-      ln -sf __PREFIX__/drill/drill-${VERSION_SHORT} __PREFIX__/drill/current
-      
-      if [ -f __PREFIX__/drill/drillversion ]; then
-        rm -f __PREFIX__/drill/drillversion
-      fi
-      echo "$VERSION_SHORT" > __PREFIX__/drill/drillversion
+      ln -sf __DRILL_HOME__ __HPE_HOME__/drill/current
 
-      OLD_DRILL_DIRS=`find "__PREFIX__/drill/" -maxdepth 1 -regex '.*drill-[0-9]*\.[0-9]*\.[0-9]*$' ! -name "*$VERSION_SHORT"`
+      if [ -f __HPE_HOME__/drill/drillversion ]; then
+        rm -f __HPE_HOME__/drill/drillversion
+      fi
+      echo "$VERSION_SHORT" > __HPE_HOME__/drill/drillversion
+
+      OLD_DRILL_DIRS=`find "__HPE_HOME__/drill/" -maxdepth 1 -regex '.*drill-[0-9]*\.[0-9]*\.[0-9]*$' ! -name "*$VERSION_SHORT"`
       rm -rf ${OLD_DRILL_DIRS}
     ;;
 

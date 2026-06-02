@@ -1,8 +1,8 @@
 #!/bin/bash
 
 MY_DRILL_VERSION="__VERSION__"
-MY_DRILL_HOME="__INSTALL_3DIGIT__"
-MAPR_HOME="__PREFIX__"
+MY_DRILL_HOME="__DRILL_HOME__"
+MAPR_HOME="__HPE_HOME__"
 [ -n "$VERBOSE" ] && echo "preinst called with argument \`$1'" >&2
 [ -n "$VERBOSE" ] && set -x
 
@@ -46,7 +46,7 @@ case "$1" in
                 fi
             fi
         fi
-        touch __PREFIX__/drill/upgrade 2>&1 || :
+        touch __HPE_HOME__/drill/upgrade 2>&1 || :
     ;;
 
     abort-upgrade)

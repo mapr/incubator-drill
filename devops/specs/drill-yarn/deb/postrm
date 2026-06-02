@@ -20,8 +20,8 @@ case "$1" in
     ;;
 
     remove|purge|disappear)
-      rm -f __PREFIX__/drill/drillversion
-      rm -Rf __PREFIX__/drill/drill-__VERSION__
+      rm -f __HPE_HOME__/drill/drillversion
+      rm -Rf __HPE_HOME__/drill/drill-__VERSION__
       rm -Rf /usr/bin/sqlline
       rm -Rf /usr/bin/drill-config.sh
     ;;
