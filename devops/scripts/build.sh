@@ -204,7 +204,7 @@ main() {
 
     "build")
       # Build project (Maven)
-      build_project
+      build_project "$deploy_flag"
       clean_resources
       ;;
 

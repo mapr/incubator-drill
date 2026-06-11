@@ -1,8 +1,5 @@
 #!/bin/bash
 
-echo "Build environment variables..."
-printenv | sort
-
 SCRIPT_DIR=$(dirname "${BASH_SOURCE[0]}")
 . "${SCRIPT_DIR}/_initialize_package_variables.sh"
 
