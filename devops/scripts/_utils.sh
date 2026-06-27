@@ -71,6 +71,7 @@ _overwrite_community_drill_conf_and_bin() {
   cp -fv "${BUILD_ROOT}/ext-conf/drill-on-yarn.conf" "${pkg_path}/conf/."
   cp -fv "${BUILD_ROOT}/ext-conf/drill-distrib.conf" "${pkg_path}/conf/."
   cp -fv "${BUILD_ROOT}/ext-conf/drill-distrib-mem-qs.conf" "${pkg_path}/conf/."
+  cp -fv "${BUILD_ROOT}/ext-conf/warden.drill-bits.conf.template" "${pkg_path}/conf/."
   cp -fv "${BUILD_ROOT}/ext-bin/configure.sh" "${pkg_path}/bin/."
 }
 

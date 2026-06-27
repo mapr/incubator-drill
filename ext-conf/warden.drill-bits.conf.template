@@ -1,11 +1,11 @@
 services=drill-bits:all:cldb
 service.displayname=Drillbit
-service.command.start=/opt/mapr/drill/drill-1.20.3/bin/drillbit.sh start
-service.command.stop=/opt/mapr/drill/drill-1.20.3/bin/drillbit.sh stop
-service.command.monitorcommand=/opt/mapr/drill/drill-1.20.3/bin/drillbit.sh status
+service.command.start=__DRILL_HOME__/bin/drillbit.sh start
+service.command.stop=__DRILL_HOME__/bin/drillbit.sh stop
+service.command.monitorcommand=__DRILL_HOME__/bin/drillbit.sh status
 service.command.type=BACKGROUND
 service.uri=/about
-service.logs.location=/opt/mapr/drill/drill-1.20.3/logs/
+service.logs.location=__DRILL_HOME__/logs/
 service.process.type=JAVA
 service.alarm.tersename=nadrill
 service.alarm.label=DRILLDOWNALARM
