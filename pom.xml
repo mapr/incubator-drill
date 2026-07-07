@@ -132,7 +132,7 @@
     <commons.beanutils.version>1.9.4</commons.beanutils.version>
     <httpdlog-parser.version>5.8</httpdlog-parser.version>
     <yauaa.version>7.9.0</yauaa.version>
-    <log4j.version>2.18.0</log4j.version>
+    <log4j.version>2.26.0</log4j.version>
     <bcfips.version>1.0.2.1</bcfips.version>
     <bctlsfips.version>1.0.11.4</bctlsfips.version>
     <aircompressor.version>0.20</aircompressor.version>
