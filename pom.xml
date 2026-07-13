@@ -1541,39 +1541,15 @@
         <exclusions>
           <exclusion>
             <groupId>org.springframework</groupId>
-            <artifactId>spring-beans</artifactId>
-          </exclusion>
-          <exclusion>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-core</artifactId>
-          </exclusion>
-          <exclusion>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-          </exclusion>
-          <exclusion>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
+            <artifactId>*</artifactId>
           </exclusion>
           <exclusion>
             <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-core</artifactId>
-          </exclusion>
-          <exclusion>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-web</artifactId>
+            <artifactId>*</artifactId>
           </exclusion>
           <exclusion>
             <groupId>org.springframework.security.kerberos</groupId>
-            <artifactId>spring-security-kerberos-web</artifactId>
-          </exclusion>
-          <exclusion>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-aop</artifactId>
-          </exclusion>
-          <exclusion>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-expression</artifactId>
+            <artifactId>*</artifactId>
           </exclusion>
         </exclusions>
       </dependency>
